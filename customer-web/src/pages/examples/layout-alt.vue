@@ -1,5 +1,5 @@
 <template>
-  <section class="page">
+  <section class="page mob--ex-page">
     <header class="page__intro">
       <p class="ex-eyebrow">Layout</p>
       <h1 class="ex-h1">备选布局案例</h1>
@@ -24,12 +24,27 @@ definePageMeta({
 </script>
 
 <style scoped lang="scss">
-.page__intro {
-  margin-bottom: 24px;
+.page {
+  &__intro {
+    margin-bottom: 24px;
+  }
+
+  &__p {
+    margin: 0;
+    line-height: 1.65;
+  }
 }
 
-.page__p {
-  margin: 0;
-  line-height: 1.65;
+@media (max-width: 768px) {
+  .mob--ex-page {
+    .page__intro {
+      margin-bottom: 18px;
+    }
+
+    .page__p {
+      font-size: 0.9rem;
+      line-height: 1.65;
+    }
+  }
 }
 </style>

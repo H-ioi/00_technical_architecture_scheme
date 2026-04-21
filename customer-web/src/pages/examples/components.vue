@@ -1,5 +1,5 @@
 <template>
-  <section class="page">
+  <section class="page mob--ex-page">
     <header class="page__intro">
       <p class="ex-eyebrow">Components</p>
       <h1 class="ex-h1">组件案例</h1>
@@ -40,36 +40,64 @@ function onCount (n: number) {
 </script>
 
 <style scoped lang="scss">
-.page__intro {
-  margin-bottom: 28px;
-}
+.page {
+  &__intro {
+    margin-bottom: 26px;
+  }
 
-.page__grid {
-  display: grid;
-  gap: 18px;
-  margin-bottom: 22px;
+  &__grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px;
+    margin-bottom: 16px;
+  }
 
-  @media (min-width: 640px) {
-    grid-template-columns: 1fr 1fr;
+  &__muted {
+    margin: 0 0 14px;
+    font-size: 0.88rem;
+    color: $color-text-muted;
+  }
+
+  &__foot {
+    margin: 16px 0 0;
+    padding-top: 14px;
+    border-top: 1px dashed $color-border;
+    font-size: 0.9rem;
+    color: $color-text-muted;
+  }
+
+  &__strong {
+    color: $color-primary-strong;
+    font-size: 1.05rem;
   }
 }
 
-.page__muted {
-  margin: 0 0 14px;
-  font-size: 0.875rem;
-  color: $color-text-muted;
-}
+@media (width <= 768px) {
+  .mob--ex-page {
+    .page__intro {
+      margin-bottom: 18px;
+    }
 
-.page__foot {
-  margin: 16px 0 0;
-  padding-top: 14px;
-  border-top: 1px dashed $color-border;
-  font-size: 0.9375rem;
-  color: $color-text-muted;
-}
+    .page__grid {
+      grid-template-columns: 1fr;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
 
-.page__strong {
-  color: $color-primary-strong;
-  font-size: 1.125rem;
+    .page__muted {
+      margin-bottom: 12px;
+      font-size: 0.85rem;
+    }
+
+    .page__foot {
+      margin-top: 10px;
+      padding-top: 10px;
+      font-size: 0.85rem;
+    }
+
+    .page__strong {
+      font-size: 0.98rem;
+    }
+  }
 }
 </style>

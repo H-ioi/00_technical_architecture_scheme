@@ -1,5 +1,5 @@
 <template>
-  <div class="alt">
+  <div class="alt mob--ex-alt">
     <header class="alt__header">
       <div class="alt__bar">
         <span class="alt__badge">备选布局</span>
@@ -23,69 +23,96 @@
   display: flex;
   flex-direction: column;
   background:
-    radial-gradient(ellipse 100% 80% at 50% -30%, rgba(99, 102, 241, 0.15), transparent 55%),
-    linear-gradient(175deg, #f5f3ff 0%, #eef2ff 35%, #f8fafc 100%);
-}
+    radial-gradient(ellipse 110% 85% at 50% -30%, rgba(59, 130, 246, 0.16), transparent 60%),
+    linear-gradient(175deg, #eff6ff 0%, #f3e8ff 40%, #f8fafc 100%);
 
-.alt__header {
-  padding: 20px 20px 0;
-}
+  &__header {
+    padding: 18px 16px 0;
+  }
 
-.alt__bar {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: space-between;
-  gap: 14px;
-  max-width: 42rem;
-  margin: 0 auto;
-  padding: 14px 18px;
-  background: rgba(255, 255, 255, 0.75);
-  border: 1px solid rgba(255, 255, 255, 0.9);
-  border-radius: $radius-lg;
-  box-shadow: $shadow-md;
-  backdrop-filter: blur(10px);
-}
+  &__bar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 14px 16px;
+    background: rgba(255, 255, 255, 0.76);
+    border: 1px solid rgba(255, 255, 255, 0.92);
+    border-radius: $radius-lg;
+    box-shadow: $shadow-md;
+    backdrop-filter: blur(10px);
+  }
 
-.alt__badge {
-  font-size: 0.6875rem;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  padding: 6px 12px;
-  border-radius: $radius-full;
-  background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
-  color: #fff;
-  box-shadow: 0 2px 12px rgba(99, 102, 241, 0.35);
-}
+  &__badge {
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 6px 12px;
+    border-radius: $radius-full;
+    background: linear-gradient(135deg, $color-primary 0%, $color-accent 100%);
+    color: #fff;
+    box-shadow: 0 2px 12px rgba(99, 102, 241, 0.35);
+  }
 
-.alt__nav {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 12px 18px;
+  &__nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px 14px;
 
-  a {
-    font-size: 0.8125rem;
-    font-weight: 500;
-    color: #475569;
-    text-decoration: none;
+    a {
+      font-size: 0.82rem;
+      font-weight: 500;
+      color: #475569;
+      text-decoration: none;
 
-    &:hover {
-      color: #6366f1;
+      &:hover {
+        color: $color-primary-strong;
+      }
+
+      &.router-link-active {
+        font-weight: 700;
+        color: $color-primary-strong;
+      }
     }
+  }
 
-    &.router-link-active {
-      font-weight: 700;
-      color: #312e81;
-    }
+  &__main {
+    flex: 1;
+    width: 100%;
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 24px 16px 42px;
   }
 }
 
-.alt__main {
-  flex: 1;
-  width: 100%;
-  max-width: 42rem;
-  margin: 0 auto;
-  padding: 28px 20px 56px;
+@media (width <= 768px) {
+  .mob--ex-alt {
+    .alt__header {
+      padding: 12px 10px 0;
+    }
+
+    .alt__bar {
+      padding: 12px;
+      border-radius: $radius-md;
+    }
+
+    .alt__badge {
+      font-size: 0.68rem;
+      padding: 6px 10px;
+    }
+
+    .alt__nav {
+      width: 100%;
+      gap: 8px 12px;
+    }
+
+    .alt__main {
+      padding: 16px 10px 28px;
+    }
+  }
 }
 </style>

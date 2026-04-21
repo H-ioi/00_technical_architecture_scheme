@@ -1,3 +1,11 @@
+import pxToViewport from 'postcss-px-to-viewport'
+import pxtorem from 'postcss-pxtorem'
+
+const mobileDesignWidth = Number(process.env.NUXT_MOBILE_DESIGN_WIDTH || 750)
+const mobileRootValue = Number.isFinite(mobileDesignWidth) && mobileDesignWidth > 0
+  ? mobileDesignWidth / 10
+  : 75
+
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   devtools: { enabled: true },
@@ -44,6 +52,26 @@ export default defineNuxtConfig({
   css: ['@/assets/styles/main.scss'],
   vite: {
     css: {
+      postcss: {
+        plugins: [
+          // 默认全部走 vw，排除 .mob-- 前缀（交给 pxtorem）
+          pxToViewport({
+            viewportWidth: 1920,
+            unitPrecision: 3,
+            viewportUnit: 'vw',
+            selectorBlackList: [/^\.mob--/, /nuxt-devtools/],
+            minPixelValue: 1
+          }),
+          // 仅 .mob-- 前缀走 rem，其它选择器不转换
+          pxtorem({
+            // 例如 750 稿 -> 75；375 稿 -> 37.5
+            rootValue: mobileRootValue,
+            propList: ['*'],
+            selectorBlackList: [/^(?!\.mob--).*/],
+            minPixelValue: 2
+          })
+        ]
+      },
       preprocessorOptions: {
         scss: {
           // 避免对 _vars 自身再注入 @use，否则自引用会触发解析错误（如“应为 {”）

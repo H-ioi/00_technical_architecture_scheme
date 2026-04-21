@@ -26,6 +26,8 @@
     "eslint-plugin-vue": "^9.31.0",
     "globals": "^15.14.0",
     "nuxt": "^3.5.2",
+    "postcss-px-to-viewport": "^1.1.1",
+    "postcss-pxtorem": "^6.1.0",
     "prettier": "^3.4.2",
     "sass": "^1.63.4",
     "stylelint": "^16.14.1",

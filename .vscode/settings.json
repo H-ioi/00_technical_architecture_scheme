@@ -1,0 +1,7 @@
+{
+  "scss.validate": false,
+  "css.validate": false,
+  "files.associations": {
+    "*.scss": "scss"
+  }
+}

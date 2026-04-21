@@ -1,5 +1,5 @@
 <template>
-  <section class="home">
+  <section class="home mob--ex-home">
     <header class="home__hero">
       <p class="ex-eyebrow">Nuxt 3 · 学习与脚手架</p>
       <h1 class="ex-h1">开箱即用的案例模版</h1>
@@ -65,131 +65,183 @@ const postsPreviewPretty = computed(() =>
 </script>
 
 <style scoped lang="scss">
-.home__hero {
-  margin-bottom: 32px;
-}
+.home {
+  &__hero {
+    margin-bottom: 28px;
+  }
 
-.home__cards {
-  display: grid;
-  gap: 14px;
-  margin-bottom: 36px;
+  &__cards {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 14px;
+    margin-bottom: 28px;
+  }
 
-  @media (min-width: 640px) {
-    grid-template-columns: repeat(3, 1fr);
+  &__card {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 18px 16px;
+    text-decoration: none;
+    color: inherit;
+    background: rgba(255, 255, 255, 0.86);
+    border: 1px solid $color-border;
+    border-radius: $radius-lg;
+    box-shadow: $shadow-sm;
+    transition:
+      transform 0.2s ease,
+      box-shadow 0.2s ease,
+      border-color 0.2s ease;
+
+    &:hover {
+      transform: translateY(-2px);
+      border-color: rgba(59, 130, 246, 0.35);
+      box-shadow: $shadow-md;
+    }
+  }
+
+  &__card-icon {
+    font-size: 1.15rem;
+    color: $color-primary-strong;
+
+    &--api {
+      color: #0ea5e9;
+    }
+
+    &--layout {
+      color: $color-accent;
+    }
+  }
+
+  &__card-title {
+    font-size: 1rem;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+  }
+
+  &__card-desc {
+    font-size: 0.82rem;
+    line-height: 1.55;
+    color: $color-text-muted;
+  }
+
+  &__panels {
+    display: grid;
+    grid-template-columns: 1.25fr 1fr;
+    gap: 16px;
+  }
+
+  &__panel {
+    padding: 16px;
+    background: rgba(255, 255, 255, 0.9);
+    border: 1px solid $color-border;
+    border-radius: $radius-lg;
+    box-shadow: $shadow-sm;
+  }
+
+  &__panel-title {
+    margin: 0 0 10px;
+    font-size: 0.73rem;
+    letter-spacing: 0.08em;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: $color-text-subtle;
+  }
+
+  &__pre {
+    margin: 0;
+    max-height: 250px;
+  }
+
+  &__panel-value {
+    margin: 0 0 10px;
+  }
+
+  &__panel-foot {
+    margin: 0;
+    font-size: 0.82rem;
+    line-height: 1.6;
+    color: $color-text-muted;
+  }
+
+  &__foot {
+    margin-top: 30px;
+    padding-top: 18px;
+    border-top: 1px dashed $color-border;
+  }
+
+  &__foot-label {
+    display: block;
+    margin-bottom: 8px;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: $color-text-subtle;
+  }
+
+  &__foot-text {
+    margin: 0;
+    font-size: 0.9rem;
+    line-height: 1.7;
+    color: $color-text-muted;
   }
 }
 
-.home__card {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  padding: 20px 18px;
-  text-decoration: none;
-  color: inherit;
-  background: $color-surface;
-  border: 1px solid $color-border;
-  border-radius: $radius-lg;
-  box-shadow: $shadow-sm;
-  transition:
-    transform 0.18s ease,
-    box-shadow 0.18s ease,
-    border-color 0.18s ease;
+@media (width <= 1024px) {
+  .home {
+    &__cards {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
 
-  &:hover {
-    transform: translateY(-3px);
-    border-color: rgba(0, 193, 106, 0.35);
-    box-shadow: $shadow-md;
+    &__panels {
+      grid-template-columns: 1fr;
+    }
   }
 }
 
-.home__card-icon {
-  font-size: 1.25rem;
-  line-height: 1;
-  color: $color-primary-strong;
+@media (width <= 768px) {
+  .mob--ex-home {
+    .home__hero {
+      margin-bottom: 20px;
+    }
 
-  &--api {
-    color: #6366f1;
+    .home__cards {
+      grid-template-columns: 1fr;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+
+    .home__card {
+      padding: 14px 12px;
+      border-radius: $radius-md;
+    }
+
+    .home__card-title {
+      font-size: 0.95rem;
+    }
+
+    .home__card-desc {
+      font-size: 0.82rem;
+    }
+
+    .home__panels {
+      gap: 12px;
+    }
+
+    .home__panel {
+      padding: 13px 12px;
+      border-radius: $radius-md;
+    }
+
+    .home__foot {
+      margin-top: 20px;
+      padding-top: 14px;
+    }
+
+    .home__foot-text {
+      font-size: 0.85rem;
+    }
   }
-
-  &--layout {
-    color: #c026d3;
-  }
-}
-
-.home__card-title {
-  font-size: 1rem;
-  font-weight: 700;
-  letter-spacing: -0.02em;
-}
-
-.home__card-desc {
-  font-size: 0.8125rem;
-  color: $color-text-muted;
-  line-height: 1.45;
-}
-
-.home__panels {
-  display: grid;
-  gap: 18px;
-
-  @media (min-width: 768px) {
-    grid-template-columns: 1fr 1fr;
-  }
-}
-
-.home__panel {
-  padding: 20px 20px 22px;
-  background: $color-surface;
-  border: 1px solid $color-border;
-  border-radius: $radius-lg;
-  box-shadow: $shadow-sm;
-}
-
-.home__panel-title {
-  margin: 0 0 12px;
-  font-size: 0.75rem;
-  font-weight: 700;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  color: $color-text-subtle;
-}
-
-.home__pre {
-  margin: 0;
-  max-height: 220px;
-}
-
-.home__panel-value {
-  margin: 0 0 10px;
-}
-
-.home__panel-foot {
-  margin: 0;
-  font-size: 0.8125rem;
-  color: $color-text-muted;
-  line-height: 1.55;
-}
-
-.home__foot {
-  margin-top: 40px;
-  padding-top: 24px;
-  border-top: 1px dashed $color-border;
-}
-
-.home__foot-label {
-  display: block;
-  margin-bottom: 8px;
-  font-size: 0.6875rem;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: $color-text-subtle;
-}
-
-.home__foot-text {
-  margin: 0;
-  font-size: 0.875rem;
-  color: $color-text-muted;
-  line-height: 1.65;
 }
 </style>

@@ -6,6 +6,13 @@
 
 html {
   scroll-behavior: smooth;
+  font-size: 16px;
+}
+
+@media (width <= 768px) {
+  html {
+    font-size: 15px;
+  }
 }
 
 body {
@@ -17,12 +24,12 @@ body {
     'Segoe UI',
     Roboto,
     sans-serif;
-  line-height: 1.6;
+  line-height: 1.55;
   color: $color-text;
   background-color: $color-surface-muted;
   background-image:
-    radial-gradient(ellipse 120% 80% at 100% -20%, rgba(0, 193, 106, 0.09), transparent 50%),
-    radial-gradient(ellipse 80% 60% at 0% 100%, rgba(99, 102, 241, 0.06), transparent 45%);
+    radial-gradient(ellipse 120% 80% at 100% -20%, rgba(59, 130, 246, 0.12), transparent 55%),
+    radial-gradient(ellipse 90% 65% at 0% 100%, rgba(139, 92, 246, 0.08), transparent 48%);
   min-height: 100vh;
 }
 
@@ -32,53 +39,74 @@ body {
 }
 
 /* 案例页通用标题区（各页可复用 class） */
-.ex-eyebrow {
-  display: inline-block;
-  margin: 0 0 8px;
-  font-size: 0.6875rem;
-  font-weight: 700;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: $color-primary-strong;
+.ex {
+  &-eyebrow {
+    display: inline-block;
+    margin: 0 0 10px;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: $color-primary-strong;
+  }
+
+  &-h1 {
+    margin: 0 0 14px;
+    font-size: clamp(1.75rem, 3.2vw, 2.35rem);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    line-height: 1.2;
+    color: $color-text;
+  }
+
+  &-lead {
+    margin: 0 0 30px;
+    max-width: 42rem;
+    font-size: 1rem;
+    color: $color-text-muted;
+    line-height: 1.75;
+  }
+
+  &-code {
+    padding: 2px 8px;
+    font-family: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, monospace;
+    font-size: 0.8125em;
+    font-weight: 500;
+    color: #4338ca;
+    background: #eef2ff;
+    border-radius: 6px;
+  }
+
+  &-pre {
+    margin: 10px 0 0;
+    padding: 14px 16px;
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: 0.78rem;
+    line-height: 1.55;
+    color: #334155;
+    background: linear-gradient(165deg, #f8fafc 0%, #eef2ff 100%);
+    border: 1px solid $color-border;
+    border-radius: $radius-md;
+    box-shadow: $shadow-sm;
+    overflow: auto;
+  }
 }
 
-.ex-h1 {
-  margin: 0 0 12px;
-  font-size: clamp(1.5rem, 3vw, 1.875rem);
-  font-weight: 700;
-  letter-spacing: -0.02em;
-  line-height: 1.25;
-  color: $color-text;
-}
+@media (width <= 768px) {
+  .ex {
+    &-eyebrow {
+      margin-bottom: 8px;
+      font-size: 0.78rem;
+    }
 
-.ex-lead {
-  margin: 0 0 28px;
-  max-width: 42rem;
-  font-size: 1rem;
-  color: $color-text-muted;
-  line-height: 1.65;
-}
+    &-h1 {
+      font-size: 1.7rem;
+    }
 
-.ex-code {
-  padding: 2px 8px;
-  font-family: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, monospace;
-  font-size: 0.8125em;
-  font-weight: 500;
-  color: #4338ca;
-  background: #eef2ff;
-  border-radius: 6px;
-}
-
-.ex-pre {
-  margin: 10px 0 0;
-  padding: 14px 16px;
-  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-  font-size: 0.75rem;
-  line-height: 1.55;
-  color: #334155;
-  background: linear-gradient(165deg, #f8fafc 0%, #f1f5f9 100%);
-  border: 1px solid $color-border;
-  border-radius: $radius-md;
-  box-shadow: $shadow-sm;
-  overflow: auto;
+    &-lead {
+      margin-bottom: 24px;
+      font-size: 0.98rem;
+      line-height: 1.65;
+    }
+  }
 }

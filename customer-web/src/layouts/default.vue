@@ -1,5 +1,5 @@
 <template>
-  <div class="shell">
+  <div class="shell mob--ex-shell">
     <header class="shell__header">
       <div class="shell__inner">
         <NuxtLink to="/" class="shell__brand">
@@ -27,98 +27,136 @@
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-}
+  background: transparent;
 
-.shell__header {
-  position: sticky;
-  top: 0;
-  z-index: 40;
-  background: rgba(255, 255, 255, 0.82);
-  border-bottom: 1px solid $color-border;
-  backdrop-filter: blur(12px);
-  box-shadow: $shadow-sm;
-}
-
-.shell__inner {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: space-between;
-  gap: 16px;
-  max-width: 72rem;
-  margin: 0 auto;
-  padding: 14px 24px;
-}
-
-.shell__brand {
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-  text-decoration: none;
-  color: $color-text;
-
-  &:hover .shell__title {
-    color: $color-primary-strong;
-  }
-}
-
-.shell__logo {
-  width: 10px;
-  height: 10px;
-  border-radius: $radius-full;
-  background: linear-gradient(135deg, $color-primary 0%, #6366f1 100%);
-  box-shadow: 0 0 0 3px $color-primary-soft;
-}
-
-.shell__title {
-  font-size: 1.0625rem;
-  font-weight: 700;
-  letter-spacing: -0.02em;
-  transition: color 0.15s ease;
-}
-
-.shell__nav {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 6px;
-  padding: 4px;
-  background: $color-surface-muted;
-  border-radius: $radius-full;
-  border: 1px solid $color-border;
-}
-
-.shell__link {
-  padding: 8px 14px;
-  font-size: 0.8125rem;
-  font-weight: 500;
-  color: $color-text-muted;
-  text-decoration: none;
-  border-radius: $radius-full;
-  transition:
-    color 0.15s ease,
-    background 0.15s ease;
-
-  &:hover {
-    color: $color-text;
-    background: rgba(255, 255, 255, 0.9);
-  }
-
-  &.router-link-active {
-    color: $color-text;
-    background: $color-surface;
+  &__header {
+    position: sticky;
+    top: 0;
+    z-index: 60;
+    background: rgba(255, 255, 255, 0.88);
+    border-bottom: 1px solid $color-border;
+    backdrop-filter: blur(14px);
     box-shadow: $shadow-sm;
-    font-weight: 600;
+  }
+
+  &__inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+    max-width: 1152px;
+    margin: 0 auto;
+    padding: 14px 22px;
+  }
+
+  &__brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+    color: $color-text;
+
+    &:hover {
+      .shell__title {
+        color: $color-primary-strong;
+      }
+    }
+  }
+
+  &__logo {
+    width: 12px;
+    height: 12px;
+    border-radius: $radius-full;
+    background: linear-gradient(140deg, $color-primary 0%, $color-accent 100%);
+    box-shadow: 0 0 0 4px $color-primary-soft;
+  }
+
+  &__title {
+    font-size: 1rem;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    transition: color 0.15s ease;
+  }
+
+  &__nav {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px;
+    background: rgba(255, 255, 255, 0.68);
+    border-radius: $radius-full;
+    border: 1px solid $color-border;
+  }
+
+  &__link {
+    padding: 8px 12px;
+    font-size: 0.82rem;
+    font-weight: 500;
+    color: $color-text-muted;
+    text-decoration: none;
+    border-radius: $radius-full;
+    transition:
+      color 0.15s ease,
+      background 0.15s ease;
+
+    &:hover {
+      color: $color-text;
+      background: rgba(59, 130, 246, 0.08);
+    }
+
+    &.router-link-active {
+      color: $color-primary-strong;
+      background: rgba(59, 130, 246, 0.12);
+      box-shadow: $shadow-sm;
+      font-weight: 600;
+    }
+  }
+
+  &__main {
+    flex: 1;
+    padding: 26px 18px 48px;
+  }
+
+  &__content {
+    max-width: 1152px;
+    margin: 0 auto;
   }
 }
 
-.shell__main {
-  flex: 1;
-  padding: 28px 20px 56px;
-}
+@media (width <= 768px) {
+  .mob--ex-shell {
+    .shell__header {
+      position: static;
+      backdrop-filter: none;
+    }
 
-.shell__content {
-  max-width: 72rem;
-  margin: 0 auto;
+    .shell__inner {
+      flex-wrap: wrap;
+      gap: 12px;
+      padding: 12px 14px;
+    }
+
+    .shell__title {
+      font-size: 0.94rem;
+    }
+
+    .shell__nav {
+      width: 100%;
+      overflow-x: auto;
+      justify-content: flex-start;
+      white-space: nowrap;
+      border-radius: $radius-md;
+    }
+
+    .shell__link {
+      flex: 0 0 auto;
+      padding: 9px 12px;
+      font-size: 0.84rem;
+    }
+
+    .shell__main {
+      padding: 18px 10px 30px;
+    }
+  }
 }
 </style>
