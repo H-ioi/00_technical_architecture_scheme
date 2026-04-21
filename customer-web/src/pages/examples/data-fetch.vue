@@ -1,5 +1,5 @@
 <template>
-  <section class="page mob--ex-page">
+  <section :class="['page', 'mob--ex-page', `page--${theme}`]">
     <header class="page__intro">
       <p class="ex-eyebrow">Mock API</p>
       <h1 class="ex-h1">模拟服务 · 数据请求</h1>
@@ -36,6 +36,8 @@
 </template>
 
 <script setup lang="ts">
+const theme = useState<'brand' | 'campaign'>('site-theme', () => 'brand')
+
 function errorToText (e: unknown): string {
   if (e == null) {
     return ''
@@ -152,6 +154,20 @@ const errorText = computed(() => errorToText(error.value))
     background: rgba(59, 130, 246, 0.12);
     border-radius: $radius-full;
     border: 1px solid rgba(59, 130, 246, 0.22);
+  }
+}
+
+.page--campaign {
+  .page__row-link {
+    &:hover {
+      color: #be185d;
+    }
+  }
+
+  .page__chip {
+    color: #be185d;
+    background: rgba(236, 72, 153, 0.12);
+    border-color: rgba(236, 72, 153, 0.26);
   }
 }
 

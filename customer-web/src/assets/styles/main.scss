@@ -91,22 +91,3 @@ body {
     overflow: auto;
   }
 }
-
-@media (width <= 768px) {
-  .ex {
-    &-eyebrow {
-      margin-bottom: 8px;
-      font-size: 0.78rem;
-    }
-
-    &-h1 {
-      font-size: 1.7rem;
-    }
-
-    &-lead {
-      margin-bottom: 24px;
-      font-size: 0.98rem;
-      line-height: 1.65;
-    }
-  }
-}

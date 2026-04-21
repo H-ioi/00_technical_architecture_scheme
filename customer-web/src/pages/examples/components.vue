@@ -1,5 +1,5 @@
 <template>
-  <section class="page mob--ex-page">
+  <section :class="['page', 'mob--ex-page', `page--${theme}`]">
     <header class="page__intro">
       <p class="ex-eyebrow">Components</p>
       <h1 class="ex-h1">组件案例</h1>
@@ -32,6 +32,8 @@
 </template>
 
 <script setup lang="ts">
+const theme = useState<'brand' | 'campaign'>('site-theme', () => 'brand')
+
 const lastCount = ref(0)
 
 function onCount (n: number) {
@@ -69,6 +71,12 @@ function onCount (n: number) {
   &__strong {
     color: $color-primary-strong;
     font-size: 1.05rem;
+  }
+}
+
+.page--campaign {
+  .page__strong {
+    color: #be185d;
   }
 }
 

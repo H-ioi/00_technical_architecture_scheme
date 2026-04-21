@@ -1,5 +1,5 @@
 <template>
-  <section class="page mob--ex-page">
+  <section :class="['page', 'mob--ex-page', `page--${theme}`]">
     <NuxtLink class="page__back" to="/examples/data-fetch">
       <span class="page__back-arrow" aria-hidden="true">←</span>
       返回列表
@@ -21,6 +21,7 @@
 import type { ExamplePost } from '~/types/example-post'
 
 const route = useRoute()
+const theme = useState<'brand' | 'campaign'>('site-theme', () => 'brand')
 const id = computed(() => {
   const raw = route.params.id
   const s = Array.isArray(raw) ? raw[0] : raw
@@ -102,6 +103,15 @@ const fetchError = computed(() =>
     border-top-color: $color-primary;
     border-radius: 50%;
     animation: spin 0.7s linear infinite;
+  }
+}
+
+.page--campaign {
+  .page__back {
+    &:hover {
+      color: #be185d;
+      border-color: rgba(236, 72, 153, 0.36);
+    }
   }
 }
 

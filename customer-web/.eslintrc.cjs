@@ -22,6 +22,8 @@ module.exports = {
     useFetch: 'readonly',
     useRuntimeConfig: 'readonly',
     useRoute: 'readonly',
+    useState: 'readonly',
+    useExamplePosts: 'readonly',
     useAsyncData: 'readonly',
     definePageMeta: 'readonly',
     defineProps: 'readonly',

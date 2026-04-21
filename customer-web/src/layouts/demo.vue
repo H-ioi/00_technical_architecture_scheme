@@ -1,5 +1,5 @@
 <template>
-  <div class="alt mob--ex-alt">
+  <div :class="['alt', 'mob--ex-alt', `alt--${theme}`]">
     <header class="alt__header">
       <div class="alt__bar">
         <span class="alt__badge">备选布局</span>
@@ -9,6 +9,24 @@
           <NuxtLink to="/examples/data-fetch">接口</NuxtLink>
           <NuxtLink to="/examples/layout-alt">关于本页</NuxtLink>
         </nav>
+        <div class="alt__themes">
+          <button
+            type="button"
+            class="alt__theme-btn"
+            :class="{ 'is-active': theme === 'brand' }"
+            @click="theme = 'brand'"
+          >
+            官网风
+          </button>
+          <button
+            type="button"
+            class="alt__theme-btn"
+            :class="{ 'is-active': theme === 'campaign' }"
+            @click="theme = 'campaign'"
+          >
+            营销风
+          </button>
+        </div>
       </div>
     </header>
     <main class="alt__main">
@@ -16,6 +34,10 @@
     </main>
   </div>
 </template>
+
+<script setup lang="ts">
+const theme = useState<'brand' | 'campaign'>('site-theme', () => 'brand')
+</script>
 
 <style scoped lang="scss">
 .alt {
@@ -87,6 +109,47 @@
     margin: 0 auto;
     padding: 24px 16px 42px;
   }
+
+  &__themes {
+    display: inline-flex;
+    gap: 6px;
+    padding: 3px;
+    border: 1px solid rgba(255, 255, 255, 0.9);
+    border-radius: $radius-full;
+    background: rgba(255, 255, 255, 0.6);
+  }
+
+  &__theme-btn {
+    border: none;
+    background: transparent;
+    color: $color-text-muted;
+    border-radius: $radius-full;
+    padding: 6px 10px;
+    font-size: 0.72rem;
+    line-height: 1;
+    cursor: pointer;
+
+    &.is-active {
+      color: $color-primary-strong;
+      font-weight: 700;
+      background: rgba(59, 130, 246, 0.12);
+    }
+  }
+}
+
+.alt--campaign {
+  background:
+    radial-gradient(ellipse 110% 85% at 50% -30%, rgba(244, 114, 182, 0.2), transparent 60%),
+    linear-gradient(175deg, #fff1f2 0%, #ffedd5 40%, #fff7ed 100%);
+
+  .alt__theme-btn.is-active {
+    color: #be185d;
+    background: rgba(236, 72, 153, 0.12);
+  }
+
+  .alt__badge {
+    background: linear-gradient(135deg, #f97316 0%, #ec4899 100%);
+  }
 }
 
 @media (width <= 768px) {
@@ -112,6 +175,11 @@
 
     .alt__main {
       padding: 16px 10px 28px;
+    }
+
+    .alt__themes {
+      width: 100%;
+      justify-content: center;
     }
   }
 }

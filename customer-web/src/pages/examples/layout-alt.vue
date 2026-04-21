@@ -1,5 +1,5 @@
 <template>
-  <section class="page mob--ex-page">
+  <section :class="['page', 'mob--ex-page', `page--${theme}`]">
     <header class="page__intro">
       <p class="ex-eyebrow">Layout</p>
       <h1 class="ex-h1">备选布局案例</h1>
@@ -18,6 +18,8 @@
 </template>
 
 <script setup lang="ts">
+const theme = useState<'brand' | 'campaign'>('site-theme', () => 'brand')
+
 definePageMeta({
   layout: 'demo'
 })
@@ -32,6 +34,12 @@ definePageMeta({
   &__p {
     margin: 0;
     line-height: 1.65;
+  }
+}
+
+.page--campaign {
+  .page__p {
+    color: #7f1d1d;
   }
 }
 
