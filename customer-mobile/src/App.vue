@@ -1,13 +1,20 @@
 <script setup lang="ts">
 import { onLaunch, onShow, onHide } from "@dcloudio/uni-app";
+import { applyTabBarTexts } from "@/locales";
+
 onLaunch(() => {
-  console.log("App Launch");
+  applyTabBarTexts();
 });
+
 onShow(() => {
-  console.log("App Show");
+  // Keep lifecycle hooks for analytics/session resume.
 });
+
 onHide(() => {
-  console.log("App Hide");
+  // Keep lifecycle hooks for cleanup/reporting.
 });
 </script>
-<style></style>
+
+<style lang="scss">
+@use "./app.scss";
+</style>

@@ -14,8 +14,9 @@
 - 首屏体验稳定、交互流畅
 - 页面目录与路由结构一致，便于协作
 - 接口能力集中管理，避免页面散写请求
+- 文案与界面语言可切换，默认覆盖中英日韩四类语言包
 
-统一采用：`uni-app + Vue 3（Vite）+ TypeScript + Sass`。
+统一采用：`uni-app + Vue 3（Vite）+ TypeScript + Sass`，国际化采用 **`vue-i18n`（Vue 3 Composition API 模式）**。
 
 ---
 
@@ -24,6 +25,7 @@
 - 固化移动端跨端项目的初始化模板与目录边界
 - 统一页面、组件、composable、service、store 的职责分层
 - 统一样式变量与适配口径，避免多套规则并存
+- 默认提供 **中 / 英 / 日 / 韩** 四类语言资源，并与工程化脚本、提交流程一致纳入维护
 - 建立可复制的质量门禁（Lint / 格式化 / 类型检查）
 - 建立标准化构建发布流程（多端构建、产物归档、回滚）
 
@@ -39,6 +41,7 @@
 | 语言 | TypeScript（默认开启） |
 | 样式 | Sass（SCSS） |
 | 状态管理 | Pinia（uni-app 适配方案） |
+| 国际化 | vue-i18n（默认语言包：`zh-CN`、`en-US`、`ja-JP`、`ko-KR`） |
 | 接口层 | `services/` 或 `api/` 二选一并全局统一 |
 | 质量体系 | ESLint + Prettier + Stylelint + lint-staged + commitlint |
 
@@ -49,6 +52,7 @@
 - 状态管理统一使用 Pinia，不混用多套全局状态方案
 - 接口目录命名统一为 `services/` 或 `api/`，项目内不得并存
 - 跨页面复用能力优先沉淀 `components/`、`composables/`
+- 文案不直接硬编码在多个页面：可抽成 i18n 词条，词条按模块分文件维护
 
 ---
 
@@ -74,6 +78,10 @@ customer-mobile/
 │   │   ├── common/
 │   │   └── business/
 │   ├── composables/                 # 逻辑复用（use-xxx.ts）
+│   ├── locales/                     # i18n：语言常量、vue-i18n 实例与各语言词条
+│   │   ├── constants.ts             # 存储键、支持的语言列表等
+│   │   ├── zh-CN.ts / en-US.ts / ja-JP.ts / ko-KR.ts
+│   │   └── index.ts                 # createI18n、持久化与 TabBar/标题同步工具
 │   ├── stores/                      # Pinia 状态层（按业务域拆分）
 │   ├── services/                    # 接口能力封装（若选 api/ 则保持唯一）
 │   ├── types/                       # 全局类型与接口契约
@@ -328,14 +336,55 @@ npm run dev:h5
 
 ---
 
-## 十六、当前仓库落地建议（customer-mobile）
+## 十六、国际化（vue-i18n）
 
-当前 `customer-mobile` 尚未形成完整工程结构，建议按本方案执行初始化：
+### 16.1 默认语言范围
+
+工程默认内置四类语言资源（可按业务扩展）：
+
+| 语言代码 | 说明 |
+| --- | --- |
+| `zh-CN` | 简体中文（默认回退语言） |
+| `en-US` | English |
+| `ja-JP` | 日本語 |
+| `ko-KR` | 한국어 |
+
+### 16.2 工程约定
+
+- 依赖：`vue-i18n`（与 Vue 3 配套），在 `main.ts` 中 `app.use(i18n)`，且 **`legacy: false`**，页面内使用 `useI18n()`。
+- 词条文件：按语言拆分在 `src/locales/` 下，例如 `zh-CN.ts`、`en-US.ts`……键名采用 **点分层级**（如 `tab.home`、`mine.refreshProfile`），避免平面大对象难以检索。
+- 常量：`src/locales/constants.ts` 声明 `LOCALE_STORAGE_KEY`、`SUPPORTED_LOCALES`、`DEFAULT_LOCALE`，避免魔法字符串散落在业务里。
+- 持久化：用户所选语言写入 `uni.setStorageSync`，应用启动时用 `uni.getStorageSync` 恢复到 `createI18n({ locale })`，保证二次打开仍是上次语言。
+
+### 16.3 uni-app 中与原生 UI 的配合
+
+`pages.json` 里的 **`tabBar.list[].text`、`navigationBarTitleText` 为静态文案**，无法随语言自动切换。约定如下：
+
+1. **Tab 文案**：应用启动与用户切换语言后，调用 `uni.setTabBarItem`，按当前 `t('tab.*')` 写入文本。
+2. **导航栏标题**：各页在展示时调用 `uni.setNavigationBarTitle`（例如在页面 `onShow` 中），标题取自 `t('nav.*')`。
+3. **页面内文案**：模板与脚本统一走 `t('...')`，不在页面写死字符串（少量调试文案除外）。
+
+### 16.4 与分层的关系
+
+- 切换语言属于“应用级动作”：封装在 `composables/use-locale.ts`（或等价模块）中，内部完成 `locale` 变更、持久化、`setTabBarItem`、必要时同步当前页导航标题。
+- 接口错误提示等多为后端返回：可在 `services` 层统一映射为 i18n key 或先做轻量映射，避免每个页面散落 `if (code === xxx)`。
+
+### 16.5 验收补充
+
+- 四类语言切换后：Tab 文案、当前页导航标题、页面内词条无混用或未翻译项（若某键暂缺，应能回退到 `zh-CN`）。
+- 杀进程重启后语言与存储一致。
+
+---
+
+## 十七、当前仓库落地建议（customer-mobile）
+
+仓库内示例工程 `customer-mobile` 已可按本方案迭代；新项目或从零初始化时，建议按下列顺序落地：
 
 1. 使用 `uni-app Vue3 + TypeScript + Vite` 模板初始化项目骨架
 2. 按本文第四章建立标准目录并补齐基础脚本
 3. 先完成首页与个人中心双页面最小闭环（页面 + service + store）
-4. 接入 ESLint / Prettier / Stylelint / Husky / lint-staged
-5. 建立首个多端发布流水线（mp-weixin + h5）
+4. 按第十六章接入 `vue-i18n` 与中英日韩默认语言包
+5. 接入 ESLint / Prettier / Stylelint / Husky / lint-staged
+6. 建立首个多端发布流水线（mp-weixin + h5）
 
 该阶段完成后，再按业务节奏逐步补齐分包策略、监控埋点与测试覆盖。
