@@ -58,38 +58,79 @@
 
 ## 四、目录结构与分层
 
-推荐目录（按规范落地）：
+以下目录树**与当前仓库 `customer-mobile` 示例工程一致**（在 `src` 下对 `services` / `types` / `utils` 等使用 `modules/` 子目录，按业务域拆文件；`node_modules`、构建产物等不列入）：
 
 ```bash
 customer-mobile/
-├── src/
-│   ├── main.ts                      # 应用入口
-│   ├── App.vue                      # 应用根组件
-│   ├── pages.json                   # uni-app 页面路由与窗口配置
-│   ├── manifest.json                # 应用平台配置
-│   ├── uni.scss                     # uni-app 全局变量（可与 app.scss 配合）
-│   ├── app.scss                     # 全局样式入口
-│   ├── pages/                       # 页面路由层，按业务页面划分
-│   │   ├── home/
-│   │   │   └── index.vue
-│   │   └── mine/
-│   │       └── index.vue
-│   ├── components/                  # 项目复用组件
-│   │   ├── common/
-│   │   └── business/
-│   ├── composables/                 # 逻辑复用（use-xxx.ts）
-│   ├── locales/                     # i18n：语言常量、vue-i18n 实例与各语言词条
-│   │   ├── constants.ts             # 存储键、支持的语言列表等
-│   │   ├── zh-CN.ts / en-US.ts / ja-JP.ts / ko-KR.ts
-│   │   └── index.ts                 # createI18n、持久化与 TabBar/标题同步工具
-│   ├── stores/                      # Pinia 状态层（按业务域拆分）
-│   ├── services/                    # 接口能力封装（若选 api/ 则保持唯一）
-│   ├── types/                       # 全局类型与接口契约
-│   ├── utils/                       # 纯函数与工具封装
-│   └── static/                      # 静态资源（图片、图标等）
-├── vite.config.ts
+├── .env.development
+├── .env.test
+├── .env.production
+├── .gitignore
+├── .husky/
+│   ├── pre-commit                   # lint-staged
+│   └── commit-msg                   # commitlint
+├── .prettierrc.json
+├── .stylelintrc.cjs
+├── commitlint.config.cjs
+├── eslint.config.mjs
+├── index.html                       # H5 入口 HTML（uni-app / Vite）
 ├── package.json
-└── tsconfig.json
+├── package-lock.json                # npm 锁文件（若团队统一只用 yarn/pnpm，可按规范择一）
+├── yarn.lock
+├── shims-uni.d.ts                   # 根目录类型补充（可与 src 内声明收敛为一套）
+├── tsconfig.json
+├── vite.config.ts
+└── src/
+    ├── main.ts                      # 应用入口：Pinia、vue-i18n 等注册
+    ├── App.vue
+    ├── app.scss                     # 全局样式（在 App.vue 中引入）
+    ├── uni.scss                     # uni-app 内置/主题变量
+    ├── env.d.ts                     # Vite / .vue 等类型
+    ├── shime-uni.d.ts               # vue 页面/应用生命周期类型（可与 shims-uni 合并治理）
+    ├── manifest.json                # 应用与各端配置（勿写 JSON 注释）
+    ├── pages.json                   # 页面路由、tabBar、全局窗口样式
+    ├── pages/
+    │   ├── home/index.vue           # Tab：首页
+    │   ├── mine/index.vue           # Tab：我的（含语言切换示例）
+    │   └── index/index.vue          # 模板遗留页：未注册到 pages.json 时可删除
+    ├── components/
+    │   ├── common/
+    │   │   └── section-title.vue
+    │   └── business/
+    │       └── .gitkeep             # 占位；业务组件在此目录增量添加
+    ├── composables/
+    │   ├── index.ts
+    │   ├── use-user-profile.ts
+    │   ├── use-locale.ts            # 切换语言 + TabBar/导航栏同步
+    │   └── use-navigation-title.ts  # onShow 同步导航栏标题
+    ├── locales/
+    │   ├── constants.ts             # 存储键、支持语言列表、展示名等
+    │   ├── index.ts                 # createI18n、持久化、TabBar/标题工具函数
+    │   └── lang/                    # 各语言词条（按文件拆分）
+    │       ├── zh-CN.ts
+    │       ├── en-US.ts
+    │       ├── ja-JP.ts
+    │       └── ko-KR.ts
+    ├── stores/
+    │   ├── index.ts
+    │   └── modules/
+    │       └── app.ts
+    ├── services/
+    │   ├── index.ts
+    │   ├── request.ts               # 请求薄封装（含 mock 分支示例）
+    │   └── modules/
+    │       └── user.ts
+    ├── types/
+    │   ├── index.ts
+    │   └── modules/
+    │       ├── http.ts
+    │       └── user.ts
+    ├── utils/
+    │   ├── index.ts
+    │   └── modules/
+    │       └── platform.ts          # H5 / 小程序等平台判断
+    └── static/
+        └── logo.png
 ```
 
 分层职责：
@@ -97,10 +138,11 @@ customer-mobile/
 - `pages/`：页面编排与交互组织，不散落底层请求细节
 - `components/`：项目内复用视图组件
 - `composables/`：跨页面逻辑复用与状态编排
+- `locales/`：国际化词条与 `vue-i18n` 实例；语言文件放在 `locales/lang/` 下按语种拆分
 - `stores/`：跨组件/跨页面共享状态
-- `services/`：按业务域封装接口，集中处理请求能力
-- `types/`：参数、响应与领域模型类型定义
-- `utils/`：纯工具函数，不依赖页面上下文
+- `services/`：按业务域封装接口；域级实现放在 `services/modules/`，入口在 `services/index.ts` 聚合导出
+- `types/`：参数、响应与领域模型类型定义；域级类型放在 `types/modules/`
+- `utils/`：纯工具函数，不依赖页面上下文；端相关判断等放在 `utils/modules/`
 
 ---
 
@@ -270,7 +312,7 @@ src/stores/
 ### 12.2 配置要求
 
 - 运行时配置统一由环境变量注入，不在业务代码硬编码地址
-- 按端差异（H5 / 小程序）封装在 `utils/platform.ts` 等统一入口
+- 按端差异（H5 / 小程序）封装在 `src/utils/modules/platform.ts` 等统一入口
 - 禁止页面散写端能力判断与兼容逻辑
 
 ---
@@ -290,12 +332,12 @@ npm run dev:h5
 
 1. 在 `pages/` 新建页面目录并在 `pages.json` 注册
 2. 页面逻辑优先抽到 `composables/use-xxx.ts`
-3. 若涉及接口，先补 `types/` 契约，再新增 `services/` 能力
+3. 若涉及接口，先补 `types/modules/` 下契约，再新增 `services/modules/` 能力并在 `types/index.ts` / `services/index.ts` 汇总导出
 4. 样式变量统一进入 `uni.scss` 或 `_vars.scss`
 
 ### 13.3 新增接口标准动作
 
-1. 按业务域新增 `services/*.ts`
+1. 按业务域在 `services/modules/` 新增能力，并在 `services/index.ts` 统一导出
 2. 完善请求参数与响应类型
 3. 页面只调用 composable / service，不散写请求实现
 
@@ -352,7 +394,7 @@ npm run dev:h5
 ### 16.2 工程约定
 
 - 依赖：`vue-i18n`（与 Vue 3 配套），在 `main.ts` 中 `app.use(i18n)`，且 **`legacy: false`**，页面内使用 `useI18n()`。
-- 词条文件：按语言拆分在 `src/locales/` 下，例如 `zh-CN.ts`、`en-US.ts`……键名采用 **点分层级**（如 `tab.home`、`mine.refreshProfile`），避免平面大对象难以检索。
+- 词条文件：按语言拆分在 `src/locales/lang/` 下，例如 `zh-CN.ts`、`en-US.ts`……键名采用 **点分层级**（如 `tab.home`、`mine.refreshProfile`），避免平面大对象难以检索。
 - 常量：`src/locales/constants.ts` 声明 `LOCALE_STORAGE_KEY`、`SUPPORTED_LOCALES`、`DEFAULT_LOCALE`，避免魔法字符串散落在业务里。
 - 持久化：用户所选语言写入 `uni.setStorageSync`，应用启动时用 `uni.getStorageSync` 恢复到 `createI18n({ locale })`，保证二次打开仍是上次语言。
 
