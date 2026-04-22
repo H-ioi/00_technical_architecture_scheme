@@ -182,7 +182,7 @@ Page / Component -> composable(use-xxx) -> service(api) -> request client
 - 页面层仅消费 composable 暴露的数据与动作
 - 请求实例、鉴权、错误处理在请求层统一处理
 - 同业务域接口统一放在同一个 service 文件（如 `user.ts`、`order.ts`）
-- 类型契约优先定义在 `types/`，避免 any 扩散
+- 类型契约优先定义在 `types/modules/` 并经 `types/index.ts` 导出，避免 any 扩散
 
 ### 6.2 禁止事项
 
