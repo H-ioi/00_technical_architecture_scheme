@@ -1,0 +1,28 @@
+{
+  "name": "main-app",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "ant-design-vue": "^4.2.6",
+    "axios": "^1.7.9",
+    "lodash-es": "^4.17.21",
+    "moment": "^2.30.1",
+    "pinia": "^2.3.1",
+    "shared-components": "file:../shared-components",
+    "vue": "^3.5.13",
+    "vue-router": "^4.5.0",
+    "vuex": "^4.1.0",
+    "wujie": "^1.0.22",
+    "wujie-vue3": "^1.0.22"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^5.2.1",
+    "vite": "^6.0.11"
+  }
+}

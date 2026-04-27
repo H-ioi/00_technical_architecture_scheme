@@ -1,0 +1,221 @@
+.avue-left,
+.avue-header,
+.avue-top,
+.avue-logo,
+.avue-layout .login-logo,
+.avue-main {
+  transition: all 0.3s;
+}
+
+.avue-contail {
+  width: 100%;
+  height: 100%;
+  background: $theme_color9;
+  background-size: 100%;
+  background-repeat: no-repeat;
+}
+
+.avue-left {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 160px;
+  height: 100%;
+  z-index: 1025;
+  box-shadow: 0px 2px 8px 8px rgba(162, 187, 202, 0.15);
+}
+
+.avue--collapse {
+  .avue-left,
+  .avue-logo {
+    width: 160px;
+  }
+
+  .avue-header {
+    padding-left: 160px;
+  }
+
+  .avue-main {
+    width: calc(100% - 160px);
+    left: 160px;
+    display: flex;
+    flex-direction: column;
+
+    #avue-view {
+      flex: 1;
+    }
+  }
+
+  .community-main {
+    width: calc(100% - 204px);
+    height: calc(100% - 80px);
+  }
+
+  .thepool-main {
+    width: calc(100% - 220px);
+    height: calc(100% - 80px);
+    background-color: #edf5f6 !important;
+  }
+}
+
+.avue-header {
+  padding-left: 240px;
+  width: 100%;
+  background-color: #fff;
+  box-sizing: border-box;
+  box-shadow: 0px 3px 6px 1px rgba(0, 0, 0, 0.16);
+}
+
+.avue-main {
+  position: absolute;
+  left: 240px;
+  padding: 0;
+  width: calc(100% - 160px);
+  height: calc(100% - 60px);
+  box-sizing: border-box;
+  overflow: hidden;
+  background-color: $theme_back;
+}
+
+.avue-view {
+  padding: 20px;
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+  background-color: #edf5f6;
+  -ms-overflow-style: none;
+  overflow: -moz-scrollbars-none;
+
+  &::-webkit-scrollbar {
+    width: 0 !important;
+  }
+}
+
+.avue-footer {
+  margin: 0 auto;
+  padding: 0 22px;
+  width: 1300px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  .logo {
+    margin-left: -50px;
+  }
+
+  .copyright {
+    color: #666;
+    line-height: 1.5;
+    font-size: 12px;
+  }
+}
+
+.avue-shade {
+  position: fixed;
+  display: none;
+  width: 100%;
+  height: 100%;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.3);
+  z-index: 1024;
+
+  &--show {
+    display: block;
+  }
+}
+
+@media screen and (max-width: 1441px) {
+  html,
+  body,
+  #app {
+    width: 1440px;
+  }
+
+  .avue-main {
+    width: calc(1440px - 160px) !important;
+  }
+
+  .community-main {
+    width: calc(1440px - 204px) !important;
+    height: calc(100% - 80px) !important;
+  }
+}
+
+@media screen and (max-width: 751px) {
+  html,
+  body,
+  #app {
+    width: 100vw;
+  }
+}
+
+// @media screen and (max-width: 992px) {
+//     $width: 240px;
+//     // ele的自适应
+//     .el-dialog,
+//     .el-message-box {
+//         width: 98% !important;
+//     }
+//     //登录页面
+//     .login-left {
+//         display: none !important;
+//     }
+//     .login-logo {
+//         padding-top: 30px !important;
+//         margin-left: -30px;
+//     }
+//     .login-weaper{
+//         margin: 0 auto;
+//         width: 96% !important;
+//     }
+//     .login-border {
+//         border-radius: 5px;
+//         padding: 40px;
+//         margin: 0 auto;
+//         float: none !important;
+//         width: 100% !important;
+//     }
+//     .login-main {
+//         width: 100% !important;
+//     }
+//     //主框架
+//     .avue-tags {
+//         display: none;
+//     }
+//     .avue-left,
+//     .avue-logo {
+//         left: -$width;
+//     }
+//     .avue-main {
+//         left: 0;
+//         width: 100%;
+//     }
+//     .avue-header {
+//         margin-bottom: 15px;
+//         padding-left: 15px;
+//     }
+//     .top-bar__item {
+//         display: none;
+//     }
+//     .avue--collapse {
+//         .avue-left,
+//         .avue-logo {
+//             width: $width;
+//             left: 0;
+//         }
+//         .avue-main {
+//             left: $width;
+//             width: 100%;
+//         }
+//         .avue-header {
+//             padding: 0;
+//             transform: translate3d(230px, 0, 0);
+//         }
+//         .avue-shade {
+//             display: block;
+//         }
+//     }
+// }

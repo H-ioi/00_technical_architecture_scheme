@@ -1,0 +1,33 @@
+const route = [
+    [
+        "首页",
+        "首页",
+        "Home"
+    ],
+    [
+        "用户管理",
+        "用户管理",
+        "Account"
+    ],
+    [
+        "工单列表",
+        "工单列表",
+        "OrderList"
+    ],
+    [
+        "统计报表",
+        "统计报表",
+        "OrderStatistical"
+    ],
+    [
+        "配置方案",
+        "配置方案",
+        "Configuration"
+    ],
+    [
+        "个人信息",
+        "个人信息",
+        "UserInfo"
+    ],
+]
+export default route
