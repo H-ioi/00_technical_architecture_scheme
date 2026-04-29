@@ -1,4 +1,8 @@
 <script setup lang="ts">
+/**
+ * 表格单元格渲染器：按 `UniTableColumn.type` 输出文本、标签、复制、金额、日期、
+ * 开关、图片、链接等；可配合列 `formatter` 与全局 `valueEnums` 做枚举展示。
+ */
 import { computed } from "vue";
 import { ElMessage } from "element-plus";
 
@@ -247,3 +251,34 @@ const handleSwitchChange = async (nextValue: unknown) => {
     </template>
   </div>
 </template>
+
+<style scoped lang="scss">
+.uni-table-cell {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  align-items: center;
+  min-width: 0;
+
+  &__image {
+    overflow: hidden;
+    border-radius: 4px;
+  }
+
+  &__copy {
+    margin-left: 4px;
+  }
+
+  &__tag {
+    margin-right: 4px;
+  }
+
+  &__ellipsis {
+    display: inline-block;
+    max-width: 220px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+}
+</style>

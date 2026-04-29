@@ -1,4 +1,8 @@
 <script setup lang="ts">
+/**
+ * 数据表格：列定义驱动渲染 + 可选前端分页或 `request` 远程分页/排序。
+ * 支持多选、行操作列、`hasUniPermission` 控制的操作按钮显隐及 `@switch-change` 等事件。
+ */
 import { computed, onMounted, reactive, ref, watch } from "vue";
 import type { Sort } from "element-plus";
 
@@ -153,79 +157,36 @@ defineExpose({
       <slot name="toolbar" />
     </div>
 
-    <el-table
-      v-loading="actualLoading"
-      :data="actualData"
-      :row-key="rowKey"
-      :empty-text="emptyText"
-      @selection-change="
-        (selection: Recordable[]) => emit('selection-change', selection)
-      "
-      @sort-change="handleSortChange"
-      @row-click="(row: Recordable) => emit('row-click', row)"
-    >
-      <el-table-column
-        v-if="selection === true || selection === 'multiple'"
-        type="selection"
-        width="48"
-      />
+    <el-table v-loading="actualLoading" :data="actualData" :row-key="rowKey" :empty-text="emptyText" @selection-change="
+      (selection: Recordable[]) => emit('selection-change', selection)
+    " @sort-change="handleSortChange" @row-click="(row: Recordable) => emit('row-click', row)">
+      <el-table-column v-if="selection === true || selection === 'multiple'" type="selection" width="48" />
 
-      <el-table-column
-        v-for="column in columns"
-        :key="column.prop"
-        :prop="column.prop"
-        :label="column.label"
-        :width="column.width"
-        :min-width="column.minWidth"
-        :fixed="column.fixed"
-        :align="column.align"
-        :sortable="column.sortable"
-        :show-overflow-tooltip="column.showOverflowTooltip"
-      >
+      <el-table-column v-for="column in columns" :key="column.prop" :prop="column.prop" :label="column.label"
+        :width="column.width" :min-width="column.minWidth" :fixed="column.fixed" :align="column.align"
+        :sortable="column.sortable" :show-overflow-tooltip="column.showOverflowTooltip">
         <template #header>
           <slot :name="`header-${column.prop}`" :column="column">{{
             column.label
-          }}</slot>
+            }}</slot>
         </template>
         <template #default="{ row, $index }">
-          <slot
-            v-if="$slots[`column-${column.prop}`]"
-            :name="`column-${column.prop}`"
-            :row="row"
-            :value="row[column.prop]"
-            :index="$index"
-          />
-          <UniTableCell
-            v-else
-            :row="row"
-            :column="column"
-            :value="row[column.prop]"
-            :row-index="$index"
-            :value-enums="valueEnums"
-            @switch-change="
+          <slot v-if="$slots[`column-${column.prop}`]" :name="`column-${column.prop}`" :row="row"
+            :value="row[column.prop]" :index="$index" />
+          <UniTableCell v-else :row="row" :column="column" :value="row[column.prop]" :row-index="$index"
+            :value-enums="valueEnums" @switch-change="
               (nextRow, nextColumn, value) =>
                 emit('switch-change', nextRow, nextColumn, value)
-            "
-          />
+            " />
         </template>
       </el-table-column>
 
-      <el-table-column
-        v-if="actions?.length || $slots.actions"
-        label="操作"
-        fixed="right"
-        width="180"
-      >
+      <el-table-column v-if="actions?.length || $slots.actions" label="操作" fixed="right" width="180">
         <template #default="{ row, $index }">
           <slot name="actions" :row="row" :index="$index">
             <template v-for="action in actions" :key="action.label">
-              <el-button
-                v-if="isActionVisible(action, row)"
-                link
-                :type="action.type ?? 'primary'"
-                :disabled="isActionDisabled(action, row)"
-                @click="action.onClick(row, $index)"
-              >
+              <el-button v-if="isActionVisible(action, row)" link :type="action.type ?? 'primary'"
+                :disabled="isActionDisabled(action, row)" @click="action.onClick(row, $index)">
                 {{ action.label }}
               </el-button>
             </template>
@@ -238,22 +199,44 @@ defineExpose({
       </template>
     </el-table>
 
-    <div
-      v-if="paginationConfig && paginationConfig.enabled !== false"
-      class="uni-data-table__pagination"
-      :class="`is-${paginationConfig.position}`"
-    >
-      <el-pagination
-        :background="paginationConfig.background"
-        :layout="paginationConfig.layout"
-        :page-sizes="paginationConfig.pageSizes"
-        :hide-on-single-page="paginationConfig.hideOnSinglePage"
-        :current-page="paginationState.pageNo"
-        :page-size="paginationState.pageSize"
-        :total="paginationConfig.total ?? paginationState.total"
-        @current-change="handleCurrentChange"
-        @size-change="handleSizeChange"
-      />
+    <div v-if="paginationConfig && paginationConfig.enabled !== false" class="uni-data-table__pagination"
+      :class="`is-${paginationConfig.position}`">
+      <el-pagination :background="paginationConfig.background" :layout="paginationConfig.layout"
+        :page-sizes="paginationConfig.pageSizes" :hide-on-single-page="paginationConfig.hideOnSinglePage"
+        :current-page="paginationState.pageNo" :page-size="paginationState.pageSize"
+        :total="paginationConfig.total ?? paginationState.total" @current-change="handleCurrentChange"
+        @size-change="handleSizeChange" />
     </div>
   </div>
 </template>
+
+<style scoped lang="scss">
+.uni-data-table {
+  width: 100%;
+
+  :deep(.el-table) {
+    width: 100%;
+  }
+
+  &__toolbar {
+    margin-bottom: 12px;
+  }
+
+  &__pagination {
+    display: flex;
+    margin-top: 16px;
+
+    &.is-left {
+      justify-content: flex-start;
+    }
+
+    &.is-center {
+      justify-content: center;
+    }
+
+    &.is-right {
+      justify-content: flex-end;
+    }
+  }
+}
+</style>

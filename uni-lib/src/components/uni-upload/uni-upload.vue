@@ -1,4 +1,11 @@
 <script setup lang="ts">
+/**
+ * 上传封装：基于 Element Plus `ElUpload`，暴露常用 props / 事件，
+ * 并用 `v-model:fileList` 双向绑定列表；可选 `maxSize` 在校验失败时触发 `validate-error`。
+ * 默认触发区：`list-type="picture-card"` 为加号图标，其余为「上传文件」按钮；可用 `#trigger` 覆盖。
+ */
+import { Plus } from "@element-plus/icons-vue";
+import { ElIcon } from "element-plus";
 import type {
   UploadFile,
   UploadFiles,
@@ -85,7 +92,10 @@ const handleProgress: UploadProps["onProgress"] = (event, file, files) =>
     @progress="handleProgress"
   >
     <slot name="trigger">
-      <el-button type="primary">上传文件</el-button>
+      <ElIcon v-if="listType === 'picture-card'" class="uni-upload__trigger-plus">
+        <Plus />
+      </ElIcon>
+      <el-button v-else type="primary">上传文件</el-button>
     </slot>
     <template v-if="$slots.tip" #tip>
       <slot name="tip" />

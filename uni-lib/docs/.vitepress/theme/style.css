@@ -4,3 +4,17 @@
   border-radius: 8px;
   background: var(--vp-c-bg);
 }
+
+.comp-demo .uni-lib-demo {
+  border: none;
+  border-radius: 0;
+}
+
+/* 文档内表格示例：保证 EP Table / Pagination 不被容器挤压导致表头表体错位 */
+.comp-demo .uni-data-table .el-table {
+  width: 100%;
+}
+
+.comp-demo .uni-data-table__pagination {
+  flex-shrink: 0;
+}

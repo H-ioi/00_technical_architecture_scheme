@@ -1,6 +1,10 @@
 <script setup lang="ts">
+/**
+ * 动态表单：`config.schema` 声明字段与 Element Plus 控件类型，支持分组 `sections`、
+ * `rules` 校验、联动显隐、异步选项、`edit`/`view` 模式及 `#field-xxx` / `#actions` 插槽。
+ */
+import type { FormInstance, RowProps } from "element-plus";
 import { computed, reactive, ref, watch } from "vue";
-import type { FormInstance } from "element-plus";
 
 import UniUpload from "@/components/uni-upload/uni-upload.vue";
 import type {
@@ -45,6 +49,33 @@ const dynamicState = reactive<
 >({});
 
 const formMode = computed(() => props.mode ?? props.config.mode ?? "edit");
+
+/** ElRow.gutter 必须为 number；JSON/接口常写成字符串，会导致栅距不生效 */
+function normalizeRowProps(rowProps?: Partial<RowProps>): Partial<RowProps> {
+  if (!rowProps || typeof rowProps !== "object") {
+    return {};
+  }
+
+  const { gutter, ...rest } = rowProps;
+
+  if (gutter === undefined || gutter === null) {
+    return { ...rest };
+  }
+
+  const n =
+    typeof gutter === "number"
+      ? gutter
+      : typeof gutter === "string"
+        ? Number.parseFloat(gutter)
+        : Number(gutter);
+
+  return {
+    ...rest,
+    ...(Number.isFinite(n) ? { gutter: n } : {}),
+  };
+}
+
+const mergedRowProps = computed(() => normalizeRowProps(props.config.rowProps));
 const formModel = computed({
   get: () => props.modelValue,
   set: (value) => emit("update:modelValue", value),
@@ -240,16 +271,8 @@ defineExpose({
 </script>
 
 <template>
-  <el-form
-    ref="formRef"
-    :model="formModel"
-    :rules="config.rules"
-    v-bind="config.formProps"
-  >
-    <template
-      v-for="section in groupedSections"
-      :key="section.title || 'default'"
-    >
+  <el-form ref="formRef" class="uni-form" :model="formModel" :rules="config.rules" v-bind="config.formProps">
+    <template v-for="section in groupedSections" :key="section.title || 'default'">
       <div v-if="section.title" class="uni-form__section-title">
         <slot name="section-title" :section="section">
           <h3>{{ section.title }}</h3>
@@ -257,106 +280,57 @@ defineExpose({
         </slot>
       </div>
 
-      <el-row v-bind="config.rowProps">
-        <el-col
-          v-for="field in section.fields"
-          :key="field.field"
-          v-bind="field.colProps ?? section.colProps ?? config.colProps"
-        >
-          <el-form-item
-            :label="field.label"
-            :prop="field.field"
-            v-bind="field.formItemProps"
-          >
-            <slot
-              v-if="$slots[`field-${field.field}`]"
-              :name="`field-${field.field}`"
-              :field="field"
-              :model="formModel"
-            />
+      <el-row v-bind="mergedRowProps">
+        <el-col v-for="field in section.fields" :key="field.field"
+          v-bind="field.colProps ?? section.colProps ?? config.colProps">
+          <el-form-item :label="field.label" :prop="field.field" v-bind="field.formItemProps">
+            <slot v-if="$slots[`field-${field.field}`]" :name="`field-${field.field}`" :field="field"
+              :model="formModel" />
 
             <span v-else-if="formMode === 'view'" class="uni-form__view-value">
               {{ renderViewValue(field) }}
             </span>
 
-            <component
-              :is="field.component"
-              v-else-if="
-                field.component === 'ElInput' ||
-                field.component === 'ElInputNumber' ||
-                field.component === 'ElSwitch' ||
-                field.component === 'ElDatePicker' ||
-                field.component === 'ElTimePicker' ||
-                field.component === 'ElCascader' ||
-                field.component === 'ElTreeSelect'
-              "
-              :model-value="formModel[field.field]"
-              :disabled="isFieldDisabled(field)"
-              :readonly="isFieldReadonly(field)"
-              v-bind="field.componentProps"
-              @update:model-value="
+            <component :is="field.component" v-else-if="
+              field.component === 'ElInput' ||
+              field.component === 'ElInputNumber' ||
+              field.component === 'ElSwitch' ||
+              field.component === 'ElDatePicker' ||
+              field.component === 'ElTimePicker' ||
+              field.component === 'ElCascader' ||
+              field.component === 'ElTreeSelect'
+            " :model-value="formModel[field.field]" :disabled="isFieldDisabled(field)"
+              :readonly="isFieldReadonly(field)" v-bind="field.componentProps" @update:model-value="
                 (value: unknown) => handleFieldChange(field, value)
-              "
-            />
+              " />
 
-            <el-select
-              v-else-if="field.component === 'ElSelect'"
-              :model-value="formModel[field.field]"
-              :disabled="isFieldDisabled(field)"
-              v-bind="field.componentProps"
-              @update:model-value="
+            <el-select v-else-if="field.component === 'ElSelect'" :model-value="formModel[field.field]"
+              :disabled="isFieldDisabled(field)" v-bind="field.componentProps" @update:model-value="
                 (value: unknown) => handleFieldChange(field, value)
-              "
-            >
-              <el-option
-                v-for="option in getFieldOptions(field)"
-                :key="String(option.value)"
-                v-bind="option"
-              />
+              ">
+              <el-option v-for="option in getFieldOptions(field)" :key="String(option.value)" v-bind="option" />
             </el-select>
 
-            <el-radio-group
-              v-else-if="field.component === 'ElRadioGroup'"
-              :model-value="formModel[field.field]"
-              :disabled="isFieldDisabled(field)"
-              v-bind="field.componentProps"
-              @update:model-value="
+            <el-radio-group v-else-if="field.component === 'ElRadioGroup'" :model-value="formModel[field.field]"
+              :disabled="isFieldDisabled(field)" v-bind="field.componentProps" @update:model-value="
                 (value: unknown) => handleFieldChange(field, value)
-              "
-            >
-              <el-radio
-                v-for="option in getFieldOptions(field)"
-                :key="String(option.value)"
-                :value="option.value"
-              >
+              ">
+              <el-radio v-for="option in getFieldOptions(field)" :key="String(option.value)" :value="option.value">
                 {{ option.label }}
               </el-radio>
             </el-radio-group>
 
-            <el-checkbox-group
-              v-else-if="field.component === 'ElCheckboxGroup'"
-              :model-value="formModel[field.field]"
-              :disabled="isFieldDisabled(field)"
-              v-bind="field.componentProps"
-              @update:model-value="
+            <el-checkbox-group v-else-if="field.component === 'ElCheckboxGroup'" :model-value="formModel[field.field]"
+              :disabled="isFieldDisabled(field)" v-bind="field.componentProps" @update:model-value="
                 (value: unknown) => handleFieldChange(field, value)
-              "
-            >
-              <el-checkbox
-                v-for="option in getFieldOptions(field)"
-                :key="String(option.value)"
-                :value="option.value"
-              >
+              ">
+              <el-checkbox v-for="option in getFieldOptions(field)" :key="String(option.value)" :value="option.value">
                 {{ option.label }}
               </el-checkbox>
             </el-checkbox-group>
 
-            <UniUpload
-              v-else-if="field.component === 'UniUpload'"
-              :file-list="formModel[field.field] as never"
-              v-bind="field.componentProps"
-              @update:file-list="(value) => handleFieldChange(field, value)"
-            />
+            <UniUpload v-else-if="field.component === 'UniUpload'" :file-list="formModel[field.field] as never"
+              v-bind="field.componentProps" @update:file-list="(value) => handleFieldChange(field, value)" />
           </el-form-item>
         </el-col>
       </el-row>
@@ -367,3 +341,30 @@ defineExpose({
     </div>
   </el-form>
 </template>
+
+<style scoped lang="scss">
+.uni-form {
+  &__section-title {
+    margin: 16px 0 12px;
+
+    h3 {
+      margin: 0;
+      font-size: 16px;
+    }
+
+    p {
+      margin: 4px 0 0;
+      color: var(--uni-text-color-secondary);
+    }
+  }
+
+  &__view-value {
+    color: var(--uni-text-color);
+  }
+
+  &__actions {
+    display: flex;
+    justify-content: flex-end;
+  }
+}
+</style>

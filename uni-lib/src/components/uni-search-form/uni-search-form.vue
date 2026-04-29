@@ -1,4 +1,8 @@
 <script setup lang="ts">
+/**
+ * 查询筛选条：在 `UniForm` 之上提供查询/重置/展开收起与右侧操作区插槽；
+ * 默认合并 `formProps.labelWidth: 0`（无左侧标签，适合 placeholder 紧凑布局，可被 `config.formProps` 覆盖）。
+ */
 import { computed, ref } from "vue";
 
 import UniForm from "@/components/uni-form/uni-form.vue";
@@ -88,6 +92,10 @@ const visibleSchema = computed(() => {
 
 const searchFormConfig = computed<UniFormConfig>(() => ({
   ...props.config,
+  formProps: {
+    labelWidth: "0px",
+    ...(props.config.formProps ?? {}),
+  },
   sections: undefined,
   schema: visibleSchema.value,
 }));
@@ -132,3 +140,43 @@ const handleReset = () => {
     </div>
   </div>
 </template>
+
+<style scoped lang="scss">
+.uni-search-form {
+  &__body {
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+
+    @media (width <=768px) {
+      display: block;
+    }
+  }
+
+  &__fields {
+    flex: 1;
+    min-width: 0;
+    width: 100%;
+    /* el-row gutter 依赖负 margin，父级 overflow 裁剪会导致栅距看起来无效 */
+    overflow: visible;
+  }
+
+  &__actions-wrap {
+    display: flex;
+    flex: 0 0 auto;
+    align-items: flex-start;
+    justify-content: flex-end;
+    padding-top: 1px;
+
+    @media (width <=768px) {
+      margin-top: 12px;
+    }
+  }
+
+  &__actions {
+    display: flex;
+    justify-content: flex-end;
+    width: 100%;
+  }
+}
+</style>

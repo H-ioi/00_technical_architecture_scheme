@@ -2,52 +2,61 @@
   "hash": "8aca0c14",
   "configHash": "30f8a75a",
   "lockfileHash": "ee8264fa",
-  "browserHash": "51166994",
+  "browserHash": "53ca4a49",
   "optimized": {
     "vue": {
       "src": "../../../../node_modules/vue/dist/vue.runtime.esm-bundler.js",
       "file": "vue.js",
-      "fileHash": "59927eb8",
+      "fileHash": "8dcc830e",
       "needsInterop": false
     },
     "vitepress > @vue/devtools-api": {
       "src": "../../../../node_modules/@vue/devtools-api/dist/index.js",
       "file": "vitepress___@vue_devtools-api.js",
-      "fileHash": "84ff582b",
+      "fileHash": "ee2938dd",
       "needsInterop": false
     },
     "vitepress > @vueuse/core": {
       "src": "../../../../node_modules/vitepress/node_modules/@vueuse/core/index.mjs",
       "file": "vitepress___@vueuse_core.js",
-      "fileHash": "312d4e56",
+      "fileHash": "80eebb51",
       "needsInterop": false
     },
     "element-plus": {
       "src": "../../../../node_modules/element-plus/es/index.mjs",
       "file": "element-plus.js",
-      "fileHash": "062ebbdf",
+      "fileHash": "187f268d",
       "needsInterop": false
     },
     "axios": {
       "src": "../../../../node_modules/axios/index.js",
       "file": "axios.js",
-      "fileHash": "65334024",
+      "fileHash": "0e8828a9",
       "needsInterop": false
     },
     "element-plus/es/locale/lang/en.mjs": {
       "src": "../../../../node_modules/element-plus/es/locale/lang/en.mjs",
       "file": "element-plus_es_locale_lang_en__mjs.js",
-      "fileHash": "a62a6a27",
+      "fileHash": "44448676",
       "needsInterop": false
     },
     "element-plus/es/locale/lang/zh-cn.mjs": {
       "src": "../../../../node_modules/element-plus/es/locale/lang/zh-cn.mjs",
       "file": "element-plus_es_locale_lang_zh-cn__mjs.js",
-      "fileHash": "c1ef7f40",
+      "fileHash": "c70f27bf",
+      "needsInterop": false
+    },
+    "@element-plus/icons-vue": {
+      "src": "../../../../node_modules/@element-plus/icons-vue/dist/index.js",
+      "file": "@element-plus_icons-vue.js",
+      "fileHash": "5eeb0b91",
       "needsInterop": false
     }
   },
   "chunks": {
+    "chunk-UUYZKWYE": {
+      "file": "chunk-UUYZKWYE.js"
+    },
     "chunk-R6J4WXPC": {
       "file": "chunk-R6J4WXPC.js"
     },

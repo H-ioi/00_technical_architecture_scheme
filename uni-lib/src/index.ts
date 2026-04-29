@@ -1,3 +1,4 @@
+/** uni-lib 入口：导出组件、插件安装函数、类型与各业务工具模块（请求、鉴权、主题等）。 */
 import { UniConfigProvider } from "./components/uni-config-provider";
 import { UniDataTable } from "./components/uni-data-table";
 import { UniForm } from "./components/uni-form";
@@ -6,13 +7,7 @@ import { UniUpload } from "./components/uni-upload";
 import { install } from "./plugins/install";
 import "./style.scss";
 
-export {
-  UniConfigProvider,
-  UniDataTable,
-  UniForm,
-  UniSearchForm,
-  UniUpload,
-};
+export { UniConfigProvider, UniDataTable, UniForm, UniSearchForm, UniUpload };
 export * from "./plugins/install";
 export * from "./types/shared";
 export * from "./directives/permission";

@@ -1,3 +1,6 @@
+/**
+ * 全量注册 uni-lib 组件与权限指令的 `app.use(UniLib)` 安装函数实现。
+ */
 import type { App } from "vue";
 
 import { UniConfigProvider } from "@/components/uni-config-provider";
