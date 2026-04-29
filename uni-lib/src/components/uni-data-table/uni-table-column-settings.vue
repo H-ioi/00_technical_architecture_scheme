@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { Rank } from "@element-plus/icons-vue";
 
+import { useUniI18n } from "@/services/i18n";
 import type { UniTableColumnState } from "@/types/uni-data-table";
 
 defineProps<{
@@ -11,11 +12,15 @@ const emit = defineEmits<{
   "drag-start": [prop: string];
   drop: [prop: string];
 }>();
+
+const i18n = useUniI18n();
 </script>
 
 <template>
   <div class="uni-table-column-settings">
-    <div class="uni-table-column-settings__title">列设置</div>
+    <div class="uni-table-column-settings__title">
+      {{ i18n.t("dataTable.columnSetting") }}
+    </div>
     <div
       v-for="column in columns"
       :key="column.prop"
@@ -35,11 +40,11 @@ const emit = defineEmits<{
         v-model="column.fixed"
         size="small"
         clearable
-        placeholder="固定"
+        :placeholder="i18n.t('dataTable.fixed')"
         style="width: 82px"
       >
-        <el-option label="左" value="left" />
-        <el-option label="右" value="right" />
+        <el-option :label="i18n.t('dataTable.fixedLeft')" value="left" />
+        <el-option :label="i18n.t('dataTable.fixedRight')" value="right" />
       </el-select>
     </div>
   </div>

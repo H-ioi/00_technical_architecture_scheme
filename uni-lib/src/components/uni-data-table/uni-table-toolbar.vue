@@ -7,6 +7,7 @@ import {
   Setting,
 } from "@element-plus/icons-vue";
 
+import { useUniI18n } from "@/services/i18n";
 import type { UniTableToolbarConfig } from "@/types/shared";
 import type { UniTableColumnState, UniTableSize } from "@/types/uni-data-table";
 import UniTableColumnSettings from "./uni-table-column-settings.vue";
@@ -28,6 +29,8 @@ const emit = defineEmits<{
   print: [];
   refresh: [];
 }>();
+
+const i18n = useUniI18n();
 </script>
 
 <template>
@@ -37,13 +40,15 @@ const emit = defineEmits<{
         link
         class="uni-table-toolbar__trigger"
         :icon="Setting"
-        aria-label="表格工具"
-        title="表格工具"
+        :aria-label="i18n.t('dataTable.tools')"
+        :title="i18n.t('dataTable.tools')"
       />
     </template>
 
     <div class="uni-table-toolbar__panel">
-      <div class="uni-table-toolbar__header">表格工具</div>
+      <div class="uni-table-toolbar__header">
+        {{ i18n.t("dataTable.tools") }}
+      </div>
 
       <div class="uni-table-toolbar__actions">
         <el-button
@@ -52,29 +57,35 @@ const emit = defineEmits<{
           :loading="loading"
           @click="emit('refresh')"
         >
-          刷新
+          {{ i18n.t("dataTable.refresh") }}
         </el-button>
         <el-button
           v-if="config.fullscreen"
           :icon="FullScreen"
           @click="emit('update:fullscreen', !fullscreen)"
         >
-          {{ fullscreen ? "退出最大化" : "最大化" }}
+          {{
+            fullscreen
+              ? i18n.t("dataTable.exitFullscreen")
+              : i18n.t("dataTable.fullscreen")
+          }}
         </el-button>
         <el-button
           v-if="config.export"
           :icon="Download"
           @click="emit('export')"
         >
-          导出
+          {{ i18n.t("dataTable.export") }}
         </el-button>
         <el-button v-if="config.print" :icon="Printer" @click="emit('print')">
-          打印
+          {{ i18n.t("dataTable.print") }}
         </el-button>
       </div>
 
       <div v-if="config.density" class="uni-table-toolbar__section">
-        <div class="uni-table-toolbar__title">密度</div>
+        <div class="uni-table-toolbar__title">
+          {{ i18n.t("dataTable.density") }}
+        </div>
         <el-radio-group
           :model-value="tableSize"
           size="small"
@@ -82,9 +93,15 @@ const emit = defineEmits<{
             (value: UniTableSize) => emit('update:tableSize', value)
           "
         >
-          <el-radio-button value="large">宽松</el-radio-button>
-          <el-radio-button value="default">默认</el-radio-button>
-          <el-radio-button value="small">紧凑</el-radio-button>
+          <el-radio-button value="large">
+            {{ i18n.t("dataTable.densityLarge") }}
+          </el-radio-button>
+          <el-radio-button value="default">
+            {{ i18n.t("dataTable.densityDefault") }}
+          </el-radio-button>
+          <el-radio-button value="small">
+            {{ i18n.t("dataTable.densitySmall") }}
+          </el-radio-button>
         </el-radio-group>
       </div>
 

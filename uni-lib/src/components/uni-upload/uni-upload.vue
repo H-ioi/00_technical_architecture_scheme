@@ -13,6 +13,9 @@ import type {
   UploadRequestOptions,
   UploadUserFile,
 } from "element-plus";
+import { useUniI18n } from "@/services/i18n";
+
+const i18n = useUniI18n();
 
 const props = withDefaults(
   defineProps<{
@@ -54,7 +57,11 @@ const emit = defineEmits<{
 
 const beforeUpload: UploadProps["beforeUpload"] = (file) => {
   if (props.maxSize && file.size > props.maxSize) {
-    emit("validate-error", `文件大小不能超过 ${props.maxSize} bytes`, file);
+    emit(
+      "validate-error",
+      i18n.t("upload.maxSize", { size: props.maxSize }),
+      file,
+    );
     return false;
   }
 
@@ -106,10 +113,15 @@ const handleChange: UploadProps["onChange"] = (file, files) =>
     @change="handleChange"
   >
     <slot name="trigger">
-      <ElIcon v-if="listType === 'picture-card'" class="uni-upload__trigger-plus">
+      <ElIcon
+        v-if="listType === 'picture-card'"
+        class="uni-upload__trigger-plus"
+      >
         <Plus />
       </ElIcon>
-      <el-button v-else type="primary">上传文件</el-button>
+      <el-button v-else type="primary">{{
+        i18n.t("upload.trigger")
+      }}</el-button>
     </slot>
     <template v-if="$slots.tip" #tip>
       <slot name="tip" />

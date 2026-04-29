@@ -17,6 +17,7 @@ import codeActionsOverflow from "../.vitepress/snippets/uni-data-table/actions-o
 import codeColumnTypes from "../.vitepress/snippets/uni-data-table/column-types.vue?raw";
 import codeColHeader from "../.vitepress/snippets/uni-data-table/column-header-slots.vue?raw";
 import codeLoading from "../.vitepress/snippets/uni-data-table/loading.vue?raw";
+import codeOverflowTooltip from "../.vitepress/snippets/uni-data-table/overflow-tooltip.vue?raw";
 import codePageCustom from "../.vitepress/snippets/uni-data-table/pagination-custom.vue?raw";
 import codePaginationRemote from "../.vitepress/snippets/uni-data-table/pagination-remote.vue?raw";
 import codeRowClick from "../.vitepress/snippets/uni-data-table/row-click.vue?raw";
@@ -440,6 +441,35 @@ onMounted(() => {
   />
 </CompDemo>
 
+## 超宽省略与 tooltip
+
+列配置 `showOverflowTooltip: true` 后，单元格内容会保持单行展示；超过列宽时自动省略，鼠标悬停展示完整内容。适合项目名称、备注、说明等长文本字段。
+
+<CompDemo title="showOverflowTooltip 超宽省略" :code="codeOverflowTooltip">
+  <UniDataTable
+    :columns="[
+      { prop: 'name', label: '项目名称', minWidth: 140, showOverflowTooltip: true },
+      { prop: 'description', label: '说明', minWidth: 180, showOverflowTooltip: true },
+      { prop: 'owner', label: '负责人', width: 100 },
+    ]"
+    :data="[
+      {
+        id: 1,
+        name: '跨端后台统一业务组件库建设与迁移专项',
+        description: '这是一段较长的项目说明，用来演示表格单元格内容超过列宽后自动省略，并在鼠标悬停时展示完整内容。',
+        owner: 'Alice',
+      },
+      {
+        id: 2,
+        name: '统一权限、主题与国际化治理',
+        description: '列配置 showOverflowTooltip 为 true 时，会启用单行省略与 tooltip 提示。',
+        owner: 'Bob',
+      },
+    ]"
+    :pagination="false"
+  />
+</CompDemo>
+
 ## 工具栏与空态插槽
 
 <CompDemo title="#toolbar + #empty" :code="codeToolbarEmpty">
@@ -505,19 +535,20 @@ onMounted(() => {
 
 ## Props
 
-| 属性         | 说明                                                     | 类型                                | 默认值     |
-| ------------ | -------------------------------------------------------- | ----------------------------------- | ---------- |
-| `columns`    | 列定义                                                   | `UniTableColumn[]`                  | —          |
-| `data`       | 静态数据；与 `request` 二选一                            | `Record<string, unknown>[]`         | `[]`       |
-| `request`    | 分页请求，返回 `{ records, total }`                      | `UniTableRequest`                   | —          |
-| `loading`    | 外部加载态                                               | `boolean`                           | —          |
-| `pagination` | 分页配置，`false` 关闭分页                               | `UniPaginationConfig \| false`      | 内置默认   |
-| `rowKey`     | 行主键字段名                                             | `string`                            | `id`       |
-| `selection`  | 多选（`true` / `multiple`）或单选高亮（`single`）        | `boolean \| 'multiple' \| 'single'` | —          |
-| `actions`    | 行操作按钮配置；可见项超过 3 个时第三位自动收纳为更多    | `UniTableAction[]`                  | —          |
-| `emptyText`  | 空数据文案                                               | `string`                            | `暂无数据` |
-| `valueEnums` | 按列 `prop` 注入枚举选项（展示 enum/tag 等）             | `Record<string, UniOption[]>`       | —          |
-| `toolbar`    | 右侧表格工具配置；`false` 关闭内置工具栏                 | `boolean \| UniTableToolbarConfig`  | 内置默认   |
+| 属性         | 说明                                                  | 类型                                | 默认值    |
+| ------------ | ----------------------------------------------------- | ----------------------------------- | --------- |
+| `columns`    | 列定义                                                | `UniTableColumn[]`                  | —         |
+| `data`       | 静态数据；与 `request` 二选一                         | `Record<string, unknown>[]`         | `[]`      |
+| `request`    | 分页请求，返回 `{ records, total }`                   | `UniTableRequest`                   | —         |
+| `filters`    | 远程请求附加筛选参数，会透传给 `request`              | `Record<string, unknown>`           | —         |
+| `loading`    | 外部加载态                                            | `boolean`                           | —         |
+| `pagination` | 分页配置，`false` 关闭分页                            | `UniPaginationConfig \| false`      | 内置默认  |
+| `rowKey`     | 行主键字段名                                          | `string`                            | `id`      |
+| `selection`  | 多选（`true` / `multiple`）或单选高亮（`single`）     | `boolean \| 'multiple' \| 'single'` | —         |
+| `actions`    | 行操作按钮配置；可见项超过 3 个时第三位自动收纳为更多 | `UniTableAction[]`                  | —         |
+| `emptyText`  | 空数据文案；不传时使用当前语言包                      | `string`                            | i18n 默认 |
+| `valueEnums` | 按列 `prop` 注入枚举选项（展示 enum/tag 等）          | `Record<string, UniOption[]>`       | —         |
+| `toolbar`    | 右侧表格工具配置；`false` 关闭内置工具栏              | `boolean \| UniTableToolbarConfig`  | 内置默认  |
 
 ## Toolbar Config
 
@@ -534,39 +565,42 @@ onMounted(() => {
 
 ## Column Types
 
-| 类型       | 说明                                   |
-| ---------- | -------------------------------------- |
-| `text`     | 默认文本，支持 `formatter`             |
-| `number`   | 数字文本                               |
-| `money`    | 金额格式化                             |
-| `percent`  | 小数转百分比展示                       |
-| `date`     | 日期格式化，默认 `YYYY-MM-DD`          |
-| `datetime` | 日期时间格式化，默认 `YYYY-MM-DD HH:mm:ss` |
-| `time`     | 时间格式化，默认 `HH:mm:ss`            |
-| `relativeTime` | 相对时间展示，如 `5 分钟前`       |
-| `boolean`  | `true/false` 展示为 `是/否`            |
-| `enum`     | 从列 `options` 或 `valueEnums` 映射文案 |
-| `tag/tags` | 标签展示                               |
-| `switch`   | 开关列，变更时触发 `switch-change`     |
-| `copy`     | 文本 + 复制按钮                        |
-| `link/links` | 链接展示                             |
-| `array`    | 数组文本或标签展示                     |
-| `json`     | JSON 字符串 + tooltip                  |
-| `image/images` | 图片预览展示                       |
-| `video/videos` | 视频链接展示                       |
-| `slot`     | 配合 `column-${prop}` 插槽自定义展示   |
+| 类型           | 说明                                                                         |
+| -------------- | ---------------------------------------------------------------------------- |
+| `text`         | 默认文本，支持 `formatter`                                                   |
+| `number`       | 数字文本                                                                     |
+| `money`        | 金额格式化                                                                   |
+| `percent`      | 百分比展示，默认按 `value * 100`，后端已返回百分数时可设 `percent.scale = 1` |
+| `date`         | 日期格式化，默认 `YYYY-MM-DD`                                                |
+| `datetime`     | 日期时间格式化，默认 `YYYY-MM-DD HH:mm:ss`                                   |
+| `time`         | 时间格式化，默认 `HH:mm:ss`                                                  |
+| `relativeTime` | 相对时间展示，如 `5 分钟前`                                                  |
+| `boolean`      | `true/false` 展示为 `是/否`                                                  |
+| `enum`         | 从列 `options` 或 `valueEnums` 映射文案                                      |
+| `tag/tags`     | 标签展示                                                                     |
+| `switch`       | 开关列，变更时触发 `switch-change`                                           |
+| `copy`         | 文本 + 复制按钮                                                              |
+| `link/links`   | 链接展示                                                                     |
+| `array`        | 数组文本或标签展示                                                           |
+| `json`         | JSON 字符串 + tooltip                                                        |
+| `image/images` | 图片预览展示                                                                 |
+| `video/videos` | 视频链接展示                                                                 |
+| `slot`         | 配合 `column-${prop}` 插槽自定义展示                                         |
+
+常用列属性还包括 `width`、`minWidth`、`fixed`、`align`、`sortable`、`showOverflowTooltip`。其中 `showOverflowTooltip` 用于长文本单行省略和悬停提示。
 
 ## Events
 
-| 事件名                              | 说明             |
-| ----------------------------------- | ---------------- |
-| `update:pageNo` / `update:pageSize` | 分页变更         |
-| `selection-change`                  | 勾选变更         |
-| `sort-change`                       | 排序变更         |
-| `row-click`                         | 行点击           |
-| `refresh`                           | `request` 成功后 |
-| `request-error`                     | 请求失败         |
-| `switch-change`                     | 开关列变更       |
+| 事件名                              | 说明                                           |
+| ----------------------------------- | ---------------------------------------------- |
+| `update:pageNo` / `update:pageSize` | 分页变更                                       |
+| `selection-change`                  | 勾选变更                                       |
+| `sort-change`                       | 排序变更                                       |
+| `row-click`                         | 行点击                                         |
+| `refresh`                           | 用户触发表格刷新（工具栏或组件 `refresh()`）   |
+| `load-success`                      | `request` 加载成功，包含首屏、分页、排序和刷新 |
+| `request-error`                     | 请求失败                                       |
+| `switch-change`                     | 开关列变更                                     |
 
 ## Slots
 

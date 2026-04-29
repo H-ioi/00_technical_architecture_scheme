@@ -4,6 +4,7 @@ export interface UniThemeTokens {
   cardBgColor?: string;
   borderColor?: string;
   textColor?: string;
+  textColorSecondary?: string;
   radiusBase?: string;
 }
 
@@ -19,6 +20,7 @@ export const applyUniTheme = (tokens: UniThemeTokens) => {
     cardBgColor: "--uni-bg-card",
     borderColor: "--uni-border-color",
     textColor: "--uni-text-color",
+    textColorSecondary: "--uni-text-color-secondary",
     radiusBase: "--uni-radius-base",
   };
 

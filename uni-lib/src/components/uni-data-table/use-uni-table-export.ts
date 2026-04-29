@@ -1,26 +1,6 @@
-import type { Recordable, UniTableColumn } from "@/types/shared";
-
-const getCellText = (row: Recordable, column: UniTableColumn) => {
-  const value = row[column.prop];
-
-  if (column.formatter) {
-    return column.formatter(row, column, value, 0);
-  }
-
-  if (value === undefined || value === null) {
-    return "";
-  }
-
-  if (Array.isArray(value)) {
-    return value.join("、");
-  }
-
-  if (typeof value === "object") {
-    return JSON.stringify(value);
-  }
-
-  return String(value);
-};
+import { useUniI18n } from "@/services/i18n";
+import type { Recordable, UniOption, UniTableColumn } from "@/types/shared";
+import { formatTableCellText } from "@/utils/format";
 
 const escapeCsvCell = (value: string) => `"${value.replace(/"/g, '""')}"`;
 
@@ -35,7 +15,23 @@ export function useUniTableExport(options: {
   getRows: () => Recordable[];
   getColumns: () => UniTableColumn[];
   getFileName: () => string;
+  getValueEnums?: () => Record<string, UniOption[]> | undefined;
 }) {
+  const i18n = useUniI18n();
+  const getCellText = (
+    row: Recordable,
+    column: UniTableColumn,
+    index: number,
+  ) =>
+    formatTableCellText(
+      row,
+      column,
+      row[column.prop],
+      index,
+      options.getValueEnums?.(),
+      i18n.t,
+    );
+
   const exportCurrentData = () => {
     if (typeof document === "undefined") {
       return;
@@ -45,9 +41,9 @@ export function useUniTableExport(options: {
     const columns = options.getColumns();
     const csv = [
       columns.map((column) => escapeCsvCell(column.label)).join(","),
-      ...rows.map((row) =>
+      ...rows.map((row, index) =>
         columns
-          .map((column) => escapeCsvCell(getCellText(row, column)))
+          .map((column) => escapeCsvCell(getCellText(row, column, index)))
           .join(","),
       ),
     ].join("\n");
@@ -73,7 +69,7 @@ export function useUniTableExport(options: {
     const html = `
       <html>
         <head>
-          <title>打印表格</title>
+          <title>${escapeHtml(i18n.t("dataTable.printTitle"))}</title>
           <style>
             table { width: 100%; border-collapse: collapse; }
             th, td { padding: 8px; border: 1px solid #ddd; text-align: left; }
@@ -87,11 +83,11 @@ export function useUniTableExport(options: {
             <tbody>
               ${rows
                 .map(
-                  (row) =>
+                  (row, index) =>
                     `<tr>${columns
                       .map(
                         (column) =>
-                          `<td>${escapeHtml(getCellText(row, column))}</td>`,
+                          `<td>${escapeHtml(getCellText(row, column, index))}</td>`,
                       )
                       .join("")}</tr>`,
                 )

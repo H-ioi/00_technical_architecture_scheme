@@ -97,6 +97,12 @@ export interface UniTableColumn {
     timezone?: string;
     placeholder?: string;
   };
+  percent?: {
+    /** 数据缩放比例，默认 100。若后端返回 50 表示 50%，可设为 1。 */
+    scale?: number;
+    digits?: number;
+    suffix?: string;
+  };
   array?: {
     itemLabel?: string;
     separator?: string;

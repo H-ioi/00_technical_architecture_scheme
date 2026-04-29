@@ -6,7 +6,9 @@
 import { computed, ref, watch } from "vue";
 
 import UniForm from "@/components/uni-form/uni-form.vue";
+import { useUniI18n } from "@/services/i18n";
 import type { Recordable, UniFormConfig, UniFormField } from "@/types/shared";
+import { formatEmpty, isEmptyValue, toArray } from "@/utils/format";
 
 const GRID_COLUMNS = 24;
 const DEFAULT_ACTION_MIN_SPAN = 6;
@@ -25,8 +27,6 @@ const props = withDefaults(
   {
     collapsedRows: 1,
     actionMinSpan: DEFAULT_ACTION_MIN_SPAN,
-    submitText: "查询",
-    resetText: "重置",
   },
 );
 
@@ -41,10 +41,43 @@ const emit = defineEmits<{
 }>();
 
 const innerCollapsed = ref(props.collapsed ?? false);
+const initialModel = ref<Recordable>({ ...props.modelValue });
+const i18n = useUniI18n();
 const formModel = computed({
   get: () => props.modelValue,
   set: (value) => emit("update:modelValue", value),
 });
+const searchText = computed(
+  () => props.submitText ?? i18n.t("searchForm.search"),
+);
+const clearText = computed(() => props.resetText ?? i18n.t("searchForm.reset"));
+const selectedTags = computed(
+  () =>
+    props.config.schema
+      .map((field) => {
+        const value = formModel.value[field.field];
+
+        if (
+          isEmptyValue(value) ||
+          (Array.isArray(value) && value.length === 0)
+        ) {
+          return undefined;
+        }
+
+        return {
+          field: field.field,
+          label: field.label,
+          value: toArray(value)
+            .map((item) => formatEmpty(item))
+            .join("、"),
+        };
+      })
+      .filter(Boolean) as Array<{
+      field: string;
+      label: string;
+      value: string;
+    }>,
+);
 
 const getFieldSpan = (field: UniFormField) =>
   Number(field.colProps?.span ?? props.config.colProps?.span ?? GRID_COLUMNS);
@@ -110,8 +143,27 @@ const toggleCollapsed = () => {
 };
 
 const handleReset = () => {
-  formModel.value = {};
+  const resetModel = { ...initialModel.value };
+
+  props.config.schema.forEach((field) => {
+    if (field.defaultValue !== undefined) {
+      resetModel[field.field] = field.defaultValue;
+      return;
+    }
+
+    if (!(field.field in initialModel.value)) {
+      delete resetModel[field.field];
+    }
+  });
+
+  formModel.value = resetModel;
   emit("reset");
+};
+
+const removeSelectedTag = (field: string) => {
+  const nextModel = { ...formModel.value };
+  delete nextModel[field];
+  formModel.value = nextModel;
 };
 
 watch(
@@ -128,27 +180,60 @@ watch(
   <div class="uni-search-form">
     <div class="uni-search-form__body">
       <div class="uni-search-form__fields">
-        <UniForm v-model="formModel" :config="searchFormConfig"
-          @field-change="(payload) => emit('field-change', payload)" />
+        <UniForm
+          v-model="formModel"
+          :config="searchFormConfig"
+          @field-change="(payload) => emit('field-change', payload)"
+        />
       </div>
 
       <div class="uni-search-form__actions-wrap">
-        <slot name="actions" :search="handleSearch" :reset="handleReset" :collapsed="innerCollapsed"
-          :need-collapse="needCollapse" :toggle-collapsed="toggleCollapsed">
+        <slot
+          name="actions"
+          :search="handleSearch"
+          :reset="handleReset"
+          :collapsed="innerCollapsed"
+          :need-collapse="needCollapse"
+          :toggle-collapsed="toggleCollapsed"
+        >
           <div class="uni-search-form__actions">
             <span class="uni-search-form__actions-pair">
               <el-button type="primary" @click="handleSearch">{{
-                submitText
-                }}</el-button>
-              <el-button @click="handleReset">{{ resetText }}</el-button>
+                searchText
+              }}</el-button>
+              <el-button @click="handleReset">{{ clearText }}</el-button>
             </span>
-            <el-button v-if="needCollapse" class="uni-search-form__collapse" link type="primary" size="small"
-              @click="toggleCollapsed">
-              {{ innerCollapsed ? "展开" : "收起" }}
+            <el-button
+              v-if="needCollapse"
+              class="uni-search-form__collapse"
+              link
+              type="primary"
+              size="small"
+              @click="toggleCollapsed"
+            >
+              {{
+                innerCollapsed
+                  ? i18n.t("searchForm.expand")
+                  : i18n.t("searchForm.collapse")
+              }}
             </el-button>
           </div>
         </slot>
       </div>
+    </div>
+
+    <div
+      v-if="showSelectedTags && selectedTags.length"
+      class="uni-search-form__selected-tags"
+    >
+      <el-tag
+        v-for="tag in selectedTags"
+        :key="tag.field"
+        closable
+        @close="removeSelectedTag(tag.field)"
+      >
+        {{ tag.label }}：{{ tag.value }}
+      </el-tag>
     </div>
   </div>
 </template>
@@ -204,6 +289,13 @@ watch(
     line-height: 1;
     height: auto;
     min-height: 0;
+  }
+
+  &__selected-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 12px;
   }
 }
 </style>

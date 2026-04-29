@@ -7,12 +7,14 @@ import type { Sort } from "element-plus";
 import { computed, ref } from "vue";
 
 import { hasUniPermission } from "@/directives/permission";
+import { useUniI18n } from "@/services/i18n";
 import type {
   Recordable,
   UniPaginationConfig,
   UniTableAction,
   UniTableColumn,
   UniTableRequest,
+  UniTableRequestResult,
   UniTableToolbarConfig,
 } from "@/types/shared";
 import type { UniTableSize } from "@/types/uni-data-table";
@@ -27,6 +29,7 @@ const props = withDefaults(
     columns: UniTableColumn[];
     data?: Recordable[];
     request?: UniTableRequest;
+    filters?: Recordable;
     loading?: boolean;
     pagination?: UniPaginationConfig | false;
     rowKey?: string;
@@ -40,7 +43,6 @@ const props = withDefaults(
     data: () => [],
     pagination: undefined,
     rowKey: "id",
-    emptyText: "暂无数据",
     toolbar: undefined,
   },
 );
@@ -52,12 +54,17 @@ const emit = defineEmits<{
   "sort-change": [sort: Sort];
   "row-click": [row: Recordable];
   refresh: [];
+  "load-success": [result: UniTableRequestResult];
   "request-error": [error: unknown];
   "switch-change": [row: Recordable, column: UniTableColumn, value: unknown];
 }>();
 
+const i18n = useUniI18n();
 const tableSize = ref<UniTableSize>("default");
 const fullscreen = ref(false);
+const actualEmptyText = computed(
+  () => props.emptyText ?? i18n.t("common.empty"),
+);
 const toolbarConfig = computed<Required<UniTableToolbarConfig>>(() => {
   if (props.toolbar === false) {
     return {
@@ -117,7 +124,8 @@ const {
   getLoading: () => props.loading,
   getPagination: () => props.pagination,
   getRequest: () => props.request,
-  emitRefresh: () => emit("refresh"),
+  getFilters: () => props.filters,
+  emitLoadSuccess: (result) => emit("load-success", result),
   emitRequestError: (error) => emit("request-error", error),
   emitUpdatePageNo: (value) => emit("update:pageNo", value),
   emitUpdatePageSize: (value) => emit("update:pageSize", value),
@@ -127,6 +135,7 @@ const { exportCurrentData, printCurrentData } = useUniTableExport({
   getRows: () => actualData.value,
   getColumns: () => visibleColumns.value,
   getFileName: () => toolbarConfig.value.exportFileName,
+  getValueEnums: () => props.valueEnums,
 });
 
 const handleSortChange = (sort: Sort) => {
@@ -143,12 +152,11 @@ const handleSingleSelectionChange = (row?: Recordable) => {
 };
 
 const handleToolbarRefresh = () => {
+  emit("refresh");
+
   if (props.request) {
     loadData();
-    return;
   }
-
-  emit("refresh");
 };
 
 const isActionVisible = (action: UniTableAction, row: Recordable) => {
@@ -186,6 +194,9 @@ const getMoreActions = (row: Recordable) => {
     : [];
 };
 
+const getActionKey = (action: UniTableAction, index: number) =>
+  `${action.code ? JSON.stringify(action.code) : action.label}-${index}`;
+
 const handleMoreActionCommand = (
   action: UniTableAction,
   row: Recordable,
@@ -199,7 +210,7 @@ const handleMoreActionCommand = (
 };
 
 defineExpose({
-  refresh: loadData,
+  refresh: handleToolbarRefresh,
 });
 </script>
 
@@ -232,7 +243,7 @@ defineExpose({
       v-loading="actualLoading"
       :data="actualData"
       :row-key="rowKey"
-      :empty-text="emptyText"
+      :empty-text="actualEmptyText"
       :size="tableSize"
       :highlight-current-row="selection === 'single'"
       @selection-change="
@@ -297,8 +308,8 @@ defineExpose({
         <template #default="{ row, $index }">
           <slot name="actions" :row="row" :index="$index">
             <template
-              v-for="action in getInlineActions(row)"
-              :key="action.label"
+              v-for="(action, actionIndex) in getInlineActions(row)"
+              :key="getActionKey(action, actionIndex)"
             >
               <el-button
                 link
@@ -321,7 +332,7 @@ defineExpose({
                 link
                 type="primary"
                 class="uni-data-table__more-action"
-                aria-label="更多操作"
+                :aria-label="i18n.t('dataTable.moreActions')"
               >
                 <el-icon>
                   <MoreFilled />
@@ -330,8 +341,8 @@ defineExpose({
               <template #dropdown>
                 <el-dropdown-menu>
                   <el-dropdown-item
-                    v-for="action in getMoreActions(row)"
-                    :key="action.label"
+                    v-for="(action, actionIndex) in getMoreActions(row)"
+                    :key="getActionKey(action, actionIndex)"
                     :command="action"
                     :disabled="isActionDisabled(action, row)"
                   >
@@ -345,7 +356,7 @@ defineExpose({
       </el-table-column>
 
       <template #empty>
-        <slot name="empty">{{ emptyText }}</slot>
+        <slot name="empty">{{ actualEmptyText }}</slot>
       </template>
     </el-table>
 

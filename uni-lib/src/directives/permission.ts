@@ -64,7 +64,7 @@ const isEmptyPermission = (code: unknown) =>
 
 const originalElementState = new WeakMap<
   HTMLElement,
-  { display: string; disabled: boolean }
+  { display: string; disabled: boolean; placeholder?: Comment }
 >();
 
 const ensureOriginalState = (el: HTMLElement) => {
@@ -90,7 +90,21 @@ const applyDeniedMode = (el: HTMLElement, mode: UniPermissionMode) => {
     return;
   }
 
-  el.parentNode?.removeChild(el);
+  const originalState = originalElementState.get(el);
+  const parent = el.parentNode;
+
+  if (!parent || originalState?.placeholder) {
+    return;
+  }
+
+  const placeholder = document.createComment("v-uni-permission");
+  parent.insertBefore(placeholder, el);
+  parent.removeChild(el);
+  originalElementState.set(el, {
+    display: originalState?.display ?? el.style.display,
+    disabled: originalState?.disabled ?? el.hasAttribute("disabled"),
+    placeholder,
+  });
 };
 
 const applyAllowedMode = (el: HTMLElement) => {
@@ -98,6 +112,15 @@ const applyAllowedMode = (el: HTMLElement) => {
 
   if (!originalState) {
     return;
+  }
+
+  if (originalState.placeholder?.parentNode) {
+    originalState.placeholder.parentNode.insertBefore(
+      el,
+      originalState.placeholder,
+    );
+    originalState.placeholder.parentNode.removeChild(originalState.placeholder);
+    originalState.placeholder = undefined;
   }
 
   el.style.display = originalState.display;
@@ -108,13 +131,15 @@ const applyAllowedMode = (el: HTMLElement) => {
   }
 };
 
-const updatePermissionState = (
-  el: HTMLElement,
-  value: UniPermissionValue,
-) => {
+const updatePermissionState = (el: HTMLElement, value: UniPermissionValue) => {
   const { code, mode } = normalizePermissionValue(value);
 
-  if (isEmptyPermission(code) || !hasUniPermission(code)) {
+  if (isEmptyPermission(code)) {
+    applyAllowedMode(el);
+    return;
+  }
+
+  if (!hasUniPermission(code)) {
     options.onDenied(code);
     applyDeniedMode(el, mode);
     return;

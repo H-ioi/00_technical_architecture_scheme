@@ -5,6 +5,7 @@ import type {
   Recordable,
   UniPaginationConfig,
   UniTableRequest,
+  UniTableRequestResult,
 } from "@/types/shared";
 
 interface UseUniTableDataOptions {
@@ -12,7 +13,8 @@ interface UseUniTableDataOptions {
   getLoading: () => boolean | undefined;
   getPagination: () => UniPaginationConfig | false | undefined;
   getRequest: () => UniTableRequest | undefined;
-  emitRefresh: () => void;
+  getFilters?: () => Recordable | undefined;
+  emitLoadSuccess: (result: UniTableRequestResult) => void;
   emitRequestError: (error: unknown) => void;
   emitUpdatePageNo: (value: number) => void;
   emitUpdatePageSize: (value: number) => void;
@@ -87,10 +89,11 @@ export function useUniTableData(options: UseUniTableDataOptions) {
         pageNo: paginationState.pageNo,
         pageSize: paginationState.pageSize,
         sort: sortState.value,
+        filters: options.getFilters?.(),
       });
       tableData.value = result.records;
       paginationState.total = result.total;
-      options.emitRefresh();
+      options.emitLoadSuccess(result);
     } catch (error) {
       options.emitRequestError(error);
     } finally {
@@ -117,7 +120,7 @@ export function useUniTableData(options: UseUniTableDataOptions) {
   };
 
   watch(
-    options.getPagination,
+    () => options.getPagination(),
     (pagination) => {
       if (pagination && typeof pagination === "object") {
         paginationState.pageNo = pagination.pageNo ?? paginationState.pageNo;

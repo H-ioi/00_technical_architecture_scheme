@@ -14,6 +14,10 @@ export const copyText = async (text: string) => {
   input.style.opacity = "0";
   document.body.appendChild(input);
   input.select();
-  document.execCommand("copy");
+  const copied = document.execCommand("copy");
   document.body.removeChild(input);
+
+  if (!copied) {
+    throw new Error("Failed to copy text.");
+  }
 };

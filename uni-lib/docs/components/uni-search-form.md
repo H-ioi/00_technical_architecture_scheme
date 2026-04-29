@@ -347,19 +347,19 @@ function onResetEvents() {
 | `collapsed`        | 是否收起（字段过多时与内部折叠联动）         | `boolean`                 | —      |
 | `collapsedRows`    | 收起时最多展示「几行」栅格高度（24 栅格/行） | `number`                  | `1`    |
 | `actionMinSpan`    | 右侧操作区预留栅格宽度                       | `number`                  | `6`    |
-| `showSelectedTags` | 预留属性，当前模板未接入 UI                  | `boolean`                 | —      |
-| `submitText`       | 主按钮文案                                   | `string`                  | `查询` |
-| `resetText`        | 重置按钮文案                                 | `string`                  | `重置` |
+| `showSelectedTags` | 展示已填写条件标签，关闭标签会移除对应条件   | `boolean`                 | —      |
+| `submitText`       | 主按钮文案，不传时使用当前语言包             | `string`                  | i18n   |
+| `resetText`        | 重置按钮文案，不传时使用当前语言包           | `string`                  | i18n   |
 
 ## Events
 
-| 事件名              | 说明                                           | 参数                      |
-| ------------------- | ---------------------------------------------- | ------------------------- |
-| `update:modelValue` | 条件变更                                       | `Record<string, unknown>` |
-| `search`            | 点击查询                                       | 当前 `modelValue`         |
-| `reset`             | 点击重置（内部已清空模型，事件用于刷新列表等） | —                         |
-| `update:collapsed`  | 展开/收起切换                                  | `boolean`                 |
-| `field-change`      | 单字段变更透传自 `UniForm`                     | `{ field, value, model }` |
+| 事件名              | 说明                                          | 参数                      |
+| ------------------- | --------------------------------------------- | ------------------------- |
+| `update:modelValue` | 条件变更                                      | `Record<string, unknown>` |
+| `search`            | 点击查询                                      | 当前 `modelValue`         |
+| `reset`             | 点击重置（恢复初始模型和字段 `defaultValue`） | —                         |
+| `update:collapsed`  | 展开/收起切换                                 | `boolean`                 |
+| `field-change`      | 单字段变更透传自 `UniForm`                    | `{ field, value, model }` |
 
 ## Slots
 
