@@ -15,6 +15,36 @@
   width: 100%;
 }
 
+.vp-doc .comp-demo .el-table table {
+  display: table;
+  width: 100%;
+  margin: 0;
+  border-collapse: separate;
+  border-spacing: 0;
+}
+
+.vp-doc .comp-demo .el-table tr {
+  border-top: none;
+  background-color: var(--el-table-tr-bg-color);
+}
+
+.vp-doc .comp-demo .el-table tr:nth-child(2n) {
+  background-color: var(--el-table-tr-bg-color);
+}
+
+.vp-doc .comp-demo .el-table th.el-table__cell,
+.vp-doc .comp-demo .el-table td.el-table__cell {
+  padding: 8px 0;
+  border: none;
+  border-bottom: var(--el-table-border);
+}
+
+.vp-doc .comp-demo .el-table th.el-table__cell {
+  color: var(--el-table-header-text-color);
+  font-weight: 500;
+  background-color: var(--el-table-header-bg-color);
+}
+
 .comp-demo .uni-data-table__pagination {
   flex-shrink: 0;
 }

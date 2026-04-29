@@ -221,34 +221,6 @@ const formConfigLoad: UniFormConfig = {
 
 动态表单编排组件，基于 Element Plus 表单原子组件，使用单一 `config` 对象初始化字段、分组、布局、联动和查看/编辑模式。
 
-## Props
-
-| 属性         | 说明                             | 类型                      | 默认值   |
-| ------------ | -------------------------------- | ------------------------- | -------- |
-| `modelValue` | 表单数据（`v-model`）            | `Record<string, unknown>` | `{}`     |
-| `config`     | 表单配置（schema、分组、校验等） | `UniFormConfig`           | —        |
-| `mode`       | `edit` 可编辑，`view` 只读展示   | `'edit' \| 'view'`        | `'edit'` |
-
-## Events
-
-| 事件名              | 说明                   | 参数                      |
-| ------------------- | ---------------------- | ------------------------- |
-| `update:modelValue` | 模型变更               | `Record<string, unknown>` |
-| `change`            | 模型变更（业务侧监听） | `Record<string, unknown>` |
-| `field-change`      | 单字段变更             | `{ field, value, model }` |
-| `linkage-change`    | 联动变更               | `{ field, model }`        |
-| `validate`          | 校验结果               | `boolean`                 |
-| `submit`            | 提交（若内部触发）     | `Record<string, unknown>` |
-| `reset`             | 重置                   | —                         |
-
-## Slots
-
-| 插槽             | 说明                                                         |
-| ---------------- | ------------------------------------------------------------ |
-| `section-title`  | 自定义分组标题区，作用域：`section`                          |
-| `field-${field}` | 完全自定义某一字段控件，作用域：`field`、`model`             |
-| `actions`        | 底部操作区，作用域：`submit`、`reset`（与内置提交/重置对齐） |
-
 ## `UniFormConfig` 要点
 
 | 字段                    | 说明                                                                                    |
@@ -344,3 +316,31 @@ const formConfigLoad: UniFormConfig = {
 <CompDemo title="字段 loadOptions 远程选项" :code="codeLoadOptions">
   <UniForm v-model="formModelLoad" :config="formConfigLoad" />
 </CompDemo>
+
+## Props
+
+| 属性         | 说明                             | 类型                      | 默认值   |
+| ------------ | -------------------------------- | ------------------------- | -------- |
+| `modelValue` | 表单数据（`v-model`）            | `Record<string, unknown>` | `{}`     |
+| `config`     | 表单配置（schema、分组、校验等） | `UniFormConfig`           | —        |
+| `mode`       | `edit` 可编辑，`view` 只读展示   | `'edit' \| 'view'`        | `'edit'` |
+
+## Events
+
+| 事件名              | 说明                   | 参数                      |
+| ------------------- | ---------------------- | ------------------------- |
+| `update:modelValue` | 模型变更               | `Record<string, unknown>` |
+| `change`            | 模型变更（业务侧监听） | `Record<string, unknown>` |
+| `field-change`      | 单字段变更             | `{ field, value, model }` |
+| `linkage-change`    | 联动变更               | `{ field, model }`        |
+| `validate`          | 校验结果               | `boolean`                 |
+| `submit`            | 提交（若内部触发）     | `Record<string, unknown>` |
+| `reset`             | 重置                   | —                         |
+
+## Slots
+
+| 插槽             | 说明                                                         |
+| ---------------- | ------------------------------------------------------------ |
+| `section-title`  | 自定义分组标题区，作用域：`section`                          |
+| `field-${field}` | 完全自定义某一字段控件，作用域：`field`、`model`             |
+| `actions`        | 底部操作区，作用域：`submit`、`reset`（与内置提交/重置对齐） |

@@ -158,43 +158,6 @@ onMounted(() => {
 
 标准后台表格组件，基于 Element Plus `ElTable`，内置分页、加载态、空态、列展示类型和操作列。
 
-## Props
-
-| 属性         | 说明                                                     | 类型                                | 默认值     |
-| ------------ | -------------------------------------------------------- | ----------------------------------- | ---------- |
-| `columns`    | 列定义                                                   | `UniTableColumn[]`                  | —          |
-| `data`       | 静态数据；与 `request` 二选一                            | `Record<string, unknown>[]`         | `[]`       |
-| `request`    | 分页请求，返回 `{ records, total }`                      | `UniTableRequest`                   | —          |
-| `loading`    | 外部加载态                                               | `boolean`                           | —          |
-| `pagination` | 分页配置，`false` 关闭分页                               | `UniPaginationConfig \| false`      | 内置默认   |
-| `rowKey`     | 行主键字段名                                             | `string`                            | `id`       |
-| `selection`  | 多选（`true` / `multiple`）；`single` 类型暂未渲染选择列 | `boolean \| 'multiple' \| 'single'` | —          |
-| `actions`    | 行操作按钮配置                                           | `UniTableAction[]`                  | —          |
-| `emptyText`  | 空数据文案                                               | `string`                            | `暂无数据` |
-| `valueEnums` | 按列 `prop` 注入枚举选项（展示 enum/tag 等）             | `Record<string, UniOption[]>`       | —          |
-
-## Events
-
-| 事件名                              | 说明             |
-| ----------------------------------- | ---------------- |
-| `update:pageNo` / `update:pageSize` | 分页变更         |
-| `selection-change`                  | 勾选变更         |
-| `sort-change`                       | 排序变更         |
-| `row-click`                         | 行点击           |
-| `refresh`                           | `request` 成功后 |
-| `request-error`                     | 请求失败         |
-| `switch-change`                     | 开关列变更       |
-
-## Slots
-
-| 插槽             | 说明                                          |
-| ---------------- | --------------------------------------------- |
-| `toolbar`        | 表格上方工具条                                |
-| `header-${prop}` | 自定义列标题                                  |
-| `column-${prop}` | 自定义单元格                                  |
-| `actions`        | 自定义操作列（替代 `actions` 配置的默认按钮） |
-| `empty`          | 空状态                                        |
-
 ---
 
 ## 静态数据（关闭分页）
@@ -366,3 +329,40 @@ onMounted(() => {
 ## 不做事项
 
 不写死接口、路由、store 或业务按钮文案；搜索区域由 `UniSearchForm` 或页面自行组合。
+
+## Props
+
+| 属性         | 说明                                                     | 类型                                | 默认值     |
+| ------------ | -------------------------------------------------------- | ----------------------------------- | ---------- |
+| `columns`    | 列定义                                                   | `UniTableColumn[]`                  | —          |
+| `data`       | 静态数据；与 `request` 二选一                            | `Record<string, unknown>[]`         | `[]`       |
+| `request`    | 分页请求，返回 `{ records, total }`                      | `UniTableRequest`                   | —          |
+| `loading`    | 外部加载态                                               | `boolean`                           | —          |
+| `pagination` | 分页配置，`false` 关闭分页                               | `UniPaginationConfig \| false`      | 内置默认   |
+| `rowKey`     | 行主键字段名                                             | `string`                            | `id`       |
+| `selection`  | 多选（`true` / `multiple`）；`single` 类型暂未渲染选择列 | `boolean \| 'multiple' \| 'single'` | —          |
+| `actions`    | 行操作按钮配置                                           | `UniTableAction[]`                  | —          |
+| `emptyText`  | 空数据文案                                               | `string`                            | `暂无数据` |
+| `valueEnums` | 按列 `prop` 注入枚举选项（展示 enum/tag 等）             | `Record<string, UniOption[]>`       | —          |
+
+## Events
+
+| 事件名                              | 说明             |
+| ----------------------------------- | ---------------- |
+| `update:pageNo` / `update:pageSize` | 分页变更         |
+| `selection-change`                  | 勾选变更         |
+| `sort-change`                       | 排序变更         |
+| `row-click`                         | 行点击           |
+| `refresh`                           | `request` 成功后 |
+| `request-error`                     | 请求失败         |
+| `switch-change`                     | 开关列变更       |
+
+## Slots
+
+| 插槽             | 说明                                          |
+| ---------------- | --------------------------------------------- |
+| `toolbar`        | 表格上方工具条                                |
+| `header-${prop}` | 自定义列标题                                  |
+| `column-${prop}` | 自定义单元格                                  |
+| `actions`        | 自定义操作列（替代 `actions` 配置的默认按钮） |
+| `empty`          | 空状态                                        |

@@ -248,3 +248,32 @@ const searchConfigNoLabel: UniFormConfig = {
     @search="() => {}"
   />
 </CompDemo>
+
+## Props
+
+| 属性               | 说明                                         | 类型                      | 默认值 |
+| ------------------ | -------------------------------------------- | ------------------------- | ------ |
+| `modelValue`       | 查询条件对象（`v-model`）                    | `Record<string, unknown>` | —      |
+| `config`           | 表单配置，字段定义见 `UniFormConfig`         | `UniFormConfig`           | —      |
+| `collapsed`        | 是否收起（字段过多时与内部折叠联动）         | `boolean`                 | —      |
+| `collapsedRows`    | 收起时最多展示「几行」栅格高度（24 栅格/行） | `number`                  | `1`    |
+| `actionMinSpan`    | 右侧操作区预留栅格宽度                       | `number`                  | `6`    |
+| `showSelectedTags` | 预留属性，当前模板未接入 UI                  | `boolean`                 | —      |
+| `submitText`       | 主按钮文案                                   | `string`                  | `查询` |
+| `resetText`        | 重置按钮文案                                 | `string`                  | `重置` |
+
+## Events
+
+| 事件名              | 说明                                           | 参数                      |
+| ------------------- | ---------------------------------------------- | ------------------------- |
+| `update:modelValue` | 条件变更                                       | `Record<string, unknown>` |
+| `search`            | 点击查询                                       | 当前 `modelValue`         |
+| `reset`             | 点击重置（内部已清空模型，事件用于刷新列表等） | —                         |
+| `update:collapsed`  | 展开/收起切换                                  | `boolean`                 |
+| `field-change`      | 单字段变更透传自 `UniForm`                     | `{ field, value, model }` |
+
+## Slots
+
+| 插槽      | 说明                                                                                        |
+| --------- | ------------------------------------------------------------------------------------------- |
+| `actions` | 自定义操作区，作用域参数：`search`、`reset`、`collapsed`、`needCollapse`、`toggleCollapsed` |

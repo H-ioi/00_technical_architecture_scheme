@@ -127,11 +127,14 @@ const handleReset = () => {
         <slot name="actions" :search="handleSearch" :reset="handleReset" :collapsed="innerCollapsed"
           :need-collapse="needCollapse" :toggle-collapsed="toggleCollapsed">
           <div class="uni-search-form__actions">
-            <el-button type="primary" @click="handleSearch">{{
-              submitText
-              }}</el-button>
-            <el-button @click="handleReset">{{ resetText }}</el-button>
-            <el-button v-if="needCollapse" link type="primary" @click="toggleCollapsed">
+            <span class="uni-search-form__actions-pair">
+              <el-button type="primary" @click="handleSearch">{{
+                submitText
+                }}</el-button>
+              <el-button @click="handleReset">{{ resetText }}</el-button>
+            </span>
+            <el-button v-if="needCollapse" class="uni-search-form__collapse" link type="primary" size="small"
+              @click="toggleCollapsed">
               {{ innerCollapsed ? "展开" : "收起" }}
             </el-button>
           </div>
@@ -157,16 +160,14 @@ const handleReset = () => {
     flex: 1;
     min-width: 0;
     width: 100%;
-    /* el-row gutter 依赖负 margin，父级 overflow 裁剪会导致栅距看起来无效 */
     overflow: visible;
   }
 
   &__actions-wrap {
     display: flex;
     flex: 0 0 auto;
-    align-items: flex-start;
+    align-items: flex-end;
     justify-content: flex-end;
-    padding-top: 1px;
 
     @media (width <=768px) {
       margin-top: 12px;
@@ -175,8 +176,25 @@ const handleReset = () => {
 
   &__actions {
     display: flex;
+    align-items: flex-end;
     justify-content: flex-end;
+    flex-wrap: wrap;
+    gap: 4px;
     width: 100%;
+  }
+
+  &__actions-pair {
+    display: inline-flex;
+    align-items: flex-end;
+  }
+
+  &__collapse {
+    flex-shrink: 0;
+    padding: 0 2px;
+    font-size: 12px;
+    line-height: 1;
+    height: auto;
+    min-height: 0;
   }
 }
 </style>
