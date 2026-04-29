@@ -31,7 +31,7 @@ export const createUniRequest = (
       config.headers.Authorization = `Bearer ${token}`;
     }
 
-    if (tenantId) {
+    if (tenantId !== undefined && tenantId !== null && tenantId !== "") {
       config.headers["X-Tenant-Id"] = String(tenantId);
     }
 

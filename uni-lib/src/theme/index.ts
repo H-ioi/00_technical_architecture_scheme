@@ -8,6 +8,10 @@ export interface UniThemeTokens {
 }
 
 export const applyUniTheme = (tokens: UniThemeTokens) => {
+  if (typeof document === "undefined") {
+    return;
+  }
+
   const root = document.documentElement;
   const tokenMap: Record<keyof UniThemeTokens, string> = {
     primaryColor: "--uni-color-primary",

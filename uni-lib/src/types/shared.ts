@@ -25,6 +25,17 @@ export interface UniPaginationConfig {
   position?: "left" | "center" | "right";
 }
 
+export interface UniTableToolbarConfig {
+  enabled?: boolean;
+  refresh?: boolean;
+  density?: boolean;
+  columnSetting?: boolean;
+  fullscreen?: boolean;
+  export?: boolean;
+  print?: boolean;
+  exportFileName?: string;
+}
+
 export type UniTableColumnType =
   | "text"
   | "number"

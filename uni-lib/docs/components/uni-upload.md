@@ -192,13 +192,18 @@ function onPreview(file: UploadUserFile) {
 | `limit`            | 最大文件数                      | `number`                                | —      |
 | `maxSize`          | 单文件最大字节                  | `number`                                | —      |
 | `multiple`         | 是否多选                        | `boolean`                               | —      |
+| `name`             | 上传文件字段名                  | `string`                                | —      |
+| `autoUpload`       | 选中文件后是否自动上传          | `boolean`                               | —      |
+| `drag`             | 是否启用拖拽上传                | `boolean`                               | —      |
+| `showFileList`     | 是否展示文件列表                | `boolean`                               | —      |
+| `withCredentials`  | 上传请求是否携带 cookie         | `boolean`                               | —      |
 | `headers` / `data` | 请求头 / 额外表单字段           | `Record`                                | —      |
 | `disabled`         | 禁用                            | `boolean`                               | —      |
 | `listType`         | 列表样式                        | `'text' \| 'picture' \| 'picture-card'` | `text` |
 
 ## Events
 
-与 Element Plus `ElUpload` 一致：`success`、`error`、`remove`、`preview`、`exceed`、`validate-error`、`progress`，以及 `update:fileList`。
+与 Element Plus `ElUpload` 一致：`success`、`error`、`remove`、`preview`、`exceed`、`validate-error`、`progress`、`change`，以及 `update:fileList`。
 
 ## Slots
 

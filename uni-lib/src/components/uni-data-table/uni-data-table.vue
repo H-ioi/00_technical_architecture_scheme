@@ -1,11 +1,10 @@
 <script setup lang="ts">
 /**
- * 数据表格：列定义驱动渲染 + 可选前端分页或 `request` 远程分页/排序。
- * 支持多选、行操作列、`hasUniPermission` 控制的操作按钮显隐及 `@switch-change` 等事件。
+ * 数据表格：列定义驱动渲染 + 可选本地/远程分页、选择列、行操作与表格工具栏。
  */
 import { MoreFilled } from "@element-plus/icons-vue";
 import type { Sort } from "element-plus";
-import { computed, onMounted, reactive, ref, watch } from "vue";
+import { computed, ref } from "vue";
 
 import { hasUniPermission } from "@/directives/permission";
 import type {
@@ -14,8 +13,14 @@ import type {
   UniTableAction,
   UniTableColumn,
   UniTableRequest,
+  UniTableToolbarConfig,
 } from "@/types/shared";
+import type { UniTableSize } from "@/types/uni-data-table";
 import UniTableCell from "./uni-table-cell.vue";
+import UniTableToolbar from "./uni-table-toolbar.vue";
+import { useUniTableColumns } from "./use-uni-table-columns";
+import { useUniTableData } from "./use-uni-table-data";
+import { useUniTableExport } from "./use-uni-table-export";
 
 const props = withDefaults(
   defineProps<{
@@ -29,12 +34,14 @@ const props = withDefaults(
     actions?: UniTableAction[];
     emptyText?: string;
     valueEnums?: Record<string, import("@/types/shared").UniOption[]>;
+    toolbar?: boolean | UniTableToolbarConfig;
   }>(),
   {
     data: () => [],
     pagination: undefined,
     rowKey: "id",
     emptyText: "暂无数据",
+    toolbar: undefined,
   },
 );
 
@@ -49,75 +56,99 @@ const emit = defineEmits<{
   "switch-change": [row: Recordable, column: UniTableColumn, value: unknown];
 }>();
 
-const innerLoading = ref(false);
-const tableData = ref<Recordable[]>([]);
-const sortState = ref<Sort>();
-const paginationState = reactive({
-  pageNo: 1,
-  pageSize: 10,
-  total: 0,
-});
-
-const paginationConfig = computed(() => {
-  if (props.pagination === false) {
-    return false;
+const tableSize = ref<UniTableSize>("default");
+const fullscreen = ref(false);
+const toolbarConfig = computed<Required<UniTableToolbarConfig>>(() => {
+  if (props.toolbar === false) {
+    return {
+      enabled: false,
+      refresh: false,
+      density: false,
+      columnSetting: false,
+      fullscreen: false,
+      export: false,
+      print: false,
+      exportFileName: "table-data",
+    };
   }
 
   return {
     enabled: true,
-    background: true,
-    layout: "total, sizes, prev, pager, next, jumper",
-    pageSizes: [10, 20, 50, 100],
-    position: "right" as const,
-    ...props.pagination,
+    refresh: true,
+    density: true,
+    columnSetting: true,
+    fullscreen: true,
+    export: true,
+    print: true,
+    exportFileName: "table-data",
+    ...(typeof props.toolbar === "object" ? props.toolbar : {}),
   };
 });
-
-const actualLoading = computed(() => props.loading || innerLoading.value);
-const actualData = computed(() =>
-  props.request ? tableData.value : props.data,
+const hasToolbarTools = computed(
+  () =>
+    toolbarConfig.value.enabled &&
+    (toolbarConfig.value.refresh ||
+      toolbarConfig.value.density ||
+      toolbarConfig.value.columnSetting ||
+      toolbarConfig.value.fullscreen ||
+      toolbarConfig.value.export ||
+      toolbarConfig.value.print),
 );
 
-const loadData = async () => {
-  if (!props.request) {
+const {
+  columnStates,
+  visibleColumns,
+  handleColumnDragStart,
+  handleColumnDrop,
+} = useUniTableColumns(() => props.columns);
+
+const {
+  actualData,
+  actualLoading,
+  actualTotal,
+  loadData,
+  paginationConfig,
+  paginationState,
+  setSort,
+  handleCurrentChange,
+  handleSizeChange,
+} = useUniTableData({
+  getData: () => props.data,
+  getLoading: () => props.loading,
+  getPagination: () => props.pagination,
+  getRequest: () => props.request,
+  emitRefresh: () => emit("refresh"),
+  emitRequestError: (error) => emit("request-error", error),
+  emitUpdatePageNo: (value) => emit("update:pageNo", value),
+  emitUpdatePageSize: (value) => emit("update:pageSize", value),
+});
+
+const { exportCurrentData, printCurrentData } = useUniTableExport({
+  getRows: () => actualData.value,
+  getColumns: () => visibleColumns.value,
+  getFileName: () => toolbarConfig.value.exportFileName,
+});
+
+const handleSortChange = (sort: Sort) => {
+  emit("sort-change", sort);
+  setSort(sort);
+};
+
+const handleSingleSelectionChange = (row?: Recordable) => {
+  if (props.selection !== "single") {
     return;
   }
 
-  innerLoading.value = true;
+  emit("selection-change", row ? [row] : []);
+};
 
-  try {
-    const result = await props.request({
-      pageNo: paginationState.pageNo,
-      pageSize: paginationState.pageSize,
-      sort: sortState.value,
-    });
-    tableData.value = result.records;
-    paginationState.total = result.total;
-    emit("refresh");
-  } catch (error) {
-    emit("request-error", error);
-  } finally {
-    innerLoading.value = false;
+const handleToolbarRefresh = () => {
+  if (props.request) {
+    loadData();
+    return;
   }
-};
 
-const handleCurrentChange = (pageNo: number) => {
-  paginationState.pageNo = pageNo;
-  emit("update:pageNo", pageNo);
-  loadData();
-};
-
-const handleSizeChange = (pageSize: number) => {
-  paginationState.pageSize = pageSize;
-  paginationState.pageNo = 1;
-  emit("update:pageSize", pageSize);
-  loadData();
-};
-
-const handleSortChange = (sort: Sort) => {
-  sortState.value = sort;
-  emit("sort-change", sort);
-  loadData();
+  emit("refresh");
 };
 
 const isActionVisible = (action: UniTableAction, row: Recordable) => {
@@ -167,76 +198,143 @@ const handleMoreActionCommand = (
   action.onClick(row, index);
 };
 
-watch(
-  () => props.pagination,
-  (pagination) => {
-    if (pagination && typeof pagination === "object") {
-      paginationState.pageNo = pagination.pageNo ?? paginationState.pageNo;
-      paginationState.pageSize =
-        pagination.pageSize ?? paginationState.pageSize;
-      paginationState.total = pagination.total ?? paginationState.total;
-    }
-  },
-  { immediate: true, deep: true },
-);
-
-onMounted(loadData);
-
 defineExpose({
   refresh: loadData,
 });
 </script>
 
 <template>
-  <div class="uni-data-table">
-    <div v-if="$slots.toolbar" class="uni-data-table__toolbar">
-      <slot name="toolbar" />
+  <div class="uni-data-table" :class="{ 'is-fullscreen': fullscreen }">
+    <div
+      v-if="$slots.toolbar || hasToolbarTools"
+      class="uni-data-table__toolbar"
+    >
+      <div class="uni-data-table__toolbar-left">
+        <slot name="toolbar" />
+      </div>
+      <div v-if="hasToolbarTools" class="uni-data-table__toolbar-right">
+        <UniTableToolbar
+          v-model:fullscreen="fullscreen"
+          v-model:table-size="tableSize"
+          :column-states="columnStates"
+          :config="toolbarConfig"
+          :loading="actualLoading"
+          @refresh="handleToolbarRefresh"
+          @export="exportCurrentData"
+          @print="printCurrentData"
+          @column-drag-start="handleColumnDragStart"
+          @column-drop="handleColumnDrop"
+        />
+      </div>
     </div>
 
-    <el-table v-loading="actualLoading" :data="actualData" :row-key="rowKey" :empty-text="emptyText" @selection-change="
-      (selection: Recordable[]) => emit('selection-change', selection)
-    " @sort-change="handleSortChange" @row-click="(row: Recordable) => emit('row-click', row)">
-      <el-table-column v-if="selection === true || selection === 'multiple'" type="selection" width="48" />
+    <el-table
+      v-loading="actualLoading"
+      :data="actualData"
+      :row-key="rowKey"
+      :empty-text="emptyText"
+      :size="tableSize"
+      :highlight-current-row="selection === 'single'"
+      @selection-change="
+        (selection: Recordable[]) => emit('selection-change', selection)
+      "
+      @current-change="handleSingleSelectionChange"
+      @sort-change="handleSortChange"
+      @row-click="(row: Recordable) => emit('row-click', row)"
+    >
+      <el-table-column
+        v-if="selection === true || selection === 'multiple'"
+        type="selection"
+        width="48"
+      />
 
-      <el-table-column v-for="column in columns" :key="column.prop" :prop="column.prop" :label="column.label"
-        :width="column.width" :min-width="column.minWidth" :fixed="column.fixed" :align="column.align"
-        :sortable="column.sortable" :show-overflow-tooltip="column.showOverflowTooltip">
+      <el-table-column
+        v-for="column in visibleColumns"
+        :key="column.prop"
+        :prop="column.prop"
+        :label="column.label"
+        :width="column.width"
+        :min-width="column.minWidth"
+        :fixed="column.fixed"
+        :align="column.align"
+        :sortable="column.sortable"
+        :show-overflow-tooltip="column.showOverflowTooltip"
+      >
         <template #header>
           <slot :name="`header-${column.prop}`" :column="column">{{
             column.label
           }}</slot>
         </template>
         <template #default="{ row, $index }">
-          <slot v-if="$slots[`column-${column.prop}`]" :name="`column-${column.prop}`" :row="row"
-            :value="row[column.prop]" :index="$index" />
-          <UniTableCell v-else :row="row" :column="column" :value="row[column.prop]" :row-index="$index"
-            :value-enums="valueEnums" @switch-change="
+          <slot
+            v-if="$slots[`column-${column.prop}`]"
+            :name="`column-${column.prop}`"
+            :row="row"
+            :value="row[column.prop]"
+            :index="$index"
+          />
+          <UniTableCell
+            v-else
+            :row="row"
+            :column="column"
+            :value="row[column.prop]"
+            :row-index="$index"
+            :value-enums="valueEnums"
+            @switch-change="
               (nextRow, nextColumn, value) =>
                 emit('switch-change', nextRow, nextColumn, value)
-            " />
+            "
+          />
         </template>
       </el-table-column>
 
-      <el-table-column v-if="actions?.length || $slots.actions" label="操作" fixed="right" width="180">
+      <el-table-column
+        v-if="actions?.length || $slots.actions"
+        label="操作"
+        fixed="right"
+        width="180"
+      >
         <template #default="{ row, $index }">
           <slot name="actions" :row="row" :index="$index">
-            <template v-for="action in getInlineActions(row)" :key="action.label">
-              <el-button link :type="action.type ?? 'primary'" :disabled="isActionDisabled(action, row)"
-                @click="action.onClick(row, $index)">
+            <template
+              v-for="action in getInlineActions(row)"
+              :key="action.label"
+            >
+              <el-button
+                link
+                :type="action.type ?? 'primary'"
+                :disabled="isActionDisabled(action, row)"
+                @click="action.onClick(row, $index)"
+              >
                 {{ action.label }}
               </el-button>
             </template>
-            <el-dropdown v-if="getMoreActions(row).length" trigger="click"
-              @command="(action: UniTableAction) => handleMoreActionCommand(action, row, $index)">
-              <el-button link type="primary" class="uni-data-table__more-action" aria-label="更多操作">
+            <el-dropdown
+              v-if="getMoreActions(row).length"
+              trigger="click"
+              @command="
+                (action: UniTableAction) =>
+                  handleMoreActionCommand(action, row, $index)
+              "
+            >
+              <el-button
+                link
+                type="primary"
+                class="uni-data-table__more-action"
+                aria-label="更多操作"
+              >
                 <el-icon>
                   <MoreFilled />
                 </el-icon>
               </el-button>
               <template #dropdown>
                 <el-dropdown-menu>
-                  <el-dropdown-item v-for="action in getMoreActions(row)" :key="action.label" :command="action"
-                    :disabled="isActionDisabled(action, row)">
+                  <el-dropdown-item
+                    v-for="action in getMoreActions(row)"
+                    :key="action.label"
+                    :command="action"
+                    :disabled="isActionDisabled(action, row)"
+                  >
                     {{ action.label }}
                   </el-dropdown-item>
                 </el-dropdown-menu>
@@ -251,13 +349,22 @@ defineExpose({
       </template>
     </el-table>
 
-    <div v-if="paginationConfig && paginationConfig.enabled !== false" class="uni-data-table__pagination"
-      :class="`is-${paginationConfig.position}`">
-      <el-pagination :background="paginationConfig.background" :layout="paginationConfig.layout"
-        :page-sizes="paginationConfig.pageSizes" :hide-on-single-page="paginationConfig.hideOnSinglePage"
-        :current-page="paginationState.pageNo" :page-size="paginationState.pageSize"
-        :total="paginationConfig.total ?? paginationState.total" @current-change="handleCurrentChange"
-        @size-change="handleSizeChange" />
+    <div
+      v-if="paginationConfig && paginationConfig.enabled !== false"
+      class="uni-data-table__pagination"
+      :class="`is-${paginationConfig.position}`"
+    >
+      <el-pagination
+        :background="paginationConfig.background"
+        :layout="paginationConfig.layout"
+        :page-sizes="paginationConfig.pageSizes"
+        :hide-on-single-page="paginationConfig.hideOnSinglePage"
+        :current-page="paginationState.pageNo"
+        :page-size="paginationState.pageSize"
+        :total="actualTotal"
+        @current-change="handleCurrentChange"
+        @size-change="handleSizeChange"
+      />
     </div>
   </div>
 </template>
@@ -266,12 +373,42 @@ defineExpose({
 .uni-data-table {
   width: 100%;
 
+  &.is-fullscreen {
+    position: fixed;
+    inset: 0;
+    z-index: 2000;
+    display: flex;
+    flex-direction: column;
+    padding: 16px;
+    overflow: auto;
+    background: var(--el-bg-color);
+  }
+
+  &.is-fullscreen :deep(.el-table) {
+    flex: 1;
+  }
+
   :deep(.el-table) {
     width: 100%;
   }
 
   &__toolbar {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    justify-content: space-between;
     margin-bottom: 12px;
+  }
+
+  &__toolbar-left {
+    flex: 1;
+    min-width: 0;
+  }
+
+  &__toolbar-right {
+    display: inline-flex;
+    flex-shrink: 0;
+    align-items: center;
   }
 
   &__pagination {

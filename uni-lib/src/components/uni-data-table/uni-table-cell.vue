@@ -3,6 +3,7 @@
  * 表格单元格渲染器：按 `UniTableColumn.type` 输出文本、标签、复制、金额、日期、
  * 开关、图片、链接等；可配合列 `formatter` 与全局 `valueEnums` 做枚举展示。
  */
+import { DocumentCopy } from "@element-plus/icons-vue";
 import { computed } from "vue";
 import { ElMessage } from "element-plus";
 
@@ -67,14 +68,48 @@ const displayValue = computed(() => {
     );
   }
 
+  if (columnType.value === "relativeTime") {
+    if (props.value === undefined || props.value === null || props.value === "") {
+      return "--";
+    }
+
+    const date = new Date(String(props.value));
+
+    if (Number.isNaN(date.getTime())) {
+      return String(props.value);
+    }
+
+    const diffSeconds = Math.floor((Date.now() - date.getTime()) / 1000);
+    const absSeconds = Math.abs(diffSeconds);
+    const suffix = diffSeconds >= 0 ? "前" : "后";
+
+    if (absSeconds < 60) {
+      return "刚刚";
+    }
+
+    if (absSeconds < 3600) {
+      return `${Math.floor(absSeconds / 60)} 分钟${suffix}`;
+    }
+
+    if (absSeconds < 86400) {
+      return `${Math.floor(absSeconds / 3600)} 小时${suffix}`;
+    }
+
+    return `${Math.floor(absSeconds / 86400)} 天${suffix}`;
+  }
+
   if (columnType.value === "money") {
     return formatMoney(props.value);
   }
 
   if (columnType.value === "percent") {
-    return props.value === undefined || props.value === null
-      ? "--"
-      : `${Number(props.value) * 100}%`;
+    if (props.value === undefined || props.value === null) {
+      return "--";
+    }
+
+    const numberValue = Number(props.value);
+
+    return Number.isNaN(numberValue) ? String(props.value) : `${numberValue * 100}%`;
   }
 
   if (columnType.value === "boolean") {
@@ -99,7 +134,9 @@ const displayValue = computed(() => {
   }
 
   if (columnType.value === "json") {
-    return JSON.stringify(props.value ?? {});
+    return props.value === undefined || props.value === null
+      ? "--"
+      : JSON.stringify(props.value);
   }
 
   return formatEmpty(props.value);
@@ -224,9 +261,14 @@ const handleSwitchChange = async (nextValue: unknown) => {
         class="uni-table-cell__copy"
         link
         type="primary"
+        aria-label="复制"
+        title="复制"
         @click="copyCurrentValue"
-        >复制</el-button
       >
+        <el-icon>
+          <DocumentCopy />
+        </el-icon>
+      </el-button>
     </template>
 
     <template
@@ -267,6 +309,7 @@ const handleSwitchChange = async (nextValue: unknown) => {
 
   &__copy {
     margin-left: 4px;
+    padding: 0;
   }
 
   &__tag {

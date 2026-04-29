@@ -41,6 +41,7 @@ const emit = defineEmits<{
 }>();
 
 const formRef = ref<FormInstance>();
+const localModel = ref<Recordable>({});
 const dynamicState = reactive<
   Record<
     string,
@@ -77,8 +78,11 @@ function normalizeRowProps(rowProps?: Partial<RowProps>): Partial<RowProps> {
 
 const mergedRowProps = computed(() => normalizeRowProps(props.config.rowProps));
 const formModel = computed({
-  get: () => props.modelValue,
-  set: (value) => emit("update:modelValue", value),
+  get: () => localModel.value,
+  set: (value) => {
+    localModel.value = value;
+    emit("update:modelValue", value);
+  },
 });
 
 const actions: UniFormActions = {
@@ -164,7 +168,7 @@ const getFieldOptions = (field: UniFormField) =>
 
 const fields = computed(() => props.config.schema.filter(isFieldVisible));
 const fieldMap = computed(
-  () => new Map(props.config.schema.map((field) => [field.field, field])),
+  () => new Map(fields.value.map((field) => [field.field, field])),
 );
 const groupedSections = computed(() => {
   if (!props.config.sections?.length) {
@@ -242,6 +246,14 @@ const handleReset = () => {
   formRef.value?.resetFields();
   emit("reset");
 };
+
+watch(
+  () => props.modelValue,
+  (value) => {
+    localModel.value = value;
+  },
+  { immediate: true, deep: true },
+);
 
 watch(
   () => props.config.schema,

@@ -20,7 +20,21 @@ const options: Required<UniPermissionOptions> = {
 };
 
 export const setUniPermissionOptions = (nextOptions?: UniPermissionOptions) => {
-  Object.assign(options, nextOptions ?? {});
+  if (!nextOptions) {
+    return;
+  }
+
+  if (nextOptions.hasPermission) {
+    options.hasPermission = nextOptions.hasPermission;
+  }
+
+  if (nextOptions.defaultMode) {
+    options.defaultMode = nextOptions.defaultMode;
+  }
+
+  if (nextOptions.onDenied) {
+    options.onDenied = nextOptions.onDenied;
+  }
 };
 
 export const hasUniPermission = (permission?: string | string[]) => {
@@ -45,7 +59,26 @@ const normalizePermissionValue = (value: UniPermissionValue) => {
   };
 };
 
+const isEmptyPermission = (code: unknown) =>
+  !code || (Array.isArray(code) && code.length === 0);
+
+const originalElementState = new WeakMap<
+  HTMLElement,
+  { display: string; disabled: boolean }
+>();
+
+const ensureOriginalState = (el: HTMLElement) => {
+  if (!originalElementState.has(el)) {
+    originalElementState.set(el, {
+      display: el.style.display,
+      disabled: el.hasAttribute("disabled"),
+    });
+  }
+};
+
 const applyDeniedMode = (el: HTMLElement, mode: UniPermissionMode) => {
+  ensureOriginalState(el);
+
   if (mode === "hidden") {
     el.style.display = "none";
     return;
@@ -60,17 +93,45 @@ const applyDeniedMode = (el: HTMLElement, mode: UniPermissionMode) => {
   el.parentNode?.removeChild(el);
 };
 
+const applyAllowedMode = (el: HTMLElement) => {
+  const originalState = originalElementState.get(el);
+
+  if (!originalState) {
+    return;
+  }
+
+  el.style.display = originalState.display;
+  el.classList.remove("is-disabled");
+
+  if (!originalState.disabled) {
+    el.removeAttribute("disabled");
+  }
+};
+
+const updatePermissionState = (
+  el: HTMLElement,
+  value: UniPermissionValue,
+) => {
+  const { code, mode } = normalizePermissionValue(value);
+
+  if (isEmptyPermission(code) || !hasUniPermission(code)) {
+    options.onDenied(code);
+    applyDeniedMode(el, mode);
+    return;
+  }
+
+  applyAllowedMode(el);
+};
+
 export const uniPermissionDirective: Directive<
   HTMLElement,
   UniPermissionValue
 > = {
   mounted(el, binding) {
-    const { code, mode } = normalizePermissionValue(binding.value);
-
-    if (!hasUniPermission(code)) {
-      options.onDenied(code);
-      applyDeniedMode(el, mode);
-    }
+    updatePermissionState(el, binding.value);
+  },
+  updated(el, binding) {
+    updatePermissionState(el, binding.value);
   },
 };
 

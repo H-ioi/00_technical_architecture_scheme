@@ -6,6 +6,7 @@ import type {
   Recordable,
   UniOption,
   UniPaginationConfig,
+  UniTableToolbarConfig,
   UniTableAction,
   UniTableColumn,
   UniTableRequest,
@@ -25,6 +26,7 @@ import codeSelEvents from "../.vitepress/snippets/uni-data-table/selection-event
 import codeSwitchChange from "../.vitepress/snippets/uni-data-table/switch-change.vue?raw";
 import codeTagSort from "../.vitepress/snippets/uni-data-table/tag-sort.vue?raw";
 import codeToolbarEmpty from "../.vitepress/snippets/uni-data-table/toolbar-empty.vue?raw";
+import codeToolbarTools from "../.vitepress/snippets/uni-data-table/toolbar-tools.vue?raw";
 import codeValueEnums from "../.vitepress/snippets/uni-data-table/value-enums.vue?raw";
 
 const columns: UniTableColumn[] = [
@@ -112,6 +114,16 @@ const paginationCustom: UniPaginationConfig = {
   pageSizes: [5, 10],
   position: "left",
   layout: "total, prev, pager, next",
+};
+
+const toolbarCustom: UniTableToolbarConfig = {
+  refresh: true,
+  density: true,
+  columnSetting: true,
+  fullscreen: true,
+  export: true,
+  print: true,
+  exportFileName: "uni-data-table-demo",
 };
 
 const allPageCustom = Array.from({ length: 23 }).map((_, i) => ({
@@ -293,6 +305,25 @@ onMounted(() => {
   />
 </CompDemo>
 
+## 内置右侧表格工具
+
+表格默认内置右侧工具栏：刷新、密度切换、列设置、最大化、导出当前展示数据、打印当前展示数据。左侧仍可使用 `#toolbar` 放业务按钮；如需关闭可传 `:toolbar="false"`，或通过 `toolbar` 对象关闭单项。
+
+<CompDemo title="默认右侧工具 + 左侧业务按钮" :code="codeToolbarTools">
+  <UniDataTable
+    :columns="columns"
+    :data="data"
+    :pagination="false"
+    :toolbar="toolbarCustom"
+    row-key="id"
+  >
+    <template #toolbar>
+      <el-button type="primary" size="small">新增</el-button>
+      <el-button size="small">批量导入</el-button>
+    </template>
+  </UniDataTable>
+</CompDemo>
+
 ## 多选 + 配置型行操作
 
 <CompDemo title="selection + actions 数组" :code="codeSelection">
@@ -462,8 +493,8 @@ onMounted(() => {
   </UniDataTable>
 </CompDemo>
 
-::: warning 关于 selection="single"
-当前版本选择列仅在 `selection` 为 `true` 或 `'multiple'` 时渲染；若需要单选样式请在业务中用自定义列或监听 `selection-change` 自行约束为单行。
+::: tip 关于 selection="single"
+`selection="single"` 不渲染复选框列，而是启用当前行高亮；行切换时通过 `selection-change` 回传单行数组。`selection=true` 或 `'multiple'` 使用 Element Plus 多选列。
 :::
 
 ---
@@ -482,10 +513,24 @@ onMounted(() => {
 | `loading`    | 外部加载态                                               | `boolean`                           | —          |
 | `pagination` | 分页配置，`false` 关闭分页                               | `UniPaginationConfig \| false`      | 内置默认   |
 | `rowKey`     | 行主键字段名                                             | `string`                            | `id`       |
-| `selection`  | 多选（`true` / `multiple`）；`single` 类型暂未渲染选择列 | `boolean \| 'multiple' \| 'single'` | —          |
+| `selection`  | 多选（`true` / `multiple`）或单选高亮（`single`）        | `boolean \| 'multiple' \| 'single'` | —          |
 | `actions`    | 行操作按钮配置；可见项超过 3 个时第三位自动收纳为更多    | `UniTableAction[]`                  | —          |
 | `emptyText`  | 空数据文案                                               | `string`                            | `暂无数据` |
 | `valueEnums` | 按列 `prop` 注入枚举选项（展示 enum/tag 等）             | `Record<string, UniOption[]>`       | —          |
+| `toolbar`    | 右侧表格工具配置；`false` 关闭内置工具栏                 | `boolean \| UniTableToolbarConfig`  | 内置默认   |
+
+## Toolbar Config
+
+| 属性             | 说明                         | 默认值       |
+| ---------------- | ---------------------------- | ------------ |
+| `enabled`        | 是否启用右侧表格工具         | `true`       |
+| `refresh`        | 刷新当前数据                 | `true`       |
+| `density`        | 密度切换：宽松 / 默认 / 紧凑 | `true`       |
+| `columnSetting`  | 列显示、排序、固定设置       | `true`       |
+| `fullscreen`     | 最大化表格区域               | `true`       |
+| `export`         | 导出当前展示数据为 CSV       | `true`       |
+| `print`          | 打印当前展示数据             | `true`       |
+| `exportFileName` | 导出文件名                   | `table-data` |
 
 ## Column Types
 
@@ -497,6 +542,8 @@ onMounted(() => {
 | `percent`  | 小数转百分比展示                       |
 | `date`     | 日期格式化，默认 `YYYY-MM-DD`          |
 | `datetime` | 日期时间格式化，默认 `YYYY-MM-DD HH:mm:ss` |
+| `time`     | 时间格式化，默认 `HH:mm:ss`            |
+| `relativeTime` | 相对时间展示，如 `5 分钟前`       |
 | `boolean`  | `true/false` 展示为 `是/否`            |
 | `enum`     | 从列 `options` 或 `valueEnums` 映射文案 |
 | `tag/tags` | 标签展示                               |
@@ -507,6 +554,7 @@ onMounted(() => {
 | `json`     | JSON 字符串 + tooltip                  |
 | `image/images` | 图片预览展示                       |
 | `video/videos` | 视频链接展示                       |
+| `slot`     | 配合 `column-${prop}` 插槽自定义展示   |
 
 ## Events
 

@@ -23,6 +23,11 @@ const props = withDefaults(
     limit?: number;
     maxSize?: number;
     multiple?: boolean;
+    name?: string;
+    autoUpload?: boolean;
+    drag?: boolean;
+    showFileList?: boolean;
+    withCredentials?: boolean;
     headers?: Record<string, string>;
     data?: Record<string, unknown>;
     disabled?: boolean;
@@ -44,6 +49,7 @@ const emit = defineEmits<{
   exceed: [files: File[], uploadFiles: UploadUserFile[]];
   "validate-error": [message: string, file: File];
   progress: [event: ProgressEvent, file: UploadFile, files: UploadFiles];
+  change: [file: UploadFile, files: UploadFiles];
 }>();
 
 const beforeUpload: UploadProps["beforeUpload"] = (file) => {
@@ -68,6 +74,8 @@ const handleExceed: UploadProps["onExceed"] = (files, uploadFiles) =>
   emit("exceed", files, uploadFiles);
 const handleProgress: UploadProps["onProgress"] = (event, file, files) =>
   emit("progress", event as ProgressEvent, file, files);
+const handleChange: UploadProps["onChange"] = (file, files) =>
+  emit("change", file, files);
 </script>
 
 <template>
@@ -78,6 +86,11 @@ const handleProgress: UploadProps["onProgress"] = (event, file, files) =>
     :accept="accept"
     :limit="limit"
     :multiple="multiple"
+    :name="name"
+    :auto-upload="autoUpload"
+    :drag="drag"
+    :show-file-list="showFileList"
+    :with-credentials="withCredentials"
     :headers="headers"
     :data="data"
     :disabled="disabled"
@@ -90,6 +103,7 @@ const handleProgress: UploadProps["onProgress"] = (event, file, files) =>
     @preview="handlePreview"
     @exceed="handleExceed"
     @progress="handleProgress"
+    @change="handleChange"
   >
     <slot name="trigger">
       <ElIcon v-if="listType === 'picture-card'" class="uni-upload__trigger-plus">

@@ -1,4 +1,8 @@
 export const copyText = async (text: string) => {
+  if (typeof navigator === "undefined" || typeof document === "undefined") {
+    throw new Error("copyText can only be used in browser environments.");
+  }
+
   if (navigator.clipboard?.writeText) {
     await navigator.clipboard.writeText(text);
     return;

@@ -3,7 +3,7 @@
  * 查询筛选条：在 `UniForm` 之上提供查询/重置/展开收起与右侧操作区插槽；
  * 默认合并 `formProps.labelWidth: 0`（无左侧标签，适合 placeholder 紧凑布局，可被 `config.formProps` 覆盖）。
  */
-import { computed, ref } from "vue";
+import { computed, ref, watch } from "vue";
 
 import UniForm from "@/components/uni-form/uni-form.vue";
 import type { Recordable, UniFormConfig, UniFormField } from "@/types/shared";
@@ -113,6 +113,15 @@ const handleReset = () => {
   formModel.value = {};
   emit("reset");
 };
+
+watch(
+  () => props.collapsed,
+  (value) => {
+    if (typeof value === "boolean") {
+      innerCollapsed.value = value;
+    }
+  },
+);
 </script>
 
 <template>
