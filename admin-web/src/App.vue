@@ -1,3 +1,5 @@
 <template>
-  <RouterView />
+  <UniConfigProvider>
+    <RouterView />
+  </UniConfigProvider>
 </template>

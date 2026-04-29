@@ -1,5 +1,6 @@
 import type { App } from "vue";
 
+import { UniConfigProvider } from "@/components/uni-config-provider";
 import { UniDataTable } from "@/components/uni-data-table";
 import { UniForm } from "@/components/uni-form";
 import { UniSearchForm } from "@/components/uni-search-form";
@@ -14,6 +15,7 @@ export interface UniLibInstallOptions {
 }
 
 const components = [
+  { name: "UniConfigProvider", component: UniConfigProvider },
   { name: "UniDataTable", component: UniDataTable },
   { name: "UniForm", component: UniForm },
   { name: "UniSearchForm", component: UniSearchForm },
