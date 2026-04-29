@@ -7,9 +7,7 @@
       @search="onSearch"
       @reset="onReset"
     />
-    <p style="margin: 8px 0 0; font-size: 13px">
-      最近变更：{{ lastChange }}
-    </p>
+    <p style="margin: 8px 0 0; font-size: 13px">最近变更：{{ lastChange }}</p>
   </div>
 </template>
 

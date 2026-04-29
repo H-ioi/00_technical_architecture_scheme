@@ -14,10 +14,7 @@
 </template>
 
 <script setup lang="ts">
-import type {
-  UniTableColumn,
-  UniTableToolbarConfig,
-} from "uni-ui-lib";
+import type { UniTableColumn, UniTableToolbarConfig } from "uni-ui-lib";
 
 const columns: UniTableColumn[] = [
   { prop: "name", label: "名称", type: "text", minWidth: 120 },

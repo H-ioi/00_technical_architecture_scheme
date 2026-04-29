@@ -1,0 +1,68 @@
+import type { App, Directive } from "vue";
+import { ElMessage } from "element-plus";
+
+import { useUniI18n } from "@/services/i18n";
+import { copyText } from "@/utils/copy";
+
+export type UniCopyValue =
+  | string
+  | number
+  | (() => string | number)
+  | {
+      text: string | number | (() => string | number);
+      successMessage?: string;
+      errorMessage?: string;
+    };
+
+const resolveCopyValue = (value: UniCopyValue) => {
+  if (typeof value === "object" && value !== null) {
+    const text = typeof value.text === "function" ? value.text() : value.text;
+
+    return {
+      text: String(text),
+      successMessage: value.successMessage,
+      errorMessage: value.errorMessage,
+    };
+  }
+
+  const text = typeof value === "function" ? value() : value;
+
+  return {
+    text: String(text),
+  };
+};
+
+const listeners = new WeakMap<HTMLElement, EventListener>();
+
+export const uniCopyDirective: Directive<HTMLElement, UniCopyValue> = {
+  mounted(el, binding) {
+    const listener = async () => {
+      const i18n = useUniI18n();
+      const { text, successMessage, errorMessage } = resolveCopyValue(
+        binding.value,
+      );
+
+      try {
+        await copyText(text);
+        ElMessage.success(successMessage ?? i18n.t("common.copySuccess"));
+      } catch {
+        ElMessage.error(errorMessage ?? i18n.t("common.copyFailed"));
+      }
+    };
+
+    listeners.set(el, listener);
+    el.addEventListener("click", listener);
+  },
+  beforeUnmount(el) {
+    const listener = listeners.get(el);
+
+    if (listener) {
+      el.removeEventListener("click", listener);
+      listeners.delete(el);
+    }
+  },
+};
+
+export const setupCopyDirective = (app: App) => {
+  app.directive("uni-copy", uniCopyDirective);
+};

@@ -11,6 +11,8 @@ export { UniConfigProvider, UniDataTable, UniForm, UniSearchForm, UniUpload };
 export * from "./plugins/install";
 export * from "./types/shared";
 export * from "./types/uni-data-table";
+export * from "./directives/copy";
+export * from "./directives/debounce-click";
 export * from "./directives/permission";
 export * from "./composables/use-uni-permission";
 export * from "./services/request";

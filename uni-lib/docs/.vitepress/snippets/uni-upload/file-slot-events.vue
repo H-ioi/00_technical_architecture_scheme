@@ -10,7 +10,10 @@
     <template #file="{ file }">
       <div class="custom-file-item">
         <span>{{ file.name }}</span>
-        <el-tag size="small" :type="file.status === 'success' ? 'success' : 'info'">
+        <el-tag
+          size="small"
+          :type="file.status === 'success' ? 'success' : 'info'"
+        >
           {{ file.status || "ready" }}
         </el-tag>
       </div>

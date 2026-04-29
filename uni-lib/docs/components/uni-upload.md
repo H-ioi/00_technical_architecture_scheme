@@ -191,6 +191,7 @@ function onPreview(file: UploadUserFile) {
 | `accept`           | 可选文件类型                    | `string`                                | —      |
 | `limit`            | 最大文件数                      | `number`                                | —      |
 | `maxSize`          | 单文件最大字节                  | `number`                                | —      |
+| `maxTotalSize`     | 当前列表加新文件的总大小限制    | `number`                                | —      |
 | `multiple`         | 是否多选                        | `boolean`                               | —      |
 | `name`             | 上传文件字段名                  | `string`                                | —      |
 | `autoUpload`       | 选中文件后是否自动上传          | `boolean`                               | —      |
@@ -203,7 +204,7 @@ function onPreview(file: UploadUserFile) {
 
 ## Events
 
-与 Element Plus `ElUpload` 一致：`success`、`error`、`remove`、`preview`、`exceed`、`validate-error`、`progress`、`change`，以及 `update:fileList`。
+与 Element Plus `ElUpload` 一致：`success`、`error`、`remove`、`preview`、`exceed`、`validate-error`、`progress`、`change`，以及 `update:fileList`。`validate-error` 会在 `accept`、`maxSize`、`maxTotalSize` 校验不通过时触发。
 
 ## Slots
 

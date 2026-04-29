@@ -4,6 +4,8 @@
 
 `uni-lib` 面向管理后台类项目，默认技术栈为 **Vue 3 + TypeScript + Element Plus + Sass**。组件对外统一使用 **`Uni` 前缀**，组件目录统一使用 **`uni-xxx`**。所有 UI 组件都应基于 Element Plus 原子组件进行轻封装，不重复实现 Element Plus 已经稳定提供的基础能力。
 
+> 说明：本文中的 `uni-lib` 指组件库工程与架构模块名；当前 npm 包名为 `uni-ui-lib`，业务项目安装和导入时以 `uni-ui-lib` 为准。
+
 ---
 
 ## 一、定位与原则

@@ -10,6 +10,8 @@ export interface UniAuthOptions<TCredentials = unknown, TUser = unknown> {
   logout?: () => Promise<void> | void;
   refreshToken?: (refreshToken: string) => Promise<UniAuthTokens>;
   onTokenChange?: (tokens: UniAuthTokens | null) => void;
+  onRefreshError?: (error: unknown) => void;
+  clearTokenOnRefreshError?: boolean;
 }
 
 export const createUniAuth = <TCredentials = unknown, TUser = unknown>(
@@ -40,9 +42,19 @@ export const createUniAuth = <TCredentials = unknown, TUser = unknown>(
         return tokens;
       }
 
-      const nextTokens = await options.refreshToken(tokens.refreshToken);
-      setTokens(nextTokens);
-      return nextTokens;
+      try {
+        const nextTokens = await options.refreshToken(tokens.refreshToken);
+        setTokens(nextTokens);
+        return nextTokens;
+      } catch (error) {
+        options.onRefreshError?.(error);
+
+        if (options.clearTokenOnRefreshError) {
+          setTokens(null);
+        }
+
+        throw error;
+      }
     },
     getTokens: () => tokens,
     getUser: () => user,

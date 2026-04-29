@@ -226,14 +226,20 @@ watch(
       v-if="showSelectedTags && selectedTags.length"
       class="uni-search-form__selected-tags"
     >
-      <el-tag
-        v-for="tag in selectedTags"
-        :key="tag.field"
-        closable
-        @close="removeSelectedTag(tag.field)"
+      <slot
+        name="selected-tags"
+        :tags="selectedTags"
+        :remove="removeSelectedTag"
       >
-        {{ tag.label }}：{{ tag.value }}
-      </el-tag>
+        <el-tag
+          v-for="tag in selectedTags"
+          :key="tag.field"
+          closable
+          @close="removeSelectedTag(tag.field)"
+        >
+          {{ tag.label }}：{{ tag.value }}
+        </el-tag>
+      </slot>
     </div>
   </div>
 </template>

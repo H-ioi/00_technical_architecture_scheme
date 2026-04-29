@@ -1,5 +1,11 @@
 <template>
-  <UniSearchForm v-model="query" :config="searchConfig" submit-text="筛选" reset-text="清空" @search="onSearch" />
+  <UniSearchForm
+    v-model="query"
+    :config="searchConfig"
+    submit-text="筛选"
+    reset-text="清空"
+    @search="onSearch"
+  />
 </template>
 
 <script setup lang="ts">
@@ -20,5 +26,5 @@ const searchConfig: UniFormConfig = {
   colProps: { span: 8 },
 };
 
-function onSearch() { }
+function onSearch() {}
 </script>

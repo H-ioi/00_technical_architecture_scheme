@@ -1,5 +1,5 @@
 <template>
-  <UniSearchForm v-model="query" :config="searchConfig" @search="() => { }" />
+  <UniSearchForm v-model="query" :config="searchConfig" @search="() => {}" />
 </template>
 
 <script setup lang="ts">

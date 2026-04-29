@@ -30,6 +30,13 @@ createApp(App)
 import { UniDataTable, UniForm, UniSearchForm, UniUpload } from "uni-ui-lib";
 ```
 
+或使用组件子路径：
+
+```ts
+import { UniDataTable } from "uni-ui-lib/components/uni-data-table";
+import "uni-ui-lib/components/uni-data-table/style.css";
+```
+
 ## Scripts
 
 ```bash

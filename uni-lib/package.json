@@ -21,7 +21,82 @@
       "import": "./dist/index.mjs",
       "require": "./dist/index.cjs"
     },
+    "./components/uni-config-provider": {
+      "types": "./dist/src/components/uni-config-provider/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.cjs"
+    },
+    "./components/uni-data-table": {
+      "types": "./dist/src/components/uni-data-table/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.cjs"
+    },
+    "./components/uni-form": {
+      "types": "./dist/src/components/uni-form/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.cjs"
+    },
+    "./components/uni-search-form": {
+      "types": "./dist/src/components/uni-search-form/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.cjs"
+    },
+    "./components/uni-upload": {
+      "types": "./dist/src/components/uni-upload/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.cjs"
+    },
+    "./services/request": {
+      "types": "./dist/src/services/request.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.cjs"
+    },
+    "./services/auth": {
+      "types": "./dist/src/services/auth.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.cjs"
+    },
+    "./services/i18n": {
+      "types": "./dist/src/services/i18n.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.cjs"
+    },
+    "./directives/copy": {
+      "types": "./dist/src/directives/copy.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.cjs"
+    },
+    "./directives/debounce-click": {
+      "types": "./dist/src/directives/debounce-click.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.cjs"
+    },
+    "./directives/permission": {
+      "types": "./dist/src/directives/permission.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.cjs"
+    },
+    "./theme": {
+      "types": "./dist/src/theme/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.cjs"
+    },
+    "./utils/format": {
+      "types": "./dist/src/utils/format.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.cjs"
+    },
+    "./utils/copy": {
+      "types": "./dist/src/utils/copy.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.cjs"
+    },
     "./style.css": {
+      "import": "./dist/index.css",
+      "require": "./dist/index.css",
+      "default": "./dist/index.css"
+    },
+    "./components/*/style.css": {
       "import": "./dist/index.css",
       "require": "./dist/index.css",
       "default": "./dist/index.css"

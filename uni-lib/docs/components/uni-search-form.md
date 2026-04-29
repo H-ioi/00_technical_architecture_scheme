@@ -363,6 +363,7 @@ function onResetEvents() {
 
 ## Slots
 
-| 插槽      | 说明                                                                                        |
-| --------- | ------------------------------------------------------------------------------------------- |
-| `actions` | 自定义操作区，作用域参数：`search`、`reset`、`collapsed`、`needCollapse`、`toggleCollapsed` |
+| 插槽            | 说明                                                                                        |
+| --------------- | ------------------------------------------------------------------------------------------- |
+| `actions`       | 自定义操作区，作用域参数：`search`、`reset`、`collapsed`、`needCollapse`、`toggleCollapsed` |
+| `selected-tags` | 自定义已选条件标签，作用域参数：`tags`、`remove`                                            |

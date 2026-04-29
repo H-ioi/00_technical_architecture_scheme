@@ -25,6 +25,7 @@ const props = withDefaults(
     accept?: string;
     limit?: number;
     maxSize?: number;
+    maxTotalSize?: number;
     multiple?: boolean;
     name?: string;
     autoUpload?: boolean;
@@ -55,11 +56,56 @@ const emit = defineEmits<{
   change: [file: UploadFile, files: UploadFiles];
 }>();
 
+const fileListSize = () =>
+  props.fileList.reduce((total, file) => total + (file.size ?? 0), 0);
+
+const isAcceptedFile = (file: File) => {
+  if (!props.accept) {
+    return true;
+  }
+
+  const acceptRules = props.accept.split(",").map((item) => item.trim());
+
+  return acceptRules.some((rule) => {
+    if (rule === "") {
+      return true;
+    }
+
+    if (rule.startsWith(".")) {
+      return file.name.toLowerCase().endsWith(rule.toLowerCase());
+    }
+
+    if (rule.endsWith("/*")) {
+      return file.type.startsWith(rule.slice(0, -1));
+    }
+
+    return file.type === rule;
+  });
+};
+
 const beforeUpload: UploadProps["beforeUpload"] = (file) => {
+  if (!isAcceptedFile(file)) {
+    emit(
+      "validate-error",
+      i18n.t("upload.accept", { accept: props.accept }),
+      file,
+    );
+    return false;
+  }
+
   if (props.maxSize && file.size > props.maxSize) {
     emit(
       "validate-error",
       i18n.t("upload.maxSize", { size: props.maxSize }),
+      file,
+    );
+    return false;
+  }
+
+  if (props.maxTotalSize && fileListSize() + file.size > props.maxTotalSize) {
+    emit(
+      "validate-error",
+      i18n.t("upload.maxTotalSize", { size: props.maxTotalSize }),
       file,
     );
     return false;

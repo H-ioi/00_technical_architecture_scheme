@@ -36,6 +36,13 @@ export interface UniTableToolbarConfig {
   exportFileName?: string;
 }
 
+export interface UniTableActionColumnConfig {
+  label?: string;
+  width?: string | number;
+  minWidth?: string | number;
+  fixed?: "left" | "right" | false;
+}
+
 export type UniTableColumnType =
   | "text"
   | "number"

@@ -32,7 +32,11 @@ const data = ref<Recordable[]>([
   { id: 2, name: "不可编辑项", enabled: 0 },
 ]);
 
-function onSwitchChange(row: Recordable, _column: UniTableColumn, value: unknown) {
+function onSwitchChange(
+  row: Recordable,
+  _column: UniTableColumn,
+  value: unknown,
+) {
   row.enabled = value;
 }
 </script>

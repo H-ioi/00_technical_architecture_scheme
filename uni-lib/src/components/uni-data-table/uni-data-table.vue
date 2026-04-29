@@ -12,6 +12,7 @@ import type {
   Recordable,
   UniPaginationConfig,
   UniTableAction,
+  UniTableActionColumnConfig,
   UniTableColumn,
   UniTableRequest,
   UniTableRequestResult,
@@ -34,7 +35,9 @@ const props = withDefaults(
     pagination?: UniPaginationConfig | false;
     rowKey?: string;
     selection?: boolean | "multiple" | "single";
+    selectable?: (row: Recordable, index: number) => boolean;
     actions?: UniTableAction[];
+    actionColumn?: UniTableActionColumnConfig;
     emptyText?: string;
     valueEnums?: Record<string, import("@/types/shared").UniOption[]>;
     toolbar?: boolean | UniTableToolbarConfig;
@@ -257,6 +260,7 @@ defineExpose({
         v-if="selection === true || selection === 'multiple'"
         type="selection"
         width="48"
+        :selectable="selectable"
       />
 
       <el-table-column
@@ -301,9 +305,14 @@ defineExpose({
 
       <el-table-column
         v-if="actions?.length || $slots.actions"
-        label="操作"
-        fixed="right"
-        width="180"
+        :label="actionColumn?.label ?? i18n.t('dataTable.actions')"
+        :fixed="
+          actionColumn?.fixed === false
+            ? false
+            : (actionColumn?.fixed ?? 'right')
+        "
+        :width="actionColumn?.width ?? 180"
+        :min-width="actionColumn?.minWidth"
       >
         <template #default="{ row, $index }">
           <slot name="actions" :row="row" :index="$index">

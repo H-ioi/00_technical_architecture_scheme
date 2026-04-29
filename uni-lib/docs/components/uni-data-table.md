@@ -535,20 +535,22 @@ onMounted(() => {
 
 ## Props
 
-| 属性         | 说明                                                  | 类型                                | 默认值    |
-| ------------ | ----------------------------------------------------- | ----------------------------------- | --------- |
-| `columns`    | 列定义                                                | `UniTableColumn[]`                  | —         |
-| `data`       | 静态数据；与 `request` 二选一                         | `Record<string, unknown>[]`         | `[]`      |
-| `request`    | 分页请求，返回 `{ records, total }`                   | `UniTableRequest`                   | —         |
-| `filters`    | 远程请求附加筛选参数，会透传给 `request`              | `Record<string, unknown>`           | —         |
-| `loading`    | 外部加载态                                            | `boolean`                           | —         |
-| `pagination` | 分页配置，`false` 关闭分页                            | `UniPaginationConfig \| false`      | 内置默认  |
-| `rowKey`     | 行主键字段名                                          | `string`                            | `id`      |
-| `selection`  | 多选（`true` / `multiple`）或单选高亮（`single`）     | `boolean \| 'multiple' \| 'single'` | —         |
-| `actions`    | 行操作按钮配置；可见项超过 3 个时第三位自动收纳为更多 | `UniTableAction[]`                  | —         |
-| `emptyText`  | 空数据文案；不传时使用当前语言包                      | `string`                            | i18n 默认 |
-| `valueEnums` | 按列 `prop` 注入枚举选项（展示 enum/tag 等）          | `Record<string, UniOption[]>`       | —         |
-| `toolbar`    | 右侧表格工具配置；`false` 关闭内置工具栏              | `boolean \| UniTableToolbarConfig`  | 内置默认  |
+| 属性           | 说明                                                     | 类型                                | 默认值    |
+| -------------- | -------------------------------------------------------- | ----------------------------------- | --------- |
+| `columns`      | 列定义                                                   | `UniTableColumn[]`                  | —         |
+| `data`         | 静态数据；与 `request` 二选一                            | `Record<string, unknown>[]`         | `[]`      |
+| `request`      | 分页请求，返回 `{ records, total }`                      | `UniTableRequest`                   | —         |
+| `filters`      | 远程请求附加筛选参数，会透传给 `request`                 | `Record<string, unknown>`           | —         |
+| `loading`      | 外部加载态                                               | `boolean`                           | —         |
+| `pagination`   | 分页配置，`false` 关闭分页                               | `UniPaginationConfig \| false`      | 内置默认  |
+| `rowKey`       | 行主键字段名                                             | `string`                            | `id`      |
+| `selection`    | 多选（`true` / `multiple`）或单选高亮（`single`）        | `boolean \| 'multiple' \| 'single'` | —         |
+| `selectable`   | 多选时控制某一行是否可勾选                               | `(row, index) => boolean`           | —         |
+| `actions`      | 行操作按钮配置；可见项超过 3 个时第三位自动收纳为更多    | `UniTableAction[]`                  | —         |
+| `actionColumn` | 操作列配置，可设置 `label`、`width`、`minWidth`、`fixed` | `UniTableActionColumnConfig`        | —         |
+| `emptyText`    | 空数据文案；不传时使用当前语言包                         | `string`                            | i18n 默认 |
+| `valueEnums`   | 按列 `prop` 注入枚举选项（展示 enum/tag 等）             | `Record<string, UniOption[]>`       | —         |
+| `toolbar`      | 右侧表格工具配置；`false` 关闭内置工具栏                 | `boolean \| UniTableToolbarConfig`  | 内置默认  |
 
 ## Toolbar Config
 

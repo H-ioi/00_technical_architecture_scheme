@@ -158,7 +158,12 @@ const formConfig: UniFormConfig = {
       field: "inputNumber",
       label: "数字",
       component: "ElInputNumber",
-      componentProps: { min: 0, max: 9999, controlsPosition: "right", style: { width: "100%" } },
+      componentProps: {
+        min: 0,
+        max: 9999,
+        controlsPosition: "right",
+        style: { width: "100%" },
+      },
       colProps: { xs: 24, sm: 12, md: 8 },
     },
     {
