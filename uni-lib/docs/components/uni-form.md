@@ -7,13 +7,16 @@ import codeActions from "../.vitepress/snippets/uni-form/actions-slot.vue?raw";
 import codeAllInputsGrid from "../.vitepress/snippets/uni-form/all-inputs-grid.vue?raw";
 import AllInputsGridDemo from "../.vitepress/snippets/uni-form/all-inputs-grid.vue";
 import codeBasic from "../.vitepress/snippets/uni-form/basic.vue?raw";
+import codeDynamicActions from "../.vitepress/snippets/uni-form/dynamic-actions.vue?raw";
 import codeFieldSlot from "../.vitepress/snippets/uni-form/field-slot.vue?raw";
 import codeLinkage from "../.vitepress/snippets/uni-form/linkage-visible.vue?raw";
 import codeLoadOptions from "../.vitepress/snippets/uni-form/load-options.vue?raw";
 import codeRadioNumber from "../.vitepress/snippets/uni-form/radio-number.vue?raw";
 import codeReadonly from "../.vitepress/snippets/uni-form/readonly.vue?raw";
 import codeRules from "../.vitepress/snippets/uni-form/rules-validate.vue?raw";
+import codeSectionTitleSlot from "../.vitepress/snippets/uni-form/section-title-slot.vue?raw";
 import codeSections from "../.vitepress/snippets/uni-form/sections.vue?raw";
+import codeViewRender from "../.vitepress/snippets/uni-form/view-render.vue?raw";
 
 const mode = ref<"edit" | "view">("edit");
 
@@ -53,6 +56,46 @@ const formConfigReadonly: UniFormConfig = {
       colProps: { span: 24 },
     },
   ],
+  colProps: { span: 12 },
+};
+
+const formModelView = ref<Record<string, unknown>>({
+  name: "演示项目",
+  status: 1,
+  startedAt: "2026-04-29 10:00:00",
+  remark: "",
+});
+const formConfigView: UniFormConfig = {
+  view: { emptyText: "未填写" },
+  schema: [
+    { field: "name", label: "名称", component: "ElInput", colProps: { span: 12 } },
+    {
+      field: "status",
+      label: "状态",
+      component: "ElSelect",
+      viewType: "enum",
+      options: [
+        { label: "启用", value: 1 },
+        { label: "停用", value: 0 },
+      ],
+      colProps: { span: 12 },
+    },
+    {
+      field: "startedAt",
+      label: "开始时间",
+      component: "ElDatePicker",
+      viewType: "datetime",
+      colProps: { span: 12 },
+    },
+    {
+      field: "remark",
+      label: "备注",
+      component: "ElInput",
+      viewRender: ({ value }) => (value ? `备注：${value}` : "暂无备注"),
+      colProps: { span: 12 },
+    },
+  ],
+  rowProps: { gutter: 12 },
   colProps: { span: 12 },
 };
 
@@ -114,6 +157,23 @@ const formConfigSections: UniFormConfig = {
   colProps: { span: 12 },
 };
 
+const formModelSectionSlot = ref<Record<string, unknown>>({
+  name: "",
+  code: "",
+});
+const formConfigSectionSlot: UniFormConfig = {
+  sections: [
+    { title: "基础信息", description: "可用插槽替换默认标题", fields: ["name"] },
+    { title: "扩展信息", fields: ["code"] },
+  ],
+  schema: [
+    { field: "name", label: "名称", component: "ElInput", colProps: { span: 12 } },
+    { field: "code", label: "编码", component: "ElInput", colProps: { span: 12 } },
+  ],
+  rowProps: { gutter: 12 },
+  colProps: { span: 12 },
+};
+
 const formModelLinkage = ref<Record<string, unknown>>({
   showExtra: "no",
   extraNote: "",
@@ -141,6 +201,53 @@ const formConfigLinkage: UniFormConfig = {
       colProps: { span: 24 },
     },
   ],
+  colProps: { span: 12 },
+};
+
+const formModelDynamic = ref<Record<string, unknown>>({
+  type: "normal",
+  owner: "",
+  reason: "",
+});
+const formConfigDynamic: UniFormConfig = {
+  schema: [
+    {
+      field: "type",
+      label: "类型",
+      component: "ElSelect",
+      options: [
+        { label: "普通", value: "normal" },
+        { label: "特殊", value: "special" },
+      ],
+      componentProps: { placeholder: "请选择类型" },
+      colProps: { span: 12 },
+      onChange: ({ value, actions }) => {
+        actions.setDisabled("owner", value === "special");
+        actions.setVisible("reason", value === "special");
+        if (value === "special") {
+          actions.setValue("reason", "特殊类型需填写原因");
+        } else {
+          actions.clearValue("reason");
+        }
+      },
+    },
+    {
+      field: "owner",
+      label: "负责人",
+      component: "ElInput",
+      componentProps: { placeholder: "特殊类型时禁用" },
+      colProps: { span: 12 },
+    },
+    {
+      field: "reason",
+      label: "原因",
+      component: "ElInput",
+      visible: false,
+      componentProps: { type: "textarea", rows: 2 },
+      colProps: { span: 24 },
+    },
+  ],
+  rowProps: { gutter: 12 },
   colProps: { span: 12 },
 };
 
@@ -230,6 +337,7 @@ const formConfigLoad: UniFormConfig = {
 | `rules`                 | Element Plus 表单校验规则                                                               |
 | `disabled` / `readonly` | 整表禁用或只读                                                                          |
 | `mode`                  | 也可写在 `config.mode`，组件 `mode` 优先                                                |
+| `view`                  | 查看态空值、冒号等展示配置                                                              |
 
 字段联动可通过 `dependencies`、`visible`、`disabled`、`onChange` 及上下文里的 `actions` 完成；异步选项使用字段上的 `loadOptions`。
 
@@ -261,16 +369,49 @@ const formConfigLoad: UniFormConfig = {
   <UniForm v-model="formModelReadonly" :config="formConfigReadonly" />
 </CompDemo>
 
+## 查看态格式化
+
+查看态会优先使用字段上的 `viewRender`，其次可通过 `viewType` 复用枚举、日期等格式化逻辑；空值文案可在 `config.view.emptyText` 中统一配置。
+
+<CompDemo title="mode=view + viewType / viewRender" :code="codeViewRender">
+  <UniForm v-model="formModelView" :config="formConfigView" mode="view" />
+</CompDemo>
+
 ## 分组 sections
 
 <CompDemo title="sections 分组标题与字段归属" :code="codeSections">
   <UniForm v-model="formModelSections" :config="formConfigSections" />
 </CompDemo>
 
+## 自定义分组标题
+
+默认分组标题只展示标题与描述；需要加图标、说明、操作按钮时可使用 `section-title` 插槽。
+
+<CompDemo title="#section-title 自定义分组标题" :code="codeSectionTitleSlot">
+  <UniForm v-model="formModelSectionSlot" :config="formConfigSectionSlot">
+    <template #section-title="{ section }">
+      <div style="display: flex; gap: 8px; align-items: center; margin: 12px 0">
+        <strong>{{ section.title }}</strong>
+        <span v-if="section.description" style="font-size: 12px; color: var(--vp-c-text-2)">
+          {{ section.description }}
+        </span>
+      </div>
+    </template>
+  </UniForm>
+</CompDemo>
+
 ## 联动显隐（dependencies + visible）
 
 <CompDemo title="依赖字段控制展示" :code="codeLinkage">
   <UniForm v-model="formModelLinkage" :config="formConfigLinkage" />
+</CompDemo>
+
+## 动态字段状态 actions
+
+字段 `onChange` 中可通过上下文 `actions` 主动设置其他字段的值、显隐、禁用态或选项，用于处理比 `visible` / `disabled` 更复杂的联动。
+
+<CompDemo title="onChange + actions.setValue / setVisible / setDisabled" :code="codeDynamicActions">
+  <UniForm v-model="formModelDynamic" :config="formConfigDynamic" />
 </CompDemo>
 
 ## 校验 rules

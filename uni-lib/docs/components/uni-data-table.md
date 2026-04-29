@@ -12,6 +12,8 @@ import type {
 } from "@/types/shared";
 
 import codeActionsSlot from "../.vitepress/snippets/uni-data-table/actions-slot.vue?raw";
+import codeActionsOverflow from "../.vitepress/snippets/uni-data-table/actions-overflow.vue?raw";
+import codeColumnTypes from "../.vitepress/snippets/uni-data-table/column-types.vue?raw";
 import codeColHeader from "../.vitepress/snippets/uni-data-table/column-header-slots.vue?raw";
 import codeLoading from "../.vitepress/snippets/uni-data-table/loading.vue?raw";
 import codePageCustom from "../.vitepress/snippets/uni-data-table/pagination-custom.vue?raw";
@@ -20,6 +22,7 @@ import codeRowClick from "../.vitepress/snippets/uni-data-table/row-click.vue?ra
 import codeSelection from "../.vitepress/snippets/uni-data-table/selection-actions.vue?raw";
 import codeStatic from "../.vitepress/snippets/uni-data-table/static.vue?raw";
 import codeSelEvents from "../.vitepress/snippets/uni-data-table/selection-events.vue?raw";
+import codeSwitchChange from "../.vitepress/snippets/uni-data-table/switch-change.vue?raw";
 import codeTagSort from "../.vitepress/snippets/uni-data-table/tag-sort.vue?raw";
 import codeToolbarEmpty from "../.vitepress/snippets/uni-data-table/toolbar-empty.vue?raw";
 import codeValueEnums from "../.vitepress/snippets/uni-data-table/value-enums.vue?raw";
@@ -67,6 +70,34 @@ const actions: UniTableAction[] = [
     type: "primary",
     onClick: (row) => console.info("[docs]", row),
   },
+];
+
+const columnsActionOverflow: UniTableColumn[] = [
+  { prop: "name", label: "名称", type: "text", minWidth: 120 },
+  { prop: "status", label: "状态", type: "tag", minWidth: 100 },
+];
+
+const dataActionOverflow = [
+  { id: 1, name: "流程 A", status: "draft" },
+  { id: 2, name: "流程 B", status: "locked" },
+];
+
+const actionsOverflow: UniTableAction[] = [
+  { label: "详情", type: "primary", onClick: (row) => console.info(row) },
+  { label: "编辑", type: "primary", onClick: (row) => console.info(row) },
+  {
+    label: "提交",
+    type: "success",
+    visible: (row) => row.status === "draft",
+    onClick: (row) => console.info(row),
+  },
+  {
+    label: "停用",
+    type: "warning",
+    disabled: (row) => row.status === "locked",
+    onClick: (row) => console.info(row),
+  },
+  { label: "删除", type: "danger", onClick: (row) => console.info(row) },
 ];
 
 const columnsSlot: UniTableColumn[] = [
@@ -135,6 +166,67 @@ const dataEnum = [
   { id: 2, code: "A2", state: "p" },
 ];
 
+const columnsSwitch: UniTableColumn[] = [
+  { prop: "name", label: "名称", type: "text", minWidth: 120 },
+  {
+    prop: "enabled",
+    label: "启用",
+    type: "switch",
+    minWidth: 100,
+    switch: {
+      activeValue: 1,
+      inactiveValue: 0,
+      disabled: (row) => row.name === "不可编辑项",
+    },
+  },
+];
+
+const dataSwitch = ref<Recordable[]>([
+  { id: 1, name: "可编辑项", enabled: 1 },
+  { id: 2, name: "不可编辑项", enabled: 0 },
+]);
+
+const columnsRich: UniTableColumn[] = [
+  { prop: "orderNo", label: "订单号", type: "copy", minWidth: 140 },
+  { prop: "amount", label: "金额", type: "money", minWidth: 100 },
+  { prop: "rate", label: "完成率", type: "percent", minWidth: 100 },
+  {
+    prop: "owner",
+    label: "负责人",
+    type: "text",
+    formatter: (_row, _column, value) => `@${value}`,
+    minWidth: 100,
+  },
+  {
+    prop: "url",
+    label: "链接",
+    type: "link",
+    minWidth: 120,
+    link: { target: "_blank" },
+  },
+  {
+    prop: "tags",
+    label: "标签",
+    type: "array",
+    minWidth: 160,
+    array: { renderMode: "tag" },
+  },
+  { prop: "extra", label: "扩展信息", type: "json", minWidth: 160 },
+];
+
+const dataRich = [
+  {
+    id: 1,
+    orderNo: "ORD-20260429-001",
+    amount: 1280.5,
+    rate: 0.86,
+    owner: "Alice",
+    url: "https://example.com",
+    tags: ["重点", "已同步"],
+    extra: { source: "ERP", priority: 1 },
+  },
+];
+
 const loadingDemo = ref(true);
 
 const selectedIds = ref("无");
@@ -145,6 +237,15 @@ function onSelectionChange(rows: Recordable[]) {
 
 function onRowClick(row: Recordable) {
   ElMessage.info(`点击了：${row.name}`);
+}
+
+function onSwitchChange(
+  row: Recordable,
+  _column: UniTableColumn,
+  value: unknown,
+) {
+  row.enabled = value;
+  ElMessage.success(`已切换：${row.name}`);
 }
 
 onMounted(() => {
@@ -205,6 +306,20 @@ onMounted(() => {
   />
 </CompDemo>
 
+## 操作列超过 3 个自动收纳
+
+`actions` 会先按 `visible` 和 `code` 过滤可见项：可见操作 **不超过 3 个** 时全部直接展示；**超过 3 个** 时，前 2 个直接展示，第 3 个位置显示更多图标，下拉内包含第 3 个及后续操作。`disabled` 会同步作用到按钮和下拉项。
+
+<CompDemo title="actions > 3：第三位收纳为更多" :code="codeActionsOverflow">
+  <UniDataTable
+    :columns="columnsActionOverflow"
+    :data="dataActionOverflow"
+    :actions="actionsOverflow"
+    :pagination="false"
+    row-key="id"
+  />
+</CompDemo>
+
 ## selection-change 事件
 
 <CompDemo title="@selection-change 拿到勾选行" :code="codeSelEvents">
@@ -243,6 +358,20 @@ onMounted(() => {
   />
 </CompDemo>
 
+## 开关列 switch-change
+
+`type="switch"` 适合表格内快速启停；切换后通过 `switch-change` 回传当前行、列配置和新值，业务侧可在事件里更新行数据或发起接口请求。
+
+<CompDemo title="type=switch + @switch-change" :code="codeSwitchChange">
+  <UniDataTable
+    :columns="columnsSwitch"
+    :data="dataSwitch"
+    :pagination="false"
+    row-key="id"
+    @switch-change="onSwitchChange"
+  />
+</CompDemo>
+
 ## tag 列 + 排序列
 
 <CompDemo title="type=tag + options；sortable" :code="codeTagSort">
@@ -262,6 +391,19 @@ onMounted(() => {
     :columns="columnsEnum"
     :data="dataEnum"
     :value-enums="valueEnumsDemo"
+    :pagination="false"
+    row-key="id"
+  />
+</CompDemo>
+
+## 常见业务列类型
+
+内置单元格渲染覆盖常见后台字段：复制、金额、百分比、formatter、链接、数组标签、JSON tooltip 等。更复杂的展示建议使用 `column-${prop}` 插槽接管。
+
+<CompDemo title="copy / money / percent / link / array / json" :code="codeColumnTypes">
+  <UniDataTable
+    :columns="columnsRich"
+    :data="dataRich"
     :pagination="false"
     row-key="id"
   />
@@ -341,9 +483,30 @@ onMounted(() => {
 | `pagination` | 分页配置，`false` 关闭分页                               | `UniPaginationConfig \| false`      | 内置默认   |
 | `rowKey`     | 行主键字段名                                             | `string`                            | `id`       |
 | `selection`  | 多选（`true` / `multiple`）；`single` 类型暂未渲染选择列 | `boolean \| 'multiple' \| 'single'` | —          |
-| `actions`    | 行操作按钮配置                                           | `UniTableAction[]`                  | —          |
+| `actions`    | 行操作按钮配置；可见项超过 3 个时第三位自动收纳为更多    | `UniTableAction[]`                  | —          |
 | `emptyText`  | 空数据文案                                               | `string`                            | `暂无数据` |
 | `valueEnums` | 按列 `prop` 注入枚举选项（展示 enum/tag 等）             | `Record<string, UniOption[]>`       | —          |
+
+## Column Types
+
+| 类型       | 说明                                   |
+| ---------- | -------------------------------------- |
+| `text`     | 默认文本，支持 `formatter`             |
+| `number`   | 数字文本                               |
+| `money`    | 金额格式化                             |
+| `percent`  | 小数转百分比展示                       |
+| `date`     | 日期格式化，默认 `YYYY-MM-DD`          |
+| `datetime` | 日期时间格式化，默认 `YYYY-MM-DD HH:mm:ss` |
+| `boolean`  | `true/false` 展示为 `是/否`            |
+| `enum`     | 从列 `options` 或 `valueEnums` 映射文案 |
+| `tag/tags` | 标签展示                               |
+| `switch`   | 开关列，变更时触发 `switch-change`     |
+| `copy`     | 文本 + 复制按钮                        |
+| `link/links` | 链接展示                             |
+| `array`    | 数组文本或标签展示                     |
+| `json`     | JSON 字符串 + tooltip                  |
+| `image/images` | 图片预览展示                       |
+| `video/videos` | 视频链接展示                       |
 
 ## Events
 

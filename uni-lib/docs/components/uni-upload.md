@@ -7,19 +7,32 @@ import type { UploadRequestOptions, UploadUserFile } from "element-plus";
 import codeCard from "../.vitepress/snippets/uni-upload/picture-card.vue?raw";
 import codeCustomReq from "../.vitepress/snippets/uni-upload/custom-request.vue?raw";
 import codeDisabled from "../.vitepress/snippets/uni-upload/disabled.vue?raw";
+import codeFileSlotEvents from "../.vitepress/snippets/uni-upload/file-slot-events.vue?raw";
 import codeLimit from "../.vitepress/snippets/uni-upload/limit-multiple.vue?raw";
 import codeMaxSize from "../.vitepress/snippets/uni-upload/max-size.vue?raw";
+import codePictureList from "../.vitepress/snippets/uni-upload/picture-list.vue?raw";
 import codeText from "../.vitepress/snippets/uni-upload/text.vue?raw";
 import codeTipTrigger from "../.vitepress/snippets/uni-upload/tip-trigger.vue?raw";
 
 const files = ref<UploadUserFile[]>([]);
 const filesCard = ref<UploadUserFile[]>([]);
+const filesPicture = ref<UploadUserFile[]>([
+  {
+    name: "示例图片",
+    status: "success",
+    uid: 1,
+    url: "https://element-plus.org/images/element-plus-logo.svg",
+  },
+]);
 const filesReq = ref<UploadUserFile[]>([]);
 const filesDisabled = ref<UploadUserFile[]>([
   { name: "示例.txt", status: "success", uid: 1 },
 ]);
 const filesLimit = ref<UploadUserFile[]>([]);
 const filesMax = ref<UploadUserFile[]>([]);
+const filesCustom = ref<UploadUserFile[]>([
+  { name: "已上传文件.pdf", status: "success", uid: 1 },
+]);
 
 async function mockUpload(options: UploadRequestOptions) {
   await new Promise((r) => setTimeout(r, 400));
@@ -36,6 +49,18 @@ function onExceed() {
 
 function onValidateError(message: string) {
   ElMessage.warning(message);
+}
+
+function onSuccess() {
+  ElMessage.success("上传成功");
+}
+
+function onRemove() {
+  ElMessage.info("已移除文件");
+}
+
+function onPreview(file: UploadUserFile) {
+  ElMessage.info(`预览：${file.name}`);
 }
 </script>
 
@@ -61,6 +86,19 @@ function onValidateError(message: string) {
   />
 </CompDemo>
 
+## 图片列表
+
+`list-type="picture"` 适合头像、附件缩略图等列表式展示；已有文件可通过 `fileList` 的 `url` 字段回显。
+
+<CompDemo title="list-type=picture + 初始文件" :code="codePictureList">
+  <UniUpload
+    v-model:file-list="filesPicture"
+    list-type="picture"
+    accept="image/*"
+    :request="mockUpload"
+  />
+</CompDemo>
+
 ## 自定义 request
 
 <CompDemo title="最小 :request 骨架" :code="codeCustomReq">
@@ -80,6 +118,30 @@ function onValidateError(message: string) {
     </template>
     <template #tip>
       <div class="el-upload__tip">仅示例；生产环境请配置 :action 或 :request</div>
+    </template>
+  </UniUpload>
+</CompDemo>
+
+## 自定义文件项与事件
+
+使用 `#file` 可以完全替换文件列表项；常用事件会透传 Element Plus 的文件对象，适合做预览、删除确认、上传成功后写回业务字段。
+
+<CompDemo title="#file + success / remove / preview" :code="codeFileSlotEvents">
+  <UniUpload
+    v-model:file-list="filesCustom"
+    list-type="text"
+    :request="mockUpload"
+    @success="onSuccess"
+    @remove="onRemove"
+    @preview="onPreview"
+  >
+    <template #file="{ file }">
+      <div style="display: flex; gap: 8px; align-items: center; justify-content: space-between; width: 100%">
+        <span>{{ file.name }}</span>
+        <el-tag size="small" :type="file.status === 'success' ? 'success' : 'info'">
+          {{ file.status || "ready" }}
+        </el-tag>
+      </div>
     </template>
   </UniUpload>
 </CompDemo>

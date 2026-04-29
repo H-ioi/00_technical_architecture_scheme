@@ -7,6 +7,8 @@ import codeActionMin from "../.vitepress/snippets/uni-search-form/action-min-spa
 import codeBasic from "../.vitepress/snippets/uni-search-form/basic.vue?raw";
 import codeCollapse from "../.vitepress/snippets/uni-search-form/collapse.vue?raw";
 import codeCollapsedRows2 from "../.vitepress/snippets/uni-search-form/collapsed-rows-2.vue?raw";
+import codeControlledCollapse from "../.vitepress/snippets/uni-search-form/controlled-collapse.vue?raw";
+import codeFieldChangeReset from "../.vitepress/snippets/uni-search-form/field-change-reset.vue?raw";
 import codeLabels from "../.vitepress/snippets/uni-search-form/labels.vue?raw";
 import codeNoLabel from "../.vitepress/snippets/uni-search-form/no-label.vue?raw";
 import codeSlot from "../.vitepress/snippets/uni-search-form/slot-actions.vue?raw";
@@ -117,6 +119,50 @@ const searchConfigRows2: UniFormConfig = {
   colProps: { span: 6 },
 };
 
+const controlledCollapsed = ref(true);
+const queryControlled = ref<Record<string, unknown>>({});
+const searchConfigControlled: UniFormConfig = {
+  schema: Array.from({ length: 6 }).map((_, index) => ({
+    field: `field${index + 1}`,
+    label: "",
+    component: "ElInput" as const,
+    componentProps: { placeholder: `条件 ${index + 1}`, clearable: true },
+    colProps: { span: 6 },
+  })),
+  rowProps: { gutter: 12 },
+  colProps: { span: 6 },
+};
+
+const queryEvents = ref<Record<string, unknown>>({
+  keyword: "",
+  status: "",
+});
+const lastChange = ref("无");
+const searchConfigEvents: UniFormConfig = {
+  schema: [
+    {
+      field: "keyword",
+      label: "",
+      component: "ElInput",
+      componentProps: { placeholder: "关键词", clearable: true },
+      colProps: { span: 8 },
+    },
+    {
+      field: "status",
+      label: "",
+      component: "ElSelect",
+      options: [
+        { label: "启用", value: "1" },
+        { label: "停用", value: "0" },
+      ],
+      componentProps: { placeholder: "状态", clearable: true },
+      colProps: { span: 6 },
+    },
+  ],
+  rowProps: { gutter: 12 },
+  colProps: { span: 6 },
+};
+
 const queryNoLabel = ref<Record<string, unknown>>({
   keyword: "",
   status: "",
@@ -152,6 +198,14 @@ const searchConfigNoLabel: UniFormConfig = {
   colProps: { span: 6 },
   rowProps: { gutter: 12 },
 };
+
+function onFieldChange(payload: { field: string; value: unknown }) {
+  lastChange.value = `${payload.field}: ${String(payload.value ?? "")}`;
+}
+
+function onResetEvents() {
+  lastChange.value = "已重置";
+}
 </script>
 
 # UniSearchForm
@@ -247,6 +301,41 @@ const searchConfigNoLabel: UniFormConfig = {
     :collapsed-rows="2"
     @search="() => {}"
   />
+</CompDemo>
+
+## 受控折叠状态
+
+需要从页面外部控制展开/收起时，使用 `v-model:collapsed`。组件内部点击展开收起也会同步更新外部状态。
+
+<CompDemo title="v-model:collapsed 外部控制" :code="codeControlledCollapse">
+  <el-switch
+    v-model="controlledCollapsed"
+    active-text="收起"
+    inactive-text="展开"
+    style="margin-bottom: 12px"
+  />
+  <UniSearchForm
+    v-model="queryControlled"
+    v-model:collapsed="controlledCollapsed"
+    :config="searchConfigControlled"
+    :collapsed-rows="1"
+    @search="() => {}"
+  />
+</CompDemo>
+
+## 查询 / 重置 / 字段变更
+
+`search` 适合刷新列表，`reset` 适合重置后重新拉取第一页，`field-change` 可用于联动更新本地状态。
+
+<CompDemo title="@search / @reset / @field-change" :code="codeFieldChangeReset">
+  <UniSearchForm
+    v-model="queryEvents"
+    :config="searchConfigEvents"
+    @field-change="onFieldChange"
+    @search="() => {}"
+    @reset="onResetEvents"
+  />
+  <p style="margin: 8px 0 0; font-size: 13px">最近变更：{{ lastChange }}</p>
 </CompDemo>
 
 ## Props

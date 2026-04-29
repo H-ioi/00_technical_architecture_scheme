@@ -3,8 +3,9 @@
  * 数据表格：列定义驱动渲染 + 可选前端分页或 `request` 远程分页/排序。
  * 支持多选、行操作列、`hasUniPermission` 控制的操作按钮显隐及 `@switch-change` 等事件。
  */
-import { computed, onMounted, reactive, ref, watch } from "vue";
+import { MoreFilled } from "@element-plus/icons-vue";
 import type { Sort } from "element-plus";
+import { computed, onMounted, reactive, ref, watch } from "vue";
 
 import { hasUniPermission } from "@/directives/permission";
 import type {
@@ -31,6 +32,7 @@ const props = withDefaults(
   }>(),
   {
     data: () => [],
+    pagination: undefined,
     rowKey: "id",
     emptyText: "暂无数据",
   },
@@ -131,6 +133,40 @@ const isActionDisabled = (action: UniTableAction, row: Recordable) =>
     ? action.disabled(row)
     : Boolean(action.disabled);
 
+const ACTION_VISIBLE_LIMIT = 3;
+const ACTION_INLINE_LIMIT_WHEN_MORE = ACTION_VISIBLE_LIMIT - 1;
+
+const getVisibleActions = (row: Recordable) =>
+  (props.actions ?? []).filter((action) => isActionVisible(action, row));
+
+const getInlineActions = (row: Recordable) => {
+  const actions = getVisibleActions(row);
+
+  return actions.length > ACTION_VISIBLE_LIMIT
+    ? actions.slice(0, ACTION_INLINE_LIMIT_WHEN_MORE)
+    : actions;
+};
+
+const getMoreActions = (row: Recordable) => {
+  const actions = getVisibleActions(row);
+
+  return actions.length > ACTION_VISIBLE_LIMIT
+    ? actions.slice(ACTION_INLINE_LIMIT_WHEN_MORE)
+    : [];
+};
+
+const handleMoreActionCommand = (
+  action: UniTableAction,
+  row: Recordable,
+  index: number,
+) => {
+  if (isActionDisabled(action, row)) {
+    return;
+  }
+
+  action.onClick(row, index);
+};
+
 watch(
   () => props.pagination,
   (pagination) => {
@@ -168,7 +204,7 @@ defineExpose({
         <template #header>
           <slot :name="`header-${column.prop}`" :column="column">{{
             column.label
-            }}</slot>
+          }}</slot>
         </template>
         <template #default="{ row, $index }">
           <slot v-if="$slots[`column-${column.prop}`]" :name="`column-${column.prop}`" :row="row"
@@ -184,12 +220,28 @@ defineExpose({
       <el-table-column v-if="actions?.length || $slots.actions" label="操作" fixed="right" width="180">
         <template #default="{ row, $index }">
           <slot name="actions" :row="row" :index="$index">
-            <template v-for="action in actions" :key="action.label">
-              <el-button v-if="isActionVisible(action, row)" link :type="action.type ?? 'primary'"
-                :disabled="isActionDisabled(action, row)" @click="action.onClick(row, $index)">
+            <template v-for="action in getInlineActions(row)" :key="action.label">
+              <el-button link :type="action.type ?? 'primary'" :disabled="isActionDisabled(action, row)"
+                @click="action.onClick(row, $index)">
                 {{ action.label }}
               </el-button>
             </template>
+            <el-dropdown v-if="getMoreActions(row).length" trigger="click"
+              @command="(action: UniTableAction) => handleMoreActionCommand(action, row, $index)">
+              <el-button link type="primary" class="uni-data-table__more-action" aria-label="更多操作">
+                <el-icon>
+                  <MoreFilled />
+                </el-icon>
+              </el-button>
+              <template #dropdown>
+                <el-dropdown-menu>
+                  <el-dropdown-item v-for="action in getMoreActions(row)" :key="action.label" :command="action"
+                    :disabled="isActionDisabled(action, row)">
+                    {{ action.label }}
+                  </el-dropdown-item>
+                </el-dropdown-menu>
+              </template>
+            </el-dropdown>
           </slot>
         </template>
       </el-table-column>
@@ -237,6 +289,10 @@ defineExpose({
     &.is-right {
       justify-content: flex-end;
     }
+  }
+
+  &__more-action {
+    margin-left: 12px;
   }
 }
 </style>
