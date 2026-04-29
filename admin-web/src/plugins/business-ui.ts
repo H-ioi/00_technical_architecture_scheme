@@ -1,5 +1,17 @@
 import type { App } from 'vue'
+import UniLib from 'uni-ui-lib'
+import 'uni-ui-lib/style.css'
 
-export const setupBusinessUi = (_app: App) => {
-  // 预留 uni-lib 安装入口：_app.use(UniLib)
+import { usePermissionStore } from '@/stores'
+
+export const setupBusinessUi = (app: App) => {
+  app.use(UniLib, {
+    permission: {
+      hasPermission: (code) => {
+        const permissionStore = usePermissionStore()
+
+        return permissionStore.hasPermission(code)
+      }
+    }
+  })
 }

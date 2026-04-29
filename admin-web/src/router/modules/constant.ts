@@ -30,6 +30,16 @@ export const constantRoutes: AppRouteRecord[] = [
           affix: true,
           permission: ['dashboard:view']
         }
+      },
+      {
+        path: 'uni-lib-demo',
+        name: 'UniLibDemo',
+        component: () => import('@/views/uni-lib-demo/uni-lib-demo-page.vue'),
+        meta: {
+          title: '组件库示例',
+          icon: 'Grid',
+          permission: ['uni-lib:demo:view']
+        }
       }
     ]
   },

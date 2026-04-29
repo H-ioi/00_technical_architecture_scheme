@@ -2,8 +2,8 @@
 
 ```ts
 import { createApp } from "vue";
-import UniLib from "uni-lib";
-import "uni-lib/style.css";
+import UniLib from "uni-ui-lib";
+import "uni-ui-lib/style.css";
 
 createApp(App)
   .use(UniLib, {

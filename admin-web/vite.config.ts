@@ -1,7 +1,14 @@
+import { createRequire } from 'node:module'
+import path from 'node:path'
 import { fileURLToPath, URL } from 'node:url'
 
 import { defineConfig, loadEnv } from 'vite'
 import vue from '@vitejs/plugin-vue'
+
+const require = createRequire(import.meta.url)
+// exports 未导出 package.json，不能用 resolve('uni-ui-lib/package.json')
+const uniLibEntry = require.resolve('uni-ui-lib')
+const uniLibCss = path.join(path.dirname(uniLibEntry), 'index.css')
 
 // https://vite.dev/config/
 export default defineConfig(({ mode }) => {
@@ -12,7 +19,9 @@ export default defineConfig(({ mode }) => {
     plugins: [vue()],
     resolve: {
       alias: {
-        '@': fileURLToPath(new URL('./src', import.meta.url))
+        '@': fileURLToPath(new URL('./src', import.meta.url)),
+        'uni-ui-lib/style.css': uniLibCss,
+        'uni-ui-lib/dist/index.css': uniLibCss
       }
     },
     server: {

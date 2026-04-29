@@ -45,12 +45,14 @@ export const setupRouterGuards = (router: Router) => {
 
   router.afterEach((to) => {
     const tagsViewStore = useTagsViewStore()
+    // 使用叶子路由 meta：父级 layout 常带 hidden，合并后 to.meta.hidden 会误判
+    const leaf = to.matched[to.matched.length - 1]
 
-    if (!to.meta.hidden && to.name) {
+    if (!leaf.meta.hidden && leaf.name) {
       tagsViewStore.addTag({
         path: to.fullPath,
-        title: String(to.meta.title || to.name),
-        affix: Boolean(to.meta.affix)
+        title: String(leaf.meta.title || leaf.name),
+        affix: Boolean(leaf.meta.affix)
       })
     }
   })

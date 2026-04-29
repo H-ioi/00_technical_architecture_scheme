@@ -1,19 +1,19 @@
-# uni-lib
+# uni-ui-lib
 
-`uni-lib` 是面向管理后台的 Vue 3 + Element Plus 业务组件库。
+`uni-ui-lib` 是面向管理后台的 Vue 3 + Element Plus 业务组件库。
 
 ## 安装
 
 ```bash
-npm install uni-lib
+npm install uni-ui-lib
 ```
 
 ## 使用
 
 ```ts
 import { createApp } from "vue";
-import UniLib from "uni-lib";
-import "uni-lib/style.css";
+import UniLib from "uni-ui-lib";
+import "uni-ui-lib/style.css";
 
 createApp(App)
   .use(UniLib, {
@@ -27,7 +27,7 @@ createApp(App)
 也可以按需使用命名导出：
 
 ```ts
-import { UniDataTable, UniForm, UniSearchForm, UniUpload } from "uni-lib";
+import { UniDataTable, UniForm, UniSearchForm, UniUpload } from "uni-ui-lib";
 ```
 
 ## Scripts

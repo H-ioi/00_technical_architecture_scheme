@@ -24,4 +24,13 @@ npm run build
 
 `src/` 顶层目录按模板保持稳定：`api`、`assets`、`components`、`composables`、`directives`、`layouts`、`plugins`、`router`、`stores`、`types`、`utils`、`views`。
 
-跨项目复用组件预留在 `plugins/business-ui.ts` 统一接入 `uni-lib`，当前模板不默认引入微前端。
+跨项目复用组件在 `plugins/business-ui.ts` 统一接入 `uni-ui-lib`，当前模板不默认引入微前端。
+
+## 组件库示例
+
+模板已接入发布包 `uni-ui-lib`，可通过侧边栏“组件库示例”查看：
+
+- `UniSearchForm` 与 `UniDataTable` 组合的列表筛选示例。
+- `UniForm` 的配置化表单、字段联动、查看/编辑模式示例。
+- `UniUpload` 的自定义请求上传示例。
+- `v-uni-permission` 与模板权限 store 的集成示例。
