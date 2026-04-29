@@ -1,0 +1,5 @@
+@mixin card-surface {
+  background: var(--app-card-bg-color);
+  border: 1px solid var(--app-border-color);
+  border-radius: var(--app-radius-base);
+}

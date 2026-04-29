@@ -1,0 +1,72 @@
+{
+  "name": "uni-lib",
+  "version": "0.1.0",
+  "description": "Vue 3 + Element Plus business component library for admin systems.",
+  "license": "UNLICENSED",
+  "type": "module",
+  "main": "dist/index.cjs",
+  "module": "dist/index.mjs",
+  "types": "dist/src/index.d.ts",
+  "style": "dist/style.css",
+  "files": [
+    "dist"
+  ],
+  "sideEffects": [
+    "**/*.css",
+    "**/*.scss"
+  ],
+  "exports": {
+    ".": {
+      "types": "./dist/src/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.cjs"
+    },
+    "./style.css": "./dist/style.css"
+  },
+  "scripts": {
+    "dev": "vite --host 0.0.0.0",
+    "build": "vite build",
+    "type-check": "vue-tsc --noEmit -p tsconfig.json",
+    "prepack": "npm run build",
+    "prepublishOnly": "npm run format:check && npm run type-check && npm run build && npm run docs:build",
+    "docs:dev": "vitepress dev docs --host 0.0.0.0",
+    "docs:build": "vitepress build docs",
+    "docs:preview": "vitepress preview docs --host 0.0.0.0",
+    "format": "prettier --write \"src/**/*.{ts,vue,scss,md}\" \"docs/**/*.md\" \"playground/**/*.{ts,vue,scss,md,json}\" \"scripts/**/*.{ts,js,mjs,md}\" \"*.{json,ts,mjs,md}\"",
+    "format:check": "prettier --check \"src/**/*.{ts,vue,scss,md}\" \"docs/**/*.md\" \"playground/**/*.{ts,vue,scss,md,json}\" \"scripts/**/*.{ts,js,mjs,md}\" \"*.{json,ts,mjs,md}\""
+  },
+  "keywords": [
+    "vue",
+    "vue3",
+    "element-plus",
+    "components",
+    "admin"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "@element-plus/icons-vue": "latest",
+    "axios": "latest",
+    "element-plus": "latest",
+    "pinia": "latest",
+    "vue": "latest",
+    "vue-router": "latest",
+    "@types/node": "latest",
+    "@vitejs/plugin-vue": "latest",
+    "prettier": "latest",
+    "sass": "latest",
+    "typescript": "latest",
+    "vite": "latest",
+    "vite-plugin-dts": "latest",
+    "vitepress": "latest",
+    "vue-tsc": "latest"
+  },
+  "peerDependencies": {
+    "@element-plus/icons-vue": ">=2.0.0",
+    "axios": ">=1.0.0",
+    "element-plus": ">=2.0.0",
+    "vue": ">=3.5.0"
+  }
+}

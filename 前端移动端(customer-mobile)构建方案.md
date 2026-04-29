@@ -224,7 +224,7 @@ src/stores/
 
 - 页面私有组件：页面目录内就近维护
 - 项目复用组件：放 `components/common` 或 `components/business`
-- 跨项目复用组件：评估后进入 `lg-lib`，不在本项目硬拷贝
+- 跨项目复用组件：评估后进入 `uni-lib`，不在本项目硬拷贝
 
 抽离触发条件：
 

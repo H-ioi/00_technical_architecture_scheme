@@ -1,0 +1,80 @@
+@use "./theme/index.scss";
+
+.uni-data-table {
+  width: 100%;
+}
+
+.uni-data-table__toolbar {
+  margin-bottom: 12px;
+}
+
+.uni-data-table__pagination {
+  display: flex;
+  margin-top: 16px;
+}
+
+.uni-data-table__pagination.is-left {
+  justify-content: flex-start;
+}
+
+.uni-data-table__pagination.is-center {
+  justify-content: center;
+}
+
+.uni-data-table__pagination.is-right {
+  justify-content: flex-end;
+}
+
+.uni-table-cell {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  align-items: center;
+  min-width: 0;
+}
+
+.uni-table-cell__image {
+  overflow: hidden;
+  border-radius: 4px;
+}
+
+.uni-table-cell__copy {
+  margin-left: 4px;
+}
+
+.uni-table-cell__tag {
+  margin-right: 4px;
+}
+
+.uni-table-cell__ellipsis {
+  display: inline-block;
+  max-width: 220px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.uni-form__section-title {
+  margin: 16px 0 12px;
+}
+
+.uni-form__section-title h3 {
+  margin: 0;
+  font-size: 16px;
+}
+
+.uni-form__section-title p {
+  margin: 4px 0 0;
+  color: var(--uni-text-color-secondary);
+}
+
+.uni-form__view-value {
+  color: var(--uni-text-color);
+}
+
+.uni-form__actions,
+.uni-search-form__actions {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+}
