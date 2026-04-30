@@ -318,7 +318,7 @@ export const createCustomerDetailConfig = (): UniFormConfig => ({
   view: {
     emptyText: '-'
   },
-  formProps: { labelWidth: '282px' },
+  formProps: { labelWidth: '78px' },
   rowProps: { gutter: 16 },
   colProps: { span: 12 },
   schema: [
@@ -392,6 +392,7 @@ export const createCustomerDetailConfig = (): UniFormConfig => ({
 
 export const createCustomerEditConfig = (): UniFormConfig => ({
   mode: 'edit',
+  formProps: { labelWidth: '85px' },
   rowProps: { gutter: 16 },
   colProps: { span: 12 },
   rules: {
@@ -441,7 +442,7 @@ export const createCustomerEditConfig = (): UniFormConfig => ({
       field: 'contractAmount',
       label: '合同金额',
       component: 'ElInputNumber',
-      componentProps: { min: 0, precision: 2 },
+      componentProps: { min: 0, precision: 2, controlsPosition: 'right' },
       colProps: { span: 12 }
     },
     {
