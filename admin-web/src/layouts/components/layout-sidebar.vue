@@ -28,10 +28,18 @@ const activeMenu = computed(() => route.meta.activeMenu || route.path)
         <el-icon><DataBoard /></el-icon>
         <template #title>工作台</template>
       </el-menu-item>
-      <el-menu-item index="/uni-lib-demo">
-        <el-icon><Grid /></el-icon>
-        <template #title>组件库示例</template>
-      </el-menu-item>
+      <el-sub-menu index="/uni-lib-demo">
+        <template #title>
+          <el-icon><Grid /></el-icon>
+          <span>组件库案例</span>
+        </template>
+        <el-menu-item index="/uni-lib-demo/standard-table">常规表格页</el-menu-item>
+        <el-menu-item index="/uni-lib-demo/plain-table">无搜索表格页</el-menu-item>
+        <el-menu-item index="/uni-lib-demo/tree-table">树形表格页</el-menu-item>
+        <el-menu-item index="/uni-lib-demo/no-pagination-table">无分页表格页</el-menu-item>
+        <el-menu-item index="/uni-lib-demo/table-link-detail">表格跳转表单</el-menu-item>
+        <el-menu-item index="/uni-lib-demo/table-dialog-detail">表格弹窗表单</el-menu-item>
+      </el-sub-menu>
     </el-menu>
   </el-aside>
 </template>

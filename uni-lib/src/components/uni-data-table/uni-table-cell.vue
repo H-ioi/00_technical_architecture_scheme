@@ -4,8 +4,8 @@
  * 开关、图片、链接等；可配合列 `formatter` 与全局 `valueEnums` 做枚举展示。
  */
 import { DocumentCopy } from "@element-plus/icons-vue";
-import { computed } from "vue";
 import { ElMessage } from "element-plus";
+import { computed } from "vue";
 
 import { useUniI18n } from "@/services/i18n";
 import type { Recordable, UniOption, UniTableColumn } from "@/types/shared";
@@ -89,107 +89,60 @@ const handleSwitchChange = async (nextValue: unknown) => {
 </script>
 
 <template>
-  <div
-    class="uni-table-cell"
-    :class="{ 'is-overflow-tooltip': column.showOverflowTooltip }"
-  >
+  <div class="uni-table-cell" :class="{ 'is-overflow-tooltip': column.showOverflowTooltip }">
     <template v-if="columnType === 'image' || columnType === 'images'">
-      <el-image
-        v-for="url in imageUrls"
-        :key="url"
-        class="uni-table-cell__image"
-        :src="url"
-        :preview-src-list="column.image?.preview === false ? [] : imageUrls"
-        :style="{
+      <el-image v-for="url in imageUrls" :key="url" class="uni-table-cell__image" :src="url"
+        :preview-src-list="column.image?.preview === false ? [] : imageUrls" :style="{
           width: `${column.image?.width ?? 40}px`,
           height: `${column.image?.height ?? 40}px`,
-        }"
-        fit="cover"
-      />
+        }" fit="cover" />
       <span v-if="imageUrls.length === 0">--</span>
     </template>
 
     <template v-else-if="columnType === 'video' || columnType === 'videos'">
-      <el-link
-        v-for="url in linkItems"
-        :key="url"
-        type="primary"
-        :href="url"
-        target="_blank"
-        >查看视频</el-link
-      >
+      <el-link v-for="url in linkItems" :key="url" type="primary" :href="url" target="_blank">查看视频</el-link>
       <span v-if="linkItems.length === 0">--</span>
     </template>
 
     <template v-else-if="columnType === 'tag' || columnType === 'enum'">
       <el-tag :type="option?.type as never" :color="option?.color">{{
         displayValue
-      }}</el-tag>
+        }}</el-tag>
     </template>
 
     <template v-else-if="columnType === 'tags'">
-      <el-tag
-        v-for="item in toArray(value)"
-        :key="String(item)"
-        class="uni-table-cell__tag"
-      >
+      <el-tag v-for="item in toArray(value)" :key="String(item)" class="uni-table-cell__tag">
         {{ formatEmpty(item) }}
       </el-tag>
     </template>
 
     <template v-else-if="columnType === 'switch'">
-      <el-switch
-        :model-value="value"
-        :active-value="column.switch?.activeValue ?? true"
-        :inactive-value="column.switch?.inactiveValue ?? false"
-        :disabled="
-          typeof column.switch?.disabled === 'function'
-            ? column.switch.disabled(row)
-            : column.switch?.disabled
-        "
-        @change="handleSwitchChange"
-      />
+      <el-switch :model-value="value" :active-value="column.switch?.activeValue ?? true"
+        :inactive-value="column.switch?.inactiveValue ?? false" :disabled="typeof column.switch?.disabled === 'function'
+          ? column.switch.disabled(row)
+          : column.switch?.disabled
+          " @change="handleSwitchChange" />
     </template>
 
     <template v-else-if="columnType === 'link' || columnType === 'links'">
-      <el-link
-        v-for="item in linkItems"
-        :key="item"
-        type="primary"
-        :href="getLinkHref(item)"
-        :target="column.link?.target ?? '_blank'"
-        @click="column.link?.onClick?.(row, item)"
-      >
+      <el-link v-for="item in linkItems" :key="item" type="primary" :href="getLinkHref(item)"
+        :target="column.link?.target ?? '_blank'" @click="column.link?.onClick?.(row, item)">
         {{ item }}
       </el-link>
       <span v-if="linkItems.length === 0">--</span>
     </template>
 
-    <template v-else-if="columnType === 'copy' || column.copyable">
+    <div v-else-if="columnType === 'copy' || column.copyable" class="uni-table-cell__copy-container">
       <span class="uni-table-cell__text">{{ displayValue }}</span>
-      <el-button
-        class="uni-table-cell__copy"
-        link
-        type="primary"
-        aria-label="复制"
-        title="复制"
-        @click="copyCurrentValue"
-      >
+      <el-button class="uni-table-cell__copy" link type="primary" aria-label="复制" title="复制" @click="copyCurrentValue">
         <el-icon>
           <DocumentCopy />
         </el-icon>
       </el-button>
-    </template>
+    </div>
 
-    <template
-      v-else-if="columnType === 'array' && column.array?.renderMode === 'tag'"
-    >
-      <el-tag
-        v-for="item in arrayItems"
-        :key="item"
-        class="uni-table-cell__tag"
-        >{{ item }}</el-tag
-      >
+    <template v-else-if="columnType === 'array' && column.array?.renderMode === 'tag'">
+      <el-tag v-for="item in arrayItems" :key="item" class="uni-table-cell__tag">{{ item }}</el-tag>
     </template>
 
     <template v-else-if="columnType === 'json'">
@@ -249,6 +202,20 @@ const handleSwitchChange = async (nextValue: unknown) => {
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+  }
+
+  &__copy-container {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+
+    &__text {
+      width: 80%;
+      min-width: 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
   }
 }
 </style>

@@ -34,12 +34,90 @@ export const constantRoutes: AppRouteRecord[] = [
       {
         path: 'uni-lib-demo',
         name: 'UniLibDemo',
-        component: () => import('@/views/uni-lib-demo/uni-lib-demo-page.vue'),
+        redirect: '/uni-lib-demo/standard-table',
         meta: {
-          title: '组件库示例',
+          title: '组件库案例',
           icon: 'Grid',
           permission: ['uni-lib:demo:view']
-        }
+        },
+        children: [
+          {
+            path: 'standard-table',
+            name: 'UniLibStandardTable',
+            component: () => import('@/views/uni-lib-demo/standard-table-page.vue'),
+            meta: {
+              title: '常规表格页',
+              permission: ['uni-lib:demo:view']
+            }
+          },
+          {
+            path: 'plain-table',
+            name: 'UniLibPlainTable',
+            component: () => import('@/views/uni-lib-demo/plain-table-page.vue'),
+            meta: {
+              title: '无搜索表格页',
+              permission: ['uni-lib:demo:view']
+            }
+          },
+          {
+            path: 'tree-table',
+            name: 'UniLibTreeTable',
+            component: () => import('@/views/uni-lib-demo/tree-table-page.vue'),
+            meta: {
+              title: '树形表格页',
+              permission: ['uni-lib:demo:view']
+            }
+          },
+          {
+            path: 'no-pagination-table',
+            name: 'UniLibNoPaginationTable',
+            component: () => import('@/views/uni-lib-demo/no-pagination-table-page.vue'),
+            meta: {
+              title: '无分页表格页',
+              permission: ['uni-lib:demo:view']
+            }
+          },
+          {
+            path: 'table-link-detail',
+            name: 'UniLibTableLinkDetail',
+            component: () => import('@/views/uni-lib-demo/table-link-detail-page.vue'),
+            meta: {
+              title: '表格跳转表单',
+              permission: ['uni-lib:demo:view']
+            }
+          },
+          {
+            path: 'table-dialog-detail',
+            name: 'UniLibTableDialogDetail',
+            component: () => import('@/views/uni-lib-demo/table-dialog-detail-page.vue'),
+            meta: {
+              title: '表格弹窗表单',
+              permission: ['uni-lib:demo:view']
+            }
+          },
+          {
+            path: 'table-detail/:id',
+            name: 'UniLibTableDetail',
+            component: () => import('@/views/uni-lib-demo/table-detail-page.vue'),
+            meta: {
+              title: '客户详情',
+              hidden: true,
+              activeMenu: '/uni-lib-demo/table-link-detail',
+              permission: ['uni-lib:demo:view']
+            }
+          },
+          {
+            path: 'table-edit/:id',
+            name: 'UniLibTableEdit',
+            component: () => import('@/views/uni-lib-demo/table-edit-page.vue'),
+            meta: {
+              title: '客户编辑',
+              hidden: true,
+              activeMenu: '/uni-lib-demo/table-link-detail',
+              permission: ['uni-lib:demo:view']
+            }
+          }
+        ]
       }
     ]
   },

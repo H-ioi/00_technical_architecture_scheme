@@ -4,8 +4,8 @@
 
 <script setup lang="ts">
 import type { UploadRequestOptions } from "element-plus";
-import { ref } from "vue";
 import type { UniFormConfig } from "uni-ui-lib";
+import { ref } from "vue";
 
 const cascaderOptions = [
   {
@@ -57,6 +57,7 @@ const formModel = ref<Record<string, unknown>>({
 });
 
 const formConfig: UniFormConfig = {
+  formProps: { labelWidth: '68px' },
   rowProps: { gutter: 16 },
   colProps: { xs: 24, sm: 12, md: 8 },
   sections: [
@@ -92,7 +93,7 @@ const formConfig: UniFormConfig = {
       label: "单行文本",
       component: "ElInput",
       componentProps: { placeholder: "ElInput", clearable: true },
-      colProps: { xs: 24, sm: 12, md: 8 },
+      colProps: { xs: 24, sm: 12, md: 12 },
     },
     {
       field: "inputPassword",
@@ -104,7 +105,7 @@ const formConfig: UniFormConfig = {
         showPassword: true,
         clearable: true,
       },
-      colProps: { xs: 24, sm: 12, md: 8 },
+      colProps: { xs: 24, sm: 12, md: 12 },
     },
     {
       field: "inputTextarea",
@@ -115,7 +116,7 @@ const formConfig: UniFormConfig = {
         rows: 2,
         placeholder: "textarea",
       },
-      colProps: { xs: 24, sm: 12, md: 8 },
+      colProps: { xs: 24, sm: 24, md: 24 },
     },
     {
       field: "selectSingle",
@@ -131,7 +132,7 @@ const formConfig: UniFormConfig = {
         clearable: true,
         style: { width: "100%" },
       },
-      colProps: { xs: 24, sm: 12, md: 8 },
+      colProps: { xs: 24, sm: 12, md: 12 },
     },
     {
       field: "radioSingle",
@@ -141,7 +142,7 @@ const formConfig: UniFormConfig = {
         { label: "方案一", value: "opt1" },
         { label: "方案二", value: "opt2" },
       ],
-      colProps: { xs: 24, sm: 12, md: 8 },
+      colProps: { xs: 24, sm: 12, md: 12 },
     },
     {
       field: "checkboxMulti",
@@ -152,7 +153,7 @@ const formConfig: UniFormConfig = {
         { label: "标签二", value: "c2" },
         { label: "标签三", value: "c3" },
       ],
-      colProps: { xs: 24, sm: 12, md: 8 },
+      colProps: { xs: 24, sm: 12, md: 12 },
     },
     {
       field: "inputNumber",
@@ -164,14 +165,14 @@ const formConfig: UniFormConfig = {
         controlsPosition: "right",
         style: { width: "100%" },
       },
-      colProps: { xs: 24, sm: 12, md: 8 },
+      colProps: { xs: 24, sm: 12, md: 12 },
     },
     {
       field: "switchVal",
       label: "开关",
       component: "ElSwitch",
       componentProps: { activeText: "开", inactiveText: "关" },
-      colProps: { xs: 24, sm: 12, md: 8 },
+      colProps: { xs: 24, sm: 12, md: 12 },
     },
     {
       field: "dateSingle",
@@ -183,7 +184,7 @@ const formConfig: UniFormConfig = {
         placeholder: "ElDatePicker date",
         style: { width: "100%" },
       },
-      colProps: { xs: 24, sm: 12, md: 8 },
+      colProps: { xs: 24, sm: 12, md: 12 },
     },
     {
       field: "datetimeSingle",
@@ -195,7 +196,7 @@ const formConfig: UniFormConfig = {
         placeholder: "datetime",
         style: { width: "100%" },
       },
-      colProps: { xs: 24, sm: 12, md: 8 },
+      colProps: { xs: 24, sm: 12, md: 12 },
     },
     {
       field: "timeSingle",
@@ -206,7 +207,7 @@ const formConfig: UniFormConfig = {
         placeholder: "ElTimePicker",
         style: { width: "100%" },
       },
-      colProps: { xs: 24, sm: 12, md: 8 },
+      colProps: { xs: 24, sm: 12, md: 12 },
     },
     {
       field: "dateRange",
@@ -231,7 +232,7 @@ const formConfig: UniFormConfig = {
         clearable: true,
         style: { width: "100%" },
       },
-      colProps: { xs: 24, sm: 12, md: 8 },
+      colProps: { xs: 24, sm: 12, md: 12 },
     },
     {
       field: "treeSelectVal",
@@ -243,7 +244,7 @@ const formConfig: UniFormConfig = {
         clearable: true,
         style: { width: "100%" },
       },
-      colProps: { xs: 24, sm: 12, md: 8 },
+      colProps: { xs: 24, sm: 12, md: 12 },
     },
     {
       field: "uploadFiles",
