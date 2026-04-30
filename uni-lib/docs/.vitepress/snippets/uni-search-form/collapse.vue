@@ -8,8 +8,8 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue";
 import type { UniFormConfig } from "uni-ui-lib";
+import { ref } from "vue";
 
 const query = ref<Record<string, unknown>>({});
 
@@ -18,32 +18,37 @@ const searchConfig: UniFormConfig = {
   schema: [
     {
       field: "a",
-      label: "条件一",
+      label: "",
       component: "ElInput",
+      componentProps: { placeholder: "条件一", clearable: true },
       colProps: { span: 6 },
     },
     {
       field: "b",
-      label: "条件二",
+      label: "",
       component: "ElInput",
+      componentProps: { placeholder: "条件二", clearable: true },
       colProps: { span: 6 },
     },
     {
       field: "c",
-      label: "条件三",
+      label: "",
+      componentProps: { placeholder: "条件三", clearable: true },
       component: "ElInput",
       colProps: { span: 6 },
     },
     {
       field: "d",
-      label: "条件四",
+      label: "",
+      componentProps: { placeholder: "条件四", clearable: true },
       component: "ElInput",
       colProps: { span: 6 },
     },
     {
       field: "e",
-      label: "条件五",
+      label: "",
       component: "ElInput",
+      componentProps: { placeholder: "条件五", clearable: true },
       colProps: { span: 6 },
     },
   ],

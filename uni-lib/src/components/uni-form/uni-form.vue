@@ -283,66 +283,126 @@ defineExpose({
 </script>
 
 <template>
-  <el-form ref="formRef" class="uni-form" :model="formModel" :rules="config.rules" v-bind="config.formProps">
-    <template v-for="section in groupedSections" :key="section.title || 'default'">
+  <el-form
+    ref="formRef"
+    class="uni-form"
+    :model="formModel"
+    :rules="config.rules"
+    v-bind="config.formProps"
+  >
+    <template
+      v-for="section in groupedSections"
+      :key="section.title || 'default'"
+    >
       <div v-if="section.title" class="uni-form__section-title">
         <slot name="section-title" :section="section">
           <h3>{{ section.title }}</h3>
-          <p v-if="section.description" class="uni-form__section-description">{{ section.description }}</p>
+          <p v-if="section.description" class="uni-form__section-description">
+            {{ section.description }}
+          </p>
         </slot>
       </div>
 
       <el-row v-bind="mergedRowProps">
-        <el-col v-for="field in section.fields" :key="field.field"
-          v-bind="field.colProps ?? section.colProps ?? config.colProps">
-          <el-form-item :label="field.label" :prop="field.field" v-bind="field.formItemProps">
-            <slot v-if="$slots[`field-${field.field}`]" :name="`field-${field.field}`" :field="field"
-              :model="formModel" />
+        <el-col
+          v-for="field in section.fields"
+          :key="field.field"
+          v-bind="field.colProps ?? section.colProps ?? config.colProps"
+        >
+          <el-form-item
+            :label="field.label"
+            :prop="field.field"
+            v-bind="field.formItemProps"
+          >
+            <slot
+              v-if="$slots[`field-${field.field}`]"
+              :name="`field-${field.field}`"
+              :field="field"
+              :model="formModel"
+            />
 
             <span v-else-if="formMode === 'view'" class="uni-form__view-value">
               {{ renderViewValue(field) }}
             </span>
 
-            <component :is="field.component" v-else-if="
-              field.component === 'ElInput' ||
-              field.component === 'ElInputNumber' ||
-              field.component === 'ElSwitch' ||
-              field.component === 'ElDatePicker' ||
-              field.component === 'ElTimePicker' ||
-              field.component === 'ElCascader' ||
-              field.component === 'ElTreeSelect'
-            " :model-value="formModel[field.field]" :disabled="isFieldDisabled(field)"
-              :readonly="isFieldReadonly(field)" v-bind="field.componentProps" @update:model-value="
+            <component
+              :is="field.component"
+              v-else-if="
+                field.component === 'ElInput' ||
+                field.component === 'ElInputNumber' ||
+                field.component === 'ElSwitch' ||
+                field.component === 'ElDatePicker' ||
+                field.component === 'ElTimePicker' ||
+                field.component === 'ElCascader' ||
+                field.component === 'ElTreeSelect'
+              "
+              :model-value="formModel[field.field]"
+              :disabled="isFieldDisabled(field)"
+              :readonly="isFieldReadonly(field)"
+              v-bind="field.componentProps"
+              @update:model-value="
                 (value: unknown) => handleFieldChange(field, value)
-              " />
+              "
+            />
 
-            <el-select v-else-if="field.component === 'ElSelect'" :model-value="formModel[field.field]"
-              :disabled="isFieldDisabled(field)" v-bind="field.componentProps" @update:model-value="
+            <el-select
+              v-else-if="field.component === 'ElSelect'"
+              :model-value="formModel[field.field]"
+              :disabled="isFieldDisabled(field)"
+              v-bind="field.componentProps"
+              @update:model-value="
                 (value: unknown) => handleFieldChange(field, value)
-              ">
-              <el-option v-for="option in getFieldOptions(field)" :key="String(option.value)" v-bind="option" />
+              "
+            >
+              <el-option
+                v-for="option in getFieldOptions(field)"
+                :key="String(option.value)"
+                v-bind="option"
+              />
             </el-select>
 
-            <el-radio-group v-else-if="field.component === 'ElRadioGroup'" :model-value="formModel[field.field]"
-              :disabled="isFieldDisabled(field)" v-bind="field.componentProps" @update:model-value="
+            <el-radio-group
+              v-else-if="field.component === 'ElRadioGroup'"
+              :model-value="formModel[field.field]"
+              :disabled="isFieldDisabled(field)"
+              v-bind="field.componentProps"
+              @update:model-value="
                 (value: unknown) => handleFieldChange(field, value)
-              ">
-              <el-radio v-for="option in getFieldOptions(field)" :key="String(option.value)" :value="option.value">
+              "
+            >
+              <el-radio
+                v-for="option in getFieldOptions(field)"
+                :key="String(option.value)"
+                :value="option.value"
+              >
                 {{ option.label }}
               </el-radio>
             </el-radio-group>
 
-            <el-checkbox-group v-else-if="field.component === 'ElCheckboxGroup'" :model-value="formModel[field.field]"
-              :disabled="isFieldDisabled(field)" v-bind="field.componentProps" @update:model-value="
+            <el-checkbox-group
+              v-else-if="field.component === 'ElCheckboxGroup'"
+              :model-value="formModel[field.field]"
+              :disabled="isFieldDisabled(field)"
+              v-bind="field.componentProps"
+              @update:model-value="
                 (value: unknown) => handleFieldChange(field, value)
-              ">
-              <el-checkbox v-for="option in getFieldOptions(field)" :key="String(option.value)" :value="option.value">
+              "
+            >
+              <el-checkbox
+                v-for="option in getFieldOptions(field)"
+                :key="String(option.value)"
+                :value="option.value"
+              >
                 {{ option.label }}
               </el-checkbox>
             </el-checkbox-group>
 
-            <UniUpload v-else-if="field.component === 'UniUpload'" :file-list="formModel[field.field] as never"
-              v-bind="field.componentProps" @update:file-list="(value) => handleFieldChange(field, value)" />
+            <UniUpload
+              v-else-if="field.component === 'UniUpload'"
+              :file-list="formModel[field.field] as never"
+              v-bind="field.componentProps"
+              @update:file-list="(value) => handleFieldChange(field, value)"
+            />
           </el-form-item>
         </el-col>
       </el-row>

@@ -13,14 +13,14 @@ const searchConfig: UniFormConfig = {
   schema: [
     {
       field: "keyword",
-      label: "关键词",
+      label: "",
       component: "ElInput",
-      componentProps: { placeholder: "请输入", clearable: true },
+      componentProps: { placeholder: "关键词", clearable: true },
       colProps: { span: 6 },
     },
     {
       field: "status",
-      label: "状态",
+      label: "",
       component: "ElSelect",
       options: [
         { label: "启用", value: "1" },

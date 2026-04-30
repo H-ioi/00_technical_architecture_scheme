@@ -9,8 +9,8 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue";
 import type { UniFormConfig } from "uni-ui-lib";
+import { ref } from "vue";
 
 const query = ref<Record<string, unknown>>({});
 const searchConfig: UniFormConfig = {
@@ -18,8 +18,9 @@ const searchConfig: UniFormConfig = {
   schema: [
     {
       field: "name",
-      label: "名称",
+      label: "",
       component: "ElInput",
+      componentProps: { placeholder: "名称", clearable: true },
       colProps: { span: 8 },
     },
   ],

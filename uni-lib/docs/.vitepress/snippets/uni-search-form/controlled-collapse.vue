@@ -17,8 +17,8 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue";
 import type { UniFormConfig } from "uni-ui-lib";
+import { ref } from "vue";
 
 const collapsed = ref(true);
 const query = ref<Record<string, unknown>>({});

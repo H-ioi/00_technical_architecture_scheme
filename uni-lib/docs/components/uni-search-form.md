@@ -20,17 +20,18 @@ const queryBasic = ref<Record<string, unknown>>({
 
 const searchConfigBasic: UniFormConfig = {
   formProps: { labelWidth: "auto" },
+  rowProps: { gutter: 12 },
   schema: [
     {
       field: "keyword",
-      label: "关键词",
+      label: "",
       component: "ElInput",
-      componentProps: { placeholder: "请输入", clearable: true },
+      componentProps: { placeholder: "关键词", clearable: true },
       colProps: { span: 6 },
     },
     {
       field: "status",
-      label: "状态",
+      label: "",
       component: "ElSelect",
       options: [
         { label: "启用", value: "1" },
@@ -41,12 +42,12 @@ const searchConfigBasic: UniFormConfig = {
     },
     {
       field: "createdAt",
-      label: "创建时间",
+      label: "",
       component: "ElDatePicker",
       componentProps: {
         type: "daterange",
-        startPlaceholder: "开始",
-        endPlaceholder: "结束",
+        startPlaceholder: "开始时间",
+        endPlaceholder: "结束时间",
         valueFormat: "YYYY-MM-DD",
       },
       colProps: { span: 8 },

@@ -57,7 +57,7 @@ const formModel = ref<Record<string, unknown>>({
 });
 
 const formConfig: UniFormConfig = {
-  formProps: { labelWidth: '68px' },
+  formProps: { labelWidth: "68px" },
   rowProps: { gutter: 16 },
   colProps: { xs: 24, sm: 12, md: 8 },
   sections: [
