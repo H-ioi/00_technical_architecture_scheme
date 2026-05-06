@@ -1,9 +1,4 @@
-import type { AppRouteRecord } from '@/types/route'
-
-export interface MenuPermissionResult {
-  menus: AppRouteRecord[]
-  permissions: string[]
-}
+import type { MenuPermissionResult } from '@/types/permission'
 
 export const fetchMenuPermissions = async (): Promise<MenuPermissionResult> => ({
   menus: [],

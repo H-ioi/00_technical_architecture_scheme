@@ -1,19 +1,4 @@
-export interface LoginParams {
-  username: string
-  password: string
-}
-
-export interface UserProfile {
-  id: string
-  name: string
-  avatar?: string
-  roles: string[]
-}
-
-export interface LoginResult {
-  accessToken: string
-  user: UserProfile
-}
+import type { LoginParams, LoginResult } from '@/types/auth'
 
 export const loginApi = async (params: LoginParams): Promise<LoginResult> => {
   // 模板默认提供可运行的本地登录闭环；接入后端时替换为真实 Service 调用。

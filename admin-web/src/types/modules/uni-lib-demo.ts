@@ -1,5 +1,7 @@
 import type { Recordable } from 'uni-ui-lib'
 
+export type { PageResult } from '@/types/api'
+
 export interface CustomerRecord extends Recordable {
   id: number
   customerNo: string
@@ -31,9 +33,4 @@ export interface CustomerListParams extends Recordable {
   keyword?: string
   level?: CustomerRecord['level'] | ''
   status?: 0 | 1 | string
-}
-
-export interface PageResult<T extends Recordable = Recordable> {
-  records: T[]
-  total: number
 }

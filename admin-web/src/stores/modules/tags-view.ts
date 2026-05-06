@@ -1,12 +1,7 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
 
-export interface TagView {
-  title: string
-  titleKey?: string
-  path: string
-  affix?: boolean
-}
+import type { TagView } from '@/types/tags-view'
 
 export const useTagsViewStore = defineStore('tagsView', () => {
   const visitedTags = ref<TagView[]>([])

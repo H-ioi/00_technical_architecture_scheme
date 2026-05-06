@@ -1,7 +1,8 @@
 import { defineStore } from 'pinia'
 import { computed, ref } from 'vue'
 
-import { loginApi, logoutApi, type LoginParams, type UserProfile } from '@/api/modules/auth'
+import { loginApi, logoutApi } from '@/api/modules/auth'
+import type { LoginParams, UserProfile } from '@/types/auth'
 import { storage } from '@/utils/storage'
 
 const ACCESS_TOKEN_KEY = 'admin-web:access-token'
