@@ -1,11 +1,13 @@
 <script setup lang="ts">
 import { useRoute, useRouter } from 'vue-router'
 
+import { useAppI18n } from '@/composables/use-app-i18n'
 import { useTagsViewStore } from '@/stores'
 
 const route = useRoute()
 const router = useRouter()
 const tagsViewStore = useTagsViewStore()
+const { t } = useAppI18n()
 
 const goTag = (path: string) => {
   if (path !== route.fullPath) {
@@ -48,7 +50,7 @@ const closeTag = (path: string, event: Event) => {
         @click="goTag(tag.path)"
         @close="closeTag(tag.path, $event)"
       >
-        {{ tag.title }}
+        {{ t(tag.titleKey, tag.title) }}
       </el-tag>
     </div>
   </div>

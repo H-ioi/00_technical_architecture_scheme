@@ -1,8 +1,8 @@
 import type { Router } from 'vue-router'
 
 import { fetchMenuPermissions } from '@/api/modules/menu'
+import { getLocalizedDocumentTitle } from '@/locales'
 import { usePermissionStore, useTagsViewStore, useUserStore } from '@/stores'
-import { getAppTitle } from '@/utils'
 
 const whiteList = ['/login']
 
@@ -10,8 +10,10 @@ export const setupRouterGuards = (router: Router) => {
   router.beforeEach(async (to) => {
     const userStore = useUserStore()
     const permissionStore = usePermissionStore()
-
-    document.title = `${to.meta.title ? `${String(to.meta.title)} - ` : ''}${getAppTitle()}`
+    document.title = getLocalizedDocumentTitle(
+      to.meta.titleKey as string | undefined,
+      String(to.meta.title ?? '')
+    )
 
     if (whiteList.includes(to.path)) {
       return userStore.isLoggedIn ? '/' : true
@@ -52,6 +54,7 @@ export const setupRouterGuards = (router: Router) => {
       tagsViewStore.addTag({
         path: to.fullPath,
         title: String(leaf.meta.title || leaf.name),
+        titleKey: leaf.meta.titleKey as string | undefined,
         affix: Boolean(leaf.meta.affix)
       })
     }

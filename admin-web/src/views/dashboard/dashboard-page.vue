@@ -1,17 +1,23 @@
 <script setup lang="ts">
-const metrics = [
-  { label: '待办事项', value: 12 },
-  { label: '今日访问', value: 2480 },
-  { label: '告警事件', value: 3 },
-  { label: '上线应用', value: 8 }
-]
+import { computed } from 'vue'
+
+import { useAppI18n } from '@/composables/use-app-i18n'
+
+const { t } = useAppI18n()
+
+const metrics = computed(() => [
+  { label: t('dashboard.todo'), value: 12 },
+  { label: t('dashboard.visits'), value: 2480 },
+  { label: t('dashboard.alerts'), value: 3 },
+  { label: t('dashboard.apps'), value: 8 }
+])
 </script>
 
 <template>
   <section class="dashboard-page">
     <el-card shadow="never" class="dashboard-page__welcome">
-      <h1>工作台</h1>
-      <p>这里保留后台首页的最小样例，后续可按业务域拆分卡片、图表、待办和快捷入口。</p>
+      <h1>{{ t('route.dashboard') }}</h1>
+      <p>{{ t('dashboard.description') }}</p>
     </el-card>
 
     <div class="dashboard-page__metrics">
@@ -28,10 +34,14 @@ const metrics = [
 
     <el-card shadow="never">
       <template #header>
-        <div class="dashboard-page__card-title">权限指令示例</div>
+        <div class="dashboard-page__card-title">{{ t('dashboard.permissionDemo') }}</div>
       </template>
-      <el-button v-permission="'system:user:create'" type="primary">新增用户</el-button>
-      <el-button v-permission="'system:user:view'">查看用户</el-button>
+      <el-button v-permission="'dashboard:view'" type="primary">
+        {{ t('dashboard.viewDashboard') }}
+      </el-button>
+      <el-button v-permission="'uni-lib:demo:view'">
+        {{ t('dashboard.viewUniLibDemo') }}
+      </el-button>
     </el-card>
   </section>
 </template>

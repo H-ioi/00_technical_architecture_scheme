@@ -1,13 +1,15 @@
 <script setup lang="ts">
-import { reactive, ref } from 'vue'
+import { computed, reactive, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import type { FormInstance, FormRules } from 'element-plus'
 
+import { useAppI18n } from '@/composables/use-app-i18n'
 import { useUserStore } from '@/stores'
 
 const router = useRouter()
 const route = useRoute()
 const userStore = useUserStore()
+const { t } = useAppI18n()
 const formRef = ref<FormInstance>()
 const loading = ref(false)
 
@@ -16,10 +18,10 @@ const formModel = reactive({
   password: 'admin123'
 })
 
-const formRules: FormRules<typeof formModel> = {
-  username: [{ required: true, message: '请输入账号', trigger: 'blur' }],
-  password: [{ required: true, message: '请输入密码', trigger: 'blur' }]
-}
+const formRules = computed<FormRules<typeof formModel>>(() => ({
+  username: [{ required: true, message: t('login.usernameRequired'), trigger: 'blur' }],
+  password: [{ required: true, message: t('login.passwordRequired'), trigger: 'blur' }]
+}))
 
 const submitLogin = async () => {
   await formRef.value?.validate()
@@ -38,27 +40,27 @@ const submitLogin = async () => {
   <main class="login-page">
     <section class="login-page__panel">
       <div class="login-page__intro">
-        <p class="login-page__eyebrow">Admin Template</p>
-        <h1>管理后台模板</h1>
-        <p>统一工程结构、权限骨架、请求封装与后台布局，登录 UI 可按产品线独立调整。</p>
+        <p class="login-page__eyebrow">{{ t('login.eyebrow') }}</p>
+        <h1>{{ t('login.title') }}</h1>
+        <p>{{ t('login.description') }}</p>
       </div>
 
       <el-card class="login-page__card" shadow="never">
         <template #header>
           <div>
-            <h2>账号登录</h2>
-            <p>示例账号用于模板本地闭环，接入后端时替换认证 Service。</p>
+            <h2>{{ t('login.cardTitle') }}</h2>
+            <p>{{ t('login.cardDescription') }}</p>
           </div>
         </template>
 
         <el-form ref="formRef" :model="formModel" :rules="formRules" label-position="top">
-          <el-form-item label="账号" prop="username">
-            <el-input v-model="formModel.username" placeholder="请输入账号" />
+          <el-form-item :label="t('common.username')" prop="username">
+            <el-input v-model="formModel.username" :placeholder="t('login.usernamePlaceholder')" />
           </el-form-item>
-          <el-form-item label="密码" prop="password">
+          <el-form-item :label="t('common.password')" prop="password">
             <el-input
               v-model="formModel.password"
-              placeholder="请输入密码"
+              :placeholder="t('login.passwordPlaceholder')"
               show-password
               type="password"
               @keyup.enter="submitLogin"
@@ -70,7 +72,7 @@ const submitLogin = async () => {
             :loading="loading"
             @click="submitLogin"
           >
-            登录
+            {{ t('common.login') }}
           </el-button>
         </el-form>
       </el-card>

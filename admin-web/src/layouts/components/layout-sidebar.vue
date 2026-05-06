@@ -3,19 +3,26 @@ import { DataBoard, Grid } from '@element-plus/icons-vue'
 import { computed } from 'vue'
 import { useRoute } from 'vue-router'
 
-import { useAppStore } from '@/stores'
+import { useAppI18n } from '@/composables/use-app-i18n'
+import { useAppStore, usePermissionStore } from '@/stores'
 
 const route = useRoute()
 const appStore = useAppStore()
+const permissionStore = usePermissionStore()
+const { t } = useAppI18n()
 
 const activeMenu = computed(() => route.meta.activeMenu || route.path)
+const appTitle = computed(() => t('app.title'))
+const collapsedTitle = computed(() => Array.from(appTitle.value)[0] ?? 'A')
+const canViewDashboard = computed(() => permissionStore.hasPermission('dashboard:view'))
+const canViewUniLibDemo = computed(() => permissionStore.hasPermission('uni-lib:demo:view'))
 </script>
 
 <template>
   <el-aside class="layout-sidebar" :width="appStore.sidebarWidth">
     <div class="layout-sidebar__brand">
-      <span v-if="!appStore.sidebarCollapsed">{{ $route.meta.title ? 'Admin Web' : '' }}</span>
-      <span v-else>A</span>
+      <span v-if="!appStore.sidebarCollapsed">{{ appTitle }}</span>
+      <span v-else>{{ collapsedTitle }}</span>
     </div>
 
     <el-menu
@@ -24,21 +31,42 @@ const activeMenu = computed(() => route.meta.activeMenu || route.path)
       :collapse="appStore.sidebarCollapsed"
       :default-active="activeMenu"
     >
-      <el-menu-item index="/dashboard">
+      <el-menu-item v-if="canViewDashboard" index="/dashboard">
         <el-icon><DataBoard /></el-icon>
-        <template #title>工作台</template>
+        <template #title>{{ t('route.dashboard') }}</template>
       </el-menu-item>
-      <el-sub-menu index="/uni-lib-demo">
+      <el-sub-menu v-if="canViewUniLibDemo" index="/uni-lib-demo">
         <template #title>
           <el-icon><Grid /></el-icon>
-          <span>组件库案例</span>
+          <span>{{ t('route.uniLibDemo') }}</span>
         </template>
-        <el-menu-item index="/uni-lib-demo/standard-table">常规表格页</el-menu-item>
-        <el-menu-item index="/uni-lib-demo/plain-table">无搜索表格页</el-menu-item>
-        <el-menu-item index="/uni-lib-demo/tree-table">树形表格页</el-menu-item>
-        <el-menu-item index="/uni-lib-demo/no-pagination-table">无分页表格页</el-menu-item>
-        <el-menu-item index="/uni-lib-demo/table-link-detail">表格跳转表单</el-menu-item>
-        <el-menu-item index="/uni-lib-demo/table-dialog-detail">表格弹窗表单</el-menu-item>
+        <el-sub-menu index="/uni-lib-demo/table-basic">
+          <template #title>{{ t('route.basicTableConfig') }}</template>
+          <el-menu-item index="/uni-lib-demo/standard-table">
+            {{ t('route.standardTable') }}
+          </el-menu-item>
+          <el-menu-item index="/uni-lib-demo/plain-table">
+            {{ t('route.plainTable') }}
+          </el-menu-item>
+          <el-menu-item index="/uni-lib-demo/no-pagination-table">
+            {{ t('route.noPaginationTable') }}
+          </el-menu-item>
+        </el-sub-menu>
+        <el-sub-menu index="/uni-lib-demo/table-tree">
+          <template #title>{{ t('route.treeTableConfig') }}</template>
+          <el-menu-item index="/uni-lib-demo/tree-table">
+            {{ t('route.treeTable') }}
+          </el-menu-item>
+        </el-sub-menu>
+        <el-sub-menu index="/uni-lib-demo/table-form">
+          <template #title>{{ t('route.tableFormConfig') }}</template>
+          <el-menu-item index="/uni-lib-demo/table-link-detail">
+            {{ t('route.tableLinkForm') }}
+          </el-menu-item>
+          <el-menu-item index="/uni-lib-demo/table-dialog-detail">
+            {{ t('route.tableDialogForm') }}
+          </el-menu-item>
+        </el-sub-menu>
       </el-sub-menu>
     </el-menu>
   </el-aside>

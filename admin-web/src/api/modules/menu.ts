@@ -7,5 +7,5 @@ export interface MenuPermissionResult {
 
 export const fetchMenuPermissions = async (): Promise<MenuPermissionResult> => ({
   menus: [],
-  permissions: ['dashboard:view', 'uni-lib:demo:view', 'system:user:view', 'system:user:create']
+  permissions: ['dashboard:view', 'uni-lib:demo:view']
 })

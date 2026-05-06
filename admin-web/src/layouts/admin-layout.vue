@@ -6,13 +6,17 @@ import LayoutHeader from './components/layout-header.vue'
 import LayoutSidebar from './components/layout-sidebar.vue'
 import LayoutTagsView from './components/layout-tags-view.vue'
 
-import { useUserStore } from '@/stores'
+import { usePermissionStore, useTagsViewStore, useUserStore } from '@/stores'
 
 const router = useRouter()
+const permissionStore = usePermissionStore()
+const tagsViewStore = useTagsViewStore()
 const userStore = useUserStore()
 
 const handleLogout = async () => {
   await userStore.logout()
+  permissionStore.resetPermission()
+  tagsViewStore.resetTags()
   router.replace('/login')
 }
 </script>

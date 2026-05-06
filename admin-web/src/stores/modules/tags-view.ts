@@ -3,6 +3,7 @@ import { ref } from 'vue'
 
 export interface TagView {
   title: string
+  titleKey?: string
   path: string
   affix?: boolean
 }
@@ -28,9 +29,14 @@ export const useTagsViewStore = defineStore('tagsView', () => {
     visitedTags.value = visitedTags.value.filter((item) => item.path !== path)
   }
 
+  const resetTags = () => {
+    visitedTags.value = visitedTags.value.filter((tag) => tag.affix)
+  }
+
   return {
     visitedTags,
     addTag,
-    removeTag
+    removeTag,
+    resetTags
   }
 })
