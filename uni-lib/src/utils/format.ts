@@ -4,6 +4,21 @@ import { useUniI18n } from "@/services/i18n";
 export const isEmptyValue = (value: unknown) =>
   value === undefined || value === null || value === "";
 
+export const isBlankValue = (value: unknown) =>
+  isEmptyValue(value) ||
+  (typeof value === "string" && value.trim() === "") ||
+  (Array.isArray(value) && value.length === 0);
+
+export const omitBlankValues = (model: Record<string, unknown>) =>
+  Object.entries(model).reduce<Record<string, unknown>>((result, [key, value]) => {
+    if (isBlankValue(value)) {
+      return result;
+    }
+
+    result[key] = typeof value === "string" ? value.trim() : value;
+    return result;
+  }, {});
+
 export const formatEmpty = (value: unknown, emptyText = "--") =>
   isEmptyValue(value) ? emptyText : String(value);
 

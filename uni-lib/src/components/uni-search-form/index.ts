@@ -1,6 +1,6 @@
 import type { App } from "vue";
 
-import UniSearchForm from "./uni-search-form.vue";
+import UniSearchForm from "./index.vue";
 
 export { UniSearchForm };
 

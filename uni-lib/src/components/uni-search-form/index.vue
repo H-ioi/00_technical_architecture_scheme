@@ -5,10 +5,15 @@
  */
 import { computed, ref, watch } from "vue";
 
-import UniForm from "@/components/uni-form/uni-form.vue";
+import UniForm from "@/components/uni-form/index.vue";
 import { useUniI18n } from "@/services/i18n";
 import type { Recordable, UniFormConfig, UniFormField } from "@/types/shared";
-import { formatEmpty, isEmptyValue, toArray } from "@/utils/format";
+import {
+  formatEmpty,
+  isEmptyValue,
+  omitBlankValues,
+  toArray,
+} from "@/utils/format";
 
 const GRID_COLUMNS = 24;
 const DEFAULT_ACTION_MIN_SPAN = 6;
@@ -33,7 +38,7 @@ const props = withDefaults(
 const emit = defineEmits<{
   "update:modelValue": [value: Recordable];
   search: [value: Recordable];
-  reset: [];
+  reset: [value: Recordable];
   "update:collapsed": [value: boolean];
   "field-change": [
     payload: { field: string; value: unknown; model: Recordable },
@@ -134,7 +139,7 @@ const searchFormConfig = computed<UniFormConfig>(() => ({
 }));
 
 const handleSearch = () => {
-  emit("search", formModel.value);
+  emit("search", omitBlankValues(formModel.value));
 };
 
 const toggleCollapsed = () => {
@@ -157,7 +162,7 @@ const handleReset = () => {
   });
 
   formModel.value = resetModel;
-  emit("reset");
+  emit("reset", omitBlankValues(resetModel));
 };
 
 const removeSelectedTag = (field: string) => {

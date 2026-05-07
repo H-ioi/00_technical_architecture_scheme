@@ -34,8 +34,8 @@ watchEffect(() => {
 </script>
 
 <template>
-  <el-header class="layout-header">
-    <div class="layout-header__left">
+  <el-header class="header">
+    <div class="header__left">
       <el-button text @click="appStore.toggleSidebar">
         <el-icon>
           <Fold v-if="!appStore.sidebarCollapsed" />
@@ -50,9 +50,9 @@ watchEffect(() => {
       </el-breadcrumb>
     </div>
 
-    <div class="layout-header__right">
+    <div class="header__right">
       <el-dropdown trigger="click" @command="switchLocale">
-        <button class="layout-header__locale" type="button">
+        <button class="header__locale" type="button">
           {{ localeLabel }}
         </button>
         <template #dropdown>
@@ -64,7 +64,7 @@ watchEffect(() => {
       </el-dropdown>
 
       <el-dropdown trigger="click">
-        <button class="layout-header__user" type="button">
+        <button class="header__user" type="button">
           <el-avatar :src="userStore.profile?.avatar" :size="32">
             {{ avatarText }}
           </el-avatar>
@@ -81,7 +81,7 @@ watchEffect(() => {
 </template>
 
 <style scoped lang="scss">
-.layout-header {
+.header {
   display: flex;
   flex-shrink: 0;
   align-items: center;
@@ -91,20 +91,20 @@ watchEffect(() => {
   border-bottom: 1px solid var(--app-border-color);
 }
 
-.layout-header__left {
+.header__left {
   display: flex;
   align-items: center;
   gap: 12px;
 }
 
-.layout-header__right {
+.header__right {
   display: flex;
   gap: 16px;
   align-items: center;
 }
 
-.layout-header__locale,
-.layout-header__user {
+.header__locale,
+.header__user {
   display: inline-flex;
   gap: 8px;
   align-items: center;
@@ -114,7 +114,7 @@ watchEffect(() => {
   border: 0;
 }
 
-.layout-header__locale {
+.header__locale {
   padding: 0;
 }
 </style>

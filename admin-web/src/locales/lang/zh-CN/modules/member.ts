@@ -11,8 +11,14 @@ export default {
     },
     fields: {
       name: '学生姓名',
+      admissionNo: '学号',
+      cnFullName: '中文名',
+      fullName: '英文名',
       grade: '年级',
       className: '班级',
+      form: '班级',
+      bus: '校巴',
+      dormitory: '住宿',
       parentName: '家长姓名'
     },
     placeholders: {
@@ -20,13 +26,35 @@ export default {
       name: '请输入学生姓名',
       grade: '请输入年级',
       className: '请输入班级',
+      form: '请选择班级',
+      yearGroup: '请选择年级',
+      bus: '请选择校巴',
+      dormitory: '请选择住宿',
       parentName: '请输入家长姓名'
+    },
+    options: {
+      enrolled: 'Enrolled',
+      leaving: 'Leaving'
     }
   },
   teacher: {
     page: {
       title: '教师列表',
       description: '维护教师资料、模块角色和账号状态。'
+    },
+    fields: {
+      teacherCode: '工号',
+      fullName: '姓名',
+      gender: '性别',
+      nationalities: '国籍',
+      role: '职位'
+    },
+    placeholders: {
+      role: '请选择职位'
+    },
+    options: {
+      unarchived: 'Unarchived',
+      archived: 'Archived'
     }
   },
   fields: {
@@ -45,7 +73,8 @@ export default {
   },
   placeholders: {
     keyword: '请输入昵称、部门、邮箱或手机号',
-    school: '请选择学校',
+    keywordInput: '请输入关键词',
+    school: '请选择校区',
     nickname: '请输入昵称',
     department: '请输入部门',
     email: '请输入邮箱',
@@ -111,6 +140,7 @@ export default {
     enableConfirm: '确定启用选中的成员吗？',
     disableConfirm: '确定禁用选中的成员吗？',
     uploadTip: '仅支持 xls、xlsx 文件，大小不超过 10M。',
-    uploadRequired: '请先选择导入文件'
+    uploadRequired: '请先选择导入文件',
+    noPermission: '没有操作权限'
   }
 }

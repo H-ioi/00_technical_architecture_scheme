@@ -12,7 +12,6 @@ defineProps<{
 
 const emit = defineEmits<{
   'update:visible': [visible: boolean]
-  edit: []
 }>()
 
 const { t } = useAppI18n()
@@ -29,7 +28,6 @@ const { t } = useAppI18n()
     <UniForm v-if="source" :model-value="source" :config="config" mode="view" />
     <template #footer>
       <el-button @click="emit('update:visible', false)">{{ t('member.actions.close') }}</el-button>
-      <el-button type="primary" @click="emit('edit')">{{ t('member.actions.edit') }}</el-button>
     </template>
   </el-dialog>
 </template>

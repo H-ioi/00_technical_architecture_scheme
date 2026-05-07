@@ -133,6 +133,13 @@ src/
 ├── composables/
 ├── directives/
 ├── layouts/
+│   ├── index.vue
+│   └── components/
+│       ├── content.vue
+│       ├── header.vue
+│       ├── menu-tree.vue
+│       ├── sidebar.vue
+│       └── tags-view.vue
 ├── plugins/
 ├── router/
 │   ├── guards/
@@ -147,11 +154,11 @@ src/
 │   ├── storage/
 │   └── index.ts
 ├── views/                      # 页面目录：kebab-case
-│   └── order-list/
+│   └── order/
 │       ├── components/         # 页面私有组件
-│       ├── constants.ts
-│       ├── use-order-list.ts
-│       └── order-list-page.vue
+│       ├── list.config.ts
+│       ├── use-list.ts
+│       └── list.vue
 ├── App.vue
 └── main.ts
 ```
@@ -164,11 +171,12 @@ src/
 典型列表页拆分示例：
 
 ```text
-order-list-page.vue
-  -> order-filter-form.vue
-  -> order-table.vue
-  -> order-detail-dialog.vue
-  -> use-order-list.ts
+views/order/
+├── components/
+│   └── detail-dialog.vue
+├── list.config.ts
+├── list.vue
+└── use-list.ts
 ```
 
 单文件过大（例如超过约 300～400 行）或存在多个明显独立区域时，必须评估拆分（《开发规范》§4.3）。
@@ -181,21 +189,29 @@ order-list-page.vue
 
 执行《前端架构方案总览》§7.2、《前端开发规范》中命名章节：**目录与文件 `kebab-case`**，标识符 **`camelCase`**，`uni-lib` 对外组件 **`Uni` 前缀**，业务工程 `components` 下**不得**占用 `Uni` 前缀。
 
+目录已经表达业务域时，文件名不重复业务名前缀：
+
+- 布局入口使用 `layouts/index.vue`，布局子组件使用 `header.vue`、`sidebar.vue`、`content.vue`、`tags-view.vue`、`menu-tree.vue`。
+- 列表页使用 `list.vue`，页面配置使用 `list.config.ts`，页面逻辑使用 `use-list.ts`。
+- 页面目录已表达业务语义时，页面内本地函数也只表达职责，例如 `createSearchConfig`、`createColumns`、`loadData`，不重复写 `createOrderColumns`、`loadOrders`。
+- 页面私有组件使用 `detail-dialog.vue`、`form-dialog.vue`、`import-dialog.vue` 等功能名。
+- 不使用 `admin-layout.vue`、`layout-header.vue`、`order-list-page.vue`、`use-order-list.ts`、`order-detail-dialog.vue` 这类重复目录语义的命名。
+
 ---
 
 ## 七、布局体系
 
 ### 7.1 标准单站点模版
 
-默认后台可采用统一 **AdminLayout**（顶栏、侧栏、面包屑、标签页、主内容区、`RouterView`），推荐层级：
+默认后台可采用统一 `layouts/index.vue`（顶栏、侧栏、面包屑、标签页、主内容区、`RouterView`），推荐层级：
 
 ```text
 App.vue
-  -> AdminLayout
+  -> layouts/index.vue
     -> Sidebar
     -> Header
     -> TagsView
-    -> MainContainer
+    -> Content
       -> RouterView
 ```
 
@@ -351,7 +367,7 @@ api/
 - **项目级组件**：多页复用；
 - **组件库组件**：跨项目复用。
 
-列表页拆分示例见 **§六**；页面级逻辑优先 `use-xxx.ts`，常量与列定义可 `constants.ts`。
+列表页拆分示例见 **§六**；页面级逻辑优先 `use-list.ts`，搜索/表格/表单配置优先放 `list.config.ts`。
 
 ---
 

@@ -11,8 +11,14 @@ export default {
     },
     fields: {
       name: 'Student Name',
+      admissionNo: 'Admission No.',
+      cnFullName: 'Chinese Name',
+      fullName: 'English Name',
       grade: 'Grade',
       className: 'Class',
+      form: 'Class',
+      bus: 'Bus',
+      dormitory: 'Dormitory',
       parentName: 'Parent'
     },
     placeholders: {
@@ -20,13 +26,35 @@ export default {
       name: 'Student name',
       grade: 'Grade',
       className: 'Class',
+      form: 'Select class',
+      yearGroup: 'Select grade',
+      bus: 'Select bus',
+      dormitory: 'Select dormitory',
       parentName: 'Parent name'
+    },
+    options: {
+      enrolled: 'Enrolled',
+      leaving: 'Leaving'
     }
   },
   teacher: {
     page: {
       title: 'Teachers',
       description: 'Maintain teacher profiles, module roles, and account status.'
+    },
+    fields: {
+      teacherCode: 'Teacher Code',
+      fullName: 'Name',
+      gender: 'Gender',
+      nationalities: 'Nationality',
+      role: 'Role'
+    },
+    placeholders: {
+      role: 'Select role'
+    },
+    options: {
+      unarchived: 'Unarchived',
+      archived: 'Archived'
     }
   },
   fields: {
@@ -45,6 +73,7 @@ export default {
   },
   placeholders: {
     keyword: 'Nickname, department, email, or phone',
+    keywordInput: 'Keyword',
     school: 'Select campus',
     nickname: 'Nickname',
     department: 'Department',
@@ -111,6 +140,7 @@ export default {
     enableConfirm: 'Enable selected members?',
     disableConfirm: 'Disable selected members?',
     uploadTip: 'Only xls and xlsx files under 10M are supported.',
-    uploadRequired: 'Please select an import file first'
+    uploadRequired: 'Please select an import file first',
+    noPermission: 'No permission'
   }
 }

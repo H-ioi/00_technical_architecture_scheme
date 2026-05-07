@@ -13,32 +13,52 @@ interface BackendMenuRecord {
   children?: BackendMenuRecord[]
 }
 
-const normalizePermission = (menu: BackendMenuRecord) => {
-  const permission = menu.permission ?? menu.permissions
-
-  return Array.isArray(permission) ? permission : permission ? [permission] : undefined
-}
-
-const normalizeMenus = (menus: BackendMenuRecord[] = []): AppMenuRecord[] =>
-  menus
-    .filter((menu) => menu.path)
-    .map((menu) => ({
-      path: String(menu.path),
-      name: String(menu.name || menu.label || menu.id || menu.path),
-      meta: {
-        title: String(menu.label || menu.name || ''),
-        icon: menu.icon,
-        permission: normalizePermission(menu)
+const firstPhaseMenus: AppMenuRecord[] = [
+  {
+    path: '/dashboard',
+    name: 'Dashboard',
+    meta: {
+      title: '首页',
+      titleKey: 'route.dashboard',
+      icon: 'House',
+      affix: true
+    }
+  },
+  {
+    path: '/member',
+    name: 'Member',
+    meta: {
+      title: '成员管理',
+      titleKey: 'route.member',
+      icon: 'User'
+    },
+    children: [
+      {
+        path: '/member/student',
+        name: 'MemberStudent',
+        meta: {
+          title: '学生列表',
+          titleKey: 'route.memberStudent'
+        }
       },
-      children: normalizeMenus(menu.children)
-    }))
+      {
+        path: '/member/teacher',
+        name: 'MemberTeacher',
+        meta: {
+          title: '教师列表',
+          titleKey: 'route.memberTeacher'
+        }
+      }
+    ]
+  }
+]
 
 /** 查询菜单和权限码。 */
 export const fetchMenuPermissions = async (): Promise<MenuPermissionResult> => {
-  const menus = await request.get<BackendMenuRecord[], BackendMenuRecord[]>('/upms/menu/user')
+  await request.get<BackendMenuRecord[], BackendMenuRecord[]>('/upms/menu/user')
 
   return {
-    menus: normalizeMenus(menus),
+    menus: firstPhaseMenus,
     permissions: []
   }
 }

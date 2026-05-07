@@ -6,7 +6,7 @@ import type {
   UniTableColumnWithState,
 } from "@/types/uni-data-table";
 
-export function useUniTableColumns(getColumns: () => UniTableColumn[]) {
+export function useColumns(getColumns: () => UniTableColumn[]) {
   const columnStates = ref<UniTableColumnState[]>([]);
   const draggingColumnProp = ref("");
 

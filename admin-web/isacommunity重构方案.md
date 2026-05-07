@@ -156,6 +156,13 @@ admin-web/src/
 │   ├── use-auth.ts
 │   └── use-dict.ts
 ├── layouts/
+│   ├── index.vue
+│   └── components/
+│       ├── content.vue
+│       ├── header.vue
+│       ├── menu-tree.vue
+│       ├── sidebar.vue
+│       └── tags-view.vue
 ├── router/
 │   ├── guards/
 │   ├── modules/
@@ -214,6 +221,24 @@ admin-web/src/
 | 登录认证 | `createUniAuth` / 项目 `userStore` |
 
 页面私有 UI 放在对应页面目录的 `components` 下，例如 `views/member/teacher/components`。跨页面复用但不跨项目的能力放在 `components/business`。跨项目可复用能力才进入 `uni-lib`。
+
+`UniSearchForm` 统一负责输出干净查询参数。查询和重置事件都必须过滤空字符串、纯空格、空数组、`null`、`undefined`，字符串统一 `trim` 后再抛给业务页面。页面和 API 层不再重复写空值清理逻辑。
+
+`uni-lib` 组件目录命名同样遵循“目录表达语义，文件表达职责”的规则。对外组件目录下主组件使用 `index.vue`，入口使用 `index.ts`，内部子组件使用短功能名。
+
+```text
+uni-lib/src/components/uni-data-table/
+├── index.ts
+├── index.vue
+├── cell.vue
+├── toolbar.vue
+├── column-settings.vue
+├── use-columns.ts
+├── use-data.ts
+└── use-export.ts
+```
+
+不使用 `uni-data-table.vue`、`uni-table-cell.vue`、`use-uni-table-columns.ts` 这类重复目录语义的文件名。
 
 ## 五、登录重构方案
 
@@ -501,12 +526,28 @@ export interface TeacherExportParams {
 
 使用 `UniSearchForm`。
 
-字段：
+成员搜索字段必须与旧项目页面和接口字段对齐，不按新项目主观改名。
 
-- `keyword`：关键词。
-- `schoolIds`：学校，多学校时显示。
+学生列表搜索字段：
+
+- `keywordssearch`：关键词。
+- `schoolIds`：校区。
+- `yearGroupName`：年级。
+- `form`：班级。
+- `dormitoryStatus`：住宿。
+- `busStatus`：校巴。
+- `studentStatus`：状态。
+
+教师列表搜索字段：
+
+- `keywordssearch`：关键词。
+- `schoolIds`：校区。
+- `role`：职位。
+- `archived`：状态。
 
 搜索表单只产出查询条件，不直接请求接口。
+
+空搜索字段不传给后端。该规则由 `UniSearchForm` 统一控制，业务页面只接收清理后的查询对象并刷新表格。
 
 ### 7.6 表格
 
@@ -628,7 +669,7 @@ export interface TeacherExportParams {
 
 ## 十、样式和布局
 
-整体布局基于 `admin-web` 的 `AdminLayout` 实现。导航结构和核心操作习惯延续旧系统，页面内容区域可以结合 `admin-web` 与 `uni-lib` 做 UX 优化。
+整体布局基于 `admin-web/src/layouts` 实现。导航结构和核心操作习惯延续旧系统，页面内容区域可以结合 `admin-web` 与 `uni-lib` 做 UX 优化。
 
 重构原则：
 
@@ -663,6 +704,8 @@ export interface TeacherExportParams {
 
 页面和页面私有组件命名保持简洁，目录已经表达业务域时，文件名不重复业务名前缀。
 
+该规则适用于 `views`、`layouts`、`components`、`uni-lib/src/components` 等所有目录。目录名已经表达上下文时，文件名只表达职责，不再重复目录语义。
+
 推荐：
 
 ```text
@@ -695,7 +738,21 @@ views/member/teacher/
 - 新增页使用 `create.vue`。
 - 页面私有弹窗使用 `form-dialog.vue`、`detail-dialog.vue`、`import-dialog.vue` 等功能名。
 - 页面组合式逻辑使用 `use-list.ts`，页面配置使用 `list.config.ts`。
+- 页面目录已表达业务语义时，配置函数和页面方法也只保留职责名，例如 `createSearchConfig`、`createColumns`、`createDetailConfig`、`loadData`，不写 `createStudentColumns`、`loadStudents`。
 - 页面目录名使用业务域表达模块语义，文件名尽量表达页面职责。
+- 布局入口使用 `layouts/index.vue`，布局子组件使用 `header.vue`、`sidebar.vue`、`content.vue`、`tags-view.vue`、`menu-tree.vue`。
+- 组件库对外组件使用 `index.vue` + `index.ts`，组件内部文件使用 `cell.vue`、`toolbar.vue`、`column-settings.vue` 等短功能名。
+- 组件库目录内组合式逻辑使用 `use-columns.ts`、`use-data.ts`、`use-export.ts` 等短职责名。
+
+不推荐：
+
+```text
+layouts/admin-layout.vue
+layouts/components/layout-header.vue
+uni-lib/src/components/uni-form/uni-form.vue
+uni-lib/src/components/uni-data-table/uni-table-cell.vue
+uni-lib/src/components/uni-data-table/use-uni-table-columns.ts
+```
 
 ## 十二、API 和注释规范
 
@@ -825,7 +882,7 @@ const routeComponentMap = {
 - 前端按 `component` key 匹配组件。
 - 无组件的父级菜单只作为分组。
 - 未匹配组件的菜单不注册路由，并在开发环境提示。
-- 所有业务路由挂载到 `AdminLayout` 下。
+- 所有业务路由挂载到 `layouts/index.vue` 下。
 - `404` 路由最后注册。
 
 ### 14.5 侧边栏渲染
@@ -835,9 +892,8 @@ const routeComponentMap = {
 新侧边栏结构：
 
 ```text
-layout-sidebar.vue
-  -> layout-menu-tree.vue
-    -> layout-menu-item.vue
+sidebar.vue
+  -> menu-tree.vue
 ```
 
 渲染规则：
@@ -1081,7 +1137,7 @@ layout-sidebar.vue
 | 能力 | 组件库形态 | 说明 |
 | --- | --- | --- |
 | 标准列表 | `UniDataTable` | 列配置、分页、选择、操作列、加载态 |
-| 查询表单 | `UniSearchForm` | 查询、重置、展开收起、选项加载 |
+| 查询表单 | `UniSearchForm` | 查询、重置、展开收起、选项加载、空值清理 |
 | 动态表单 | `UniForm` | 新增、编辑、详情查看共用 schema |
 | 上传 | `UniUpload` | 导入、图片、附件上传统一交互 |
 | 权限 | `v-uni-permission`、`useUniPermission` | UI 和 JS 权限统一 |

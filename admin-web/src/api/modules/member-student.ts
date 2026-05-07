@@ -1,54 +1,62 @@
 import type { PageResult } from '@/types/api'
-import type {
-  StudentCreateParams,
-  StudentDetail,
-  StudentExportParams,
-  StudentListParams,
-  StudentRecord,
-  StudentUpdateParams
-} from '@/types/modules/member-student'
+import type { StudentListParams, StudentRecord } from '@/types/modules/member-student'
+import type { SchoolOptionRecord } from '@/types/modules/member-teacher'
 import { request } from '@/utils/request'
+
+interface MembershipPageResult<T> {
+  data: T[]
+  total: number
+  current: number
+}
+
+const MEMBERSHIP_PATH = '/isacommunity/membership'
+
+const toPageParams = (params: StudentListParams) => {
+  const { pageNo, pageSize, ...rest } = params
+
+  return {
+    ...rest,
+    current: params.current ?? pageNo,
+    size: params.size ?? pageSize
+  }
+}
 
 /** 分页查询学生列表。 */
 export const fetchStudentPage = async (
   params: StudentListParams
-): Promise<PageResult<StudentRecord>> =>
-  request.get<PageResult<StudentRecord>, PageResult<StudentRecord>>('/member/student/page', {
-    params
+): Promise<PageResult<StudentRecord>> => {
+  const result = await request.get<
+    MembershipPageResult<StudentRecord>,
+    MembershipPageResult<StudentRecord>
+  >(`${MEMBERSHIP_PATH}/getStudentPage`, {
+    params: toPageParams(params)
   })
 
-/** 查询学生详情。 */
-export const fetchStudentDetail = async (id: string | number): Promise<StudentDetail> =>
-  request.get<StudentDetail, StudentDetail>(`/member/student/${id}`)
+  return {
+    records: result.data,
+    total: result.total
+  }
+}
 
-/** 新增学生。 */
-export const createStudent = async (data: StudentCreateParams) =>
-  request.post<void, void>('/member/student', data)
+/** 查询校区选项。 */
+export const fetchMembershipSchoolOptions = async () => {
+  const result = await request.get<SchoolOptionRecord[], SchoolOptionRecord[]>(
+    `${MEMBERSHIP_PATH}/getSchoolList`
+  )
 
-/** 更新学生。 */
-export const updateStudent = async (data: StudentUpdateParams) =>
-  request.put<void, void>(`/member/student/${data.id}`, data)
+  return result
+}
 
-/** 批量删除学生。 */
-export const deleteStudents = async (ids: Array<string | number>) =>
-  request.delete<void, void>('/member/student', { data: { ids } })
+/** 查询年级选项。 */
+export const fetchYearGroupOptions = async () => {
+  const result = await request.get<string[], string[]>(`${MEMBERSHIP_PATH}/getYeargroupList`)
 
-/** 批量启用学生。 */
-export const enableStudents = async (ids: Array<string | number>) =>
-  request.post<void, void>('/member/student/enable', { ids })
+  return result
+}
 
-/** 批量禁用学生。 */
-export const disableStudents = async (ids: Array<string | number>) =>
-  request.post<void, void>('/member/student/disable', { ids })
+/** 查询班级选项。 */
+export const fetchFormOptions = async () => {
+  const result = await request.get<string[], string[]>(`${MEMBERSHIP_PATH}/getFormList`)
 
-/** 导入学生。 */
-export const importStudents = async (data: FormData) =>
-  request.post<void, void>('/member/student/import', data)
-
-/** 导出学生。 */
-export const exportStudents = async (params: StudentExportParams) =>
-  request.get<Blob, Blob>('/member/student/export', { params, responseType: 'blob' })
-
-/** 下载学生导入模板。 */
-export const downloadStudentTemplate = async () =>
-  request.get<Blob, Blob>('/member/student/template', { responseType: 'blob' })
+  return result
+}

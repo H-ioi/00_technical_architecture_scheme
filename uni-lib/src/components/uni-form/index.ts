@@ -1,6 +1,6 @@
 import type { App } from "vue";
 
-import UniForm from "./uni-form.vue";
+import UniForm from "./index.vue";
 
 export { UniForm };
 export * from "@/types/shared";

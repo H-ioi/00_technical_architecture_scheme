@@ -1,7 +1,10 @@
 import { createUniAuth } from 'uni-ui-lib'
+import CryptoJS from 'crypto-js'
 
-import type { LoginParams, LoginResult, UserPermissionResult, UserProfile } from '@/types/auth'
+import type { LoginParams, LoginResult, UserProfile } from '@/types/auth'
 import { request } from '@/utils/request'
+
+const LOGIN_PASSWORD_KEY = 'unixunixunixunix'
 
 interface OAuthTokenResult {
   access_token: string
@@ -16,34 +19,35 @@ interface OAuthTokenResult {
   }
 }
 
-interface UserInfoResult {
-  sysUser?: {
-    userId?: string | number
-    id?: string | number
-    username?: string
-    nickname?: string
-    avatar?: string
-  }
-  roles?: string[]
-  permissions?: string[]
-}
+const normalizeAuthorities = (authorities?: OAuthTokenResult['user_info']['authorities']) =>
+  (authorities ?? [])
+    .map((item) => (typeof item === 'string' ? item : item.authority))
+    .filter(Boolean) as string[]
 
-const normalizeProfile = (
-  user?: OAuthTokenResult['user_info'] | UserInfoResult['sysUser'],
-  roles: string[] = []
-): UserProfile => ({
+const normalizeProfile = (user?: OAuthTokenResult['user_info'], roles: string[] = []): UserProfile => ({
   id: String(user?.userId ?? user?.id ?? ''),
   name: user?.nickname || user?.username || '',
   avatar: user?.avatar,
   roles
 })
 
+/** 加密登录密码。 */
+const encryptLoginPassword = (password: string) => {
+  const key = CryptoJS.enc.Latin1.parse(LOGIN_PASSWORD_KEY)
+
+  return CryptoJS.AES.encrypt(password, key, {
+    iv: key,
+    mode: CryptoJS.mode.CFB,
+    padding: CryptoJS.pad.NoPadding
+  }).toString()
+}
+
 /** 请求登录接口。 */
 const requestLogin = async (params: LoginParams): Promise<LoginResult> => {
   const data = new URLSearchParams()
 
   data.append('username', params.username)
-  data.append('password', params.password)
+  data.append('password', encryptLoginPassword(params.password))
 
   const result = await request.post<OAuthTokenResult, OAuthTokenResult>('/auth/oauth/token', data, {
     headers: {
@@ -58,12 +62,14 @@ const requestLogin = async (params: LoginParams): Promise<LoginResult> => {
     }
   })
 
-  const roles: string[] = []
+  const permissions = normalizeAuthorities(result.user_info?.authorities)
+  const roles = permissions.filter((item) => item.startsWith('ROLE_'))
 
   return {
     accessToken: result.access_token,
     refreshToken: result.refresh_token,
-    user: normalizeProfile(result.user_info, roles)
+    user: normalizeProfile(result.user_info, roles),
+    permissions
   }
 }
 
@@ -73,7 +79,8 @@ export const authService = createUniAuth<LoginParams, LoginResult['user']>({
 
     return {
       tokens: {
-        accessToken: result.accessToken
+        accessToken: result.accessToken,
+        refreshToken: result.refreshToken
       },
       user: result.user
     }
@@ -82,24 +89,14 @@ export const authService = createUniAuth<LoginParams, LoginResult['user']>({
 
 /** 登录系统。 */
 export const loginApi = async (params: LoginParams): Promise<LoginResult> => {
-  const result = await authService.login(params)
+  const result = await requestLogin(params)
 
-  return {
-    accessToken: result.tokens.accessToken,
-    user: result.user
-  }
-}
+  authService.setTokens({
+    accessToken: result.accessToken,
+    refreshToken: result.refreshToken
+  })
 
-/** 查询当前用户和权限。 */
-export const fetchUserPermissions = async (): Promise<UserPermissionResult> => {
-  const result = await request.get<UserInfoResult, UserInfoResult>('/admin/user/info')
-  const roles = Array.isArray(result.roles) ? result.roles : []
-
-  return {
-    user: normalizeProfile(result.sysUser, roles),
-    roles,
-    permissions: Array.isArray(result.permissions) ? result.permissions : []
-  }
+  return result
 }
 
 /** 退出系统。 */

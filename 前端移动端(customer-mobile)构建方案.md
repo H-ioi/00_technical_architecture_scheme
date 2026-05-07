@@ -263,6 +263,8 @@ src/stores/
 - 目录和文件使用 `kebab-case`
 - 组合式函数使用 `use-xxx.ts`
 - 组件名语义清晰，避免 `data`、`temp`、`info` 等泛化命名
+- 目录已经表达页面或业务域时，文件名只表达职责，不重复目录语义
+- 页面入口优先使用 `pages/<route>/index.vue`；页面内组合逻辑和本地函数使用 `use-list.ts`、`use-detail.ts`、`loadData` 等短职责名
 
 代码分层约束：
 

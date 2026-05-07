@@ -54,9 +54,23 @@ uni-lib/
 ├── src/
 │   ├── components/
 │   │   ├── uni-data-table/
+│   │   │   ├── index.ts
+│   │   │   ├── index.vue
+│   │   │   ├── cell.vue
+│   │   │   ├── toolbar.vue
+│   │   │   ├── column-settings.vue
+│   │   │   ├── use-columns.ts
+│   │   │   ├── use-data.ts
+│   │   │   └── use-export.ts
 │   │   ├── uni-form/
+│   │   │   ├── index.ts
+│   │   │   └── index.vue
 │   │   ├── uni-search-form/
+│   │   │   ├── index.ts
+│   │   │   └── index.vue
 │   │   ├── uni-upload/
+│   │   │   ├── index.ts
+│   │   │   └── index.vue
 │   │   └── ...
 │   ├── directives/
 │   ├── composables/
@@ -71,6 +85,15 @@ uni-lib/
 ├── scripts/
 └── package.json
 ```
+
+组件目录命名规则：
+
+- 组件目录统一使用 `uni-xxx`，对外组件名统一使用 `UniXxx`。
+- 对外主组件使用 `index.vue`，对外入口使用 `index.ts`。
+- 组件目录已经表达组件语义时，内部文件不再重复 `uni-*` 前缀。
+- 内部子组件使用短功能名，如 `cell.vue`、`toolbar.vue`、`column-settings.vue`。
+- 组件目录内组合式逻辑使用短职责名，如 `use-columns.ts`、`use-data.ts`、`use-export.ts`。
+- 不使用 `uni-data-table.vue`、`uni-table-cell.vue`、`use-uni-table-columns.ts` 这类重复目录语义的命名。
 
 ### 2.2 包拆分建议
 
@@ -995,6 +1018,13 @@ const schema = [
 - 字典选项：支持静态 `options` 和异步 `loadOptions`。
 - 自定义字段：通过插槽覆盖单个字段。
 - 已选条件：可选展示已选标签，并支持单项清除。
+- 查询参数清理：`search` 和 `reset` 事件统一输出清理后的查询对象。
+
+查询参数清理规则：
+
+- 不输出 `''`、纯空格字符串、空数组、`null`、`undefined`。
+- 字符串输出前统一 `trim`。
+- 该规则由 `UniSearchForm` 统一控制，业务页面、API 层不重复实现空值过滤。
 
 建议核心 Props：
 
@@ -1010,8 +1040,8 @@ const schema = [
 建议事件：
 
 - `update:modelValue`
-- `search`
-- `reset`
+- `search`：返回清理后的查询对象
+- `reset`：返回清理后的查询对象
 - `field-change`
 - `clear-field`
 - `update:collapsed`
@@ -1246,7 +1276,7 @@ export const setupBusinessUi = (app: App) => {
 
 | 能力     | `admin-web` 模板                         | `uni-lib`                                                       |
 | -------- | ---------------------------------------- | --------------------------------------------------------------- |
-| 布局     | 保留默认 `AdminLayout`，允许产品线自定义 | 只提供无品牌容器/局部组件                                       |
+| 布局     | 保留 `layouts/index.vue`，允许产品线自定义 | 只提供无品牌容器/局部组件                                       |
 | 登录页   | 保留页面 UI 与品牌                       | 提供认证协议、token 管理、错误处理                              |
 | 路由菜单 | 宿主维护路由与菜单映射                   | 提供权限判断 helper/指令                                        |
 | 请求     | 宿主配置 baseURL、业务 API               | 提供请求实例工厂和拦截器能力                                    |

@@ -110,6 +110,8 @@ customer-web/
 - 禁止在 `pages/` 内长期堆积通用逻辑，需抽离到 `composables/`
 - 禁止在 `components/` 内放接口请求实现
 - 服务端逻辑优先收敛到 `server/`，避免前端页面散落数据拼接
+- 命名遵循“目录表达语义，文件表达职责”：目录已表达业务域时，文件名不重复目录名前缀
+- Nuxt 页面可使用 `pages/<route>/index.vue`；页面内组合逻辑和本地函数使用短职责名，如 `use-detail.ts`、`use-list.ts`、`loadData`
 
 ---
 

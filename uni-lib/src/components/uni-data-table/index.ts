@@ -1,6 +1,6 @@
 import type { App } from "vue";
 
-import UniDataTable from "./uni-data-table.vue";
+import UniDataTable from "./index.vue";
 
 export { UniDataTable };
 export * from "@/types/shared";

@@ -8,7 +8,7 @@ import type {
   UniTableRequestResult,
 } from "@/types/shared";
 
-interface UseUniTableDataOptions {
+interface UseDataOptions {
   getData: () => Recordable[];
   getLoading: () => boolean | undefined;
   getPagination: () => UniPaginationConfig | false | undefined;
@@ -20,7 +20,7 @@ interface UseUniTableDataOptions {
   emitUpdatePageSize: (value: number) => void;
 }
 
-export function useUniTableData(options: UseUniTableDataOptions) {
+export function useData(options: UseDataOptions) {
   const innerLoading = ref(false);
   const tableData = ref<Recordable[]>([]);
   const sortState = ref<Sort>();

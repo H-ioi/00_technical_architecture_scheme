@@ -1,47 +1,35 @@
 <script setup lang="ts">
-import { computed, onMounted, ref } from 'vue'
+import { computed } from 'vue'
 import { useRouter } from 'vue-router'
 
-import { fetchDashboardOverview, fetchDashboardShortcuts } from '@/api'
 import { useAppI18n } from '@/composables/use-app-i18n'
-import { usePermissionStore } from '@/stores'
-import type { DashboardOverview, DashboardShortcut } from '@/types/modules/dashboard'
+import type { DashboardShortcut } from '@/types/modules/dashboard'
 
 const { t } = useAppI18n()
 const router = useRouter()
-const permissionStore = usePermissionStore()
-const overview = ref<DashboardOverview>({
-  memberTotal: 0,
-  todayActivityTotal: 0,
-  pendingTaskTotal: 0,
-  alertTotal: 0
-})
-const shortcuts = ref<DashboardShortcut[]>([])
 
 const metrics = computed(() => [
-  { label: t('dashboard.memberTotal'), value: overview.value.memberTotal },
-  { label: t('dashboard.todayActivityTotal'), value: overview.value.todayActivityTotal },
-  { label: t('dashboard.pendingTaskTotal'), value: overview.value.pendingTaskTotal },
-  { label: t('dashboard.alertTotal'), value: overview.value.alertTotal }
+  { label: t('dashboard.memberTotal'), value: '-' },
+  { label: t('dashboard.todayActivityTotal'), value: '-' },
+  { label: t('dashboard.pendingTaskTotal'), value: '-' },
+  { label: t('dashboard.alertTotal'), value: '-' }
 ])
-
-const visibleShortcuts = computed(() =>
-  shortcuts.value.filter((item) => permissionStore.hasPermission(item.permission))
-)
+const shortcuts = computed<DashboardShortcut[]>(() => [
+  {
+    label: t('route.memberStudent'),
+    description: t('dashboard.studentShortcutDescription'),
+    path: '/member/student'
+  },
+  {
+    label: t('route.memberTeacher'),
+    description: t('dashboard.teacherShortcutDescription'),
+    path: '/member/teacher'
+  }
+])
 
 const goShortcut = (item: DashboardShortcut) => {
   router.push(item.path)
 }
-
-onMounted(async () => {
-  const [nextOverview, nextShortcuts] = await Promise.all([
-    fetchDashboardOverview(),
-    fetchDashboardShortcuts()
-  ])
-
-  overview.value = nextOverview
-  shortcuts.value = nextShortcuts
-})
 </script>
 
 <template>
@@ -70,7 +58,7 @@ onMounted(async () => {
 
       <div class="dashboard-page__shortcuts">
         <button
-          v-for="item in visibleShortcuts"
+          v-for="item in shortcuts"
           :key="item.path"
           class="dashboard-page__shortcut"
           type="button"

@@ -5,6 +5,8 @@ export default {
   pendingTaskTotal: 'Pending Tasks',
   alertTotal: 'Alerts',
   shortcuts: 'Shortcuts',
+  studentShortcutDescription: 'Open the student list and profiles.',
+  teacherShortcutDescription: 'Open the teacher list and account permissions.',
   firstPhase: 'First Phase',
   firstPhaseDescription:
     'Login, dashboard, and member management are rebuilt first. Other modules will migrate by plan.',

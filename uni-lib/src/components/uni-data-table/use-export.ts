@@ -11,7 +11,7 @@ const escapeHtml = (value: string) =>
     .replace(/>/g, "&gt;")
     .replace(/"/g, "&quot;");
 
-export function useUniTableExport(options: {
+export function useExport(options: {
   getRows: () => Recordable[];
   getColumns: () => UniTableColumn[];
   getFileName: () => string;

@@ -1,4 +1,4 @@
-import AdminLayout from '@/layouts/admin-layout.vue'
+import Layout from '@/layouts/index.vue'
 import type { AppRouteRecord } from '@/types/route'
 
 export const constantRoutes: AppRouteRecord[] = [
@@ -14,7 +14,7 @@ export const constantRoutes: AppRouteRecord[] = [
   },
   {
     path: '/',
-    component: AdminLayout,
+    component: Layout,
     redirect: '/dashboard',
     meta: {
       title: '首页',
@@ -30,8 +30,7 @@ export const constantRoutes: AppRouteRecord[] = [
           title: '工作台',
           titleKey: 'route.dashboard',
           icon: 'DataBoard',
-          affix: true,
-          permission: ['dashboard:view']
+          affix: true
         }
       },
       {
@@ -41,8 +40,7 @@ export const constantRoutes: AppRouteRecord[] = [
         meta: {
           title: '成员管理',
           titleKey: 'route.member',
-          icon: 'User',
-          permission: ['member:view']
+          icon: 'User'
         },
         children: [
           {
@@ -51,8 +49,7 @@ export const constantRoutes: AppRouteRecord[] = [
             component: () => import('@/views/member/student/list.vue'),
             meta: {
               title: '学生列表',
-              titleKey: 'route.memberStudent',
-              permission: ['member:student:view']
+              titleKey: 'route.memberStudent'
             }
           },
           {
@@ -61,8 +58,7 @@ export const constantRoutes: AppRouteRecord[] = [
             component: () => import('@/views/member/teacher/list.vue'),
             meta: {
               title: '教师列表',
-              titleKey: 'route.memberTeacher',
-              permission: ['member:teacher:view']
+              titleKey: 'route.memberTeacher'
             }
           }
         ]

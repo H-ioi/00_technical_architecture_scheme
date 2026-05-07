@@ -1,5 +1,4 @@
 import { computed, nextTick, onMounted, ref } from 'vue'
-import { ElMessage, ElMessageBox } from 'element-plus'
 import type {
   Recordable,
   UniOption,
@@ -9,99 +8,52 @@ import type {
 } from 'uni-ui-lib'
 
 import {
-  createTeacher,
-  deleteTeachers,
-  disableTeachers,
-  downloadTeacherTemplate,
-  enableTeachers,
-  exportTeachers,
-  fetchTeacherDetail,
-  fetchTeacherPage,
-  fetchTeacherSchoolOptions,
-  importTeachers,
-  updateTeacher
+  fetchTeacherDetail as fetchDetail,
+  fetchTeacherPage as fetchPage,
+  fetchTeacherRoleOptions as fetchRoles,
+  fetchTeacherSchoolOptions as fetchSchools
 } from '@/api'
 import { useAppI18n } from '@/composables/use-app-i18n'
-import { usePermissionStore } from '@/stores'
-import type { TeacherDetail, TeacherRecord } from '@/types/modules/member-teacher'
-import { downloadBlob } from '@/utils/download'
+import type { TeacherDetail as Detail, TeacherRecord as Row } from '@/types/modules/member-teacher'
 
 import {
-  createModuleOptions,
+  createColumns,
+  createDetailConfig,
   createRoleOptions,
-  createStatusOptions,
-  createTeacherColumns,
-  createTeacherDetailConfig,
-  createTeacherFormConfig,
-  createTeacherSearchConfig
+  createSearchConfig,
+  createStatusOptions
 } from './list.config'
 
 export const useList = () => {
   const { t } = useAppI18n()
-  const permissionStore = usePermissionStore()
   const initialFilters = {
-    nickname: '',
-    department: '',
-    phone: '',
-    email: '',
-    schoolIds: [],
-    modules: [],
-    roles: [],
-    status: undefined
+    keywordssearch: '',
+    schoolIds: undefined,
+    role: undefined,
+    archived: undefined
   }
   const queryModel = ref<Recordable>({ ...initialFilters })
-  const filters = ref<Recordable>({ ...queryModel.value })
+  const filters = ref<Recordable>({})
   const tableRef = ref<{ refresh: () => void } | null>(null)
-  const selectedRows = ref<TeacherRecord[]>([])
   const total = ref(0)
-  const formVisible = ref(false)
   const detailVisible = ref(false)
-  const importVisible = ref(false)
-  const formMode = ref<'add' | 'edit'>('add')
-  const currentMember = ref<TeacherDetail | null>(null)
+  const currentRecord = ref<Detail | null>(null)
   const schoolOptions = ref<UniOption[]>([])
+  const roleOptions = ref<UniOption[]>([])
 
-  const moduleOptions = computed(() => createModuleOptions(t))
-  const roleOptions = computed(() => createRoleOptions(t))
   const statusOptions = computed(() => createStatusOptions(t))
   const valueEnums = computed<Record<string, UniOption[]>>(() => ({
-    school: schoolOptions.value,
-    status: statusOptions.value
+    archived: statusOptions.value,
+    schoolName: schoolOptions.value
   }))
   const searchConfig = computed(() =>
-    createTeacherSearchConfig(
-      t,
-      schoolOptions.value,
-      moduleOptions.value,
-      roleOptions.value,
-      statusOptions.value
-    )
+    createSearchConfig(t, schoolOptions.value, roleOptions.value, statusOptions.value)
   )
-  const columns = computed(() =>
-    createTeacherColumns(t, schoolOptions.value, moduleOptions.value, roleOptions.value)
-  )
-  const formConfig = computed(() =>
-    createTeacherFormConfig(
-      t,
-      schoolOptions.value,
-      moduleOptions.value,
-      roleOptions.value,
-      statusOptions.value
-    )
-  )
-  const detailConfig = computed(() =>
-    createTeacherDetailConfig(
-      t,
-      schoolOptions.value,
-      moduleOptions.value,
-      roleOptions.value,
-      statusOptions.value
-    )
-  )
-  const selectedIds = computed(() => selectedRows.value.map((item) => item.id))
+  const columns = computed(() => createColumns(t))
+  const detailConfig = computed(() => createDetailConfig(t))
 
-  const loadMembers: UniTableRequest = ({ pageNo, pageSize, filters }) =>
-    fetchTeacherPage({ pageNo, pageSize, ...filters })
+  const loadData: UniTableRequest = ({ pageNo, pageSize, filters }) =>
+    fetchPage({ pageNo, pageSize, ...filters })
 
   const refreshTable = async () => {
     await nextTick()
@@ -113,8 +65,8 @@ export const useList = () => {
     await refreshTable()
   }
 
-  const reset = async () => {
-    filters.value = { ...initialFilters }
+  const reset = async (value: Recordable = {}) => {
+    filters.value = { ...value }
     await refreshTable()
   }
 
@@ -122,155 +74,39 @@ export const useList = () => {
     total.value = result.total
   }
 
-  const openCreate = () => {
-    formMode.value = 'add'
-    currentMember.value = null
-    formVisible.value = true
-  }
-
-  const openEdit = async (row: TeacherRecord) => {
-    currentMember.value = await fetchTeacherDetail(row.id)
-    formMode.value = 'edit'
-    formVisible.value = true
-  }
-
-  const openDetail = async (row: TeacherRecord) => {
-    currentMember.value = await fetchTeacherDetail(row.id)
+  const openDetail = async (row: Row) => {
+    currentRecord.value = row.teacherIdInt ? await fetchDetail(row.teacherIdInt) : row
     detailVisible.value = true
   }
 
-  const editCurrent = () => {
-    if (!currentMember.value) {
-      return
-    }
-
-    detailVisible.value = false
-    formMode.value = 'edit'
-    formVisible.value = true
-  }
-
-  const saveMember = async (value: Recordable) => {
-    if (formMode.value === 'add') {
-      await createTeacher(value as unknown as Parameters<typeof createTeacher>[0])
-    } else {
-      await updateTeacher({
-        ...(value as unknown as Parameters<typeof updateTeacher>[0]),
-        id: currentMember.value?.id ?? value.id
-      })
-    }
-
-    ElMessage.success(t('member.messages.saved'))
-    formVisible.value = false
-    await refreshTable()
-  }
-
-  const requireSelection = () => {
-    if (!selectedIds.value.length) {
-      ElMessage.warning(t('member.messages.selectRows'))
-      return false
-    }
-
-    return true
-  }
-
-  const confirmBatch = async (message: string, action: () => Promise<void>, successMessage: string) => {
-    if (!requireSelection()) {
-      return
-    }
-
-    await ElMessageBox.confirm(message)
-    await action()
-    ElMessage.success(successMessage)
-    selectedRows.value = []
-    await refreshTable()
-  }
-
-  const batchDelete = () =>
-    confirmBatch(
-      t('member.messages.deleteConfirm'),
-      () => deleteTeachers(selectedIds.value),
-      t('member.messages.deleted')
-    )
-
-  const batchEnable = () =>
-    confirmBatch(
-      t('member.messages.enableConfirm'),
-      () => enableTeachers(selectedIds.value),
-      t('member.messages.enabled')
-    )
-
-  const batchDisable = () =>
-    confirmBatch(
-      t('member.messages.disableConfirm'),
-      () => disableTeachers(selectedIds.value),
-      t('member.messages.disabled')
-    )
-
-  const exportData = async () => {
-    const blob = await exportTeachers(filters.value)
-
-    downloadBlob(blob, 'teachers.txt')
-    ElMessage.success(t('member.messages.exported'))
-  }
-
-  const submitImport = async (data: FormData) => {
-    await importTeachers(data)
-    ElMessage.success(t('member.messages.imported'))
-    importVisible.value = false
-    await refreshTable()
-  }
-
-  const downloadTemplate = async () => {
-    const blob = await downloadTeacherTemplate()
-
-    downloadBlob(blob, 'teacher-template.txt')
-    ElMessage.success(t('member.messages.templateDownloaded'))
-  }
-
   const actions = computed<UniTableAction[]>(() => [
-    { label: t('member.actions.detail'), onClick: (row) => openDetail(row as TeacherRecord) },
     {
-      label: t('member.actions.edit'),
-      type: 'success',
-      code: 'teacheruser_edit',
-      onClick: (row) => openEdit(row as TeacherRecord)
+      label: t('member.actions.detail'),
+      code: 'dataform_file_look',
+      onClick: (row) => openDetail(row as Row)
     }
   ])
 
   onMounted(async () => {
-    const schools = await fetchTeacherSchoolOptions()
+    const [schools, roles] = await Promise.all([fetchSchools(), fetchRoles()])
 
-    schoolOptions.value = schools.map((item) => ({ label: item.name, value: item.id, type: 'primary' }))
+    schoolOptions.value = schools.map((item) => ({ label: item.enName || item.name, value: item.id }))
+    roleOptions.value = createRoleOptions(roles)
   })
 
   return {
     actions,
-    batchDelete,
-    batchDisable,
-    batchEnable,
     columns,
-    currentMember,
+    currentRecord,
     detailConfig,
     detailVisible,
-    downloadTemplate,
-    editCurrent,
-    exportData,
     filters,
-    formConfig,
-    formMode,
-    formVisible,
     handleLoadSuccess,
-    importVisible,
-    loadMembers,
-    openCreate,
-    permissionStore,
+    loadData,
     queryModel,
     reset,
-    saveMember,
     search,
     searchConfig,
-    selectedRows,
-    submitImport,
     tableRef,
     total,
     valueEnums

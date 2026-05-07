@@ -6,7 +6,7 @@ import type { ApiResponse } from '@/types/api'
 
 export const request = axios.create({
   baseURL: import.meta.env.VITE_API_BASE_URL || '/api',
-  timeout: 15000
+  timeout: 60000
 })
 
 request.interceptors.request.use((config: InternalAxiosRequestConfig) => {
@@ -23,6 +23,30 @@ request.interceptors.request.use((config: InternalAxiosRequestConfig) => {
 
   config.headers['TENANT-ID'] = import.meta.env.VITE_TENANT_ID || '5'
   config.headers.version = 'B'
+
+  if (config.method?.toLowerCase() === 'get') {
+    // 兼容旧接口数组参数格式：a=1&a=2。
+    config.paramsSerializer = {
+      serialize: (params) => {
+        const searchParams = new URLSearchParams()
+
+        Object.entries(params || {}).forEach(([key, value]) => {
+          if (value === undefined || value === null || value === '') {
+            return
+          }
+
+          if (Array.isArray(value)) {
+            value.forEach((item) => searchParams.append(key, String(item)))
+            return
+          }
+
+          searchParams.append(key, String(value))
+        })
+
+        return searchParams.toString()
+      }
+    }
+  }
 
   return config
 })

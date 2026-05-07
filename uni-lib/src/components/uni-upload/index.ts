@@ -1,6 +1,6 @@
 import type { App } from "vue";
 
-import UniUpload from "./uni-upload.vue";
+import UniUpload from "./index.vue";
 
 export { UniUpload };
 

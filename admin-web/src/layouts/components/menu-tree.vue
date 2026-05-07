@@ -16,7 +16,7 @@ import { useAppI18n } from '@/composables/use-app-i18n'
 import type { AppMenuRecord } from '@/types/route'
 
 defineOptions({
-  name: 'LayoutMenuTree'
+  name: 'MenuTree'
 })
 
 defineProps<{
@@ -51,7 +51,7 @@ const resolveIcon = (icon?: string) => (icon ? iconMap[icon] : undefined)
         <span>{{ resolveTitle(menu) }}</span>
       </template>
 
-      <LayoutMenuTree :menus="menu.children" />
+      <MenuTree :menus="menu.children" />
     </el-sub-menu>
 
     <el-menu-item v-else :index="menu.path">

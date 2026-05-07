@@ -1,6 +1,5 @@
 import type { Router } from 'vue-router'
 
-import { fetchUserPermissions } from '@/api/modules/auth'
 import { fetchMenuPermissions } from '@/api/modules/menu'
 import { getLocalizedDocumentTitle } from '@/locales'
 import { usePermissionStore, useTagsViewStore, useUserStore } from '@/stores'
@@ -30,11 +29,8 @@ export const setupRouterGuards = (router: Router) => {
     }
 
     if (!permissionStore.dynamicRoutesLoaded) {
-      const userPermission = await fetchUserPermissions()
       const result = await fetchMenuPermissions()
 
-      userStore.setProfile(userPermission.user)
-      permissionStore.setPermissionCodes(userPermission.permissions)
       permissionStore.setMenus(result?.menus)
 
       if (Array.isArray(result?.permissions) && result.permissions.length) {

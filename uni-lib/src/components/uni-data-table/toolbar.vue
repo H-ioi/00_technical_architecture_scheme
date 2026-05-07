@@ -10,7 +10,7 @@ import {
 import { useUniI18n } from "@/services/i18n";
 import type { UniTableToolbarConfig } from "@/types/shared";
 import type { UniTableColumnState, UniTableSize } from "@/types/uni-data-table";
-import UniTableColumnSettings from "./uni-table-column-settings.vue";
+import UniTableColumnSettings from "./column-settings.vue";
 
 defineProps<{
   columnStates: UniTableColumnState[];
@@ -34,7 +34,12 @@ const i18n = useUniI18n();
 </script>
 
 <template>
-  <el-popover placement="bottom-end" trigger="click" width="320">
+  <el-popover
+    placement="bottom-end"
+    trigger="click"
+    width="280"
+    popper-class="uni-table-toolbar-popper"
+  >
     <template #reference>
       <el-button
         link
@@ -53,6 +58,7 @@ const i18n = useUniI18n();
       <div class="uni-table-toolbar__actions">
         <el-button
           v-if="config.refresh"
+          size="small"
           :icon="Refresh"
           :loading="loading"
           @click="emit('refresh')"
@@ -61,6 +67,7 @@ const i18n = useUniI18n();
         </el-button>
         <el-button
           v-if="config.fullscreen"
+          size="small"
           :icon="FullScreen"
           @click="emit('update:fullscreen', !fullscreen)"
         >
@@ -72,12 +79,18 @@ const i18n = useUniI18n();
         </el-button>
         <el-button
           v-if="config.export"
+          size="small"
           :icon="Download"
           @click="emit('export')"
         >
           {{ i18n.t("dataTable.export") }}
         </el-button>
-        <el-button v-if="config.print" :icon="Printer" @click="emit('print')">
+        <el-button
+          v-if="config.print"
+          size="small"
+          :icon="Printer"
+          @click="emit('print')"
+        >
           {{ i18n.t("dataTable.print") }}
         </el-button>
       </div>
@@ -130,10 +143,11 @@ const i18n = useUniI18n();
   &__panel {
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: 8px;
   }
 
   &__header {
+    font-size: 13px;
     font-weight: 600;
     color: var(--el-text-color-primary);
   }
@@ -141,7 +155,7 @@ const i18n = useUniI18n();
   &__actions {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 8px;
+    gap: 6px;
   }
 
   &__actions :deep(.el-button) {
@@ -151,15 +165,19 @@ const i18n = useUniI18n();
   }
 
   &__section {
-    padding-top: 12px;
+    padding-top: 8px;
     border-top: 1px solid var(--el-border-color-lighter);
   }
 
   &__title {
-    margin-bottom: 8px;
-    font-size: 13px;
+    margin-bottom: 6px;
+    font-size: 12px;
     font-weight: 600;
     color: var(--el-text-color-regular);
   }
+}
+
+:global(.uni-table-toolbar-popper.el-popover) {
+  padding: 10px;
 }
 </style>

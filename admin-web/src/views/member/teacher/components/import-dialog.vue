@@ -4,6 +4,7 @@ import { ElMessage } from 'element-plus'
 import type { UploadFile, UploadUserFile } from 'element-plus'
 
 import { useAppI18n } from '@/composables/use-app-i18n'
+import { usePermissionStore } from '@/stores'
 
 const props = defineProps<{
   visible: boolean
@@ -16,6 +17,7 @@ const emit = defineEmits<{
 }>()
 
 const { t } = useAppI18n()
+const permissionStore = usePermissionStore()
 const fileList = ref<UploadUserFile[]>([])
 const selectedFile = ref<File | null>(null)
 
@@ -78,7 +80,12 @@ const submit = () => {
         </template>
       </UniUpload>
 
-      <el-button text type="primary" @click="emit('downloadTemplate')">
+      <el-button
+        v-if="permissionStore.hasPermission('teacheruser_download')"
+        text
+        type="primary"
+        @click="emit('downloadTemplate')"
+      >
         {{ t('member.actions.downloadTemplate') }}
       </el-button>
     </div>

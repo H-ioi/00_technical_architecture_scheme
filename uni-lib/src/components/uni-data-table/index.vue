@@ -19,11 +19,11 @@ import type {
   UniTableToolbarConfig,
 } from "@/types/shared";
 import type { UniTableSize } from "@/types/uni-data-table";
-import UniTableCell from "./uni-table-cell.vue";
-import UniTableToolbar from "./uni-table-toolbar.vue";
-import { useUniTableColumns } from "./use-uni-table-columns";
-import { useUniTableData } from "./use-uni-table-data";
-import { useUniTableExport } from "./use-uni-table-export";
+import UniTableCell from "./cell.vue";
+import UniTableToolbar from "./toolbar.vue";
+import { useColumns } from "./use-columns";
+import { useData } from "./use-data";
+import { useExport } from "./use-export";
 
 const props = withDefaults(
   defineProps<{
@@ -110,7 +110,7 @@ const {
   visibleColumns,
   handleColumnDragStart,
   handleColumnDrop,
-} = useUniTableColumns(() => props.columns);
+} = useColumns(() => props.columns);
 
 const {
   actualData,
@@ -122,7 +122,7 @@ const {
   setSort,
   handleCurrentChange,
   handleSizeChange,
-} = useUniTableData({
+} = useData({
   getData: () => props.data,
   getLoading: () => props.loading,
   getPagination: () => props.pagination,
@@ -134,7 +134,7 @@ const {
   emitUpdatePageSize: (value) => emit("update:pageSize", value),
 });
 
-const { exportCurrentData, printCurrentData } = useUniTableExport({
+const { exportCurrentData, printCurrentData } = useExport({
   getRows: () => actualData.value,
   getColumns: () => visibleColumns.value,
   getFileName: () => toolbarConfig.value.exportFileName,
@@ -414,10 +414,10 @@ defineExpose({
 
   &__toolbar {
     display: flex;
-    gap: 12px;
+    gap: 8px;
     align-items: center;
     justify-content: space-between;
-    margin-bottom: 12px;
+    margin-bottom: 8px;
   }
 
   &__toolbar-left {
@@ -433,7 +433,7 @@ defineExpose({
 
   &__pagination {
     display: flex;
-    margin-top: 16px;
+    margin-top: 10px;
 
     &.is-left {
       justify-content: flex-start;

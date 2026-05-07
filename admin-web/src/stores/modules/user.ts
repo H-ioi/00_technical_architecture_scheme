@@ -2,6 +2,7 @@ import { defineStore } from 'pinia'
 import { computed, ref } from 'vue'
 
 import { loginApi, logoutApi } from '@/api/modules/auth'
+import { usePermissionStore } from '@/stores/modules/permission'
 import type { LoginParams, UserProfile } from '@/types/auth'
 import { storage } from '@/utils/storage'
 
@@ -31,9 +32,11 @@ export const useUserStore = defineStore('user', () => {
 
   const login = async (params: LoginParams) => {
     const result = await loginApi(params)
+    const permissionStore = usePermissionStore()
 
     setToken(result.accessToken)
     setProfile(result.user)
+    permissionStore.setPermissionCodes(result.permissions)
 
     return result
   }
@@ -47,8 +50,11 @@ export const useUserStore = defineStore('user', () => {
   }
 
   const resetAuth = () => {
+    const permissionStore = usePermissionStore()
+
     accessToken.value = ''
     profile.value = null
+    permissionStore.resetPermission()
     storage.remove(ACCESS_TOKEN_KEY)
     storage.remove(USER_PROFILE_KEY)
   }

@@ -6,7 +6,7 @@
 import type { FormInstance, RowProps } from "element-plus";
 import { computed, reactive, ref, watch } from "vue";
 
-import UniUpload from "@/components/uni-upload/uni-upload.vue";
+import UniUpload from "@/components/uni-upload/index.vue";
 import type {
   Recordable,
   UniFormActions,

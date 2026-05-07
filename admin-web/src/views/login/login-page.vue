@@ -6,12 +6,15 @@ import type { FormInstance, FormRules } from 'element-plus'
 import { useAppI18n } from '@/composables/use-app-i18n'
 import { useUserStore } from '@/stores'
 
+import SecurityVerifyDialog from './components/security-verify-dialog.vue'
+
 const router = useRouter()
 const route = useRoute()
 const userStore = useUserStore()
 const { t } = useAppI18n()
 const formRef = ref<FormInstance>()
 const loading = ref(false)
+const verifyVisible = ref(false)
 
 const formModel = reactive({
   username: 'admin',
@@ -25,10 +28,18 @@ const formRules = computed<FormRules<typeof formModel>>(() => ({
 
 const submitLogin = async () => {
   await formRef.value?.validate()
+  verifyVisible.value = true
+}
+
+const loginWithCaptcha = async (captchaVerification: string) => {
   loading.value = true
 
   try {
-    await userStore.login(formModel)
+    await userStore.login({
+      ...formModel,
+      code: captchaVerification,
+      randomStr: 'blockPuzzle'
+    })
     router.replace((route.query.redirect as string) || '/')
   } finally {
     loading.value = false
@@ -80,6 +91,8 @@ const submitLogin = async () => {
         </el-form>
       </el-card>
     </section>
+
+    <SecurityVerifyDialog v-model:visible="verifyVisible" @success="loginWithCaptcha" />
   </main>
 </template>
 

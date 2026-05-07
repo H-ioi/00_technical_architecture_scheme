@@ -18,6 +18,7 @@ export const setupBusinessUi = (app: App) => {
       setLocale: appStore.setLocale
     },
     permission: {
+      defaultMode: 'remove',
       hasPermission: (code) => {
         const permissionStore = usePermissionStore()
 
