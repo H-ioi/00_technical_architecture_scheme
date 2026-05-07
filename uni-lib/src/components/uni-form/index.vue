@@ -322,7 +322,12 @@ defineExpose({
               :disabled="isFieldDisabled(field)" v-bind="field.componentProps" @update:model-value="
                 (value: unknown) => handleFieldChange(field, value)
               ">
-              <el-option v-for="option in getFieldOptions(field)" :key="String(option.value)" v-bind="option" />
+              <el-option
+                v-for="option in getFieldOptions(field)"
+                :key="String(option.value)"
+                v-bind="option"
+                :title="option.label"
+              />
             </el-select>
 
             <el-radio-group v-else-if="field.component === 'ElRadioGroup'" :model-value="formModel[field.field]"

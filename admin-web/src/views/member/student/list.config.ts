@@ -2,19 +2,33 @@ import type { UniFormConfig, UniOption, UniTableColumn } from 'uni-ui-lib'
 
 type Translate = (key: string) => string
 
-export const createDormitoryOptions = (): UniOption[] => [
-  { label: 'Yes', value: '1', type: 'success' },
-  { label: 'No', value: '0', type: 'info' }
+export const createDormitoryOptions = (t: Translate): UniOption[] => [
+  { label: t('member.student.options.yes'), value: '1', type: 'success' },
+  { label: t('member.student.options.no'), value: '0', type: 'info' }
 ]
 
-export const createBusOptions = (): UniOption[] => [
-  { label: 'Yes', value: '1', type: 'success' },
-  { label: 'No', value: '0', type: 'info' }
+export const createBusOptions = (t: Translate): UniOption[] => [
+  { label: t('member.student.options.yes'), value: '1', type: 'success' },
+  { label: t('member.student.options.no'), value: '0', type: 'info' }
+]
+
+export const createYesNoDisplayOptions = (t: Translate): UniOption[] => [
+  { label: t('member.student.options.yes'), value: '1', type: 'success' },
+  { label: t('member.student.options.yes'), value: 'Yes', type: 'success' },
+  { label: t('member.student.options.no'), value: '0', type: 'info' },
+  { label: t('member.student.options.no'), value: 'No', type: 'info' }
 ]
 
 export const createStatusOptions = (t: Translate): UniOption[] => [
   { label: t('member.student.options.enrolled'), value: '1', type: 'success' },
   { label: t('member.student.options.leaving'), value: '2', type: 'warning' }
+]
+
+export const createStatusDisplayOptions = (t: Translate): UniOption[] => [
+  { label: t('member.student.options.enrolled'), value: '1', type: 'success' },
+  { label: t('member.student.options.enrolled'), value: 'Enrolled', type: 'success' },
+  { label: t('member.student.options.leaving'), value: '2', type: 'warning' },
+  { label: t('member.student.options.leaving'), value: 'Leaving', type: 'warning' }
 ]
 
 export const createSearchConfig = (
@@ -152,13 +166,26 @@ export const createDetailConfig = (t: Translate): UniFormConfig => ({
     { field: 'fullName', label: t('member.student.fields.fullName'), component: 'ElInput' },
     { field: 'grade', label: t('member.student.fields.grade'), component: 'ElInput' },
     { field: 'formCode', label: t('member.student.fields.form'), component: 'ElInput' },
-    { field: 'busStatus', label: t('member.student.fields.bus'), component: 'ElInput', viewType: 'tag' },
+    {
+      field: 'busStatus',
+      label: t('member.student.fields.bus'),
+      component: 'ElInput',
+      options: createYesNoDisplayOptions(t),
+      viewType: 'enum'
+    },
     {
       field: 'dormitoryStatus',
       label: t('member.student.fields.dormitory'),
       component: 'ElInput',
-      viewType: 'tag'
+      options: createYesNoDisplayOptions(t),
+      viewType: 'enum'
     },
-    { field: 'studentStatus', label: t('member.fields.status'), component: 'ElInput', viewType: 'tag' }
+    {
+      field: 'studentStatus',
+      label: t('member.fields.status'),
+      component: 'ElInput',
+      options: createStatusDisplayOptions(t),
+      viewType: 'enum'
+    }
   ]
 })

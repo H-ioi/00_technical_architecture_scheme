@@ -177,7 +177,4 @@ const i18n = useUniI18n();
   }
 }
 
-:global(.uni-table-toolbar-popper.el-popover) {
-  padding: 10px;
-}
 </style>

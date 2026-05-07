@@ -23,6 +23,9 @@ const passwordFormRef = ref<FormInstance>()
 const passwordVisible = ref(false)
 const themeVisible = ref(false)
 const passwordSubmitting = ref(false)
+const defaultTheme = {
+  primaryColor: '#BA8E62'
+}
 const passwordForm = reactive({
   password: '',
   newpassword1: '',
@@ -187,17 +190,12 @@ watchEffect(() => {
       </template>
     </el-dialog>
 
-    <el-drawer v-model="themeVisible" :title="t('common.themeSettings')" size="320px">
-      <div class="header__theme-row">
-        <span>{{ t('common.primaryColor') }}</span>
-        <el-color-picker
-          :model-value="appStore.themeColor"
-          show-alpha
-          @update:model-value="(value) => appStore.setThemeColor(value || '#1677ff')"
-        />
-      </div>
-      <el-button @click="appStore.resetThemeColor">{{ t('common.reset') }}</el-button>
-    </el-drawer>
+    <UniThemeSettings
+      v-model="themeVisible"
+      :default-theme="defaultTheme"
+      storage-key="admin-web:theme"
+      :title="t('common.themeSettings')"
+    />
   </el-header>
 </template>
 
@@ -238,11 +236,5 @@ watchEffect(() => {
     padding: 0;
   }
 
-  &__theme-row {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 16px;
-  }
 }
 </style>

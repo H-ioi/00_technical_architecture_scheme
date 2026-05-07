@@ -24,6 +24,12 @@ export const setupBusinessUi = (app: App) => {
 
         return permissionStore.hasPermission(code)
       }
+    },
+    theme: {
+      storageKey: 'admin-web:theme',
+      defaultTheme: {
+        primaryColor: '#BA8E62'
+      }
     }
   })
 }

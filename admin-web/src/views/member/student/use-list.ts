@@ -16,7 +16,9 @@ import {
   createDetailConfig,
   createDormitoryOptions,
   createSearchConfig,
-  createStatusOptions
+  createStatusDisplayOptions,
+  createStatusOptions,
+  createYesNoDisplayOptions
 } from './list.config'
 
 export const useList = () => {
@@ -41,13 +43,15 @@ export const useList = () => {
   const currentRecord = ref<Row | null>(null)
 
   const statusOptions = computed(() => createStatusOptions(t))
-  const busOptions = computed(() => createBusOptions())
-  const dormitoryOptions = computed(() => createDormitoryOptions())
+  const statusDisplayOptions = computed(() => createStatusDisplayOptions(t))
+  const busOptions = computed(() => createBusOptions(t))
+  const dormitoryOptions = computed(() => createDormitoryOptions(t))
+  const yesNoDisplayOptions = computed(() => createYesNoDisplayOptions(t))
   const valueEnums = computed<Record<string, UniOption[]>>(() => ({
-    busStatus: busOptions.value,
-    dormitoryStatus: dormitoryOptions.value,
+    busStatus: yesNoDisplayOptions.value,
+    dormitoryStatus: yesNoDisplayOptions.value,
     schoolName: schoolOptions.value,
-    studentStatus: statusOptions.value
+    studentStatus: statusDisplayOptions.value
   }))
   const searchConfig = computed(() =>
     createSearchConfig(

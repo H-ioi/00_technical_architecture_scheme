@@ -3,11 +3,12 @@ import { UniConfigProvider } from "./components/uni-config-provider";
 import { UniDataTable } from "./components/uni-data-table";
 import { UniForm } from "./components/uni-form";
 import { UniSearchForm } from "./components/uni-search-form";
+import { UniThemeSettings } from "./components/uni-theme-settings";
 import { UniUpload } from "./components/uni-upload";
 import { install } from "./plugins/install";
 import "./style.scss";
 
-export { UniConfigProvider, UniDataTable, UniForm, UniSearchForm, UniUpload };
+export { UniConfigProvider, UniDataTable, UniForm, UniSearchForm, UniThemeSettings, UniUpload };
 export * from "./plugins/install";
 export * from "./types/shared";
 export * from "./types/uni-data-table";

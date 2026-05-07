@@ -419,7 +419,7 @@ assets/styles/
 └── index.scss
 ```
 
-支持品牌主色、明暗扩展、侧栏配色、覆盖 Element Plus 变量；优先设计变量，避免深层嵌套与大段复制样式。主题变量优先与 **`uni-lib` 主题出口**对齐。
+支持品牌主色、明暗扩展、侧栏配色、覆盖 Element Plus 变量；优先设计变量，避免深层嵌套与大段复制样式。主题初始化、持久化和 `--el-*` 变量覆盖优先通过 **`uni-lib` 的 `setupUniTheme`、`applyUniTheme`、`UniThemeSettings`** 完成，业务项目只传默认主题和品牌变量。
 
 ---
 

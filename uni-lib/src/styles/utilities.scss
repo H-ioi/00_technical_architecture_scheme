@@ -1,0 +1,16 @@
+.uni-text-ellipsis {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.uni-flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.uni-scroll-y {
+  overflow-x: hidden;
+  overflow-y: auto;
+}

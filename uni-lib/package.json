@@ -41,6 +41,11 @@
       "import": "./dist/index.mjs",
       "require": "./dist/index.cjs"
     },
+    "./components/uni-theme-settings": {
+      "types": "./dist/src/components/uni-theme-settings/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.cjs"
+    },
     "./components/uni-upload": {
       "types": "./dist/src/components/uni-upload/index.d.ts",
       "import": "./dist/index.mjs",

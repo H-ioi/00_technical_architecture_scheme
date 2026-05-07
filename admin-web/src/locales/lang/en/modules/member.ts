@@ -28,6 +28,8 @@ export default {
       parentName: 'Parent name'
     },
     options: {
+      yes: 'Yes',
+      no: 'No',
       enrolled: 'Enrolled',
       leaving: 'Leaving'
     }

@@ -1,0 +1,48 @@
+:root {
+  --el-color-primary: var(--uni-color-primary);
+  --el-bg-color-page: var(--uni-bg-page);
+  --el-bg-color-overlay: var(--uni-bg-card);
+  --el-border-radius-base: var(--uni-radius-base);
+}
+
+.el-card {
+  --el-card-border-radius: var(--uni-radius-base);
+}
+
+.el-dialog {
+  border-radius: var(--uni-radius-base);
+}
+
+.el-drawer {
+  --el-drawer-padding-primary: 16px;
+}
+
+.el-table {
+  --el-table-header-bg-color: var(--uni-bg-page);
+}
+
+.uni-table-toolbar-popper.el-popover {
+  padding: 10px;
+}
+
+.el-select__popper {
+  max-width: min(520px, calc(100vw - 32px));
+}
+
+.el-select-dropdown__item {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.el-select-dropdown__item span {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.el-button {
+  line-height: 0.8;
+}

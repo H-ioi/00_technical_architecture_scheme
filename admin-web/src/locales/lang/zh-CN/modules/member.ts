@@ -28,8 +28,10 @@ export default {
       parentName: '请输入家长姓名'
     },
     options: {
-      enrolled: 'Enrolled',
-      leaving: 'Leaving'
+      yes: '是',
+      no: '否',
+      enrolled: '已入读',
+      leaving: '离校'
     }
   },
   teacher: {

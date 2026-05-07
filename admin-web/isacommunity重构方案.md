@@ -542,7 +542,7 @@ export interface TeacherRecord {
 - 保留旧系统主导航结构和用户操作路径。
 - 保留旧系统菜单分组、主要入口、按钮操作顺序和弹窗操作方式。
 - 保留旧系统主要配色和菜单选中态。
-- 顶部用户下拉保留旧系统“修改密码、退出系统”入口，新增“主题设置”入口并通过抽屉调整主色。
+- 顶部用户下拉保留旧系统“修改密码、退出系统”入口，新增“主题设置”入口并通过 `uni-lib` 的 `UniThemeSettings` 抽屉调整主题。
 - 内容区域不强制照搬旧 UI，可按用户习惯优化查询区、表格区、表单区和详情区。
 - 允许做间距、对齐、响应式、空态、加载态、按钮层级等 UX 微调。
 - 不为追求模板统一而改变用户熟悉的模块入口和操作顺序。
@@ -844,6 +844,8 @@ sidebar.vue
 - `v-uni-permission`。
 - `useUniPermission`。
 - 权限配置注入协议。
+- `UniThemeSettings`。
+- `setupUniTheme` / `applyUniTheme`，统一覆盖 Element Plus 和项目级 CSS 变量。
 
 保留在 `admin-web` 的是：
 
@@ -1008,6 +1010,7 @@ sidebar.vue
 | 权限 | `v-uni-permission`、`useUniPermission` | UI 和 JS 权限统一 |
 | 请求 | `createUniRequest` | token、错误码、401、403、重复请求 |
 | 认证 | `createUniAuth` | 登录、退出、刷新、清理 token |
+| 主题 | `UniThemeSettings`、`setupUniTheme`、`applyUniTheme` | 主题抽屉、持久化、Element Plus 变量覆盖 |
 | 下载 | `downloadBlob` / `useUniDownload` | 导出、模板下载 |
 | 格式化 | `formatEmpty`、`formatDate`、`formatOptionLabel` | 空值、日期、枚举回显 |
 

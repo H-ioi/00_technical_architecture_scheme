@@ -76,9 +76,16 @@ uni-lib/
 │   ├── composables/
 │   ├── plugins/
 │   ├── services/
+│   ├── styles/
+│   │   ├── index.scss
+│   │   ├── base.scss
+│   │   ├── element-plus.scss
+│   │   ├── utilities.scss
+│   │   └── variables.scss
 │   ├── theme/
 │   ├── types/
 │   ├── utils/
+│   ├── style.scss
 │   └── index.ts
 ├── docs/
 ├── playground/
@@ -105,6 +112,7 @@ uni-lib
 ├── directives      # v-uni-* 指令
 ├── composables     # useUni* 组合式函数
 ├── services        # createUniRequest / createUniAuth 等协议层
+├── styles          # 全局样式、Element Plus 覆盖、工具类
 ├── theme           # 设计令牌与主题工具
 └── utils           # 纯函数工具
 ```
@@ -500,16 +508,17 @@ const request = createUniRequest({
 建议提供：
 
 - CSS 变量 token：颜色、间距、圆角、阴影、字号、表格密度。
-- `createUniTheme()`：主题注册、切换、持久化。
+- `createUniTheme()` / `setupUniTheme()`：主题注册、切换、持久化。
 - `useUniTheme()`：读取当前主题和切换主题。
 - `applyUniTheme()`：运行时写入 CSS 变量。
-- Element Plus 变量覆盖出口。
+- `UniThemeSettings`：通用主题设置抽屉，宿主只负责传入默认主题和存储 key。
+- Element Plus 变量覆盖出口，必须覆盖主色、主色浅色/深色、状态色、背景、文字、边框、填充、阴影、遮罩、组件尺寸、圆角和 transition 变量。
 
 示例 token：
 
 ```scss
 :root {
-  --uni-color-primary: #1677ff;
+  --uni-color-primary: #BA8E62;
   --uni-bg-page: #f5f7fb;
   --uni-bg-card: #fff;
   --uni-border-color: #e5e7eb;
@@ -517,7 +526,28 @@ const request = createUniRequest({
 }
 ```
 
+业务项目不应在自身 store 或页面中直接维护 `--el-*` 覆盖逻辑，应通过 `app.use(UniLib, { theme })` 初始化，并通过 `UniThemeSettings` 完成运行时设置。
+
 宿主项目保留品牌 Logo、登录页背景、菜单图标等视觉资产。
+
+### 7.4.1 全局样式入口
+
+组件库必须提供唯一全局样式入口 `src/style.scss`，业务工程通过 `import 'uni-ui-lib/style.css'` 一次性引入。`style.scss` 只负责聚合，不直接写业务样式：
+
+```scss
+@use "./theme/index.scss" as theme;
+@use "./styles/index.scss" as styles;
+```
+
+`src/styles` 分层约定：
+
+- `variables.scss`：字体、滚动条、间距等静态全局变量。
+- `base.scss`：盒模型、基础字体、滚动条等全局基础样式。
+- `element-plus.scss`：集中覆盖 Element Plus 全局变量和结构性样式，例如 popover、dialog、drawer、table。
+- `utilities.scss`：少量跨项目通用工具类，例如省略号、居中、滚动容器。
+- `index.scss`：只聚合以上文件。
+
+禁止在业务项目页面或 store 中散落 `--el-*` 覆盖；禁止在组件 scoped 样式里写 `:global(.el-xxx)` 作为长期方案。确需覆盖 Element Plus 弹层、popper、全局类时，统一放入 `styles/element-plus.scss`。
 
 ### 7.5 字典与枚举
 
