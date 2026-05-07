@@ -89,32 +89,32 @@ watchEffect(() => {
   height: 56px;
   background: var(--app-card-bg-color);
   border-bottom: 1px solid var(--app-border-color);
-}
 
-.header__left {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
+  &__left {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
 
-.header__right {
-  display: flex;
-  gap: 16px;
-  align-items: center;
-}
+  &__right {
+    display: flex;
+    gap: 16px;
+    align-items: center;
+  }
 
-.header__locale,
-.header__user {
-  display: inline-flex;
-  gap: 8px;
-  align-items: center;
-  color: var(--app-text-color);
-  cursor: pointer;
-  background: transparent;
-  border: 0;
-}
+  &__locale,
+  &__user {
+    display: inline-flex;
+    gap: 8px;
+    align-items: center;
+    color: var(--app-text-color);
+    cursor: pointer;
+    background: transparent;
+    border: 0;
+  }
 
-.header__locale {
-  padding: 0;
+  &__locale {
+    padding: 0;
+  }
 }
 </style>

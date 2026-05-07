@@ -5,7 +5,6 @@ import dashboard from './dashboard'
 import login from './login'
 import member from './modules/member'
 import route from './route'
-import uniLibDemo from './modules/uni-lib-demo'
 
 const en: typeof zhCN = {
   app: {
@@ -15,8 +14,7 @@ const en: typeof zhCN = {
   route,
   login,
   dashboard,
-  member,
-  uniLibDemo
+  member
 }
 
 export default en

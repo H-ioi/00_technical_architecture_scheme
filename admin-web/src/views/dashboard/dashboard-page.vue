@@ -82,84 +82,84 @@ const goShortcut = (item: DashboardShortcut) => {
 .dashboard-page {
   display: grid;
   gap: 16px;
-}
 
-.dashboard-page__welcome {
-  h1 {
-    margin: 0 0 8px;
-    font-size: 24px;
+  &__welcome {
+    h1 {
+      margin: 0 0 8px;
+      font-size: 24px;
+    }
+
+    p {
+      margin: 0;
+      color: var(--app-text-color-secondary);
+    }
   }
 
-  p {
-    margin: 0;
-    color: var(--app-text-color-secondary);
-  }
-}
-
-.dashboard-page__metrics {
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 16px;
-}
-
-.dashboard-page__metric {
-  border-radius: 14px;
-
-  span {
-    color: var(--app-text-color-secondary);
+  &__metrics {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 16px;
   }
 
-  strong {
-    display: block;
-    margin-top: 12px;
-    color: var(--app-text-color);
-    font-size: 28px;
-  }
-}
+  &__metric {
+    border-radius: 14px;
 
-.dashboard-page__card-title {
-  font-weight: 700;
-}
+    span {
+      color: var(--app-text-color-secondary);
+    }
 
-.dashboard-page__shortcuts {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 14px;
-}
-
-.dashboard-page__shortcut {
-  display: grid;
-  gap: 8px;
-  padding: 16px;
-  color: var(--app-text-color);
-  text-align: left;
-  cursor: pointer;
-  background: #f8fafc;
-  border: 1px solid var(--app-border-color);
-  border-radius: 12px;
-
-  span {
-    color: var(--app-text-color-secondary);
-    line-height: 1.6;
+    strong {
+      display: block;
+      margin-top: 12px;
+      color: var(--app-text-color);
+      font-size: 28px;
+    }
   }
 
-  em {
-    color: var(--app-primary-color);
-    font-style: normal;
+  &__card-title {
     font-weight: 700;
   }
-}
 
-.dashboard-page__phase {
-  :deep(.el-card__body) {
-    display: flex;
-    gap: 12px;
-    align-items: center;
-    color: var(--app-text-color-secondary);
+  &__shortcuts {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 14px;
   }
 
-  strong {
+  &__shortcut {
+    display: grid;
+    gap: 8px;
+    padding: 16px;
     color: var(--app-text-color);
+    text-align: left;
+    cursor: pointer;
+    background: #f8fafc;
+    border: 1px solid var(--app-border-color);
+    border-radius: 12px;
+
+    span {
+      color: var(--app-text-color-secondary);
+      line-height: 1.6;
+    }
+
+    em {
+      color: var(--app-primary-color);
+      font-style: normal;
+      font-weight: 700;
+    }
+  }
+
+  &__phase {
+    :deep(.el-card__body) {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      color: var(--app-text-color-secondary);
+    }
+
+    strong {
+      color: var(--app-text-color);
+    }
   }
 }
 

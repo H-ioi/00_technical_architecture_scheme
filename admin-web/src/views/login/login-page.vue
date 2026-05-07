@@ -1,7 +1,7 @@
 <script setup lang="ts">
+import type { FormInstance, FormRules } from 'element-plus'
 import { computed, reactive, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import type { FormInstance, FormRules } from 'element-plus'
 
 import { useAppI18n } from '@/composables/use-app-i18n'
 import { useUserStore } from '@/stores'
@@ -17,8 +17,8 @@ const loading = ref(false)
 const verifyVisible = ref(false)
 
 const formModel = reactive({
-  username: 'admin',
-  password: 'admin123'
+  username: '',
+  password: ''
 })
 
 const formRules = computed<FormRules<typeof formModel>>(() => ({
@@ -105,87 +105,87 @@ const loginWithCaptcha = async (captchaVerification: string) => {
   overflow: hidden;
   background: linear-gradient(135deg, #f4f8fb 0%, #eef5f8 48%, #e8f8fb 100%);
   place-items: center;
-}
 
-.login-page__decor {
-  position: absolute;
-  border-radius: 999px;
-  filter: blur(2px);
-}
+  &__decor {
+    position: absolute;
+    border-radius: 999px;
+    filter: blur(2px);
 
-.login-page__decor--left {
-  bottom: -120px;
-  left: -80px;
-  width: 320px;
-  height: 320px;
-  background: rgb(42 63 84 / 12%);
-}
+    &--left {
+      bottom: -120px;
+      left: -80px;
+      width: 320px;
+      height: 320px;
+      background: rgb(42 63 84 / 12%);
+    }
 
-.login-page__decor--right {
-  top: -160px;
-  right: -80px;
-  width: 380px;
-  height: 380px;
-  background: rgb(27 188 199 / 18%);
-}
+    &--right {
+      top: -160px;
+      right: -80px;
+      width: 380px;
+      height: 380px;
+      background: rgb(27 188 199 / 18%);
+    }
+  }
 
-.login-page__panel {
-  position: relative;
-  z-index: 1;
-  display: grid;
-  grid-template-columns: minmax(280px, 1fr) 420px;
-  gap: 48px;
-  align-items: center;
-  width: min(100%, 1040px);
-}
+  &__panel {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    grid-template-columns: minmax(280px, 1fr) 420px;
+    gap: 48px;
+    align-items: center;
+    width: min(100%, 1040px);
+  }
 
-.login-page__intro {
-  padding: 32px;
-  color: #1f2937;
-
-  h1 {
-    margin: 12px 0 16px;
+  &__intro {
+    padding: 32px;
     color: #1f2937;
-    font-size: 46px;
-    line-height: 1.15;
+
+    h1 {
+      margin: 12px 0 16px;
+      color: #1f2937;
+      font-size: 46px;
+      line-height: 1.15;
+    }
+
+    p {
+      max-width: 520px;
+      color: #4b5563;
+      line-height: 1.8;
+    }
   }
 
-  p {
-    max-width: 520px;
-    color: #4b5563;
-    line-height: 1.8;
+  &__logo {
+    display: inline-grid;
+    width: 64px;
+    height: 64px;
+    margin-bottom: 24px;
+    color: #fff;
+    font-size: 20px;
+    font-weight: 800;
+    background: #2a3f54;
+    border-radius: 18px;
+    box-shadow: 0 16px 36px rgb(42 63 84 / 24%);
+    place-items: center;
   }
-}
 
-.login-page__logo {
-  display: inline-grid;
-  width: 64px;
-  height: 64px;
-  margin-bottom: 24px;
-  color: #fff;
-  font-size: 20px;
-  font-weight: 800;
-  background: #2a3f54;
-  border-radius: 18px;
-  box-shadow: 0 16px 36px rgb(42 63 84 / 24%);
-  place-items: center;
-}
+  &__eyebrow {
+    color: #2a3f54;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
 
-.login-page__eyebrow {
-  color: #2a3f54;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-}
+  &__card {
+    border: 0;
+    border-radius: 18px;
+    box-shadow: 0 24px 60px rgb(42 63 84 / 16%);
+  }
 
-.login-page__card {
-  border: 0;
-  border-radius: 18px;
-  box-shadow: 0 24px 60px rgb(42 63 84 / 16%);
-}
-
-.login-page__submit {
-  width: 100%;
+  &__submit {
+    width: 100%;
+  }
 }
 
 @media (width <= 860px) {

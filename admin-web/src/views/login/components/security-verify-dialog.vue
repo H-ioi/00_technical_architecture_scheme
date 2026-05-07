@@ -222,124 +222,126 @@ watch(
 </template>
 
 <style scoped lang="scss">
-.security-verify__header {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
+.security-verify {
+  &__header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
 
-  h3 {
-    margin: 0 0 4px;
-    font-size: 18px;
+    h3 {
+      margin: 0 0 4px;
+      font-size: 18px;
+    }
+
+    p {
+      margin: 0;
+      color: var(--app-text-color-secondary);
+      font-size: 13px;
+    }
   }
 
-  p {
-    margin: 0;
+  &__body {
+    display: grid;
+    justify-content: center;
+    gap: 16px;
+  }
+
+  &__image {
+    position: relative;
+    overflow: hidden;
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    border-radius: 12px;
+  }
+
+  &__refresh {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    z-index: 2;
+    display: grid;
+    width: 30px;
+    height: 30px;
+    color: #fff;
+    cursor: pointer;
+    background: rgb(15 23 42 / 45%);
+    border: 0;
+    border-radius: 999px;
+    place-items: center;
+  }
+
+  &__block {
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    transition: transform 0.12s ease;
+
+    &.is-dragging {
+      transition: none;
+    }
+  }
+
+  &__tip {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    padding: 8px 12px;
+    color: #fff;
+    background: rgb(220 38 38 / 80%);
+
+    &.is-success {
+      background: rgb(22 163 74 / 85%);
+    }
+  }
+
+  &__track {
+    position: relative;
+    display: grid;
+    width: 330px;
+    height: 42px;
+    overflow: hidden;
     color: var(--app-text-color-secondary);
-    font-size: 13px;
-  }
-}
-
-.security-verify__body {
-  display: grid;
-  justify-content: center;
-  gap: 16px;
-}
-
-.security-verify__image {
-  position: relative;
-  overflow: hidden;
-  background-repeat: no-repeat;
-  background-size: 100% 100%;
-  border-radius: 12px;
-}
-
-.security-verify__refresh {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  z-index: 2;
-  display: grid;
-  width: 30px;
-  height: 30px;
-  color: #fff;
-  cursor: pointer;
-  background: rgb(15 23 42 / 45%);
-  border: 0;
-  border-radius: 999px;
-  place-items: center;
-}
-
-.security-verify__block {
-  position: absolute;
-  top: 0;
-  left: 0;
-  background-repeat: no-repeat;
-  background-size: 100% 100%;
-  transition: transform 0.12s ease;
-
-  &.is-dragging {
-    transition: none;
-  }
-}
-
-.security-verify__tip {
-  position: absolute;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  padding: 8px 12px;
-  color: #fff;
-  background: rgb(220 38 38 / 80%);
-
-  &.is-success {
-    background: rgb(22 163 74 / 85%);
-  }
-}
-
-.security-verify__track {
-  position: relative;
-  display: grid;
-  width: 330px;
-  height: 42px;
-  overflow: hidden;
-  color: var(--app-text-color-secondary);
-  font-size: 14px;
-  background: #f1f5f9;
-  border: 1px solid #dbe3ef;
-  border-radius: 999px;
-  place-items: center;
-}
-
-.security-verify__progress {
-  position: absolute;
-  inset: 0 auto 0 0;
-  background: linear-gradient(90deg, #b7dbff, #6bb7f7);
-}
-
-.security-verify__handle {
-  position: absolute;
-  top: 3px;
-  left: 3px;
-  z-index: 2;
-  display: grid;
-  width: 36px;
-  height: 36px;
-  color: #3b82f6;
-  cursor: grab;
-  background: #fff;
-  border: 0;
-  border-radius: 999px;
-  box-shadow: 0 6px 16px rgb(15 23 42 / 18%);
-  place-items: center;
-  transition: transform 0.12s ease;
-
-  &.is-dragging {
-    cursor: grabbing;
-    transition: none;
+    font-size: 14px;
+    background: #f1f5f9;
+    border: 1px solid #dbe3ef;
+    border-radius: 999px;
+    place-items: center;
   }
 
-  &.is-success {
-    color: #16a34a;
+  &__progress {
+    position: absolute;
+    inset: 0 auto 0 0;
+    background: linear-gradient(90deg, #b7dbff, #6bb7f7);
+  }
+
+  &__handle {
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    z-index: 2;
+    display: grid;
+    width: 36px;
+    height: 36px;
+    color: #3b82f6;
+    cursor: grab;
+    background: #fff;
+    border: 0;
+    border-radius: 999px;
+    box-shadow: 0 6px 16px rgb(15 23 42 / 18%);
+    place-items: center;
+    transition: transform 0.12s ease;
+
+    &.is-dragging {
+      cursor: grabbing;
+      transition: none;
+    }
+
+    &.is-success {
+      color: #16a34a;
+    }
   }
 }
 </style>

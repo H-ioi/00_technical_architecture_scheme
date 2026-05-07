@@ -39,12 +39,12 @@ const handleLogout = async () => {
   max-height: 100vh;
   overflow: hidden;
   background: var(--app-bg-color);
-}
 
-.layout__main {
-  flex: 1;
-  min-width: 0;
-  min-height: 0;
-  overflow: hidden;
+  &__main {
+    flex: 1;
+    min-width: 0;
+    min-height: 0;
+    overflow: hidden;
+  }
 }
 </style>

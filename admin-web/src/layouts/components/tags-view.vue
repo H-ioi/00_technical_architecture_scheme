@@ -102,38 +102,38 @@ const closeAll = () => {
   padding: 0 12px;
   background: var(--app-card-bg-color);
   border-bottom: 1px solid var(--app-border-color);
-}
 
-.tags-view__scroll {
-  display: flex;
-  gap: 8px;
-  align-items: center;
-  flex: 1;
-  min-width: 0;
-  height: 100%;
-  overflow-x: auto;
-  overflow-y: hidden;
-  scrollbar-width: thin;
-}
+  &__scroll {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    flex: 1;
+    min-width: 0;
+    height: 100%;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scrollbar-width: thin;
+  }
 
-.tags-view__tag {
-  flex-shrink: 0;
-  cursor: pointer;
-  user-select: none;
-}
+  &__tag {
+    flex-shrink: 0;
+    cursor: pointer;
+    user-select: none;
+  }
 
-.tags-view__actions {
-  display: flex;
-  flex-shrink: 0;
-  gap: 2px;
-  align-items: center;
-  height: 100%;
+  &__actions {
+    display: flex;
+    flex-shrink: 0;
+    gap: 2px;
+    align-items: center;
+    height: 100%;
 
-  :deep(.el-button) {
-    width: 28px;
-    height: 28px;
-    margin-left: 0;
-    color: var(--app-text-color-secondary);
+    :deep(.el-button) {
+      width: 28px;
+      height: 28px;
+      margin-left: 0;
+      color: var(--app-text-color-secondary);
+    }
   }
 }
 </style>

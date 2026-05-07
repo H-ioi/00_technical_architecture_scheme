@@ -101,17 +101,17 @@ const submit = () => {
 .member-import {
   display: grid;
   gap: 12px;
-}
 
-.member-import__trigger {
-  display: grid;
-  gap: 8px;
-  justify-items: center;
-  padding: 24px;
+  &__trigger {
+    display: grid;
+    gap: 8px;
+    justify-items: center;
+    padding: 24px;
 
-  span {
-    color: var(--app-text-color-secondary);
-    font-size: 13px;
+    span {
+      color: var(--app-text-color-secondary);
+      font-size: 13px;
+    }
   }
 }
 </style>

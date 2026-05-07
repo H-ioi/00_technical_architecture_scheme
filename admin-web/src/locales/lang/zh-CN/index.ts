@@ -3,7 +3,6 @@ import dashboard from './dashboard'
 import login from './login'
 import member from './modules/member'
 import route from './route'
-import uniLibDemo from './modules/uni-lib-demo'
 
 export default {
   app: {
@@ -13,6 +12,5 @@ export default {
   route,
   login,
   dashboard,
-  member,
-  uniLibDemo
+  member
 }
