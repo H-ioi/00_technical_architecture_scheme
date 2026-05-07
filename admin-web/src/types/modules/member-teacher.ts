@@ -25,8 +25,6 @@ export interface TeacherRecord {
   [key: string]: unknown
 }
 
-export type TeacherDetail = TeacherRecord
-
 export interface SchoolOptionRecord {
   id: string | number
   name: string

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import DetailDialog from './components/detail-dialog.vue'
+import DetailDialog from '../components/detail-dialog.vue'
 import { useList } from './use-list'
 
 import { useAppI18n } from '@/composables/use-app-i18n'

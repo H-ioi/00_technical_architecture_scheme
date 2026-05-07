@@ -59,24 +59,56 @@ export const createSearchConfig = (
 
 export const createColumns = (t: Translate): UniTableColumn[] => [
   { prop: 'id', label: 'ID', type: 'text', width: 90, fixed: 'left' },
-  { prop: 'schoolName', label: t('member.fields.school'), type: 'text', minWidth: 140 },
+  {
+    prop: 'schoolName',
+    label: t('member.fields.school'),
+    type: 'text',
+    minWidth: 160,
+    showOverflowTooltip: true
+  },
   {
     prop: 'isaTeacherCode',
     label: t('member.teacher.fields.teacherCode'),
     type: 'text',
-    minWidth: 120
+    minWidth: 120,
+    showOverflowTooltip: true
   },
-  { prop: 'fullName', label: t('member.teacher.fields.fullName'), type: 'text', minWidth: 140 },
+  {
+    prop: 'fullName',
+    label: t('member.teacher.fields.fullName'),
+    type: 'text',
+    minWidth: 140,
+    showOverflowTooltip: true
+  },
   { prop: 'gender', label: t('member.teacher.fields.gender'), type: 'text', width: 90 },
   {
     prop: 'nationalities',
     label: t('member.teacher.fields.nationalities'),
     type: 'text',
-    minWidth: 120
+    minWidth: 120,
+    showOverflowTooltip: true
   },
-  { prop: 'phoneNumber', label: t('member.fields.phone'), type: 'copy', minWidth: 130 },
-  { prop: 'email', label: t('member.fields.email'), type: 'copy', minWidth: 190 },
-  { prop: 'role', label: t('member.teacher.fields.role'), type: 'text', minWidth: 120 },
+  {
+    prop: 'phoneNumber',
+    label: t('member.fields.phone'),
+    type: 'copy',
+    minWidth: 130,
+    showOverflowTooltip: true
+  },
+  {
+    prop: 'email',
+    label: t('member.fields.email'),
+    type: 'copy',
+    minWidth: 190,
+    showOverflowTooltip: true
+  },
+  {
+    prop: 'role',
+    label: t('member.teacher.fields.role'),
+    type: 'text',
+    minWidth: 120,
+    showOverflowTooltip: true
+  },
   { prop: 'archived', label: t('member.fields.status'), type: 'tag', width: 110 },
   { prop: 'createTime', label: t('member.fields.createTime'), type: 'datetime', minWidth: 170 }
 ]

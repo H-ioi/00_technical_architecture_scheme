@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import DetailDialog from '../components/detail-dialog.vue'
 import { useList } from './use-list'
 
 import { useAppI18n } from '@/composables/use-app-i18n'
@@ -7,6 +8,9 @@ const { t } = useAppI18n()
 const {
   actions,
   columns,
+  currentRecord,
+  detailConfig,
+  detailVisible,
   filters,
   handleLoadSuccess,
   loadData,
@@ -57,6 +61,8 @@ const {
         @load-success="handleLoadSuccess"
       />
     </el-card>
+
+    <DetailDialog v-model:visible="detailVisible" :source="currentRecord" :config="detailConfig" />
   </section>
 </template>
 

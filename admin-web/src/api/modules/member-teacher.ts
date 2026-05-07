@@ -1,5 +1,5 @@
 import type { PageResult } from '@/types/api'
-import type { SchoolOptionRecord, TeacherDetail, TeacherListParams, TeacherRecord } from '@/types/modules/member-teacher'
+import type { SchoolOptionRecord, TeacherListParams, TeacherRecord } from '@/types/modules/member-teacher'
 import { request } from '@/utils/request'
 
 interface MembershipPageResult<T> {
@@ -36,13 +36,6 @@ export const fetchTeacherPage = async (
     total: result.total
   }
 }
-
-/** 查询教师详情。 */
-export const fetchTeacherDetail = async (id: string | number): Promise<TeacherDetail> =>
-  request
-    .get<TeacherDetail, TeacherDetail>(`${MEMBERSHIP_PATH}/getTeacherDetail`, {
-      params: { teacherId: id }
-    })
 
 /** 查询学校选项。 */
 export const fetchTeacherSchoolOptions = async () => {

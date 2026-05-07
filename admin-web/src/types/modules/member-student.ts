@@ -25,5 +25,3 @@ export interface StudentRecord {
   studentStatus?: string
   [key: string]: unknown
 }
-
-export type StudentDetail = StudentRecord

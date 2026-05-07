@@ -1,5 +1,4 @@
 import { computed, nextTick, ref } from 'vue'
-import { ElMessage } from 'element-plus'
 import type { Recordable, UniOption, UniTableAction, UniTableRequest, UniTableRequestResult } from 'uni-ui-lib'
 
 import {
@@ -14,6 +13,7 @@ import type { StudentRecord as Row } from '@/types/modules/member-student'
 import {
   createBusOptions,
   createColumns,
+  createDetailConfig,
   createDormitoryOptions,
   createSearchConfig,
   createStatusOptions
@@ -37,6 +37,8 @@ export const useList = () => {
   const yearGroupOptions = ref<UniOption[]>([])
   const formOptions = ref<UniOption[]>([])
   const total = ref(0)
+  const detailVisible = ref(false)
+  const currentRecord = ref<Row | null>(null)
 
   const statusOptions = computed(() => createStatusOptions(t))
   const busOptions = computed(() => createBusOptions())
@@ -59,6 +61,7 @@ export const useList = () => {
     )
   )
   const columns = computed(() => createColumns(t))
+  const detailConfig = computed(() => createDetailConfig(t))
 
   const loadData: UniTableRequest = ({ pageNo, pageSize, filters }) =>
     fetchPage({ pageNo, pageSize, ...filters })
@@ -82,11 +85,16 @@ export const useList = () => {
     total.value = result.total
   }
 
+  const openDetail = (row: Row) => {
+    currentRecord.value = row
+    detailVisible.value = true
+  }
+
   const actions = computed<UniTableAction[]>(() => [
     {
       label: t('member.actions.detail'),
       code: 'dataform_file_look',
-      onClick: (row) => ElMessage.info(String((row as Row).fullName ?? '-'))
+      onClick: (row) => openDetail(row as Row)
     }
   ])
 
@@ -107,6 +115,9 @@ export const useList = () => {
   return {
     actions,
     columns,
+    currentRecord,
+    detailConfig,
+    detailVisible,
     filters,
     handleLoadSuccess,
     loadData,

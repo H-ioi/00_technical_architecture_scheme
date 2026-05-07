@@ -1,12 +1,11 @@
 <script setup lang="ts">
-import type { UniFormConfig } from 'uni-ui-lib'
+import type { Recordable, UniFormConfig } from 'uni-ui-lib'
 
 import { useAppI18n } from '@/composables/use-app-i18n'
-import type { TeacherDetail } from '@/types/modules/member-teacher'
 
 defineProps<{
   visible: boolean
-  source?: TeacherDetail | null
+  source?: Recordable | null
   config: UniFormConfig
 }>()
 

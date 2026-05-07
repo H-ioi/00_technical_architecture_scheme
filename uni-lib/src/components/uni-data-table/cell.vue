@@ -13,6 +13,7 @@ import { copyText } from "@/utils/copy";
 import {
   formatEmpty,
   formatTableCellText,
+  isBlankValue,
   resolveOption,
   toArray,
 } from "@/utils/format";
@@ -56,10 +57,22 @@ const arrayItems = computed(() =>
     .split(props.column.array?.separator ?? "、")
     .filter(Boolean),
 );
+const emptyCopyTexts = new Set(["-", "--", "—", "暂无数据"]);
+const copyTextValue = computed(() => String(displayValue.value ?? "").trim());
+const canCopy = computed(
+  () =>
+    !isBlankValue(props.value) &&
+    !isBlankValue(copyTextValue.value) &&
+    !emptyCopyTexts.has(copyTextValue.value),
+);
 
 const copyCurrentValue = async () => {
+  if (!canCopy.value) {
+    return;
+  }
+
   try {
-    await copyText(String(displayValue.value));
+    await copyText(copyTextValue.value);
     ElMessage.success(i18n.t("common.copySuccess"));
   } catch {
     ElMessage.error(i18n.t("common.copyFailed"));
@@ -134,7 +147,15 @@ const handleSwitchChange = async (nextValue: unknown) => {
 
     <div v-else-if="columnType === 'copy' || column.copyable" class="uni-table-cell__copy-container">
       <span class="uni-table-cell__text">{{ displayValue }}</span>
-      <el-button class="uni-table-cell__copy" link type="primary" aria-label="复制" title="复制" @click="copyCurrentValue">
+      <el-button
+        v-if="canCopy"
+        class="uni-table-cell__copy"
+        link
+        type="primary"
+        aria-label="复制"
+        title="复制"
+        @click="copyCurrentValue"
+      >
         <el-icon>
           <DocumentCopy />
         </el-icon>
@@ -208,9 +229,11 @@ const handleSwitchChange = async (nextValue: unknown) => {
     display: inline-flex;
     align-items: center;
     gap: 4px;
+    width: 100%;
+    min-width: 0;
 
     .uni-table-cell__text {
-      width: 65%;
+      flex: 0 1 80%;
       min-width: 0;
       overflow: hidden;
       text-overflow: ellipsis;

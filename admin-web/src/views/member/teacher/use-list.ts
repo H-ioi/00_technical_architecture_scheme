@@ -1,4 +1,3 @@
-import { computed, nextTick, onMounted, ref } from 'vue'
 import type {
   Recordable,
   UniOption,
@@ -6,15 +5,15 @@ import type {
   UniTableRequest,
   UniTableRequestResult
 } from 'uni-ui-lib'
+import { computed, nextTick, onMounted, ref } from 'vue'
 
 import {
-  fetchTeacherDetail as fetchDetail,
   fetchTeacherPage as fetchPage,
   fetchTeacherRoleOptions as fetchRoles,
   fetchTeacherSchoolOptions as fetchSchools
 } from '@/api'
 import { useAppI18n } from '@/composables/use-app-i18n'
-import type { TeacherDetail as Detail, TeacherRecord as Row } from '@/types/modules/member-teacher'
+import type { TeacherRecord as Row } from '@/types/modules/member-teacher'
 
 import {
   createColumns,
@@ -37,7 +36,7 @@ export const useList = () => {
   const tableRef = ref<{ refresh: () => void } | null>(null)
   const total = ref(0)
   const detailVisible = ref(false)
-  const currentRecord = ref<Detail | null>(null)
+  const currentRecord = ref<Row | null>(null)
   const schoolOptions = ref<UniOption[]>([])
   const roleOptions = ref<UniOption[]>([])
 
@@ -74,8 +73,8 @@ export const useList = () => {
     total.value = result.total
   }
 
-  const openDetail = async (row: Row) => {
-    currentRecord.value = row.teacherIdInt ? await fetchDetail(row.teacherIdInt) : row
+  const openDetail = (row: Row) => {
+    currentRecord.value = row
     detailVisible.value = true
   }
 
@@ -90,7 +89,10 @@ export const useList = () => {
   onMounted(async () => {
     const [schools, roles] = await Promise.all([fetchSchools(), fetchRoles()])
 
-    schoolOptions.value = schools.map((item) => ({ label: item.enName || item.name, value: item.id }))
+    schoolOptions.value = schools.map((item) => ({
+      label: item.enName || item.name,
+      value: item.id
+    }))
     roleOptions.value = createRoleOptions(roles)
   })
 

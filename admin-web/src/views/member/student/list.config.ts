@@ -39,7 +39,11 @@ export const createSearchConfig = (
       label: '',
       component: 'ElSelect',
       options: schoolOptions,
-      componentProps: { placeholder: t('member.placeholders.school'), clearable: true, filterable: true },
+      componentProps: {
+        placeholder: t('member.placeholders.school'),
+        clearable: true,
+        filterable: true
+      },
       colProps: { span: 6 }
     },
     {
@@ -99,13 +103,62 @@ export const createSearchConfig = (
 
 export const createColumns = (t: Translate): UniTableColumn[] => [
   { prop: 'id', label: 'ID', type: 'text', width: 90, fixed: 'left' },
-  { prop: 'schoolName', label: t('member.fields.school'), type: 'text', minWidth: 140 },
-  { prop: 'admissonNo', label: t('member.student.fields.admissionNo'), type: 'text', minWidth: 120 },
-  { prop: 'cnFullName', label: t('member.student.fields.cnFullName'), type: 'text', minWidth: 120 },
-  { prop: 'fullName', label: t('member.student.fields.fullName'), type: 'text', minWidth: 140 },
+  {
+    prop: 'schoolName',
+    label: t('member.fields.school'),
+    type: 'text',
+    minWidth: 240,
+    showOverflowTooltip: true
+  },
+  {
+    prop: 'admissonNo',
+    label: t('member.student.fields.admissionNo'),
+    type: 'text',
+    minWidth: 120,
+    showOverflowTooltip: true
+  },
+  {
+    prop: 'cnFullName',
+    label: t('member.student.fields.cnFullName'),
+    type: 'text',
+    minWidth: 120,
+    showOverflowTooltip: true
+  },
+  {
+    prop: 'fullName',
+    label: t('member.student.fields.fullName'),
+    type: 'text',
+    minWidth: 140,
+    showOverflowTooltip: true
+  },
   { prop: 'grade', label: t('member.student.fields.grade'), type: 'text', width: 110 },
   { prop: 'formCode', label: t('member.student.fields.form'), type: 'text', width: 110 },
   { prop: 'busStatus', label: t('member.student.fields.bus'), type: 'tag', width: 90 },
   { prop: 'dormitoryStatus', label: t('member.student.fields.dormitory'), type: 'tag', width: 90 },
   { prop: 'studentStatus', label: t('member.fields.status'), type: 'tag', width: 110 }
 ]
+
+export const createDetailConfig = (t: Translate): UniFormConfig => ({
+  mode: 'view',
+  formProps: { labelWidth: '96px' },
+  rowProps: { gutter: 16 },
+  colProps: { span: 12 },
+  view: { emptyText: '-' },
+  schema: [
+    { field: 'id', label: 'ID', component: 'ElInput' },
+    { field: 'schoolName', label: t('member.fields.school'), component: 'ElInput' },
+    { field: 'admissonNo', label: t('member.student.fields.admissionNo'), component: 'ElInput' },
+    { field: 'cnFullName', label: t('member.student.fields.cnFullName'), component: 'ElInput' },
+    { field: 'fullName', label: t('member.student.fields.fullName'), component: 'ElInput' },
+    { field: 'grade', label: t('member.student.fields.grade'), component: 'ElInput' },
+    { field: 'formCode', label: t('member.student.fields.form'), component: 'ElInput' },
+    { field: 'busStatus', label: t('member.student.fields.bus'), component: 'ElInput', viewType: 'tag' },
+    {
+      field: 'dormitoryStatus',
+      label: t('member.student.fields.dormitory'),
+      component: 'ElInput',
+      viewType: 'tag'
+    },
+    { field: 'studentStatus', label: t('member.fields.status'), component: 'ElInput', viewType: 'tag' }
+  ]
+})

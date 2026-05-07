@@ -2,12 +2,12 @@
 /**
  * 数据表格：列定义驱动渲染 + 可选本地/远程分页、选择列、行操作与表格工具栏。
  */
-import { MoreFilled } from "@element-plus/icons-vue";
-import type { Sort } from "element-plus";
-import { computed, ref } from "vue";
+import { MoreFilled } from '@element-plus/icons-vue'
+import type { Sort } from 'element-plus'
+import { computed, ref, useSlots } from 'vue'
 
-import { hasUniPermission } from "@/directives/permission";
-import { useUniI18n } from "@/services/i18n";
+import { hasUniPermission } from '@/directives/permission'
+import { useUniI18n } from '@/services/i18n'
 import type {
   Recordable,
   UniPaginationConfig,
@@ -16,58 +16,57 @@ import type {
   UniTableColumn,
   UniTableRequest,
   UniTableRequestResult,
-  UniTableToolbarConfig,
-} from "@/types/shared";
-import type { UniTableSize } from "@/types/uni-data-table";
-import UniTableCell from "./cell.vue";
-import UniTableToolbar from "./toolbar.vue";
-import { useColumns } from "./use-columns";
-import { useData } from "./use-data";
-import { useExport } from "./use-export";
+  UniTableToolbarConfig
+} from '@/types/shared'
+import type { UniTableSize } from '@/types/uni-data-table'
+import UniTableCell from './cell.vue'
+import UniTableToolbar from './toolbar.vue'
+import { useColumns } from './use-columns'
+import { useData } from './use-data'
+import { useExport } from './use-export'
 
 const props = withDefaults(
   defineProps<{
-    columns: UniTableColumn[];
-    data?: Recordable[];
-    request?: UniTableRequest;
-    filters?: Recordable;
-    loading?: boolean;
-    pagination?: UniPaginationConfig | false;
-    rowKey?: string;
-    selection?: boolean | "multiple" | "single";
-    selectable?: (row: Recordable, index: number) => boolean;
-    actions?: UniTableAction[];
-    actionColumn?: UniTableActionColumnConfig;
-    emptyText?: string;
-    valueEnums?: Record<string, import("@/types/shared").UniOption[]>;
-    toolbar?: boolean | UniTableToolbarConfig;
+    columns: UniTableColumn[]
+    data?: Recordable[]
+    request?: UniTableRequest
+    filters?: Recordable
+    loading?: boolean
+    pagination?: UniPaginationConfig | false
+    rowKey?: string
+    selection?: boolean | 'multiple' | 'single'
+    selectable?: (row: Recordable, index: number) => boolean
+    actions?: UniTableAction[]
+    actionColumn?: UniTableActionColumnConfig
+    emptyText?: string
+    valueEnums?: Record<string, import('@/types/shared').UniOption[]>
+    toolbar?: boolean | UniTableToolbarConfig
   }>(),
   {
     data: () => [],
     pagination: undefined,
-    rowKey: "id",
-    toolbar: undefined,
-  },
-);
+    rowKey: 'id',
+    toolbar: undefined
+  }
+)
 
 const emit = defineEmits<{
-  "update:pageNo": [value: number];
-  "update:pageSize": [value: number];
-  "selection-change": [selection: Recordable[]];
-  "sort-change": [sort: Sort];
-  "row-click": [row: Recordable];
-  refresh: [];
-  "load-success": [result: UniTableRequestResult];
-  "request-error": [error: unknown];
-  "switch-change": [row: Recordable, column: UniTableColumn, value: unknown];
-}>();
+  'update:pageNo': [value: number]
+  'update:pageSize': [value: number]
+  'selection-change': [selection: Recordable[]]
+  'sort-change': [sort: Sort]
+  'row-click': [row: Recordable]
+  refresh: []
+  'load-success': [result: UniTableRequestResult]
+  'request-error': [error: unknown]
+  'switch-change': [row: Recordable, column: UniTableColumn, value: unknown]
+}>()
 
-const i18n = useUniI18n();
-const tableSize = ref<UniTableSize>("default");
-const fullscreen = ref(false);
-const actualEmptyText = computed(
-  () => props.emptyText ?? i18n.t("common.empty"),
-);
+const i18n = useUniI18n()
+const slots = useSlots()
+const tableSize = ref<UniTableSize>('default')
+const fullscreen = ref(false)
+const actualEmptyText = computed(() => props.emptyText ?? i18n.t('common.empty'))
 const toolbarConfig = computed<Required<UniTableToolbarConfig>>(() => {
   if (props.toolbar === false) {
     return {
@@ -78,8 +77,8 @@ const toolbarConfig = computed<Required<UniTableToolbarConfig>>(() => {
       fullscreen: false,
       export: false,
       print: false,
-      exportFileName: "table-data",
-    };
+      exportFileName: 'table-data'
+    }
   }
 
   return {
@@ -90,10 +89,10 @@ const toolbarConfig = computed<Required<UniTableToolbarConfig>>(() => {
     fullscreen: true,
     export: true,
     print: true,
-    exportFileName: "table-data",
-    ...(typeof props.toolbar === "object" ? props.toolbar : {}),
-  };
-});
+    exportFileName: 'table-data',
+    ...(typeof props.toolbar === 'object' ? props.toolbar : {})
+  }
+})
 const hasToolbarTools = computed(
   () =>
     toolbarConfig.value.enabled &&
@@ -102,127 +101,107 @@ const hasToolbarTools = computed(
       toolbarConfig.value.columnSetting ||
       toolbarConfig.value.fullscreen ||
       toolbarConfig.value.export ||
-      toolbarConfig.value.print),
-);
+      toolbarConfig.value.print)
+)
 
-const {
-  columnStates,
-  visibleColumns,
-  handleColumnDragStart,
-  handleColumnDrop,
-} = useColumns(() => props.columns);
+const { columnStates, visibleColumns, handleColumnDragStart, handleColumnDrop } = useColumns(() => props.columns)
 
-const {
-  actualData,
-  actualLoading,
-  actualTotal,
-  loadData,
-  paginationConfig,
-  paginationState,
-  setSort,
-  handleCurrentChange,
-  handleSizeChange,
-} = useData({
+const { actualData, actualLoading, actualTotal, loadData, paginationConfig, paginationState, setSort, handleCurrentChange, handleSizeChange } = useData({
   getData: () => props.data,
   getLoading: () => props.loading,
   getPagination: () => props.pagination,
   getRequest: () => props.request,
   getFilters: () => props.filters,
-  emitLoadSuccess: (result) => emit("load-success", result),
-  emitRequestError: (error) => emit("request-error", error),
-  emitUpdatePageNo: (value) => emit("update:pageNo", value),
-  emitUpdatePageSize: (value) => emit("update:pageSize", value),
-});
+  emitLoadSuccess: (result) => emit('load-success', result),
+  emitRequestError: (error) => emit('request-error', error),
+  emitUpdatePageNo: (value) => emit('update:pageNo', value),
+  emitUpdatePageSize: (value) => emit('update:pageSize', value)
+})
 
 const { exportCurrentData, printCurrentData } = useExport({
   getRows: () => actualData.value,
   getColumns: () => visibleColumns.value,
   getFileName: () => toolbarConfig.value.exportFileName,
-  getValueEnums: () => props.valueEnums,
-});
+  getValueEnums: () => props.valueEnums
+})
 
 const handleSortChange = (sort: Sort) => {
-  emit("sort-change", sort);
-  setSort(sort);
-};
+  emit('sort-change', sort)
+  setSort(sort)
+}
 
 const handleSingleSelectionChange = (row?: Recordable) => {
-  if (props.selection !== "single") {
-    return;
+  if (props.selection !== 'single') {
+    return
   }
 
-  emit("selection-change", row ? [row] : []);
-};
+  emit('selection-change', row ? [row] : [])
+}
 
 const handleToolbarRefresh = () => {
-  emit("refresh");
+  emit('refresh')
 
   if (props.request) {
-    loadData();
+    loadData()
   }
-};
+}
 
 const isActionVisible = (action: UniTableAction, row: Recordable) => {
-  const visible =
-    typeof action.visible === "function" ? action.visible(row) : action.visible;
-  const permitted = action.code ? hasUniPermission(action.code) : true;
+  const visible = typeof action.visible === 'function' ? action.visible(row) : action.visible
+  const permitted = action.code ? hasUniPermission(action.code) : true
 
-  return visible !== false && permitted;
-};
+  return visible !== false && permitted
+}
 
-const isActionDisabled = (action: UniTableAction, row: Recordable) =>
-  typeof action.disabled === "function"
-    ? action.disabled(row)
-    : Boolean(action.disabled);
+const isActionDisabled = (action: UniTableAction, row: Recordable) => (typeof action.disabled === 'function' ? action.disabled(row) : Boolean(action.disabled))
 
-const ACTION_VISIBLE_LIMIT = 3;
-const ACTION_INLINE_LIMIT_WHEN_MORE = ACTION_VISIBLE_LIMIT - 1;
+const ACTION_VISIBLE_LIMIT = 3
+const ACTION_INLINE_LIMIT_WHEN_MORE = ACTION_VISIBLE_LIMIT - 1
 
-const getVisibleActions = (row: Recordable) =>
-  (props.actions ?? []).filter((action) => isActionVisible(action, row));
+const getVisibleActions = (row: Recordable) => (props.actions ?? []).filter((action) => isActionVisible(action, row))
 
-const getInlineActions = (row: Recordable) => {
-  const actions = getVisibleActions(row);
-
-  return actions.length > ACTION_VISIBLE_LIMIT
-    ? actions.slice(0, ACTION_INLINE_LIMIT_WHEN_MORE)
-    : actions;
-};
-
-const getMoreActions = (row: Recordable) => {
-  const actions = getVisibleActions(row);
-
-  return actions.length > ACTION_VISIBLE_LIMIT
-    ? actions.slice(ACTION_INLINE_LIMIT_WHEN_MORE)
-    : [];
-};
-
-const getActionKey = (action: UniTableAction, index: number) =>
-  `${action.code ? JSON.stringify(action.code) : action.label}-${index}`;
-
-const handleMoreActionCommand = (
-  action: UniTableAction,
-  row: Recordable,
-  index: number,
-) => {
-  if (isActionDisabled(action, row)) {
-    return;
+const hasActionColumn = computed(() => {
+  if (slots.actions) {
+    return true
   }
 
-  action.onClick(row, index);
-};
+  if (!props.actions?.length) {
+    return false
+  }
+
+  return actualData.value.some((row) => getVisibleActions(row).length > 0)
+})
+
+const getInlineActions = (row: Recordable) => {
+  const actions = getVisibleActions(row)
+
+  return actions.length > ACTION_VISIBLE_LIMIT ? actions.slice(0, ACTION_INLINE_LIMIT_WHEN_MORE) : actions
+}
+
+const getMoreActions = (row: Recordable) => {
+  const actions = getVisibleActions(row)
+
+  return actions.length > ACTION_VISIBLE_LIMIT ? actions.slice(ACTION_INLINE_LIMIT_WHEN_MORE) : []
+}
+
+const getActionKey = (action: UniTableAction, index: number) => `${action.code ? JSON.stringify(action.code) : action.label}-${index}`
+
+const handleMoreActionCommand = (action: UniTableAction, row: Recordable, index: number) => {
+  if (isActionDisabled(action, row)) {
+    return
+  }
+
+  action.onClick(row, index)
+}
 
 defineExpose({
-  refresh: handleToolbarRefresh,
-});
+  refresh: handleToolbarRefresh
+})
 </script>
 
 <template>
   <div class="uni-data-table" :class="{ 'is-fullscreen': fullscreen }">
-    <div
-      v-if="$slots.toolbar || hasToolbarTools"
-      class="uni-data-table__toolbar"
-    >
+    <div v-if="$slots.toolbar || hasToolbarTools" class="uni-data-table__toolbar">
       <div class="uni-data-table__toolbar-left">
         <slot name="toolbar" />
       </div>
@@ -237,8 +216,7 @@ defineExpose({
           @export="exportCurrentData"
           @print="printCurrentData"
           @column-drag-start="handleColumnDragStart"
-          @column-drop="handleColumnDrop"
-        />
+          @column-drop="handleColumnDrop" />
       </div>
     </div>
 
@@ -249,19 +227,11 @@ defineExpose({
       :empty-text="actualEmptyText"
       :size="tableSize"
       :highlight-current-row="selection === 'single'"
-      @selection-change="
-        (selection: Recordable[]) => emit('selection-change', selection)
-      "
+      @selection-change="(selection: Recordable[]) => emit('selection-change', selection)"
       @current-change="handleSingleSelectionChange"
       @sort-change="handleSortChange"
-      @row-click="(row: Recordable) => emit('row-click', row)"
-    >
-      <el-table-column
-        v-if="selection === true || selection === 'multiple'"
-        type="selection"
-        width="48"
-        :selectable="selectable"
-      />
+      @row-click="(row: Recordable) => emit('row-click', row)">
+      <el-table-column v-if="selection === true || selection === 'multiple'" type="selection" width="48" :selectable="selectable" />
 
       <el-table-column
         v-for="column in visibleColumns"
@@ -273,21 +243,12 @@ defineExpose({
         :fixed="column.fixed"
         :align="column.align"
         :sortable="column.sortable"
-        :show-overflow-tooltip="column.showOverflowTooltip"
-      >
+        :show-overflow-tooltip="column.showOverflowTooltip">
         <template #header>
-          <slot :name="`header-${column.prop}`" :column="column">{{
-            column.label
-          }}</slot>
+          <slot :name="`header-${column.prop}`" :column="column">{{ column.label }}</slot>
         </template>
         <template #default="{ row, $index }">
-          <slot
-            v-if="$slots[`column-${column.prop}`]"
-            :name="`column-${column.prop}`"
-            :row="row"
-            :value="row[column.prop]"
-            :index="$index"
-          />
+          <slot v-if="$slots[`column-${column.prop}`]" :name="`column-${column.prop}`" :row="row" :value="row[column.prop]" :index="$index" />
           <UniTableCell
             v-else
             :row="row"
@@ -295,54 +256,25 @@ defineExpose({
             :value="row[column.prop]"
             :row-index="$index"
             :value-enums="valueEnums"
-            @switch-change="
-              (nextRow, nextColumn, value) =>
-                emit('switch-change', nextRow, nextColumn, value)
-            "
-          />
+            @switch-change="(nextRow, nextColumn, value) => emit('switch-change', nextRow, nextColumn, value)" />
         </template>
       </el-table-column>
 
       <el-table-column
-        v-if="actions?.length || $slots.actions"
+        v-if="hasActionColumn"
         :label="actionColumn?.label ?? i18n.t('dataTable.actions')"
-        :fixed="
-          actionColumn?.fixed === false
-            ? false
-            : (actionColumn?.fixed ?? 'right')
-        "
+        :fixed="actionColumn?.fixed === false ? false : (actionColumn?.fixed ?? 'right')"
         :width="actionColumn?.width ?? 180"
-        :min-width="actionColumn?.minWidth"
-      >
+        :min-width="actionColumn?.minWidth">
         <template #default="{ row, $index }">
           <slot name="actions" :row="row" :index="$index">
-            <template
-              v-for="(action, actionIndex) in getInlineActions(row)"
-              :key="getActionKey(action, actionIndex)"
-            >
-              <el-button
-                link
-                :type="action.type ?? 'primary'"
-                :disabled="isActionDisabled(action, row)"
-                @click="action.onClick(row, $index)"
-              >
+            <template v-for="(action, actionIndex) in getInlineActions(row)" :key="getActionKey(action, actionIndex)">
+              <el-button link :type="action.type ?? 'primary'" :disabled="isActionDisabled(action, row)" @click="action.onClick(row, $index)">
                 {{ action.label }}
               </el-button>
             </template>
-            <el-dropdown
-              v-if="getMoreActions(row).length"
-              trigger="click"
-              @command="
-                (action: UniTableAction) =>
-                  handleMoreActionCommand(action, row, $index)
-              "
-            >
-              <el-button
-                link
-                type="primary"
-                class="uni-data-table__more-action"
-                :aria-label="i18n.t('dataTable.moreActions')"
-              >
+            <el-dropdown v-if="getMoreActions(row).length" trigger="click" @command="(action: UniTableAction) => handleMoreActionCommand(action, row, $index)">
+              <el-button link type="primary" class="uni-data-table__more-action" :aria-label="i18n.t('dataTable.moreActions')">
                 <el-icon>
                   <MoreFilled />
                 </el-icon>
@@ -353,8 +285,7 @@ defineExpose({
                     v-for="(action, actionIndex) in getMoreActions(row)"
                     :key="getActionKey(action, actionIndex)"
                     :command="action"
-                    :disabled="isActionDisabled(action, row)"
-                  >
+                    :disabled="isActionDisabled(action, row)">
                     {{ action.label }}
                   </el-dropdown-item>
                 </el-dropdown-menu>
@@ -369,11 +300,7 @@ defineExpose({
       </template>
     </el-table>
 
-    <div
-      v-if="paginationConfig && paginationConfig.enabled !== false"
-      class="uni-data-table__pagination"
-      :class="`is-${paginationConfig.position}`"
-    >
+    <div v-if="paginationConfig && paginationConfig.enabled !== false" class="uni-data-table__pagination" :class="`is-${paginationConfig.position}`">
       <el-pagination
         :background="paginationConfig.background"
         :layout="paginationConfig.layout"
@@ -381,10 +308,10 @@ defineExpose({
         :hide-on-single-page="paginationConfig.hideOnSinglePage"
         :current-page="paginationState.pageNo"
         :page-size="paginationState.pageSize"
+        size="small"
         :total="actualTotal"
         @current-change="handleCurrentChange"
-        @size-change="handleSizeChange"
-      />
+        @size-change="handleSizeChange" />
     </div>
   </div>
 </template>

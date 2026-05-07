@@ -214,8 +214,7 @@ admin-web/src/
 | --- | --- |
 | 列表表格 | `UniDataTable` |
 | 查询条件 | `UniSearchForm` |
-| 新增/编辑/详情表单 | `UniForm` |
-| 文件导入 | `UniUpload` 或基于 `UniUpload` 的项目弹窗 |
+| 详情表单 | `UniForm` |
 | 权限控制 | `v-uni-permission` / `useUniPermission` |
 | 请求封装 | `createUniRequest` 或 `admin-web` 当前 `request` 适配后统一出口 |
 | 登录认证 | `createUniAuth` / 项目 `userStore` |
@@ -326,32 +325,27 @@ test/old-test/src/views/isacommunity/member
 
 注意：旧页面 `test/old-test/src/views/isacommunity/user/teacher` 对应旧菜单 `校车管理 / 跟车老师列表`，不归属顶层 `成员管理`。如果继续迁移该页面，新模块应命名为 `school-bus/follow-teacher`，不应命名为 `member`。
 
-成员管理旧页面能力按学生/教师列表分别盘点，常见能力包括：
+成员管理旧页面能力按学生/教师列表分别盘点，第一轮只迁移旧页面真实存在且可运行的能力：
 
 - 关键词搜索。
 - 学校筛选。
-- 学生/教师列表。
-- 新增学生/教师。
-- 编辑学生/教师。
-- 查看详情。
-- 批量启用。
-- 批量禁用。
-- 批量删除。
-- 导入学生/教师。
-- 导出学生/教师。
-- 下载导入模板。
+- 学生列表、教师列表。
+- 查询、重置、分页。
+- 查看详情，权限码为 `dataform_file_look`。
+
+旧项目学生列表和教师列表未提供新增、编辑、删除、启用、禁用、导入、导出、模板下载等页面按钮能力，第一轮不得凭经验补造这些功能；后续如需新增，必须先确认旧系统来源、后端接口和权限码。
 
 ### 7.1 新页面结构
 
 ```text
 views/member/
+├── components/
+│   └── detail-dialog.vue
 ├── student/
-│   ├── components/
 │   ├── list.config.ts
 │   ├── list.vue
 │   └── use-list.ts
 └── teacher/
-    ├── components/
     ├── list.config.ts
     ├── list.vue
     └── use-list.ts
@@ -361,20 +355,17 @@ views/member/
 
 `student/list.vue`、`teacher/list.vue` 只负责页面组合：
 
-- 顶部标题和操作按钮。
+- 顶部标题。
 - `UniSearchForm` 查询区。
 - `UniDataTable` 表格区。
-- 三个弹窗组件挂载。
+- 详情弹窗挂载。
 
 各自目录下的 `use-list.ts` 负责页面逻辑：
 
 - 查询参数。
 - 列表加载。
 - 当前行。
-- 选中项。
-- 新增、编辑、详情弹窗控制。
-- 批量启用、禁用、删除。
-- 导入、导出。
+- 详情弹窗控制。
 
 各自目录下的 `list.config.ts` 负责页面配置：
 
@@ -394,76 +385,23 @@ api/modules/member-student.ts
 api/modules/member-teacher.ts
 ```
 
-教师列表接口命名示例：
+成员列表接口命名示例：
 
 | 旧接口 | 新接口方法 |
 | --- | --- |
+| `getStudentPage` | `fetchStudentPage` |
 | `getTeacherPage` | `fetchTeacherPage` |
-| `getTeacherDetail` | `fetchTeacherDetail` |
-| `addTeacher` | `createTeacher` |
-| `editTeacher` | `updateTeacher` |
-| `delTeacher` | `deleteTeachers` |
-| `batchEnable` | `enableTeachers` |
-| `batchDisabled` | `disableTeachers` |
-| `importTeacher` | `importTeachers` |
-| `exportTeacher` | `exportTeachers` |
-| `downloadCarTemplate` | `downloadTeacherTemplate` |
 
 API 注释使用精炼单句。
 
 ```ts
 /** 分页查询教师列表。 */
 export const fetchTeacherPage = (params: TeacherListParams) => {
-  return request.get<PageResult<TeacherRecord>>('/member/teacher/page', { params })
-}
-
-/** 查询教师详情。 */
-export const fetchTeacherDetail = (id: string | number) => {
-  return request.get<TeacherDetail>(`/member/teacher/${id}`)
-}
-
-/** 新增教师。 */
-export const createTeacher = (data: TeacherCreateParams) => {
-  return request.post<void>('/member/teacher', data)
-}
-
-/** 更新教师。 */
-export const updateTeacher = (data: TeacherUpdateParams) => {
-  return request.put<void>(`/member/teacher/${data.id}`, data)
-}
-
-/** 批量删除教师。 */
-export const deleteTeachers = (ids: Array<string | number>) => {
-  return request.delete<void>('/member/teacher', { data: { ids } })
-}
-
-/** 批量启用教师。 */
-export const enableTeachers = (ids: Array<string | number>) => {
-  return request.post<void>('/member/teacher/enable', { ids })
-}
-
-/** 批量禁用教师。 */
-export const disableTeachers = (ids: Array<string | number>) => {
-  return request.post<void>('/member/teacher/disable', { ids })
-}
-
-/** 导入教师。 */
-export const importTeachers = (data: FormData) => {
-  return request.post<void>('/member/teacher/import', data)
-}
-
-/** 导出教师。 */
-export const exportTeachers = (params: TeacherExportParams) => {
-  return request.get<Blob>('/member/teacher/export', { params, responseType: 'blob' })
-}
-
-/** 下载教师导入模板。 */
-export const downloadTeacherTemplate = () => {
-  return request.get<Blob>('/member/teacher/template', { responseType: 'blob' })
+  return request.get<PageResult<TeacherRecord>>('/isacommunity/membership/getTeacherPage', { params })
 }
 ```
 
-真实路径以后端接口为准。若第一轮仍对接旧后端路径，可以在 API 层保留旧 URL，但方法命名和页面语义使用新项目命名。
+真实路径以后端接口为准。第一轮对接旧后端路径，只保留页面实际用到的列表和选项接口。
 
 ### 7.4 成员类型
 
@@ -478,45 +416,25 @@ types/modules/member-teacher.ts
 
 ```ts
 export interface TeacherListParams extends PageQuery {
-  keyword?: string
-  schoolIds?: Array<string | number>
+  keywordssearch?: string
+  schoolIds?: string | number
+  role?: string
+  archived?: string
 }
 
 export interface TeacherRecord {
   id: string | number
-  school?: string | number
-  nickname: string
-  department: string
-  email: string
-  phone: string
-  modules: number[]
-  roles: number[]
-  status: number
-  lastLoginTime?: string
+  schoolName?: string
+  isaTeacherCode?: string
+  fullName?: string
+  gender?: string
+  nationalities?: string
+  phoneNumber?: string
+  email?: string
+  role?: string
+  archived?: string
   createTime?: string
-}
-
-export interface TeacherDetail extends TeacherRecord {}
-
-export interface TeacherCreateParams {
-  school?: string | number
-  nickname: string
-  department: string
-  email: string
-  phone: string
-  modules: number[]
-  roles: number[]
-  password: string
-  status: number
-}
-
-export interface TeacherUpdateParams extends TeacherCreateParams {
-  id: string | number
-}
-
-export interface TeacherExportParams {
-  keyword?: string
-  schoolIds?: Array<string | number>
+  teacherIdInt?: string | number
 }
 ```
 
@@ -553,85 +471,33 @@ export interface TeacherExportParams {
 
 使用 `UniDataTable`。
 
-建议列：
+学生列按旧接口字段展示：校区、学号、中文名、英文名、年级、班级、校巴、住宿、状态。
 
-- 学校。
-- 昵称。
-- 部门。
-- 邮箱。
-- 手机号。
-- 模块。
-- 角色。
-- 状态。
-- 最后登录时间。
-- 创建时间。
-- 操作。
+教师列按旧接口字段展示：校区、工号、姓名、性别、国籍、手机号、邮箱、职位、状态、创建时间。
 
-日期列使用 `datetime` 类型。状态、模块、角色使用 `tag`、`array` 或枚举映射，不再通过 `formatData()` 改写原始数据。
+日期列使用 `datetime` 类型。状态使用 `tag` 或枚举映射，不再通过 `formatData()` 改写原始数据。只有存在 `dataform_file_look` 权限时显示查看操作列。
 
-### 7.7 新增和编辑
-
-使用 `UniForm`。
-
-字段：
-
-- 学校。
-- 昵称。
-- 部门。
-- 邮箱。
-- 手机号。
-- 模块。
-- 角色。
-- 密码。
-- 状态。
-
-新增和编辑共用表单 schema。编辑时按详情接口回填。密码字段是否必填以后端规则为准。
-
-### 7.8 详情
+### 7.7 详情
 
 详情弹窗优先使用 `UniForm` 的 `mode: 'view'`。
 
 不再手写 `v-for tabletitle` 详情布局。
 
-### 7.9 导入导出
-
-导入弹窗使用 `UniUpload` 或项目弹窗封装。
-
-导入规则：
-
-- 只允许 `.xls`、`.xlsx`。
-- 文件大小不超过 10M。
-- 提交时使用 `FormData`。
-
-导出和模板下载使用统一下载工具处理 blob。
-
 ## 八、权限设计
 
 第一轮沿用旧系统权限语义，但代码改成 `uni-lib` 权限能力。
 
-旧权限码可暂时保留：
+成员管理旧页面真实使用的按钮权限：
 
 | 操作 | 权限码 |
 | --- | --- |
-| 新增成员 | `teacheruser_add` |
-| 导入成员 | `teacheruser_import` |
-| 导出成员 | `teacheruser_export` |
-| 下载模板 | `teacheruser_download` |
-| 启用成员 | `teacheruser_enble` |
-| 禁用成员 | `teacheruser_disable` |
-| 删除成员 | `teacheruser_del` |
-| 导出学生 | `studentuser_export` |
-| 启用学生 | `studentuser_enble` |
-| 禁用学生 | `studentuser_disable` |
-| 删除学生 | `studentuser_del` |
-
-旧代码中疑似不匹配的权限码，如编辑使用 `busorder_edit`，第一轮需和后端确认后修正。
+| 查看详情 | `dataform_file_look` |
 
 按钮示例：
 
 ```vue
-<el-button v-uni-permission="'teacheruser_add'" type="primary">
-  新增
+<el-button v-uni-permission="'dataform_file_look'" type="primary">
+  查看
 </el-button>
 ```
 
@@ -709,14 +575,13 @@ export interface TeacherExportParams {
 推荐：
 
 ```text
-views/member/teacher/
-├── list.vue
-├── list.config.ts
-├── use-list.ts
-└── components/
-    ├── form-dialog.vue
-    ├── detail-dialog.vue
-    └── import-dialog.vue
+views/member/
+├── components/
+│   └── detail-dialog.vue
+└── teacher/
+    ├── list.vue
+    ├── list.config.ts
+    └── use-list.ts
 ```
 
 不推荐：
@@ -737,6 +602,7 @@ views/member/teacher/
 - 编辑页使用 `edit.vue`。
 - 新增页使用 `create.vue`。
 - 页面私有弹窗使用 `form-dialog.vue`、`detail-dialog.vue`、`import-dialog.vue` 等功能名。
+- 第一轮成员管理只保留 `detail-dialog.vue`，不创建旧页面不存在的 `form-dialog.vue`、`import-dialog.vue`。
 - 页面组合式逻辑使用 `use-list.ts`，页面配置使用 `list.config.ts`。
 - 页面目录已表达业务语义时，配置函数和页面方法也只保留职责名，例如 `createSearchConfig`、`createColumns`、`createDetailConfig`、`loadData`，不写 `createStudentColumns`、`loadStudents`。
 - 页面目录名使用业务域表达模块语义，文件名尽量表达页面职责。
@@ -759,9 +625,9 @@ uni-lib/src/components/uni-data-table/use-uni-table-columns.ts
 API 文件必须使用 TypeScript，并为每个接口方法添加精炼注释。
 
 ```ts
-/** 查询教师详情。 */
-export const fetchTeacherDetail = (id: string | number) => {
-  return request.get<TeacherDetail>(`/member/teacher/${id}`)
+/** 分页查询教师列表。 */
+export const fetchTeacherPage = (params: TeacherListParams) => {
+  return request.get<PageResult<TeacherRecord>>('/isacommunity/membership/getTeacherPage', { params })
 }
 ```
 
@@ -936,8 +802,8 @@ sidebar.vue
 | 类型 | 用法 | 示例 |
 | --- | --- | --- |
 | 路由权限 | `route.meta.permission` | `member:view` |
-| 按钮权限 | `v-uni-permission` | `teacheruser_add` |
-| 业务逻辑权限 | `useUniPermission()` | 导出前判断 |
+| 按钮权限 | `v-uni-permission` | `dataform_file_look` |
+| 业务逻辑权限 | `useUniPermission()` | 查看前判断 |
 
 第一轮允许暂时沿用旧权限码，但新代码不直接读 `permissions[...]`。
 
@@ -1022,12 +888,9 @@ sidebar.vue
 
 - 登录页可登录、退出、登录失效清理。
 - 首页替换模板 demo 内容。
-- 学生列表可查询、分页、选择。
-- 教师列表可查询、分页、选择。
-- 学生/教师可新增、编辑、查看详情。
-- 学生/教师可批量启用、禁用、删除。
-- 学生/教师可导入、导出、下载模板。
-- 成员页面全部使用 `uni-lib` 表单、表格、搜索和上传能力。
+- 学生列表可查询、重置、分页、查看详情。
+- 教师列表可查询、重置、分页、查看详情。
+- 成员页面全部使用 `uni-lib` 表格、搜索和详情表单能力。
 
 ### 15.3 Phase 2：基础设置
 
@@ -1227,9 +1090,9 @@ views/activity/
 - 登录页可登录、退出、登录失效清理。
 - 首页替换模板 demo 内容。
 - 成员管理按 `学生列表`、`教师列表` 拆分为二级菜单。
-- 学生列表可查询、分页、选择、批量启用、禁用、删除、导出。
-- 教师列表可查询、分页、选择、新增、编辑、查看详情、批量启用、禁用、删除、导入、导出、下载模板。
-- 成员页面全部使用 `uni-lib` 表单、表格、搜索和上传能力。
+- 学生列表可查询、重置、分页、查看详情。
+- 教师列表可查询、重置、分页、查看详情。
+- 成员页面全部使用 `uni-lib` 表格、搜索和详情表单能力。
 - API 方法均有精炼注释。
 - 全局关键代码有必要短注释。
 - 不出现 `views/isacommunity` 这类旧业务层级。
@@ -1258,10 +1121,10 @@ views/activity/
 3. 对接菜单接口，完成菜单树标准化和侧边栏渲染。
 4. 接入路由守卫，完成登录态、菜单加载、权限校验、401/403 处理。
 5. 调整首页页面和已授权快捷入口。
-6. 新增成员 API 和类型。
-7. 新增成员页面配置和 composable。
+6. 新增成员列表 API 和类型。
+7. 新增成员列表页面配置和 composable。
 8. 实现成员列表页。
-9. 实现成员新增/编辑、详情、导入弹窗。
-10. 联调请求、分页、下载和错误处理。
+9. 实现成员详情弹窗。
+10. 联调请求、分页和错误处理。
 11. 执行 lint、type-check、build。
 
