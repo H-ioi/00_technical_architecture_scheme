@@ -1,7 +1,7 @@
 import { createUniAuth } from 'uni-ui-lib'
 import CryptoJS from 'crypto-js'
 
-import type { LoginParams, LoginResult, UserProfile } from '@/types/auth'
+import type { ChangePasswordParams, LoginParams, LoginResult, UserProfile } from '@/types/auth'
 import { request } from '@/utils/request'
 
 const LOGIN_PASSWORD_KEY = 'unixunixunixunix'
@@ -26,6 +26,7 @@ const normalizeAuthorities = (authorities?: OAuthTokenResult['user_info']['autho
 
 const normalizeProfile = (user?: OAuthTokenResult['user_info'], roles: string[] = []): UserProfile => ({
   id: String(user?.userId ?? user?.id ?? ''),
+  username: user?.username,
   name: user?.nickname || user?.username || '',
   avatar: user?.avatar,
   roles
@@ -103,4 +104,9 @@ export const loginApi = async (params: LoginParams): Promise<LoginResult> => {
 export const logoutApi = async () => {
   await request.delete<void, void>('/auth/token/logout')
   await authService.logout()
+}
+
+/** 修改当前用户密码。 */
+export const changePasswordApi = async (data: ChangePasswordParams) => {
+  await request.put<void, void>('/upms/user/edit', data)
 }

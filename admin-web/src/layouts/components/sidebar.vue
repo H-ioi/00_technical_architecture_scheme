@@ -4,24 +4,20 @@ import { useRoute } from 'vue-router'
 
 import MenuTree from './menu-tree.vue'
 
-import { useAppI18n } from '@/composables/use-app-i18n'
+import logoUrl from '@/assets/images/logo-top.png'
 import { useAppStore, usePermissionStore } from '@/stores'
 
 const route = useRoute()
 const appStore = useAppStore()
 const permissionStore = usePermissionStore()
-const { t } = useAppI18n()
 
 const activeMenu = computed(() => route.meta.activeMenu || route.path)
-const appTitle = computed(() => t('app.title'))
-const collapsedTitle = computed(() => Array.from(appTitle.value)[0] ?? 'A')
 </script>
 
 <template>
   <el-aside class="sidebar" :width="appStore.sidebarWidth">
     <div class="sidebar__brand">
-      <span v-if="!appStore.sidebarCollapsed">{{ appTitle }}</span>
-      <span v-else>{{ collapsedTitle }}</span>
+      <img class="sidebar__logo" :src="logoUrl" alt="logo">
     </div>
 
     <el-menu
@@ -45,13 +41,17 @@ const collapsedTitle = computed(() => Array.from(appTitle.value)[0] ?? 'A')
   &__brand {
     display: flex;
     align-items: center;
+    justify-content: center;
     height: 56px;
-    padding: 0 20px;
+    padding: 0 12px;
     overflow: hidden;
-    color: var(--app-primary-color);
-    font-size: 18px;
-    font-weight: 700;
-    white-space: nowrap;
+  }
+
+  &__logo {
+    display: block;
+    max-width: 100%;
+    height: 28px;
+    object-fit: contain;
   }
 
   &__menu {

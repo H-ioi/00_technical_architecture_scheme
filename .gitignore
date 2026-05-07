@@ -2,3 +2,4 @@
 **/dist/
 **/.vitepress/dist/
 test/
+.agents/
