@@ -14,3 +14,27 @@
   overflow-x: hidden;
   overflow-y: auto;
 }
+
+.uni-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: var(--uni-scrollbar-thumb-color) transparent;
+
+  &::-webkit-scrollbar {
+    width: var(--uni-scrollbar-size);
+    height: var(--uni-scrollbar-size);
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: var(--uni-scrollbar-thumb-color);
+    border-radius: var(--el-border-radius-circle);
+  }
+
+  &::-webkit-scrollbar-thumb:hover {
+    background-color: var(--uni-scrollbar-thumb-hover-color);
+  }
+}
+
+.uni-scroll-y.uni-scrollbar {
+  overflow-x: hidden;
+  overflow-y: auto;
+}

@@ -18,6 +18,8 @@ const viewKey = computed(() => `${route.fullPath}-${tagsViewStore.refreshKey}`)
 <style scoped lang="scss">
 .content {
   flex: 1;
+  width: 100%;
+  min-width: 0;
   min-height: 0;
   padding: 16px;
   overflow-x: hidden;

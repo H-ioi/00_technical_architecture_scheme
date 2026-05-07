@@ -542,9 +542,9 @@ const request = createUniRequest({
 `src/styles` 分层约定：
 
 - `variables.scss`：字体、滚动条、间距等静态全局变量。
-- `base.scss`：盒模型、基础字体、滚动条等全局基础样式。
+- `base.scss`：盒模型、基础字体等全局基础样式，不直接覆盖浏览器或 Element Plus 的全局滚动条。
 - `element-plus.scss`：集中覆盖 Element Plus 全局变量和结构性样式，例如 popover、dialog、drawer、table。
-- `utilities.scss`：少量跨项目通用工具类，例如省略号、居中、滚动容器。
+- `utilities.scss`：少量跨项目通用工具类，例如省略号、居中、滚动容器；滚动条美化只能通过 `.uni-scrollbar` 显式启用。
 - `index.scss`：只聚合以上文件。
 
 禁止在业务项目页面或 store 中散落 `--el-*` 覆盖；禁止在组件 scoped 样式里写 `:global(.el-xxx)` 作为长期方案。确需覆盖 Element Plus 弹层、popper、全局类时，统一放入 `styles/element-plus.scss`。

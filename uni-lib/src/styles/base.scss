@@ -11,17 +11,3 @@ html {
 *::after {
   box-sizing: border-box;
 }
-
-::-webkit-scrollbar {
-  width: var(--uni-scrollbar-size);
-  height: var(--uni-scrollbar-size);
-}
-
-::-webkit-scrollbar-thumb {
-  background-color: var(--uni-scrollbar-thumb-color);
-  border-radius: var(--el-border-radius-circle);
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background-color: var(--uni-scrollbar-thumb-hover-color);
-}
