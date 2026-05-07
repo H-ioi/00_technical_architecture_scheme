@@ -11,10 +11,18 @@ export const request = axios.create({
 
 request.interceptors.request.use((config: InternalAxiosRequestConfig) => {
   const userStore = useUserStore()
+  const isToken = config.headers?.isToken === false
 
-  if (userStore.accessToken) {
+  if (userStore.accessToken && !isToken) {
     config.headers.Authorization = `Bearer ${userStore.accessToken}`
   }
+
+  if (isToken) {
+    delete config.headers.isToken
+  }
+
+  config.headers['TENANT-ID'] = import.meta.env.VITE_TENANT_ID || '5'
+  config.headers.version = 'B'
 
   return config
 })

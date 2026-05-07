@@ -1,9 +1,9 @@
 export default {
-  eyebrow: 'Admin Template',
-  title: '管理后台模板',
-  description: '统一工程结构、权限骨架、请求封装与后台布局，登录 UI 可按产品线独立调整。',
+  eyebrow: 'ISA Community',
+  title: '智慧校园管理后台',
+  description: '聚合成员、校车、活动、考勤和内容管理，延续旧系统操作习惯并优化后台体验。',
   cardTitle: '账号登录',
-  cardDescription: '示例账号用于模板本地闭环，接入后端时替换认证 Service。',
+  cardDescription: '请输入账号密码进入管理后台。',
   usernamePlaceholder: '请输入账号',
   passwordPlaceholder: '请输入密码',
   usernameRequired: '请输入账号',

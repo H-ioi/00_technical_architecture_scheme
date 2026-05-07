@@ -1,11 +1,10 @@
 export default {
-  eyebrow: 'Admin Template',
-  title: 'Admin Template',
+  eyebrow: 'ISA Community',
+  title: 'Smart Campus Admin',
   description:
-    'A unified project structure with permission scaffolding, request wrappers, and admin layouts.',
+    'Manage members, school buses, activities, attendance, and content with familiar workflows.',
   cardTitle: 'Account Login',
-  cardDescription:
-    'The demo account keeps the template runnable locally. Replace the auth service when connecting APIs.',
+  cardDescription: 'Enter your account and password to continue.',
   usernamePlaceholder: 'Please enter username',
   passwordPlaceholder: 'Please enter password',
   usernameRequired: 'Please enter username',

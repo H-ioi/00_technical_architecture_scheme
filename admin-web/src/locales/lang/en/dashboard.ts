@@ -1,11 +1,12 @@
 export default {
-  description:
-    'A minimal admin dashboard sample. Split cards, charts, todos, and quick entries by business domain later.',
-  todo: 'Todos',
-  visits: 'Visits Today',
-  alerts: 'Alerts',
-  apps: 'Online Apps',
-  permissionDemo: 'Permission Directive Demo',
-  viewDashboard: 'View Dashboard',
-  viewUniLibDemo: 'View Component Cases'
+  description: 'Review campus operations and quickly access frequent modules.',
+  memberTotal: 'Members',
+  todayActivityTotal: 'Activities Today',
+  pendingTaskTotal: 'Pending Tasks',
+  alertTotal: 'Alerts',
+  shortcuts: 'Shortcuts',
+  firstPhase: 'First Phase',
+  firstPhaseDescription:
+    'Login, dashboard, and member management are rebuilt first. Other modules will migrate by plan.',
+  enter: 'Enter'
 }

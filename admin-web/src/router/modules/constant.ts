@@ -35,6 +35,39 @@ export const constantRoutes: AppRouteRecord[] = [
         }
       },
       {
+        path: 'member',
+        name: 'Member',
+        redirect: '/member/student',
+        meta: {
+          title: '成员管理',
+          titleKey: 'route.member',
+          icon: 'User',
+          permission: ['member:view']
+        },
+        children: [
+          {
+            path: 'student',
+            name: 'MemberStudent',
+            component: () => import('@/views/member/student/list.vue'),
+            meta: {
+              title: '学生列表',
+              titleKey: 'route.memberStudent',
+              permission: ['member:student:view']
+            }
+          },
+          {
+            path: 'teacher',
+            name: 'MemberTeacher',
+            component: () => import('@/views/member/teacher/list.vue'),
+            meta: {
+              title: '教师列表',
+              titleKey: 'route.memberTeacher',
+              permission: ['member:teacher:view']
+            }
+          }
+        ]
+      },
+      {
         path: 'uni-lib-demo',
         name: 'UniLibDemo',
         redirect: '/uni-lib-demo/standard-table',

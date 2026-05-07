@@ -1,3 +1,7 @@
 export * from './modules/auth'
+export * from './modules/captcha'
+export * from './modules/dashboard'
+export * from './modules/member-student'
+export * from './modules/member-teacher'
 export * from './modules/menu'
 export * from './modules/uni-lib-demo'

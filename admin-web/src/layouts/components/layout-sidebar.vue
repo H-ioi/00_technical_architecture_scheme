@@ -1,7 +1,8 @@
 <script setup lang="ts">
-import { DataBoard, Grid } from '@element-plus/icons-vue'
 import { computed } from 'vue'
 import { useRoute } from 'vue-router'
+
+import LayoutMenuTree from './layout-menu-tree.vue'
 
 import { useAppI18n } from '@/composables/use-app-i18n'
 import { useAppStore, usePermissionStore } from '@/stores'
@@ -14,8 +15,6 @@ const { t } = useAppI18n()
 const activeMenu = computed(() => route.meta.activeMenu || route.path)
 const appTitle = computed(() => t('app.title'))
 const collapsedTitle = computed(() => Array.from(appTitle.value)[0] ?? 'A')
-const canViewDashboard = computed(() => permissionStore.hasPermission('dashboard:view'))
-const canViewUniLibDemo = computed(() => permissionStore.hasPermission('uni-lib:demo:view'))
 </script>
 
 <template>
@@ -31,43 +30,7 @@ const canViewUniLibDemo = computed(() => permissionStore.hasPermission('uni-lib:
       :collapse="appStore.sidebarCollapsed"
       :default-active="activeMenu"
     >
-      <el-menu-item v-if="canViewDashboard" index="/dashboard">
-        <el-icon><DataBoard /></el-icon>
-        <template #title>{{ t('route.dashboard') }}</template>
-      </el-menu-item>
-      <el-sub-menu v-if="canViewUniLibDemo" index="/uni-lib-demo">
-        <template #title>
-          <el-icon><Grid /></el-icon>
-          <span>{{ t('route.uniLibDemo') }}</span>
-        </template>
-        <el-sub-menu index="/uni-lib-demo/table-basic">
-          <template #title>{{ t('route.basicTableConfig') }}</template>
-          <el-menu-item index="/uni-lib-demo/standard-table">
-            {{ t('route.standardTable') }}
-          </el-menu-item>
-          <el-menu-item index="/uni-lib-demo/plain-table">
-            {{ t('route.plainTable') }}
-          </el-menu-item>
-          <el-menu-item index="/uni-lib-demo/no-pagination-table">
-            {{ t('route.noPaginationTable') }}
-          </el-menu-item>
-        </el-sub-menu>
-        <el-sub-menu index="/uni-lib-demo/table-tree">
-          <template #title>{{ t('route.treeTableConfig') }}</template>
-          <el-menu-item index="/uni-lib-demo/tree-table">
-            {{ t('route.treeTable') }}
-          </el-menu-item>
-        </el-sub-menu>
-        <el-sub-menu index="/uni-lib-demo/table-form">
-          <template #title>{{ t('route.tableFormConfig') }}</template>
-          <el-menu-item index="/uni-lib-demo/table-link-detail">
-            {{ t('route.tableLinkForm') }}
-          </el-menu-item>
-          <el-menu-item index="/uni-lib-demo/table-dialog-detail">
-            {{ t('route.tableDialogForm') }}
-          </el-menu-item>
-        </el-sub-menu>
-      </el-sub-menu>
+      <LayoutMenuTree :menus="permissionStore.menuRoutes" />
     </el-menu>
   </el-aside>
 </template>

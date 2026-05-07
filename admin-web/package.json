@@ -18,7 +18,9 @@
   },
   "dependencies": {
     "@element-plus/icons-vue": "^2.3.2",
+    "@types/crypto-js": "^4.2.2",
     "axios": "^1.15.2",
+    "crypto-js": "^4.2.0",
     "element-plus": "^2.13.7",
     "pinia": "^3.0.4",
     "sass": "^1.99.0",

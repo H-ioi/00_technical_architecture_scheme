@@ -1,5 +1,8 @@
 export default {
   dashboard: 'Dashboard',
+  member: 'Member Management',
+  memberStudent: 'Students',
+  memberTeacher: 'Teachers',
   uniLibDemo: 'Component Cases',
   basicTableConfig: 'Basic Table Config',
   standardTable: 'Standard Table',

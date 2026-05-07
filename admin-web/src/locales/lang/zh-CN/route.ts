@@ -1,5 +1,8 @@
 export default {
   dashboard: '工作台',
+  member: '成员管理',
+  memberStudent: '学生列表',
+  memberTeacher: '教师列表',
   uniLibDemo: '组件库案例',
   basicTableConfig: '基础表格配置',
   standardTable: '常规表格页',

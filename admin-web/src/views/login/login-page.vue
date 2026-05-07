@@ -38,8 +38,11 @@ const submitLogin = async () => {
 
 <template>
   <main class="login-page">
+    <div class="login-page__decor login-page__decor--left" />
+    <div class="login-page__decor login-page__decor--right" />
     <section class="login-page__panel">
       <div class="login-page__intro">
+        <div class="login-page__logo">ISA</div>
         <p class="login-page__eyebrow">{{ t('login.eyebrow') }}</p>
         <h1>{{ t('login.title') }}</h1>
         <p>{{ t('login.description') }}</p>
@@ -82,16 +85,40 @@ const submitLogin = async () => {
 
 <style scoped lang="scss">
 .login-page {
+  position: relative;
   display: grid;
   min-height: 100vh;
   padding: 32px;
-  background:
-    radial-gradient(circle at top left, rgb(22 119 255 / 16%), transparent 32%),
-    linear-gradient(135deg, #eef4ff 0%, #f8fafc 100%);
+  overflow: hidden;
+  background: linear-gradient(135deg, #f4f8fb 0%, #eef5f8 48%, #e8f8fb 100%);
   place-items: center;
 }
 
+.login-page__decor {
+  position: absolute;
+  border-radius: 999px;
+  filter: blur(2px);
+}
+
+.login-page__decor--left {
+  bottom: -120px;
+  left: -80px;
+  width: 320px;
+  height: 320px;
+  background: rgb(42 63 84 / 12%);
+}
+
+.login-page__decor--right {
+  top: -160px;
+  right: -80px;
+  width: 380px;
+  height: 380px;
+  background: rgb(27 188 199 / 18%);
+}
+
 .login-page__panel {
+  position: relative;
+  z-index: 1;
   display: grid;
   grid-template-columns: minmax(280px, 1fr) 420px;
   gap: 48px;
@@ -100,10 +127,14 @@ const submitLogin = async () => {
 }
 
 .login-page__intro {
+  padding: 32px;
+  color: #1f2937;
+
   h1 {
     margin: 12px 0 16px;
-    color: #111827;
-    font-size: 44px;
+    color: #1f2937;
+    font-size: 46px;
+    line-height: 1.15;
   }
 
   p {
@@ -113,8 +144,22 @@ const submitLogin = async () => {
   }
 }
 
+.login-page__logo {
+  display: inline-grid;
+  width: 64px;
+  height: 64px;
+  margin-bottom: 24px;
+  color: #fff;
+  font-size: 20px;
+  font-weight: 800;
+  background: #2a3f54;
+  border-radius: 18px;
+  box-shadow: 0 16px 36px rgb(42 63 84 / 24%);
+  place-items: center;
+}
+
 .login-page__eyebrow {
-  color: var(--app-primary-color);
+  color: #2a3f54;
   font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -122,7 +167,8 @@ const submitLogin = async () => {
 
 .login-page__card {
   border: 0;
-  border-radius: 16px;
+  border-radius: 18px;
+  box-shadow: 0 24px 60px rgb(42 63 84 / 16%);
 }
 
 .login-page__submit {

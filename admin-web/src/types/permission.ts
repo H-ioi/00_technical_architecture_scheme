@@ -1,6 +1,6 @@
-import type { AppRouteRecord } from './route'
+import type { AppMenuRecord } from './route'
 
 export interface MenuPermissionResult {
-  menus: AppRouteRecord[]
+  menus: AppMenuRecord[]
   permissions: string[]
 }

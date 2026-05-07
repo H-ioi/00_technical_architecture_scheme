@@ -1,21 +1,21 @@
 import { defineStore } from 'pinia'
 import { computed, ref } from 'vue'
 
-import type { AppRouteRecord } from '@/types/route'
+import type { AppMenuRecord } from '@/types/route'
 
 export const usePermissionStore = defineStore('permission', () => {
-  const menus = ref<AppRouteRecord[]>([])
+  const menus = ref<AppMenuRecord[]>([])
   const permissionCodes = ref<string[]>([])
   const dynamicRoutesLoaded = ref(false)
 
-  const menuRoutes = computed(() => menus.value.filter((route) => !route.meta.hidden))
+  const menuRoutes = computed(() => menus.value.filter((route) => !route.meta?.hidden))
 
-  const setMenus = (nextMenus: AppRouteRecord[]) => {
-    menus.value = nextMenus
+  const setMenus = (nextMenus?: AppMenuRecord[]) => {
+    menus.value = Array.isArray(nextMenus) ? nextMenus : []
   }
 
-  const setPermissionCodes = (nextCodes: string[]) => {
-    permissionCodes.value = nextCodes
+  const setPermissionCodes = (nextCodes?: string[]) => {
+    permissionCodes.value = Array.isArray(nextCodes) ? nextCodes : []
   }
 
   const hasPermission = (permission?: string | string[]) => {
@@ -25,7 +25,9 @@ export const usePermissionStore = defineStore('permission', () => {
 
     const requiredPermissions = Array.isArray(permission) ? permission : [permission]
 
-    return requiredPermissions.some((code) => permissionCodes.value.includes(code))
+    const codes = Array.isArray(permissionCodes.value) ? permissionCodes.value : []
+
+    return requiredPermissions.some((code) => codes.includes(code))
   }
 
   const markDynamicRoutesLoaded = () => {
