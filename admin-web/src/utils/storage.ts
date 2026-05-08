@@ -1,6 +1,16 @@
+import { STORAGE_PREFIX } from '@/config'
+
+const resolveKey = (key: string): string => {
+  const prefix = `${STORAGE_PREFIX}:`
+
+  return key.startsWith(prefix) ? key : `${prefix}${key}`
+}
+
 export const storage = {
+  key: resolveKey,
+
   get<T = string>(key: string): T | null {
-    const rawValue = window.localStorage.getItem(key)
+    const rawValue = window.localStorage.getItem(resolveKey(key))
 
     if (!rawValue) {
       return null
@@ -16,14 +26,20 @@ export const storage = {
   set<T>(key: string, value: T): void {
     const nextValue = typeof value === 'string' ? value : JSON.stringify(value)
 
-    window.localStorage.setItem(key, nextValue)
+    window.localStorage.setItem(resolveKey(key), nextValue)
   },
 
   remove(key: string): void {
-    window.localStorage.removeItem(key)
+    window.localStorage.removeItem(resolveKey(key))
   },
 
   clear(): void {
-    window.localStorage.clear()
+    const prefix = `${STORAGE_PREFIX}:`
+
+    Object.keys(window.localStorage).forEach((key) => {
+      if (key.startsWith(prefix)) {
+        window.localStorage.removeItem(key)
+      }
+    })
   }
 }

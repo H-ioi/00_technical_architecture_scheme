@@ -6,9 +6,11 @@ import { computed, reactive, ref, watchEffect } from 'vue'
 import { useRoute } from 'vue-router'
 
 import { changePasswordApi } from '@/api'
+import { DEFAULT_THEME } from '@/config'
 import { useAppI18n } from '@/composables/use-app-i18n'
 import { getLocalizedDocumentTitle } from '@/locales'
 import { useAppStore, useUserStore } from '@/stores'
+import { storage } from '@/utils/storage'
 
 const route = useRoute()
 const appStore = useAppStore()
@@ -24,9 +26,7 @@ const passwordFormRef = ref<FormInstance>()
 const passwordVisible = ref(false)
 const themeVisible = ref(false)
 const passwordSubmitting = ref(false)
-const defaultTheme = {
-  primaryColor: '#BA8E62'
-}
+const defaultTheme = DEFAULT_THEME
 const passwordForm = reactive({
   password: '',
   newpassword1: '',
@@ -225,7 +225,7 @@ watchEffect(() => {
     <UniThemeSettings
       v-model="themeVisible"
       :default-theme="defaultTheme"
-      storage-key="admin-web:theme"
+      :storage-key="storage.key('theme')"
       :title="t('common.themeSettings')"
     />
   </el-header>

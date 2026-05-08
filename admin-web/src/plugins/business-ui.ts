@@ -3,8 +3,10 @@ import { storeToRefs } from 'pinia'
 import UniLib from 'uni-ui-lib'
 import 'uni-ui-lib/style.css'
 
+import { DEFAULT_THEME } from '@/config'
 import { translateAppMessage } from '@/locales'
 import { useAppStore, usePermissionStore } from '@/stores'
+import { storage } from '@/utils/storage'
 
 export const setupBusinessUi = (app: App) => {
   const appStore = useAppStore()
@@ -26,10 +28,8 @@ export const setupBusinessUi = (app: App) => {
       }
     },
     theme: {
-      storageKey: 'admin-web:theme',
-      defaultTheme: {
-        primaryColor: '#BA8E62'
-      }
+      storageKey: storage.key('theme'),
+      defaultTheme: { ...DEFAULT_THEME }
     }
   })
 }

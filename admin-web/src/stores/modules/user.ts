@@ -6,27 +6,24 @@ import { usePermissionStore } from '@/stores/modules/permission'
 import type { LoginParams, UserProfile } from '@/types/auth'
 import { storage } from '@/utils/storage'
 
-const ACCESS_TOKEN_KEY = 'admin-web:access-token'
-const USER_PROFILE_KEY = 'admin-web:user-profile'
-
 export const useUserStore = defineStore('user', () => {
-  const accessToken = ref(storage.get<string>(ACCESS_TOKEN_KEY) ?? '')
-  const profile = ref<UserProfile | null>(storage.get<UserProfile>(USER_PROFILE_KEY))
+  const accessToken = ref(storage.get<string>('access-token') ?? '')
+  const profile = ref<UserProfile | null>(storage.get<UserProfile>('user-profile'))
 
   const isLoggedIn = computed(() => Boolean(accessToken.value))
 
   const setToken = (token: string) => {
     accessToken.value = token
-    storage.set(ACCESS_TOKEN_KEY, token)
+    storage.set('access-token', token)
   }
 
   const setProfile = (nextProfile: UserProfile | null) => {
     profile.value = nextProfile
 
     if (nextProfile) {
-      storage.set(USER_PROFILE_KEY, nextProfile)
+      storage.set('user-profile', nextProfile)
     } else {
-      storage.remove(USER_PROFILE_KEY)
+      storage.remove('user-profile')
     }
   }
 
@@ -55,8 +52,8 @@ export const useUserStore = defineStore('user', () => {
     accessToken.value = ''
     profile.value = null
     permissionStore.resetPermission()
-    storage.remove(ACCESS_TOKEN_KEY)
-    storage.remove(USER_PROFILE_KEY)
+    storage.remove('access-token')
+    storage.remove('user-profile')
   }
 
   return {
