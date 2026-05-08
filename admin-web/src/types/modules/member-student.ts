@@ -1,8 +1,6 @@
 import type { PageQuery } from '@/types/api'
 
 export interface StudentListParams extends PageQuery {
-  current?: number
-  size?: number
   keywordssearch?: string
   schoolIds?: string | number
   yearGroupName?: string[]

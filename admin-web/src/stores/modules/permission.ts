@@ -7,6 +7,7 @@ import { storage } from '@/utils/storage'
 export const usePermissionStore = defineStore('permission', () => {
   const menus = ref<AppMenuRecord[]>([])
   const permissionCodes = ref<string[]>(storage.get<string[]>('permission-codes') ?? [])
+  const allowedPaths = ref<string[]>(storage.get<string[]>('allowed-paths') ?? [])
   const dynamicRoutesLoaded = ref(false)
   const permissionVersion = ref(0)
 
@@ -22,6 +23,11 @@ export const usePermissionStore = defineStore('permission', () => {
     storage.set('permission-codes', permissionCodes.value)
   }
 
+  const setAllowedPaths = (nextPaths?: string[]) => {
+    allowedPaths.value = Array.isArray(nextPaths) ? nextPaths : []
+    storage.set('allowed-paths', allowedPaths.value)
+  }
+
   const hasPermission = (permission?: string | string[]) => {
     if (!permission) {
       return true
@@ -34,6 +40,14 @@ export const usePermissionStore = defineStore('permission', () => {
     return requiredPermissions.some((code) => codes.includes(code))
   }
 
+  const canAccessPath = (path?: string) => {
+    if (!path) {
+      return true
+    }
+
+    return allowedPaths.value.includes(path)
+  }
+
   const markDynamicRoutesLoaded = () => {
     dynamicRoutesLoaded.value = true
   }
@@ -41,20 +55,25 @@ export const usePermissionStore = defineStore('permission', () => {
   const resetPermission = () => {
     menus.value = []
     permissionCodes.value = []
+    allowedPaths.value = []
     dynamicRoutesLoaded.value = false
     permissionVersion.value += 1
     storage.remove('permission-codes')
+    storage.remove('allowed-paths')
   }
 
   return {
     menus,
     menuRoutes,
+    allowedPaths,
     permissionCodes,
     permissionVersion,
     dynamicRoutesLoaded,
+    canAccessPath,
     hasPermission,
     markDynamicRoutesLoaded,
     resetPermission,
+    setAllowedPaths,
     setMenus,
     setPermissionCodes
   }

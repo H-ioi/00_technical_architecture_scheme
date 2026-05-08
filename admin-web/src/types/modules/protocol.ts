@@ -1,8 +1,6 @@
 import type { PageQuery } from '@/types/api'
 
 export interface ProtocolListParams extends PageQuery {
-  current?: number
-  size?: number
   schoolIds?: string | number | Array<string | number>
   cnName?: string
   enName?: string
@@ -57,8 +55,6 @@ export interface ProtocolFormModel {
 }
 
 export interface ProtocolSignListParams extends PageQuery {
-  current?: number
-  size?: number
   protocolId: string | number
   schoolIds?: Array<string | number>
 }
@@ -71,12 +67,6 @@ export interface ProtocolSignRecord {
   signImageUrl?: string
   updateTime?: string
   [key: string]: unknown
-}
-
-export interface SchoolOptionRecord {
-  id: string | number
-  name?: string
-  enName?: string
 }
 
 export interface UploadFileResult {

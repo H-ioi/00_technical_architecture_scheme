@@ -10,7 +10,7 @@ import { useRouter } from 'vue-router'
 import {
   fetchProtocolDict,
   fetchProtocolPage as fetchPage,
-  fetchProtocolSchoolOptions as fetchSchools
+  fetchSchoolOptions as fetchSchools
 } from '@/api'
 import { useAppI18n } from '@/composables/use-app-i18n'
 import type { ProtocolDict, ProtocolDictItem, ProtocolRecord as Row } from '@/types/modules/protocol'
@@ -69,11 +69,11 @@ export const useList = () => {
     schoolName: (locale.value === 'en' ? row.schoolEnNames : row.schoolCnNames) || row.schoolEnNames || row.schoolCnNames
   })
 
-  const loadData: UniTableRequest = async ({ pageNo, pageSize, filters }) => {
-    const result = await fetchPage({ pageNo, pageSize, ...filters })
+  const loadData: UniTableRequest = async ({ pageNo: current, pageSize: size, filters }) => {
+    const result = await fetchPage({ current, size, ...filters })
 
     return {
-      records: result.records.map(normalizeRow),
+      data: result.data.map(normalizeRow),
       total: result.total
     }
   }

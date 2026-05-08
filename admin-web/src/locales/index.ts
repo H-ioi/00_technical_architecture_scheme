@@ -1,13 +1,13 @@
 import { createI18n } from 'vue-i18n'
 
-import en from './lang/en'
-import zhCN from './lang/zh-CN'
+import { DEFAULT_LOCALE } from '@/config'
 import type { AppLocale, LocaleMessageSchema } from '@/types/i18n'
 import { getAppTitle } from '@/utils'
 
-export type { AppLocale, LocaleMessageSchema } from '@/types/i18n'
+import en from './lang/en'
+import zhCN from './lang/zh-CN'
 
-export const defaultLocale: AppLocale = 'zh-CN'
+export type { AppLocale, LocaleMessageSchema } from '@/types/i18n'
 
 export const messages = {
   'zh-CN': zhCN,
@@ -16,8 +16,8 @@ export const messages = {
 
 export const i18n = createI18n<[LocaleMessageSchema], AppLocale>({
   legacy: false,
-  locale: defaultLocale,
-  fallbackLocale: defaultLocale,
+  locale: DEFAULT_LOCALE,
+  fallbackLocale: DEFAULT_LOCALE,
   messages,
   missingWarn: false,
   fallbackWarn: false

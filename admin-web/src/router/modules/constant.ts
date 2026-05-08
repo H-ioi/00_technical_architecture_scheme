@@ -29,7 +29,7 @@ export const constantRoutes: AppRouteRecord[] = [
         meta: {
           title: '工作台',
           titleKey: 'route.dashboard',
-          icon: 'DataBoard',
+          icon: 'House',
           affix: true
         }
       },

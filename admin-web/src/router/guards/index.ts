@@ -37,9 +37,10 @@ export const setupRouterGuards = (router: Router) => {
     }
 
     if (!permissionStore.dynamicRoutesLoaded) {
-      const result = await fetchMenuPermissions()
+      const result = await fetchMenuPermissions(router.getRoutes())
 
       permissionStore.setMenus(result?.menus)
+      permissionStore.setAllowedPaths(result?.paths)
 
       if (Array.isArray(result?.permissions) && result.permissions.length) {
         permissionStore.setPermissionCodes(result.permissions)
@@ -49,8 +50,10 @@ export const setupRouterGuards = (router: Router) => {
     }
 
     const routePermissions = to.meta.permission as string[] | undefined
+    const leaf = to.matched[to.matched.length - 1]
+    const accessPath = leaf.meta.activeMenu || (leaf.meta.hidden ? undefined : to.path)
 
-    if (!permissionStore.hasPermission(routePermissions)) {
+    if (!permissionStore.hasPermission(routePermissions) || !permissionStore.canAccessPath(accessPath as string | undefined)) {
       return '/403'
     }
 

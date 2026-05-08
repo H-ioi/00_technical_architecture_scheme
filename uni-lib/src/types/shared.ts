@@ -144,7 +144,8 @@ export interface UniTableRequestParams {
 }
 
 export interface UniTableRequestResult<T = Recordable> {
-  records: T[];
+  data?: T[];
+  records?: T[];
   total: number;
 }
 

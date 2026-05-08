@@ -4,7 +4,7 @@ import { toUniOptions } from 'uni-ui-lib'
 import { computed, onMounted, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 
-import { fetchProtocolDetail, fetchProtocolDict, fetchProtocolSchoolOptions, fetchProtocolSignPage } from '@/api'
+import { fetchProtocolDetail, fetchProtocolDict, fetchProtocolSignPage, fetchSchoolOptions } from '@/api'
 import { useAppI18n } from '@/composables/use-app-i18n'
 import type { ProtocolDict, ProtocolRecord } from '@/types/modules/protocol'
 
@@ -67,10 +67,10 @@ const detailModel = computed(() => {
   }
 })
 
-const loadSignData: UniTableRequest = ({ pageNo, pageSize }) =>
+const loadSignData: UniTableRequest = ({ pageNo: current, pageSize: size }) =>
   fetchProtocolSignPage({
-    pageNo,
-    pageSize,
+    current,
+    size,
     protocolId: protocolId.value,
     schoolIds: signSchoolIds.value
   })
@@ -81,7 +81,7 @@ const goBack = () => {
 
 onMounted(async () => {
   const [schools, dict, record] = await Promise.all([
-    fetchProtocolSchoolOptions(),
+    fetchSchoolOptions(),
     fetchProtocolDict(),
     fetchProtocolDetail(protocolId.value)
   ])

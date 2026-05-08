@@ -1,3 +1,4 @@
+import { API_PATHS } from '@/api/constants'
 import type { PageResult } from '@/types/api'
 import type {
   ProtocolDict,
@@ -6,20 +7,9 @@ import type {
   ProtocolRecord,
   ProtocolSignListParams,
   ProtocolSignRecord,
-  SchoolOptionRecord,
   UploadFileResult
 } from '@/types/modules/protocol'
 import { request } from '@/utils/request'
-
-interface LegacyPageResult<T> {
-  data: T[]
-  total: number
-  current: number
-}
-
-const PROTOCOL_PATH = '/isacommunity/protocol'
-const PROTOCOL_SIGN_PATH = '/isacommunity/protocolsign'
-const MEMBERSHIP_PATH = '/isacommunity/membership'
 
 const resolveUploadUrl = () => {
   const uploadUrl = import.meta.env.VITE_UPLOAD_URL || '/files/upload'
@@ -32,82 +22,43 @@ const resolveUploadUrl = () => {
   return uploadUrl
 }
 
-const toPageParams = <T extends ProtocolListParams | ProtocolSignListParams>(params: T) => {
-  const { pageNo, pageSize, ...rest } = params
-
-  return {
-    ...rest,
-    current: params.current ?? pageNo,
-    size: params.size ?? pageSize
+// 分页查询协议列表。
+export const fetchProtocolPage = (params: ProtocolListParams) =>
+  request.get<PageResult<ProtocolRecord>, PageResult<ProtocolRecord>>(`${API_PATHS.protocol}/getProtocolPage`, {
+    params
   }
-}
+)
 
-/** 分页查询协议列表。 */
-export const fetchProtocolPage = async (params: ProtocolListParams): Promise<PageResult<ProtocolRecord>> => {
-  const result = await request.get<LegacyPageResult<ProtocolRecord>, LegacyPageResult<ProtocolRecord>>(
-    `${PROTOCOL_PATH}/getProtocolPage`,
-    {
-      params: toPageParams(params)
-    }
-  )
+// 查询协议类型和所属模块字典。
+export const fetchProtocolDict = () =>
+  request.get<ProtocolDict, ProtocolDict>(`${API_PATHS.protocol}/getDictList`)
 
-  return {
-    records: result.data,
-    total: result.total
-  }
-}
+// 查询协议详情。
+export const fetchProtocolDetail = (id: string | number) =>
+  request.get<ProtocolRecord, ProtocolRecord>(`${API_PATHS.protocol}/get/${id}`)
 
-/** 查询协议类型和所属模块字典。 */
-export const fetchProtocolDict = async () => {
-  const result = await request.get<ProtocolDict, ProtocolDict>(`${PROTOCOL_PATH}/getDictList`)
+// 新增协议。
+export const addProtocol = (data: ProtocolFormModel) => request.post(`${API_PATHS.protocol}/add`, data)
 
-  return result
-}
+// 编辑协议。
+export const updateProtocol = (data: ProtocolFormModel) => request.post(`${API_PATHS.protocol}/edit`, data)
 
-/** 查询协议详情。 */
-export const fetchProtocolDetail = async (id: string | number) => {
-  const result = await request.get<ProtocolRecord, ProtocolRecord>(`${PROTOCOL_PATH}/get/${id}`)
-
-  return result
-}
-
-/** 新增协议。 */
-export const addProtocol = (data: ProtocolFormModel) => request.post(`${PROTOCOL_PATH}/add`, data)
-
-/** 编辑协议。 */
-export const updateProtocol = (data: ProtocolFormModel) => request.post(`${PROTOCOL_PATH}/edit`, data)
-
-/** 删除协议。 */
+// 删除协议。
 export const deleteProtocol = (ids: Array<string | number>) =>
-  request.delete(`${PROTOCOL_PATH}/del`, {
+  request.delete(`${API_PATHS.protocol}/del`, {
     params: { ids }
   })
 
-/** 查询签署记录。 */
-export const fetchProtocolSignPage = async (
-  params: ProtocolSignListParams
-): Promise<PageResult<ProtocolSignRecord>> => {
-  const result = await request.get<LegacyPageResult<ProtocolSignRecord>, LegacyPageResult<ProtocolSignRecord>>(
-    `${PROTOCOL_SIGN_PATH}/getProtocolSignPage`,
+// 查询签署记录。
+export const fetchProtocolSignPage = (params: ProtocolSignListParams) =>
+  request.get<PageResult<ProtocolSignRecord>, PageResult<ProtocolSignRecord>>(
+    `${API_PATHS.protocolSign}/getProtocolSignPage`,
     {
-      params: toPageParams(params)
+      params
     }
   )
 
-  return {
-    records: result.data,
-    total: result.total
-  }
-}
-
-/** 查询学校选项。 */
-export const fetchProtocolSchoolOptions = async () => {
-  const result = await request.get<SchoolOptionRecord[], SchoolOptionRecord[]>(`${MEMBERSHIP_PATH}/getSchoolList`)
-
-  return result
-}
-
-/** 上传协议 PDF 文档。 */
+// 上传协议 PDF 文档。
 export const uploadProtocolDocument = async (file: File) => {
   const formData = new FormData()
   formData.append('file', file)

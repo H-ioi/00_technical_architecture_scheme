@@ -5,7 +5,7 @@ import { useUserStore } from '@/stores'
 import type { ApiResponse } from '@/types/api'
 
 export const request = axios.create({
-  baseURL: import.meta.env.VITE_API_BASE_URL || '/api',
+  baseURL: import.meta.env.VITE_API_BASE_URL,
   timeout: 60000
 })
 
@@ -21,8 +21,8 @@ request.interceptors.request.use((config: InternalAxiosRequestConfig) => {
     delete config.headers.isToken
   }
 
-  config.headers['TENANT-ID'] = import.meta.env.VITE_TENANT_ID || '5'
-  config.headers.version = 'B'
+  config.headers['TENANT-ID'] = import.meta.env.VITE_TENANT_ID
+  config.headers.version = import.meta.env.VITE_API_VERSION
 
   if (config.method?.toLowerCase() === 'get') {
     // 兼容旧接口数组参数格式：a=1&a=2。

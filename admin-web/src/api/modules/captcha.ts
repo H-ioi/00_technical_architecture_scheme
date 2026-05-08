@@ -20,7 +20,7 @@ const CAPTCHA_TYPE = 'blockPuzzle'
 const normalizeCaptchaResponse = <T>(response: CaptchaResponse<T> | { data: CaptchaResponse<T> }) =>
   'data' in response ? response.data : response
 
-/** AES 加密滑块校验点位。 */
+// AES 加密滑块校验点位。
 export const encryptCaptchaPoint = (value: string, secretKey?: string) => {
   if (!secretKey) {
     return value
@@ -35,7 +35,7 @@ export const encryptCaptchaPoint = (value: string, secretKey?: string) => {
   }).toString()
 }
 
-/** 获取滑块验证码图片。 */
+// 获取滑块验证码图片。
 export const fetchCaptchaImage = async (): Promise<CaptchaImageData> => {
   const response = await request.get<
     CaptchaResponse<CaptchaImageData> | { data: CaptchaResponse<CaptchaImageData> },
@@ -52,7 +52,7 @@ export const fetchCaptchaImage = async (): Promise<CaptchaImageData> => {
   return result.repData
 }
 
-/** 校验滑块位置。 */
+// 校验滑块位置。
 export const checkCaptchaPoint = async (data: {
   pointJson: string
   token: string

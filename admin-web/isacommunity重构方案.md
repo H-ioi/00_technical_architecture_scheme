@@ -284,7 +284,7 @@ views/login/
   -> createUniAuth.login()
   -> 写入 token 和用户信息
   -> 拉取菜单和权限码
-  -> 注册动态路由
+  -> 保存授权菜单和允许访问路径
   -> 跳转首页
 ```
 
@@ -685,21 +685,66 @@ if (status === 401) {
 | 外链菜单打开新窗口 | 菜单 meta 标记 external |
 | 锁屏逻辑 | 第一轮不迁移，后续单独评估 |
 
-### 14.2 菜单数据来源
+### 14.2 菜单数据来源和兼容原则
 
-菜单采用“后端菜单树优先，本地配置兜底”的方式。
+菜单采用“旧菜单接口是权限源，本地路由是前端实现源”的方式。
+
+当前重构项目仍复用旧接口 `/upms/menu/user` 判断用户可见菜单。接口返回的菜单树决定：
+
+- 哪些菜单显示在左侧。
+- 哪些页面路径允许访问。
+- 菜单标题可按接口返回覆盖。
+- 菜单节点中的 `permission`、`permissions`、`authority` 可补充按钮/业务权限码。
+
+本地路由 `constantRoutes` / `router.getRoutes()` 决定：
+
+- 页面组件注册。
+- `meta.titleKey`、`meta.activeMenu`、`meta.hidden` 等前端行为。
+- 菜单 `icon`。图标必须使用本地路由 `meta.icon`，不要使用旧接口返回的 icon 覆盖。
+
+不要再用本地静态菜单模拟权限，也不要请求菜单接口后丢弃响应。否则用户知道 URL 时可能绕过菜单权限访问页面。
 
 ```text
 登录成功
   -> 拉取用户信息
-  -> 拉取菜单树和权限码
-  -> 标准化菜单数据
-  -> 生成动态路由
-  -> permissionStore 保存菜单和权限码
+  -> 拉取 /upms/menu/user
+  -> 将旧菜单 path/url 映射到新路由 path
+  -> 用 router.getRoutes() 补充本地 route meta
+  -> permissionStore 保存菜单、允许访问路径、权限码
   -> 侧边栏递归渲染菜单
 ```
 
-第一轮如后端菜单接口暂未稳定，可以先使用本地菜单配置模拟，但数据结构必须按后端菜单树设计，后续直接替换来源。
+当前实现位置：
+
+- `src/api/modules/menu.ts`：请求旧菜单接口，做路径兼容和菜单标准化。
+- `src/router/guards/index.ts`：调用 `fetchMenuPermissions(router.getRoutes())`，避免 `menu.ts` 直接导入 `constantRoutes` 造成循环依赖。
+- `src/stores/modules/permission.ts`：保存 `menus`、`allowedPaths`、`permissionCodes`。
+
+### 14.2.1 旧路径到新路径映射
+
+旧系统菜单路径包含 `/isacommunity` 和旧页面层级，新项目路由已去掉这些旧层级。必须在 `src/api/modules/menu.ts` 的 `MENU_PATH_ALIASES` 中维护旧路径到新路径的映射。
+
+当前第一轮映射：
+
+| 旧菜单路径 | 新路由路径 |
+| --- | --- |
+| `/isacommunity/home/index` | `/dashboard` |
+| `/isacommunity/home` | `/dashboard` |
+| `/isacommunity/member` | `/member` |
+| `/isacommunity/member/student/index` | `/member/student` |
+| `/isacommunity/member/student` | `/member/student` |
+| `/isacommunity/member/teacher/index` | `/member/teacher` |
+| `/isacommunity/member/teacher` | `/member/teacher` |
+| `/isacommunity/protocol` | `/protocol` |
+| `/isacommunity/protocol/index` | `/protocol` |
+
+后续每迁移一个旧菜单入口，都必须同步补充：
+
+- 本地 `constantRoutes` 中的新路由。
+- `MENU_PATH_ALIASES` 中旧路径到新路径的映射。
+- 页面按钮权限码使用 `v-uni-permission` 或 `useUniPermission()`。
+
+如果接口菜单路径没有映射到本地路由，该菜单不会显示，也不会进入 `allowedPaths`。
 
 ### 14.3 标准菜单结构
 
@@ -707,52 +752,34 @@ if (status === 401) {
 
 ```ts
 export interface AppMenuRecord {
-  id: string | number
-  parentId?: string | number
   path: string
   name: string
-  title: string
-  titleKey?: string
-  icon?: string
-  component?: string
-  redirect?: string
-  permission?: string | string[]
-  hidden?: boolean
-  keepAlive?: boolean
-  affix?: boolean
-  external?: boolean
+  meta: AppRouteMeta
   children?: AppMenuRecord[]
 }
 ```
 
 字段约定：
 
-- `path` 用于路由和菜单选中。
-- `component` 使用组件映射 key，不存真实 import 代码。
-- `permission` 控制路由访问。
-- `hidden` 控制是否显示在侧边栏。
-- `external` 控制外链打开方式。
+- `path` 使用映射后的新项目路由路径。
+- `name` 优先使用本地路由 `name`。
+- `meta` 以本地路由 meta 为主，接口只允许覆盖菜单标题。
+- `meta.icon` 使用本地路由配置。
+- `children` 由旧接口菜单树递归转换而来。
 
 ### 14.4 动态路由生成
 
-动态路由不直接信任后端组件路径，前端维护组件映射表。
-
-```ts
-const routeComponentMap = {
-  Dashboard: () => import('@/views/dashboard/dashboard-page.vue'),
-  MemberStudent: () => import('@/views/member/student/list.vue'),
-  MemberTeacher: () => import('@/views/member/teacher/list.vue')
-}
-```
+第一轮不根据接口动态注册组件路由。页面路由由本地 `constantRoutes` 注册，菜单接口只做授权和显示过滤。
 
 生成规则：
 
 - 后端返回菜单树。
-- 前端按 `component` key 匹配组件。
+- 前端按 `MENU_PATH_ALIASES` 把旧 path/url 转成新路由 path。
+- 前端用 `router.getRoutes()` 查找本地路由。
 - 无组件的父级菜单只作为分组。
-- 未匹配组件的菜单不注册路由，并在开发环境提示。
-- 所有业务路由挂载到 `layouts/index.vue` 下。
-- `404` 路由最后注册。
+- 未匹配本地路由的菜单不显示，不进入 `allowedPaths`。
+- 隐藏路由不显示在菜单中。
+- 详情页等隐藏路由通过 `meta.activeMenu` 复用列表页权限。
 
 ### 14.5 侧边栏渲染
 
@@ -783,7 +810,7 @@ sidebar.vue
   -> 判断白名单
   -> 判断登录态
   -> 首次进入时拉菜单和权限
-  -> 注册动态路由
+  -> 保存授权菜单和允许访问路径
   -> 校验路由权限
   -> 写入 tags-view
   -> 放行
@@ -794,6 +821,8 @@ sidebar.vue
 - 未登录访问业务页跳转 `/login?redirect=xxx`。
 - 已登录访问 `/login` 跳转首页。
 - 菜单和权限只在首次进入或刷新后加载一次。
+- 普通业务页必须存在于 `permissionStore.allowedPaths`。
+- 隐藏详情页使用 `activeMenu` 对应路径做权限校验。
 - 退出登录必须清空 token、用户信息、菜单、权限码、tags-view。
 - 401 由请求层触发退出和跳转登录。
 - 403 跳转无权限页。

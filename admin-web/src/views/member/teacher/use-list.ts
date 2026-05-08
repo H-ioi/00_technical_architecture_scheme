@@ -9,7 +9,7 @@ import { computed, onMounted, ref } from 'vue'
 import {
   fetchTeacherPage as fetchPage,
   fetchTeacherRoleOptions as fetchRoles,
-  fetchTeacherSchoolOptions as fetchSchools
+  fetchSchoolOptions as fetchSchools
 } from '@/api'
 import { useAppI18n } from '@/composables/use-app-i18n'
 import type { TeacherRecord as Row } from '@/types/modules/member-teacher'
@@ -50,8 +50,8 @@ export const useList = () => {
   const columns = computed(() => createColumns(t))
   const detailConfig = computed(() => createDetailConfig(t))
 
-  const loadData: UniTableRequest = ({ pageNo, pageSize, filters }) =>
-    fetchPage({ pageNo, pageSize, ...filters })
+  const loadData: UniTableRequest = ({ pageNo: current, pageSize: size, filters }) =>
+    fetchPage({ current, size, ...filters })
 
   const openDetail = (row: Row) => {
     currentRecord.value = row

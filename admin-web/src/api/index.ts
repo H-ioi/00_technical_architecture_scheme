@@ -1,5 +1,6 @@
 export * from './modules/auth'
 export * from './modules/captcha'
+export * from './modules/membership'
 export * from './modules/member-student'
 export * from './modules/member-teacher'
 export * from './modules/menu'

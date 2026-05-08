@@ -5,11 +5,11 @@ export interface ApiResponse<T = unknown> {
 }
 
 export interface PageQuery {
-  pageNo: number
-  pageSize: number
+  current: number
+  size: number
 }
 
 export interface PageResult<T> {
-  records: T[]
+  data: T[]
   total: number
 }

@@ -91,7 +91,7 @@ export function useData(options: UseDataOptions) {
         sort: sortState.value,
         filters: options.getFilters?.(),
       });
-      tableData.value = result.records;
+      tableData.value = result.data ?? result.records ?? [];
       paginationState.total = result.total;
       options.emitLoadSuccess(result);
     } catch (error) {

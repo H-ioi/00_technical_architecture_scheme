@@ -1,8 +1,6 @@
 import type { PageQuery } from '@/types/api'
 
 export interface TeacherListParams extends PageQuery {
-  current?: number
-  size?: number
   keywordssearch?: string
   schoolIds?: string | number
   role?: string
@@ -25,8 +23,3 @@ export interface TeacherRecord {
   [key: string]: unknown
 }
 
-export interface SchoolOptionRecord {
-  id: string | number
-  name: string
-  enName: string
-}

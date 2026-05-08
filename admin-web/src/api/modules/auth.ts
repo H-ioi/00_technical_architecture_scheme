@@ -32,7 +32,7 @@ const normalizeProfile = (user?: OAuthTokenResult['user_info'], roles: string[] 
   roles
 })
 
-/** 加密登录密码。 */
+// 加密登录密码。
 const encryptLoginPassword = (password: string) => {
   const key = CryptoJS.enc.Latin1.parse(LOGIN_PASSWORD_KEY)
 
@@ -43,7 +43,7 @@ const encryptLoginPassword = (password: string) => {
   }).toString()
 }
 
-/** 请求登录接口。 */
+// 请求登录接口。
 const requestLogin = async (params: LoginParams): Promise<LoginResult> => {
   const data = new URLSearchParams()
 
@@ -88,7 +88,7 @@ export const authService = createUniAuth<LoginParams, LoginResult['user']>({
   }
 })
 
-/** 登录系统。 */
+// 登录系统。
 export const loginApi = async (params: LoginParams): Promise<LoginResult> => {
   const result = await requestLogin(params)
 
@@ -100,13 +100,13 @@ export const loginApi = async (params: LoginParams): Promise<LoginResult> => {
   return result
 }
 
-/** 退出系统。 */
+// 退出系统。
 export const logoutApi = async () => {
   await request.delete<void, void>('/auth/token/logout')
   await authService.logout()
 }
 
-/** 修改当前用户密码。 */
+// 修改当前用户密码。
 export const changePasswordApi = async (data: ChangePasswordParams) => {
   await request.put<void, void>('/upms/user/edit', data)
 }

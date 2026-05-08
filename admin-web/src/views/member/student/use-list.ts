@@ -4,7 +4,7 @@ import { toUniOptions, useUniListState } from 'uni-ui-lib'
 
 import {
   fetchFormOptions as fetchForms,
-  fetchMembershipSchoolOptions as fetchSchools,
+  fetchSchoolOptions as fetchSchools,
   fetchStudentPage as fetchPage,
   fetchYearGroupOptions as fetchYearGroups
 } from '@/api'
@@ -68,8 +68,8 @@ export const useList = () => {
   const columns = computed(() => createColumns(t))
   const detailConfig = computed(() => createDetailConfig(t))
 
-  const loadData: UniTableRequest = ({ pageNo, pageSize, filters }) =>
-    fetchPage({ pageNo, pageSize, ...filters })
+  const loadData: UniTableRequest = ({ pageNo: current, pageSize: size, filters }) =>
+    fetchPage({ current, size, ...filters })
 
   const openDetail = (row: Row) => {
     currentRecord.value = row

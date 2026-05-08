@@ -57,14 +57,14 @@ const displayItems = computed(() => {
   ]
 })
 
-const loadSignData: UniTableRequest = ({ pageNo, pageSize }) => {
+const loadSignData: UniTableRequest = ({ pageNo: current, pageSize: size }) => {
   if (!props.source?.id) {
-    return Promise.resolve({ records: [], total: 0 })
+    return Promise.resolve({ data: [], total: 0 })
   }
 
   return fetchProtocolSignPage({
-    pageNo,
-    pageSize,
+    current,
+    size,
     protocolId: props.source.id,
     schoolIds: signSchoolIds.value
   })
