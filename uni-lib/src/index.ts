@@ -2,14 +2,16 @@
 import { UniConfigProvider } from "./components/uni-config-provider";
 import { UniDataTable } from "./components/uni-data-table";
 import { UniForm } from "./components/uni-form";
+import { UniIcon } from "./components/uni-icon";
 import { UniSearchForm } from "./components/uni-search-form";
 import { UniThemeSettings } from "./components/uni-theme-settings";
 import { UniUpload } from "./components/uni-upload";
 import { install } from "./plugins/install";
 import "./style.scss";
 
-export { UniConfigProvider, UniDataTable, UniForm, UniSearchForm, UniThemeSettings, UniUpload };
+export { UniConfigProvider, UniDataTable, UniForm, UniIcon, UniSearchForm, UniThemeSettings, UniUpload };
 export * from "./plugins/install";
+export * from "./icons";
 export * from "./types/shared";
 export * from "./types/uni-data-table";
 export * from "./directives/copy";

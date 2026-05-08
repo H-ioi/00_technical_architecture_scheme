@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ArrowDown, Expand, Fold } from '@element-plus/icons-vue'
 import { ElMessage, type FormInstance, type FormRules } from 'element-plus'
+import { UniIcon, UniZhEnIcon } from 'uni-ui-lib'
 import { computed, reactive, ref, watchEffect } from 'vue'
 import { useRoute } from 'vue-router'
 
@@ -145,7 +146,7 @@ watchEffect(() => {
     <div class="header__right">
       <el-dropdown trigger="click" @command="switchLocale">
         <button class="header__locale header__action" type="button">
-          <!-- <span class="header__locale-icon">文A</span> -->
+          <UniIcon class="header__locale-icon" :icon="UniZhEnIcon" :size="24" />
           {{ localeLabel }}
           <el-icon class="header__locale-arrow">
             <ArrowDown />
@@ -285,8 +286,11 @@ watchEffect(() => {
 
   &__locale-icon {
     color: var(--app-text-color-secondary);
-    font-size: 13px;
-    line-height: 1;
+    transition: color 0.2s ease;
+  }
+
+  &__locale:hover &__locale-icon {
+    color: var(--app-primary-color);
   }
 
   &__locale-arrow {

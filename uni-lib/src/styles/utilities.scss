@@ -42,22 +42,28 @@
 // 默认列表页布局
 .uni-list-page {
   display: grid;
-  gap: 16px;
+  min-width: 0;
+
+  > * {
+    min-width: 0;
+  }
 
   &__header {
     display: flex;
     gap: 16px;
     align-items: flex-start;
     justify-content: space-between;
+    margin-bottom: 15px;
 
     h1 {
-      margin: 0 0 8px;
+      margin: 0;
       font-size: 22px;
     }
 
     p {
       margin: 0;
-      color: var(--app-text-color-secondary);
+      color: #64748b;
+      font-size: 13px;
     }
   }
 }

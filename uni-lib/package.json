@@ -36,6 +36,11 @@
       "import": "./dist/index.mjs",
       "require": "./dist/index.cjs"
     },
+    "./components/uni-icon": {
+      "types": "./dist/src/components/uni-icon/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.cjs"
+    },
     "./components/uni-search-form": {
       "types": "./dist/src/components/uni-search-form/index.d.ts",
       "import": "./dist/index.mjs",
@@ -86,6 +91,11 @@
       "import": "./dist/index.mjs",
       "require": "./dist/index.cjs"
     },
+    "./icons": {
+      "types": "./dist/src/icons/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.cjs"
+    },
     "./utils/format": {
       "types": "./dist/src/utils/format.d.ts",
       "import": "./dist/index.mjs",
@@ -110,6 +120,7 @@
   },
   "scripts": {
     "dev": "vite --host 0.0.0.0",
+    "icons:generate": "node scripts/generate-icons.mjs",
     "build": "vite build",
     "type-check": "vue-tsc --noEmit -p tsconfig.json",
     "prepack": "npm run build",

@@ -385,6 +385,7 @@ watch(() => [props.maxHeight, actualData.value.length, paginationConfig.value, f
 
 <style scoped lang="scss">
 .uni-data-table {
+  min-width: 0;
   width: 100%;
 
   &.is-fullscreen {
