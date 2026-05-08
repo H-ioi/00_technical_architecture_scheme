@@ -1,10 +1,18 @@
 import type { Router } from 'vue-router'
 
 import { fetchMenuPermissions } from '@/api/modules/menu'
-import { getLocalizedDocumentTitle } from '@/locales'
+import { getLocalizedDocumentTitle, translateAppMessage } from '@/locales'
 import { usePermissionStore, useTagsViewStore, useUserStore } from '@/stores'
 
 const whiteList = ['/login']
+
+const getRouteParamText = (value: string | string[] | undefined) => {
+  if (Array.isArray(value)) {
+    return value[0] ?? ''
+  }
+
+  return value ?? ''
+}
 
 export const setupRouterGuards = (router: Router) => {
   router.beforeEach(async (to) => {
@@ -57,10 +65,16 @@ export const setupRouterGuards = (router: Router) => {
     const shouldAddTag = !leaf.meta.hidden || Boolean(leaf.meta.activeMenu)
 
     if (shouldAddTag && leaf.name) {
+      const detailId = leaf.name === 'ProtocolDetail' ? getRouteParamText(to.params.id as string | string[] | undefined) : ''
+      const titleKey = detailId ? undefined : (leaf.meta.titleKey as string | undefined)
+      const title = detailId
+        ? `${translateAppMessage(leaf.meta.titleKey as string | undefined, String(leaf.meta.title || leaf.name))}_${detailId}`
+        : String(leaf.meta.title || leaf.name)
+
       tagsViewStore.addTag({
         path: to.fullPath,
-        title: String(leaf.meta.title || leaf.name),
-        titleKey: leaf.meta.titleKey as string | undefined,
+        title,
+        titleKey,
         affix: Boolean(leaf.meta.affix)
       })
     }

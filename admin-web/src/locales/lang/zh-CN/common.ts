@@ -16,6 +16,7 @@ export default {
   scrollRight: '向右滚动',
   more: '更多',
   refresh: '刷新',
+  closeCurrent: '关闭当前',
   closeOthers: '关闭其他',
   closeAll: '关闭全部',
   passwordChanged: '修改成功，请重新登录',

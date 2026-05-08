@@ -16,6 +16,7 @@ export default {
   scrollRight: 'Scroll right',
   more: 'More',
   refresh: 'Refresh',
+  closeCurrent: 'Close Current',
   closeOthers: 'Close Others',
   closeAll: 'Close All',
   passwordChanged: 'Password changed. Please log in again.',

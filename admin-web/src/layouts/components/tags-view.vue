@@ -5,6 +5,7 @@ import { useRoute, useRouter } from 'vue-router'
 
 import { useAppI18n } from '@/composables/use-app-i18n'
 import { useTagsViewStore } from '@/stores'
+import type { TagView } from '@/types/tags-view'
 
 const route = useRoute()
 const router = useRouter()
@@ -29,6 +30,10 @@ const goTag = (path: string) => {
 
 const closeTag = (path: string, event: Event) => {
   event.stopPropagation()
+  closeTagByPath(path)
+}
+
+const closeTagByPath = (path: string) => {
   const isActive = route.fullPath === path
   const nextTag = findNextTag(path)
 
@@ -48,8 +53,15 @@ const refreshCurrent = () => {
   tagsViewStore.refreshCurrentTag()
 }
 
-const closeOthers = () => {
-  tagsViewStore.removeOtherTags(route.fullPath)
+const refreshTag = (tag: TagView) => {
+  if (tag.path !== route.fullPath) {
+    router.push(tag.path)
+  }
+  tagsViewStore.refreshCurrentTag()
+}
+
+const closeOthers = (path = route.fullPath) => {
+  tagsViewStore.removeOtherTags(path)
 }
 
 const closeAll = () => {
@@ -74,22 +86,61 @@ const handleMoreCommand = (command: string | number | object) => {
     closeAll()
   }
 }
+
+const handleTagCommand = (command: string | number | object, tag: TagView) => {
+  if (command === 'refresh') {
+    refreshTag(tag)
+    return
+  }
+
+  if (command === 'close') {
+    closeTagByPath(tag.path)
+    return
+  }
+
+  if (command === 'closeOthers') {
+    closeOthers(tag.path)
+    if (tag.path !== route.fullPath) {
+      router.push(tag.path)
+    }
+    return
+  }
+
+  if (command === 'closeAll') {
+    closeAll()
+  }
+}
 </script>
 
 <template>
   <div class="tags-view">
     <div ref="scrollRef" class="tags-view__scroll">
-      <el-tag
+      <el-dropdown
         v-for="tag in tagsViewStore.visitedTags"
         :key="tag.path"
-        class="tags-view__tag"
-        :closable="!tag.affix"
-        :effect="tag.path === route.fullPath ? 'dark' : 'plain'"
-        @click="goTag(tag.path)"
-        @close="closeTag(tag.path, $event)"
+        trigger="contextmenu"
+        popper-class="tags-view-context-dropdown"
+        @command="(command) => handleTagCommand(command, tag)"
       >
-        {{ t(tag.titleKey, tag.title) }}
-      </el-tag>
+        <el-tag
+          class="tags-view__tag"
+          :class="{ 'is-active': tag.path === route.fullPath }"
+          :closable="!tag.affix"
+          :effect="tag.path === route.fullPath ? 'dark' : 'plain'"
+          @click="goTag(tag.path)"
+          @close="closeTag(tag.path, $event)"
+        >
+          {{ t(tag.titleKey, tag.title) }}
+        </el-tag>
+        <template #dropdown>
+          <el-dropdown-menu>
+            <el-dropdown-item command="refresh">{{ t('common.refresh') }}</el-dropdown-item>
+            <el-dropdown-item command="close" :disabled="tag.affix">{{ t('common.closeCurrent') }}</el-dropdown-item>
+            <el-dropdown-item command="closeOthers">{{ t('common.closeOthers') }}</el-dropdown-item>
+            <el-dropdown-item command="closeAll">{{ t('common.closeAll') }}</el-dropdown-item>
+          </el-dropdown-menu>
+        </template>
+      </el-dropdown>
     </div>
     <div class="tags-view__actions">
       <el-button
@@ -142,7 +193,8 @@ const handleMoreCommand = (command: string | number | object) => {
     height: 100%;
     overflow-x: auto;
     overflow-y: hidden;
-    scrollbar-width: thin;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
   }
 
   &__scroll::-webkit-scrollbar {
@@ -153,6 +205,24 @@ const handleMoreCommand = (command: string | number | object) => {
     flex-shrink: 0;
     cursor: pointer;
     user-select: none;
+  }
+
+  &__tag :deep(.el-tag__close) {
+    width: 0;
+    margin-left: 0;
+    overflow: hidden;
+    opacity: 0;
+    transition:
+      width 0.2s ease,
+      margin-left 0.2s ease,
+      opacity 0.2s ease;
+  }
+
+  &__tag:hover :deep(.el-tag__close),
+  &__tag.is-active :deep(.el-tag__close) {
+    width: 14px;
+    margin-left: 6px;
+    opacity: 1;
   }
 
   &__actions {
