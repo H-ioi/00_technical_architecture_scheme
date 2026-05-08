@@ -2,7 +2,6 @@
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { computed, ref } from 'vue'
 
-import DetailDialog from './components/detail-dialog.vue'
 import FormDialog from './components/form-dialog.vue'
 import { useList } from './use-list'
 
@@ -15,7 +14,6 @@ const {
   actions,
   columns,
   currentRecord,
-  detailVisible,
   filters,
   formMode,
   formVisible,
@@ -123,13 +121,6 @@ const handleDelete = async () => {
       :yes-no-options="yesNoOptions"
       :status-options="statusOptions"
       @saved="refreshTable"
-    />
-
-    <DetailDialog
-      v-model:visible="detailVisible"
-      :source="currentRecord"
-      :school-options="schoolOptions"
-      :value-enums="valueEnums"
     />
   </section>
 </template>

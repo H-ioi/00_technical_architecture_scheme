@@ -37,7 +37,8 @@ export default {
     reset: 'Reset',
     submit: 'Confirm',
     cancel: 'Cancel',
-    close: 'Close'
+    close: 'Close',
+    back: 'Back'
   },
   options: {
     yes: 'Yes',

@@ -3,5 +3,6 @@ export default {
   member: 'Member Management',
   memberStudent: 'Students',
   memberTeacher: 'Teachers',
-  protocol: 'Protocol Management'
+  protocol: 'Protocol Management',
+  protocolDetail: 'Protocol Detail'
 }

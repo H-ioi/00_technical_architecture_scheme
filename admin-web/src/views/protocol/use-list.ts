@@ -6,6 +6,7 @@ import type {
   UniTableRequestResult
 } from 'uni-ui-lib'
 import { computed, nextTick, onMounted, ref } from 'vue'
+import { useRouter } from 'vue-router'
 
 import {
   fetchProtocolDict,
@@ -29,6 +30,7 @@ const createDictOptions = (items: ProtocolDictItem[] = [], locale: string): UniO
   }))
 
 export const useList = () => {
+  const router = useRouter()
   const { locale, t } = useAppI18n()
   const initialFilters = {
     schoolIds: undefined,
@@ -42,7 +44,6 @@ export const useList = () => {
   const filters = ref<Recordable>({})
   const tableRef = ref<{ refresh: () => void } | null>(null)
   const total = ref(0)
-  const detailVisible = ref(false)
   const formVisible = ref(false)
   const formMode = ref<'add' | 'edit'>('add')
   const currentRecord = ref<Row | null>(null)
@@ -98,8 +99,7 @@ export const useList = () => {
   }
 
   const openDetail = (row: Row) => {
-    currentRecord.value = row
-    detailVisible.value = true
+    void router.push(`/protocol/detail/${row.id}`)
   }
 
   const openForm = (mode: 'add' | 'edit', row?: Row) => {
@@ -134,7 +134,6 @@ export const useList = () => {
     actions,
     columns,
     currentRecord,
-    detailVisible,
     filters,
     formMode,
     formVisible,

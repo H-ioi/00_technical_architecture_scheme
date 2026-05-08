@@ -72,6 +72,17 @@ export const constantRoutes: AppRouteRecord[] = [
           titleKey: 'route.protocol',
           icon: 'Document'
         }
+      },
+      {
+        path: 'protocol/detail/:id',
+        name: 'ProtocolDetail',
+        component: () => import('@/views/protocol/detail.vue'),
+        meta: {
+          title: '协议详情',
+          titleKey: 'route.protocolDetail',
+          hidden: true,
+          activeMenu: '/protocol'
+        }
       }
     ]
   },

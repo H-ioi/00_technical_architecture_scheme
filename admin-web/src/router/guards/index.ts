@@ -54,7 +54,9 @@ export const setupRouterGuards = (router: Router) => {
     // 使用叶子路由 meta：父级 layout 常带 hidden，合并后 to.meta.hidden 会误判
     const leaf = to.matched[to.matched.length - 1]
 
-    if (!leaf.meta.hidden && leaf.name) {
+    const shouldAddTag = !leaf.meta.hidden || Boolean(leaf.meta.activeMenu)
+
+    if (shouldAddTag && leaf.name) {
       tagsViewStore.addTag({
         path: to.fullPath,
         title: String(leaf.meta.title || leaf.name),

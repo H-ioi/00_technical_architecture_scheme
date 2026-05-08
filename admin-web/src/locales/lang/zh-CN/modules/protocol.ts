@@ -37,7 +37,8 @@ export default {
     reset: '重置',
     submit: '确认',
     cancel: '取消',
-    close: '关闭'
+    close: '关闭',
+    back: '返回'
   },
   options: {
     yes: '是',

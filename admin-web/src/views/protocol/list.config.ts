@@ -133,6 +133,27 @@ export const createSignColumns = (t: Translate): UniTableColumn[] => [
   { prop: 'updateTime', label: t('protocol.fields.updateTime'), type: 'datetime', minWidth: 170 }
 ]
 
+export const createDetailConfig = (t: Translate): UniFormConfig => ({
+  mode: 'view',
+  formProps: { labelWidth: '120px' },
+  rowProps: { gutter: 16 },
+  colProps: { span: 12 },
+  view: { emptyText: '-' },
+  schema: [
+    { field: 'id', label: 'ID', component: 'ElInput' },
+    { field: 'schoolName', label: t('protocol.fields.school'), component: 'ElInput' },
+    { field: 'cnName', label: t('protocol.fields.cnName'), component: 'ElInput' },
+    { field: 'enName', label: t('protocol.fields.enName'), component: 'ElInput' },
+    { field: 'protocolTypeName', label: t('protocol.fields.protocolType'), component: 'ElInput' },
+    { field: 'moduleName', label: t('protocol.fields.module'), component: 'ElInput' },
+    { field: 'needSignName', label: t('protocol.fields.needSign'), component: 'ElInput' },
+    { field: 'statusName', label: t('protocol.fields.status'), component: 'ElInput' },
+    { field: 'createTime', label: t('protocol.fields.createTime'), component: 'ElInput' },
+    { field: 'updateTime', label: t('protocol.fields.updateTime'), component: 'ElInput' },
+    { field: 'documentUrl', label: t('protocol.fields.documentUrl'), component: 'ElInput', colProps: { span: 24 } }
+  ]
+})
+
 export const createFormRules = (t: Translate): FormRules<ProtocolFormModel> => ({
   schoolIds: [{ required: true, message: t('protocol.placeholders.school'), trigger: 'change' }],
   cnName: [{ required: true, message: t('protocol.placeholders.cnName'), trigger: 'blur' }],
