@@ -9,7 +9,15 @@ import { UniUpload } from "./components/uni-upload";
 import { install } from "./plugins/install";
 import "./style.scss";
 
-export { UniConfigProvider, UniDataTable, UniForm, UniIcon, UniSearchForm, UniThemeSettings, UniUpload };
+export {
+  UniConfigProvider,
+  UniDataTable,
+  UniForm,
+  UniIcon,
+  UniSearchForm,
+  UniThemeSettings,
+  UniUpload,
+};
 export * from "./plugins/install";
 export * from "./icons";
 export * from "./types/shared";
@@ -17,6 +25,7 @@ export * from "./types/uni-data-table";
 export * from "./directives/copy";
 export * from "./directives/debounce-click";
 export * from "./directives/permission";
+export * from "./composables/use-uni-list-state";
 export * from "./composables/use-uni-permission";
 export * from "./services/request";
 export * from "./services/auth";
@@ -25,6 +34,7 @@ export * from "./services/i18n";
 export * from "./theme";
 export * from "./utils/format";
 export * from "./utils/copy";
+export * from "./utils/options";
 
 export default {
   install,

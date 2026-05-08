@@ -86,6 +86,11 @@
       "import": "./dist/index.mjs",
       "require": "./dist/index.cjs"
     },
+    "./composables/use-uni-list-state": {
+      "types": "./dist/src/composables/use-uni-list-state.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.cjs"
+    },
     "./theme": {
       "types": "./dist/src/theme/index.d.ts",
       "import": "./dist/index.mjs",
@@ -103,6 +108,11 @@
     },
     "./utils/copy": {
       "types": "./dist/src/utils/copy.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.cjs"
+    },
+    "./utils/options": {
+      "types": "./dist/src/utils/options.d.ts",
       "import": "./dist/index.mjs",
       "require": "./dist/index.cjs"
     },

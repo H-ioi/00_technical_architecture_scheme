@@ -34,6 +34,7 @@ const formModel = reactive<ProtocolFormModel>({})
 const rules = computed(() => createFormRules(t))
 const title = computed(() => t(props.mode === 'add' ? 'protocol.actions.add' : 'protocol.actions.edit'))
 
+// 弹窗复用同一份表单状态，打开前必须清空旧值，避免新增/编辑之间串数据。
 const resetForm = () => {
   Object.keys(formModel).forEach((key) => {
     delete formModel[key as keyof ProtocolFormModel]
@@ -74,6 +75,7 @@ const close = () => {
   emit('update:visible', false)
 }
 
+// UniUpload 通过自定义 request 接入项目上传接口，成功后把返回 URL 写回表单字段参与校验。
 const handleUploadRequest = async (options: UploadRequestOptions) => {
   const file = options.file
   const url = await uploadProtocolDocument(file)
@@ -227,6 +229,7 @@ watch(
         </el-col>
         <el-col :span="24">
           <el-form-item :label="t('protocol.fields.documentUrl')" prop="documentUrl">
+            <!-- UniUpload 负责文件类型、大小、数量和拖拽交互；协议业务只实现上传请求和 URL 回填。 -->
             <UniUpload
               v-model:file-list="fileList"
               drag

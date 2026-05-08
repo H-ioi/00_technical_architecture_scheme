@@ -1,11 +1,10 @@
 import type {
-  Recordable,
   UniOption,
   UniTableAction,
-  UniTableRequest,
-  UniTableRequestResult
+  UniTableRequest
 } from 'uni-ui-lib'
-import { computed, nextTick, onMounted, ref } from 'vue'
+import { toUniOptions, useUniListState } from 'uni-ui-lib'
+import { computed, onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
 
 import {
@@ -24,10 +23,10 @@ import {
 } from './list.config'
 
 const createDictOptions = (items: ProtocolDictItem[] = [], locale: string): UniOption[] =>
-  items.map((item) => ({
-    label: (locale === 'en' ? item.enName : item.cnName) || item.name || item.enName || item.cnName || String(item.id),
-    value: item.id
-  }))
+  toUniOptions(items, {
+    labelKeys: locale === 'en' ? ['enName', 'name', 'cnName'] : ['name', 'cnName', 'enName'],
+    valueKey: 'id'
+  })
 
 export const useList = () => {
   const router = useRouter()
@@ -40,10 +39,10 @@ export const useList = () => {
     module: undefined,
     status: undefined
   }
-  const queryModel = ref<Recordable>({ ...initialFilters })
-  const filters = ref<Recordable>({})
-  const tableRef = ref<{ refresh: () => void } | null>(null)
-  const total = ref(0)
+  // useUniListState 抽离列表页通用状态：查询模型、实际过滤条件、表格 ref 和总数。
+  const { queryModel, filters, tableRef, total, search, reset, handleLoadSuccess } = useUniListState({
+    initialFilters
+  })
   const formVisible = ref(false)
   const formMode = ref<'add' | 'edit'>('add')
   const currentRecord = ref<Row | null>(null)
@@ -79,25 +78,7 @@ export const useList = () => {
     }
   }
 
-  const refreshTable = async () => {
-    await nextTick()
-    tableRef.value?.refresh()
-  }
-
-  const search = async (value: Recordable) => {
-    filters.value = { ...value }
-    await refreshTable()
-  }
-
-  const reset = async (value: Recordable = {}) => {
-    filters.value = { ...value }
-    await refreshTable()
-  }
-
-  const handleLoadSuccess = (result: UniTableRequestResult) => {
-    total.value = result.total
-  }
-
+  // 查看动作进入独立详情页，由路由生成对应 tag，避免详情弹窗承载大表格。
   const openDetail = (row: Row) => {
     void router.push(`/protocol/detail/${row.id}`)
   }
@@ -123,10 +104,10 @@ export const useList = () => {
   onMounted(async () => {
     const [schools, dict] = await Promise.all([fetchSchools(), fetchProtocolDict()])
 
-    schoolOptions.value = schools.map((item) => ({
-      label: item.enName || item.name || String(item.id),
-      value: item.id
-    }))
+    schoolOptions.value = toUniOptions(schools, {
+      labelKeys: locale.value === 'en' ? ['enName', 'name'] : ['name', 'cnName', 'enName'],
+      valueKey: 'id'
+    })
     protocolDict.value = dict ?? {}
   })
 

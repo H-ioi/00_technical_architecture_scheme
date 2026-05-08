@@ -1,11 +1,10 @@
 import type {
-  Recordable,
   UniOption,
   UniTableAction,
-  UniTableRequest,
-  UniTableRequestResult
+  UniTableRequest
 } from 'uni-ui-lib'
-import { computed, nextTick, onMounted, ref } from 'vue'
+import { toUniOptions, useUniListState } from 'uni-ui-lib'
+import { computed, onMounted, ref } from 'vue'
 
 import {
   fetchTeacherPage as fetchPage,
@@ -24,17 +23,17 @@ import {
 } from './list.config'
 
 export const useList = () => {
-  const { t } = useAppI18n()
+  const { locale, t } = useAppI18n()
   const initialFilters = {
     keywordssearch: '',
     schoolIds: undefined,
     role: undefined,
     archived: undefined
   }
-  const queryModel = ref<Recordable>({ ...initialFilters })
-  const filters = ref<Recordable>({})
-  const tableRef = ref<{ refresh: () => void } | null>(null)
-  const total = ref(0)
+  // 成员列表共用组件库列表状态，页面只保留教师领域的列、选项和行操作。
+  const { queryModel, filters, tableRef, total, search, reset, handleLoadSuccess } = useUniListState({
+    initialFilters
+  })
   const detailVisible = ref(false)
   const currentRecord = ref<Row | null>(null)
   const schoolOptions = ref<UniOption[]>([])
@@ -54,25 +53,6 @@ export const useList = () => {
   const loadData: UniTableRequest = ({ pageNo, pageSize, filters }) =>
     fetchPage({ pageNo, pageSize, ...filters })
 
-  const refreshTable = async () => {
-    await nextTick()
-    tableRef.value?.refresh()
-  }
-
-  const search = async (value: Recordable) => {
-    filters.value = { ...value }
-    await refreshTable()
-  }
-
-  const reset = async (value: Recordable = {}) => {
-    filters.value = { ...value }
-    await refreshTable()
-  }
-
-  const handleLoadSuccess = (result: UniTableRequestResult) => {
-    total.value = result.total
-  }
-
   const openDetail = (row: Row) => {
     currentRecord.value = row
     detailVisible.value = true
@@ -89,10 +69,11 @@ export const useList = () => {
   onMounted(async () => {
     const [schools, roles] = await Promise.all([fetchSchools(), fetchRoles()])
 
-    schoolOptions.value = schools.map((item) => ({
-      label: item.enName || item.name,
-      value: item.id
-    }))
+    // 学校字典统一转成 UniOption，供 UniSearchForm 和 UniDataTable 枚举回显复用。
+    schoolOptions.value = toUniOptions(schools, {
+      labelKeys: locale.value === 'en' ? ['enName', 'name'] : ['name', 'cnName', 'enName'],
+      valueKey: 'id'
+    })
     roleOptions.value = createRoleOptions(roles)
   })
 

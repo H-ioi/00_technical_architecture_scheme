@@ -1,5 +1,6 @@
-import { computed, nextTick, ref } from 'vue'
-import type { Recordable, UniOption, UniTableAction, UniTableRequest, UniTableRequestResult } from 'uni-ui-lib'
+import { computed, ref } from 'vue'
+import type { UniOption, UniTableAction, UniTableRequest } from 'uni-ui-lib'
+import { toUniOptions, useUniListState } from 'uni-ui-lib'
 
 import {
   fetchFormOptions as fetchForms,
@@ -22,7 +23,7 @@ import {
 } from './list.config'
 
 export const useList = () => {
-  const { t } = useAppI18n()
+  const { locale, t } = useAppI18n()
   const initialFilters = {
     keywordssearch: '',
     schoolIds: undefined,
@@ -32,13 +33,13 @@ export const useList = () => {
     busStatus: undefined,
     studentStatus: undefined
   }
-  const queryModel = ref<Recordable>({ ...initialFilters })
-  const filters = ref<Recordable>({})
-  const tableRef = ref<{ refresh: () => void } | null>(null)
+  // 学生列表复用组件库列表状态，避免每个列表重复维护 search/reset/refresh。
+  const { queryModel, filters, tableRef, total, search, reset, handleLoadSuccess } = useUniListState({
+    initialFilters
+  })
   const schoolOptions = ref<UniOption[]>([])
   const yearGroupOptions = ref<UniOption[]>([])
   const formOptions = ref<UniOption[]>([])
-  const total = ref(0)
   const detailVisible = ref(false)
   const currentRecord = ref<Row | null>(null)
 
@@ -70,25 +71,6 @@ export const useList = () => {
   const loadData: UniTableRequest = ({ pageNo, pageSize, filters }) =>
     fetchPage({ pageNo, pageSize, ...filters })
 
-  const refreshTable = async () => {
-    await nextTick()
-    tableRef.value?.refresh()
-  }
-
-  const search = async (value: Recordable) => {
-    filters.value = { ...value }
-    await refreshTable()
-  }
-
-  const reset = async (value: Recordable = {}) => {
-    filters.value = { ...value }
-    await refreshTable()
-  }
-
-  const handleLoadSuccess = (result: UniTableRequestResult) => {
-    total.value = result.total
-  }
-
   const openDetail = (row: Row) => {
     currentRecord.value = row
     detailVisible.value = true
@@ -109,9 +91,19 @@ export const useList = () => {
       fetchForms()
     ])
 
-    schoolOptions.value = schools.map((item) => ({ label: item.enName || item.name, value: item.id }))
-    yearGroupOptions.value = yearGroups.map((item) => ({ label: item, value: item }))
-    formOptions.value = forms.map((item) => ({ label: item, value: item }))
+    // 选项统一转成 UniOption，供搜索表单下拉和表格枚举展示共享。
+    schoolOptions.value = toUniOptions(schools, {
+      labelKeys: locale.value === 'en' ? ['enName', 'name'] : ['name', 'cnName', 'enName'],
+      valueKey: 'id'
+    })
+    yearGroupOptions.value = toUniOptions(yearGroups.map((item) => ({ label: item, value: item })), {
+      labelKeys: ['label'],
+      valueKey: 'value'
+    })
+    formOptions.value = toUniOptions(forms.map((item) => ({ label: item, value: item })), {
+      labelKeys: ['label'],
+      valueKey: 'value'
+    })
   }
 
   loadOptions()

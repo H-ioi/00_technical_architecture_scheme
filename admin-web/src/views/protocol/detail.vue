@@ -1,11 +1,12 @@
 <script setup lang="ts">
 import type { UniOption, UniTableRequest } from 'uni-ui-lib'
+import { toUniOptions } from 'uni-ui-lib'
 import { computed, onMounted, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 
 import { fetchProtocolDetail, fetchProtocolDict, fetchProtocolSchoolOptions, fetchProtocolSignPage } from '@/api'
 import { useAppI18n } from '@/composables/use-app-i18n'
-import type { ProtocolDict, ProtocolDictItem, ProtocolRecord } from '@/types/modules/protocol'
+import type { ProtocolDict, ProtocolRecord } from '@/types/modules/protocol'
 
 import { createDetailConfig, createSignColumns, createStatusOptions, createYesNoOptions } from './list.config'
 
@@ -18,16 +19,12 @@ const protocolDict = ref<ProtocolDict>({})
 const signColumns = computed(() => createSignColumns(t))
 const protocolId = computed(() => String(route.params.id ?? ''))
 
-const createDictOptions = (items: ProtocolDictItem[] = []): UniOption[] =>
-  items.map((item) => ({
-    label:
-      (locale.value === 'en' ? item.enName : item.cnName) ||
-      item.name ||
-      item.enName ||
-      item.cnName ||
-      String(item.id),
-    value: item.id
-  }))
+// 后端字典同时返回中英文名称，这里按当前语言转换成 UniDataTable/UniForm 可复用的选项结构。
+const createDictOptions = (items: NonNullable<ProtocolDict['protocolTypeList']> = []): UniOption[] =>
+  toUniOptions(items, {
+    labelKeys: locale.value === 'en' ? ['enName', 'name', 'cnName'] : ['name', 'cnName', 'enName'],
+    valueKey: 'id'
+  })
 
 const protocolTypeOptions = computed(() => createDictOptions(protocolDict.value.protocolTypeList))
 const moduleOptions = computed(() => createDictOptions(protocolDict.value.moduleList))
@@ -42,6 +39,7 @@ const signSchoolIds = computed(() => schoolOptions.value.map((item) => item.valu
 const getOptionLabel = (field: string, value: unknown) =>
   valueEnums.value[field]?.find((item) => item.value === value)?.label ?? String(value ?? '--')
 
+// 校区字段是后端聚合后的字符串，详情展示按语言优先选择对应名称。
 const schoolName = computed(
   () =>
     (locale.value === 'en' ? detail.value?.schoolEnNames : detail.value?.schoolCnNames) ||
@@ -58,6 +56,7 @@ const detailModel = computed(() => {
     return {}
   }
 
+  // UniForm view 模式只负责展示，因此先把枚举值和多语言字段整理成可读文本。
   return {
     ...record,
     schoolName: schoolName.value,
@@ -87,10 +86,10 @@ onMounted(async () => {
     fetchProtocolDetail(protocolId.value)
   ])
 
-  schoolOptions.value = schools.map((item) => ({
-    label: item.enName || item.name || String(item.id),
-    value: item.id
-  }))
+  schoolOptions.value = toUniOptions(schools, {
+    labelKeys: locale.value === 'en' ? ['enName', 'name'] : ['name', 'cnName', 'enName'],
+    valueKey: 'id'
+  })
   protocolDict.value = dict ?? {}
   detail.value = record
 })
@@ -108,10 +107,12 @@ onMounted(async () => {
 
     <el-card shadow="never">
       <div v-if="detail" class="protocol-detail-page__content">
+        <!-- UniForm 查看模式统一渲染详情字段，避免页面手写 descriptions/tabletitle 布局。 -->
         <UniForm :model-value="detailModel" :config="detailConfig" mode="view" />
 
         <section class="protocol-detail-page__sign">
           <h2>{{ t('protocol.detail.signRecords') }}</h2>
+          <!-- UniDataTable 继续承载签署记录的远程分页和列设置，详情页只提供协议 id 过滤条件。 -->
           <UniDataTable
             row-key="id"
             :columns="signColumns"

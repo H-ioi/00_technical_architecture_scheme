@@ -36,6 +36,7 @@ const {
 const selectedRows = ref<ProtocolRecord[]>([])
 const selectedIds = computed(() => selectedRows.value.map((item) => item.id))
 
+// 列表刷新交给 UniDataTable 暴露的 refresh，表单保存和批量删除后复用同一入口。
 const refreshTable = () => {
   tableRef.value?.refresh()
 }
@@ -70,6 +71,7 @@ const handleDelete = async () => {
       </el-button>
     </div>
 
+    <!-- UniSearchForm 统一承载查询条件、重置和空值清理，页面只接收过滤后的查询参数。 -->
     <UniSearchForm
       v-model="queryModel"
       :config="searchConfig"
@@ -82,6 +84,7 @@ const handleDelete = async () => {
       @reset="reset"
     />
 
+    <!-- UniDataTable 负责远程分页、选择列、操作列和表格工具栏；业务只提供列配置、请求和行操作。 -->
     <UniDataTable
       ref="tableRef"
       row-key="id"
@@ -97,6 +100,7 @@ const handleDelete = async () => {
       @selection-change="selectedRows = $event as ProtocolRecord[]"
       @load-success="handleLoadSuccess"
     >
+      <!-- toolbar 插槽放表格勾选后的批量操作，组件内部会和刷新/最大化/列设置工具合并到底部工具栏。 -->
       <template #toolbar>
         <div class="protocol-page__toolbar">
           <el-button
@@ -111,6 +115,7 @@ const handleDelete = async () => {
       </template>
     </UniDataTable>
 
+    <!-- FormDialog 保留协议新增编辑的业务表单逻辑，公共上传能力由内部 UniUpload 提供。 -->
     <FormDialog
       v-model:visible="formVisible"
       :mode="formMode"
