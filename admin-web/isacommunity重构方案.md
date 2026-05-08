@@ -475,6 +475,8 @@ export interface TeacherRecord {
 
 教师列按旧接口字段展示：校区、工号、姓名、性别、国籍、手机号、邮箱、职位、状态、创建时间。
 
+列表表格默认使用 `UniDataTable` 的自动最大高度计算能力，让表体内部滚动，避免外层页面被长列表撑出浏览器级滚动条；特殊页面可通过 `maxHeight` 显式覆盖。
+
 日期列使用 `datetime` 类型。状态使用 `tag` 或枚举映射，不再通过 `formatData()` 改写原始数据。只有存在 `dataform_file_look` 权限时显示查看操作列。
 
 ### 7.7 详情

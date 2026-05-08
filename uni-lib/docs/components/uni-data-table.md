@@ -549,6 +549,8 @@ onMounted(() => {
 | `actions`      | 行操作按钮配置；可见项超过 3 个时第三位自动收纳为更多    | `UniTableAction[]`                  | —         |
 | `actionColumn` | 操作列配置，可设置 `label`、`width`、`minWidth`、`fixed` | `UniTableActionColumnConfig`        | —         |
 | `emptyText`    | 空数据文案；不传时使用当前语言包                         | `string`                            | i18n 默认 |
+| `maxHeight`    | 表格最大高度；默认自动计算可用视口高度，`false` 关闭      | `number \| string \| false \| 'auto'` | `auto`    |
+| `maxHeightOffset` | 自动计算时距离视口底部的保留间距                      | `number`                            | `16`      |
 | `valueEnums`   | 按列 `prop` 注入枚举选项（展示 enum/tag 等）             | `Record<string, UniOption[]>`       | —         |
 | `toolbar`      | 右侧表格工具配置；`false` 关闭内置工具栏                 | `boolean \| UniTableToolbarConfig`  | 内置默认  |
 

@@ -25,7 +25,7 @@ const {
 
 <template>
   <section class="member-page">
-    <el-card shadow="never" class="member-page__header-card">
+    <div class="member-page__header-card">
       <div class="member-page__header">
         <div>
           <h1>{{ t('member.student.page.title') }}</h1>
@@ -44,7 +44,7 @@ const {
         @search="search"
         @reset="reset"
       />
-    </el-card>
+    </div>
 
     <el-card shadow="never">
       <UniDataTable

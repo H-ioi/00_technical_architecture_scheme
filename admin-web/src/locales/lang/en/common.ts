@@ -10,6 +10,14 @@ export default {
   reset: 'Reset',
   cancel: 'Cancel',
   primaryColor: 'Primary Color',
+  search: 'Search',
+  notification: 'Notifications',
+  scrollLeft: 'Scroll left',
+  scrollRight: 'Scroll right',
+  more: 'More',
+  refresh: 'Refresh',
+  closeOthers: 'Close Others',
+  closeAll: 'Close All',
   passwordChanged: 'Password changed. Please log in again.',
   passwordMismatch: 'The two passwords do not match',
   passwordMinLength: 'Password must be at least 6 characters',
@@ -17,6 +25,7 @@ export default {
   username: 'Username',
   password: 'Password',
   admin: 'Admin',
+  adminRole: 'Admin',
   notFound: 'Page Not Found',
   forbidden: 'Forbidden'
 }

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Expand, Fold } from '@element-plus/icons-vue'
+import { ArrowDown, Expand, Fold } from '@element-plus/icons-vue'
 import { ElMessage, type FormInstance, type FormRules } from 'element-plus'
 import { computed, reactive, ref, watchEffect } from 'vue'
 import { useRoute } from 'vue-router'
@@ -36,10 +36,29 @@ const avatarText = computed(() => {
 
   return /[a-z]/i.test(firstChar) ? firstChar.toUpperCase() : firstChar
 })
-const localeLabel = computed(() => (appStore.locale === 'en' ? 'English' : '中文'))
+const localeLabel = computed(() => (appStore.locale === 'en' ? 'English' : '简体中文'))
+const roleLabel = computed(
+  () => userStore.profile?.roles?.[0]?.replace(/^ROLE_/, '') || t('common.adminRole')
+)
 
 const switchLocale = (locale: string | number | object) => {
   appStore.setLocale(locale === 'en' ? 'en' : 'zh-CN')
+}
+
+const handleUserCommand = (command: string | number | object) => {
+  if (command === 'password') {
+    openPasswordDialog()
+    return
+  }
+
+  if (command === 'theme') {
+    themeVisible.value = true
+    return
+  }
+
+  if (command === 'logout') {
+    emit('logout')
+  }
 }
 
 const passwordRules = computed<FormRules<typeof passwordForm>>(() => ({
@@ -125,33 +144,45 @@ watchEffect(() => {
 
     <div class="header__right">
       <el-dropdown trigger="click" @command="switchLocale">
-        <button class="header__locale" type="button">
+        <button class="header__locale header__action" type="button">
+          <!-- <span class="header__locale-icon">文A</span> -->
           {{ localeLabel }}
+          <el-icon class="header__locale-arrow">
+            <ArrowDown />
+          </el-icon>
         </button>
         <template #dropdown>
           <el-dropdown-menu>
-            <el-dropdown-item command="zh-CN">中文</el-dropdown-item>
+            <el-dropdown-item command="zh-CN">简体中文</el-dropdown-item>
             <el-dropdown-item command="en">English</el-dropdown-item>
           </el-dropdown-menu>
         </template>
       </el-dropdown>
 
-      <el-dropdown trigger="click">
+      <span class="header__divider" />
+
+      <el-dropdown trigger="click" popper-class="header-user-dropdown" @command="handleUserCommand">
         <button class="header__user" type="button">
-          <el-avatar :src="userStore.profile?.avatar" :size="32">
+          <span class="header__user-info">
+            <strong>{{ displayName }}</strong>
+            <small>{{ roleLabel }}</small>
+          </span>
+          <el-avatar class="header__avatar" :src="userStore.profile?.avatar" :size="34">
             {{ avatarText }}
           </el-avatar>
-          <span>{{ displayName }}</span>
+          <el-icon class="header__user-arrow">
+            <ArrowDown />
+          </el-icon>
         </button>
         <template #dropdown>
           <el-dropdown-menu>
-            <el-dropdown-item @click="openPasswordDialog">
+            <el-dropdown-item command="password">
               {{ t('common.changePassword') }}
             </el-dropdown-item>
-            <el-dropdown-item @click="themeVisible = true">
+            <el-dropdown-item command="theme">
               {{ t('common.themeSettings') }}
             </el-dropdown-item>
-            <el-dropdown-item divided @click="emit('logout')">
+            <el-dropdown-item divided command="logout">
               {{ t('common.logout') }}
             </el-dropdown-item>
           </el-dropdown-menu>
@@ -217,24 +248,125 @@ watchEffect(() => {
 
   &__right {
     display: flex;
-    gap: 16px;
+    gap: 12px;
     align-items: center;
+    height: 100%;
   }
 
   &__locale,
-  &__user {
+  &__user,
+  &__icon-button {
     display: inline-flex;
     gap: 8px;
     align-items: center;
+    height: 36px;
+    padding: 0;
     color: var(--app-text-color);
     cursor: pointer;
     background: transparent;
     border: 0;
+    border-radius: 8px;
+    transition:
+      color 0.2s ease,
+      background-color 0.2s ease;
+  }
+
+  &__locale:hover,
+  &__user:hover,
+  &__icon-button:hover {
+    color: var(--app-primary-color);
   }
 
   &__locale {
-    padding: 0;
+    gap: 8px;
+    font-size: 13px;
+    font-weight: 500;
   }
 
+  &__locale-icon {
+    color: var(--app-text-color-secondary);
+    font-size: 13px;
+    line-height: 1;
+  }
+
+  &__locale-arrow {
+    color: var(--app-text-color-secondary);
+    font-size: 12px;
+  }
+
+  &__icon-button {
+    justify-content: center;
+    width: 30px;
+    padding: 0;
+    font-size: 18px;
+  }
+
+  &__divider {
+    width: 1px;
+    height: 28px;
+    background: var(--app-border-color);
+  }
+
+  &__user {
+    gap: 8px;
+    height: 44px;
+  }
+
+  &__avatar {
+    color: var(--app-primary-color);
+    font-size: 18px;
+    font-weight: 700;
+    background: var(--app-primary-color-5);
+    box-shadow: 0 12px 28px rgb(108 92 231 / 18%);
+  }
+
+  &__user-info {
+    display: grid;
+    gap: 2px;
+    min-width: 0;
+    text-align: left;
+
+    strong,
+    small {
+      max-width: 96px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    strong {
+      color: var(--app-text-color);
+      font-size: 13px;
+      font-weight: 600;
+      line-height: 1.1;
+    }
+
+    small {
+      color: var(--app-text-color-secondary);
+      font-size: 11px;
+      line-height: 1.1;
+    }
+  }
+
+  &__user-arrow {
+    color: var(--app-text-color-secondary);
+    font-size: 12px;
+  }
+}
+</style>
+
+<style lang="scss">
+.header-user-dropdown {
+  min-width: 112px;
+
+  .el-dropdown-menu {
+    padding: 6px;
+  }
+
+  .el-dropdown-menu__item {
+    justify-content: center;
+    border-radius: 6px;
+    font-size: 13px;
+  }
 }
 </style>

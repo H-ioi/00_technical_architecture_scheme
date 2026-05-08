@@ -10,6 +10,14 @@ export default {
   reset: '重置',
   cancel: '取消',
   primaryColor: '主题色',
+  search: '搜索',
+  notification: '消息通知',
+  scrollLeft: '向左滚动',
+  scrollRight: '向右滚动',
+  more: '更多',
+  refresh: '刷新',
+  closeOthers: '关闭其他',
+  closeAll: '关闭全部',
   passwordChanged: '修改成功，请重新登录',
   passwordMismatch: '两次输入密码不一致',
   passwordMinLength: '密码长度不少于 6 位',
@@ -17,6 +25,7 @@ export default {
   username: '账号',
   password: '密码',
   admin: '管理员',
+  adminRole: '管理员',
   notFound: '页面不存在',
   forbidden: '无权限'
 }

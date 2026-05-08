@@ -4,7 +4,7 @@
  */
 import { MoreFilled } from '@element-plus/icons-vue'
 import type { Sort } from 'element-plus'
-import { computed, ref, useSlots } from 'vue'
+import { computed, nextTick, onBeforeUnmount, onMounted, onUpdated, ref, useSlots, watch } from 'vue'
 
 import { hasUniPermission } from '@/directives/permission'
 import { useUniI18n } from '@/services/i18n'
@@ -39,11 +39,15 @@ const props = withDefaults(
     actions?: UniTableAction[]
     actionColumn?: UniTableActionColumnConfig
     emptyText?: string
+    maxHeight?: number | string | false | 'auto'
+    maxHeightOffset?: number
     valueEnums?: Record<string, import('@/types/shared').UniOption[]>
     toolbar?: boolean | UniTableToolbarConfig
   }>(),
   {
     data: () => [],
+    maxHeight: 'auto',
+    maxHeightOffset: 16,
     pagination: undefined,
     rowKey: 'id',
     toolbar: undefined
@@ -64,8 +68,12 @@ const emit = defineEmits<{
 
 const i18n = useUniI18n()
 const slots = useSlots()
+const rootRef = ref<HTMLElement>()
+const paginationRef = ref<HTMLElement>()
 const tableSize = ref<UniTableSize>('default')
 const fullscreen = ref(false)
+const autoMaxHeight = ref<number>()
+let resizeObserver: ResizeObserver | undefined
 const actualEmptyText = computed(() => props.emptyText ?? i18n.t('common.empty'))
 const toolbarConfig = computed<Required<UniTableToolbarConfig>>(() => {
   if (props.toolbar === false) {
@@ -172,6 +180,41 @@ const hasActionColumn = computed(() => {
   return actualData.value.some((row) => getVisibleActions(row).length > 0)
 })
 
+const actualMaxHeight = computed(() => {
+  if (props.maxHeight === false) {
+    return undefined
+  }
+
+  if (props.maxHeight !== 'auto') {
+    return props.maxHeight
+  }
+
+  return autoMaxHeight.value
+})
+
+const updateAutoMaxHeight = () => {
+  if (props.maxHeight !== 'auto' || typeof window === 'undefined') {
+    return
+  }
+
+  const tableElement = rootRef.value?.querySelector<HTMLElement>('.el-table')
+
+  if (!tableElement) {
+    return
+  }
+
+  const tableTop = tableElement.getBoundingClientRect().top
+  const paginationHeight = paginationRef.value?.getBoundingClientRect().height ?? 0
+  const paginationGap = paginationHeight > 0 ? 10 : 0
+  const availableHeight = window.innerHeight - tableTop - paginationHeight - paginationGap - props.maxHeightOffset - 22
+
+  autoMaxHeight.value = Math.max(160, Math.floor(availableHeight))
+}
+
+const scheduleUpdateAutoMaxHeight = () => {
+  void nextTick(updateAutoMaxHeight)
+}
+
 const getInlineActions = (row: Recordable) => {
   const actions = getVisibleActions(row)
 
@@ -197,10 +240,29 @@ const handleMoreActionCommand = (action: UniTableAction, row: Recordable, index:
 defineExpose({
   refresh: handleToolbarRefresh
 })
+
+onMounted(() => {
+  scheduleUpdateAutoMaxHeight()
+  window.addEventListener('resize', scheduleUpdateAutoMaxHeight)
+
+  if (typeof ResizeObserver !== 'undefined' && rootRef.value) {
+    resizeObserver = new ResizeObserver(scheduleUpdateAutoMaxHeight)
+    resizeObserver.observe(rootRef.value)
+  }
+})
+
+onUpdated(scheduleUpdateAutoMaxHeight)
+
+onBeforeUnmount(() => {
+  window.removeEventListener('resize', scheduleUpdateAutoMaxHeight)
+  resizeObserver?.disconnect()
+})
+
+watch(() => [props.maxHeight, actualData.value.length, paginationConfig.value, fullscreen.value, tableSize.value], scheduleUpdateAutoMaxHeight)
 </script>
 
 <template>
-  <div class="uni-data-table" :class="{ 'is-fullscreen': fullscreen }">
+  <div ref="rootRef" class="uni-data-table" :class="{ 'is-fullscreen': fullscreen }">
     <div v-if="$slots.toolbar || hasToolbarTools" class="uni-data-table__toolbar">
       <div class="uni-data-table__toolbar-left">
         <slot name="toolbar" />
@@ -225,6 +287,7 @@ defineExpose({
       :data="actualData"
       :row-key="rowKey"
       :empty-text="actualEmptyText"
+      :max-height="actualMaxHeight"
       :size="tableSize"
       :highlight-current-row="selection === 'single'"
       @selection-change="(selection: Recordable[]) => emit('selection-change', selection)"
@@ -300,7 +363,11 @@ defineExpose({
       </template>
     </el-table>
 
-    <div v-if="paginationConfig && paginationConfig.enabled !== false" class="uni-data-table__pagination" :class="`is-${paginationConfig.position}`">
+    <div
+      v-if="paginationConfig && paginationConfig.enabled !== false"
+      ref="paginationRef"
+      class="uni-data-table__pagination"
+      :class="`is-${paginationConfig.position}`">
       <el-pagination
         :background="paginationConfig.background"
         :layout="paginationConfig.layout"
