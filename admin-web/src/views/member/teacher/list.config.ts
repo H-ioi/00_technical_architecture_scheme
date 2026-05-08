@@ -70,7 +70,7 @@ export const createColumns = (t: Translate): UniTableColumn[] => [
     prop: 'isaTeacherCode',
     label: t('member.teacher.fields.teacherCode'),
     type: 'text',
-    minWidth: 120,
+    width: 120,
     showOverflowTooltip: true
   },
   {

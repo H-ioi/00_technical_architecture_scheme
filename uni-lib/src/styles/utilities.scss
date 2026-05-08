@@ -38,3 +38,26 @@
   overflow-x: hidden;
   overflow-y: auto;
 }
+
+// 默认列表页布局
+.uni-list-page {
+  display: grid;
+  gap: 16px;
+
+  &__header {
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+    justify-content: space-between;
+
+    h1 {
+      margin: 0 0 8px;
+      font-size: 22px;
+    }
+
+    p {
+      margin: 0;
+      color: var(--app-text-color-secondary);
+    }
+  }
+}

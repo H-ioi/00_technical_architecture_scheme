@@ -406,6 +406,35 @@ watch(() => [props.maxHeight, actualData.value.length, paginationConfig.value, f
     width: 100%;
   }
 
+  :deep(.el-table) {
+    --el-table-border-color: #edf0f5;
+    --el-table-header-bg-color: #fafbfc;
+    --el-table-row-hover-bg-color: #f7f9ff;
+
+    border-top: 1px solid var(--el-table-border-color);
+    color: var(--app-text-color);
+    font-size: 13px;
+  }
+
+  :deep(.el-table th.el-table__cell) {
+    height: 44px;
+    color: var(--app-text-color-secondary);
+    font-weight: 600;
+    background: #fafbfc;
+  }
+
+  :deep(.el-table .el-table__cell) {
+    padding: 9px 0;
+  }
+
+  :deep(.el-table__inner-wrapper::before) {
+    height: 0;
+  }
+
+  :deep(.uni-data-table__pagination) {
+    margin-top: 14px;
+  }
+
   &__toolbar {
     display: flex;
     gap: 8px;
