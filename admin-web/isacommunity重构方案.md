@@ -724,19 +724,74 @@ if (status === 401) {
 
 旧系统菜单路径包含 `/isacommunity` 和旧页面层级，新项目路由已去掉这些旧层级。必须在 `src/api/modules/menu.ts` 的 `MENU_PATH_ALIASES` 中维护旧路径到新路径的映射。
 
-当前第一轮映射：
+完整旧菜单映射：
 
-| 旧菜单路径 | 新路由路径 |
-| --- | --- |
-| `/isacommunity/home/index` | `/dashboard` |
-| `/isacommunity/home` | `/dashboard` |
-| `/isacommunity/member` | `/member` |
-| `/isacommunity/member/student/index` | `/member/student` |
-| `/isacommunity/member/student` | `/member/student` |
-| `/isacommunity/member/teacher/index` | `/member/teacher` |
-| `/isacommunity/member/teacher` | `/member/teacher` |
-| `/isacommunity/protocol` | `/protocol` |
-| `/isacommunity/protocol/index` | `/protocol` |
+| 旧菜单层级 | 旧菜单路径 | 新路由 / 新模块 |
+| --- | --- | --- |
+| 首页 | `/isacommunity/home/index` | `/dashboard` |
+| 成员管理 | `/isacommunity/member` | `/member` |
+| 成员管理 / 学生列表 | `/isacommunity/member/student/index` | `/member/student` |
+| 成员管理 / 教师列表 | `/isacommunity/member/teacher/index` | `/member/teacher` |
+| 校车管理 | `/isacommunity/schoolbus` | `/school-bus` |
+| 校车管理 / 路线管理 | `/isacommunity/schoolbus/route` | `/school-bus/route` |
+| 校车管理 / 路线管理 / 路线规划 | `/isacommunity/schoolbus/route/plan/index` | `/school-bus/route/plan` |
+| 校车管理 / 路线管理 / 路线运营 | `/isacommunity/schoolbus/route/operation/index` | `/school-bus/route/operation` |
+| 校车管理 / 路线管理 / 异常上报 | `/isacommunity/schoolbus/route/exception/index` | `/school-bus/route/exception` |
+| 校车管理 / 学生管理 | `/isacommunity/schoolbus/student` | `/school-bus/student` |
+| 校车管理 / 学生管理 / 申请意向管理 | `/isacommunity/schoolbus/student/apply/index` | `/school-bus/student/apply` |
+| 校车管理 / 学生管理 / 乘车学生管理 | `/isacommunity/schoolbus/student/order/index` | `/school-bus/student/order` |
+| 校车管理 / 司机管理 | `/isacommunity/schoolbus/driver/index` | `/school-bus/driver` |
+| 校车管理 / 跟车老师列表 | `/isacommunity/user/teacher/index` | `/school-bus/follow-teacher` |
+| 校车管理 / 车辆管理 | `/isacommunity/schoolbus/car/index` | `/school-bus/car` |
+| 协议管理 | `/isacommunity/protocol/index` | `/protocol` |
+| 基础设置 | `/isacommunity/base` | `/base` |
+| 基础设置 / 校区配置 | `/isacommunity/base/school/index` | `/base/school` |
+| 基础设置 / 年级配置 | `/isacommunity/base/grade/index` | `/base/grade` |
+| 权限管理 | `/admin` | `/permission` |
+| 权限管理 / 菜单管理 | `/admin/menu/index` | `/permission/menu` |
+| 权限管理 / 角色管理 | `/admin/role/index` | `/permission/role` |
+| 权限管理 / 部门管理 | `/admin/dept/index` | `/permission/dept` |
+| 权限管理 / 用户管理 | `/admin/isauser/index` | `/permission/user` |
+| 活动管理 | `/isacommunity/activity` | `/activity` |
+| 活动管理 / 活动列表 | `/isacommunity/activity/list/index` | `/activity/list` |
+| 活动管理 / 活动项目 | `/isacommunity/activity/program/index` | `/activity/program` |
+| 活动管理 / 奖品列表 | `/isacommunity/activity/prize/index` | `/activity/prize` |
+| 活动管理 / 投票节目 | `/isacommunity/activity/voteprogram/index` | `/activity/vote-program` |
+| 活动管理 / 问卷管理 | `/isacommunity/activity/questionnaire/index` | `/activity/questionnaire` |
+| 活动管理 / 家长学生关联管理 | `/isacommunity/activity/parentstudent/index` | `/activity/parent-student` |
+| 活动管理 / 微信配置 | `/isacommunity/activity/wechatSchool/index` | `/activity/wechat-school` |
+| 活动管理 / 邮箱配置 | `/isacommunity/activity/emailSchool/index` | `/activity/email-school` |
+| 考勤管理 | `/isacommunity/attendance` | `/attendance` |
+| 考勤管理 / 学生考勤 | `/isacommunity/attendance/student/index` | `/attendance/student` |
+| 考勤管理 / 校园考勤 | `/isacommunity/attendance/school/index` | `/attendance/school` |
+| 考勤管理 / 门禁记录 | `/isacommunity/attendance/access/index` | `/attendance/access` |
+| 考勤管理 / 微信Openid | `/isacommunity/attendance/wechat/index` | `/attendance/wechat` |
+| 考勤管理 / 微信通知 | `/isacommunity/attendance/wechatnotice/index` | `/attendance/wechat-notice` |
+| 考勤管理 / 学生每日考勤 | `/isacommunity/attendance/index` | `/attendance/daily` |
+| 考勤管理 / 请假管理 | `/isacommunity/attendance/holiday/index` | `/attendance/holiday` |
+| 考勤管理 / 流程设计 | `/isacommunity/attendance/holiday/flow` | `/attendance/holiday/flow` |
+| 考勤管理 / 任务处理 | `/isacommunity/attendance/holiday/task` | `/attendance/holiday/task` |
+| 考勤管理 / 配置管理 | `/isacommunity/attendance/holiday/config` | `/attendance/holiday/config` |
+| 考勤管理 / 放行条管理 | `/isacommunity/attendance/holiday/pass` | `/attendance/holiday/pass` |
+| 内容管理 | `/isacommunity/content` | `/content` |
+| 内容管理 / 公告内容 | `/isacommunity/content/announcement/index` | `/content/announcement` |
+| 内容管理 / 动态内容 | `/isacommunity/content/moent` | `/content/moment` |
+| 内容管理 / 动态内容 / 一周食谱 | `/isacommunity/content/moent/foodweekly/index` | `/content/moment/food-weekly` |
+| 内容管理 / 动态内容 / 校园生活 | `/isacommunity/content/moent/schoollife/index` | `/content/moment/school-life` |
+| 内容管理 / 文章管理 | `/isacommunity/content/article` | `/content/article` |
+| 内容管理 / 文章管理 / 文章内容 | `/isacommunity/content/article/list/index` | `/content/article/list` |
+| 内容管理 / 文章管理 / 文章分类 | `/isacommunity/content/article/category/index` | `/content/article/category` |
+| 内容管理 / 讨论管理 | `/isacommunity/content/discussion` | `/content/discussion` |
+| 内容管理 / 讨论管理 / 内容列表 | `/isacommunity/content/discussion/list/index` | `/content/discussion/list` |
+| 内容管理 / 讨论管理 / 讨论标签 | `/isacommunity/content/discussion/tag/index` | `/content/discussion/tag` |
+| 内容管理 / 讨论管理 / 讨论评论 | `/isacommunity/content/discussion/comment/index` | `/content/discussion/comment` |
+| 内容管理 / 讨论管理 / 点赞收藏 | `/isacommunity/content/discussion/likeandsave/index` | `/content/discussion/like-save` |
+| 群发邮件 | `/isacommunity/email` | `/email` |
+| 群发邮件 / 群组配置 | `/isacommunity/email/group` | `/email/group` |
+| 群发邮件 / 发件箱配置 | `/isacommunity/email/send/index` | `/email/send` |
+| 群发邮件 / 发件列表 | `/isacommunity/email/outgo/index` | `/email/outbox` |
+
+当前第一轮代码只接入首页、成员管理、协议管理相关映射；其余路径作为后续迁移规划，迁移到对应模块时再同步加入 `MENU_PATH_ALIASES`。
 
 后续每迁移一个旧菜单入口，都必须同步补充：
 
@@ -767,7 +822,7 @@ export interface AppMenuRecord {
 - `meta.icon` 使用本地路由配置。
 - `children` 由旧接口菜单树递归转换而来。
 
-### 14.4 动态路由生成
+### 14.4 菜单和本地路由匹配
 
 第一轮不根据接口动态注册组件路由。页面路由由本地 `constantRoutes` 注册，菜单接口只做授权和显示过滤。
 
@@ -853,8 +908,10 @@ sidebar.vue
 
 - 菜单树。
 - 权限码。
-- 动态路由加载状态。
+- 菜单权限加载状态。
 - `hasPermission()`。
+- `canAccessPath()`。
+- 允许访问路径 `allowedPaths`。
 - 清理权限状态。
 
 `tagsViewStore`：
@@ -882,7 +939,7 @@ sidebar.vue
 
 - 侧边栏 UI。
 - 菜单递归组件。
-- 动态路由映射。
+- 旧菜单路径映射。
 - 菜单接口。
 - 权限 store。
 - tags-view。

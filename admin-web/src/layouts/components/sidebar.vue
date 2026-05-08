@@ -17,7 +17,7 @@ const activeMenu = computed(() => route.meta.activeMenu || route.path)
 <template>
   <el-aside class="sidebar" :width="appStore.sidebarWidth">
     <div class="sidebar__brand">
-      <img class="sidebar__logo" :src="logoUrl" alt="logo">
+      <img class="sidebar__logo" :src="logoUrl" alt="logo" />
     </div>
 
     <el-menu
@@ -50,7 +50,7 @@ const activeMenu = computed(() => route.meta.activeMenu || route.path)
   &__logo {
     display: block;
     max-width: 100%;
-    height: 28px;
+    height: 100%;
     object-fit: contain;
   }
 
