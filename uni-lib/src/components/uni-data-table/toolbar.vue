@@ -1,171 +1,85 @@
 <script setup lang="ts">
-import {
-  Download,
-  FullScreen,
-  Printer,
-  Refresh,
-  Setting,
-} from "@element-plus/icons-vue";
+import { FullScreen, Refresh, Setting } from '@element-plus/icons-vue'
 
-import { useUniI18n } from "@/services/i18n";
-import type { UniTableToolbarConfig } from "@/types/shared";
-import type { UniTableColumnState, UniTableSize } from "@/types/uni-data-table";
-import UniTableColumnSettings from "./column-settings.vue";
+import { useUniI18n } from '@/services/i18n'
+import type { UniTableToolbarConfig } from '@/types/shared'
+import type { UniTableColumnState } from '@/types/uni-data-table'
+import UniTableColumnSettings from './column-settings.vue'
 
 defineProps<{
-  columnStates: UniTableColumnState[];
-  config: Required<UniTableToolbarConfig>;
-  fullscreen: boolean;
-  loading: boolean;
-  tableSize: UniTableSize;
-}>();
+  columnStates: UniTableColumnState[]
+  config: Required<UniTableToolbarConfig>
+  fullscreen: boolean
+  loading: boolean
+  border: boolean
+  stripe: boolean
+}>()
 
 const emit = defineEmits<{
-  "column-drag-start": [prop: string];
-  "column-drop": [prop: string];
-  "update:fullscreen": [value: boolean];
-  "update:tableSize": [value: UniTableSize];
-  export: [];
-  print: [];
-  refresh: [];
-}>();
+  'column-drag-start': [prop: string]
+  'column-drop': [prop: string]
+  'update:border': [value: boolean]
+  'update:fullscreen': [value: boolean]
+  'update:stripe': [value: boolean]
+  refresh: []
+}>()
 
-const i18n = useUniI18n();
+const i18n = useUniI18n()
 </script>
 
 <template>
-  <el-popover
-    placement="bottom-end"
-    trigger="click"
-    width="280"
-    popper-class="uni-table-toolbar-popper"
-  >
-    <template #reference>
-      <el-button
-        link
-        class="uni-table-toolbar__trigger"
-        :icon="Setting"
-        :aria-label="i18n.t('dataTable.tools')"
-        :title="i18n.t('dataTable.tools')"
-      />
-    </template>
+  <el-button-group size="small" plain class="uni-table-toolbar">
+    <el-button
+      v-if="config.refresh"
+      class="uni-table-toolbar__trigger"
+      :icon="Refresh"
+      :loading="loading"
+      :aria-label="i18n.t('dataTable.refresh')"
+      :title="i18n.t('dataTable.refresh')"
+      @click="emit('refresh')" />
+    <el-button
+      v-if="config.fullscreen"
+      class="uni-table-toolbar__trigger"
+      :icon="FullScreen"
+      :aria-label="fullscreen ? i18n.t('dataTable.exitFullscreen') : i18n.t('dataTable.fullscreen')"
+      :title="fullscreen ? i18n.t('dataTable.exitFullscreen') : i18n.t('dataTable.fullscreen')"
+      @click="emit('update:fullscreen', !fullscreen)" />
+    <el-popover v-if="config.columnSetting" placement="bottom-end" trigger="click" width="300" popper-class="uni-table-toolbar-popper">
+      <template #reference>
+        <el-button class="uni-table-toolbar__trigger" :icon="Setting" :aria-label="i18n.t('dataTable.tools')" :title="i18n.t('dataTable.tools')" />
+      </template>
 
-    <div class="uni-table-toolbar__panel">
-      <div class="uni-table-toolbar__header">
-        {{ i18n.t("dataTable.tools") }}
-      </div>
+      <div class="uni-table-toolbar__panel">
+        <UniTableColumnSettings :columns="columnStates" @drag-start="(prop) => emit('column-drag-start', prop)" @drop="(prop) => emit('column-drop', prop)" />
 
-      <div class="uni-table-toolbar__actions">
-        <el-button
-          v-if="config.refresh"
-          size="small"
-          :icon="Refresh"
-          :loading="loading"
-          @click="emit('refresh')"
-        >
-          {{ i18n.t("dataTable.refresh") }}
-        </el-button>
-        <el-button
-          v-if="config.fullscreen"
-          size="small"
-          :icon="FullScreen"
-          @click="emit('update:fullscreen', !fullscreen)"
-        >
-          {{
-            fullscreen
-              ? i18n.t("dataTable.exitFullscreen")
-              : i18n.t("dataTable.fullscreen")
-          }}
-        </el-button>
-        <el-button
-          v-if="config.export"
-          size="small"
-          :icon="Download"
-          @click="emit('export')"
-        >
-          {{ i18n.t("dataTable.export") }}
-        </el-button>
-        <el-button
-          v-if="config.print"
-          size="small"
-          :icon="Printer"
-          @click="emit('print')"
-        >
-          {{ i18n.t("dataTable.print") }}
-        </el-button>
-      </div>
-
-      <div v-if="config.density" class="uni-table-toolbar__section">
-        <div class="uni-table-toolbar__title">
-          {{ i18n.t("dataTable.density") }}
+        <div class="uni-table-toolbar__section">
+          <div class="uni-table-toolbar__title">
+            {{ i18n.t('dataTable.otherSettings') }}
+          </div>
+          <div class="uni-table-toolbar__option">
+            <span>{{ i18n.t('dataTable.stripe') }}</span>
+            <el-switch :model-value="stripe" @update:model-value="(value: boolean) => emit('update:stripe', value)" />
+          </div>
+          <div class="uni-table-toolbar__option">
+            <span>{{ i18n.t('dataTable.border') }}</span>
+            <el-switch :model-value="border" @update:model-value="(value: boolean) => emit('update:border', value)" />
+          </div>
         </div>
-        <el-radio-group
-          :model-value="tableSize"
-          size="small"
-          @update:model-value="
-            (value: UniTableSize) => emit('update:tableSize', value)
-          "
-        >
-          <el-radio-button value="large">
-            {{ i18n.t("dataTable.densityLarge") }}
-          </el-radio-button>
-          <el-radio-button value="default">
-            {{ i18n.t("dataTable.densityDefault") }}
-          </el-radio-button>
-          <el-radio-button value="small">
-            {{ i18n.t("dataTable.densitySmall") }}
-          </el-radio-button>
-        </el-radio-group>
       </div>
-
-      <div v-if="config.columnSetting" class="uni-table-toolbar__section">
-        <UniTableColumnSettings
-          :columns="columnStates"
-          @drag-start="(prop) => emit('column-drag-start', prop)"
-          @drop="(prop) => emit('column-drop', prop)"
-        />
-      </div>
-    </div>
-  </el-popover>
+    </el-popover>
+  </el-button-group>
 </template>
 
 <style scoped lang="scss">
 .uni-table-toolbar {
-  &__trigger {
-    padding: 4px;
-    color: var(--el-text-color-regular);
-  }
-
-  &__trigger:hover {
-    color: var(--el-color-primary);
-  }
-
   &__panel {
     display: flex;
     flex-direction: column;
-    gap: 8px;
-  }
-
-  &__header {
-    font-size: 13px;
-    font-weight: 600;
-    color: var(--el-text-color-primary);
-  }
-
-  &__actions {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 6px;
-  }
-
-  &__actions :deep(.el-button) {
-    justify-content: flex-start;
-    width: 100%;
-    margin-left: 0;
+    gap: 10px;
   }
 
   &__section {
-    padding-top: 8px;
+    padding-top: 10px;
     border-top: 1px solid var(--el-border-color-lighter);
   }
 
@@ -175,6 +89,14 @@ const i18n = useUniI18n();
     font-weight: 600;
     color: var(--el-text-color-regular);
   }
-}
 
+  &__option {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    min-height: 28px;
+    font-size: 12px;
+    color: var(--el-text-color-primary);
+  }
+}
 </style>

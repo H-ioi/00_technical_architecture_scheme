@@ -2,5 +2,6 @@ export default {
   dashboard: 'Dashboard',
   member: 'Member Management',
   memberStudent: 'Students',
-  memberTeacher: 'Teachers'
+  memberTeacher: 'Teachers',
+  protocol: 'Protocol Management'
 }

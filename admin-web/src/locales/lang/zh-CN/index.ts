@@ -2,6 +2,7 @@ import common from './common'
 import dashboard from './dashboard'
 import login from './login'
 import member from './modules/member'
+import protocol from './modules/protocol'
 import route from './route'
 
 export default {
@@ -12,5 +13,6 @@ export default {
   route,
   login,
   dashboard,
-  member
+  member,
+  protocol
 }

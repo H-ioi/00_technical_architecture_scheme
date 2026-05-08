@@ -1,26 +1,26 @@
 <script setup lang="ts">
-import { Rank } from "@element-plus/icons-vue";
+import { Rank } from '@element-plus/icons-vue'
 
-import { useUniI18n } from "@/services/i18n";
-import type { UniTableColumnState } from "@/types/uni-data-table";
+import { useUniI18n } from '@/services/i18n'
+import type { UniTableColumnState } from '@/types/uni-data-table'
 
 defineProps<{
-  columns: UniTableColumnState[];
-}>();
+  columns: UniTableColumnState[]
+}>()
 
 const emit = defineEmits<{
-  "drag-start": [prop: string];
-  drop: [prop: string];
-}>();
+  'drag-start': [prop: string]
+  drop: [prop: string]
+}>()
 
-const i18n = useUniI18n();
+const i18n = useUniI18n()
 </script>
 
 <template>
+  <div class="uni-table-column-settings__title">
+    {{ i18n.t('dataTable.columnSetting') }}
+  </div>
   <div class="uni-table-column-settings">
-    <div class="uni-table-column-settings__title">
-      {{ i18n.t("dataTable.columnSetting") }}
-    </div>
     <div
       v-for="column in columns"
       :key="column.prop"
@@ -28,21 +28,14 @@ const i18n = useUniI18n();
       draggable="true"
       @dragstart="emit('drag-start', column.prop)"
       @dragover.prevent
-      @drop="emit('drop', column.prop)"
-    >
+      @drop="emit('drop', column.prop)">
       <el-icon class="uni-table-column-settings__drag">
         <Rank />
       </el-icon>
       <el-checkbox v-model="column.visible">
         {{ column.label }}
       </el-checkbox>
-      <el-select
-        v-model="column.fixed"
-        size="small"
-        clearable
-        :placeholder="i18n.t('dataTable.fixed')"
-        style="width: 72px"
-      >
+      <el-select v-model="column.fixed" size="small" clearable :placeholder="i18n.t('dataTable.fixed')" style="width: 72px">
         <el-option :label="i18n.t('dataTable.fixedLeft')" value="left" />
         <el-option :label="i18n.t('dataTable.fixedRight')" value="right" />
       </el-select>

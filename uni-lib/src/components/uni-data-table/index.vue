@@ -23,7 +23,6 @@ import UniTableCell from './cell.vue'
 import UniTableToolbar from './toolbar.vue'
 import { useColumns } from './use-columns'
 import { useData } from './use-data'
-import { useExport } from './use-export'
 
 const props = withDefaults(
   defineProps<{
@@ -72,6 +71,8 @@ const rootRef = ref<HTMLElement>()
 const paginationRef = ref<HTMLElement>()
 const tableSize = ref<UniTableSize>('default')
 const fullscreen = ref(false)
+const tableBorder = ref(false)
+const tableStripe = ref(false)
 const autoMaxHeight = ref<number>()
 let resizeObserver: ResizeObserver | undefined
 const actualEmptyText = computed(() => props.emptyText ?? i18n.t('common.empty'))
@@ -102,14 +103,7 @@ const toolbarConfig = computed<Required<UniTableToolbarConfig>>(() => {
   }
 })
 const hasToolbarTools = computed(
-  () =>
-    toolbarConfig.value.enabled &&
-    (toolbarConfig.value.refresh ||
-      toolbarConfig.value.density ||
-      toolbarConfig.value.columnSetting ||
-      toolbarConfig.value.fullscreen ||
-      toolbarConfig.value.export ||
-      toolbarConfig.value.print)
+  () => toolbarConfig.value.enabled && (toolbarConfig.value.refresh || toolbarConfig.value.columnSetting || toolbarConfig.value.fullscreen)
 )
 
 const { columnStates, visibleColumns, handleColumnDragStart, handleColumnDrop } = useColumns(() => props.columns)
@@ -124,13 +118,6 @@ const { actualData, actualLoading, actualTotal, loadData, paginationConfig, pagi
   emitRequestError: (error) => emit('request-error', error),
   emitUpdatePageNo: (value) => emit('update:pageNo', value),
   emitUpdatePageSize: (value) => emit('update:pageSize', value)
-})
-
-const { exportCurrentData, printCurrentData } = useExport({
-  getRows: () => actualData.value,
-  getColumns: () => visibleColumns.value,
-  getFileName: () => toolbarConfig.value.exportFileName,
-  getValueEnums: () => props.valueEnums
 })
 
 const handleSortChange = (sort: Sort) => {
@@ -263,32 +250,15 @@ watch(() => [props.maxHeight, actualData.value.length, paginationConfig.value, f
 
 <template>
   <div ref="rootRef" class="uni-data-table" :class="{ 'is-fullscreen': fullscreen }">
-    <div v-if="$slots.toolbar || hasToolbarTools" class="uni-data-table__toolbar">
-      <div class="uni-data-table__toolbar-left">
-        <slot name="toolbar" />
-      </div>
-      <div v-if="hasToolbarTools" class="uni-data-table__toolbar-right">
-        <UniTableToolbar
-          v-model:fullscreen="fullscreen"
-          v-model:table-size="tableSize"
-          :column-states="columnStates"
-          :config="toolbarConfig"
-          :loading="actualLoading"
-          @refresh="handleToolbarRefresh"
-          @export="exportCurrentData"
-          @print="printCurrentData"
-          @column-drag-start="handleColumnDragStart"
-          @column-drop="handleColumnDrop" />
-      </div>
-    </div>
-
     <el-table
       v-loading="actualLoading"
       :data="actualData"
       :row-key="rowKey"
       :empty-text="actualEmptyText"
+      :border="tableBorder"
       :max-height="actualMaxHeight"
       :size="tableSize"
+      :stripe="tableStripe"
       :highlight-current-row="selection === 'single'"
       @selection-change="(selection: Recordable[]) => emit('selection-change', selection)"
       @current-change="handleSingleSelectionChange"
@@ -364,21 +334,41 @@ watch(() => [props.maxHeight, actualData.value.length, paginationConfig.value, f
     </el-table>
 
     <div
-      v-if="paginationConfig && paginationConfig.enabled !== false"
+      v-if="$slots.toolbar || hasToolbarTools || (paginationConfig && paginationConfig.enabled !== false)"
       ref="paginationRef"
-      class="uni-data-table__pagination"
-      :class="`is-${paginationConfig.position}`">
-      <el-pagination
-        :background="paginationConfig.background"
-        :layout="paginationConfig.layout"
-        :page-sizes="paginationConfig.pageSizes"
-        :hide-on-single-page="paginationConfig.hideOnSinglePage"
-        :current-page="paginationState.pageNo"
-        :page-size="paginationState.pageSize"
-        size="small"
-        :total="actualTotal"
-        @current-change="handleCurrentChange"
-        @size-change="handleSizeChange" />
+      class="uni-data-table__footer">
+      <div class="uni-data-table__toolbar">
+        <el-button-group size="small" v-if="$slots.toolbar" class="uni-data-table__toolbar-left">
+          <slot name="toolbar" />
+        </el-button-group>
+        <el-divider v-if="$slots.toolbar" direction="vertical" />
+        <div v-if="hasToolbarTools" class="uni-data-table__toolbar-right">
+          <UniTableToolbar
+            v-model:border="tableBorder"
+            v-model:fullscreen="fullscreen"
+            v-model:stripe="tableStripe"
+            :column-states="columnStates"
+            :config="toolbarConfig"
+            :loading="actualLoading"
+            @refresh="handleToolbarRefresh"
+            @column-drag-start="handleColumnDragStart"
+            @column-drop="handleColumnDrop" />
+        </div>
+      </div>
+
+      <div v-if="paginationConfig && paginationConfig.enabled !== false" class="uni-data-table__pagination" :class="`is-${paginationConfig.position}`">
+        <el-pagination
+          :background="paginationConfig.background"
+          :layout="paginationConfig.layout"
+          :page-sizes="paginationConfig.pageSizes"
+          :hide-on-single-page="paginationConfig.hideOnSinglePage"
+          :current-page="paginationState.pageNo"
+          :page-size="paginationState.pageSize"
+          size="small"
+          :total="actualTotal"
+          @current-change="handleCurrentChange"
+          @size-change="handleSizeChange" />
+      </div>
     </div>
   </div>
 </template>
@@ -433,19 +423,27 @@ watch(() => [props.maxHeight, actualData.value.length, paginationConfig.value, f
   }
 
   :deep(.uni-data-table__pagination) {
-    margin-top: 14px;
+    margin-top: 0;
+  }
+
+  &__footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    min-height: 32px;
+    margin-top: 10px;
   }
 
   &__toolbar {
-    display: flex;
+    display: inline-flex;
     gap: 8px;
     align-items: center;
-    justify-content: space-between;
-    margin-bottom: 8px;
+    justify-content: flex-start;
+    min-width: 0;
   }
 
   &__toolbar-left {
-    flex: 1;
+    flex: 0 1 auto;
     min-width: 0;
   }
 
@@ -457,7 +455,8 @@ watch(() => [props.maxHeight, actualData.value.length, paginationConfig.value, f
 
   &__pagination {
     display: flex;
-    margin-top: 10px;
+    flex: 1;
+    min-width: 0;
 
     &.is-left {
       justify-content: flex-start;

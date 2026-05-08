@@ -50,6 +50,15 @@ const firstPhaseMenus: AppMenuRecord[] = [
         }
       }
     ]
+  },
+  {
+    path: '/protocol',
+    name: 'Protocol',
+    meta: {
+      title: '协议管理',
+      titleKey: 'route.protocol',
+      icon: 'Document'
+    }
   }
 ]
 
