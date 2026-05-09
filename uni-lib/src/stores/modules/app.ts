@@ -1,7 +1,7 @@
 import { defineStore } from "pinia";
 import { computed, ref } from "vue";
 
-import { tryGetUniRuntimeConfig } from "@/runtime";
+import { tryGetUniConfig } from "@/plugins/config";
 import { storage } from "@/plugins/storage";
 
 export const useAppStore = defineStore("app", () => {
@@ -11,7 +11,7 @@ export const useAppStore = defineStore("app", () => {
 
   const locale = ref<string>(
     storage.get<string>("locale") ??
-      tryGetUniRuntimeConfig()?.defaultLocale ??
+      tryGetUniConfig()?.defaultLocale ??
       "zh-CN",
   );
 

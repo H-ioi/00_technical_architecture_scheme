@@ -7,19 +7,27 @@ import { UniConfigProvider } from "@/components/uni-config-provider";
 import { UniDataTable } from "@/components/uni-data-table";
 import { UniForm } from "@/components/uni-form";
 import { UniIcon } from "@/components/uni-icon";
-import { UniLayout, UniLayoutChangePasswordDialog } from "@/components/uni-layout";
+import {
+  UniLayout,
+  UniLayoutChangePasswordDialog,
+} from "@/components/uni-layout";
 import { UniSearchForm } from "@/components/uni-search-form";
 import { UniThemeSettings } from "@/components/uni-theme-settings";
 import { UniUpload } from "@/components/uni-upload";
 import { setupUniTheme } from "@/components/uni-theme-settings/runtime";
 import { setupCopyDirective } from "@/directives/copy";
 import { setupDebounceClickDirective } from "@/directives/debounce-click";
+import { setupPermissionDirective } from "@/directives/permission";
 import {
-  setupPermissionDirective,
-} from "@/directives/permission";
+  getUniConfig,
+  normalizeUniConfig,
+  setUniConfig,
+  tryGetUniConfig,
+} from "@/plugins/config";
 import { initUniHttpClient } from "@/plugins/request";
 import { setUniAppName } from "@/plugins/storage";
-import { setUniRuntimeConfig, tryGetUniRuntimeConfig } from "@/runtime";
+import { useUniTagsViewStore } from "@/stores/modules/tags-view";
+import { useUserStore } from "@/stores/modules/user";
 import type { UniLibInstallOptions } from "@/types/uni-install";
 
 const components = [
@@ -38,18 +46,25 @@ const components = [
 ];
 
 export const install = (app: App, options: UniLibInstallOptions = {}) => {
-  if (options.runtime) {
-    setUniAppName(options.runtime.name);
-    setUniRuntimeConfig(options.runtime);
+  if (options.config) {
+    const config = normalizeUniConfig(
+      options.config,
+      defaultChangePasswordOnSuccess,
+    );
+
+    setUniAppName(config.name);
+    setUniConfig(config);
     initUniHttpClient();
   }
 
-  const shell = tryGetUniRuntimeConfig()?.shell;
+  const shell = tryGetUniConfig()?.shell;
   setupUniTheme({
     ...(shell?.themeStorageKey != null
       ? { storageKey: shell.themeStorageKey }
       : {}),
-    ...(shell?.defaultTheme != null ? { defaultTheme: shell.defaultTheme } : {}),
+    ...(shell?.defaultTheme != null
+      ? { defaultTheme: shell.defaultTheme }
+      : {}),
     ...options.theme,
   });
 
@@ -61,4 +76,19 @@ export const install = (app: App, options: UniLibInstallOptions = {}) => {
   setupDebounceClickDirective(app);
 };
 
+const defaultChangePasswordOnSuccess = async () => {
+  const userStore = useUserStore();
+  const tagsViewStore = useUniTagsViewStore();
+
+  await userStore.logout();
+  tagsViewStore.resetTags();
+
+  const redirect = getUniConfig().shell?.logoutRedirect ?? "/login";
+
+  if (typeof window !== "undefined") {
+    window.location.assign(redirect);
+  }
+};
+
 export type { UniLibInstallOptions } from "@/types/uni-install";
+export type { UniLibConfig, UniLibConfigInput } from "@/types/uni-runtime";

@@ -1,12 +1,12 @@
-import type { App } from 'vue'
-import UniLib, { createUniLibRuntime } from 'uni-ui-lib'
+import UniLib from 'uni-ui-lib'
 import 'uni-ui-lib/style.css'
+import type { App } from 'vue'
 
 import { fetchLoginSnapshot, submitLogoutRequest } from '@/api/modules/auth'
 
 export const initUniLib = (app: App) => {
   app.use(UniLib, {
-    runtime: createUniLibRuntime({
+    config: {
       name: 'uni-admin-web',
       request: {
         baseURL: import.meta.env.VITE_API_BASE_URL as string,
@@ -19,6 +19,6 @@ export const initUniLib = (app: App) => {
         login: (params) => fetchLoginSnapshot(params),
         logoutRequest: submitLogoutRequest
       }
-    })
+    }
   })
 }

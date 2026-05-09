@@ -1,4 +1,4 @@
-import axios, {
+﻿import axios, {
   type AxiosError,
   type AxiosInstance,
   type AxiosRequestConfig,
@@ -6,7 +6,7 @@ import axios, {
 } from "axios";
 import { ElMessage } from "element-plus";
 
-import { getUniRuntimeConfig } from "@/runtime";
+import { getUniConfig } from "@/plugins/config";
 import { useUserStore } from "@/stores";
 import type { UniRequestOptions } from "@/types/uni-request";
 
@@ -244,7 +244,7 @@ const createApiEnvelopeParser = (
 let defaultClient: AxiosInstance | null = null;
 
 export const initUniHttpClient = () => {
-  const runtime = getUniRuntimeConfig();
+  const runtime = getUniConfig();
   const messages = {
     ...DEFAULT_MESSAGES,
     ...runtime.httpMessages,
@@ -310,7 +310,7 @@ export const initUniHttpClient = () => {
 export const getUniRequest = (): AxiosInstance => {
   if (!defaultClient) {
     throw new Error(
-      "[uni-ui-lib] HTTP client not initialized. Ensure app.use(UniLib) ran with options.runtime.",
+      "[uni-ui-lib] HTTP client not initialized. Ensure app.use(UniLib) ran with options.config.",
     );
   }
   return defaultClient;

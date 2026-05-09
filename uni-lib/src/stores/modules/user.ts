@@ -1,7 +1,7 @@
 import { defineStore } from "pinia";
 import { computed, ref } from "vue";
 
-import { getUniRuntimeConfig } from "@/runtime";
+import { getUniConfig } from "@/plugins/config";
 import { storage } from "@/plugins/storage";
 import type { UniUserProfile } from "@/types/user-profile";
 
@@ -39,7 +39,7 @@ export const useUserStore = defineStore("user", () => {
   };
 
   const login = async (params: unknown) => {
-    const result = await getUniRuntimeConfig().auth.login(params);
+    const result = await getUniConfig().auth.login(params);
     const permissionCodeStore = usePermissionCodeStore();
 
     setToken(result.accessToken);
@@ -51,7 +51,9 @@ export const useUserStore = defineStore("user", () => {
 
   const logout = async () => {
     if (accessToken.value) {
-      await getUniRuntimeConfig().auth.logoutRequest?.().catch(() => undefined);
+      await getUniConfig()
+        .auth.logoutRequest?.()
+        .catch(() => undefined);
     }
 
     resetAuth();

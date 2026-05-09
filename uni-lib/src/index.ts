@@ -3,7 +3,10 @@ import { UniConfigProvider } from "./components/uni-config-provider";
 import { UniDataTable } from "./components/uni-data-table";
 import { UniForm } from "./components/uni-form";
 import { UniIcon } from "./components/uni-icon";
-import { UniLayout, UniLayoutChangePasswordDialog } from "./components/uni-layout";
+import {
+  UniLayout,
+  UniLayoutChangePasswordDialog,
+} from "./components/uni-layout";
 import { UniSearchForm } from "./components/uni-search-form";
 import { UniThemeSettings } from "./components/uni-theme-settings";
 import { UniUpload } from "./components/uni-upload";
@@ -26,7 +29,6 @@ export {
   UniUpload,
 };
 export * from "./plugins/install";
-export * from "./runtime";
 export * from "./icons";
 export * from "./types/shared";
 export * from "./types/uni-table";

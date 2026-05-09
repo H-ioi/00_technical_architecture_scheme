@@ -26,24 +26,24 @@ export interface UniLoginSnapshot {
   permissions: string[];
 }
 
-export interface UniLibRuntimeAuth {
+export interface UniLibConfigAuth {
   login: (params: unknown) => Promise<UniLoginSnapshot>;
   logoutRequest?: () => Promise<void>;
 }
 
-export interface UniRuntimeShell {
+export interface UniConfigShell {
   /** 退出登录后的路由路径，默认 <code>/login</code> */
   logoutRedirect?: string;
   themeStorageKey?: string;
   defaultTheme?: UniThemeOptions;
 }
 
-export interface UniLibRuntimeOptions {
+export interface UniLibConfig {
   /** 项目名称：localStorage、主题持久化键等命名空间（如 `admin-web:access-token`） */
   name: string;
   defaultLocale: string;
   /** 布局壳：主题持久化键、默认主题、登出跳转等 */
-  shell?: UniRuntimeShell;
+  shell?: UniConfigShell;
   /** HTTP 客户端：由 {@link createUniRequest} 构建，支持在 install 时合并业务壳解析等 */
   request: Omit<
     UniRequestOptions,
@@ -60,21 +60,18 @@ export interface UniLibRuntimeOptions {
       /** 业务成功时的 <code>code</code> 取值列表；若未设置则默认为 <code>0</code> 与 <code>200</code> */
       apiSuccessCodes?: number[];
     };
-  auth: UniLibRuntimeAuth;
+  auth: UniLibConfigAuth;
   changePassword?: UniChangePasswordRuntime;
   httpMessages?: UniHttpMessages;
 }
 
-export type CreateUniLibRuntimeInput = Pick<
-  UniLibRuntimeOptions,
+export type UniLibConfigInput = Pick<
+  UniLibConfig,
   "name" | "auth" | "request"
 > &
   Partial<
     Pick<
-      UniLibRuntimeOptions,
-      | "defaultLocale"
-      | "shell"
-      | "changePassword"
-      | "httpMessages"
+      UniLibConfig,
+      "defaultLocale" | "shell" | "changePassword" | "httpMessages"
     >
   >;
