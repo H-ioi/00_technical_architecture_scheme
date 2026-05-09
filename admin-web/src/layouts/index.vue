@@ -1,37 +1,42 @@
 <script setup lang="ts">
-import type { FormInstance, FormRules } from 'element-plus'
 import { ElMessage } from 'element-plus'
-import { UniLayout, UniThemeSettings, type UniLayoutTag } from 'uni-ui-lib'
-import { computed, reactive, ref, watchEffect } from 'vue'
+import {
+  type UniLayoutChangePasswordPayload,
+  UniLayout,
+  UniLayoutChangePasswordDialog,
+  UniThemeSettings,
+  useUniTagsViewController
+} from 'uni-ui-lib'
+import { computed, ref, watchEffect } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 
 import { changePasswordApi } from '@/api'
 import logoUrl from '@/assets/images/logo-top.png'
 import { useAppI18n } from '@/composables/use-app-i18n'
 import { getLocalizedDocumentTitle } from '@/locales'
-import { useAppStore, usePermissionStore, useTagsViewStore, useUserStore } from '@/stores'
+import { useAppStore, usePermissionStore, useUserStore } from '@/stores'
 import { storage } from '@/utils/storage'
 
 const route = useRoute()
 const router = useRouter()
 const appStore = useAppStore()
 const permissionStore = usePermissionStore()
-const tagsViewStore = useTagsViewStore()
+const {
+  tagsViewStore,
+  viewKey,
+  closeTag,
+  refreshTag,
+  closeOthers,
+  closeAll
+} = useUniTagsViewController(router, route, { fallbackPath: '/dashboard' })
 const userStore = useUserStore()
 const { t } = useAppI18n()
-const passwordFormRef = ref<FormInstance>()
 const passwordVisible = ref(false)
 const themeVisible = ref(false)
 const passwordSubmitting = ref(false)
 const defaultTheme = {
   primaryColor: '#BA8E62'
 }
-const passwordForm = reactive({
-  password: '',
-  newpassword1: '',
-  newpassword2: ''
-})
-const viewKey = computed(() => `${route.fullPath}-${tagsViewStore.refreshKey}`)
 const activeMenu = computed(() => String(route.meta.activeMenu || route.path))
 const roleLabel = computed(
   () => userStore.profile?.roles?.[0]?.replace(/^ROLE_/, '') || t('common.adminRole')
@@ -56,31 +61,6 @@ const userCommands = computed(() => [
 ])
 const translateLayoutText = (key?: string, fallback = '') => (key ? t(key, fallback) : fallback)
 
-const passwordRules = computed<FormRules<typeof passwordForm>>(() => ({
-  password: [
-    { required: true, message: t('common.oldPassword'), trigger: 'blur' },
-    { min: 6, message: t('common.passwordMinLength'), trigger: 'blur' }
-  ],
-  newpassword1: [
-    { required: true, message: t('common.newPassword'), trigger: 'blur' },
-    { min: 6, message: t('common.passwordMinLength'), trigger: 'blur' }
-  ],
-  newpassword2: [
-    { required: true, message: t('common.confirmPassword'), trigger: 'blur' },
-    {
-      validator: (_rule, value, callback) => {
-        if (value !== passwordForm.newpassword1) {
-          callback(new Error(t('common.passwordMismatch')))
-          return
-        }
-
-        callback()
-      },
-      trigger: 'blur'
-    }
-  ]
-}))
-
 const handleLogout = async () => {
   await userStore.logout()
   permissionStore.resetPermission()
@@ -88,31 +68,13 @@ const handleLogout = async () => {
   router.replace('/login')
 }
 
-const resetPasswordForm = () => {
-  passwordForm.password = ''
-  passwordForm.newpassword1 = ''
-  passwordForm.newpassword2 = ''
-  passwordFormRef.value?.clearValidate()
-}
-
-const openPasswordDialog = () => {
-  passwordVisible.value = true
-  resetPasswordForm()
-}
-
-const submitPassword = async () => {
-  const valid = await passwordFormRef.value?.validate().catch(() => false)
-
-  if (!valid) {
-    return
-  }
-
+const submitPasswordPayload = async (payload: UniLayoutChangePasswordPayload) => {
   passwordSubmitting.value = true
 
   try {
     await changePasswordApi({
       username: userStore.profile?.username || userStore.profile?.name || '',
-      ...passwordForm
+      ...payload
     })
     ElMessage.success(t('common.passwordChanged'))
     passwordVisible.value = false
@@ -124,7 +86,7 @@ const submitPassword = async () => {
 
 const handleUserCommand = (command: string) => {
   if (command === 'password') {
-    openPasswordDialog()
+    passwordVisible.value = true
     return
   }
 
@@ -138,49 +100,6 @@ const handleUserCommand = (command: string) => {
   }
 }
 
-const findNextTag = (path: string) => {
-  const tags = tagsViewStore.visitedTags
-  const index = tags.findIndex((tag) => tag.path === path)
-  const left = index > 0 ? tags[index - 1] : undefined
-  const right = index < tags.length - 1 ? tags[index + 1] : undefined
-
-  return left || right || tagsViewStore.visitedTags[tagsViewStore.visitedTags.length - 1]
-}
-
-const closeTag = (path: string) => {
-  const isActive = route.fullPath === path
-  const nextTag = findNextTag(path)
-
-  tagsViewStore.removeTag(path)
-
-  if (!isActive) {
-    return
-  }
-
-  void router.push((nextTag || { path: '/dashboard' }).path)
-}
-
-const refreshTag = (tag?: UniLayoutTag) => {
-  if (tag && tag.path !== route.fullPath) {
-    void router.push(tag.path)
-  }
-  tagsViewStore.refreshCurrentTag()
-}
-
-const closeOthers = (path = route.fullPath) => {
-  tagsViewStore.removeOtherTags(path)
-
-  if (path !== route.fullPath) {
-    void router.push(path)
-  }
-}
-
-const closeAll = () => {
-  tagsViewStore.removeAllTags()
-  void router.push('/dashboard')
-}
-
-// UniLayout 只负责 UI 事件，项目适配层在这里接入当前路由、权限菜单和业务状态。
 watchEffect(() => {
   document.title = getLocalizedDocumentTitle(route.meta.titleKey, route.meta.title)
 })
@@ -214,36 +133,11 @@ watchEffect(() => {
     <RouterView :key="viewKey" />
   </UniLayout>
 
-  <el-dialog
+  <UniLayoutChangePasswordDialog
     v-model="passwordVisible"
-    :title="t('common.changePassword')"
-    width="420px"
-    destroy-on-close
-  >
-    <el-form
-      ref="passwordFormRef"
-      :model="passwordForm"
-      :rules="passwordRules"
-      label-position="top"
-    >
-      <el-form-item :label="t('common.oldPassword')" prop="password">
-        <el-input v-model="passwordForm.password" type="password" show-password />
-      </el-form-item>
-      <el-form-item :label="t('common.newPassword')" prop="newpassword1">
-        <el-input v-model="passwordForm.newpassword1" type="password" show-password />
-      </el-form-item>
-      <el-form-item :label="t('common.confirmPassword')" prop="newpassword2">
-        <el-input v-model="passwordForm.newpassword2" type="password" show-password />
-      </el-form-item>
-    </el-form>
-    <template #footer>
-      <el-button @click="resetPasswordForm">{{ t('common.reset') }}</el-button>
-      <el-button @click="passwordVisible = false">{{ t('common.cancel') }}</el-button>
-      <el-button type="primary" :loading="passwordSubmitting" @click="submitPassword">
-        {{ t('common.submit') }}
-      </el-button>
-    </template>
-  </el-dialog>
+    :loading="passwordSubmitting"
+    @submit="submitPasswordPayload"
+  />
 
   <UniThemeSettings
     v-model="themeVisible"

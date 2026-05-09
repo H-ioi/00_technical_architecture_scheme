@@ -3,7 +3,7 @@ import { UniConfigProvider } from "./components/uni-config-provider";
 import { UniDataTable } from "./components/uni-data-table";
 import { UniForm } from "./components/uni-form";
 import { UniIcon } from "./components/uni-icon";
-import { UniLayout } from "./components/uni-layout";
+import { UniLayout, UniLayoutChangePasswordDialog } from "./components/uni-layout";
 import { UniSearchForm } from "./components/uni-search-form";
 import { UniThemeSettings } from "./components/uni-theme-settings";
 import { UniUpload } from "./components/uni-upload";
@@ -16,6 +16,7 @@ export {
   UniForm,
   UniIcon,
   UniLayout,
+  UniLayoutChangePasswordDialog,
   UniSearchForm,
   UniThemeSettings,
   UniUpload,
@@ -32,6 +33,8 @@ export * from "./directives/debounce-click";
 export * from "./directives/permission";
 export * from "./composables/use-uni-list-state";
 export * from "./composables/use-uni-permission";
+export * from "./composables/use-uni-tags-view-controller";
+export * from "./stores/uni-tags-view";
 export * from "./services/request";
 export * from "./services/auth";
 export * from "./services/element-plus-locale";

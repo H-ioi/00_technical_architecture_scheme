@@ -2,7 +2,8 @@ import type { Router } from 'vue-router'
 
 import { fetchMenuPermissions } from '@/api/modules/menu'
 import { getLocalizedDocumentTitle, translateAppMessage } from '@/locales'
-import { usePermissionStore, useTagsViewStore, useUserStore } from '@/stores'
+import { usePermissionStore, useUserStore } from '@/stores'
+import { useUniTagsViewStore } from 'uni-ui-lib'
 
 const whiteList = ['/login']
 
@@ -61,7 +62,7 @@ export const setupRouterGuards = (router: Router) => {
   })
 
   router.afterEach((to) => {
-    const tagsViewStore = useTagsViewStore()
+    const tagsViewStore = useUniTagsViewStore()
     // 使用叶子路由 meta：父级 layout 常带 hidden，合并后 to.meta.hidden 会误判
     const leaf = to.matched[to.matched.length - 1]
 

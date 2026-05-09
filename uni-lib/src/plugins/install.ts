@@ -7,7 +7,7 @@ import { UniConfigProvider } from "@/components/uni-config-provider";
 import { UniDataTable } from "@/components/uni-data-table";
 import { UniForm } from "@/components/uni-form";
 import { UniIcon } from "@/components/uni-icon";
-import { UniLayout } from "@/components/uni-layout";
+import { UniLayout, UniLayoutChangePasswordDialog } from "@/components/uni-layout";
 import { UniSearchForm } from "@/components/uni-search-form";
 import { UniThemeSettings } from "@/components/uni-theme-settings";
 import { UniUpload } from "@/components/uni-upload";
@@ -32,6 +32,10 @@ const components = [
   { name: "UniForm", component: UniForm },
   { name: "UniIcon", component: UniIcon },
   { name: "UniLayout", component: UniLayout },
+  {
+    name: "UniLayoutChangePasswordDialog",
+    component: UniLayoutChangePasswordDialog,
+  },
   { name: "UniSearchForm", component: UniSearchForm },
   { name: "UniThemeSettings", component: UniThemeSettings },
   { name: "UniUpload", component: UniUpload },

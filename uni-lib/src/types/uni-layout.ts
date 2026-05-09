@@ -46,5 +46,12 @@ export interface UniLayoutUserCommand {
   divided?: boolean;
 }
 
+/** 与常见后端修改密码字段对齐（见应用侧 API）。 */
+export interface UniLayoutChangePasswordPayload {
+  password: string;
+  newpassword1: string;
+  newpassword2: string;
+}
+
 export type UniLayoutTranslate = (key?: string, fallback?: string) => string;
 export type UniLayoutIconMap = Record<string, Component>;

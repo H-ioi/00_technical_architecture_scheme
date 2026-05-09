@@ -31,11 +31,20 @@ export default defineConfig({
       fileName: (format) => (format === "es" ? "index.mjs" : "index.cjs"),
     },
     rollupOptions: {
-      external: ["vue", "element-plus", "@element-plus/icons-vue", "axios"],
+      external: [
+        "vue",
+        "vue-router",
+        "pinia",
+        "element-plus",
+        "@element-plus/icons-vue",
+        "axios",
+      ],
       output: {
         exports: "named",
         globals: {
           vue: "Vue",
+          "vue-router": "VueRouter",
+          pinia: "Pinia",
           "element-plus": "ElementPlus",
           "@element-plus/icons-vue": "ElementPlusIconsVue",
           axios: "axios",
