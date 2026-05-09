@@ -3,6 +3,7 @@ import { UniConfigProvider } from "./components/uni-config-provider";
 import { UniDataTable } from "./components/uni-data-table";
 import { UniForm } from "./components/uni-form";
 import { UniIcon } from "./components/uni-icon";
+import { UniLayout } from "./components/uni-layout";
 import { UniSearchForm } from "./components/uni-search-form";
 import { UniThemeSettings } from "./components/uni-theme-settings";
 import { UniUpload } from "./components/uni-upload";
@@ -14,6 +15,7 @@ export {
   UniDataTable,
   UniForm,
   UniIcon,
+  UniLayout,
   UniSearchForm,
   UniThemeSettings,
   UniUpload,
@@ -21,7 +23,10 @@ export {
 export * from "./plugins/install";
 export * from "./icons";
 export * from "./types/shared";
+export * from "./types/uni-table";
+export * from "./types/uni-form";
 export * from "./types/uni-data-table";
+export * from "./types/uni-layout";
 export * from "./directives/copy";
 export * from "./directives/debounce-click";
 export * from "./directives/permission";

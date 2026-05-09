@@ -41,6 +41,11 @@
       "import": "./dist/index.mjs",
       "require": "./dist/index.cjs"
     },
+    "./components/uni-layout": {
+      "types": "./dist/src/components/uni-layout/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.cjs"
+    },
     "./components/uni-search-form": {
       "types": "./dist/src/components/uni-search-form/index.d.ts",
       "import": "./dist/index.mjs",

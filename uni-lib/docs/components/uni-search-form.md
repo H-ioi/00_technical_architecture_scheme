@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref } from "vue";
 
-import type { UniFormConfig } from "@/types/shared";
+import type { UniFormConfig } from "@/types/uni-form";
 
 import codeActionMin from "../.vitepress/snippets/uni-search-form/action-min-span.vue?raw";
 import codeBasic from "../.vitepress/snippets/uni-search-form/basic.vue?raw";

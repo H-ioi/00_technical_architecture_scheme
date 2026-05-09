@@ -1,4 +1,5 @@
-import type { UniOption, UniTableColumn } from "@/types/shared";
+import type { UniOption } from "@/types/shared";
+import type { UniTableColumn } from "@/types/uni-table";
 import { useUniI18n } from "@/services/i18n";
 
 export const isEmptyValue = (value: unknown) =>
@@ -10,14 +11,17 @@ export const isBlankValue = (value: unknown) =>
   (Array.isArray(value) && value.length === 0);
 
 export const omitBlankValues = (model: Record<string, unknown>) =>
-  Object.entries(model).reduce<Record<string, unknown>>((result, [key, value]) => {
-    if (isBlankValue(value)) {
-      return result;
-    }
+  Object.entries(model).reduce<Record<string, unknown>>(
+    (result, [key, value]) => {
+      if (isBlankValue(value)) {
+        return result;
+      }
 
-    result[key] = typeof value === "string" ? value.trim() : value;
-    return result;
-  }, {});
+      result[key] = typeof value === "string" ? value.trim() : value;
+      return result;
+    },
+    {},
+  );
 
 export const formatEmpty = (value: unknown, emptyText = "--") =>
   isEmptyValue(value) ? emptyText : String(value);

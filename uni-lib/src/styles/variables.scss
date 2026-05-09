@@ -6,4 +6,19 @@
   --uni-scrollbar-size: 8px;
   --uni-scrollbar-thumb-color: rgb(144 147 153 / 30%);
   --uni-scrollbar-thumb-hover-color: rgb(144 147 153 / 45%);
+
+  /** UniLayout：可被业务 `--app-*` 覆盖，或由 `.uni-layout--*` 预设改写 */
+  --uni-layout-bg: var(--app-bg-color, #f5f7fb);
+  --uni-layout-card-bg: var(--app-card-bg-color, #fff);
+  --uni-layout-sidebar-bg: var(--app-sidebar-bg-color, #fff);
+  --uni-layout-primary: var(--app-primary-color, #ba8e62);
+  --uni-layout-primary-light: var(--app-primary-color-5, rgb(186 142 98 / 12%));
+  --uni-layout-border: var(--app-border-color, #e5e7eb);
+  --uni-layout-text: var(--app-text-color, #1f2937);
+  --uni-layout-text-secondary: var(--app-text-color-secondary, #6b7280);
+  --uni-layout-menu-active-bg: #19364a;
+  --uni-layout-menu-active-color: #fff;
+  --uni-layout-header-height: 56px;
+  --uni-layout-tags-height: 40px;
+  --uni-layout-content-padding: 16px;
 }

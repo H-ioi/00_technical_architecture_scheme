@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref } from "vue";
 
-import type { UniFormConfig } from "@/types/shared";
+import type { UniFormConfig } from "@/types/uni-form";
 
 import codeActions from "../.vitepress/snippets/uni-form/actions-slot.vue?raw";
 import codeAllInputsGrid from "../.vitepress/snippets/uni-form/all-inputs-grid.vue?raw";

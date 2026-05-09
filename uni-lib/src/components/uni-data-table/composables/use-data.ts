@@ -1,12 +1,12 @@
 import type { Sort } from "element-plus";
 import { computed, onMounted, reactive, ref, watch } from "vue";
 
+import type { Recordable } from "@/types/shared";
 import type {
-  Recordable,
   UniPaginationConfig,
   UniTableRequest,
   UniTableRequestResult,
-} from "@/types/shared";
+} from "@/types/uni-table";
 
 interface UseDataOptions {
   getData: () => Recordable[];

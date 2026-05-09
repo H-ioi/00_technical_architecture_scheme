@@ -1,4 +1,4 @@
-import type { UniTableColumn } from "./shared";
+import type { UniTableColumn } from "./uni-table";
 
 export type UniTableSize = "large" | "default" | "small";
 export type UniTableColumnFixed = "left" | "right" | undefined;

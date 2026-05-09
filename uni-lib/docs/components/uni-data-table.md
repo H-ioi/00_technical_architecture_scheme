@@ -2,15 +2,14 @@
 import { ElMessage } from "element-plus";
 import { onMounted, ref } from "vue";
 
+import type { Recordable, UniOption } from "@/types/shared";
 import type {
-  Recordable,
-  UniOption,
   UniPaginationConfig,
   UniTableToolbarConfig,
   UniTableAction,
   UniTableColumn,
   UniTableRequest,
-} from "@/types/shared";
+} from "@/types/uni-table";
 
 import codeActionsSlot from "../.vitepress/snippets/uni-data-table/actions-slot.vue?raw";
 import codeActionsOverflow from "../.vitepress/snippets/uni-data-table/actions-overflow.vue?raw";

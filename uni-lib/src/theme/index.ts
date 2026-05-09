@@ -24,7 +24,8 @@ const ELEMENT_THEME_VARIABLES: Record<string, string> = {
   "--el-border-radius-circle": "100%",
   "--el-transition-duration": ".3s",
   "--el-transition-duration-fast": ".2s",
-  "--el-transition-function-ease-in-out-bezier": "cubic-bezier(.645, .045, .355, 1)",
+  "--el-transition-function-ease-in-out-bezier":
+    "cubic-bezier(.645, .045, .355, 1)",
   "--el-transition-function-fast-bezier": "cubic-bezier(.23, 1, .32, 1)",
   "--el-transition-all":
     "all var(--el-transition-duration) var(--el-transition-function-ease-in-out-bezier)",
@@ -32,7 +33,8 @@ const ELEMENT_THEME_VARIABLES: Record<string, string> = {
     "opacity var(--el-transition-duration) var(--el-transition-function-fast-bezier)",
   "--el-transition-md-fade":
     "transform var(--el-transition-duration) var(--el-transition-function-fast-bezier), opacity var(--el-transition-duration) var(--el-transition-function-fast-bezier)",
-  "--el-transition-fade-linear": "opacity var(--el-transition-duration-fast) linear",
+  "--el-transition-fade-linear":
+    "opacity var(--el-transition-duration-fast) linear",
   "--el-transition-border":
     "border-color var(--el-transition-duration-fast) var(--el-transition-function-ease-in-out-bezier)",
   "--el-transition-box-shadow":
@@ -117,7 +119,8 @@ const ELEMENT_THEME_VARIABLES: Record<string, string> = {
   "--el-border-width": "1px",
   "--el-border-style": "solid",
   "--el-border-color-hover": "var(--el-text-color-disabled)",
-  "--el-border": "var(--el-border-width) var(--el-border-style) var(--el-border-color)",
+  "--el-border":
+    "var(--el-border-width) var(--el-border-style) var(--el-border-color)",
   "--el-svg-monochrome-grey": "var(--el-border-color)",
 };
 
@@ -145,7 +148,9 @@ const mixColor = (color: string, mixColorValue: string, weight: number) => {
   const channels = [0, 2, 4].map((index) => {
     const sourceValue = Number.parseInt(source.slice(index, index + 2), 16);
     const targetValue = Number.parseInt(target.slice(index, index + 2), 16);
-    const mixedValue = Math.round(sourceValue * (1 - weight) + targetValue * weight);
+    const mixedValue = Math.round(
+      sourceValue * (1 - weight) + targetValue * weight,
+    );
 
     return mixedValue.toString(16).padStart(2, "0");
   });
@@ -169,24 +174,38 @@ const createElementPrimaryVariables = (primaryColor: string) => {
 
 export const createUniThemeVariables = (tokens: UniThemeOptions = {}) => {
   const primaryColor = tokens.primaryColor ?? DEFAULT_PRIMARY_COLOR;
+  const pageBg = tokens.pageBgColor ?? "#f5f7fb";
+  const cardBg = tokens.cardBgColor ?? "#fff";
+  const border = tokens.borderColor ?? "#e5e7eb";
+  const text = tokens.textColor ?? "#1f2937";
+  const textSecondary = tokens.textColorSecondary ?? "#6b7280";
+  const radiusBase = tokens.radiusBase ?? "8px";
 
   return {
     ...ELEMENT_THEME_VARIABLES,
     ...createElementPrimaryVariables(primaryColor),
+    "--el-border-radius-base": radiusBase,
+    "--el-bg-color-page": pageBg,
+    "--el-bg-color": cardBg,
+    "--el-bg-color-overlay": cardBg,
+    "--el-border-color": border,
+    "--el-text-color-primary": text,
+    "--el-text-color-regular": text,
+    "--el-text-color-secondary": textSecondary,
     "--uni-color-primary": primaryColor,
-    "--uni-bg-page": tokens.pageBgColor ?? "#f5f7fb",
-    "--uni-bg-card": tokens.cardBgColor ?? "#fff",
-    "--uni-border-color": tokens.borderColor ?? "#e5e7eb",
-    "--uni-text-color": tokens.textColor ?? "#1f2937",
-    "--uni-text-color-secondary": tokens.textColorSecondary ?? "#6b7280",
-    "--uni-radius-base": tokens.radiusBase ?? "8px",
+    "--uni-bg-page": pageBg,
+    "--uni-bg-card": cardBg,
+    "--uni-border-color": border,
+    "--uni-text-color": text,
+    "--uni-text-color-secondary": textSecondary,
+    "--uni-radius-base": radiusBase,
     "--app-primary-color": primaryColor,
-    "--app-bg-color": tokens.pageBgColor ?? "#f5f7fb",
-    "--app-card-bg-color": tokens.cardBgColor ?? "#fff",
-    "--app-border-color": tokens.borderColor ?? "#e5e7eb",
-    "--app-text-color": tokens.textColor ?? "#1f2937",
-    "--app-text-color-secondary": tokens.textColorSecondary ?? "#6b7280",
-    "--app-radius-base": tokens.radiusBase ?? "8px",
+    "--app-bg-color": pageBg,
+    "--app-card-bg-color": cardBg,
+    "--app-border-color": border,
+    "--app-text-color": text,
+    "--app-text-color-secondary": textSecondary,
+    "--app-radius-base": radiusBase,
     ...tokens.variables,
   };
 };
@@ -205,7 +224,9 @@ export const applyUniTheme = (tokens: UniThemeOptions = {}) => {
   });
 };
 
-export const getStoredUniTheme = (storageKey = DEFAULT_THEME_STORAGE_KEY): UniThemeOptions | null => {
+export const getStoredUniTheme = (
+  storageKey = DEFAULT_THEME_STORAGE_KEY,
+): UniThemeOptions | null => {
   if (typeof localStorage === "undefined") {
     return null;
   }
@@ -223,7 +244,10 @@ export const getStoredUniTheme = (storageKey = DEFAULT_THEME_STORAGE_KEY): UniTh
   }
 };
 
-export const saveUniTheme = (theme: UniThemeOptions, storageKey = DEFAULT_THEME_STORAGE_KEY) => {
+export const saveUniTheme = (
+  theme: UniThemeOptions,
+  storageKey = DEFAULT_THEME_STORAGE_KEY,
+) => {
   if (typeof localStorage === "undefined") {
     return;
   }
@@ -235,10 +259,13 @@ export const setupUniTheme = (options: UniThemeSetupOptions = {}) => {
   const { defaultTheme, storageKey, ...themeOptions } = options;
   const fallbackTheme =
     defaultTheme ??
-    (Object.keys(themeOptions).length > 0 ? themeOptions : { primaryColor: DEFAULT_PRIMARY_COLOR });
-  const theme = getStoredUniTheme(storageKey) ?? fallbackTheme ?? {
-    primaryColor: DEFAULT_PRIMARY_COLOR,
-  };
+    (Object.keys(themeOptions).length > 0
+      ? themeOptions
+      : { primaryColor: DEFAULT_PRIMARY_COLOR });
+  const theme = getStoredUniTheme(storageKey) ??
+    fallbackTheme ?? {
+      primaryColor: DEFAULT_PRIMARY_COLOR,
+    };
 
   applyUniTheme(theme);
 

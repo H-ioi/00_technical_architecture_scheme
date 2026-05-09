@@ -1,5 +1,6 @@
 import { useUniI18n } from "@/services/i18n";
-import type { Recordable, UniOption, UniTableColumn } from "@/types/shared";
+import type { Recordable, UniOption } from "@/types/shared";
+import type { UniTableColumn } from "@/types/uni-table";
 import { formatTableCellText } from "@/utils/format";
 
 const escapeCsvCell = (value: string) => `"${value.replace(/"/g, '""')}"`;

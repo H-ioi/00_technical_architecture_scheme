@@ -1,6 +1,6 @@
 import { computed, ref, watch } from "vue";
 
-import type { UniTableColumn } from "@/types/shared";
+import type { UniTableColumn } from "@/types/uni-table";
 import type {
   UniTableColumnState,
   UniTableColumnWithState,

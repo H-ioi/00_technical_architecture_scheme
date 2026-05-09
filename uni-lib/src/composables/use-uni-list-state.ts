@@ -1,6 +1,7 @@
 import { nextTick, ref } from "vue";
 
-import type { Recordable, UniTableRequestResult } from "@/types/shared";
+import type { Recordable } from "@/types/shared";
+import type { UniTableRequestResult } from "@/types/uni-table";
 
 export interface UniListTableExpose {
   refresh: () => void;
