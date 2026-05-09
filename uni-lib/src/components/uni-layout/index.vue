@@ -230,6 +230,10 @@ const avatarText = computed(() => {
     object-fit: contain;
   }
 
+  &__menu {
+    border-right: 0;
+  }
+
   &__main {
     flex: 1;
     min-width: 0;
