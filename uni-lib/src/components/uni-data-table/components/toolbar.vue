@@ -1,32 +1,3 @@
-<script setup lang="ts">
-import { FullScreen, Refresh, Setting } from "@element-plus/icons-vue";
-
-import { useUniI18n } from "@/locales/use-uni-i18n";
-import type { UniTableToolbarConfig } from "@/types/uni-table";
-import type { UniTableColumnState } from "@/types/uni-data-table";
-import UniTableColumnSettings from "./column-settings.vue";
-
-defineProps<{
-  columnStates: UniTableColumnState[];
-  config: Required<UniTableToolbarConfig>;
-  fullscreen: boolean;
-  loading: boolean;
-  border: boolean;
-  stripe: boolean;
-}>();
-
-const emit = defineEmits<{
-  "column-drag-start": [prop: string];
-  "column-drop": [prop: string];
-  "update:border": [value: boolean];
-  "update:fullscreen": [value: boolean];
-  "update:stripe": [value: boolean];
-  refresh: [];
-}>();
-
-const i18n = useUniI18n();
-</script>
-
 <template>
   <el-button-group size="small" plain class="uni-table-toolbar">
     <el-button
@@ -34,76 +5,67 @@ const i18n = useUniI18n();
       class="uni-table-toolbar__trigger"
       :icon="Refresh"
       :loading="loading"
-      :aria-label="i18n.t('dataTable.refresh')"
-      :title="i18n.t('dataTable.refresh')"
-      @click="emit('refresh')"
-    />
+      :aria-label="$t('dataTable.refresh')"
+      :title="$t('dataTable.refresh')"
+      @click="emit('refresh')" />
     <el-button
       v-if="config.fullscreen"
       class="uni-table-toolbar__trigger"
       :icon="FullScreen"
-      :aria-label="
-        fullscreen
-          ? i18n.t('dataTable.exitFullscreen')
-          : i18n.t('dataTable.fullscreen')
-      "
-      :title="
-        fullscreen
-          ? i18n.t('dataTable.exitFullscreen')
-          : i18n.t('dataTable.fullscreen')
-      "
-      @click="emit('update:fullscreen', !fullscreen)"
-    />
-    <el-popover
-      v-if="config.columnSetting"
-      placement="bottom-end"
-      trigger="click"
-      width="300"
-      popper-class="uni-table-toolbar-popper"
-    >
+      :aria-label="fullscreen ? $t('dataTable.exitFullscreen') : $t('dataTable.fullscreen')"
+      :title="fullscreen ? $t('dataTable.exitFullscreen') : $t('dataTable.fullscreen')"
+      @click="emit('update:fullscreen', !fullscreen)" />
+    <el-popover v-if="config.columnSetting" placement="bottom-end" trigger="click" width="300" popper-class="uni-table-toolbar-popper">
       <template #reference>
-        <el-button
-          class="uni-table-toolbar__trigger"
-          :icon="Setting"
-          :aria-label="i18n.t('dataTable.tools')"
-          :title="i18n.t('dataTable.tools')"
-        />
+        <el-button class="uni-table-toolbar__trigger" :icon="Setting" :aria-label="$t('dataTable.tools')" :title="$t('dataTable.tools')" />
       </template>
 
       <div class="uni-table-toolbar__panel">
-        <UniTableColumnSettings
-          :columns="columnStates"
-          @drag-start="(prop) => emit('column-drag-start', prop)"
-          @drop="(prop) => emit('column-drop', prop)"
-        />
+        <UniTableColumnSettings :columns="columnStates" @drag-start="(prop) => emit('column-drag-start', prop)" @drop="(prop) => emit('column-drop', prop)" />
 
         <div class="uni-table-toolbar__section">
           <div class="uni-table-toolbar__title">
-            {{ i18n.t("dataTable.otherSettings") }}
+            {{ $t('dataTable.otherSettings') }}
           </div>
           <div class="uni-table-toolbar__option">
-            <span>{{ i18n.t("dataTable.stripe") }}</span>
-            <el-switch
-              :model-value="stripe"
-              @update:model-value="
-                (value: boolean) => emit('update:stripe', value)
-              "
-            />
+            <span>{{ $t('dataTable.stripe') }}</span>
+            <el-switch :model-value="stripe" @update:model-value="(value: boolean) => emit('update:stripe', value)" />
           </div>
           <div class="uni-table-toolbar__option">
-            <span>{{ i18n.t("dataTable.border") }}</span>
-            <el-switch
-              :model-value="border"
-              @update:model-value="
-                (value: boolean) => emit('update:border', value)
-              "
-            />
+            <span>{{ $t('dataTable.border') }}</span>
+            <el-switch :model-value="border" @update:model-value="(value: boolean) => emit('update:border', value)" />
           </div>
         </div>
       </div>
     </el-popover>
   </el-button-group>
 </template>
+
+<script setup lang="ts">
+import { FullScreen, Refresh, Setting } from '@element-plus/icons-vue'
+
+import type { UniTableToolbarConfig } from '@/types/uni-table'
+import type { UniTableColumnState } from '@/types/uni-data-table'
+import UniTableColumnSettings from './column-settings.vue'
+
+defineProps<{
+  columnStates: UniTableColumnState[]
+  config: Required<UniTableToolbarConfig>
+  fullscreen: boolean
+  loading: boolean
+  border: boolean
+  stripe: boolean
+}>()
+
+const emit = defineEmits<{
+  'column-drag-start': [prop: string]
+  'column-drop': [prop: string]
+  'update:border': [value: boolean]
+  'update:fullscreen': [value: boolean]
+  'update:stripe': [value: boolean]
+  refresh: []
+}>()
+</script>
 
 <style scoped lang="scss">
 .uni-table-toolbar {

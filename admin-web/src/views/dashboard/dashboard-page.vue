@@ -1,3 +1,39 @@
+<template>
+  <section class="dashboard-page">
+    <el-card shadow="never" class="dashboard-page__welcome">
+      <h1>{{ $t('route.dashboard') }}</h1>
+      <p>{{ $t('dashboard.description') }}</p>
+    </el-card>
+
+    <div class="dashboard-page__metrics">
+      <el-card v-for="item in metrics" :key="item.label" shadow="never" class="dashboard-page__metric">
+        <span>{{ item.label }}</span>
+        <strong>{{ item.value }}</strong>
+      </el-card>
+    </div>
+
+    <el-card shadow="never">
+      <template #header>
+        <div class="dashboard-page__card-title">{{ $t('dashboard.shortcuts') }}</div>
+      </template>
+
+      <div class="dashboard-page__shortcuts">
+        <button v-for="item in shortcuts" :key="item.path" class="dashboard-page__shortcut" type="button"
+          @click="goShortcut(item)">
+          <strong>{{ item.label }}</strong>
+          <span>{{ item.description }}</span>
+          <em>{{ $t('dashboard.enter') }}</em>
+        </button>
+      </div>
+    </el-card>
+
+    <el-card shadow="never" class="dashboard-page__phase">
+      <strong>{{ $t('dashboard.firstPhase') }}</strong>
+      <span>{{ $t('dashboard.firstPhaseDescription') }}</span>
+    </el-card>
+  </section>
+</template>
+
 <script setup lang="ts">
 import { computed } from 'vue'
 import { useUniI18n } from 'uni-ui-lib'
@@ -31,52 +67,6 @@ const goShortcut = (item: DashboardShortcut) => {
   router.push(item.path)
 }
 </script>
-
-<template>
-  <section class="dashboard-page">
-    <el-card shadow="never" class="dashboard-page__welcome">
-      <h1>{{ t('route.dashboard') }}</h1>
-      <p>{{ t('dashboard.description') }}</p>
-    </el-card>
-
-    <div class="dashboard-page__metrics">
-      <el-card
-        v-for="item in metrics"
-        :key="item.label"
-        shadow="never"
-        class="dashboard-page__metric"
-      >
-        <span>{{ item.label }}</span>
-        <strong>{{ item.value }}</strong>
-      </el-card>
-    </div>
-
-    <el-card shadow="never">
-      <template #header>
-        <div class="dashboard-page__card-title">{{ t('dashboard.shortcuts') }}</div>
-      </template>
-
-      <div class="dashboard-page__shortcuts">
-        <button
-          v-for="item in shortcuts"
-          :key="item.path"
-          class="dashboard-page__shortcut"
-          type="button"
-          @click="goShortcut(item)"
-        >
-          <strong>{{ item.label }}</strong>
-          <span>{{ item.description }}</span>
-          <em>{{ t('dashboard.enter') }}</em>
-        </button>
-      </div>
-    </el-card>
-
-    <el-card shadow="never" class="dashboard-page__phase">
-      <strong>{{ t('dashboard.firstPhase') }}</strong>
-      <span>{{ t('dashboard.firstPhaseDescription') }}</span>
-    </el-card>
-  </section>
-</template>
 
 <style scoped lang="scss">
 .dashboard-page {
@@ -163,14 +153,16 @@ const goShortcut = (item: DashboardShortcut) => {
   }
 }
 
-@media (width <= 960px) {
+@media (width <=960px) {
+
   .dashboard-page__metrics,
   .dashboard-page__shortcuts {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
 
-@media (width <= 640px) {
+@media (width <=640px) {
+
   .dashboard-page__metrics,
   .dashboard-page__shortcuts {
     grid-template-columns: 1fr;

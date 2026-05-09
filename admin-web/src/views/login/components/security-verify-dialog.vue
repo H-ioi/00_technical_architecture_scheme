@@ -1,3 +1,64 @@
+<template>
+  <el-dialog
+    :model-value="visible"
+    width="390px"
+    class="security-verify"
+    :show-close="false"
+    destroy-on-close
+    append-to-body
+    @update:model-value="emit('update:visible', $event)"
+  >
+    <template #header>
+      <div class="security-verify__header">
+        <div>
+          <h3>安全验证</h3>
+          <p>拖动滑块完成验证后继续登录</p>
+        </div>
+        <el-button text circle :icon="Close" @click="close" />
+      </div>
+    </template>
+
+    <div v-loading="loading" class="security-verify__body">
+      <div
+        class="security-verify__image"
+        :style="{ width: `${imageWidth}px`, height: `${imageHeight}px`, backgroundImage }"
+      >
+        <button class="security-verify__refresh" type="button" @click="refresh">
+          <el-icon><RefreshRight /></el-icon>
+        </button>
+        <div
+          class="security-verify__block"
+          :class="{ 'is-dragging': dragging }"
+          :style="{
+            width: `${blockSize}px`,
+            height: `${imageHeight}px`,
+            transform: `translateX(${dragLeft}px)`,
+            backgroundImage: blockImage
+          }"
+        />
+        <div v-if="tip" class="security-verify__tip" :class="{ 'is-success': verified }">
+          {{ tip }}
+        </div>
+      </div>
+
+      <div ref="trackRef" class="security-verify__track">
+        <div class="security-verify__progress" :style="{ width: progressWidth }" />
+        <span>{{ verified ? '验证通过' : '向右拖动滑块' }}</span>
+        <button
+          class="security-verify__handle"
+          type="button"
+          :class="{ 'is-dragging': dragging, 'is-success': verified }"
+          :style="{ transform: `translateX(${dragLeft}px)` }"
+          @mousedown="startDrag($event.clientX)"
+          @touchstart.prevent="startDrag($event.touches[0]?.clientX ?? 0)"
+        >
+          <el-icon><Right /></el-icon>
+        </button>
+      </div>
+    </div>
+  </el-dialog>
+</template>
+
 <script setup lang="ts">
 import { computed, nextTick, ref, watch } from 'vue'
 import { ElMessage } from 'element-plus'
@@ -159,67 +220,6 @@ watch(
   }
 )
 </script>
-
-<template>
-  <el-dialog
-    :model-value="visible"
-    width="390px"
-    class="security-verify"
-    :show-close="false"
-    destroy-on-close
-    append-to-body
-    @update:model-value="emit('update:visible', $event)"
-  >
-    <template #header>
-      <div class="security-verify__header">
-        <div>
-          <h3>安全验证</h3>
-          <p>拖动滑块完成验证后继续登录</p>
-        </div>
-        <el-button text circle :icon="Close" @click="close" />
-      </div>
-    </template>
-
-    <div v-loading="loading" class="security-verify__body">
-      <div
-        class="security-verify__image"
-        :style="{ width: `${imageWidth}px`, height: `${imageHeight}px`, backgroundImage }"
-      >
-        <button class="security-verify__refresh" type="button" @click="refresh">
-          <el-icon><RefreshRight /></el-icon>
-        </button>
-        <div
-          class="security-verify__block"
-          :class="{ 'is-dragging': dragging }"
-          :style="{
-            width: `${blockSize}px`,
-            height: `${imageHeight}px`,
-            transform: `translateX(${dragLeft}px)`,
-            backgroundImage: blockImage
-          }"
-        />
-        <div v-if="tip" class="security-verify__tip" :class="{ 'is-success': verified }">
-          {{ tip }}
-        </div>
-      </div>
-
-      <div ref="trackRef" class="security-verify__track">
-        <div class="security-verify__progress" :style="{ width: progressWidth }" />
-        <span>{{ verified ? '验证通过' : '向右拖动滑块' }}</span>
-        <button
-          class="security-verify__handle"
-          type="button"
-          :class="{ 'is-dragging': dragging, 'is-success': verified }"
-          :style="{ transform: `translateX(${dragLeft}px)` }"
-          @mousedown="startDrag($event.clientX)"
-          @touchstart.prevent="startDrag($event.touches[0]?.clientX ?? 0)"
-        >
-          <el-icon><Right /></el-icon>
-        </button>
-      </div>
-    </div>
-  </el-dialog>
-</template>
 
 <style scoped lang="scss">
 .security-verify {

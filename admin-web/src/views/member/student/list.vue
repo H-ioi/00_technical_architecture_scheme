@@ -1,34 +1,9 @@
-<script setup lang="ts">
-import { useUniI18n } from 'uni-ui-lib'
-
-import DetailDialog from '../components/detail-dialog.vue'
-import { useList } from './use-list'
-
-const { t } = useUniI18n()
-const {
-  actions,
-  columns,
-  currentRecord,
-  detailConfig,
-  detailVisible,
-  filters,
-  handleLoadSuccess,
-  loadData,
-  queryModel,
-  reset,
-  search,
-  searchConfig,
-  tableRef,
-  valueEnums
-} = useList()
-</script>
-
 <template>
   <section class="uni-list-page">
     <div class="uni-list-page__header">
       <div>
-        <h1>{{ t('member.student.page.title') }}</h1>
-        <p>{{ t('member.student.page.description') }}</p>
+        <h1>{{ $t('member.student.page.title') }}</h1>
+        <p>{{ $t('member.student.page.description') }}</p>
       </div>
     </div>
 
@@ -38,8 +13,8 @@ const {
       :collapsed="true"
       :collapsed-rows="1"
       :action-min-span="0"
-      :submit-text="t('member.actions.search')"
-      :reset-text="t('member.actions.reset')"
+      :submit-text="$t('member.actions.search')"
+      :reset-text="$t('member.actions.reset')"
       @search="search"
       @reset="reset"
     />
@@ -61,5 +36,27 @@ const {
     <DetailDialog v-model:visible="detailVisible" :source="currentRecord" :config="detailConfig" />
   </section>
 </template>
+
+<script setup lang="ts">
+import DetailDialog from '../components/detail-dialog.vue'
+import { useList } from './use-list'
+
+const {
+  actions,
+  columns,
+  currentRecord,
+  detailConfig,
+  detailVisible,
+  filters,
+  handleLoadSuccess,
+  loadData,
+  queryModel,
+  reset,
+  search,
+  searchConfig,
+  tableRef,
+  valueEnums
+} = useList()
+</script>
 
 <style scoped lang="scss"></style>

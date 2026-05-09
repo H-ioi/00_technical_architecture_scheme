@@ -1,3 +1,52 @@
+<template>
+  <main class="login-page">
+    <div class="login-page__decor login-page__decor--left" />
+    <div class="login-page__decor login-page__decor--right" />
+    <section class="login-page__panel">
+      <div class="login-page__intro">
+        <div class="login-page__logo">ISA</div>
+        <p class="login-page__eyebrow">{{ $t('login.eyebrow') }}</p>
+        <h1>{{ $t('login.title') }}</h1>
+        <p>{{ $t('login.description') }}</p>
+      </div>
+
+      <el-card class="login-page__card" shadow="never">
+        <template #header>
+          <div>
+            <h2>{{ $t('login.cardTitle') }}</h2>
+            <p>{{ $t('login.cardDescription') }}</p>
+          </div>
+        </template>
+
+        <el-form ref="formRef" :model="formModel" :rules="formRules" label-position="top">
+          <el-form-item :label="$t('common.username')" prop="username">
+            <el-input v-model="formModel.username" :placeholder="$t('login.usernamePlaceholder')" />
+          </el-form-item>
+          <el-form-item :label="$t('common.password')" prop="password">
+            <el-input
+              v-model="formModel.password"
+              :placeholder="$t('login.passwordPlaceholder')"
+              show-password
+              type="password"
+              @keyup.enter="submitLogin"
+            />
+          </el-form-item>
+          <el-button
+            type="primary"
+            class="login-page__submit"
+            :loading="loading"
+            @click="submitLogin"
+          >
+            {{ $t('common.login') }}
+          </el-button>
+        </el-form>
+      </el-card>
+    </section>
+
+    <SecurityVerifyDialog v-model:visible="verifyVisible" @success="loginWithCaptcha" />
+  </main>
+</template>
+
 <script setup lang="ts">
 import type { FormInstance, FormRules } from 'element-plus'
 import { computed, reactive, ref } from 'vue'
@@ -46,55 +95,6 @@ const loginWithCaptcha = async (captchaVerification: string) => {
   }
 }
 </script>
-
-<template>
-  <main class="login-page">
-    <div class="login-page__decor login-page__decor--left" />
-    <div class="login-page__decor login-page__decor--right" />
-    <section class="login-page__panel">
-      <div class="login-page__intro">
-        <div class="login-page__logo">ISA</div>
-        <p class="login-page__eyebrow">{{ t('login.eyebrow') }}</p>
-        <h1>{{ t('login.title') }}</h1>
-        <p>{{ t('login.description') }}</p>
-      </div>
-
-      <el-card class="login-page__card" shadow="never">
-        <template #header>
-          <div>
-            <h2>{{ t('login.cardTitle') }}</h2>
-            <p>{{ t('login.cardDescription') }}</p>
-          </div>
-        </template>
-
-        <el-form ref="formRef" :model="formModel" :rules="formRules" label-position="top">
-          <el-form-item :label="t('common.username')" prop="username">
-            <el-input v-model="formModel.username" :placeholder="t('login.usernamePlaceholder')" />
-          </el-form-item>
-          <el-form-item :label="t('common.password')" prop="password">
-            <el-input
-              v-model="formModel.password"
-              :placeholder="t('login.passwordPlaceholder')"
-              show-password
-              type="password"
-              @keyup.enter="submitLogin"
-            />
-          </el-form-item>
-          <el-button
-            type="primary"
-            class="login-page__submit"
-            :loading="loading"
-            @click="submitLogin"
-          >
-            {{ t('common.login') }}
-          </el-button>
-        </el-form>
-      </el-card>
-    </section>
-
-    <SecurityVerifyDialog v-model:visible="verifyVisible" @success="loginWithCaptcha" />
-  </main>
-</template>
 
 <style scoped lang="scss">
 .login-page {
@@ -188,7 +188,7 @@ const loginWithCaptcha = async (captchaVerification: string) => {
   }
 }
 
-@media (width <= 860px) {
+@media (width <=860px) {
   .login-page__panel {
     grid-template-columns: 1fr;
   }

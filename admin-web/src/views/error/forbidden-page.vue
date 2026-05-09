@@ -1,4 +1,5 @@
 <template>
+
   <main class="error-page">
     <el-result icon="warning" title="403" sub-title="当前账号没有权限访问该页面">
       <template #extra>
@@ -7,6 +8,9 @@
     </el-result>
   </main>
 </template>
+
+<script setup lang="ts">
+</script>
 
 <style scoped lang="scss">
 .error-page {

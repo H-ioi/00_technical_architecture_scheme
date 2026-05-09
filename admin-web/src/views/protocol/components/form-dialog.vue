@@ -1,3 +1,142 @@
+<template>
+  <el-dialog
+    :model-value="visible"
+    :title="title"
+    width="920px"
+    destroy-on-close
+    @update:model-value="emit('update:visible', $event)"
+  >
+    <el-form ref="formRef" :model="formModel" :rules="rules" label-position="top">
+      <el-row :gutter="16">
+        <el-col :span="12">
+          <el-form-item :label="$t('protocol.fields.school')" prop="schoolIds">
+            <el-select
+              v-model="formModel.schoolIds"
+              multiple
+              collapse-tags
+              filterable
+              clearable
+              :placeholder="$t('protocol.placeholders.school')"
+            >
+              <el-option
+                v-for="option in schoolOptions"
+                :key="String(option.value)"
+                :label="option.label"
+                :value="option.value"
+              />
+            </el-select>
+          </el-form-item>
+        </el-col>
+        <el-col :span="12">
+          <el-form-item :label="$t('protocol.fields.cnName')" prop="cnName">
+            <el-input
+              v-model="formModel.cnName"
+              maxlength="50"
+              :placeholder="$t('protocol.placeholders.cnName')"
+            />
+          </el-form-item>
+        </el-col>
+        <el-col :span="12">
+          <el-form-item :label="$t('protocol.fields.enName')" prop="enName">
+            <el-input
+              v-model="formModel.enName"
+              maxlength="50"
+              :placeholder="$t('protocol.placeholders.enName')"
+            />
+          </el-form-item>
+        </el-col>
+        <el-col :span="12">
+          <el-form-item :label="$t('protocol.fields.protocolType')" prop="protocolType">
+            <el-select
+              v-model="formModel.protocolType"
+              filterable
+              :placeholder="$t('protocol.placeholders.protocolType')"
+            >
+              <el-option
+                v-for="option in protocolTypeOptions"
+                :key="String(option.value)"
+                :label="option.label"
+                :value="option.value"
+              />
+            </el-select>
+          </el-form-item>
+        </el-col>
+        <el-col :span="12">
+          <el-form-item :label="$t('protocol.fields.module')" prop="module">
+            <el-select
+              v-model="formModel.module"
+              filterable
+              :placeholder="$t('protocol.placeholders.module')"
+            >
+              <el-option
+                v-for="option in moduleOptions"
+                :key="String(option.value)"
+                :label="option.label"
+                :value="option.value"
+              />
+            </el-select>
+          </el-form-item>
+        </el-col>
+        <el-col :span="12">
+          <el-form-item :label="$t('protocol.fields.needSign')" prop="needSign">
+            <el-select
+              v-model="formModel.needSign"
+              :placeholder="$t('protocol.placeholders.needSign')"
+            >
+              <el-option
+                v-for="option in yesNoOptions"
+                :key="String(option.value)"
+                :label="option.label"
+                :value="option.value"
+              />
+            </el-select>
+          </el-form-item>
+        </el-col>
+        <el-col :span="12">
+          <el-form-item :label="$t('protocol.fields.status')" prop="status">
+            <el-select v-model="formModel.status" :placeholder="$t('protocol.placeholders.status')">
+              <el-option
+                v-for="option in statusOptions"
+                :key="String(option.value)"
+                :label="option.label"
+                :value="option.value"
+              />
+            </el-select>
+          </el-form-item>
+        </el-col>
+        <el-col :span="24">
+          <el-form-item :label="$t('protocol.fields.documentUrl')" prop="documentUrl">
+            <!-- UniUpload 负责文件类型、大小、数量和拖拽交互；协议业务只实现上传请求和 URL 回填。 -->
+            <UniUpload
+              v-model:file-list="fileList"
+              drag
+              accept=".pdf,application/pdf"
+              :limit="1"
+              :max-size="10 * 1024 * 1024"
+              :request="handleUploadRequest"
+              @validate-error="handleValidateError"
+              @remove="handleRemove"
+            >
+              <template #tip>
+                <div class="protocol-form__upload-tip">
+                  {{ $t('protocol.messages.uploadPdfSize') }}
+                </div>
+              </template>
+            </UniUpload>
+          </el-form-item>
+        </el-col>
+      </el-row>
+    </el-form>
+
+    <template #footer>
+      <el-button @click="close">{{ $t('protocol.actions.cancel') }}</el-button>
+      <el-button type="primary" :loading="submitting" @click="submit">
+        {{ $t('protocol.actions.submit') }}
+      </el-button>
+    </template>
+  </el-dialog>
+</template>
+
 <script setup lang="ts">
 import type { FormInstance, UploadRequestOptions, UploadUserFile } from 'element-plus'
 import { ElMessage } from 'element-plus'
@@ -32,7 +171,9 @@ const submitting = ref(false)
 const fileList = ref<UploadUserFile[]>([])
 const formModel = reactive<ProtocolFormModel>({})
 const rules = computed(() => createFormRules(t))
-const title = computed(() => t(props.mode === 'add' ? 'protocol.actions.add' : 'protocol.actions.edit'))
+const title = computed(() =>
+  t(props.mode === 'add' ? 'protocol.actions.add' : 'protocol.actions.edit')
+)
 
 // 弹窗复用同一份表单状态，打开前必须清空旧值，避免新增/编辑之间串数据。
 const resetForm = () => {
@@ -139,126 +280,6 @@ watch(
   }
 )
 </script>
-
-<template>
-  <el-dialog
-    :model-value="visible"
-    :title="title"
-    width="920px"
-    destroy-on-close
-    @update:model-value="emit('update:visible', $event)"
-  >
-    <el-form ref="formRef" :model="formModel" :rules="rules" label-position="top">
-      <el-row :gutter="16">
-        <el-col :span="12">
-          <el-form-item :label="t('protocol.fields.school')" prop="schoolIds">
-            <el-select
-              v-model="formModel.schoolIds"
-              multiple
-              collapse-tags
-              filterable
-              clearable
-              :placeholder="t('protocol.placeholders.school')"
-            >
-              <el-option
-                v-for="option in schoolOptions"
-                :key="String(option.value)"
-                :label="option.label"
-                :value="option.value"
-              />
-            </el-select>
-          </el-form-item>
-        </el-col>
-        <el-col :span="12">
-          <el-form-item :label="t('protocol.fields.cnName')" prop="cnName">
-            <el-input v-model="formModel.cnName" maxlength="50" :placeholder="t('protocol.placeholders.cnName')" />
-          </el-form-item>
-        </el-col>
-        <el-col :span="12">
-          <el-form-item :label="t('protocol.fields.enName')" prop="enName">
-            <el-input v-model="formModel.enName" maxlength="50" :placeholder="t('protocol.placeholders.enName')" />
-          </el-form-item>
-        </el-col>
-        <el-col :span="12">
-          <el-form-item :label="t('protocol.fields.protocolType')" prop="protocolType">
-            <el-select v-model="formModel.protocolType" filterable :placeholder="t('protocol.placeholders.protocolType')">
-              <el-option
-                v-for="option in protocolTypeOptions"
-                :key="String(option.value)"
-                :label="option.label"
-                :value="option.value"
-              />
-            </el-select>
-          </el-form-item>
-        </el-col>
-        <el-col :span="12">
-          <el-form-item :label="t('protocol.fields.module')" prop="module">
-            <el-select v-model="formModel.module" filterable :placeholder="t('protocol.placeholders.module')">
-              <el-option
-                v-for="option in moduleOptions"
-                :key="String(option.value)"
-                :label="option.label"
-                :value="option.value"
-              />
-            </el-select>
-          </el-form-item>
-        </el-col>
-        <el-col :span="12">
-          <el-form-item :label="t('protocol.fields.needSign')" prop="needSign">
-            <el-select v-model="formModel.needSign" :placeholder="t('protocol.placeholders.needSign')">
-              <el-option
-                v-for="option in yesNoOptions"
-                :key="String(option.value)"
-                :label="option.label"
-                :value="option.value"
-              />
-            </el-select>
-          </el-form-item>
-        </el-col>
-        <el-col :span="12">
-          <el-form-item :label="t('protocol.fields.status')" prop="status">
-            <el-select v-model="formModel.status" :placeholder="t('protocol.placeholders.status')">
-              <el-option
-                v-for="option in statusOptions"
-                :key="String(option.value)"
-                :label="option.label"
-                :value="option.value"
-              />
-            </el-select>
-          </el-form-item>
-        </el-col>
-        <el-col :span="24">
-          <el-form-item :label="t('protocol.fields.documentUrl')" prop="documentUrl">
-            <!-- UniUpload 负责文件类型、大小、数量和拖拽交互；协议业务只实现上传请求和 URL 回填。 -->
-            <UniUpload
-              v-model:file-list="fileList"
-              drag
-              accept=".pdf,application/pdf"
-              :limit="1"
-              :max-size="10 * 1024 * 1024"
-              :request="handleUploadRequest"
-              @validate-error="handleValidateError"
-              @remove="handleRemove"
-            >
-              <template #tip>
-                <div class="protocol-form__upload-tip">
-                  {{ t('protocol.messages.uploadPdfSize') }}
-                </div>
-              </template>
-            </UniUpload>
-          </el-form-item>
-        </el-col>
-      </el-row>
-    </el-form>
-
-    <template #footer>
-      <el-button @click="close">{{ t('protocol.actions.cancel') }}</el-button>
-      <el-button type="primary" :loading="submitting" @click="submit">
-        {{ t('protocol.actions.submit') }}
-      </el-button>
-    </template>
-  </el-dialog>
-</template>
 
 <style scoped lang="scss">
 .protocol-form__upload-tip {
