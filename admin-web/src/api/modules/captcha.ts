@@ -20,8 +20,7 @@ const CAPTCHA_TYPE = 'blockPuzzle'
 const normalizeCaptchaResponse = <T>(response: CaptchaResponse<T> | { data: CaptchaResponse<T> }) =>
   'data' in response ? response.data : response
 
-// AES 加密滑块校验点位。
-export const encryptCaptchaPoint = (value: string, secretKey?: string) => {
+const encryptCaptchaPoint = (value: string, secretKey?: string) => {
   if (!secretKey) {
     return value
   }
@@ -35,41 +34,51 @@ export const encryptCaptchaPoint = (value: string, secretKey?: string) => {
   }).toString()
 }
 
-// 获取滑块验证码图片。
-export const fetchCaptchaImage = async (): Promise<CaptchaImageData> => {
-  const response = await request.get<
-    CaptchaResponse<CaptchaImageData> | { data: CaptchaResponse<CaptchaImageData> },
-    CaptchaResponse<CaptchaImageData> | { data: CaptchaResponse<CaptchaImageData> }
-  >('/code', {
-    data: { captchaType: CAPTCHA_TYPE }
-  })
-  const result = normalizeCaptchaResponse(response)
+export default {
+  encrypt: {
+    name: '加密滑块点位',
+    run: encryptCaptchaPoint
+  },
 
-  if (result.repCode !== '0000') {
-    throw new Error(result.repMsg || '验证码获取失败')
-  }
+  image: {
+    url: '/code',
+    name: '验证码图片',
+    get: async function (this: { url: string }): Promise<CaptchaImageData> {
+      const response = await request.get<
+        CaptchaResponse<CaptchaImageData> | { data: CaptchaResponse<CaptchaImageData> },
+        CaptchaResponse<CaptchaImageData> | { data: CaptchaResponse<CaptchaImageData> }
+      >(this.url, {
+        data: { captchaType: CAPTCHA_TYPE }
+      })
+      const result = normalizeCaptchaResponse(response)
 
-  return result.repData
-}
+      if (result.repCode !== '0000') {
+        throw new Error(result.repMsg || '验证码获取失败')
+      }
 
-// 校验滑块位置。
-export const checkCaptchaPoint = async (data: {
-  pointJson: string
-  token: string
-}): Promise<void> => {
-  const response = await request.post<
-    CaptchaResponse<unknown> | { data: CaptchaResponse<unknown> },
-    CaptchaResponse<unknown> | { data: CaptchaResponse<unknown> }
-  >('/code/check', undefined, {
-    params: {
-      captchaType: CAPTCHA_TYPE,
-      pointJson: data.pointJson,
-      token: data.token
+      return result.repData
     }
-  })
-  const result = normalizeCaptchaResponse(response)
+  },
 
-  if (result.repCode !== '0000') {
-    throw new Error(result.repMsg || '验证失败')
+  check: {
+    url: '/code/check',
+    name: '校验滑块',
+    post: async function (this: { url: string }, data: { pointJson: string; token: string }): Promise<void> {
+      const response = await request.post<
+        CaptchaResponse<unknown> | { data: CaptchaResponse<unknown> },
+        CaptchaResponse<unknown> | { data: CaptchaResponse<unknown> }
+      >(this.url, undefined, {
+        params: {
+          captchaType: CAPTCHA_TYPE,
+          pointJson: data.pointJson,
+          token: data.token
+        }
+      })
+      const result = normalizeCaptchaResponse(response)
+
+      if (result.repCode !== '0000') {
+        throw new Error(result.repMsg || '验证失败')
+      }
+    }
   }
 }

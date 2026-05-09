@@ -3,16 +3,30 @@ import type { PageResult } from '@/types/api'
 import type { StudentListParams, StudentRecord } from '@/types/modules/member-student'
 import { request } from 'uni-ui-lib'
 
-// 分页查询学生列表。
-export const fetchStudentPage = (params: StudentListParams) =>
-  request.get<PageResult<StudentRecord>, PageResult<StudentRecord>>(`${API_PATHS.membership}/getStudentPage`, {
-    params
-  })
+export default {
+  page: {
+    url: `${API_PATHS.membership}/getStudentPage`,
+    name: '学生分页',
+    get: async function (this: { url: string }, params: StudentListParams) {
+      return await request.get<PageResult<StudentRecord>, PageResult<StudentRecord>>(this.url, {
+        params
+      })
+    }
+  },
 
-// 查询年级选项。
-export const fetchYearGroupOptions = () =>
-  request.get<string[], string[]>(`${API_PATHS.membership}/getYeargroupList`)
+  yearGroup: {
+    url: `${API_PATHS.membership}/getYeargroupList`,
+    name: '年级列表',
+    get: async function (this: { url: string }) {
+      return await request.get<string[], string[]>(this.url)
+    }
+  },
 
-// 查询班级选项。
-export const fetchFormOptions = () =>
-  request.get<string[], string[]>(`${API_PATHS.membership}/getFormList`)
+  form: {
+    url: `${API_PATHS.membership}/getFormList`,
+    name: '班级列表',
+    get: async function (this: { url: string }) {
+      return await request.get<string[], string[]>(this.url)
+    }
+  }
+}

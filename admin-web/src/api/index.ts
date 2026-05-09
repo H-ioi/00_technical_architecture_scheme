@@ -1,7 +1,10 @@
-export * from './modules/auth'
-export * from './modules/captcha'
-export * from './modules/membership'
-export * from './modules/member-student'
-export * from './modules/member-teacher'
-export * from './modules/menu'
-export * from './modules/protocol'
+import authApi from './modules/auth'
+import captchaApi from './modules/captcha'
+import membershipApi from './modules/membership'
+import studentApi from './modules/member-student'
+import teacherApi from './modules/member-teacher'
+import menuApi from './modules/menu'
+import protocolApi from './modules/protocol'
+
+export { authApi, captchaApi, membershipApi, studentApi, teacherApi, menuApi, protocolApi }
+export type { CaptchaImageData } from './modules/captcha'

@@ -11,8 +11,7 @@ import type {
 } from '@/types/modules/protocol'
 import { request } from 'uni-ui-lib'
 
-const resolveUploadUrl = () => {
-  const uploadUrl = import.meta.env.VITE_UPLOAD_URL || '/files/upload'
+const resolveUploadUrl = (uploadUrl: string) => {
   const baseURL = request.defaults.baseURL
 
   if (baseURL && uploadUrl.startsWith(baseURL)) {
@@ -22,56 +21,83 @@ const resolveUploadUrl = () => {
   return uploadUrl
 }
 
-// 分页查询协议列表。
-export const fetchProtocolPage = (params: ProtocolListParams) =>
-  request.get<PageResult<ProtocolRecord>, PageResult<ProtocolRecord>>(`${API_PATHS.protocol}/getProtocolPage`, {
-    params
+export default {
+  page: {
+    url: `${API_PATHS.protocol}/getProtocolPage`,
+    name: '协议分页',
+    get: async function (this: { url: string }, params: ProtocolListParams) {
+      return await request.get<PageResult<ProtocolRecord>, PageResult<ProtocolRecord>>(this.url, {
+        params
+      })
+    }
+  },
+
+  dict: {
+    url: `${API_PATHS.protocol}/getDictList`,
+    name: '协议字典',
+    get: async function (this: { url: string }) {
+      return await request.get<ProtocolDict, ProtocolDict>(this.url)
+    }
+  },
+
+  info: {
+    url: `${API_PATHS.protocol}/get`,
+    name: '协议详情',
+    get: async function (this: { url: string }, id: string | number) {
+      return await request.get<ProtocolRecord, ProtocolRecord>(`${this.url}/${id}`)
+    }
+  },
+
+  add: {
+    url: `${API_PATHS.protocol}/add`,
+    name: '新增协议',
+    post: async function (this: { url: string }, data: ProtocolFormModel) {
+      return await request.post(this.url, data)
+    }
+  },
+
+  edit: {
+    url: `${API_PATHS.protocol}/edit`,
+    name: '编辑协议',
+    post: async function (this: { url: string }, data: ProtocolFormModel) {
+      return await request.post(this.url, data)
+    }
+  },
+
+  delete: {
+    url: `${API_PATHS.protocol}/del`,
+    name: '删除协议',
+    delete: async function (this: { url: string }, ids: Array<string | number>) {
+      return await request.delete(this.url, {
+        params: { ids }
+      })
+    }
+  },
+
+  signPage: {
+    url: `${API_PATHS.protocolSign}/getProtocolSignPage`,
+    name: '签署分页',
+    get: async function (this: { url: string }, params: ProtocolSignListParams) {
+      return await request.get<PageResult<ProtocolSignRecord>, PageResult<ProtocolSignRecord>>(this.url, {
+        params
+      })
+    }
+  },
+
+  upload: {
+    url: import.meta.env.VITE_UPLOAD_URL || '/files/upload',
+    name: '上传协议',
+    post: async function (this: { url: string }, file: File) {
+      const formData = new FormData()
+      formData.append('file', file)
+
+      const result = await request.post<UploadFileResult, UploadFileResult>(resolveUploadUrl(this.url), formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      })
+
+      return result.url ?? result.data?.url ?? ''
+    }
   }
-)
-
-// 查询协议类型和所属模块字典。
-export const fetchProtocolDict = () =>
-  request.get<ProtocolDict, ProtocolDict>(`${API_PATHS.protocol}/getDictList`)
-
-// 查询协议详情。
-export const fetchProtocolDetail = (id: string | number) =>
-  request.get<ProtocolRecord, ProtocolRecord>(`${API_PATHS.protocol}/get/${id}`)
-
-// 新增协议。
-export const addProtocol = (data: ProtocolFormModel) => request.post(`${API_PATHS.protocol}/add`, data)
-
-// 编辑协议。
-export const updateProtocol = (data: ProtocolFormModel) => request.post(`${API_PATHS.protocol}/edit`, data)
-
-// 删除协议。
-export const deleteProtocol = (ids: Array<string | number>) =>
-  request.delete(`${API_PATHS.protocol}/del`, {
-    params: { ids }
-  })
-
-// 查询签署记录。
-export const fetchProtocolSignPage = (params: ProtocolSignListParams) =>
-  request.get<PageResult<ProtocolSignRecord>, PageResult<ProtocolSignRecord>>(
-    `${API_PATHS.protocolSign}/getProtocolSignPage`,
-    {
-      params
-    }
-  )
-
-// 上传协议 PDF 文档。
-export const uploadProtocolDocument = async (file: File) => {
-  const formData = new FormData()
-  formData.append('file', file)
-
-  const result = await request.post<UploadFileResult, UploadFileResult>(
-    resolveUploadUrl(),
-    formData,
-    {
-      headers: {
-        'Content-Type': 'multipart/form-data'
-      }
-    }
-  )
-
-  return result.url ?? result.data?.url ?? ''
 }

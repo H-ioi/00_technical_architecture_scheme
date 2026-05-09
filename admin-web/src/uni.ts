@@ -2,7 +2,7 @@ import UniLib from 'uni-ui-lib'
 import 'uni-ui-lib/style.css'
 import type { App } from 'vue'
 
-import { fetchLoginSnapshot, submitLogoutRequest } from '@/api/modules/auth'
+import { authApi } from '@/api'
 
 export const initUniLib = (app: App) => {
   app.use(UniLib, {
@@ -16,8 +16,8 @@ export const initUniLib = (app: App) => {
         }
       },
       auth: {
-        login: (params) => fetchLoginSnapshot(params),
-        logoutRequest: submitLogoutRequest
+        login: (params) => authApi.login.post(params),
+        logoutRequest: () => authApi.logout.delete()
       }
     }
   })

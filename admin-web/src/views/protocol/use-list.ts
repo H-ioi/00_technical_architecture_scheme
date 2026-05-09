@@ -7,11 +7,7 @@ import { toUniOptions, useUniI18n, useUniListState } from 'uni-ui-lib'
 import { computed, onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
 
-import {
-  fetchProtocolDict,
-  fetchProtocolPage as fetchPage,
-  fetchSchoolOptions as fetchSchools
-} from '@/api'
+import { membershipApi, protocolApi } from '@/api'
 import type { ProtocolDict, ProtocolDictItem, ProtocolRecord as Row } from '@/types/modules/protocol'
 
 import {
@@ -69,7 +65,7 @@ export const useList = () => {
   })
 
   const loadData: UniTableRequest = async ({ pageNo: current, pageSize: size, filters }) => {
-    const result = await fetchPage({ current, size, ...filters })
+    const result = await protocolApi.page.get({ current, size, ...filters })
 
     return {
       data: result.data.map(normalizeRow),
@@ -101,7 +97,7 @@ export const useList = () => {
   ])
 
   onMounted(async () => {
-    const [schools, dict] = await Promise.all([fetchSchools(), fetchProtocolDict()])
+    const [schools, dict] = await Promise.all([membershipApi.school.get(), protocolApi.dict.get()])
 
     schoolOptions.value = toUniOptions(schools, {
       labelKeys: locale() === 'en' ? ['enName', 'name'] : ['name', 'cnName', 'enName'],

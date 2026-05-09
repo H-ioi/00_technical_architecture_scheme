@@ -93,11 +93,14 @@ const createMenuResult = (
   }
 }
 
-// 旧菜单接口是权限源，本地路由只负责补充组件和前端 meta。
-export const fetchMenuPermissions = async (
-  routes: RouteRecordNormalized[]
-): Promise<MenuPermissionResult> => {
-  const menus = await request.get<BackendMenuRecord[], BackendMenuRecord[]>('/upms/menu/user')
+export default {
+  user: {
+    url: '/upms/menu/user',
+    name: '用户菜单',
+    get: async function (this: { url: string }, routes: RouteRecordNormalized[]): Promise<MenuPermissionResult> {
+      const menus = await request.get<BackendMenuRecord[], BackendMenuRecord[]>(this.url)
 
-  return createMenuResult(Array.isArray(menus) ? menus : [], routes)
+      return createMenuResult(Array.isArray(menus) ? menus : [], routes)
+    }
+  }
 }

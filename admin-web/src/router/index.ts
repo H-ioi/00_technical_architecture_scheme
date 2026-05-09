@@ -1,6 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 
-import { fetchMenuPermissions } from '@/api/modules/menu'
+import { menuApi } from '@/api'
 import {
   useMenuStore,
   usePermissionCodeStore,
@@ -41,7 +41,7 @@ router.beforeEach(async (to) => {
 
   if (!routeAccessStore.accessHydrated) {
     try {
-      const result = await fetchMenuPermissions(router.getRoutes())
+      const result = await menuApi.user.get(router.getRoutes())
 
       menuStore.setMenus(result?.menus)
       routeAccessStore.setAllowedPaths(result?.paths)

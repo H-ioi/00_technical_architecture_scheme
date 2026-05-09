@@ -5,7 +5,7 @@ import { computed, onMounted, ref } from 'vue'
 import { useUniI18n } from 'uni-ui-lib'
 import { useRoute, useRouter } from 'vue-router'
 
-import { fetchProtocolDetail, fetchProtocolDict, fetchProtocolSignPage, fetchSchoolOptions } from '@/api'
+import { membershipApi, protocolApi } from '@/api'
 import type { ProtocolDict, ProtocolRecord } from '@/types/modules/protocol'
 
 import { createDetailConfig, createSignColumns, createStatusOptions, createYesNoOptions } from './list.config'
@@ -68,7 +68,7 @@ const detailModel = computed(() => {
 })
 
 const loadSignData: UniTableRequest = ({ pageNo: current, pageSize: size }) =>
-  fetchProtocolSignPage({
+  protocolApi.signPage.get({
     current,
     size,
     protocolId: protocolId.value,
@@ -81,9 +81,9 @@ const goBack = () => {
 
 onMounted(async () => {
   const [schools, dict, record] = await Promise.all([
-    fetchSchoolOptions(),
-    fetchProtocolDict(),
-    fetchProtocolDetail(protocolId.value)
+    membershipApi.school.get(),
+    protocolApi.dict.get(),
+    protocolApi.info.get(protocolId.value)
   ])
 
   schoolOptions.value = toUniOptions(schools, {

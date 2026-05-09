@@ -2,12 +2,7 @@ import type { UniOption, UniTableAction, UniTableRequest } from 'uni-ui-lib'
 import { toUniOptions, useUniI18n, useUniListState } from 'uni-ui-lib'
 import { computed, ref } from 'vue'
 
-import {
-  fetchFormOptions as fetchForms,
-  fetchSchoolOptions as fetchSchools,
-  fetchStudentPage as fetchPage,
-  fetchYearGroupOptions as fetchYearGroups
-} from '@/api'
+import { membershipApi, studentApi } from '@/api'
 import type { StudentRecord as Row } from '@/types/modules/member-student'
 
 import {
@@ -68,7 +63,7 @@ export const useList = () => {
   const detailConfig = computed(() => createDetailConfig(t))
 
   const loadData: UniTableRequest = ({ pageNo: current, pageSize: size, filters }) =>
-    fetchPage({ current, size, ...filters })
+    studentApi.page.get({ current, size, ...filters })
 
   const openDetail = (row: Row) => {
     currentRecord.value = row
@@ -85,9 +80,9 @@ export const useList = () => {
 
   const loadOptions = async () => {
     const [schools, yearGroups, forms] = await Promise.all([
-      fetchSchools(),
-      fetchYearGroups(),
-      fetchForms()
+      membershipApi.school.get(),
+      studentApi.yearGroup.get(),
+      studentApi.form.get()
     ])
 
     // 选项统一转成 UniOption，供搜索表单下拉和表格枚举展示共享。

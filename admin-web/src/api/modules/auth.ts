@@ -1,7 +1,7 @@
 import CryptoJS from 'crypto-js'
-import { request, type UniLoginSnapshot, type UniUserProfile } from 'uni-ui-lib'
 
 import type { LoginParams } from '@/types/auth'
+import { request, type UniLoginSnapshot, type UniUserProfile } from 'uni-ui-lib'
 
 const LOGIN_PASSWORD_KEY = 'unixunixunixunix'
 
@@ -43,11 +43,12 @@ const encryptLoginPassword = (password: string) => {
 
 const requestLogin = async (params: LoginParams): Promise<UniLoginSnapshot> => {
   const data = new URLSearchParams()
+  const url = '/auth/oauth/token'
 
   data.append('username', params.username)
   data.append('password', encryptLoginPassword(params.password))
 
-  const result = await request.post<OAuthTokenResult, OAuthTokenResult>('/auth/oauth/token', data, {
+  const result = await request.post<OAuthTokenResult, OAuthTokenResult>(url, data, {
     headers: {
       isToken: false,
       Authorization: 'Basic dW5pOnVuaQ==',
@@ -71,8 +72,8 @@ const requestLogin = async (params: LoginParams): Promise<UniLoginSnapshot> => {
   }
 }
 
-export const fetchLoginSnapshot = async (params: unknown): Promise<UniLoginSnapshot> => {
-  const result = await requestLogin(params as LoginParams)
+const createLoginSnapshot = async (params: LoginParams): Promise<UniLoginSnapshot> => {
+  const result = await requestLogin(params)
 
   return {
     accessToken: result.accessToken,
@@ -82,6 +83,20 @@ export const fetchLoginSnapshot = async (params: unknown): Promise<UniLoginSnaps
   }
 }
 
-export const submitLogoutRequest = async () => {
-  await request.delete('/auth/token/logout')
+export default {
+  login: {
+    url: '/auth/oauth/token',
+    name: '登录',
+    post: async function (_params: unknown): Promise<UniLoginSnapshot> {
+      return await createLoginSnapshot(_params as LoginParams)
+    }
+  },
+
+  logout: {
+    url: '/auth/token/logout',
+    name: '退出登录',
+    delete: async function (this: { url: string }) {
+      await request.delete(this.url)
+    }
+  }
 }

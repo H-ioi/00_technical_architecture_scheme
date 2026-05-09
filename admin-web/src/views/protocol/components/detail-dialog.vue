@@ -3,7 +3,7 @@ import type { UniOption, UniTableRequest } from 'uni-ui-lib'
 import { computed, ref, watch } from 'vue'
 import { useUniI18n } from 'uni-ui-lib'
 
-import { fetchProtocolDetail, fetchProtocolSignPage } from '@/api'
+import { protocolApi } from '@/api'
 import type { ProtocolRecord } from '@/types/modules/protocol'
 
 import { createSignColumns } from '../list.config'
@@ -62,7 +62,7 @@ const loadSignData: UniTableRequest = ({ pageNo: current, pageSize: size }) => {
     return Promise.resolve({ data: [], total: 0 })
   }
 
-  return fetchProtocolSignPage({
+  return protocolApi.signPage.get({
     current,
     size,
     protocolId: props.source.id,
@@ -77,7 +77,7 @@ watch(
       return
     }
 
-    detail.value = await fetchProtocolDetail(props.source.id)
+    detail.value = await protocolApi.info.get(props.source.id)
     signTableRef.value?.refresh()
   }
 )

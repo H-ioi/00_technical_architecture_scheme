@@ -3,12 +3,22 @@ import type { PageResult } from '@/types/api'
 import type { TeacherListParams, TeacherRecord } from '@/types/modules/member-teacher'
 import { request } from 'uni-ui-lib'
 
-// 分页查询教师列表。
-export const fetchTeacherPage = (params: TeacherListParams) =>
-  request.get<PageResult<TeacherRecord>, PageResult<TeacherRecord>>(`${API_PATHS.membership}/getTeacherPage`, {
-    params
-  })
+export default {
+  page: {
+    url: `${API_PATHS.membership}/getTeacherPage`,
+    name: '教师分页',
+    get: async function (this: { url: string }, params: TeacherListParams) {
+      return await request.get<PageResult<TeacherRecord>, PageResult<TeacherRecord>>(this.url, {
+        params
+      })
+    }
+  },
 
-// 查询教师职位选项。
-export const fetchTeacherRoleOptions = () =>
-  request.get<string[], string[]>(`${API_PATHS.membership}/getTeacherRoleList`)
+  role: {
+    url: `${API_PATHS.membership}/getTeacherRoleList`,
+    name: '教师职位列表',
+    get: async function (this: { url: string }) {
+      return await request.get<string[], string[]>(this.url)
+    }
+  }
+}

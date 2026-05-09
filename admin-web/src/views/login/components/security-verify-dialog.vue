@@ -3,7 +3,7 @@ import { computed, nextTick, ref, watch } from 'vue'
 import { ElMessage } from 'element-plus'
 import { Close, RefreshRight, Right } from '@element-plus/icons-vue'
 
-import { checkCaptchaPoint, encryptCaptchaPoint, fetchCaptchaImage } from '@/api'
+import { captchaApi } from '@/api'
 import type { CaptchaImageData } from '@/api'
 
 const props = defineProps<{
@@ -53,7 +53,7 @@ const refresh = async () => {
   resetDrag()
 
   try {
-    captcha.value = await fetchCaptchaImage()
+    captcha.value = await captchaApi.image.get()
   } finally {
     loading.value = false
   }
@@ -74,16 +74,16 @@ const verify = async () => {
 
   try {
     const point = { x: resolvePointX(), y: 5.0 }
-    const pointJson = encryptCaptchaPoint(JSON.stringify(point), captcha.value.secretKey)
+    const pointJson = captchaApi.encrypt.run(JSON.stringify(point), captcha.value.secretKey)
 
-    await checkCaptchaPoint({
+    await captchaApi.check.post({
       pointJson,
       token: captcha.value.token
     })
 
     verified.value = true
     tip.value = '验证通过'
-    const captchaVerification = encryptCaptchaPoint(
+    const captchaVerification = captchaApi.encrypt.run(
       `${captcha.value.token}---${JSON.stringify(point)}`,
       captcha.value.secretKey
     )

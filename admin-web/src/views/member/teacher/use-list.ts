@@ -6,11 +6,7 @@ import type {
 import { toUniOptions, useUniI18n, useUniListState } from 'uni-ui-lib'
 import { computed, onMounted, ref } from 'vue'
 
-import {
-  fetchTeacherPage as fetchPage,
-  fetchTeacherRoleOptions as fetchRoles,
-  fetchSchoolOptions as fetchSchools
-} from '@/api'
+import { membershipApi, teacherApi } from '@/api'
 import type { TeacherRecord as Row } from '@/types/modules/member-teacher'
 
 import {
@@ -50,7 +46,7 @@ export const useList = () => {
   const detailConfig = computed(() => createDetailConfig(t))
 
   const loadData: UniTableRequest = ({ pageNo: current, pageSize: size, filters }) =>
-    fetchPage({ current, size, ...filters })
+    teacherApi.page.get({ current, size, ...filters })
 
   const openDetail = (row: Row) => {
     currentRecord.value = row
@@ -66,7 +62,7 @@ export const useList = () => {
   ])
 
   onMounted(async () => {
-    const [schools, roles] = await Promise.all([fetchSchools(), fetchRoles()])
+    const [schools, roles] = await Promise.all([membershipApi.school.get(), teacherApi.role.get()])
 
     // 学校字典统一转成 UniOption，供 UniSearchForm 和 UniDataTable 枚举回显复用。
     schoolOptions.value = toUniOptions(schools, {

@@ -6,7 +6,7 @@ import { useUniI18n } from 'uni-ui-lib'
 import FormDialog from './components/form-dialog.vue'
 import { useList } from './use-list'
 
-import { deleteProtocol } from '@/api'
+import { protocolApi } from '@/api'
 import type { ProtocolRecord } from '@/types/modules/protocol'
 
 const { t } = useUniI18n()
@@ -52,7 +52,7 @@ const handleDelete = async () => {
     type: 'warning'
   })
 
-  await deleteProtocol(selectedIds.value)
+  await protocolApi.delete.delete(selectedIds.value)
   ElMessage.success(t('protocol.messages.deleteSuccess'))
   selectedRows.value = []
   refreshTable()

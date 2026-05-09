@@ -5,7 +5,7 @@ import type { UniOption } from 'uni-ui-lib'
 import { computed, reactive, ref, watch } from 'vue'
 import { useUniI18n } from 'uni-ui-lib'
 
-import { addProtocol, fetchProtocolDetail, updateProtocol, uploadProtocolDocument } from '@/api'
+import { protocolApi } from '@/api'
 import type { ProtocolFormModel, ProtocolRecord } from '@/types/modules/protocol'
 
 import { createFormRules } from '../list.config'
@@ -78,7 +78,7 @@ const close = () => {
 // UniUpload 通过自定义 request 接入项目上传接口，成功后把返回 URL 写回表单字段参与校验。
 const handleUploadRequest = async (options: UploadRequestOptions) => {
   const file = options.file
-  const url = await uploadProtocolDocument(file)
+  const url = await protocolApi.upload.post(file)
 
   if (!url) {
     throw new Error(t('protocol.messages.uploadRequired'))
@@ -111,9 +111,9 @@ const submit = async () => {
 
   try {
     if (props.mode === 'add') {
-      await addProtocol({ ...formModel })
+      await protocolApi.add.post({ ...formModel })
     } else {
-      await updateProtocol({ ...formModel })
+      await protocolApi.edit.post({ ...formModel })
     }
 
     ElMessage.success(t('protocol.messages.saveSuccess'))
@@ -134,7 +134,7 @@ watch(
     resetForm()
 
     if (props.mode === 'edit' && props.source?.id) {
-      fillForm(await fetchProtocolDetail(props.source.id))
+      fillForm(await protocolApi.info.get(props.source.id))
     }
   }
 )
