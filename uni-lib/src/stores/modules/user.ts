@@ -40,11 +40,11 @@ export const useUserStore = defineStore("user", () => {
 
   const login = async (params: unknown) => {
     const result = await getUniConfig().auth.login(params);
-    const permissionCodeStore = usePermissionCodeStore();
 
     setToken(result.accessToken);
     setProfile(result.user);
-    permissionCodeStore.setPermissionCodes(result.permissions);
+    resetShellAccess();
+    usePermissionCodeStore().setPermissionCodes(result.permissions);
 
     return result;
   };

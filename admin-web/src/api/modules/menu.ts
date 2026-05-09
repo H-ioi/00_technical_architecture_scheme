@@ -39,6 +39,20 @@ const normalizeBackendPath = (path?: string) => {
   return MENU_PATH_ALIASES[normalizedPath] ?? normalizedPath
 }
 
+/** 接口可能直接返回数组，或未解包仍带 { data }；防止 allowedPaths 为空导致误跳 403 */
+const toMenuTree = (raw: unknown): BackendMenuRecord[] => {
+  if (Array.isArray(raw)) {
+    return raw
+  }
+  if (raw && typeof raw === 'object' && 'data' in raw) {
+    const inner = (raw as { data: unknown }).data
+    if (Array.isArray(inner)) {
+      return inner as BackendMenuRecord[]
+    }
+  }
+  return []
+}
+
 const collectPermissions = (menu: BackendMenuRecord) =>
   [menu.permission, menu.permissions, menu.authority]
     .flatMap((value) => (Array.isArray(value) ? value : value ? [value] : []))
@@ -98,9 +112,9 @@ export default {
     url: '/upms/menu/user',
     name: '用户菜单',
     get: async function (this: { url: string }, routes: RouteRecordNormalized[]): Promise<MenuPermissionResult> {
-      const menus = await request.get<BackendMenuRecord[], BackendMenuRecord[]>(this.url)
+      const raw = await request.get<unknown>(this.url)
 
-      return createMenuResult(Array.isArray(menus) ? menus : [], routes)
+      return createMenuResult(toMenuTree(raw), routes)
     }
   }
 }

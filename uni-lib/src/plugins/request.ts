@@ -201,6 +201,19 @@ export const createUniRequest = (
   return instance;
 };
 
+const coerceBusinessCode = (value: unknown): number | undefined => {
+  if (typeof value === "number" && Number.isFinite(value)) {
+    return value;
+  }
+  if (typeof value === "string" && value.trim() !== "") {
+    const n = Number(value);
+    if (!Number.isNaN(n)) {
+      return n;
+    }
+  }
+  return undefined;
+};
+
 const createApiEnvelopeParser = (
   unwrap: boolean | undefined,
   successCode: number | undefined,
@@ -224,10 +237,11 @@ const createApiEnvelopeParser = (
     }
 
     const result = data as Record<string, unknown>;
-    if (typeof result.code !== "number") {
+    const code = coerceBusinessCode(result.code);
+    if (code === undefined) {
       return data;
     }
-    if (!okCodes.includes(result.code)) {
+    if (!okCodes.includes(code)) {
       const message =
         (typeof result.message === "string" ? result.message : undefined) ??
         (typeof result.msg === "string" ? result.msg : undefined) ??
