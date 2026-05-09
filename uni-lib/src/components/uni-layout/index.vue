@@ -230,15 +230,6 @@ const avatarText = computed(() => {
     object-fit: contain;
   }
 
-  &__menu {
-    border-right: 0;
-
-    :deep(.el-menu-item.is-active) {
-      color: var(--uni-layout-menu-active-color);
-      background: var(--uni-layout-menu-active-bg);
-    }
-  }
-
   &__main {
     flex: 1;
     min-width: 0;
