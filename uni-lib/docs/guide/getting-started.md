@@ -17,7 +17,7 @@ createApp(App)
   .mount("#app");
 ```
 
-在根组件用 `UniConfigProvider` 包裹，使 **Element Plus 原子组件**（日期、分页、空态文案等）与组件库语言一致；未接 `vue-i18n` 时默认按中文处理。
+先在宿主创建 **`createUniLibI18n`** 导出的实例并 **`app.use(i18n)`**（合并宿主文案后同 key 由宿主覆盖库）。再在根组件用 `UniConfigProvider` 包裹，使 **Element Plus 原子组件**（日期、分页等）与 `vue-i18n` 语言一致。
 
 ```vue
 <template>
@@ -27,19 +27,7 @@ createApp(App)
 </template>
 ```
 
-若已使用 `createUniI18nBridge` 并传入 `localeRef`，切换语言时 Element Plus 会同步更新。详见 [I18n](/locales/i18n)。
-
-也可以在 `app.use` 中传入 `i18n` 桥接配置；效果与手动调用 `createUniI18nBridge()` 一致。
-
-```ts
-app.use(UniLib, {
-  i18n: {
-    t: i18n.global.t,
-    locale: () => i18n.global.locale.value,
-    localeRef: i18n.global.locale,
-  },
-});
-```
+详见 [I18n](/locales/i18n)。（已不再使用 `app.use(UniLib, { i18n: … })` 桥接。）
 
 ## 按需导入
 

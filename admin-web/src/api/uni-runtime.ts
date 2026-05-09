@@ -1,14 +1,14 @@
 import type { UniLibRuntimeOptions } from 'uni-ui-lib'
-import { useUniTagsViewStore } from 'uni-ui-lib'
+import { UNI_DEFAULT_LOCALE, useUniTagsViewStore } from 'uni-ui-lib'
 
 import { fetchLoginSnapshot, submitLogoutRequest } from '@/api/modules/auth'
-import { DEFAULT_LOCALE, DEFAULT_THEME, STORAGE_PREFIX } from '@/config'
+import { DEFAULT_THEME, STORAGE_PREFIX } from '@/config'
 import { router } from '@/router'
 import { useUserStore } from '@/stores'
 
 export const buildAdminUniRuntime = (): UniLibRuntimeOptions => ({
   storagePrefix: STORAGE_PREFIX,
-  defaultLocale: DEFAULT_LOCALE,
+  defaultLocale: UNI_DEFAULT_LOCALE,
   shell: {
     logoutRedirect: '/login',
     themeStorageKey: `${STORAGE_PREFIX}:theme`,

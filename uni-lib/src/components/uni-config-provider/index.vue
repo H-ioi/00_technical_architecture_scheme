@@ -1,26 +1,21 @@
 <script setup lang="ts">
 /**
- * 全局配置容器：将 uni-lib 当前语言同步到 Element Plus 的 `locale`，
+ * 全局配置容器：将 vue-i18n 当前语言同步到 Element Plus 的 `locale`，
  * 使表格分页、日期等组件的内置文案与业务 i18n 一致。
  */
 import { ElConfigProvider } from "element-plus";
 import { computed } from "vue";
+import { useI18n } from "vue-i18n";
 
 import { resolveElementPlusLocale } from "@/plugins/element-plus-locale";
-import { useUniI18n, useUniLocaleRef } from "@/locales/i18n";
 
-const i18n = useUniI18n();
-const localeRef = useUniLocaleRef();
+const { locale } = useI18n({ useScope: "global" });
 
-const locale = computed(() => {
-  const code = localeRef?.value ?? i18n.locale();
-
-  return resolveElementPlusLocale(code);
-});
+const epLocale = computed(() => resolveElementPlusLocale(locale.value));
 </script>
 
 <template>
-  <el-config-provider :locale="locale">
+  <el-config-provider :locale="epLocale">
     <slot />
   </el-config-provider>
 </template>

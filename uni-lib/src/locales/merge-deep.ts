@@ -1,6 +1,5 @@
 /**
  * 深度合并文案对象：后者覆盖前者；仅处理普通对象，不拷贝原型。
- * 用于将 uni-lib 默认文案作为基底，再由业务语言包覆盖。
  */
 export function mergeDeep<T extends Record<string, unknown>>(
   base: T,

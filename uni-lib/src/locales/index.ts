@@ -4,9 +4,12 @@ import {
   type ZhCNMessagesNested,
 } from "./lang/zh-CN";
 
+export * from "./create-i18n";
 export * from "./i18n";
+export * from "./merge-deep";
+export * from "./register-i18n";
 
-/** 与 admin-web 各语言 `lang` 目录下的 index 一致：嵌套树，可直接并入 vue-i18n 的 messages。 */
+/** 库内置文案树（已由 {@link createUniLibI18n} 合并进实例；也可用于按需二次合并）。 */
 export const uniLibMessagesNested = {
   "zh-CN": zhCNMessagesNested,
   en: enMessagesNested,

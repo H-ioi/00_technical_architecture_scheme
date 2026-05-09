@@ -38,6 +38,7 @@ export default defineConfig({
         "element-plus",
         "@element-plus/icons-vue",
         "axios",
+        "vue-i18n",
       ],
       output: {
         exports: "named",
@@ -48,6 +49,7 @@ export default defineConfig({
           "element-plus": "ElementPlus",
           "@element-plus/icons-vue": "ElementPlusIconsVue",
           axios: "axios",
+          "vue-i18n": "VueI18n",
         },
       },
     },

@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import type { UniOption, UniTableRequest } from 'uni-ui-lib'
 import { computed, ref, watch } from 'vue'
+import { useUniI18n } from 'uni-ui-lib'
 
 import { fetchProtocolDetail, fetchProtocolSignPage } from '@/api'
-import { useAppI18n } from '@/composables/use-app-i18n'
 import type { ProtocolRecord } from '@/types/modules/protocol'
 
 import { createSignColumns } from '../list.config'
@@ -19,7 +19,7 @@ const emit = defineEmits<{
   'update:visible': [visible: boolean]
 }>()
 
-const { locale, t } = useAppI18n()
+const { locale, t } = useUniI18n()
 const detail = ref<ProtocolRecord | null>(null)
 const signTableRef = ref<{ refresh: () => void } | null>(null)
 const signColumns = computed(() => createSignColumns(t))
@@ -30,7 +30,7 @@ const getOptionLabel = (field: string, value: unknown) =>
 
 const schoolName = computed(
   () =>
-    (locale.value === 'en' ? detail.value?.schoolEnNames : detail.value?.schoolCnNames) ||
+    (locale() === 'en' ? detail.value?.schoolEnNames : detail.value?.schoolCnNames) ||
     detail.value?.schoolEnNames ||
     detail.value?.schoolCnNames ||
     '--'

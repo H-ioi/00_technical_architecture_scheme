@@ -1,6 +1,6 @@
-import { computed, ref } from 'vue'
 import type { UniOption, UniTableAction, UniTableRequest } from 'uni-ui-lib'
-import { toUniOptions, useUniListState } from 'uni-ui-lib'
+import { toUniOptions, useUniI18n, useUniListState } from 'uni-ui-lib'
+import { computed, ref } from 'vue'
 
 import {
   fetchFormOptions as fetchForms,
@@ -8,7 +8,6 @@ import {
   fetchStudentPage as fetchPage,
   fetchYearGroupOptions as fetchYearGroups
 } from '@/api'
-import { useAppI18n } from '@/composables/use-app-i18n'
 import type { StudentRecord as Row } from '@/types/modules/member-student'
 
 import {
@@ -23,7 +22,7 @@ import {
 } from './list.config'
 
 export const useList = () => {
-  const { locale, t } = useAppI18n()
+  const { locale, t } = useUniI18n()
   const initialFilters = {
     keywordssearch: '',
     schoolIds: undefined,
@@ -93,7 +92,7 @@ export const useList = () => {
 
     // 选项统一转成 UniOption，供搜索表单下拉和表格枚举展示共享。
     schoolOptions.value = toUniOptions(schools, {
-      labelKeys: locale.value === 'en' ? ['enName', 'name'] : ['name', 'cnName', 'enName'],
+      labelKeys: locale() === 'en' ? ['enName', 'name'] : ['name', 'cnName', 'enName'],
       valueKey: 'id'
     })
     yearGroupOptions.value = toUniOptions(yearGroups.map((item) => ({ label: item, value: item })), {

@@ -1,10 +1,10 @@
 <script setup lang="ts">
+import { useUniI18n } from 'uni-ui-lib'
+
 import DetailDialog from '../components/detail-dialog.vue'
 import { useList } from './use-list'
 
-import { useAppI18n } from '@/composables/use-app-i18n'
-
-const { t } = useAppI18n()
+const { t } = useUniI18n()
 const {
   actions,
   columns,

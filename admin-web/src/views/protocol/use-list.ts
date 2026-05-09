@@ -3,7 +3,7 @@ import type {
   UniTableAction,
   UniTableRequest
 } from 'uni-ui-lib'
-import { toUniOptions, useUniListState } from 'uni-ui-lib'
+import { toUniOptions, useUniI18n, useUniListState } from 'uni-ui-lib'
 import { computed, onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
 
@@ -12,7 +12,6 @@ import {
   fetchProtocolPage as fetchPage,
   fetchSchoolOptions as fetchSchools
 } from '@/api'
-import { useAppI18n } from '@/composables/use-app-i18n'
 import type { ProtocolDict, ProtocolDictItem, ProtocolRecord as Row } from '@/types/modules/protocol'
 
 import {
@@ -30,7 +29,7 @@ const createDictOptions = (items: ProtocolDictItem[] = [], locale: string): UniO
 
 export const useList = () => {
   const router = useRouter()
-  const { locale, t } = useAppI18n()
+  const { locale, t } = useUniI18n()
   const initialFilters = {
     schoolIds: undefined,
     cnName: '',
@@ -49,8 +48,8 @@ export const useList = () => {
   const schoolOptions = ref<UniOption[]>([])
   const protocolDict = ref<ProtocolDict>({})
 
-  const protocolTypeOptions = computed(() => createDictOptions(protocolDict.value.protocolTypeList, locale.value))
-  const moduleOptions = computed(() => createDictOptions(protocolDict.value.moduleList, locale.value))
+  const protocolTypeOptions = computed(() => createDictOptions(protocolDict.value.protocolTypeList, locale()))
+  const moduleOptions = computed(() => createDictOptions(protocolDict.value.moduleList, locale()))
   const yesNoOptions = computed(() => createYesNoOptions(t))
   const statusOptions = computed(() => createStatusOptions(t))
   const valueEnums = computed<Record<string, UniOption[]>>(() => ({
@@ -66,7 +65,7 @@ export const useList = () => {
 
   const normalizeRow = (row: Row): Row => ({
     ...row,
-    schoolName: (locale.value === 'en' ? row.schoolEnNames : row.schoolCnNames) || row.schoolEnNames || row.schoolCnNames
+    schoolName: (locale() === 'en' ? row.schoolEnNames : row.schoolCnNames) || row.schoolEnNames || row.schoolCnNames
   })
 
   const loadData: UniTableRequest = async ({ pageNo: current, pageSize: size, filters }) => {
@@ -105,7 +104,7 @@ export const useList = () => {
     const [schools, dict] = await Promise.all([fetchSchools(), fetchProtocolDict()])
 
     schoolOptions.value = toUniOptions(schools, {
-      labelKeys: locale.value === 'en' ? ['enName', 'name'] : ['name', 'cnName', 'enName'],
+      labelKeys: locale() === 'en' ? ['enName', 'name'] : ['name', 'cnName', 'enName'],
       valueKey: 'id'
     })
     protocolDict.value = dict ?? {}

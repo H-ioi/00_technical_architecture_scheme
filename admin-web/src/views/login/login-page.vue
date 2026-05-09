@@ -2,8 +2,8 @@
 import type { FormInstance, FormRules } from 'element-plus'
 import { computed, reactive, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
+import { useUniI18n } from 'uni-ui-lib'
 
-import { useAppI18n } from '@/composables/use-app-i18n'
 import { useUserStore } from '@/stores'
 
 import SecurityVerifyDialog from './components/security-verify-dialog.vue'
@@ -11,7 +11,7 @@ import SecurityVerifyDialog from './components/security-verify-dialog.vue'
 const router = useRouter()
 const route = useRoute()
 const userStore = useUserStore()
-const { t } = useAppI18n()
+const { t } = useUniI18n()
 const formRef = ref<FormInstance>()
 const loading = ref(false)
 const verifyVisible = ref(false)

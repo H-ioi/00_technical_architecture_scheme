@@ -3,9 +3,9 @@ import type { FormInstance, UploadRequestOptions, UploadUserFile } from 'element
 import { ElMessage } from 'element-plus'
 import type { UniOption } from 'uni-ui-lib'
 import { computed, reactive, ref, watch } from 'vue'
+import { useUniI18n } from 'uni-ui-lib'
 
 import { addProtocol, fetchProtocolDetail, updateProtocol, uploadProtocolDocument } from '@/api'
-import { useAppI18n } from '@/composables/use-app-i18n'
 import type { ProtocolFormModel, ProtocolRecord } from '@/types/modules/protocol'
 
 import { createFormRules } from '../list.config'
@@ -26,7 +26,7 @@ const emit = defineEmits<{
   saved: []
 }>()
 
-const { t } = useAppI18n()
+const { t } = useUniI18n()
 const formRef = ref<FormInstance>()
 const submitting = ref(false)
 const fileList = ref<UploadUserFile[]>([])

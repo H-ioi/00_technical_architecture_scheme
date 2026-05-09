@@ -2,17 +2,17 @@
 import type { UniOption, UniTableRequest } from 'uni-ui-lib'
 import { toUniOptions } from 'uni-ui-lib'
 import { computed, onMounted, ref } from 'vue'
+import { useUniI18n } from 'uni-ui-lib'
 import { useRoute, useRouter } from 'vue-router'
 
 import { fetchProtocolDetail, fetchProtocolDict, fetchProtocolSignPage, fetchSchoolOptions } from '@/api'
-import { useAppI18n } from '@/composables/use-app-i18n'
 import type { ProtocolDict, ProtocolRecord } from '@/types/modules/protocol'
 
 import { createDetailConfig, createSignColumns, createStatusOptions, createYesNoOptions } from './list.config'
 
 const route = useRoute()
 const router = useRouter()
-const { locale, t } = useAppI18n()
+const { locale, t } = useUniI18n()
 const detail = ref<ProtocolRecord | null>(null)
 const schoolOptions = ref<UniOption[]>([])
 const protocolDict = ref<ProtocolDict>({})
@@ -22,7 +22,7 @@ const protocolId = computed(() => String(route.params.id ?? ''))
 // 后端字典同时返回中英文名称，这里按当前语言转换成 UniDataTable/UniForm 可复用的选项结构。
 const createDictOptions = (items: NonNullable<ProtocolDict['protocolTypeList']> = []): UniOption[] =>
   toUniOptions(items, {
-    labelKeys: locale.value === 'en' ? ['enName', 'name', 'cnName'] : ['name', 'cnName', 'enName'],
+    labelKeys: locale() === 'en' ? ['enName', 'name', 'cnName'] : ['name', 'cnName', 'enName'],
     valueKey: 'id'
   })
 
@@ -42,7 +42,7 @@ const getOptionLabel = (field: string, value: unknown) =>
 // 校区字段是后端聚合后的字符串，详情展示按语言优先选择对应名称。
 const schoolName = computed(
   () =>
-    (locale.value === 'en' ? detail.value?.schoolEnNames : detail.value?.schoolCnNames) ||
+    (locale() === 'en' ? detail.value?.schoolEnNames : detail.value?.schoolCnNames) ||
     detail.value?.schoolEnNames ||
     detail.value?.schoolCnNames ||
     '--'
@@ -87,7 +87,7 @@ onMounted(async () => {
   ])
 
   schoolOptions.value = toUniOptions(schools, {
-    labelKeys: locale.value === 'en' ? ['enName', 'name'] : ['name', 'cnName', 'enName'],
+    labelKeys: locale() === 'en' ? ['enName', 'name'] : ['name', 'cnName', 'enName'],
     valueKey: 'id'
   })
   protocolDict.value = dict ?? {}

@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ArrowDown, Expand, Fold } from '@element-plus/icons-vue'
 import { computed, ref } from 'vue'
+import { useI18n } from 'vue-i18n'
 import { useRoute, useRouter } from 'vue-router'
 
 import { UniIcon } from '@/components/uni-icon'
@@ -8,7 +9,6 @@ import { UniThemeSettings } from '@/components/uni-theme-settings'
 import { useUniTagsViewController } from '@/composables/use-uni-tags-view-controller'
 import { UniZhEnIcon } from '@/icons'
 import { tryGetUniRuntimeConfig } from '@/runtime/config'
-import { useUniI18n } from '@/locales/i18n'
 import { useAppStore } from '@/stores/uni-app'
 import { usePermissionStore } from '@/stores/uni-permission'
 import { useUserStore } from '@/stores/uni-user'
@@ -102,7 +102,9 @@ const emit = defineEmits<{
   tagCloseAll: []
 }>()
 
-const { t } = useUniI18n()
+const { t, locale: globalLocale } = useI18n({
+  useScope: 'global'
+})
 const tr: UniLayoutTranslate = (key?: string, fallback = '') => {
   if (props.translate) {
     return props.translate(key, fallback)
@@ -150,7 +152,9 @@ const resolvedActiveMenuBase = computed(() =>
 const resolvedActiveMenu = computed(() => resolvedActiveMenuBase.value || resolvedActivePath.value)
 const resolvedCollapsed = computed(() => (props.autoWire ? appStore.sidebarCollapsed : props.collapsed))
 const resolvedSidebarWidth = computed(() => (props.autoWire ? appStore.sidebarWidth : props.sidebarWidth))
-const resolvedLocale = computed(() => (props.autoWire ? appStore.locale : props.locale))
+const resolvedLocale = computed(() =>
+  props.autoWire ? String(globalLocale.value) : props.locale
+)
 
 const resolvedBreadcrumbs = computed<UniLayoutBreadcrumbItem[]>(() => {
   if (!props.autoWire) {
@@ -235,6 +239,8 @@ const onMenuSelect = (path: string) => {
 const onChangeLocale = (value: string) => {
   if (props.autoWire) {
     appStore.setLocale(value)
+    globalLocale.value = value
+    document.documentElement.lang = value
   } else {
     emit('changeLocale', value)
   }

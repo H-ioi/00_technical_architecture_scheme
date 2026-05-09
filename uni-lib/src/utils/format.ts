@@ -1,6 +1,6 @@
 import type { UniOption } from "@/types/shared";
 import type { UniTableColumn } from "@/types/uni-table";
-import { useUniI18n } from "@/locales/i18n";
+import { uniLibTranslate } from "@/locales/register-i18n";
 
 export const isEmptyValue = (value: unknown) =>
   value === undefined || value === null || value === "";
@@ -129,7 +129,7 @@ export type UniTranslate = (
 export const formatRelativeTime = (
   value: unknown,
   emptyText = "--",
-  t: UniTranslate = useUniI18n().t,
+  t: UniTranslate = uniLibTranslate,
 ) => {
   if (isEmptyValue(value)) {
     return emptyText;
@@ -201,7 +201,7 @@ export const formatTableCellText = (
   value: unknown,
   index: number,
   valueEnums?: Record<string, UniOption[]>,
-  t: UniTranslate = useUniI18n().t,
+  t: UniTranslate = uniLibTranslate,
 ) => {
   if (column.formatter) {
     return column.formatter(row, column, value, index);

@@ -1,7 +1,6 @@
 import type { Router } from 'vue-router'
 
 import { fetchMenuPermissions } from '@/api/modules/menu'
-import { getLocalizedDocumentTitle, translateAppMessage } from '@/locales'
 import { usePermissionStore, useUserStore } from '@/stores'
 import { useUniTagsViewStore } from 'uni-ui-lib'
 
@@ -19,10 +18,7 @@ export const setupRouterGuards = (router: Router) => {
   router.beforeEach(async (to) => {
     const userStore = useUserStore()
     const permissionStore = usePermissionStore()
-    document.title = getLocalizedDocumentTitle(
-      to.meta.titleKey as string | undefined,
-      String(to.meta.title ?? '')
-    )
+    document.title = String(to.meta.title ?? '')
 
     if (whiteList.includes(to.path)) {
       return userStore.isLoggedIn ? '/' : true
@@ -99,7 +95,7 @@ export const setupRouterGuards = (router: Router) => {
       const detailId = leaf.name === 'ProtocolDetail' ? getRouteParamText(to.params.id as string | string[] | undefined) : ''
       const titleKey = detailId ? undefined : (leaf.meta.titleKey as string | undefined)
       const title = detailId
-        ? `${translateAppMessage(leaf.meta.titleKey as string | undefined, String(leaf.meta.title || leaf.name))}_${detailId}`
+        ? `${String(leaf.meta.title || leaf.name)}_${detailId}`
         : String(leaf.meta.title || leaf.name)
 
       tagsViewStore.addTag({

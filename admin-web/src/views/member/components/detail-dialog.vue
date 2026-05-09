@@ -1,7 +1,5 @@
 <script setup lang="ts">
-import type { Recordable, UniFormConfig } from 'uni-ui-lib'
-
-import { useAppI18n } from '@/composables/use-app-i18n'
+import { useUniI18n, type Recordable, type UniFormConfig } from 'uni-ui-lib'
 
 defineProps<{
   visible: boolean
@@ -13,7 +11,7 @@ const emit = defineEmits<{
   'update:visible': [visible: boolean]
 }>()
 
-const { t } = useAppI18n()
+const { t } = useUniI18n()
 </script>
 
 <template>

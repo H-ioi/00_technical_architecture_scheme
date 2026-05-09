@@ -1,15 +1,15 @@
 <script setup lang="ts">
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { computed, ref } from 'vue'
+import { useUniI18n } from 'uni-ui-lib'
 
 import FormDialog from './components/form-dialog.vue'
 import { useList } from './use-list'
 
 import { deleteProtocol } from '@/api'
-import { useAppI18n } from '@/composables/use-app-i18n'
 import type { ProtocolRecord } from '@/types/modules/protocol'
 
-const { t } = useAppI18n()
+const { t } = useUniI18n()
 const {
   actions,
   columns,

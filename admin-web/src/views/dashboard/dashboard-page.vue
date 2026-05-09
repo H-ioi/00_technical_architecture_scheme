@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import { computed } from 'vue'
+import { useUniI18n } from 'uni-ui-lib'
 import { useRouter } from 'vue-router'
 
-import { useAppI18n } from '@/composables/use-app-i18n'
 import type { DashboardShortcut } from '@/types/modules/dashboard'
 
-const { t } = useAppI18n()
+const { t } = useUniI18n()
 const router = useRouter()
 
 const metrics = computed(() => [

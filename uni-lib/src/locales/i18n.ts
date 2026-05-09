@@ -1,46 +1,22 @@
-import type { Ref } from "vue";
+import { useI18n } from "vue-i18n";
 
-export interface UniI18nBridge {
-  /** 应指向宿主 `vue-i18n` 的翻译函数（如 `i18n.global.t`）。 */
-  t: (key: string, params?: Record<string, unknown>) => string;
-  locale: () => string;
-  setLocale?: (locale: string) => void;
-  /**
-   * 建议与 vue-i18n 等配合传入（例如 `i18n.global.locale`），
-   * 语言切换时 Element Plus 原子组件（日期、分页等）才能同步更新。
-   */
-  localeRef?: Ref<string>;
-}
+/**
+ * 组件库内访问全局文案（须在组件 `setup` / `<script setup>` 同步调用链上使用）。
+ * 模板可直接 `$t('key')`（依赖 {@link createUniLibI18n} 的 `globalInjection`）。
+ */
+export const useUniI18n = () => {
+  const { t, locale } = useI18n({ useScope: "global" });
 
-let bridge: UniI18nBridge | undefined;
-let bridgeLocaleRef: Ref<string> | undefined;
-
-export const createUniI18nBridge = (nextBridge: UniI18nBridge) => {
-  bridge = nextBridge;
-  bridgeLocaleRef = nextBridge.localeRef;
-  return bridge;
+  return {
+    t: (key: string, params?: Record<string, unknown>) =>
+      String(
+        params !== undefined && Object.keys(params).length > 0
+          ? t(key, params as Record<string, unknown> & object)
+          : t(key),
+      ),
+    locale: () => String(locale.value),
+    setLocale: (next: string) => {
+      locale.value = next;
+    },
+  };
 };
-
-export const patchUniI18nBridge = (patch: Partial<UniI18nBridge>) => {
-  if (!bridge) {
-    bridge = patch as UniI18nBridge;
-  } else {
-    bridge = { ...bridge, ...patch };
-  }
-
-  if (patch.localeRef) {
-    bridgeLocaleRef = patch.localeRef;
-  }
-
-  return bridge;
-};
-
-/** 供 {@link UniConfigProvider} 使用：存在时随语言切换驱动 Element Plus locale */
-export const useUniLocaleRef = () => bridgeLocaleRef;
-
-export const useUniI18n = () => ({
-  t: (key: string, params?: Record<string, unknown>) =>
-    bridge?.t ? bridge.t(key, params) : key,
-  locale: () => bridge?.locale() ?? "zh-CN",
-  setLocale: (locale: string) => bridge?.setLocale?.(locale),
-});

@@ -1,7 +1,7 @@
 import type { App, Directive } from "vue";
 import { ElMessage } from "element-plus";
 
-import { useUniI18n } from "@/locales/i18n";
+import { uniLibTranslate } from "@/locales/register-i18n";
 import { copyText } from "@/utils/copy";
 
 export type UniCopyValue =
@@ -37,16 +37,15 @@ const listeners = new WeakMap<HTMLElement, EventListener>();
 export const uniCopyDirective: Directive<HTMLElement, UniCopyValue> = {
   mounted(el, binding) {
     const listener = async () => {
-      const i18n = useUniI18n();
       const { text, successMessage, errorMessage } = resolveCopyValue(
         binding.value,
       );
 
       try {
         await copyText(text);
-        ElMessage.success(successMessage ?? i18n.t("common.copySuccess"));
+        ElMessage.success(successMessage ?? uniLibTranslate("common.copySuccess"));
       } catch {
-        ElMessage.error(errorMessage ?? i18n.t("common.copyFailed"));
+        ElMessage.error(errorMessage ?? uniLibTranslate("common.copyFailed"));
       }
     };
 

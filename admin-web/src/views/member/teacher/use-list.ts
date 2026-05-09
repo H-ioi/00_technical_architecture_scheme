@@ -3,7 +3,7 @@ import type {
   UniTableAction,
   UniTableRequest
 } from 'uni-ui-lib'
-import { toUniOptions, useUniListState } from 'uni-ui-lib'
+import { toUniOptions, useUniI18n, useUniListState } from 'uni-ui-lib'
 import { computed, onMounted, ref } from 'vue'
 
 import {
@@ -11,7 +11,6 @@ import {
   fetchTeacherRoleOptions as fetchRoles,
   fetchSchoolOptions as fetchSchools
 } from '@/api'
-import { useAppI18n } from '@/composables/use-app-i18n'
 import type { TeacherRecord as Row } from '@/types/modules/member-teacher'
 
 import {
@@ -23,7 +22,7 @@ import {
 } from './list.config'
 
 export const useList = () => {
-  const { locale, t } = useAppI18n()
+  const { locale, t } = useUniI18n()
   const initialFilters = {
     keywordssearch: '',
     schoolIds: undefined,
@@ -71,7 +70,7 @@ export const useList = () => {
 
     // 学校字典统一转成 UniOption，供 UniSearchForm 和 UniDataTable 枚举回显复用。
     schoolOptions.value = toUniOptions(schools, {
-      labelKeys: locale.value === 'en' ? ['enName', 'name'] : ['name', 'cnName', 'enName'],
+      labelKeys: locale() === 'en' ? ['enName', 'name'] : ['name', 'cnName', 'enName'],
       valueKey: 'id'
     })
     roleOptions.value = createRoleOptions(roles)
