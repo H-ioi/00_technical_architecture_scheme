@@ -2,7 +2,6 @@ import type zhCN from '../zh-CN'
 
 import common from './common'
 import dashboard from './dashboard'
-import login from './login'
 import member from './modules/member'
 import protocol from './modules/protocol'
 import route from './route'
@@ -13,7 +12,6 @@ const en: typeof zhCN = {
   },
   common,
   route,
-  login,
   dashboard,
   member,
   protocol

@@ -10,6 +10,7 @@ import {
 import { UniSearchForm } from "./components/uni-search-form";
 import { UniThemeSettings } from "./components/uni-theme-settings";
 import { UniUpload } from "./components/uni-upload";
+import UniLoginPage from "./components/uni-login-page/index.vue";
 import { install } from "./plugins/install";
 import { pinia } from "./stores";
 import "./styles/index.scss";
@@ -27,6 +28,7 @@ export {
   UniSearchForm,
   UniThemeSettings,
   UniUpload,
+  UniLoginPage,
 };
 export * from "./plugins/install";
 export * from "./icons";
@@ -47,6 +49,7 @@ export * from "./types/uni-directives";
 export * from "./types/uni-install";
 export * from "./types/uni-list-state";
 export * from "./types/uni-options";
+export * from "./types/uni-login";
 export * from "./directives/copy";
 export * from "./directives/debounce-click";
 export * from "./directives/permission";

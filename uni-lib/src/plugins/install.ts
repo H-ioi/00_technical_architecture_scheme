@@ -15,6 +15,7 @@ import { UniSearchForm } from "@/components/uni-search-form";
 import { UniThemeSettings } from "@/components/uni-theme-settings";
 import { setupUniTheme } from "@/components/uni-theme-settings/runtime";
 import { UniUpload } from "@/components/uni-upload";
+import UniLoginPage from "@/components/uni-login-page/index.vue";
 import { setupCopyDirective } from "@/directives/copy";
 import { setupDebounceClickDirective } from "@/directives/debounce-click";
 import { setupPermissionDirective } from "@/directives/permission";
@@ -43,6 +44,7 @@ const components = [
   { name: "UniSearchForm", component: UniSearchForm },
   { name: "UniThemeSettings", component: UniThemeSettings },
   { name: "UniUpload", component: UniUpload },
+  { name: "UniLoginPage", component: UniLoginPage },
 ];
 
 export const install = (app: App, options: UniLibInstallOptions = {}) => {

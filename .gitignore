@@ -3,3 +3,4 @@
 **/.vitepress/dist/
 test/
 .agents/
+uni-lib/.npmrc
