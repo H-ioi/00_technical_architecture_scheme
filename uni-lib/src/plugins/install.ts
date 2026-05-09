@@ -11,27 +11,16 @@ import { UniLayout, UniLayoutChangePasswordDialog } from "@/components/uni-layou
 import { UniSearchForm } from "@/components/uni-search-form";
 import { UniThemeSettings } from "@/components/uni-theme-settings";
 import { UniUpload } from "@/components/uni-upload";
+import { setupUniTheme } from "@/components/uni-theme-settings/runtime";
 import { setupCopyDirective } from "@/directives/copy";
 import { setupDebounceClickDirective } from "@/directives/debounce-click";
 import {
   setupPermissionDirective,
-  type UniPermissionOptions,
 } from "@/directives/permission";
 import { initUniHttpClient } from "@/plugins/http-client";
 import { setUniAppName } from "@/plugins/storage";
 import { setUniRuntimeConfig, tryGetUniRuntimeConfig } from "@/runtime";
-import type { UniLibRuntimeOptions } from "@/types/uni-runtime";
-import {
-  setupUniTheme,
-  type UniThemeSetupOptions,
-} from "@/components/uni-theme-settings/runtime";
-
-export interface UniLibInstallOptions {
-  /** 模板注入：存储前缀、HTTP、鉴权、改密接口等 */
-  runtime?: UniLibRuntimeOptions;
-  permission?: UniPermissionOptions;
-  theme?: UniThemeSetupOptions;
-}
+import type { UniLibInstallOptions } from "@/types/uni-install";
 
 const components = [
   { name: "UniConfigProvider", component: UniConfigProvider },
@@ -71,3 +60,5 @@ export const install = (app: App, options: UniLibInstallOptions = {}) => {
   setupCopyDirective(app);
   setupDebounceClickDirective(app);
 };
+
+export type { UniLibInstallOptions } from "@/types/uni-install";

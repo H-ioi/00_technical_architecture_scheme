@@ -1,12 +1,8 @@
 import type { App, Directive } from "vue";
 
-export type UniDebounceClickValue =
-  | ((event: MouseEvent) => void)
-  | {
-      handler: (event: MouseEvent) => void;
-      wait?: number;
-      immediate?: boolean;
-    };
+import type { UniDebounceClickValue } from "@/types/uni-directives";
+
+export type { UniDebounceClickValue } from "@/types/uni-directives";
 
 type DebounceState = {
   listener: EventListener;

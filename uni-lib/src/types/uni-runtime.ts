@@ -1,5 +1,5 @@
-import type { UniThemeOptions } from "@/components/uni-theme-settings/runtime";
-import type { UniRequestOptions } from "@/plugins/request";
+import type { UniRequestOptions } from "./uni-request";
+import type { UniThemeOptions } from "./uni-theme";
 
 import type { UniUserProfile } from "./user-profile";
 
@@ -64,3 +64,17 @@ export interface UniLibRuntimeOptions {
   changePassword?: UniChangePasswordRuntime;
   httpMessages?: UniHttpMessages;
 }
+
+export type CreateUniLibRuntimeInput = Pick<
+  UniLibRuntimeOptions,
+  "name" | "auth" | "request"
+> &
+  Partial<
+    Pick<
+      UniLibRuntimeOptions,
+      | "defaultLocale"
+      | "shell"
+      | "changePassword"
+      | "httpMessages"
+    >
+  >;

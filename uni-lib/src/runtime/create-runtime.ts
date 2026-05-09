@@ -8,6 +8,7 @@ import type {
   UniHttpMessages,
   UniLibRuntimeOptions,
   UniRuntimeShell,
+  CreateUniLibRuntimeInput,
 } from "@/types/uni-runtime";
 
 /** 与 {@link createUniLibRuntime} 合并用的中文 HTTP 提示默认文案 */
@@ -36,9 +37,6 @@ const defaultChangePasswordOnSuccess = async () => {
     window.location.assign(redirect)
   }
 }
-
-export type CreateUniLibRuntimeInput = Pick<UniLibRuntimeOptions, 'name' | 'auth' | 'request'> &
-  Partial<Pick<UniLibRuntimeOptions, 'defaultLocale' | 'shell' | 'changePassword' | 'httpMessages'>>
 
 /**
  * 合并组件库内置默认 runtime（壳主题键、HTTP 提示、改密接口与登出后的跳转等），
@@ -83,3 +81,5 @@ export const createUniLibRuntime = (input: CreateUniLibRuntimeInput): UniLibRunt
     }
   }
 }
+
+export type { CreateUniLibRuntimeInput } from "@/types/uni-runtime";

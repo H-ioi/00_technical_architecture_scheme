@@ -5,11 +5,10 @@ import {
   MoreFilled,
   Refresh,
 } from "@element-plus/icons-vue";
-import { ref } from "vue";
+import { ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 
-import { useTagsViewFromRoute } from "@/composables/use-uni-tags-view-from-route";
-import { useUniTagsViewController } from "@/composables/use-uni-tags-view-controller";
+import { useUniTagsViewStore } from "@/stores";
 import type { UniLayoutTag, UniLayoutTranslate } from "@/types/uni-layout";
 
 const props = withDefaults(
@@ -29,18 +28,117 @@ const props = withDefaults(
   },
 );
 
-useTagsViewFromRoute({ enabled: () => props.syncFromRoute });
-
 const router = useRouter();
 const route = useRoute();
-const {
-  closeTag: removeVisitedTag,
-  refreshTag,
-  closeOthers,
-  closeAll,
-} = useUniTagsViewController(router, route, {
-  fallbackPath: props.tagsFallback,
-});
+const tagsViewStore = useUniTagsViewStore();
+
+const getRouteParamText = (value: string | string[] | undefined) => {
+  if (Array.isArray(value)) {
+    return value[0] ?? "";
+  }
+
+  return value ?? "";
+};
+
+const syncVisitedTagsFromRoute = () => {
+  if (!props.syncFromRoute) {
+    return;
+  }
+
+  const leaf = route.matched[route.matched.length - 1];
+
+  if (!leaf?.name) {
+    return;
+  }
+
+  const shouldAddTag =
+    !leaf.meta.hidden || Boolean(leaf.meta.activeMenu);
+
+  if (!shouldAddTag) {
+    return;
+  }
+
+  const meta = leaf.meta as {
+    title?: string;
+    titleKey?: string;
+    affix?: boolean;
+    tagDetailParam?: string;
+  };
+
+  const paramKey = meta.tagDetailParam;
+  const detailId = paramKey
+    ? getRouteParamText(
+        route.params[paramKey] as string | string[] | undefined,
+      )
+    : "";
+  const titleKey = detailId
+    ? undefined
+    : (meta.titleKey as string | undefined);
+  const title = detailId
+    ? `${String(meta.title || String(leaf.name))}_${detailId}`
+    : String(meta.title || String(leaf.name));
+
+  tagsViewStore.addTag({
+    path: route.fullPath,
+    title,
+    titleKey,
+    affix: Boolean(meta.affix),
+  });
+};
+
+watch(
+  [() => route.fullPath, () => props.syncFromRoute],
+  () => {
+    syncVisitedTagsFromRoute();
+  },
+  { flush: "post", immediate: true },
+);
+
+const findVisitedTagNeighbor = (path: string) => {
+  const tags = tagsViewStore.visitedTags;
+  const index = tags.findIndex((tag) => tag.path === path);
+  const left = index > 0 ? tags[index - 1] : undefined;
+  const right = index < tags.length - 1 ? tags[index + 1] : undefined;
+
+  return (
+    left ||
+    right ||
+    tagsViewStore.visitedTags[tagsViewStore.visitedTags.length - 1]
+  );
+};
+
+const removeVisitedTag = (path: string) => {
+  const isActive = route.fullPath === path;
+  const nextTag = findVisitedTagNeighbor(path);
+
+  tagsViewStore.removeTag(path);
+
+  if (!isActive) {
+    return;
+  }
+
+  void router.push((nextTag || { path: props.tagsFallback }).path);
+};
+
+const refreshTag = (tag?: UniLayoutTag) => {
+  if (tag && tag.path !== route.fullPath) {
+    void router.push(tag.path);
+  }
+  tagsViewStore.refreshCurrentTag();
+};
+
+const closeOthers = (path = route.fullPath) => {
+  tagsViewStore.removeOtherTags(path);
+
+  if (path !== route.fullPath) {
+    void router.push(path);
+  }
+};
+
+const closeAll = () => {
+  tagsViewStore.removeAllTags();
+  void router.push(props.tagsFallback);
+};
 
 const emit = defineEmits<{
   click: [path: string];

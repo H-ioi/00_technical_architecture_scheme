@@ -1,46 +1,39 @@
-import { nextTick, ref } from "vue";
+import { nextTick, ref } from 'vue'
 
-import type { Recordable } from "@/types/shared";
-import type { UniTableRequestResult } from "@/types/uni-table";
+import type { UniListStateOptions, UniListTableExpose } from '@/types/uni-list-state'
+import type { Recordable } from '@/types/shared'
+import type { UniTableRequestResult } from '@/types/uni-table'
 
-export interface UniListTableExpose {
-  refresh: () => void;
-}
-
-export interface UniListStateOptions {
-  initialFilters: Recordable;
-}
+export type { UniListStateOptions, UniListTableExpose } from '@/types/uni-list-state'
 
 /**
- * Standard state holder for search + data table pages.
- *
- * It keeps query model, effective filters, table ref and total count together,
- * and provides the common search/reset/refresh flow used by list pages.
+ * 列表页通用状态：查询模型、实际过滤条件、表格 ref 和总数。
+ * 提供搜索/重置/刷新等通用功能。
  */
 export const useUniListState = (options: UniListStateOptions) => {
-  const queryModel = ref<Recordable>({ ...options.initialFilters });
-  const filters = ref<Recordable>({});
-  const tableRef = ref<UniListTableExpose | null>(null);
-  const total = ref(0);
+  const queryModel = ref<Recordable>({ ...options.initialFilters })
+  const filters = ref<Recordable>({})
+  const tableRef = ref<UniListTableExpose | null>(null)
+  const total = ref(0)
 
   const refreshTable = async () => {
-    await nextTick();
-    tableRef.value?.refresh();
-  };
+    await nextTick()
+    tableRef.value?.refresh()
+  }
 
   const search = async (value: Recordable) => {
-    filters.value = { ...value };
-    await refreshTable();
-  };
+    filters.value = { ...value }
+    await refreshTable()
+  }
 
   const reset = async (value: Recordable = {}) => {
-    filters.value = { ...value };
-    await refreshTable();
-  };
+    filters.value = { ...value }
+    await refreshTable()
+  }
 
   const handleLoadSuccess = (result: UniTableRequestResult) => {
-    total.value = result.total;
-  };
+    total.value = result.total
+  }
 
   return {
     filters,
@@ -50,6 +43,6 @@ export const useUniListState = (options: UniListStateOptions) => {
     reset,
     search,
     tableRef,
-    total,
-  };
-};
+    total
+  }
+}

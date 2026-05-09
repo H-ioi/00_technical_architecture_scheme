@@ -1,21 +1,10 @@
-export interface UniThemeTokens {
-  primaryColor?: string;
-  pageBgColor?: string;
-  cardBgColor?: string;
-  borderColor?: string;
-  textColor?: string;
-  textColorSecondary?: string;
-  radiusBase?: string;
-}
+import type { UniThemeOptions, UniThemeSetupOptions } from "@/types/uni-theme";
 
-export interface UniThemeOptions extends UniThemeTokens {
-  variables?: Record<string, string>;
-}
-
-export interface UniThemeSetupOptions extends UniThemeOptions {
-  defaultTheme?: UniThemeOptions;
-  storageKey?: string;
-}
+export type {
+  UniThemeTokens,
+  UniThemeOptions,
+  UniThemeSetupOptions,
+} from "@/types/uni-theme";
 
 const DEFAULT_PRIMARY_COLOR = "#BA8E62";
 const DEFAULT_THEME_STORAGE_KEY = "uni-lib:theme";

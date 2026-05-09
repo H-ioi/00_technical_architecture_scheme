@@ -6,10 +6,9 @@ import { useRoute, useRouter } from 'vue-router'
 
 import { UniIcon } from '@/components/uni-icon'
 import { UniThemeSettings } from '@/components/uni-theme-settings'
-import { useUniTagsViewController } from '@/composables/use-uni-tags-view-controller'
 import { UniZhEnIcon } from '@/icons'
 import { tryGetUniRuntimeConfig } from '@/runtime'
-import { useAppStore, useMenuStore, useUserStore } from '@/stores'
+import { useAppStore, useMenuStore, useUniTagsViewStore, useUserStore } from '@/stores'
 import type {
   UniLayoutBreadcrumbItem,
   UniLayoutIconMap,
@@ -133,13 +132,57 @@ const resolvedLogo = computed(() => {
 const menuStore = useMenuStore()
 const appStore = useAppStore()
 const userStore = useUserStore()
+const tagsViewStore = useUniTagsViewStore()
 const route = useRoute()
 const router = useRouter()
-const { tagsViewStore, viewKey, closeTag, refreshTag, closeOthers, closeAll } = useUniTagsViewController(
-  router,
-  route,
-  { fallbackPath: props.tagsFallback }
-)
+
+const viewKey = computed(() => `${route.fullPath}-${tagsViewStore.refreshKey}`)
+
+const findVisitedTagNeighbor = (path: string) => {
+  const tags = tagsViewStore.visitedTags
+  const index = tags.findIndex((tag) => tag.path === path)
+  const left = index > 0 ? tags[index - 1] : undefined
+  const right = index < tags.length - 1 ? tags[index + 1] : undefined
+
+  return (
+    left ||
+    right ||
+    tagsViewStore.visitedTags[tagsViewStore.visitedTags.length - 1]
+  )
+}
+
+const closeTag = (path: string) => {
+  const isActive = route.fullPath === path
+  const nextTag = findVisitedTagNeighbor(path)
+
+  tagsViewStore.removeTag(path)
+
+  if (!isActive) {
+    return
+  }
+
+  void router.push((nextTag || { path: props.tagsFallback }).path)
+}
+
+const refreshTag = (tag?: UniLayoutTag) => {
+  if (tag && tag.path !== route.fullPath) {
+    void router.push(tag.path)
+  }
+  tagsViewStore.refreshCurrentTag()
+}
+
+const closeOthers = (path = route.fullPath) => {
+  tagsViewStore.removeOtherTags(path)
+
+  if (path !== route.fullPath) {
+    void router.push(path)
+  }
+}
+
+const closeAll = () => {
+  tagsViewStore.removeAllTags()
+  void router.push(props.tagsFallback)
+}
 
 const resolvedMenus = computed(() => (props.autoWire ? menuStore.menuRoutes : props.menus ?? []))
 const resolvedTags = computed(() => (props.autoWire ? tagsViewStore.visitedTags : props.tags))

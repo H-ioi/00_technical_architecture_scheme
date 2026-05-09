@@ -1,5 +1,6 @@
 import type { UniOption } from "@/types/shared";
 import type { UniTableColumn } from "@/types/uni-table";
+import type { UniTranslate } from "@/types/i18n";
 import { uniLibTranslate } from "@/locales/create-i18n";
 
 export const isEmptyValue = (value: unknown) =>
@@ -120,11 +121,6 @@ export const toArray = (value: unknown): unknown[] => {
 
   return [value];
 };
-
-export type UniTranslate = (
-  key: string,
-  params?: Record<string, unknown>,
-) => string;
 
 export const formatRelativeTime = (
   value: unknown,

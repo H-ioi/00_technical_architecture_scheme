@@ -1,18 +1,11 @@
 import type { App, Directive } from "vue";
 import { ElMessage } from "element-plus";
 
+import type { UniCopyValue } from "@/types/uni-directives";
 import { uniLibTranslate } from "@/locales/create-i18n";
 import { copyText } from "@/utils/copy";
 
-export type UniCopyValue =
-  | string
-  | number
-  | (() => string | number)
-  | {
-      text: string | number | (() => string | number);
-      successMessage?: string;
-      errorMessage?: string;
-    };
+export type { UniCopyValue } from "@/types/uni-directives";
 
 const resolveCopyValue = (value: UniCopyValue) => {
   if (typeof value === "object" && value !== null) {

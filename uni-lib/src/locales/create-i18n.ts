@@ -2,7 +2,7 @@ import type { I18n, I18nOptions } from 'vue-i18n'
 import { createI18n } from 'vue-i18n'
 
 import { setUniAppName, storage } from '@/plugins/storage'
-import { UNI_DEFAULT_LOCALE, isUniAppLocale, type UniAppLocale } from '@/types/i18n'
+import { UNI_DEFAULT_LOCALE, isUniAppLocale, type CreateUniLibI18nOptions } from '@/types/i18n'
 
 import { enMessagesNested } from './lang/en'
 import { zhCNMessagesNested } from './lang/zh-CN'
@@ -29,18 +29,6 @@ export const uniLibTranslate = (key: string, params?: Record<string, unknown>): 
   }
   const tFn = i18n.global.t as (key: string, values?: Record<string, unknown>) => string
   return params !== undefined && Object.keys(params).length > 0 ? tFn(key, params) : tFn(key)
-}
-
-export interface CreateUniLibI18nOptions {
-  /**
-   * 项目名称：写入 `localStorage` 前设置键前缀，与 `UniLib` 的 `runtime.name` 一致。
-   * 不传则沿用当前前缀（默认 `uni-lib`）。
-   */
-  name?: string
-  locale?: UniAppLocale
-  fallbackLocale?: UniAppLocale
-  /** 宿主文案；与库文案深度合并，同 key 下宿主覆盖库。 */
-  hostMessages?: Partial<Record<UniAppLocale, Record<string, unknown>>>
 }
 
 /**
@@ -79,3 +67,5 @@ export function createUniLibI18n(options: CreateUniLibI18nOptions = {}) {
 
   return i18n
 }
+
+export type { CreateUniLibI18nOptions } from '@/types/i18n'

@@ -1,13 +1,7 @@
 import type { OptionValue, UniOption } from "@/types/shared";
+import type { OptionSource, ToUniOptionsConfig } from "@/types/uni-options";
 
-type OptionSource = Record<string, unknown>;
-
-export interface ToUniOptionsConfig<T extends OptionSource> {
-  valueKey?: keyof T;
-  labelKeys?: Array<keyof T>;
-  typeKey?: keyof T;
-  colorKey?: keyof T;
-}
+export type { OptionSource, ToUniOptionsConfig } from "@/types/uni-options";
 
 const toOptionValue = (value: unknown): OptionValue =>
   typeof value === "string" ||
