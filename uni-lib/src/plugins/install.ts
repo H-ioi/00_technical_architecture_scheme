@@ -17,7 +17,7 @@ import { setupDebounceClickDirective } from "@/directives/debounce-click";
 import {
   setupPermissionDirective,
 } from "@/directives/permission";
-import { initUniHttpClient } from "@/plugins/http-client";
+import { initUniHttpClient } from "@/plugins/request";
 import { setUniAppName } from "@/plugins/storage";
 import { setUniRuntimeConfig, tryGetUniRuntimeConfig } from "@/runtime";
 import type { UniLibInstallOptions } from "@/types/uni-install";

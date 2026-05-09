@@ -36,7 +36,6 @@ export default defineConfig({
         text: "插件能力",
         items: [
           { text: "Request", link: "/plugins/request" },
-          { text: "Auth", link: "/plugins/auth" },
           { text: "Theme", link: "/plugins/theme" },
         ],
       },

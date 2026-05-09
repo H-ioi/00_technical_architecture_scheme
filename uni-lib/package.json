@@ -66,11 +66,6 @@
       "import": "./dist/index.mjs",
       "require": "./dist/index.cjs"
     },
-    "./plugins/auth": {
-      "types": "./dist/src/plugins/auth.d.ts",
-      "import": "./dist/index.mjs",
-      "require": "./dist/index.cjs"
-    },
     "./locales/i18n": {
       "types": "./dist/locales/use-uni-i18n.d.ts",
       "import": "./dist/index.mjs",

@@ -4,7 +4,7 @@ import { ElMessage } from 'element-plus'
 import { computed, reactive, ref, watch } from 'vue'
 
 import { getUniRuntimeConfig, tryGetUniRuntimeConfig } from '@/runtime'
-import { request } from '@/plugins/http-client'
+import { request } from '@/plugins/request'
 import { useUniI18n } from '@/locales/use-uni-i18n'
 import { useUserStore } from '@/stores'
 import type { UniLayoutChangePasswordPayload } from '@/types/uni-layout'

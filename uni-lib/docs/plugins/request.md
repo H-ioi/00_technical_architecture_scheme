@@ -51,13 +51,4 @@ const request = createUniRequest({
 });
 ```
 
-## 下载 Blob
-
-```ts
-import { downloadBlob } from "uni-ui-lib";
-
-const response = await request.get("/export", { responseType: "blob" });
-downloadBlob(response.data, "export.xlsx");
-```
-
 组件库只负责请求实例与通用协议，不写死具体接口路径、错误码全集或登录跳转路由。
