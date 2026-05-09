@@ -72,7 +72,7 @@
       "require": "./dist/index.cjs"
     },
     "./locales/i18n": {
-      "types": "./dist/src/locales/i18n.d.ts",
+      "types": "./dist/locales/use-uni-i18n.d.ts",
       "import": "./dist/index.mjs",
       "require": "./dist/index.cjs"
     },

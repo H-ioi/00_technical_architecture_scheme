@@ -1,0 +1,9 @@
+# npm pack / `file:` installs follow this file instead of the repo root .gitignore
+# (which ignores **/dist/). Built output must be installable after `npm run build`.
+
+node_modules/
+*.log
+.DS_Store
+coverage/
+.vitepress/cache/
+docs/.vitepress/cache/

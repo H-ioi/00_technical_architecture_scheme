@@ -1,4 +1,4 @@
-import { useUniI18n } from "@/locales/i18n";
+import { useUniI18n } from "@/locales/use-uni-i18n";
 import type { Recordable, UniOption } from "@/types/shared";
 import type { UniTableColumn } from "@/types/uni-table";
 import { formatTableCellText } from "@/utils/format";

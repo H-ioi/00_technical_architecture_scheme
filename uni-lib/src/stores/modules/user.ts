@@ -1,10 +1,13 @@
 import { defineStore } from "pinia";
 import { computed, ref } from "vue";
 
-import { getUniRuntimeConfig } from "@/runtime/config";
+import { getUniRuntimeConfig } from "@/runtime";
 import { storage } from "@/plugins/storage";
 import type { UniUserProfile } from "@/types/user-profile";
-import { usePermissionStore } from "@/stores/uni-permission";
+
+import { useMenuStore } from "./menu";
+import { usePermissionCodeStore } from "./permission-code";
+import { useRouteAccessStore } from "./route-access";
 
 export const useUserStore = defineStore("user", () => {
   const accessToken = ref(storage.get<string>("access-token") ?? "");
@@ -29,13 +32,19 @@ export const useUserStore = defineStore("user", () => {
     }
   };
 
+  const resetShellAccess = () => {
+    useMenuStore().reset();
+    useRouteAccessStore().reset();
+    usePermissionCodeStore().reset();
+  };
+
   const login = async (params: unknown) => {
     const result = await getUniRuntimeConfig().auth.login(params);
-    const permissionStore = usePermissionStore();
+    const permissionCodeStore = usePermissionCodeStore();
 
     setToken(result.accessToken);
     setProfile(result.user);
-    permissionStore.setPermissionCodes(result.permissions);
+    permissionCodeStore.setPermissionCodes(result.permissions);
 
     return result;
   };
@@ -49,11 +58,9 @@ export const useUserStore = defineStore("user", () => {
   };
 
   const resetAuth = () => {
-    const permissionStore = usePermissionStore();
-
     accessToken.value = "";
     profile.value = null;
-    permissionStore.resetPermission();
+    resetShellAccess();
     storage.remove("access-token");
     storage.remove("user-profile");
   };

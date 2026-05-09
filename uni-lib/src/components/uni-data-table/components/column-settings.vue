@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { Rank } from "@element-plus/icons-vue";
 
-import { useUniI18n } from "@/locales/i18n";
+import { useUniI18n } from "@/locales/use-uni-i18n";
 import type { UniTableColumnState } from "@/types/uni-data-table";
 
 defineProps<{

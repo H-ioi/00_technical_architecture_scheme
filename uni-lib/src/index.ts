@@ -8,7 +8,8 @@ import { UniSearchForm } from "./components/uni-search-form";
 import { UniThemeSettings } from "./components/uni-theme-settings";
 import { UniUpload } from "./components/uni-upload";
 import { install } from "./plugins/install";
-import "./style.scss";
+import { pinia } from "./stores";
+import "./styles/index.scss";
 import defaultLayoutLogoUrl from "./assets/images/logo-top.png";
 
 export const uniLayoutDefaultLogoUrl = defaultLayoutLogoUrl;
@@ -25,27 +26,25 @@ export {
   UniUpload,
 };
 export * from "./plugins/install";
-export * from "./runtime/config";
+export * from "./runtime";
 export * from "./icons";
 export * from "./types/shared";
 export * from "./types/uni-table";
 export * from "./types/uni-form";
+export * from "./types/uni-runtime";
 export * from "./types/uni-data-table";
 export * from "./types/uni-layout";
 export * from "./types/i18n";
 export * from "./types/api";
-export * from "./types/admin-route";
 export * from "./types/user-profile";
 export * from "./directives/copy";
 export * from "./directives/debounce-click";
 export * from "./directives/permission";
 export * from "./composables/use-uni-list-state";
 export * from "./composables/use-uni-permission";
+export * from "./composables/use-uni-tags-view-from-route";
 export * from "./composables/use-uni-tags-view-controller";
-export * from "./stores/uni-tags-view";
-export * from "./stores/uni-app";
-export * from "./stores/uni-user";
-export * from "./stores/uni-permission";
+export * from "./stores";
 export * from "./plugins/request";
 export * from "./plugins/auth";
 export * from "./plugins/http-client";
@@ -59,4 +58,5 @@ export * from "./utils/options";
 
 export default {
   install,
+  pinia,
 };

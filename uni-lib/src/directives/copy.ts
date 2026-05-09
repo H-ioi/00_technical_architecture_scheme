@@ -1,7 +1,7 @@
 import type { App, Directive } from "vue";
 import { ElMessage } from "element-plus";
 
-import { uniLibTranslate } from "@/locales/register-i18n";
+import { uniLibTranslate } from "@/locales/create-i18n";
 import { copyText } from "@/utils/copy";
 
 export type UniCopyValue =

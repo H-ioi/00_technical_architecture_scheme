@@ -1,5 +1,7 @@
 import type { App, Directive } from "vue";
 
+import { usePermissionCodeStore } from "@/stores/modules/permission-code";
+
 export type UniPermissionMode = "remove" | "hidden" | "disabled";
 export type UniPermissionValue =
   | string
@@ -13,8 +15,11 @@ export interface UniPermissionOptions {
   onDenied?: (permission: string | string[]) => void;
 }
 
+const defaultHasPermission: UniPermissionChecker = (permission) =>
+  usePermissionCodeStore().hasPermission(permission);
+
 const options: Required<UniPermissionOptions> = {
-  hasPermission: () => true,
+  hasPermission: defaultHasPermission,
   defaultMode: "remove",
   onDenied: () => undefined,
 };

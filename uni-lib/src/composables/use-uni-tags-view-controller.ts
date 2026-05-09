@@ -1,7 +1,7 @@
 import type { RouteLocationNormalizedLoaded, Router } from "vue-router";
 import { computed } from "vue";
 
-import { useUniTagsViewStore } from "@/stores/uni-tags-view";
+import { useUniTagsViewStore } from "@/stores";
 import type { UniLayoutTag } from "@/types/uni-layout";
 
 export interface UseUniTagsViewControllerOptions {

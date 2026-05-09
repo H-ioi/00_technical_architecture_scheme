@@ -18,8 +18,9 @@ import {
   type UniPermissionOptions,
 } from "@/directives/permission";
 import { initUniHttpClient } from "@/plugins/http-client";
-import { setUniStoragePrefix } from "@/plugins/storage";
-import { setUniRuntimeConfig, type UniLibRuntimeOptions } from "@/runtime/config";
+import { setUniAppName } from "@/plugins/storage";
+import { setUniRuntimeConfig, tryGetUniRuntimeConfig } from "@/runtime";
+import type { UniLibRuntimeOptions } from "@/types/uni-runtime";
 import {
   setupUniTheme,
   type UniThemeSetupOptions,
@@ -49,14 +50,19 @@ const components = [
 
 export const install = (app: App, options: UniLibInstallOptions = {}) => {
   if (options.runtime) {
-    setUniStoragePrefix(options.runtime.storagePrefix);
+    setUniAppName(options.runtime.name);
     setUniRuntimeConfig(options.runtime);
     initUniHttpClient();
   }
 
-  if (options.theme) {
-    setupUniTheme(options.theme);
-  }
+  const shell = tryGetUniRuntimeConfig()?.shell;
+  setupUniTheme({
+    ...(shell?.themeStorageKey != null
+      ? { storageKey: shell.themeStorageKey }
+      : {}),
+    ...(shell?.defaultTheme != null ? { defaultTheme: shell.defaultTheme } : {}),
+    ...options.theme,
+  });
 
   components.forEach(({ name, component }) => {
     app.component(name, component);

@@ -96,7 +96,6 @@ uni-lib/
 │   │   └── variables.scss
 │   ├── types/
 │   ├── utils/
-│   ├── style.scss
 │   └── index.ts
 ├── docs/
 ├── playground/
@@ -150,8 +149,8 @@ uni-lib
 全量安装用于模板快速接入：
 
 ```ts
-import UniLib from "uni-lib";
-import "uni-lib/dist/style.css";
+import UniLib from "uni-ui-lib";
+import "uni-ui-lib/style.css";
 
 app.use(UniLib, {
   permission: {
@@ -180,7 +179,7 @@ import "uni-lib/components/uni-search-form/style.css";
 - `dist/index.mjs`：ESM 入口。
 - `dist/index.cjs`：CJS 兼容入口（如确有需要）。
 - `dist/index.d.ts`：类型声明。
-- `dist/style.css`：全量样式。
+- `dist/index.css`：全量样式（由 `src/index.ts` 引入 `styles/index.scss` 经构建产出；宿主通常 `import 'uni-ui-lib/style.css'`，与 `package.json` 的 `./style.css` 导出一致）。
 - `dist/components/*`：组件级 JS、类型与样式（含 `uni-theme-settings/runtime` 主题 API 类型）。
 
 `package.json` 建议：
@@ -544,10 +543,11 @@ const request = createUniRequest({
 
 ### 7.4.1 全局样式入口
 
-组件库必须提供唯一全局样式入口 `src/style.scss`，业务工程通过 `import 'uni-ui-lib/style.css'` 一次性引入。`style.scss` 只负责聚合，不直接写业务样式：
+组件库在 **`src/index.ts` 顶层** 通过 `import "./styles/index.scss"` 拉入全局样式，随 JS 入口一并参与 Vite 构建，产出 **`dist/index.css`**。业务工程通过 **`import 'uni-ui-lib/style.css'`** 一次性引入（与 `package.json` 中 `"./style.css"` → `dist/index.css` 的导出一致）。**不在根目录保留多余的 `style.scss` 转发文件**；聚合只发生在 `src/styles/index.scss`，且此处不直接写业务样式：
 
-```scss
-@use "./styles/index.scss" as styles;
+```ts
+// src/index.ts（节选）
+import "./styles/index.scss";
 ```
 
 `src/styles` 分层约定：
@@ -1292,8 +1292,8 @@ Phase 2 组件必须先满足两个条件再进入实现：至少两个独立业
 后续接入 `uni-lib` 时建议：
 
 ```ts
-import UniLib, { createUniRequest } from "uni-lib";
-import "uni-lib/dist/style.css";
+import UniLib, { createUniRequest } from "uni-ui-lib";
+import "uni-ui-lib/style.css";
 
 import { usePermissionStore, useUserStore } from "@/stores";
 

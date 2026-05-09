@@ -1,11 +1,12 @@
-let storagePrefix = "uni-lib";
+/** 项目名称，用作 localStorage 键前缀（`{name}:key`） */
+let appName = "uni-lib";
 
-export const setUniStoragePrefix = (prefix: string) => {
-  storagePrefix = prefix;
+export const setUniAppName = (name: string) => {
+  appName = name;
 };
 
 const resolveKey = (key: string): string => {
-  const prefix = `${storagePrefix}:`;
+  const prefix = `${appName}:`;
 
   return key.startsWith(prefix) ? key : `${prefix}${key}`;
 };
@@ -54,7 +55,7 @@ export const storage = {
       return;
     }
 
-    const prefix = `${storagePrefix}:`;
+    const prefix = `${appName}:`;
 
     Object.keys(window.localStorage).forEach((key) => {
       if (key.startsWith(prefix)) {

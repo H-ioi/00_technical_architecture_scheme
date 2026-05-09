@@ -13,9 +13,9 @@ import type {
   UploadRequestOptions,
   UploadUserFile,
 } from "element-plus";
-import { useUniI18n } from "@/locales/i18n";
+import { useUniI18n } from "@/locales/use-uni-i18n";
 
-const i18n = useUniI18n();
+const { t } = useUniI18n();
 
 const props = withDefaults(
   defineProps<{
@@ -87,7 +87,7 @@ const beforeUpload: UploadProps["beforeUpload"] = (file) => {
   if (!isAcceptedFile(file)) {
     emit(
       "validate-error",
-      i18n.t("upload.accept", { accept: props.accept }),
+      t("upload.accept", { accept: props.accept }),
       file,
     );
     return false;
@@ -96,7 +96,7 @@ const beforeUpload: UploadProps["beforeUpload"] = (file) => {
   if (props.maxSize && file.size > props.maxSize) {
     emit(
       "validate-error",
-      i18n.t("upload.maxSize", { size: props.maxSize }),
+      t("upload.maxSize", { size: props.maxSize }),
       file,
     );
     return false;
@@ -105,7 +105,7 @@ const beforeUpload: UploadProps["beforeUpload"] = (file) => {
   if (props.maxTotalSize && fileListSize() + file.size > props.maxTotalSize) {
     emit(
       "validate-error",
-      i18n.t("upload.maxTotalSize", { size: props.maxTotalSize }),
+      t("upload.maxTotalSize", { size: props.maxTotalSize }),
       file,
     );
     return false;
@@ -166,7 +166,7 @@ const handleChange: UploadProps["onChange"] = (file, files) =>
         <Plus />
       </ElIcon>
       <el-button v-else type="primary">{{
-        i18n.t("upload.trigger")
+        t("upload.trigger")
       }}</el-button>
     </slot>
     <template v-if="$slots.tip" #tip>

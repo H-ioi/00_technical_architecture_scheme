@@ -1,6 +1,6 @@
 import type { UniOption } from "@/types/shared";
 import type { UniTableColumn } from "@/types/uni-table";
-import { uniLibTranslate } from "@/locales/register-i18n";
+import { uniLibTranslate } from "@/locales/create-i18n";
 
 export const isEmptyValue = (value: unknown) =>
   value === undefined || value === null || value === "";

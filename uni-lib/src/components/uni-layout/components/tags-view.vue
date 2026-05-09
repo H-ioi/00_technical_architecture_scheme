@@ -6,19 +6,41 @@ import {
   Refresh,
 } from "@element-plus/icons-vue";
 import { ref } from "vue";
+import { useRoute, useRouter } from "vue-router";
 
+import { useTagsViewFromRoute } from "@/composables/use-uni-tags-view-from-route";
+import { useUniTagsViewController } from "@/composables/use-uni-tags-view-controller";
 import type { UniLayoutTag, UniLayoutTranslate } from "@/types/uni-layout";
 
-withDefaults(
+const props = withDefaults(
   defineProps<{
     tags: UniLayoutTag[];
     activePath: string;
+    /** 为 true 时根据当前路由维护 `visitedTags`（与 `UniLayout` 的 `autoWire` 一致） */
+    syncFromRoute?: boolean;
+    /** `syncFromRoute` 为 true 时，关闭全部等操作的回落路径 */
+    tagsFallback?: string;
     translate?: UniLayoutTranslate;
   }>(),
   {
+    syncFromRoute: true,
+    tagsFallback: "/dashboard",
     translate: (_key?: string, fallback = "") => fallback,
   },
 );
+
+useTagsViewFromRoute({ enabled: () => props.syncFromRoute });
+
+const router = useRouter();
+const route = useRoute();
+const {
+  closeTag: removeVisitedTag,
+  refreshTag,
+  closeOthers,
+  closeAll,
+} = useUniTagsViewController(router, route, {
+  fallbackPath: props.tagsFallback,
+});
 
 const emit = defineEmits<{
   click: [path: string];
@@ -30,11 +52,27 @@ const emit = defineEmits<{
 
 const scrollRef = ref<HTMLElement>();
 
-const closeTag = (path: string, event: Event) => {
-  event.stopPropagation();
-  emit("close", path);
+const isSelfManaged = () => props.syncFromRoute;
+
+const navigateTag = (path: string) => {
+  if (isSelfManaged()) {
+    void router.push(path);
+    return;
+  }
+
+  emit("click", path);
 };
 
+const onTagCloseIcon = (path: string, event: Event) => {
+  event.stopPropagation();
+
+  if (isSelfManaged()) {
+    removeVisitedTag(path);
+    return;
+  }
+
+  emit("close", path);
+};
 const scrollTags = (direction: "left" | "right") => {
   scrollRef.value?.scrollBy({
     left: direction === "left" ? -180 : 180,
@@ -42,9 +80,56 @@ const scrollTags = (direction: "left" | "right") => {
   });
 };
 
-const handleMoreCommand = (command: string | number | object) => {
+const handleTagsMenuCommand = (
+  command: string | number | object,
+  tag?: UniLayoutTag,
+) => {
+  const closeOthersAnchor = tag?.path ?? route.fullPath;
+
+  if (isSelfManaged()) {
+    if (command === "refresh") {
+      if (tag) {
+        refreshTag(tag);
+      }
+
+      return;
+    }
+
+    if (command === "close") {
+      if (tag) {
+        removeVisitedTag(tag.path);
+      }
+
+      return;
+    }
+
+    if (command === "closeOthers") {
+      closeOthers(closeOthersAnchor);
+      return;
+    }
+
+    if (command === "closeAll") {
+      closeAll();
+    }
+
+    return;
+  }
+
+  if (command === "refresh") {
+    emit("refresh", tag);
+    return;
+  }
+
+  if (command === "close") {
+    if (tag) {
+      emit("close", tag.path);
+    }
+
+    return;
+  }
+
   if (command === "closeOthers") {
-    emit("closeOthers");
+    emit("closeOthers", tag?.path);
     return;
   }
 
@@ -53,28 +138,13 @@ const handleMoreCommand = (command: string | number | object) => {
   }
 };
 
-const handleTagCommand = (
-  command: string | number | object,
-  tag: UniLayoutTag,
-) => {
-  if (command === "refresh") {
-    emit("refresh", tag);
+const onToolbarRefresh = () => {
+  if (isSelfManaged()) {
+    refreshTag();
     return;
   }
 
-  if (command === "close") {
-    emit("close", tag.path);
-    return;
-  }
-
-  if (command === "closeOthers") {
-    emit("closeOthers", tag.path);
-    return;
-  }
-
-  if (command === "closeAll") {
-    emit("closeAll");
-  }
+  emit("refresh");
 };
 </script>
 
@@ -87,7 +157,8 @@ const handleTagCommand = (
         trigger="contextmenu"
         popper-class="uni-layout-tags-context-dropdown"
         @command="
-          (command: string | number | object) => handleTagCommand(command, tag)
+          (command: string | number | object) =>
+            handleTagsMenuCommand(command, tag)
         "
       >
         <el-tag
@@ -95,8 +166,8 @@ const handleTagCommand = (
           :class="{ 'is-active': tag.path === activePath }"
           :closable="!tag.affix"
           :effect="tag.path === activePath ? 'dark' : 'plain'"
-          @click="emit('click', tag.path)"
-          @close="closeTag(tag.path, $event)"
+          @click="navigateTag(tag.path)"
+          @close="onTagCloseIcon(tag.path, $event)"
         >
           {{ translate(tag.titleKey, tag.title) }}
         </el-tag>
@@ -134,7 +205,10 @@ const handleTagCommand = (
       <el-dropdown
         trigger="click"
         popper-class="uni-layout-tags-more-dropdown"
-        @command="handleMoreCommand"
+        @command="
+          (command: string | number | object) =>
+            handleTagsMenuCommand(command)
+        "
       >
         <el-button
           :icon="MoreFilled"
@@ -156,7 +230,7 @@ const handleTagCommand = (
         :icon="Refresh"
         text
         :aria-label="translate('common.refresh', '刷新')"
-        @click="emit('refresh')"
+        @click="onToolbarRefresh"
       />
     </div>
   </div>

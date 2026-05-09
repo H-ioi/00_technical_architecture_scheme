@@ -1,6 +1,7 @@
-import type { UniRequestOptions } from "@/plugins/request";
 import type { UniThemeOptions } from "@/components/uni-theme-settings/runtime";
-import type { UniUserProfile } from "@/types/user-profile";
+import type { UniRequestOptions } from "@/plugins/request";
+
+import type { UniUserProfile } from "./user-profile";
 
 export interface UniChangePasswordRuntime {
   api: {
@@ -38,7 +39,8 @@ export interface UniRuntimeShell {
 }
 
 export interface UniLibRuntimeOptions {
-  storagePrefix: string;
+  /** 项目名称：localStorage、主题持久化键等命名空间（如 `admin-web:access-token`） */
+  name: string;
   defaultLocale: string;
   /** 布局壳：主题持久化键、默认主题、登出跳转等 */
   shell?: UniRuntimeShell;
@@ -62,21 +64,3 @@ export interface UniLibRuntimeOptions {
   changePassword?: UniChangePasswordRuntime;
   httpMessages?: UniHttpMessages;
 }
-
-let runtime: UniLibRuntimeOptions | null = null;
-
-export const setUniRuntimeConfig = (next: UniLibRuntimeOptions) => {
-  runtime = next;
-};
-
-export const getUniRuntimeConfig = (): UniLibRuntimeOptions => {
-  if (!runtime) {
-    throw new Error(
-      "[uni-ui-lib] Runtime config is not set. Pass options.runtime to app.use(UniLib, …).",
-    );
-  }
-
-  return runtime;
-};
-
-export const tryGetUniRuntimeConfig = (): UniLibRuntimeOptions | null => runtime;

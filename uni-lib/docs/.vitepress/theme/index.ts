@@ -7,7 +7,6 @@ import DefaultTheme from "vitepress/theme";
 
 import UniLib from "../../../src/index";
 
-import "../../../src/style.scss";
 import "./style.css";
 
 import CompDemo from "./components/CompDemo.vue";

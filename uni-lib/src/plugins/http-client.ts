@@ -1,9 +1,9 @@
 import type { AxiosInstance, InternalAxiosRequestConfig } from "axios";
 import { ElMessage } from "element-plus";
 
-import { getUniRuntimeConfig } from "@/runtime/config";
+import { getUniRuntimeConfig } from "@/runtime";
 import { createUniRequest } from "@/plugins/request";
-import { useUserStore } from "@/stores/uni-user";
+import { useUserStore } from "@/stores";
 
 let client: AxiosInstance | null = null;
 

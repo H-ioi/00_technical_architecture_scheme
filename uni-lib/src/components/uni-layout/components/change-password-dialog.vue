@@ -3,10 +3,10 @@ import type { FormInstance, FormRules } from 'element-plus'
 import { ElMessage } from 'element-plus'
 import { computed, reactive, ref, watch } from 'vue'
 
-import { getUniRuntimeConfig, tryGetUniRuntimeConfig } from '@/runtime/config'
+import { getUniRuntimeConfig, tryGetUniRuntimeConfig } from '@/runtime'
 import { request } from '@/plugins/http-client'
-import { useUniI18n } from '@/locales/i18n'
-import { useUserStore } from '@/stores/uni-user'
+import { useUniI18n } from '@/locales/use-uni-i18n'
+import { useUserStore } from '@/stores'
 import type { UniLayoutChangePasswordPayload } from '@/types/uni-layout'
 
 defineOptions({

@@ -1,7 +1,7 @@
 import { defineStore } from "pinia";
 import { computed, ref } from "vue";
 
-import { tryGetUniRuntimeConfig } from "@/runtime/config";
+import { tryGetUniRuntimeConfig } from "@/runtime";
 import { storage } from "@/plugins/storage";
 
 export const useAppStore = defineStore("app", () => {

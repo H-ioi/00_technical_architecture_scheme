@@ -8,10 +8,8 @@ import { UniIcon } from '@/components/uni-icon'
 import { UniThemeSettings } from '@/components/uni-theme-settings'
 import { useUniTagsViewController } from '@/composables/use-uni-tags-view-controller'
 import { UniZhEnIcon } from '@/icons'
-import { tryGetUniRuntimeConfig } from '@/runtime/config'
-import { useAppStore } from '@/stores/uni-app'
-import { usePermissionStore } from '@/stores/uni-permission'
-import { useUserStore } from '@/stores/uni-user'
+import { tryGetUniRuntimeConfig } from '@/runtime'
+import { useAppStore, useMenuStore, useUserStore } from '@/stores'
 import type {
   UniLayoutBreadcrumbItem,
   UniLayoutIconMap,
@@ -132,7 +130,7 @@ const resolvedLogo = computed(() => {
   return defaultLayoutLogo
 })
 
-const permissionStore = usePermissionStore()
+const menuStore = useMenuStore()
 const appStore = useAppStore()
 const userStore = useUserStore()
 const route = useRoute()
@@ -143,7 +141,7 @@ const { tagsViewStore, viewKey, closeTag, refreshTag, closeOthers, closeAll } = 
   { fallbackPath: props.tagsFallback }
 )
 
-const resolvedMenus = computed(() => (props.autoWire ? permissionStore.menuRoutes : props.menus ?? []))
+const resolvedMenus = computed(() => (props.autoWire ? menuStore.menuRoutes : props.menus ?? []))
 const resolvedTags = computed(() => (props.autoWire ? tagsViewStore.visitedTags : props.tags))
 const resolvedActivePath = computed(() => (props.autoWire ? route.fullPath : props.activePath))
 const resolvedActiveMenuBase = computed(() =>
@@ -424,6 +422,8 @@ const onUserCommand = (command: string) => {
           v-if="showTags"
           :tags="resolvedTags"
           :active-path="resolvedActivePath"
+          :sync-from-route="autoWire"
+          :tags-fallback="tagsFallback"
           :translate="tr"
           @click="(path) => onTagClick(path)"
           @close="(path) => onTagClose(path)"
