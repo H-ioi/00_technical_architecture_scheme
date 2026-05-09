@@ -1,9 +1,13 @@
 <script setup lang="ts">
 import type { FormInstance, FormRules } from 'element-plus'
+import { ElMessage } from 'element-plus'
 import { computed, reactive, ref, watch } from 'vue'
 
+import { getUniRuntimeConfig, tryGetUniRuntimeConfig } from '@/runtime/config'
+import { request } from '@/plugins/http-client'
+import { useUniI18n } from '@/locales/i18n'
+import { useUserStore } from '@/stores/uni-user'
 import type { UniLayoutChangePasswordPayload } from '@/types/uni-layout'
-import { useUniI18n } from '@/services/i18n'
 
 defineOptions({
   name: 'UniLayoutChangePasswordDialog'
@@ -12,6 +16,7 @@ defineOptions({
 const props = withDefaults(
   defineProps<{
     modelValue: boolean
+    /** 未配置 <code>runtime.changePassword</code> 时生效，由父级控制提交与 loading */
     loading?: boolean
     width?: string
     destroyOnClose?: boolean
@@ -30,12 +35,19 @@ const emit = defineEmits<{
 }>()
 
 const { t } = useUniI18n()
+const userStore = useUserStore()
 const formRef = ref<FormInstance>()
 const form = reactive({
   password: '',
   newpassword1: '',
   newpassword2: ''
 })
+
+const managed = computed(() => Boolean(tryGetUniRuntimeConfig()?.changePassword))
+const innerLoading = ref(false)
+const effectiveLoading = computed(() =>
+  managed.value ? innerLoading.value : props.loading
+)
 
 const resetForm = () => {
   form.password = ''
@@ -95,11 +107,45 @@ const handleSubmit = async () => {
     return
   }
 
-  emit('submit', {
+  const payload: UniLayoutChangePasswordPayload = {
     password: form.password,
     newpassword1: form.newpassword1,
     newpassword2: form.newpassword2
-  })
+  }
+
+  if (managed.value) {
+    const cfg = getUniRuntimeConfig().changePassword
+    if (!cfg) {
+      return
+    }
+
+    innerLoading.value = true
+
+    try {
+      const body = {
+        username: userStore.profile?.username || userStore.profile?.name || '',
+        ...payload
+      }
+      const path = cfg.api.path
+      const method = (cfg.api.method ?? 'put').toUpperCase()
+
+      if (method === 'POST') {
+        await request.post(path, body)
+      } else {
+        await request.put(path, body)
+      }
+
+      ElMessage.success(t('layout.passwordChangeSuccess'))
+      visible.value = false
+      await cfg.onSuccess?.()
+    } finally {
+      innerLoading.value = false
+    }
+
+    return
+  }
+
+  emit('submit', payload)
 }
 </script>
 
@@ -124,7 +170,7 @@ const handleSubmit = async () => {
     <template #footer>
       <el-button @click="resetForm">{{ t('layout.reset') }}</el-button>
       <el-button @click="handleCancel">{{ t('layout.cancel') }}</el-button>
-      <el-button type="primary" :loading="loading" @click="handleSubmit">
+      <el-button type="primary" :loading="effectiveLoading" @click="handleSubmit">
         {{ t('layout.submit') }}
       </el-button>
     </template>

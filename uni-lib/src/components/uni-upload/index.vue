@@ -13,7 +13,7 @@ import type {
   UploadRequestOptions,
   UploadUserFile,
 } from "element-plus";
-import { useUniI18n } from "@/services/i18n";
+import { useUniI18n } from "@/locales/i18n";
 
 const i18n = useUniI18n();
 

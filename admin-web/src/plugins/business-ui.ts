@@ -1,23 +1,20 @@
 import type { App } from 'vue'
 import { storeToRefs } from 'pinia'
-import UniLib from 'uni-ui-lib'
+import UniLib, { patchUniI18nBridge, type UniAppLocale } from 'uni-ui-lib'
 import 'uni-ui-lib/style.css'
 
-import { DEFAULT_THEME } from '@/config'
+import { buildAdminUniRuntime } from '@/api/uni-runtime'
+import { DEFAULT_THEME, STORAGE_PREFIX } from '@/config'
 import { translateAppMessage } from '@/locales'
 import { useAppStore, usePermissionStore } from '@/stores'
-import { storage } from '@/utils/storage'
 
 export const setupBusinessUi = (app: App) => {
-  const appStore = useAppStore()
-  const { locale } = storeToRefs(appStore)
-
   app.use(UniLib, {
+    runtime: buildAdminUniRuntime(),
     i18n: {
-      t: (key) => translateAppMessage(key, key),
-      locale: () => appStore.locale,
-      localeRef: locale,
-      setLocale: appStore.setLocale
+      t: (key, params) => translateAppMessage(key, key, params),
+      locale: () => useAppStore().locale,
+      setLocale: (locale) => useAppStore().setLocale(locale as UniAppLocale)
     },
     permission: {
       defaultMode: 'remove',
@@ -28,8 +25,13 @@ export const setupBusinessUi = (app: App) => {
       }
     },
     theme: {
-      storageKey: storage.key('theme'),
+      storageKey: `${STORAGE_PREFIX}:theme`,
       defaultTheme: { ...DEFAULT_THEME }
     }
   })
+
+  const appStore = useAppStore()
+  const { locale } = storeToRefs(appStore)
+
+  patchUniI18nBridge({ localeRef: locale })
 }

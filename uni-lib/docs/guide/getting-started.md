@@ -27,7 +27,7 @@ createApp(App)
 </template>
 ```
 
-若已使用 `createUniI18nBridge` 并传入 `localeRef`，切换语言时 Element Plus 会同步更新。详见 [I18n](/services/i18n)。
+若已使用 `createUniI18nBridge` 并传入 `localeRef`，切换语言时 Element Plus 会同步更新。详见 [I18n](/locales/i18n)。
 
 也可以在 `app.use` 中传入 `i18n` 桥接配置；效果与手动调用 `createUniI18nBridge()` 一致。
 

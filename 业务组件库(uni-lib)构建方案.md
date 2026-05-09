@@ -71,18 +71,29 @@ uni-lib/
 │   │   ├── uni-upload/
 │   │   │   ├── index.ts
 │   │   │   └── index.vue
+│   │   ├── uni-theme-settings/
+│   │   │   ├── index.ts
+│   │   │   ├── index.vue
+│   │   │   └── runtime.ts
 │   │   └── ...
 │   ├── directives/
 │   ├── composables/
 │   ├── plugins/
-│   ├── services/
+│   │   ├── install.ts
+│   │   ├── request.ts
+│   │   ├── http-client.ts
+│   │   ├── auth.ts
+│   │   ├── storage.ts
+│   │   └── element-plus-locale.ts
+│   ├── locales/
+│   │   ├── i18n.ts
+│   │   └── lang/
 │   ├── styles/
 │   │   ├── index.scss
 │   │   ├── base.scss
 │   │   ├── element-plus.scss
 │   │   ├── utilities.scss
 │   │   └── variables.scss
-│   ├── theme/
 │   ├── types/
 │   ├── utils/
 │   ├── style.scss
@@ -111,7 +122,8 @@ uni-lib
 ├── components      # Uni* 组件
 ├── directives      # v-uni-* 指令
 ├── composables     # useUni* 组合式函数
-├── services        # createUniRequest / createUniAuth 等协议层
+├── plugins         # install、createUniRequest / createUniAuth、HTTP 客户端、存储等
+├── locales         # 默认语言包与 vue-i18n 桥接（i18n.ts）
 ├── styles          # 全局样式、Element Plus 覆盖、工具类
 ├── theme           # 设计令牌与主题工具
 └── utils           # 纯函数工具
@@ -169,8 +181,7 @@ import "uni-lib/components/uni-search-form/style.css";
 - `dist/index.cjs`：CJS 兼容入口（如确有需要）。
 - `dist/index.d.ts`：类型声明。
 - `dist/style.css`：全量样式。
-- `dist/components/*`：组件级 JS、类型与样式。
-- `dist/theme/*`：主题变量与样式入口。
+- `dist/components/*`：组件级 JS、类型与样式（含 `uni-theme-settings/runtime` 主题 API 类型）。
 
 `package.json` 建议：
 
@@ -185,8 +196,8 @@ import "uni-lib/components/uni-search-form/style.css";
       "import": "./dist/index.mjs"
     },
     "./theme": {
-      "types": "./dist/theme/index.d.ts",
-      "import": "./dist/theme/index.mjs"
+      "types": "./dist/src/components/uni-theme-settings/runtime.d.ts",
+      "import": "./dist/index.mjs"
     },
     "./components/*": {
       "types": "./dist/components/*/index.d.ts",
@@ -252,11 +263,12 @@ uni-lib/
 │   │   ├── uni-form.md
 │   │   ├── uni-search-form.md
 │   │   └── uni-upload.md
-│   ├── services/
+│   ├── plugins/
 │   │   ├── request.md
 │   │   ├── auth.md
-│   │   ├── i18n.md
 │   │   └── theme.md
+│   ├── locales/
+│   │   └── i18n.md
 │   └── index.md
 └── playground/
 ```
@@ -535,13 +547,12 @@ const request = createUniRequest({
 组件库必须提供唯一全局样式入口 `src/style.scss`，业务工程通过 `import 'uni-ui-lib/style.css'` 一次性引入。`style.scss` 只负责聚合，不直接写业务样式：
 
 ```scss
-@use "./theme/index.scss" as theme;
 @use "./styles/index.scss" as styles;
 ```
 
 `src/styles` 分层约定：
 
-- `variables.scss`：字体、滚动条、间距等静态全局变量。
+- `variables.scss`：`--uni-*` 语义色/圆角静态默认、字体、滚动条、UniLayout 用 `--uni-layout-*` 等全局变量。
 - `base.scss`：盒模型、基础字体等全局基础样式，不直接覆盖浏览器或 Element Plus 的全局滚动条。
 - `element-plus.scss`：集中覆盖 Element Plus 全局变量和结构性样式，例如 popover、dialog、drawer、table。
 - `utilities.scss`：少量跨项目通用工具类，例如省略号、居中、滚动容器；滚动条美化只能通过 `.uni-scrollbar` 显式启用。

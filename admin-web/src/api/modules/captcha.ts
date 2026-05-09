@@ -1,6 +1,6 @@
 import CryptoJS from 'crypto-js'
 
-import { request } from '@/utils/request'
+import { request } from 'uni-ui-lib'
 
 export interface CaptchaImageData {
   originalImageBase64: string

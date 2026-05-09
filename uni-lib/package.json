@@ -61,18 +61,18 @@
       "import": "./dist/index.mjs",
       "require": "./dist/index.cjs"
     },
-    "./services/request": {
-      "types": "./dist/src/services/request.d.ts",
+    "./plugins/request": {
+      "types": "./dist/src/plugins/request.d.ts",
       "import": "./dist/index.mjs",
       "require": "./dist/index.cjs"
     },
-    "./services/auth": {
-      "types": "./dist/src/services/auth.d.ts",
+    "./plugins/auth": {
+      "types": "./dist/src/plugins/auth.d.ts",
       "import": "./dist/index.mjs",
       "require": "./dist/index.cjs"
     },
-    "./services/i18n": {
-      "types": "./dist/src/services/i18n.d.ts",
+    "./locales/i18n": {
+      "types": "./dist/src/locales/i18n.d.ts",
       "import": "./dist/index.mjs",
       "require": "./dist/index.cjs"
     },
@@ -97,7 +97,7 @@
       "require": "./dist/index.cjs"
     },
     "./theme": {
-      "types": "./dist/src/theme/index.d.ts",
+      "types": "./dist/src/components/uni-theme-settings/runtime.d.ts",
       "import": "./dist/index.mjs",
       "require": "./dist/index.cjs"
     },

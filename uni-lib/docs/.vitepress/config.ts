@@ -12,7 +12,7 @@ export default defineConfig({
     nav: [
       { text: "指南", link: "/guide/getting-started" },
       { text: "组件", link: "/components/uni-data-table" },
-      { text: "服务", link: "/services/request" },
+      { text: "插件能力", link: "/plugins/request" },
     ],
     sidebar: [
       {
@@ -33,13 +33,16 @@ export default defineConfig({
         ],
       },
       {
-        text: "服务",
+        text: "插件能力",
         items: [
-          { text: "Request", link: "/services/request" },
-          { text: "Auth", link: "/services/auth" },
-          { text: "I18n", link: "/services/i18n" },
-          { text: "Theme", link: "/services/theme" },
+          { text: "Request", link: "/plugins/request" },
+          { text: "Auth", link: "/plugins/auth" },
+          { text: "Theme", link: "/plugins/theme" },
         ],
+      },
+      {
+        text: "国际化",
+        items: [{ text: "I18n 桥接", link: "/locales/i18n" }],
       },
     ],
   },

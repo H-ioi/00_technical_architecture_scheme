@@ -1,7 +1,7 @@
 import { API_PATHS } from '@/api/constants'
 import type { PageResult } from '@/types/api'
 import type { StudentListParams, StudentRecord } from '@/types/modules/member-student'
-import { request } from '@/utils/request'
+import { request } from 'uni-ui-lib'
 
 // 分页查询学生列表。
 export const fetchStudentPage = (params: StudentListParams) =>

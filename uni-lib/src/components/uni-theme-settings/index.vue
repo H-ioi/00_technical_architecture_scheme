@@ -7,7 +7,7 @@ import {
   getStoredUniTheme,
   saveUniTheme,
   type UniThemeOptions,
-} from "@/theme";
+} from "./runtime";
 
 defineOptions({
   name: "UniThemeSettings",

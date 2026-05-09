@@ -6,7 +6,7 @@
 import { computed, ref, watch } from "vue";
 
 import UniForm from "@/components/uni-form/index.vue";
-import { useUniI18n } from "@/services/i18n";
+import { useUniI18n } from "@/locales/i18n";
 import type { Recordable } from "@/types/shared";
 import type { UniFormConfig, UniFormField } from "@/types/uni-form";
 import {

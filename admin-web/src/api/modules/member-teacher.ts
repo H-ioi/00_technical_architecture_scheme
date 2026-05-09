@@ -1,7 +1,7 @@
 import { API_PATHS } from '@/api/constants'
 import type { PageResult } from '@/types/api'
 import type { TeacherListParams, TeacherRecord } from '@/types/modules/member-teacher'
-import { request } from '@/utils/request'
+import { request } from 'uni-ui-lib'
 
 // 分页查询教师列表。
 export const fetchTeacherPage = (params: TeacherListParams) =>

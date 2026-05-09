@@ -7,7 +7,7 @@ import { DocumentCopy } from "@element-plus/icons-vue";
 import { ElMessage } from "element-plus";
 import { computed } from "vue";
 
-import { useUniI18n } from "@/services/i18n";
+import { useUniI18n } from "@/locales/i18n";
 import type { Recordable, UniOption } from "@/types/shared";
 import type { UniTableColumn } from "@/types/uni-table";
 import { copyText } from "@/utils/copy";

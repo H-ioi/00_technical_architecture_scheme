@@ -9,6 +9,9 @@ import { UniThemeSettings } from "./components/uni-theme-settings";
 import { UniUpload } from "./components/uni-upload";
 import { install } from "./plugins/install";
 import "./style.scss";
+import defaultLayoutLogoUrl from "./assets/images/logo-top.png";
+
+export const uniLayoutDefaultLogoUrl = defaultLayoutLogoUrl;
 
 export {
   UniConfigProvider,
@@ -22,12 +25,17 @@ export {
   UniUpload,
 };
 export * from "./plugins/install";
+export * from "./runtime/config";
 export * from "./icons";
 export * from "./types/shared";
 export * from "./types/uni-table";
 export * from "./types/uni-form";
 export * from "./types/uni-data-table";
 export * from "./types/uni-layout";
+export * from "./types/i18n";
+export * from "./types/api";
+export * from "./types/admin-route";
+export * from "./types/user-profile";
 export * from "./directives/copy";
 export * from "./directives/debounce-click";
 export * from "./directives/permission";
@@ -35,11 +43,16 @@ export * from "./composables/use-uni-list-state";
 export * from "./composables/use-uni-permission";
 export * from "./composables/use-uni-tags-view-controller";
 export * from "./stores/uni-tags-view";
-export * from "./services/request";
-export * from "./services/auth";
-export * from "./services/element-plus-locale";
-export * from "./services/i18n";
-export * from "./theme";
+export * from "./stores/uni-app";
+export * from "./stores/uni-user";
+export * from "./stores/uni-permission";
+export * from "./plugins/request";
+export * from "./plugins/auth";
+export * from "./plugins/http-client";
+export * from "./plugins/storage";
+export * from "./plugins/element-plus-locale";
+export * from "./locales";
+export * from "./components/uni-theme-settings/runtime";
 export * from "./utils/format";
 export * from "./utils/copy";
 export * from "./utils/options";

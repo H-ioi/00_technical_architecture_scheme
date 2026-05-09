@@ -1,8 +1,7 @@
-import { createUniAuth } from 'uni-ui-lib'
 import CryptoJS from 'crypto-js'
+import { request, type UniLoginSnapshot, type UniUserProfile } from 'uni-ui-lib'
 
-import type { ChangePasswordParams, LoginParams, LoginResult, UserProfile } from '@/types/auth'
-import { request } from '@/utils/request'
+import type { LoginParams } from '@/types/auth'
 
 const LOGIN_PASSWORD_KEY = 'unixunixunixunix'
 
@@ -24,7 +23,7 @@ const normalizeAuthorities = (authorities?: OAuthTokenResult['user_info']['autho
     .map((item) => (typeof item === 'string' ? item : item.authority))
     .filter(Boolean) as string[]
 
-const normalizeProfile = (user?: OAuthTokenResult['user_info'], roles: string[] = []): UserProfile => ({
+const normalizeProfile = (user?: OAuthTokenResult['user_info'], roles: string[] = []): UniUserProfile => ({
   id: String(user?.userId ?? user?.id ?? ''),
   username: user?.username,
   name: user?.nickname || user?.username || '',
@@ -32,7 +31,6 @@ const normalizeProfile = (user?: OAuthTokenResult['user_info'], roles: string[] 
   roles
 })
 
-// 加密登录密码。
 const encryptLoginPassword = (password: string) => {
   const key = CryptoJS.enc.Latin1.parse(LOGIN_PASSWORD_KEY)
 
@@ -43,8 +41,7 @@ const encryptLoginPassword = (password: string) => {
   }).toString()
 }
 
-// 请求登录接口。
-const requestLogin = async (params: LoginParams): Promise<LoginResult> => {
+const requestLogin = async (params: LoginParams): Promise<UniLoginSnapshot> => {
   const data = new URLSearchParams()
 
   data.append('username', params.username)
@@ -74,39 +71,17 @@ const requestLogin = async (params: LoginParams): Promise<LoginResult> => {
   }
 }
 
-export const authService = createUniAuth<LoginParams, LoginResult['user']>({
-  login: async (params) => {
-    const result = await requestLogin(params)
+export const fetchLoginSnapshot = async (params: unknown): Promise<UniLoginSnapshot> => {
+  const result = await requestLogin(params as LoginParams)
 
-    return {
-      tokens: {
-        accessToken: result.accessToken,
-        refreshToken: result.refreshToken
-      },
-      user: result.user
-    }
-  }
-})
-
-// 登录系统。
-export const loginApi = async (params: LoginParams): Promise<LoginResult> => {
-  const result = await requestLogin(params)
-
-  authService.setTokens({
+  return {
     accessToken: result.accessToken,
-    refreshToken: result.refreshToken
-  })
-
-  return result
+    refreshToken: result.refreshToken,
+    user: result.user,
+    permissions: result.permissions
+  }
 }
 
-// 退出系统。
-export const logoutApi = async () => {
-  await request.delete<void, void>('/auth/token/logout')
-  await authService.logout()
-}
-
-// 修改当前用户密码。
-export const changePasswordApi = async (data: ChangePasswordParams) => {
-  await request.put<void, void>('/upms/user/edit', data)
+export const submitLogoutRequest = async () => {
+  await request.delete('/auth/token/logout')
 }

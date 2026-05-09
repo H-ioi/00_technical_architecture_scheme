@@ -2,7 +2,7 @@ import type { RouteRecordNormalized } from 'vue-router'
 
 import type { MenuPermissionResult } from '@/types/permission'
 import type { AppMenuRecord, AppRouteMeta } from '@/types/route'
-import { request } from '@/utils/request'
+import { request } from 'uni-ui-lib'
 
 interface BackendMenuRecord {
   path?: string

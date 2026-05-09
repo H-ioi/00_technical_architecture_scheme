@@ -9,7 +9,7 @@ import type {
   ProtocolSignRecord,
   UploadFileResult
 } from '@/types/modules/protocol'
-import { request } from '@/utils/request'
+import { request } from 'uni-ui-lib'
 
 const resolveUploadUrl = () => {
   const uploadUrl = import.meta.env.VITE_UPLOAD_URL || '/files/upload'

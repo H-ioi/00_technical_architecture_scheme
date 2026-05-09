@@ -38,16 +38,41 @@ export const setupRouterGuards = (router: Router) => {
     }
 
     if (!permissionStore.dynamicRoutesLoaded) {
-      const result = await fetchMenuPermissions(router.getRoutes())
+      try {
+        const result = await fetchMenuPermissions(router.getRoutes())
 
-      permissionStore.setMenus(result?.menus)
-      permissionStore.setAllowedPaths(result?.paths)
+        permissionStore.setMenus(result?.menus)
+        permissionStore.setAllowedPaths(result?.paths)
 
-      if (Array.isArray(result?.permissions) && result.permissions.length) {
-        permissionStore.setPermissionCodes(result.permissions)
+        if (Array.isArray(result?.permissions) && result.permissions.length) {
+          permissionStore.setPermissionCodes(result.permissions)
+        }
+
+        permissionStore.markDynamicRoutesLoaded()
+      } catch (error: unknown) {
+        permissionStore.markDynamicRoutesLoaded()
+
+        const status =
+          typeof error === 'object' &&
+          error !== null &&
+          'response' in error &&
+          typeof (error as { response?: { status?: unknown } }).response?.status === 'number'
+            ? (error as { response: { status: number } }).response.status
+            : undefined
+
+        if (status === 401) {
+          userStore.resetAuth()
+
+          return {
+            path: '/login',
+            query: { redirect: to.fullPath }
+          }
+        }
+
+        console.error('[router] fetchMenuPermissions failed', error)
+
+        return '/403'
       }
-
-      permissionStore.markDynamicRoutesLoaded()
     }
 
     const routePermissions = to.meta.permission as string[] | undefined

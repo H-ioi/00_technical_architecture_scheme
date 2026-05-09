@@ -16,7 +16,7 @@ import {
 } from "vue";
 
 import { hasUniPermission } from "@/directives/permission";
-import { useUniI18n } from "@/services/i18n";
+import { useUniI18n } from "@/locales/i18n";
 import type { Recordable } from "@/types/shared";
 import type {
   UniPaginationConfig,

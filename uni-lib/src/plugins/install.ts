@@ -17,10 +17,21 @@ import {
   setupPermissionDirective,
   type UniPermissionOptions,
 } from "@/directives/permission";
-import { createUniI18nBridge, type UniI18nBridge } from "@/services/i18n";
-import { setupUniTheme, type UniThemeSetupOptions } from "@/theme";
+import {
+  createUniI18nBridge,
+  type UniI18nBridge,
+} from "@/locales/i18n";
+import { initUniHttpClient } from "@/plugins/http-client";
+import { setUniStoragePrefix } from "@/plugins/storage";
+import { setUniRuntimeConfig, type UniLibRuntimeOptions } from "@/runtime/config";
+import {
+  setupUniTheme,
+  type UniThemeSetupOptions,
+} from "@/components/uni-theme-settings/runtime";
 
 export interface UniLibInstallOptions {
+  /** 模板注入：存储前缀、HTTP、鉴权、改密接口等 */
+  runtime?: UniLibRuntimeOptions;
   i18n?: UniI18nBridge;
   permission?: UniPermissionOptions;
   theme?: UniThemeSetupOptions;
@@ -42,6 +53,12 @@ const components = [
 ];
 
 export const install = (app: App, options: UniLibInstallOptions = {}) => {
+  if (options.runtime) {
+    setUniStoragePrefix(options.runtime.storagePrefix);
+    setUniRuntimeConfig(options.runtime);
+    initUniHttpClient();
+  }
+
   if (options.i18n) {
     createUniI18nBridge(options.i18n);
   }

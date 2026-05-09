@@ -6,8 +6,8 @@
 import { ElConfigProvider } from "element-plus";
 import { computed } from "vue";
 
-import { resolveElementPlusLocale } from "@/services/element-plus-locale";
-import { useUniI18n, useUniLocaleRef } from "@/services/i18n";
+import { resolveElementPlusLocale } from "@/plugins/element-plus-locale";
+import { useUniI18n, useUniLocaleRef } from "@/locales/i18n";
 
 const i18n = useUniI18n();
 const localeRef = useUniLocaleRef();

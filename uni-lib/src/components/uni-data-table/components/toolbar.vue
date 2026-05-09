@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { FullScreen, Refresh, Setting } from "@element-plus/icons-vue";
 
-import { useUniI18n } from "@/services/i18n";
+import { useUniI18n } from "@/locales/i18n";
 import type { UniTableToolbarConfig } from "@/types/uni-table";
 import type { UniTableColumnState } from "@/types/uni-data-table";
 import UniTableColumnSettings from "./column-settings.vue";

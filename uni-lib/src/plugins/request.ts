@@ -16,6 +16,10 @@ export interface UniRequestOptions {
   timeout?: number;
   getAccessToken?: () => string | undefined;
   getTenantId?: () => string | number | undefined;
+  /** 默认 <code>X-Tenant-Id</code>，可改为如 <code>TENANT-ID</code> */
+  tenantIdHeaderName?: string;
+  /** 每次请求合并的固定请求头（如 <code>version</code>） */
+  commonHeaders?: Record<string, string>;
   onUnauthorized?: () => void;
   onForbidden?: () => void;
   onServiceUnavailable?: () => void;
@@ -32,6 +36,11 @@ export interface UniRequestOptions {
   onResponse?: (
     response: AxiosResponse,
   ) => AxiosResponse | Promise<AxiosResponse>;
+  /**
+   * 在默认响应处理前解析 <code>response.data</code>（如 <code>{ code, data, message }</code> 业务壳）。
+   * 抛出错误将走 Axios 错误链路。
+   */
+  parseResponseData?: (data: unknown) => unknown;
 }
 
 type UniInternalRequestConfig = InternalAxiosRequestConfig & {
@@ -127,8 +136,17 @@ export const createUniRequest = (
         config.headers.Authorization = `Bearer ${token}`;
       }
 
+      if (
+        options.commonHeaders &&
+        typeof config.headers === "object" &&
+        config.headers
+      ) {
+        Object.assign(config.headers, options.commonHeaders);
+      }
+
       if (tenantId !== undefined && tenantId !== null && tenantId !== "") {
-        config.headers["X-Tenant-Id"] = String(tenantId);
+        const tenantKey = options.tenantIdHeaderName ?? "X-Tenant-Id";
+        config.headers[tenantKey] = String(tenantId);
       }
 
       if (options.preventDuplicate) {
@@ -150,7 +168,22 @@ export const createUniRequest = (
       removePendingRequest(response.config as UniInternalRequestConfig);
       options.progress?.done();
 
-      return options.onResponse ? options.onResponse(response) : response;
+      let next = response;
+
+      if (options.parseResponseData) {
+        try {
+          const parsed = options.parseResponseData(response.data);
+          next = { ...response, data: parsed };
+        } catch (error) {
+          return Promise.reject(error);
+        }
+      }
+
+      const resolved = options.onResponse
+        ? await Promise.resolve(options.onResponse(next))
+        : next;
+
+      return resolved.data;
     },
     (error: AxiosError) => {
       removePendingRequest(error.config as UniInternalRequestConfig);
