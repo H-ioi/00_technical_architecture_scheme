@@ -1,5 +1,10 @@
 <template>
-  <el-drawer v-model="visible" class="uni-theme-settings" :title="title" size="520px">
+  <el-drawer
+    v-model="visible"
+    class="uni-theme-settings"
+    :title="title"
+    size="520px"
+  >
     <el-form label-position="top" class="uni-theme-settings__form">
       <el-divider content-position="left">语义色与尺寸</el-divider>
 
@@ -67,13 +72,22 @@
         等），一行一键值；重复键以后者为准。
       </p>
 
-      <div v-for="(row, index) in extraVariables" :key="index" class="uni-theme-settings__extra-row">
+      <div
+        v-for="(row, index) in extraVariables"
+        :key="index"
+        class="uni-theme-settings__extra-row"
+      >
         <el-input v-model="row.key" placeholder="变量名，如 --uni-layout-bg" />
         <el-input v-model="row.value" placeholder="值" />
         <el-button :icon="Delete" circle @click="removeExtraVariable(index)" />
       </div>
 
-      <el-button class="uni-theme-settings__add" :icon="Plus" @click="addExtraVariable">添加变量</el-button>
+      <el-button
+        class="uni-theme-settings__add"
+        :icon="Plus"
+        @click="addExtraVariable"
+        >添加变量</el-button
+      >
     </el-form>
 
     <template #footer>
@@ -85,103 +99,117 @@
 </template>
 
 <script setup lang="ts">
-import { Delete, Plus } from '@element-plus/icons-vue'
-import { computed, reactive, ref, watch } from 'vue'
+import { Delete, Plus } from "@element-plus/icons-vue";
+import { computed, reactive, ref, watch } from "vue";
 
-import { applyUniTheme, getStoredUniTheme, saveUniTheme } from './runtime'
-import type { UniThemeOptions } from '@/types/uni-theme'
+import { applyUniTheme, getStoredUniTheme, saveUniTheme } from "./runtime";
+import type { UniThemeOptions } from "@/types/uni-theme";
 
 defineOptions({
-  name: 'UniThemeSettings'
-})
+  name: "UniThemeSettings",
+});
 
 /** 由表单固定维护的 EP 尺寸变量，其余写入 `variables` 的条目归入「自定义 CSS 变量」编辑 */
-const MANAGED_VARIABLE_KEYS = new Set(['--el-component-size-large', '--el-component-size', '--el-component-size-small'])
+const MANAGED_VARIABLE_KEYS = new Set([
+  "--el-component-size-large",
+  "--el-component-size",
+  "--el-component-size-small",
+]);
 
 const props = withDefaults(
   defineProps<{
-    modelValue: boolean
-    defaultTheme?: UniThemeOptions
-    storageKey?: string
-    title?: string
+    modelValue: boolean;
+    defaultTheme?: UniThemeOptions;
+    storageKey?: string;
+    title?: string;
   }>(),
   {
     defaultTheme: () => ({
-      primaryColor: '#BA8E62',
-      pageBgColor: '#f5f7fb',
-      cardBgColor: '#ffffff',
-      borderColor: '#e5e7eb',
-      textColor: '#1f2937',
-      textColorSecondary: '#6b7280',
-      radiusBase: '8px'
+      primaryColor: "#BA8E62",
+      pageBgColor: "#f5f7fb",
+      cardBgColor: "#ffffff",
+      borderColor: "#e5e7eb",
+      textColor: "#1f2937",
+      textColorSecondary: "#6b7280",
+      radiusBase: "8px",
     }),
-    storageKey: 'uni-lib:theme',
-    title: '主题设置'
-  }
-)
+    storageKey: "uni-lib:theme",
+    title: "主题设置",
+  },
+);
 
 const emit = defineEmits<{
-  'update:modelValue': [visible: boolean]
-  applied: [theme: UniThemeOptions]
-}>()
+  "update:modelValue": [visible: boolean];
+  applied: [theme: UniThemeOptions];
+}>();
 
 const form = reactive({
-  primaryColor: '#BA8E62',
-  pageBgColor: '#f5f7fb',
-  cardBgColor: '#ffffff',
-  borderColor: '#e5e7eb',
-  textColor: '#1f2937',
-  textColorSecondary: '#6b7280',
-  radiusBase: '8px',
-  componentSizeLarge: '40px',
-  componentSize: '32px',
-  componentSizeSmall: '24px'
-})
+  primaryColor: "#BA8E62",
+  pageBgColor: "#f5f7fb",
+  cardBgColor: "#ffffff",
+  borderColor: "#e5e7eb",
+  textColor: "#1f2937",
+  textColorSecondary: "#6b7280",
+  radiusBase: "8px",
+  componentSizeLarge: "40px",
+  componentSize: "32px",
+  componentSizeSmall: "24px",
+});
 
-const extraVariables = ref<Array<{ key: string; value: string }>>([])
+const extraVariables = ref<Array<{ key: string; value: string }>>([]);
 
 const visible = computed({
   get: () => props.modelValue,
-  set: (value) => emit('update:modelValue', value)
-})
+  set: (value) => emit("update:modelValue", value),
+});
 
 const syncExtraFromVariables = (vars: Record<string, string> | undefined) => {
   if (!vars) {
-    extraVariables.value = []
-    return
+    extraVariables.value = [];
+    return;
   }
   extraVariables.value = Object.entries(vars)
     .filter(([k]) => !MANAGED_VARIABLE_KEYS.has(k))
-    .map(([key, value]) => ({ key, value }))
-}
+    .map(([key, value]) => ({ key, value }));
+};
 
 const syncForm = (theme: UniThemeOptions) => {
-  const d = props.defaultTheme
+  const d = props.defaultTheme;
 
-  form.primaryColor = theme.primaryColor ?? d.primaryColor ?? '#BA8E62'
-  form.pageBgColor = theme.pageBgColor ?? d.pageBgColor ?? '#f5f7fb'
-  form.cardBgColor = theme.cardBgColor ?? d.cardBgColor ?? '#ffffff'
-  form.borderColor = theme.borderColor ?? d.borderColor ?? '#e5e7eb'
-  form.textColor = theme.textColor ?? d.textColor ?? '#1f2937'
-  form.textColorSecondary = theme.textColorSecondary ?? d.textColorSecondary ?? '#6b7280'
-  form.radiusBase = theme.radiusBase ?? d.radiusBase ?? '8px'
-  form.componentSizeLarge = theme.variables?.['--el-component-size-large'] ?? d.variables?.['--el-component-size-large'] ?? '40px'
-  form.componentSize = theme.variables?.['--el-component-size'] ?? d.variables?.['--el-component-size'] ?? '32px'
-  form.componentSizeSmall = theme.variables?.['--el-component-size-small'] ?? d.variables?.['--el-component-size-small'] ?? '24px'
+  form.primaryColor = theme.primaryColor ?? d.primaryColor ?? "#BA8E62";
+  form.pageBgColor = theme.pageBgColor ?? d.pageBgColor ?? "#f5f7fb";
+  form.cardBgColor = theme.cardBgColor ?? d.cardBgColor ?? "#ffffff";
+  form.borderColor = theme.borderColor ?? d.borderColor ?? "#e5e7eb";
+  form.textColor = theme.textColor ?? d.textColor ?? "#1f2937";
+  form.textColorSecondary =
+    theme.textColorSecondary ?? d.textColorSecondary ?? "#6b7280";
+  form.radiusBase = theme.radiusBase ?? d.radiusBase ?? "8px";
+  form.componentSizeLarge =
+    theme.variables?.["--el-component-size-large"] ??
+    d.variables?.["--el-component-size-large"] ??
+    "40px";
+  form.componentSize =
+    theme.variables?.["--el-component-size"] ??
+    d.variables?.["--el-component-size"] ??
+    "32px";
+  form.componentSizeSmall =
+    theme.variables?.["--el-component-size-small"] ??
+    d.variables?.["--el-component-size-small"] ??
+    "24px";
 
-  syncExtraFromVariables(theme.variables)
-}
+  syncExtraFromVariables(theme.variables);
+};
 
 const buildExtrasObject = (): Record<string, string> => {
-  const out: Record<string, string> = {}
+  const out: Record<string, string> = {};
   for (const row of extraVariables.value) {
-    const k = row.key.trim()
+    const k = row.key.trim();
     if (k) {
-      out[k] = row.value
+      out[k] = row.value;
     }
   }
-  return out
-}
+  return out;
+};
 
 const buildTheme = (): UniThemeOptions => ({
   ...props.defaultTheme,
@@ -194,43 +222,43 @@ const buildTheme = (): UniThemeOptions => ({
   radiusBase: form.radiusBase,
   variables: {
     ...props.defaultTheme.variables,
-    '--el-component-size-large': form.componentSizeLarge,
-    '--el-component-size': form.componentSize,
-    '--el-component-size-small': form.componentSizeSmall,
-    ...buildExtrasObject()
-  }
-})
+    "--el-component-size-large": form.componentSizeLarge,
+    "--el-component-size": form.componentSize,
+    "--el-component-size-small": form.componentSizeSmall,
+    ...buildExtrasObject(),
+  },
+});
 
 const applyTheme = () => {
-  const theme = buildTheme()
+  const theme = buildTheme();
 
-  applyUniTheme(theme)
-  saveUniTheme(theme, props.storageKey)
-  emit('applied', theme)
-  visible.value = false
-}
+  applyUniTheme(theme);
+  saveUniTheme(theme, props.storageKey);
+  emit("applied", theme);
+  visible.value = false;
+};
 
 const resetTheme = () => {
-  syncForm(props.defaultTheme)
-  applyTheme()
-}
+  syncForm(props.defaultTheme);
+  applyTheme();
+};
 
 const addExtraVariable = () => {
-  extraVariables.value.push({ key: '', value: '' })
-}
+  extraVariables.value.push({ key: "", value: "" });
+};
 
 const removeExtraVariable = (index: number) => {
-  extraVariables.value.splice(index, 1)
-}
+  extraVariables.value.splice(index, 1);
+};
 
 watch(
   () => props.modelValue,
   (nextVisible) => {
     if (nextVisible) {
-      syncForm(getStoredUniTheme(props.storageKey) ?? props.defaultTheme)
+      syncForm(getStoredUniTheme(props.storageKey) ?? props.defaultTheme);
     }
-  }
-)
+  },
+);
 </script>
 
 <style scoped lang="scss">

@@ -9,6 +9,9 @@ export * from "@/types/uni-layout";
 export default {
   install(app: App) {
     app.component("UniLayout", UniLayout);
-    app.component("UniLayoutChangePasswordDialog", UniLayoutChangePasswordDialog);
+    app.component(
+      "UniLayoutChangePasswordDialog",
+      UniLayoutChangePasswordDialog,
+    );
   },
 };

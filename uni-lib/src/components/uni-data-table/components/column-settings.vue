@@ -1,6 +1,6 @@
 <template>
   <div class="uni-table-column-settings__title">
-    {{ $t('dataTable.columnSetting') }}
+    {{ $t("dataTable.columnSetting") }}
   </div>
   <div class="uni-table-column-settings">
     <div
@@ -10,14 +10,21 @@
       draggable="true"
       @dragstart="emit('drag-start', column.prop)"
       @dragover.prevent
-      @drop="emit('drop', column.prop)">
+      @drop="emit('drop', column.prop)"
+    >
       <el-icon class="uni-table-column-settings__drag">
         <Rank />
       </el-icon>
       <el-checkbox v-model="column.visible">
         {{ column.label }}
       </el-checkbox>
-      <el-select v-model="column.fixed" size="small" clearable :placeholder="$t('dataTable.fixed')" style="width: 72px">
+      <el-select
+        v-model="column.fixed"
+        size="small"
+        clearable
+        :placeholder="$t('dataTable.fixed')"
+        style="width: 72px"
+      >
         <el-option :label="$t('dataTable.fixedLeft')" value="left" />
         <el-option :label="$t('dataTable.fixedRight')" value="right" />
       </el-select>
@@ -26,18 +33,18 @@
 </template>
 
 <script setup lang="ts">
-import { Rank } from '@element-plus/icons-vue'
+import { Rank } from "@element-plus/icons-vue";
 
-import type { UniTableColumnState } from '@/types/uni-data-table'
+import type { UniTableColumnState } from "@/types/uni-data-table";
 
 defineProps<{
-  columns: UniTableColumnState[]
-}>()
+  columns: UniTableColumnState[];
+}>();
 
 const emit = defineEmits<{
-  'drag-start': [prop: string]
-  drop: [prop: string]
-}>()
+  "drag-start": [prop: string];
+  drop: [prop: string];
+}>();
 </script>
 
 <style scoped lang="scss">

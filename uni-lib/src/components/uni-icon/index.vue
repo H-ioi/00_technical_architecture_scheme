@@ -1,32 +1,40 @@
 <template>
-  <span class="uni-icon" :style="iconStyle" :role="title ? 'img' : undefined" :aria-label="title" :aria-hidden="title ? undefined : 'true'">
+  <span
+    class="uni-icon"
+    :style="iconStyle"
+    :role="title ? 'img' : undefined"
+    :aria-label="title"
+    :aria-hidden="title ? undefined : 'true'"
+  >
     <component :is="icon" />
   </span>
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
-import type { Component } from 'vue'
+import { computed } from "vue";
+import type { Component } from "vue";
 
 const props = withDefaults(
   defineProps<{
-    icon: Component
-    size?: number | string
-    color?: string
-    title?: string
+    icon: Component;
+    size?: number | string;
+    color?: string;
+    title?: string;
   }>(),
   {
-    size: 16
-  }
-)
+    size: 16,
+  },
+);
 
-const normalizedSize = computed(() => (typeof props.size === 'number' ? `${props.size}px` : props.size))
+const normalizedSize = computed(() =>
+  typeof props.size === "number" ? `${props.size}px` : props.size,
+);
 
 const iconStyle = computed(() => ({
   width: normalizedSize.value,
   height: normalizedSize.value,
-  color: props.color
-}))
+  color: props.color,
+}));
 </script>
 
 <style scoped lang="scss">

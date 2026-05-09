@@ -18,5 +18,11 @@
       "@/*": ["./src/*"]
     }
   },
-  "include": ["src/**/*.ts", "src/**/*.vue", "docs/**/*.ts", "playground/**/*.ts", "playground/**/*.vue"]
+  "include": [
+    "src/**/*.ts",
+    "src/**/*.vue",
+    "docs/**/*.ts",
+    "playground/**/*.ts",
+    "playground/**/*.vue"
+  ]
 }

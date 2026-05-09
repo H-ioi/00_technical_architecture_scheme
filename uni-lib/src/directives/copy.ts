@@ -36,7 +36,9 @@ export const uniCopyDirective: Directive<HTMLElement, UniCopyValue> = {
 
       try {
         await copyText(text);
-        ElMessage.success(successMessage ?? uniLibTranslate("common.copySuccess"));
+        ElMessage.success(
+          successMessage ?? uniLibTranslate("common.copySuccess"),
+        );
       } catch {
         ElMessage.error(errorMessage ?? uniLibTranslate("common.copyFailed"));
       }

@@ -7,12 +7,20 @@
             <component :is="resolveIcon(menu.meta.icon, iconMap)" />
           </el-icon>
         </slot>
-        <slot name="menu-title" :menu="menu" :title="resolveTitle(menu, translate)">
+        <slot
+          name="menu-title"
+          :menu="menu"
+          :title="resolveTitle(menu, translate)"
+        >
           <span>{{ resolveTitle(menu, translate) }}</span>
         </slot>
       </template>
 
-      <UniLayoutMenuTree :menus="menu.children" :icon-map="iconMap" :translate="translate" />
+      <UniLayoutMenuTree
+        :menus="menu.children"
+        :icon-map="iconMap"
+        :translate="translate"
+      />
     </el-sub-menu>
 
     <el-menu-item v-else :index="menu.path">
@@ -22,7 +30,11 @@
         </el-icon>
       </slot>
       <template #title>
-        <slot name="menu-title" :menu="menu" :title="resolveTitle(menu, translate)">
+        <slot
+          name="menu-title"
+          :menu="menu"
+          :title="resolveTitle(menu, translate)"
+        >
           {{ resolveTitle(menu, translate) }}
         </slot>
       </template>
@@ -31,26 +43,40 @@
 </template>
 
 <script setup lang="ts">
-import { Calendar, Document, EditPen, House, Lock, Message, Setting, User, Van } from '@element-plus/icons-vue'
-import type { Component } from 'vue'
+import {
+  Calendar,
+  Document,
+  EditPen,
+  House,
+  Lock,
+  Message,
+  Setting,
+  User,
+  Van,
+} from "@element-plus/icons-vue";
+import type { Component } from "vue";
 
-import type { UniLayoutIconMap, UniLayoutMenuRecord, UniLayoutTranslate } from '@/types/uni-layout'
+import type {
+  UniLayoutIconMap,
+  UniLayoutMenuRecord,
+  UniLayoutTranslate,
+} from "@/types/uni-layout";
 
 defineOptions({
-  name: 'UniLayoutMenuTree'
-})
+  name: "UniLayoutMenuTree",
+});
 
 withDefaults(
   defineProps<{
-    menus: UniLayoutMenuRecord[]
-    iconMap?: UniLayoutIconMap
-    translate?: UniLayoutTranslate
+    menus: UniLayoutMenuRecord[];
+    iconMap?: UniLayoutIconMap;
+    translate?: UniLayoutTranslate;
   }>(),
   {
     iconMap: () => ({}),
-    translate: (_key?: string, fallback = '') => fallback
-  }
-)
+    translate: (_key?: string, fallback = "") => fallback,
+  },
+);
 
 const defaultIconMap: Record<string, Component> = {
   Calendar,
@@ -61,12 +87,16 @@ const defaultIconMap: Record<string, Component> = {
   Message,
   Setting,
   User,
-  Van
-}
+  Van,
+};
 
-const resolveTitle = (menu: UniLayoutMenuRecord, translate: UniLayoutTranslate) => translate(menu.meta.titleKey, menu.meta.title ?? menu.name ?? menu.path)
+const resolveTitle = (
+  menu: UniLayoutMenuRecord,
+  translate: UniLayoutTranslate,
+) => translate(menu.meta.titleKey, menu.meta.title ?? menu.name ?? menu.path);
 
-const resolveIcon = (icon: string | undefined, iconMap: UniLayoutIconMap) => (icon ? (iconMap[icon] ?? defaultIconMap[icon]) : undefined)
+const resolveIcon = (icon: string | undefined, iconMap: UniLayoutIconMap) =>
+  icon ? (iconMap[icon] ?? defaultIconMap[icon]) : undefined;
 </script>
 
 <style scoped lang="scss"></style>
