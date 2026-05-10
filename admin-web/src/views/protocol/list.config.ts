@@ -4,17 +4,17 @@ import type { UniFormConfig, UniOption, UniTableColumn } from 'uni-ui-lib'
 import type { Translate } from '@/types/i18n'
 import type { ProtocolFormModel } from '@/types/modules/protocol'
 
-export const createYesNoOptions = (t: Translate): UniOption[] => [
+export const yesNoOpts = (t: Translate): UniOption[] => [
   { label: t('protocol.options.yes'), value: 1, type: 'success' },
   { label: t('protocol.options.no'), value: 0, type: 'info' }
 ]
 
-export const createStatusOptions = (t: Translate): UniOption[] => [
+export const statusOpts = (t: Translate): UniOption[] => [
   { label: t('protocol.options.enabled'), value: 1, type: 'success' },
   { label: t('protocol.options.disabled'), value: 0, type: 'info' }
 ]
 
-export const createSearchConfig = (
+export const searchForm = (
   t: Translate,
   schoolOptions: UniOption[],
   protocolTypeOptions: UniOption[],
@@ -85,7 +85,7 @@ export const createSearchConfig = (
   colProps: { span: 5 }
 })
 
-export const createColumns = (t: Translate): UniTableColumn[] => [
+export const tableCols = (t: Translate): UniTableColumn[] => [
   { prop: 'id', label: 'ID', type: 'text', width: 90, fixed: 'left' },
   {
     prop: 'schoolName',
@@ -123,7 +123,7 @@ export const createColumns = (t: Translate): UniTableColumn[] => [
   { prop: 'updateTime', label: t('protocol.fields.updateTime'), type: 'datetime', minWidth: 170 }
 ]
 
-export const createSignColumns = (t: Translate): UniTableColumn[] => [
+export const signCols = (t: Translate): UniTableColumn[] => [
   { prop: 'id', label: 'ID', type: 'text', width: 90 },
   { prop: 'studentName', label: t('protocol.fields.studentName'), type: 'text', minWidth: 140 },
   { prop: 'admissionNo', label: t('protocol.fields.admissionNo'), type: 'text', minWidth: 130 },
@@ -132,7 +132,7 @@ export const createSignColumns = (t: Translate): UniTableColumn[] => [
   { prop: 'updateTime', label: t('protocol.fields.updateTime'), type: 'datetime', minWidth: 170 }
 ]
 
-export const createDetailConfig = (t: Translate): UniFormConfig => ({
+export const detailForm = (t: Translate): UniFormConfig => ({
   mode: 'view',
   formProps: { labelWidth: '120px' },
   rowProps: { gutter: 16 },
@@ -153,7 +153,7 @@ export const createDetailConfig = (t: Translate): UniFormConfig => ({
   ]
 })
 
-export const createFormRules = (t: Translate): FormRules<ProtocolFormModel> => ({
+export const formRules = (t: Translate): FormRules<ProtocolFormModel> => ({
   schoolIds: [{ required: true, message: t('protocol.placeholders.school'), trigger: 'change' }],
   cnName: [{ required: true, message: t('protocol.placeholders.cnName'), trigger: 'blur' }],
   enName: [{ required: true, message: t('protocol.placeholders.enName'), trigger: 'blur' }],

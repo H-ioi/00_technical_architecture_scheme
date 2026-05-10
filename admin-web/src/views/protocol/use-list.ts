@@ -10,14 +10,9 @@ import { useRouter } from 'vue-router'
 import { membershipApi, protocolApi } from '@/api'
 import type { ProtocolDict, ProtocolDictItem, ProtocolRecord as Row } from '@/types/modules/protocol'
 
-import {
-  createColumns,
-  createSearchConfig,
-  createStatusOptions,
-  createYesNoOptions
-} from './list.config'
+import { searchForm, statusOpts, tableCols, yesNoOpts } from './list.config'
 
-const createDictOptions = (items: ProtocolDictItem[] = [], locale: string): UniOption[] =>
+const dictOpts = (items: ProtocolDictItem[] = [], locale: string): UniOption[] =>
   toUniOptions(items, {
     labelKeys: locale === 'en' ? ['enName', 'name', 'cnName'] : ['name', 'cnName', 'enName'],
     valueKey: 'id'
@@ -34,7 +29,6 @@ export const useList = () => {
     module: undefined,
     status: undefined
   }
-  // useUniListState 抽离列表页通用状态：查询模型、实际过滤条件、表格 ref 和总数。
   const { queryModel, filters, tableRef, total, search, reset, handleLoadSuccess } = useUniListState({
     initialFilters
   })
@@ -44,10 +38,10 @@ export const useList = () => {
   const schoolOptions = ref<UniOption[]>([])
   const protocolDict = ref<ProtocolDict>({})
 
-  const protocolTypeOptions = computed(() => createDictOptions(protocolDict.value.protocolTypeList, locale()))
-  const moduleOptions = computed(() => createDictOptions(protocolDict.value.moduleList, locale()))
-  const yesNoOptions = computed(() => createYesNoOptions(t))
-  const statusOptions = computed(() => createStatusOptions(t))
+  const protocolTypeOptions = computed(() => dictOpts(protocolDict.value.protocolTypeList, locale()))
+  const moduleOptions = computed(() => dictOpts(protocolDict.value.moduleList, locale()))
+  const yesNoOptions = computed(() => yesNoOpts(t))
+  const statusOptions = computed(() => statusOpts(t))
   const valueEnums = computed<Record<string, UniOption[]>>(() => ({
     protocolType: protocolTypeOptions.value,
     module: moduleOptions.value,
@@ -55,11 +49,11 @@ export const useList = () => {
     status: statusOptions.value
   }))
   const searchConfig = computed(() =>
-    createSearchConfig(t, schoolOptions.value, protocolTypeOptions.value, moduleOptions.value, statusOptions.value)
+    searchForm(t, schoolOptions.value, protocolTypeOptions.value, moduleOptions.value, statusOptions.value)
   )
-  const columns = computed(() => createColumns(t))
+  const columns = computed(() => tableCols(t))
 
-  const normalizeRow = (row: Row): Row => ({
+  const normRow = (row: Row): Row => ({
     ...row,
     schoolName: (locale() === 'en' ? row.schoolEnNames : row.schoolCnNames) || row.schoolEnNames || row.schoolCnNames
   })
@@ -68,13 +62,12 @@ export const useList = () => {
     const result = await protocolApi.page.get({ current, size, ...filters })
 
     return {
-      data: result.data.map(normalizeRow),
+      data: result.data.map(normRow),
       total: result.total
     }
   }
 
-  // 查看动作进入独立详情页，由路由生成对应 tag，避免详情弹窗承载大表格。
-  const openDetail = (row: Row) => {
+  const toDetail = (row: Row) => {
     void router.push(`/protocol/detail/${row.id}`)
   }
 
@@ -87,7 +80,7 @@ export const useList = () => {
   const actions = computed<UniTableAction[]>(() => [
     {
       label: t('protocol.actions.detail'),
-      onClick: (row) => openDetail(row as Row)
+      onClick: (row) => toDetail(row as Row)
     },
     {
       label: t('protocol.actions.edit'),

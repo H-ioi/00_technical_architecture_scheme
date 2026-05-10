@@ -2,7 +2,7 @@ import type { UniOption } from 'uni-ui-lib'
 
 import type { ProtocolRecord } from '@/types/modules/protocol'
 
-export interface ProtocolFormDialogProps {
+export interface ProtocolFormProps {
   visible: boolean
   mode: 'add' | 'edit'
   source?: ProtocolRecord | null
@@ -13,7 +13,7 @@ export interface ProtocolFormDialogProps {
   statusOptions: UniOption[]
 }
 
-export type ProtocolFormDialogEmits = {
+export type ProtocolFormEmits = {
   'update:visible': [visible: boolean]
   saved: []
 }

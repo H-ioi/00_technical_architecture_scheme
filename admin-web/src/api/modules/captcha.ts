@@ -6,10 +6,10 @@ import type { CaptchaImageData, CaptchaResponse } from '@/types/modules/captcha'
 
 const CAPTCHA_TYPE = 'blockPuzzle'
 
-const normalizeCaptchaResponse = <T>(response: CaptchaResponse<T> | { data: CaptchaResponse<T> }) =>
+const unwrap = <T>(response: CaptchaResponse<T> | { data: CaptchaResponse<T> }) =>
   'data' in response ? response.data : response
 
-const encryptCaptchaPoint = (value: string, secretKey?: string) => {
+const encryptPoint = (value: string, secretKey?: string) => {
   if (!secretKey) {
     return value
   }
@@ -26,7 +26,7 @@ const encryptCaptchaPoint = (value: string, secretKey?: string) => {
 export default {
   encrypt: {
     name: '加密滑块点位',
-    run: encryptCaptchaPoint
+    run: encryptPoint
   },
 
   image: {
@@ -39,7 +39,7 @@ export default {
       >(this.url, {
         data: { captchaType: CAPTCHA_TYPE }
       })
-      const result = normalizeCaptchaResponse(response)
+      const result = unwrap(response)
 
       if (result.repCode !== '0000') {
         throw new Error(result.repMsg || '验证码获取失败')
@@ -63,7 +63,7 @@ export default {
           token: data.token
         }
       })
-      const result = normalizeCaptchaResponse(response)
+      const result = unwrap(response)
 
       if (result.repCode !== '0000') {
         throw new Error(result.repMsg || '验证失败')

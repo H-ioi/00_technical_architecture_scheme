@@ -17,7 +17,7 @@ const MENU_PATH_ALIASES: Record<string, string> = {
   '/isacommunity/protocol/index': '/protocol'
 }
 
-const normalizeBackendPath = (path?: string) => {
+const normPath = (path?: string) => {
   if (!path) {
     return ''
   }
@@ -28,7 +28,7 @@ const normalizeBackendPath = (path?: string) => {
 }
 
 /** 接口可能直接返回数组，或未解包仍带 { data }；防止 allowedPaths 为空导致误跳 403 */
-const toMenuTree = (raw: unknown): BackendMenuRecord[] => {
+const parseTree = (raw: unknown): BackendMenuRecord[] => {
   if (Array.isArray(raw)) {
     return raw
   }
@@ -46,23 +46,23 @@ const collectPermissions = (menu: BackendMenuRecord) =>
     .flatMap((value) => (Array.isArray(value) ? value : value ? [value] : []))
     .filter(Boolean)
 
-const createRouteMap = (routes: RouteRecordNormalized[]) =>
+const routeIdx = (routes: RouteRecordNormalized[]) =>
   new Map(routes.map((route) => [route.path, route]))
 
-const createMenuResult = (
+const buildMenus = (
   items: BackendMenuRecord[],
   routes: RouteRecordNormalized[]
 ): MenuPermissionResult => {
   const permissions = new Set<string>()
   const paths = new Set<string>()
-  const routeMap = createRouteMap(routes)
+  const routeMap = routeIdx(routes)
 
-  const createMenus = (menus: BackendMenuRecord[]): AppMenuRecord[] =>
+  const mapMenus = (menus: BackendMenuRecord[]): AppMenuRecord[] =>
     menus.flatMap((menu) => {
       collectPermissions(menu).forEach((code) => permissions.add(code))
 
-      const children = createMenus(menu.children ?? [])
-      const routePath = normalizeBackendPath(menu.path ?? menu.url)
+      const children = mapMenus(menu.children ?? [])
+      const routePath = normPath(menu.path ?? menu.url)
       const route = routeMap.get(routePath)
 
       if (!route && children.length) {
@@ -86,7 +86,7 @@ const createMenuResult = (
       }
     })
 
-  const menus = createMenus(items)
+  const menus = mapMenus(items)
 
   return {
     menus,
@@ -102,7 +102,7 @@ export default {
     get: async function (this: { url: string }, routes: RouteRecordNormalized[]): Promise<MenuPermissionResult> {
       const raw = await request.get<unknown>(this.url)
 
-      return createMenuResult(toMenuTree(raw), routes)
+      return buildMenus(parseTree(raw), routes)
     }
   }
 }

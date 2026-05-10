@@ -1,7 +1,8 @@
 import Layout from '@/layouts/index.vue'
 import type { AppRouteRecord } from '@/types/route'
 
-export const constantRoutes: AppRouteRecord[] = [
+/** 静态路由表（登录、布局子路由、403/404）。 */
+export const routes: AppRouteRecord[] = [
   {
     path: '/login',
     name: 'Login',
@@ -25,7 +26,7 @@ export const constantRoutes: AppRouteRecord[] = [
       {
         path: 'dashboard',
         name: 'Dashboard',
-        component: () => import('@/views/dashboard/dashboard-page.vue'),
+        component: () => import('@/views/dashboard/index.vue'),
         meta: {
           title: '工作台',
           titleKey: 'route.dashboard',
@@ -77,13 +78,13 @@ export const constantRoutes: AppRouteRecord[] = [
         path: 'protocol/detail/:id',
         name: 'ProtocolDetail',
         component: () => import('@/views/protocol/detail.vue'),
-    meta: {
-      title: '协议详情',
-      titleKey: 'route.protocolDetail',
-      hidden: true,
-      activeMenu: '/protocol',
-      tagDetailParam: 'id'
-    }
+        meta: {
+          title: '协议详情',
+          titleKey: 'route.protocolDetail',
+          hidden: true,
+          activeMenu: '/protocol',
+          tagDetailParam: 'id'
+        }
       }
     ]
   },

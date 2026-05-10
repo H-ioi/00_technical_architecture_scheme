@@ -9,13 +9,7 @@ import { computed, onMounted, ref } from 'vue'
 import { membershipApi, teacherApi } from '@/api'
 import type { TeacherRecord as Row } from '@/types/modules/member-teacher'
 
-import {
-  createColumns,
-  createDetailConfig,
-  createRoleOptions,
-  createSearchConfig,
-  createStatusOptions
-} from './list.config'
+import { detailForm, roleOpts, searchForm, statusOpts, tableCols } from './list.config'
 
 export const useList = () => {
   const { locale, t } = useUniI18n()
@@ -25,7 +19,6 @@ export const useList = () => {
     role: undefined,
     archived: undefined
   }
-  // 成员列表共用组件库列表状态，页面只保留教师领域的列、选项和行操作。
   const { queryModel, filters, tableRef, total, search, reset, handleLoadSuccess } = useUniListState({
     initialFilters
   })
@@ -34,21 +27,21 @@ export const useList = () => {
   const schoolOptions = ref<UniOption[]>([])
   const roleOptions = ref<UniOption[]>([])
 
-  const statusOptions = computed(() => createStatusOptions(t))
+  const statusOptions = computed(() => statusOpts(t))
   const valueEnums = computed<Record<string, UniOption[]>>(() => ({
     archived: statusOptions.value,
     schoolName: schoolOptions.value
   }))
   const searchConfig = computed(() =>
-    createSearchConfig(t, schoolOptions.value, roleOptions.value, statusOptions.value)
+    searchForm(t, schoolOptions.value, roleOptions.value, statusOptions.value)
   )
-  const columns = computed(() => createColumns(t))
-  const detailConfig = computed(() => createDetailConfig(t))
+  const columns = computed(() => tableCols(t))
+  const detailConfig = computed(() => detailForm(t))
 
   const loadData: UniTableRequest = ({ pageNo: current, pageSize: size, filters }) =>
     teacherApi.page.get({ current, size, ...filters })
 
-  const openDetail = (row: Row) => {
+  const show = (row: Row) => {
     currentRecord.value = row
     detailVisible.value = true
   }
@@ -57,19 +50,18 @@ export const useList = () => {
     {
       label: t('member.actions.detail'),
       code: 'dataform_file_look',
-      onClick: (row) => openDetail(row as Row)
+      onClick: (row) => show(row as Row)
     }
   ])
 
   onMounted(async () => {
     const [schools, roles] = await Promise.all([membershipApi.school.get(), teacherApi.role.get()])
 
-    // 学校字典统一转成 UniOption，供 UniSearchForm 和 UniDataTable 枚举回显复用。
     schoolOptions.value = toUniOptions(schools, {
       labelKeys: locale() === 'en' ? ['enName', 'name'] : ['name', 'cnName', 'enName'],
       valueKey: 'id'
     })
-    roleOptions.value = createRoleOptions(roles)
+    roleOptions.value = roleOpts(roles)
   })
 
   return {

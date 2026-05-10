@@ -1,12 +1,12 @@
 <template>
-  <section class="dashboard-page">
-    <el-card shadow="never" class="dashboard-page__welcome">
+  <section class="dash">
+    <el-card shadow="never" class="dash__welcome">
       <h1>{{ $t('route.dashboard') }}</h1>
       <p>{{ $t('dashboard.description') }}</p>
     </el-card>
 
-    <div class="dashboard-page__metrics">
-      <el-card v-for="item in metrics" :key="item.label" shadow="never" class="dashboard-page__metric">
+    <div class="dash__metrics">
+      <el-card v-for="item in metrics" :key="item.label" shadow="never" class="dash__metric">
         <span>{{ item.label }}</span>
         <strong>{{ item.value }}</strong>
       </el-card>
@@ -14,12 +14,17 @@
 
     <el-card shadow="never">
       <template #header>
-        <div class="dashboard-page__card-title">{{ $t('dashboard.shortcuts') }}</div>
+        <div class="dash__card-title">{{ $t('dashboard.shortcuts') }}</div>
       </template>
 
-      <div class="dashboard-page__shortcuts">
-        <button v-for="item in shortcuts" :key="item.path" class="dashboard-page__shortcut" type="button"
-          @click="goShortcut(item)">
+      <div class="dash__shortcuts">
+        <button
+          v-for="item in shortcuts"
+          :key="item.path"
+          class="dash__shortcut"
+          type="button"
+          @click="go(item)"
+        >
           <strong>{{ item.label }}</strong>
           <span>{{ item.description }}</span>
           <em>{{ $t('dashboard.enter') }}</em>
@@ -27,7 +32,7 @@
       </div>
     </el-card>
 
-    <el-card shadow="never" class="dashboard-page__phase">
+    <el-card shadow="never" class="dash__phase">
       <strong>{{ $t('dashboard.firstPhase') }}</strong>
       <span>{{ $t('dashboard.firstPhaseDescription') }}</span>
     </el-card>
@@ -63,13 +68,13 @@ const shortcuts = computed<DashboardShortcut[]>(() => [
   }
 ])
 
-const goShortcut = (item: DashboardShortcut) => {
+const go = (item: DashboardShortcut) => {
   router.push(item.path)
 }
 </script>
 
 <style scoped lang="scss">
-.dashboard-page {
+.dash {
   display: grid;
   gap: 16px;
 
@@ -154,17 +159,15 @@ const goShortcut = (item: DashboardShortcut) => {
 }
 
 @media (width <=960px) {
-
-  .dashboard-page__metrics,
-  .dashboard-page__shortcuts {
+  .dash__metrics,
+  .dash__shortcuts {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
 
 @media (width <=640px) {
-
-  .dashboard-page__metrics,
-  .dashboard-page__shortcuts {
+  .dash__metrics,
+  .dash__shortcuts {
     grid-template-columns: 1fr;
   }
 }

@@ -2,15 +2,15 @@ import type { UniFormConfig, UniOption, UniTableColumn } from 'uni-ui-lib'
 
 import type { Translate } from '@/types/i18n'
 
-export const createRoleOptions = (roles: string[]): UniOption[] =>
+export const roleOpts = (roles: string[]): UniOption[] =>
   roles.map((item) => ({ label: item, value: item }))
 
-export const createStatusOptions = (t: Translate): UniOption[] => [
+export const statusOpts = (t: Translate): UniOption[] => [
   { label: t('member.teacher.options.unarchived'), value: '0', type: 'success' },
   { label: t('member.teacher.options.archived'), value: '1', type: 'info' }
 ]
 
-export const createSearchConfig = (
+export const searchForm = (
   t: Translate,
   schoolOptions: UniOption[],
   roleOptions: UniOption[],
@@ -57,7 +57,7 @@ export const createSearchConfig = (
   colProps: { span: 6 }
 })
 
-export const createColumns = (t: Translate): UniTableColumn[] => [
+export const tableCols = (t: Translate): UniTableColumn[] => [
   { prop: 'id', label: 'ID', type: 'text', width: 90, fixed: 'left' },
   {
     prop: 'schoolName',
@@ -113,7 +113,7 @@ export const createColumns = (t: Translate): UniTableColumn[] => [
   { prop: 'createTime', label: t('member.fields.createTime'), type: 'datetime', minWidth: 170 }
 ]
 
-export const createDetailConfig = (t: Translate): UniFormConfig => ({
+export const detailForm = (t: Translate): UniFormConfig => ({
   mode: 'view',
   formProps: { labelWidth: '96px' },
   rowProps: { gutter: 16 },

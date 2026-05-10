@@ -6,14 +6,14 @@ import { membershipApi, studentApi } from '@/api'
 import type { StudentRecord as Row } from '@/types/modules/member-student'
 
 import {
-  createBusOptions,
-  createColumns,
-  createDetailConfig,
-  createDormitoryOptions,
-  createSearchConfig,
-  createStatusDisplayOptions,
-  createStatusOptions,
-  createYesNoDisplayOptions
+  busOpts,
+  detailForm,
+  dormOpts,
+  searchForm,
+  stDispOpts,
+  statusOpts,
+  tableCols,
+  ynDispOpts
 } from './list.config'
 
 export const useList = () => {
@@ -27,7 +27,6 @@ export const useList = () => {
     busStatus: undefined,
     studentStatus: undefined
   }
-  // 学生列表复用组件库列表状态，避免每个列表重复维护 search/reset/refresh。
   const { queryModel, filters, tableRef, total, search, reset, handleLoadSuccess } = useUniListState({
     initialFilters
   })
@@ -37,19 +36,19 @@ export const useList = () => {
   const detailVisible = ref(false)
   const currentRecord = ref<Row | null>(null)
 
-  const statusOptions = computed(() => createStatusOptions(t))
-  const statusDisplayOptions = computed(() => createStatusDisplayOptions(t))
-  const busOptions = computed(() => createBusOptions(t))
-  const dormitoryOptions = computed(() => createDormitoryOptions(t))
-  const yesNoDisplayOptions = computed(() => createYesNoDisplayOptions(t))
+  const statusOptions = computed(() => statusOpts(t))
+  const statusDispOpts = computed(() => stDispOpts(t))
+  const busOptions = computed(() => busOpts(t))
+  const dormitoryOptions = computed(() => dormOpts(t))
+  const ynDispOptions = computed(() => ynDispOpts(t))
   const valueEnums = computed<Record<string, UniOption[]>>(() => ({
-    busStatus: yesNoDisplayOptions.value,
-    dormitoryStatus: yesNoDisplayOptions.value,
+    busStatus: ynDispOptions.value,
+    dormitoryStatus: ynDispOptions.value,
     schoolName: schoolOptions.value,
-    studentStatus: statusDisplayOptions.value
+    studentStatus: statusDispOpts.value
   }))
   const searchConfig = computed(() =>
-    createSearchConfig(
+    searchForm(
       t,
       schoolOptions.value,
       yearGroupOptions.value,
@@ -59,13 +58,13 @@ export const useList = () => {
       statusOptions.value
     )
   )
-  const columns = computed(() => createColumns(t))
-  const detailConfig = computed(() => createDetailConfig(t))
+  const columns = computed(() => tableCols(t))
+  const detailConfig = computed(() => detailForm(t))
 
   const loadData: UniTableRequest = ({ pageNo: current, pageSize: size, filters }) =>
     studentApi.page.get({ current, size, ...filters })
 
-  const openDetail = (row: Row) => {
+  const show = (row: Row) => {
     currentRecord.value = row
     detailVisible.value = true
   }
@@ -74,18 +73,17 @@ export const useList = () => {
     {
       label: t('member.actions.detail'),
       code: 'dataform_file_look',
-      onClick: (row) => openDetail(row as Row)
+      onClick: (row) => show(row as Row)
     }
   ])
 
-  const loadOptions = async () => {
+  const loadOpts = async () => {
     const [schools, yearGroups, forms] = await Promise.all([
       membershipApi.school.get(),
       studentApi.yearGroup.get(),
       studentApi.form.get()
     ])
 
-    // 选项统一转成 UniOption，供搜索表单下拉和表格枚举展示共享。
     schoolOptions.value = toUniOptions(schools, {
       labelKeys: locale() === 'en' ? ['enName', 'name'] : ['name', 'cnName', 'enName'],
       valueKey: 'id'
@@ -100,7 +98,7 @@ export const useList = () => {
     })
   }
 
-  loadOptions()
+  loadOpts()
 
   return {
     actions,

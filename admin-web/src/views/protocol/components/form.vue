@@ -106,16 +106,15 @@
         </el-col>
         <el-col :span="24">
           <el-form-item :label="$t('protocol.fields.documentUrl')" prop="documentUrl">
-            <!-- UniUpload 负责文件类型、大小、数量和拖拽交互；协议业务只实现上传请求和 URL 回填。 -->
             <UniUpload
               v-model:file-list="fileList"
               drag
               accept=".pdf,application/pdf"
               :limit="1"
               :max-size="10 * 1024 * 1024"
-              :request="handleUploadRequest"
-              @validate-error="handleValidateError"
-              @remove="handleRemove"
+              :request="uploadReq"
+              @validate-error="onUploadErr"
+              @remove="clearDoc"
             >
               <template #tip>
                 <div class="protocol-form__upload-tip">
@@ -144,26 +143,25 @@ import { computed, reactive, ref, watch } from 'vue'
 import { useUniI18n } from 'uni-ui-lib'
 
 import { protocolApi } from '@/api'
-import type { ProtocolFormDialogEmits, ProtocolFormDialogProps } from '@/types/components/protocol-form-dialog'
+import type { ProtocolFormEmits, ProtocolFormProps } from '@/types/components/protocol-form'
 import type { ProtocolFormModel, ProtocolRecord } from '@/types/modules/protocol'
 
-import { createFormRules } from '../list.config'
+import { formRules } from '../list.config'
 
-const props = defineProps<ProtocolFormDialogProps>()
+const props = defineProps<ProtocolFormProps>()
 
-const emit = defineEmits<ProtocolFormDialogEmits>()
+const emit = defineEmits<ProtocolFormEmits>()
 
 const { t } = useUniI18n()
 const formRef = ref<FormInstance>()
 const submitting = ref(false)
 const fileList = ref<UploadUserFile[]>([])
 const formModel = reactive<ProtocolFormModel>({})
-const rules = computed(() => createFormRules(t))
+const rules = computed(() => formRules(t))
 const title = computed(() =>
   t(props.mode === 'add' ? 'protocol.actions.add' : 'protocol.actions.edit')
 )
 
-// 弹窗复用同一份表单状态，打开前必须清空旧值，避免新增/编辑之间串数据。
 const resetForm = () => {
   Object.keys(formModel).forEach((key) => {
     delete formModel[key as keyof ProtocolFormModel]
@@ -204,8 +202,7 @@ const close = () => {
   emit('update:visible', false)
 }
 
-// UniUpload 通过自定义 request 接入项目上传接口，成功后把返回 URL 写回表单字段参与校验。
-const handleUploadRequest = async (options: UploadRequestOptions) => {
+const uploadReq = async (options: UploadRequestOptions) => {
   const file = options.file
   const url = await protocolApi.upload.post(file)
 
@@ -220,11 +217,11 @@ const handleUploadRequest = async (options: UploadRequestOptions) => {
   return { url }
 }
 
-const handleValidateError = (message: string) => {
+const onUploadErr = (message: string) => {
   ElMessage.error(message)
 }
 
-const handleRemove = () => {
+const clearDoc = () => {
   formModel.documentUrl = undefined
   fileList.value = []
 }

@@ -2,36 +2,36 @@ import type { UniFormConfig, UniOption, UniTableColumn } from 'uni-ui-lib'
 
 import type { Translate } from '@/types/i18n'
 
-export const createDormitoryOptions = (t: Translate): UniOption[] => [
+export const dormOpts = (t: Translate): UniOption[] => [
   { label: t('member.student.options.yes'), value: '1', type: 'success' },
   { label: t('member.student.options.no'), value: '0', type: 'info' }
 ]
 
-export const createBusOptions = (t: Translate): UniOption[] => [
+export const busOpts = (t: Translate): UniOption[] => [
   { label: t('member.student.options.yes'), value: '1', type: 'success' },
   { label: t('member.student.options.no'), value: '0', type: 'info' }
 ]
 
-export const createYesNoDisplayOptions = (t: Translate): UniOption[] => [
+export const ynDispOpts = (t: Translate): UniOption[] => [
   { label: t('member.student.options.yes'), value: '1', type: 'success' },
   { label: t('member.student.options.yes'), value: 'Yes', type: 'success' },
   { label: t('member.student.options.no'), value: '0', type: 'info' },
   { label: t('member.student.options.no'), value: 'No', type: 'info' }
 ]
 
-export const createStatusOptions = (t: Translate): UniOption[] => [
+export const statusOpts = (t: Translate): UniOption[] => [
   { label: t('member.student.options.enrolled'), value: '1', type: 'success' },
   { label: t('member.student.options.leaving'), value: '2', type: 'warning' }
 ]
 
-export const createStatusDisplayOptions = (t: Translate): UniOption[] => [
+export const stDispOpts = (t: Translate): UniOption[] => [
   { label: t('member.student.options.enrolled'), value: '1', type: 'success' },
   { label: t('member.student.options.enrolled'), value: 'Enrolled', type: 'success' },
   { label: t('member.student.options.leaving'), value: '2', type: 'warning' },
   { label: t('member.student.options.leaving'), value: 'Leaving', type: 'warning' }
 ]
 
-export const createSearchConfig = (
+export const searchForm = (
   t: Translate,
   schoolOptions: UniOption[],
   yearGroupOptions: UniOption[],
@@ -115,7 +115,7 @@ export const createSearchConfig = (
   colProps: { span: 6 }
 })
 
-export const createColumns = (t: Translate): UniTableColumn[] => [
+export const tableCols = (t: Translate): UniTableColumn[] => [
   { prop: 'id', label: 'ID', type: 'text', width: 90, fixed: 'left' },
   {
     prop: 'schoolName',
@@ -152,7 +152,7 @@ export const createColumns = (t: Translate): UniTableColumn[] => [
   { prop: 'studentStatus', label: t('member.fields.status'), type: 'tag', width: 110 }
 ]
 
-export const createDetailConfig = (t: Translate): UniFormConfig => ({
+export const detailForm = (t: Translate): UniFormConfig => ({
   mode: 'view',
   formProps: { labelWidth: '96px' },
   rowProps: { gutter: 16 },
@@ -170,21 +170,21 @@ export const createDetailConfig = (t: Translate): UniFormConfig => ({
       field: 'busStatus',
       label: t('member.student.fields.bus'),
       component: 'ElInput',
-      options: createYesNoDisplayOptions(t),
+      options: ynDispOpts(t),
       viewType: 'enum'
     },
     {
       field: 'dormitoryStatus',
       label: t('member.student.fields.dormitory'),
       component: 'ElInput',
-      options: createYesNoDisplayOptions(t),
+      options: ynDispOpts(t),
       viewType: 'enum'
     },
     {
       field: 'studentStatus',
       label: t('member.fields.status'),
       component: 'ElInput',
-      options: createStatusDisplayOptions(t),
+      options: stDispOpts(t),
       viewType: 'enum'
     }
   ]

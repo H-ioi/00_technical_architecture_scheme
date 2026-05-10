@@ -40,9 +40,7 @@
     </div>
 
     <template #footer>
-      <el-button @click="emit('update:visible', false)">{{
-        $t('protocol.actions.close')
-      }}</el-button>
+      <el-button @click="emit('update:visible', false)">{{ $t('protocol.actions.close') }}</el-button>
     </template>
   </el-dialog>
 </template>
@@ -53,27 +51,24 @@ import { computed, ref, watch } from 'vue'
 import { useUniI18n } from 'uni-ui-lib'
 
 import { protocolApi } from '@/api'
-import type {
-  ProtocolDetailDialogEmits,
-  ProtocolDetailDialogProps
-} from '@/types/components/protocol-detail-dialog'
+import type { ProtocolPanelEmits, ProtocolPanelProps } from '@/types/components/protocol-panel'
 import type { ProtocolRecord } from '@/types/modules/protocol'
 
-import { createSignColumns } from '../list.config'
+import { signCols } from '../list.config'
 
-const props = defineProps<ProtocolDetailDialogProps>()
+const props = defineProps<ProtocolPanelProps>()
 
-const emit = defineEmits<ProtocolDetailDialogEmits>()
+const emit = defineEmits<ProtocolPanelEmits>()
 
 const { locale, t } = useUniI18n()
 const detail = ref<ProtocolRecord | null>(null)
 const signTableRef = ref<{ refresh: () => void } | null>(null)
-const signColumns = computed(() => createSignColumns(t))
+const signColumns = computed(() => signCols(t))
 const signSchoolIds = computed(() =>
   props.schoolOptions.map((item) => item.value as string | number)
 )
 
-const getOptionLabel = (field: string, value: unknown) =>
+const enumLabel = (field: string, value: unknown) =>
   props.valueEnums[field]?.find((item) => item.value === value)?.label ?? String(value ?? '--')
 
 const schoolName = computed(
@@ -98,11 +93,11 @@ const displayItems = computed(() => {
     { label: t('protocol.fields.enName'), value: record.enName },
     {
       label: t('protocol.fields.protocolType'),
-      value: getOptionLabel('protocolType', record.protocolType)
+      value: enumLabel('protocolType', record.protocolType)
     },
-    { label: t('protocol.fields.module'), value: getOptionLabel('module', record.module) },
-    { label: t('protocol.fields.needSign'), value: getOptionLabel('needSign', record.needSign) },
-    { label: t('protocol.fields.status'), value: getOptionLabel('status', record.status) },
+    { label: t('protocol.fields.module'), value: enumLabel('module', record.module) },
+    { label: t('protocol.fields.needSign'), value: enumLabel('needSign', record.needSign) },
+    { label: t('protocol.fields.status'), value: enumLabel('status', record.status) },
     { label: t('protocol.fields.createTime'), value: record.createTime },
     { label: t('protocol.fields.updateTime'), value: record.updateTime }
   ]

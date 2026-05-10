@@ -8,14 +8,14 @@ import {
   useUserStore
 } from 'uni-ui-lib'
 
-import { constantRoutes } from './modules/constant'
+import { routes } from './routes'
 
-// 白名单
-const whiteList = ['/login']
+/** 免登录路径 */
+const pub = ['/login']
 
 export const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
-  routes: constantRoutes,
+  routes,
   scrollBehavior: () => ({ left: 0, top: 0 })
 })
 
@@ -26,7 +26,7 @@ router.beforeEach(async (to) => {
   const permissionCodeStore = usePermissionCodeStore()
   document.title = String(to.meta.title ?? '')
 
-  if (whiteList.includes(to.path)) {
+  if (pub.includes(to.path)) {
     return userStore.isLoggedIn ? '/' : true
   }
 

@@ -14,11 +14,11 @@
 </template>
 
 <script setup lang="ts">
-import type { MemberDetailDialogEmits, MemberDetailDialogProps } from '@/types/components/member-detail-dialog'
+import type { MemberDetailEmits, MemberDetailProps } from '@/types/components/member-detail'
 
-defineProps<MemberDetailDialogProps>()
+defineProps<MemberDetailProps>()
 
-const emit = defineEmits<MemberDetailDialogEmits>()
+const emit = defineEmits<MemberDetailEmits>()
 </script>
 
 <style scoped lang="scss"></style>

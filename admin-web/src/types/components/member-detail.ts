@@ -1,11 +1,11 @@
 import type { Recordable, UniFormConfig } from 'uni-ui-lib'
 
-export interface MemberDetailDialogProps {
+export interface MemberDetailProps {
   visible: boolean
   source?: Recordable | null
   config: UniFormConfig
 }
 
-export type MemberDetailDialogEmits = {
+export type MemberDetailEmits = {
   'update:visible': [visible: boolean]
 }

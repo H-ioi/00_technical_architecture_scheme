@@ -36,7 +36,7 @@
       :value-enums="valueEnums"
       :actions="actions"
       :action-column="{ width: 130, fixed: 'right' }"
-      @selection-change="selectedRows = $event as ProtocolRecord[]"
+      @selection-change="picked = $event as ProtocolRecord[]"
       @load-success="handleLoadSuccess"
     >
       <!-- toolbar 插槽放表格勾选后的批量操作，组件内部会和刷新/最大化/列设置工具合并到底部工具栏。 -->
@@ -45,8 +45,8 @@
           <el-button
             v-uni-permission="'protocol_del'"
             type="danger"
-            :disabled="selectedIds.length === 0"
-            @click="handleDelete"
+            :disabled="ids.length === 0"
+            @click="del"
           >
             {{ $t('protocol.actions.delete') }}
           </el-button>
@@ -54,8 +54,7 @@
       </template>
     </UniDataTable>
 
-    <!-- FormDialog 保留协议新增编辑的业务表单逻辑，公共上传能力由内部 UniUpload 提供。 -->
-    <FormDialog
+    <PForm
       v-model:visible="formVisible"
       :mode="formMode"
       :source="currentRecord"
@@ -64,7 +63,7 @@
       :module-options="moduleOptions"
       :yes-no-options="yesNoOptions"
       :status-options="statusOptions"
-      @saved="refreshTable"
+      @saved="reload"
     />
   </section>
 </template>
@@ -74,7 +73,7 @@ import { ElMessage, ElMessageBox } from 'element-plus'
 import { computed, ref } from 'vue'
 import { useUniI18n } from 'uni-ui-lib'
 
-import FormDialog from './components/form-dialog.vue'
+import PForm from './components/form.vue'
 import { useList } from './use-list'
 
 import { protocolApi } from '@/api'
@@ -104,16 +103,15 @@ const {
   yesNoOptions
 } = useList()
 
-const selectedRows = ref<ProtocolRecord[]>([])
-const selectedIds = computed(() => selectedRows.value.map((item) => item.id))
+const picked = ref<ProtocolRecord[]>([])
+const ids = computed(() => picked.value.map((item) => item.id))
 
-// 列表刷新交给 UniDataTable 暴露的 refresh，表单保存和批量删除后复用同一入口。
-const refreshTable = () => {
+const reload = () => {
   tableRef.value?.refresh()
 }
 
-const handleDelete = async () => {
-  if (selectedIds.value.length === 0) {
+const del = async () => {
+  if (ids.value.length === 0) {
     return
   }
 
@@ -123,10 +121,10 @@ const handleDelete = async () => {
     type: 'warning'
   })
 
-  await protocolApi.delete.delete(selectedIds.value)
+  await protocolApi.delete.delete(ids.value)
   ElMessage.success(t('protocol.messages.deleteSuccess'))
-  selectedRows.value = []
-  refreshTable()
+  picked.value = []
+  reload()
 }
 </script>
 

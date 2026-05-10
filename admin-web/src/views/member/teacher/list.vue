@@ -33,12 +33,12 @@
       @load-success="handleLoadSuccess"
     />
 
-    <DetailDialog v-model:visible="detailVisible" :source="currentRecord" :config="detailConfig" />
+    <MDetail v-model:visible="detailVisible" :source="currentRecord" :config="detailConfig" />
   </section>
 </template>
 
 <script setup lang="ts">
-import DetailDialog from '../components/detail-dialog.vue'
+import MDetail from '../components/detail.vue'
 import { useList } from './use-list'
 
 const {
