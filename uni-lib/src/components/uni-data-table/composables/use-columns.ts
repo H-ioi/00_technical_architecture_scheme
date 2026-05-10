@@ -70,11 +70,7 @@ export function useColumns(getColumns: () => UniTableColumn[]) {
     draggingColumnProp.value = "";
   };
 
-  watch(
-    () => getColumns(),
-    syncColumnStates,
-    { immediate: true, deep: true },
-  );
+  watch(() => getColumns(), syncColumnStates, { immediate: true, deep: true });
 
   return {
     columnStates,

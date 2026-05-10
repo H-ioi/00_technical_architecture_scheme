@@ -151,7 +151,7 @@ export const formatMoney = (value: unknown, emptyText = "--") => {
 export const hasLookupOptionSource = (column: UniTableColumn) =>
   Boolean(
     column.options?.length ||
-      (column.valueEnum && Object.keys(column.valueEnum).length > 0),
+    (column.valueEnum && Object.keys(column.valueEnum).length > 0),
   );
 
 export const optionValuesLooselyEqual = (
@@ -234,8 +234,7 @@ const unwrapLookupItemValue = (raw: unknown): unknown => {
   }
 
   const o = raw as Record<string, unknown>;
-  const candidate =
-    o.id ?? o.value ?? o.schoolId ?? o.campusId ?? o.code;
+  const candidate = o.id ?? o.value ?? o.schoolId ?? o.campusId ?? o.code;
 
   return candidate !== undefined && candidate !== null ? candidate : raw;
 };
@@ -299,9 +298,7 @@ export const formatLookupCell = (
 
       if (
         parts.length > 1 &&
-        parts.every((part) =>
-          Boolean(resolveOption(part, column)?.label),
-        )
+        parts.every((part) => Boolean(resolveOption(part, column)?.label))
       ) {
         items = parts;
       }
@@ -464,9 +461,7 @@ export const formatTableCellText = (
   }
 
   if (columnType === "enum" || columnType === "tag") {
-    return (
-      resolveOption(value, column)?.label ?? formatEmpty(value)
-    );
+    return resolveOption(value, column)?.label ?? formatEmpty(value);
   }
 
   if (columnType === "array") {

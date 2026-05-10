@@ -139,8 +139,7 @@ const syncVisitedTagsFromRoute = () => {
   }
 
   const leafMeta = leaf.meta ?? {};
-  const shouldAddTag =
-    !leafMeta.hidden || Boolean(leafMeta.activeMenu);
+  const shouldAddTag = !leafMeta.hidden || Boolean(leafMeta.activeMenu);
 
   if (!shouldAddTag) {
     return;

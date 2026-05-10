@@ -93,11 +93,7 @@ const defaultIconMap: Record<string, Component> = {
 const resolveTitle = (
   menu: UniLayoutMenuRecord,
   translate: UniLayoutTranslate,
-) =>
-  translate(
-    menu.meta?.titleKey,
-    menu.meta?.title ?? menu.name ?? menu.path,
-  );
+) => translate(menu.meta?.titleKey, menu.meta?.title ?? menu.name ?? menu.path);
 
 const resolveIcon = (icon: string | undefined, iconMap: UniLayoutIconMap) =>
   icon ? (iconMap[icon] ?? defaultIconMap[icon]) : undefined;
