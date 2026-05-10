@@ -68,8 +68,20 @@ const signSchoolIds = computed(() =>
   schoolOptions.value.map((item) => item.value as string | number)
 )
 
-const enumLabel = (field: string, value: unknown) =>
-  enumOptionMaps.value[field]?.find((item) => item.value === value)?.label ?? String(value ?? '--')
+const enumLabel = (field: string, value: unknown) => {
+  const opts = enumOptionMaps.value[field]
+  const fallback = String(value ?? '--')
+
+  if (!opts?.length) {
+    return fallback
+  }
+
+  const hit = opts.find(
+    (item) => item.value === value || String(item.value) === String(value)
+  )
+
+  return hit?.label ?? fallback
+}
 
 const schoolName = computed(
   () =>

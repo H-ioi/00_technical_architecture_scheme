@@ -12,7 +12,9 @@ export const statusOpts = (t: Translate): UniOption[] => [
 export const searchForm = (
   t: Translate,
   schoolOptions: UniOption[],
-  statusOptions: UniOption[]
+  statusOptions: UniOption[],
+  /** 单校区时重置查询可回到该校（与旧系统一致） */
+  defaultSchoolId?: string | number | null
 ): UniFormConfig => ({
   schema: [
     {
@@ -20,6 +22,7 @@ export const searchForm = (
       label: '',
       component: 'ElSelect',
       options: schoolOptions,
+      ...(defaultSchoolId != null ? { defaultValue: defaultSchoolId } : {}),
       componentProps: {
         placeholder: t('schoolBus.driver.placeholders.school'),
         clearable: true,
@@ -114,5 +117,125 @@ export const formRules = (t: Translate): FormRules<DriverFormModel> => ({
   employeeNo: [
     { required: true, message: t('schoolBus.driver.rules.employeeNo'), trigger: 'blur' }
   ],
+  contact: [
+    { required: true, message: t('schoolBus.driver.rules.contact'), trigger: 'blur' }
+  ],
+  age: [
+    { required: true, message: t('schoolBus.driver.rules.age'), trigger: 'change' },
+    {
+      type: 'number',
+      min: 18,
+      max: 80,
+      message: t('schoolBus.driver.rules.ageRange'),
+      trigger: 'change'
+    }
+  ],
+  licenseType: [
+    { required: true, message: t('schoolBus.driver.rules.licenseType'), trigger: 'blur' }
+  ],
   status: [{ required: true, message: t('schoolBus.driver.rules.status'), trigger: 'change' }]
+})
+
+/** 司机新增/编辑/查看弹窗（与 `base/components/dict.vue` 一致使用 `UniForm`） */
+export const driverDialogFormConfig = (
+  t: Translate,
+  schoolOptions: UniOption[],
+  statusOptions: UniOption[]
+): UniFormConfig => ({
+  formProps: { labelPosition: 'top' },
+  rowProps: { gutter: 16 },
+  colProps: { span: 12 },
+  rules: formRules(t) as UniFormConfig['rules'],
+  schema: [
+    {
+      field: 'schoolIds',
+      label: t('schoolBus.driver.fields.school'),
+      component: 'ElSelect',
+      options: schoolOptions,
+      colProps: { span: 24 },
+      componentProps: {
+        multiple: true,
+        collapseTags: true,
+        filterable: true,
+        clearable: true,
+        placeholder: t('schoolBus.driver.placeholders.school')
+      },
+      viewRender: ({ value }) => {
+        const ids = Array.isArray(value) ? value : []
+        if (!ids.length) {
+          return '--'
+        }
+
+        return ids
+          .map(
+            (id) =>
+              schoolOptions.find((o) => String(o.value) === String(id))?.label ?? String(id)
+          )
+          .join('、')
+      }
+    },
+    {
+      field: 'name',
+      label: t('schoolBus.driver.fields.name'),
+      component: 'ElInput',
+      componentProps: {
+        maxlength: 64,
+        clearable: true,
+        placeholder: t('schoolBus.driver.placeholders.name')
+      }
+    },
+    {
+      field: 'employeeNo',
+      label: t('schoolBus.driver.fields.employeeNo'),
+      component: 'ElInput',
+      componentProps: {
+        maxlength: 64,
+        clearable: true,
+        placeholder: t('schoolBus.driver.placeholders.employeeNo')
+      }
+    },
+    {
+      field: 'contact',
+      label: t('schoolBus.driver.fields.contact'),
+      component: 'ElInput',
+      componentProps: {
+        maxlength: 32,
+        clearable: true,
+        placeholder: t('schoolBus.driver.placeholders.contact')
+      }
+    },
+    {
+      field: 'age',
+      label: t('schoolBus.driver.fields.age'),
+      component: 'ElInputNumber',
+      componentProps: {
+        min: 18,
+        max: 80,
+        step: 1,
+        precision: 0,
+        controlsPosition: 'right',
+        style: { width: '100%' }
+      }
+    },
+    {
+      field: 'licenseType',
+      label: t('schoolBus.driver.fields.licenseType'),
+      component: 'ElInput',
+      componentProps: {
+        maxlength: 32,
+        clearable: true,
+        placeholder: t('schoolBus.driver.placeholders.licenseType')
+      }
+    },
+    {
+      field: 'status',
+      label: t('schoolBus.driver.fields.status'),
+      component: 'ElSelect',
+      options: statusOptions,
+      viewType: 'enum',
+      componentProps: {
+        placeholder: t('schoolBus.driver.placeholders.status')
+      }
+    }
+  ]
 })

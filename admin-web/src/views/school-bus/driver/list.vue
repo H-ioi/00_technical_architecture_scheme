@@ -6,7 +6,7 @@
         <p>{{ $t('schoolBus.driver.page.description') }}</p>
       </div>
       <div class="school-bus-driver-page__header-actions">
-        <el-button v-uni-permission="'busdriver_import'" @click="downloadImportTemplate">
+        <el-button v-uni-permission="'busdriver_download'" @click="downloadImportTemplate">
           {{ $t('schoolBus.driver.actions.downloadTemplate') }}
         </el-button>
         <el-button v-uni-permission="'busdriver_import'" @click="pickImport">
@@ -24,7 +24,7 @@
       accept=".xlsx,.xls"
       class="school-bus-driver-page__file"
       @change="onImportFile"
-    />
+    >
 
     <UniSearchForm
       v-model="queryModel"
@@ -48,7 +48,7 @@
       :pagination="{ pageSize: 10, pageSizes: [10, 20, 50, 100] }"
       :toolbar="{ refresh: true, density: true, columnSetting: true }"
       :actions="actions"
-      :action-column="{ width: 100, fixed: 'right' }"
+      :action-column="{ width: 160, fixed: 'right' }"
       @selection-change="onSelectionChange"
       @load-success="handleLoadSuccess"
     >
@@ -68,6 +68,7 @@
       v-model:visible="formVisible"
       :mode="formMode"
       :source="currentRecord"
+      :default-school-id="defaultSchoolId"
       :school-options="schoolOptions"
       :status-options="statusOptions"
       @saved="reload"
@@ -92,6 +93,7 @@ const {
   actions,
   columns,
   currentRecord,
+  defaultSchoolId,
   downloadImportTemplate,
   filters,
   formMode,
@@ -107,6 +109,13 @@ const {
   statusOptions,
   tableRef
 } = useList()
+
+const IMPORT_MAX_BYTES = 10 * 1024 * 1024
+
+const isSpreadsheetFilename = (name: string) => {
+  const lower = name.toLowerCase()
+  return lower.endsWith('.xls') || lower.endsWith('.xlsx')
+}
 
 const picked = ref<DriverRow[]>([])
 const ids = computed(() => picked.value.map((item) => item.id))
@@ -133,6 +142,16 @@ const onImportFile = async (e: Event) => {
     return
   }
 
+  if (!isSpreadsheetFilename(file.name)) {
+    ElMessage.warning(t('schoolBus.driver.messages.importInvalidType'))
+    return
+  }
+
+  if (file.size > IMPORT_MAX_BYTES) {
+    ElMessage.warning(t('schoolBus.driver.messages.importTooLarge'))
+    return
+  }
+
   try {
     await schoolBusDriverApi.import.post(file)
     ElMessage.success(t('schoolBus.driver.messages.importSuccess'))
@@ -147,15 +166,19 @@ const del = async () => {
     return
   }
 
-  await ElMessageBox.confirm(
-    t('schoolBus.driver.messages.confirmDelete'),
-    t('schoolBus.driver.actions.delete'),
-    {
-      confirmButtonText: t('schoolBus.driver.actions.submit'),
-      cancelButtonText: t('schoolBus.driver.actions.cancel'),
-      type: 'warning'
-    }
-  )
+  try {
+    await ElMessageBox.confirm(
+      t('schoolBus.driver.messages.confirmDelete'),
+      t('schoolBus.driver.actions.delete'),
+      {
+        confirmButtonText: t('schoolBus.driver.actions.submit'),
+        cancelButtonText: t('schoolBus.driver.actions.cancel'),
+        type: 'warning'
+      }
+    )
+  } catch {
+    return
+  }
 
   await schoolBusDriverApi.delete.delete(ids.value)
   ElMessage.success(t('schoolBus.driver.messages.deleteSuccess'))

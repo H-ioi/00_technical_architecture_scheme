@@ -27,6 +27,7 @@ export default {
       reset: '重置',
       add: '新增',
       edit: '编辑',
+      look: '查看',
       delete: '删除',
       import: '导入',
       downloadTemplate: '下载模板',
@@ -37,6 +38,8 @@ export default {
       saveSuccess: '保存成功',
       deleteSuccess: '删除成功',
       importSuccess: '导入成功',
+      importInvalidType: '仅支持上传 xls、xlsx 文件',
+      importTooLarge: '文件大小不能超过 10MB',
       confirmDelete: '确定删除所选司机吗？'
     },
     options: {
@@ -47,6 +50,10 @@ export default {
       schoolIds: '请选择所属校区',
       name: '请输入姓名',
       employeeNo: '请输入工号',
+      contact: '请输入联系方式',
+      age: '请输入年龄',
+      ageRange: '年龄需在 18～80',
+      licenseType: '请输入准驾车型',
       status: '请选择状态'
     }
   }

@@ -27,6 +27,7 @@ export default {
       reset: 'Reset',
       add: 'Add',
       edit: 'Edit',
+      look: 'View',
       delete: 'Delete',
       import: 'Import',
       downloadTemplate: 'Template',
@@ -37,6 +38,8 @@ export default {
       saveSuccess: 'Saved',
       deleteSuccess: 'Deleted',
       importSuccess: 'Imported',
+      importInvalidType: 'Only .xls and .xlsx files are allowed',
+      importTooLarge: 'File size must be under 10MB',
       confirmDelete: 'Delete selected drivers?'
     },
     options: {
@@ -47,6 +50,10 @@ export default {
       schoolIds: 'Select campus',
       name: 'Enter name',
       employeeNo: 'Enter employee no.',
+      contact: 'Enter contact',
+      age: 'Enter age',
+      ageRange: 'Age must be between 18 and 80',
+      licenseType: 'Enter license class',
       status: 'Select status'
     }
   }
