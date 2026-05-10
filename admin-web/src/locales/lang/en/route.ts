@@ -13,5 +13,10 @@ export default {
   schoolBusRoute: 'Routes',
   schoolBusRoutePlan: 'Planning',
   schoolBusRouteOperation: 'Operations',
-  schoolBusRouteException: 'Exceptions'
+  schoolBusRouteException: 'Exceptions',
+  schoolBusStudent: 'Students',
+  schoolBusStudentApply: 'Applications',
+  schoolBusStudentOrder: 'Riders',
+  schoolBusFollowTeacher: 'Bus teachers',
+  schoolBusCar: 'Vehicles'
 }

@@ -17,5 +17,11 @@ export const API_PATHS = {
   /** 站点（旧 `api/isacommunity/station.js`，`/isacommunity/busstation`） */
   schoolBusStation: '/isacommunity/busstation',
   /** 公共字典项（旧 `api/workorder/order/orderlist.js`） */
-  publicDictItem: '/publik/dict/item'
+  publicDictItem: '/publik/dict/item',
+  /** 校车乘车订单 / 意向（旧 `api/isacommunity/busorder.js`，`/isacommunity/busorder`） */
+  schoolBusOrder: '/isacommunity/busorder',
+  /** 校车车辆（旧 `api/isacommunity/car.js`，`/isacommunity/buscarinfo`） */
+  schoolBusCarInfo: '/isacommunity/buscarinfo',
+  /** 跟车老师账号（旧 `api/isacommunity/user.js`，`/isacommunity/teacher/user`） */
+  schoolBusFollowTeacher: '/isacommunity/teacher/user'
 } as const

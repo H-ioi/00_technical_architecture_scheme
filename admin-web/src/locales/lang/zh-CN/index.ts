@@ -4,6 +4,7 @@ import base from './modules/base'
 import member from './modules/member'
 import protocol from './modules/protocol'
 import schoolBus from './modules/school-bus'
+import schoolBusMore from './modules/school-bus-more'
 import route from './route'
 
 export default {
@@ -16,5 +17,5 @@ export default {
   base,
   member,
   protocol,
-  schoolBus
+  schoolBus: { ...schoolBus, ...schoolBusMore },
 }

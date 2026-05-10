@@ -3,5 +3,10 @@
   "css.validate": false,
   "files.associations": {
     "*.scss": "scss"
+  },
+  "search.exclude": {
+    "**/node_modules": true,
+    "**/dist": true,
+    "**/.vitepress/cache": true
   }
 }

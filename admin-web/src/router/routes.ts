@@ -150,6 +150,54 @@ export const routes: AppRouteRecord[] = [
               title: '司机管理',
               titleKey: 'route.schoolBusDriver'
             }
+          },
+          {
+            path: 'student',
+            name: 'SchoolBusStudent',
+            redirect: '/school-bus/student/apply',
+            meta: {
+              title: '学生管理',
+              titleKey: 'route.schoolBusStudent'
+            },
+            children: [
+              {
+                path: 'apply',
+                name: 'SchoolBusStudentApply',
+                component: () => import('@/views/school-bus/student/apply/list.vue'),
+                meta: {
+                  title: '申请意向管理',
+                  titleKey: 'route.schoolBusStudentApply'
+                }
+              },
+              {
+                path: 'order',
+                name: 'SchoolBusStudentOrder',
+                component: () => import('@/views/school-bus/student/order/list.vue'),
+                meta: {
+                  title: '乘车学生管理',
+                  titleKey: 'route.schoolBusStudentOrder'
+                }
+              }
+            ]
+          },
+          {
+            path: 'follow-teacher',
+            name: 'SchoolBusFollowTeacher',
+            component: () => import('@/views/school-bus/follow-teacher/list.vue'),
+            meta: {
+              title: '跟车老师',
+              titleKey: 'route.schoolBusFollowTeacher',
+              icon: 'User'
+            }
+          },
+          {
+            path: 'car',
+            name: 'SchoolBusCar',
+            component: () => import('@/views/school-bus/car/list.vue'),
+            meta: {
+              title: '车辆管理',
+              titleKey: 'route.schoolBusCar'
+            }
           }
         ]
       },

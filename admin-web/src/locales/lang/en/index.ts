@@ -6,6 +6,7 @@ import base from './modules/base'
 import member from './modules/member'
 import protocol from './modules/protocol'
 import schoolBus from './modules/school-bus'
+import schoolBusMore from './modules/school-bus-more'
 import route from './route'
 
 const en: typeof zhCN = {
@@ -18,7 +19,7 @@ const en: typeof zhCN = {
   base,
   member,
   protocol,
-  schoolBus
+  schoolBus: { ...schoolBus, ...schoolBusMore }
 }
 
 export default en

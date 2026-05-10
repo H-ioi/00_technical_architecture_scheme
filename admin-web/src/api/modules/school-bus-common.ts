@@ -9,6 +9,12 @@ export default {
       return await request.get(this.url, { params })
     }
   },
+  teacherList: {
+    url: `${API_PATHS.schoolBusCommon}/getTeacherList`,
+    get: async function (this: { url: string }, params?: Record<string, unknown>) {
+      return await request.get(this.url, { params })
+    }
+  },
   carinfoList: {
     url: `${API_PATHS.schoolBusCommon}/getCarinfoList`,
     get: async function (this: { url: string }, params?: Record<string, unknown>) {

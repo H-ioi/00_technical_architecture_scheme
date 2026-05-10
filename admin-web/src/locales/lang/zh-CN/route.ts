@@ -13,5 +13,10 @@ export default {
   schoolBusRoute: '路线管理',
   schoolBusRoutePlan: '路线规划',
   schoolBusRouteOperation: '路线运营',
-  schoolBusRouteException: '异常上报'
+  schoolBusRouteException: '异常上报',
+  schoolBusStudent: '学生管理',
+  schoolBusStudentApply: '申请意向管理',
+  schoolBusStudentOrder: '乘车学生管理',
+  schoolBusFollowTeacher: '跟车老师',
+  schoolBusCar: '车辆管理'
 }

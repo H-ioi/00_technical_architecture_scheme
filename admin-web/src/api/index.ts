@@ -6,11 +6,14 @@ import studentApi from './modules/member-student'
 import teacherApi from './modules/member-teacher'
 import menuApi from './modules/menu'
 import protocolApi from './modules/protocol'
+import schoolBusCarApi from './modules/school-bus-car'
 import schoolBusCommonApi from './modules/school-bus-common'
 import schoolBusDriverApi from './modules/school-bus-driver'
 import schoolBusExceptionApi from './modules/school-bus-exception'
+import schoolBusFollowTeacherApi from './modules/school-bus-follow-teacher'
 import schoolBusLineApi from './modules/school-bus-line'
 import schoolBusOperationApi from './modules/school-bus-operation'
+import schoolBusOrderApi from './modules/school-bus-order'
 import schoolBusSectionApi from './modules/school-bus-section'
 import schoolBusStationApi from './modules/school-bus-station'
 
@@ -23,11 +26,14 @@ export {
   teacherApi,
   menuApi,
   protocolApi,
+  schoolBusCarApi,
   schoolBusCommonApi,
   schoolBusDriverApi,
   schoolBusExceptionApi,
+  schoolBusFollowTeacherApi,
   schoolBusLineApi,
   schoolBusOperationApi,
+  schoolBusOrderApi,
   schoolBusSectionApi,
   schoolBusStationApi
 }
