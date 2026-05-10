@@ -9,5 +9,9 @@ export default {
   baseSchool: '校区配置',
   baseGrade: '年级配置',
   schoolBus: '校车管理',
-  schoolBusDriver: '司机管理'
+  schoolBusDriver: '司机管理',
+  schoolBusRoute: '路线管理',
+  schoolBusRoutePlan: '路线规划',
+  schoolBusRouteOperation: '路线运营',
+  schoolBusRouteException: '异常上报'
 }

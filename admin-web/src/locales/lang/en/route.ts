@@ -9,5 +9,9 @@ export default {
   baseSchool: 'Campus configuration',
   baseGrade: 'Grade configuration',
   schoolBus: 'School bus',
-  schoolBusDriver: 'Drivers'
+  schoolBusDriver: 'Drivers',
+  schoolBusRoute: 'Routes',
+  schoolBusRoutePlan: 'Planning',
+  schoolBusRouteOperation: 'Operations',
+  schoolBusRouteException: 'Exceptions'
 }

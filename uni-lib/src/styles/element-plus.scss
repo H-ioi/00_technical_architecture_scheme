@@ -46,3 +46,8 @@
 .el-button {
   line-height: 0.8;
 }
+
+.el-date-editor.el-input,
+.el-date-editor.el-input__wrapper {
+  width: 100%;
+}

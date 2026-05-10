@@ -117,9 +117,7 @@ export const formRules = (t: Translate): FormRules<DriverFormModel> => ({
   employeeNo: [
     { required: true, message: t('schoolBus.driver.rules.employeeNo'), trigger: 'blur' }
   ],
-  contact: [
-    { required: true, message: t('schoolBus.driver.rules.contact'), trigger: 'blur' }
-  ],
+  contact: [{ required: true, message: t('schoolBus.driver.rules.contact'), trigger: 'blur' }],
   age: [
     { required: true, message: t('schoolBus.driver.rules.age'), trigger: 'change' },
     {
@@ -168,8 +166,7 @@ export const driverDialogFormConfig = (
 
         return ids
           .map(
-            (id) =>
-              schoolOptions.find((o) => String(o.value) === String(id))?.label ?? String(id)
+            (id) => schoolOptions.find((o) => String(o.value) === String(id))?.label ?? String(id)
           )
           .join('、')
       }

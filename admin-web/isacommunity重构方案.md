@@ -259,7 +259,7 @@ admin-web/src/
 | --- | --- |
 | 列表表格 | `UniDataTable` |
 | 查询条件 | `UniSearchForm` |
-| 详情表单 | `UniForm` |
+| 详情 / 新增 / 编辑表单（含弹窗） | `UniForm`：`schema`、`rules`、选项类字段放在同目录 `list.config.ts`；**多 Tab 聚合页**（如路线规划）主文件为 **`tab.vue`**，配置为 **`tab.config.ts`**。禁止在已能映射为 `UniFormConfig` 的场景下直接使用裸 `el-form`；若组件库暂不支持，须在方案或 PR 中写明例外原因。 |
 | 权限控制 | `v-uni-permission` / `useUniPermission` |
 | 请求封装 | `createUniRequest` 或 `admin-web` 当前 `request` 适配后统一出口 |
 | 登录认证 | `createUniAuth` / 项目 `userStore` |
@@ -779,7 +779,7 @@ if (status === 401) {
 | 成员管理 / 教师列表 | `/isacommunity/member/teacher/index` | `/member/teacher` |
 | 校车管理 | `/isacommunity/schoolbus` | `/school-bus` |
 | 校车管理 / 路线管理 | `/isacommunity/schoolbus/route` | `/school-bus/route` |
-| 校车管理 / 路线管理 / 路线规划 | `/isacommunity/schoolbus/route/plan/index` | `/school-bus/route/plan` |
+| 校车管理 / 路线管理 / 路线规划 | `/isacommunity/schoolbus/route/plan/index` | `/school-bus/route/plan`（页面 `tab.vue`，配置 `tab.config.ts`） |
 | 校车管理 / 路线管理 / 路线运营 | `/isacommunity/schoolbus/route/operation/index` | `/school-bus/route/operation` |
 | 校车管理 / 路线管理 / 异常上报 | `/isacommunity/schoolbus/route/exception/index` | `/school-bus/route/exception` |
 | 校车管理 / 学生管理 | `/isacommunity/schoolbus/student` | `/school-bus/student` |

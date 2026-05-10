@@ -97,13 +97,51 @@ export const routes: AppRouteRecord[] = [
       {
         path: 'school-bus',
         name: 'SchoolBus',
-        redirect: '/school-bus/driver',
+        redirect: '/school-bus/route/plan',
         meta: {
           title: '校车管理',
           titleKey: 'route.schoolBus',
           icon: 'Van'
         },
         children: [
+          {
+            path: 'route',
+            name: 'SchoolBusRoute',
+            redirect: '/school-bus/route/plan',
+            meta: {
+              title: '路线管理',
+              titleKey: 'route.schoolBusRoute'
+            },
+            children: [
+              {
+                path: 'plan',
+                name: 'SchoolBusRoutePlan',
+                component: () => import('@/views/school-bus/route/plan/tab.vue'),
+                meta: {
+                  title: '路线规划',
+                  titleKey: 'route.schoolBusRoutePlan'
+                }
+              },
+              {
+                path: 'operation',
+                name: 'SchoolBusRouteOperation',
+                component: () => import('@/views/school-bus/route/operation/list.vue'),
+                meta: {
+                  title: '路线运营',
+                  titleKey: 'route.schoolBusRouteOperation'
+                }
+              },
+              {
+                path: 'exception',
+                name: 'SchoolBusRouteException',
+                component: () => import('@/views/school-bus/route/exception/list.vue'),
+                meta: {
+                  title: '异常上报',
+                  titleKey: 'route.schoolBusRouteException'
+                }
+              }
+            ]
+          },
           {
             path: 'driver',
             name: 'SchoolBusDriver',
