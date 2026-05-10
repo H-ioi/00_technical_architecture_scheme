@@ -6,14 +6,17 @@
         <p>{{ $t('schoolBus.studentOrder.page.description') }}</p>
       </div>
       <div class="school-bus-student-order__actions">
-        <el-button v-uni-permission="'busorder_add'" type="primary" @click="onAddNotReady">
-          {{ $t('schoolBus.driver.actions.add') }}
+        <el-button v-uni-permission="'busorder_export_order'" @click="exportData">
+          {{ $t('schoolBus.driver.actions.export') }}
+        </el-button>
+        <el-button v-uni-permission="'busorder_import_order'" @click="downloadOrderTemplate">
+          {{ $t('schoolBus.driver.actions.downloadTemplate') }}
         </el-button>
         <el-button v-uni-permission="'busorder_import_order'" @click="pickImport">
           {{ $t('schoolBus.driver.actions.import') }}
         </el-button>
-        <el-button v-uni-permission="'busorder_export_order'" @click="exportData">
-          {{ $t('schoolBus.driver.actions.export') }}
+        <el-button v-uni-permission="'busorder_add'" type="primary" @click="onAddNotReady">
+          {{ $t('schoolBus.driver.actions.add') }}
         </el-button>
       </div>
     </div>
@@ -111,6 +114,14 @@ const onSelectionChange = (rows: BusOrderRecord[]) => {
 
 const onAddNotReady = () => {
   ElMessage.info(t('schoolBus.studentOrder.messages.addFormTodo'))
+}
+
+const downloadOrderTemplate = async () => {
+  try {
+    await schoolBusOrderApi.downloadOrder.download()
+  } catch {
+    /* request 层已提示 */
+  }
 }
 
 const pickImport = () => fileRef.value?.click()

@@ -8,15 +8,10 @@ import { computed, onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
 
 import { membershipApi, protocolApi } from '@/api'
-import type { ProtocolDict, ProtocolDictItem, ProtocolRecord as Row } from '@/types/modules/protocol'
+import type { ProtocolDict, ProtocolRecord as Row } from '@/types/modules/protocol'
 
+import { buildProtocolDictOptions } from './dict-options'
 import { searchForm, statusOpts, tableCols, yesNoOpts } from './list.config'
-
-const dictOpts = (items: ProtocolDictItem[] = [], locale: string): UniOption[] =>
-  toUniOptions(items, {
-    labelKeys: locale === 'en' ? ['enName', 'name', 'cnName'] : ['name', 'cnName', 'enName'],
-    valueKey: 'id'
-  })
 
 export const useList = () => {
   const router = useRouter()
@@ -38,8 +33,10 @@ export const useList = () => {
   const schoolOptions = ref<UniOption[]>([])
   const protocolDict = ref<ProtocolDict>({})
 
-  const protocolTypeOptions = computed(() => dictOpts(protocolDict.value.protocolTypeList, locale()))
-  const moduleOptions = computed(() => dictOpts(protocolDict.value.moduleList, locale()))
+  const protocolTypeOptions = computed(() =>
+    buildProtocolDictOptions(protocolDict.value.protocolTypeList, locale())
+  )
+  const moduleOptions = computed(() => buildProtocolDictOptions(protocolDict.value.moduleList, locale()))
   const yesNoOptions = computed(() => yesNoOpts(t))
   const statusOptions = computed(() => statusOpts(t))
   const searchConfig = computed(() =>
@@ -48,6 +45,8 @@ export const useList = () => {
   const columns = computed(() =>
     tableCols(
       t,
+      locale(),
+      schoolOptions.value,
       protocolTypeOptions.value,
       moduleOptions.value,
       yesNoOptions.value,
@@ -55,16 +54,11 @@ export const useList = () => {
     )
   )
 
-  const normRow = (row: Row): Row => ({
-    ...row,
-    schoolName: (locale() === 'en' ? row.schoolEnNames : row.schoolCnNames) || row.schoolEnNames || row.schoolCnNames
-  })
-
   const loadData: UniTableRequest = async ({ pageNo: current, pageSize: size, filters }) => {
     const result = await protocolApi.page.get({ current, size, ...filters })
 
     return {
-      data: result.data.map(normRow),
+      data: result.data,
       total: result.total
     }
   }

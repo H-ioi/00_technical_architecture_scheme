@@ -35,6 +35,8 @@ export interface ProtocolDictItem {
   cnName?: string
   enName?: string
   name?: string
+  /** 与列表字段 protocolType / module 一致的业务编码（若与 id 不同则用于映射） */
+  code?: string | number
 }
 
 export interface ProtocolDict {

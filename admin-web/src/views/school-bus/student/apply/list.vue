@@ -6,11 +6,14 @@
         <p>{{ $t('schoolBus.studentApply.page.description') }}</p>
       </div>
       <div class="school-bus-student-apply__actions">
-        <el-button v-uni-permission="'busorder_add'" type="primary" @click="onAddNotReady">
-          {{ $t('schoolBus.driver.actions.add') }}
+        <el-button v-uni-permission="'busorder_import_intention_order'" @click="downloadIntentionTemplate">
+          {{ $t('schoolBus.driver.actions.downloadTemplate') }}
         </el-button>
         <el-button v-uni-permission="'busorder_import_intention_order'" @click="pickImport">
           {{ $t('schoolBus.driver.actions.import') }}
+        </el-button>
+        <el-button v-uni-permission="'busorder_add'" type="primary" @click="onAddNotReady">
+          {{ $t('schoolBus.driver.actions.add') }}
         </el-button>
       </div>
     </div>
@@ -157,6 +160,14 @@ const onSelectionChange = (rows: BusOrderRecord[]) => {
 
 const onAddNotReady = () => {
   ElMessage.info(t('schoolBus.studentApply.messages.addFormTodo'))
+}
+
+const downloadIntentionTemplate = async () => {
+  try {
+    await schoolBusOrderApi.downloadIntentionOrder.download()
+  } catch {
+    /* request 层已提示 */
+  }
 }
 
 const pickImport = () => fileRef.value?.click()

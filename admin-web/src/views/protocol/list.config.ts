@@ -4,6 +4,8 @@ import type { UniFormConfig, UniOption, UniTableColumn } from 'uni-ui-lib'
 import type { Translate } from '@/types/i18n'
 import type { ProtocolFormModel } from '@/types/modules/protocol'
 
+import { resolveProtocolDictCellLabel } from './dict-options'
+
 export const yesNoOpts = (t: Translate): UniOption[] => [
   { label: t('protocol.options.yes'), value: 1, type: 'success' },
   { label: t('protocol.options.no'), value: 0, type: 'info' }
@@ -87,6 +89,8 @@ export const searchForm = (
 
 export const tableCols = (
   t: Translate,
+  locale: string,
+  schoolOptions: UniOption[],
   protocolTypeOptions: UniOption[],
   moduleOptions: UniOption[],
   yesNoOptions: UniOption[],
@@ -94,10 +98,12 @@ export const tableCols = (
 ): UniTableColumn[] => [
   { prop: 'id', label: 'ID', type: 'text', width: 90, fixed: 'left' },
   {
-    prop: 'schoolName',
+    prop: 'schoolIds',
     label: t('protocol.fields.school'),
-    type: 'text',
-    minWidth: 180,
+    type: 'array',
+    options: schoolOptions,
+    lookup: { splitValues: true },
+    minWidth: 200,
     showOverflowTooltip: true
   },
   {
@@ -117,16 +123,24 @@ export const tableCols = (
   {
     prop: 'protocolType',
     label: t('protocol.fields.protocolType'),
-    type: 'enum',
-    options: protocolTypeOptions,
-    minWidth: 130
+    type: 'text',
+    minWidth: 130,
+    formatter: (row, _column, value) =>
+      resolveProtocolDictCellLabel(row, value, protocolTypeOptions, locale, {
+        zh: 'protocolTypeCnName',
+        en: 'protocolTypeEnName'
+      })
   },
   {
     prop: 'module',
     label: t('protocol.fields.module'),
-    type: 'enum',
-    options: moduleOptions,
-    minWidth: 130
+    type: 'text',
+    minWidth: 130,
+    formatter: (row, _column, value) =>
+      resolveProtocolDictCellLabel(row, value, moduleOptions, locale, {
+        zh: 'moduleCnName',
+        en: 'moduleEnName'
+      })
   },
   {
     prop: 'needSign',

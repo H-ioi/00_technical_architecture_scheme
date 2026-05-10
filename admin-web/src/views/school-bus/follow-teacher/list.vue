@@ -6,14 +6,14 @@
         <p>{{ $t('schoolBus.followTeacher.page.description') }}</p>
       </div>
       <div class="school-bus-follow-teacher__actions">
+        <el-button v-uni-permission="'teacheruser_export'" @click="exportData">
+          {{ $t('schoolBus.driver.actions.export') }}
+        </el-button>
         <el-button v-uni-permission="'teacheruser_download'" @click="downloadTemplate">
           {{ $t('schoolBus.driver.actions.downloadTemplate') }}
         </el-button>
         <el-button v-uni-permission="'teacheruser_import'" @click="pickImport">
           {{ $t('schoolBus.driver.actions.import') }}
-        </el-button>
-        <el-button v-uni-permission="'teacheruser_export'" @click="exportData">
-          {{ $t('schoolBus.driver.actions.export') }}
         </el-button>
         <el-button v-uni-permission="'teacheruser_add'" type="primary" @click="openForm('add')">
           {{ $t('schoolBus.driver.actions.add') }}

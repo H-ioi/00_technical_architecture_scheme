@@ -38,6 +38,7 @@ import { useRoute, useRouter } from 'vue-router'
 import { membershipApi, protocolApi } from '@/api'
 import type { ProtocolDict, ProtocolRecord } from '@/types/modules/protocol'
 
+import { buildProtocolDictOptions, resolveProtocolDictCellLabel } from './dict-options'
 import { detailForm, signCols as buildSignCols, statusOpts, yesNoOpts } from './list.config'
 
 const route = useRoute()
@@ -49,14 +50,10 @@ const protocolDict = ref<ProtocolDict>({})
 const signCols = computed(() => buildSignCols(t))
 const pid = computed(() => String(route.params.id ?? ''))
 
-const dictOpts = (items: NonNullable<ProtocolDict['protocolTypeList']> = []): UniOption[] =>
-  toUniOptions(items, {
-    labelKeys: locale() === 'en' ? ['enName', 'name', 'cnName'] : ['name', 'cnName', 'enName'],
-    valueKey: 'id'
-  })
-
-const protocolTypeOptions = computed(() => dictOpts(protocolDict.value.protocolTypeList))
-const moduleOptions = computed(() => dictOpts(protocolDict.value.moduleList))
+const protocolTypeOptions = computed(() =>
+  buildProtocolDictOptions(protocolDict.value.protocolTypeList, locale())
+)
+const moduleOptions = computed(() => buildProtocolDictOptions(protocolDict.value.moduleList, locale()))
 /** 详情页文案映射（非表格 props） */
 const enumOptionMaps = computed<Record<string, UniOption[]>>(() => ({
   protocolType: protocolTypeOptions.value,
@@ -69,6 +66,22 @@ const signSchoolIds = computed(() =>
 )
 
 const enumLabel = (field: string, value: unknown) => {
+  const row = (detail.value ?? {}) as Record<string, unknown>
+
+  if (field === 'protocolType') {
+    return resolveProtocolDictCellLabel(row, value, protocolTypeOptions.value, locale(), {
+      zh: 'protocolTypeCnName',
+      en: 'protocolTypeEnName'
+    })
+  }
+
+  if (field === 'module') {
+    return resolveProtocolDictCellLabel(row, value, moduleOptions.value, locale(), {
+      zh: 'moduleCnName',
+      en: 'moduleEnName'
+    })
+  }
+
   const opts = enumOptionMaps.value[field]
   const fallback = String(value ?? '--')
 
@@ -77,7 +90,12 @@ const enumLabel = (field: string, value: unknown) => {
   }
 
   const hit = opts.find(
-    (item) => item.value === value || String(item.value) === String(value)
+    (item) =>
+      item.value === value ||
+      String(item.value) === String(value) ||
+      (Number.isFinite(Number(item.value)) &&
+        Number.isFinite(Number(value)) &&
+        Number(item.value) === Number(value))
   )
 
   return hit?.label ?? fallback
