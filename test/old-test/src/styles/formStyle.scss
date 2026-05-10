@@ -1,0 +1,122 @@
+.ClueFrom {
+  padding: 40px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  .title_text {
+    font-size: 18px;
+    color: #2c88f5;
+    margin-bottom: 20px;
+    font-weight: 600;
+  }
+  .demo-ruleForm {
+    margin-top: 40px;
+    padding: 30px 20px;
+    background-color: #fff;
+    box-sizing: border-box;
+    position: relative;
+
+    .fromitemBtn {
+      position: absolute;
+      top: -50px;
+      right: 0;
+      .el-button {
+        width: 120px;
+        height: 40px;
+      }
+    }
+  }
+  .content {
+    flex: 1;
+    margin-top: 40px;
+    .contentBox {
+      // height: 100%;
+      width: 49%;
+      padding: 20px;
+      background-color: #fff;
+      box-sizing: border-box;
+    }
+  }
+}
+.selectionItem {
+  display: flex;
+  align-items: flex-start;
+  margin-bottom: 30px;
+  span {
+    padding: 10px 30px;
+    box-sizing: border-box;
+    margin-right: 10px;
+    color: #999999;
+    border-radius: 5px;
+    background: #f8f8f8;
+    cursor: pointer;
+    // margin-bottom: 20px;
+    &:hover {
+      color: #2c88f5;
+      background: #f5f7fe;
+    }
+  }
+}
+.contentBox_item {
+  .stagebox {
+    margin-left: 152px;
+  }
+  .contentBox_item_title {
+    width: 66px;
+    height: 66px;
+    background: #f5f7fe;
+    border-radius: 50%;
+    font-size: 16px;
+    padding: 0 10px;
+    box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    color: #2c88f5;
+    margin-bottom: 20px;
+    text-align: center;
+  }
+
+  .contentBox_item_list {
+    position: relative;
+    margin-bottom: 40px;
+    font-size: 14px;
+    .line {
+      position: absolute;
+      top: 20px;
+      bottom: 0;
+      left: 184px;
+      width: 2px;
+      height: 40px;
+      margin: 20px 0;
+      background-color: #ececec;
+      z-index: 99;
+    }
+    .list_l {
+      flex: 1;
+      display: flex;
+      align-items: center;
+    }
+    .listdate {
+      font-weight: 600;
+      color: #333333;
+    }
+    .listtext {
+      width: 40px;
+      height: 40px;
+      background: #2c88f5;
+      border-radius: 50%;
+      line-height: 40px;
+      text-align: center;
+      margin: 0 20px;
+      color: #fff;
+    }
+    .listdesc {
+      flex: 1;
+      .dasc {
+        width: 200px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+    }
+  }
+}

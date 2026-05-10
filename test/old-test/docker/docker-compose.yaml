@@ -1,0 +1,19 @@
+version: '3'
+services:
+  uni-ui:
+    build:
+      context: .
+    restart: always
+    container_name: uni-ui
+    image: uni-ui
+    networks:
+      - uni_default
+    external_links:
+      - uni-gateway
+    ports:
+      - 80:80
+
+# 加入到后端网络， 默认为 uni_default  | docker network ls   查看
+networks:
+  uni_default:
+    external: true

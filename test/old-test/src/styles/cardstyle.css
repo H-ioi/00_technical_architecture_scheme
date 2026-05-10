@@ -1,0 +1,50 @@
+.cardcontentbox {
+  border-bottom: 1px solid #e5e5e5;
+  padding-bottom: 20px;
+  margin-bottom: 20px;
+}
+
+.playbtnbox {
+  background-color: #fff;
+  padding: 20px 20px 10px;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+}
+
+.tabbox {
+  padding: 0 20px 30px;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+  background-color: #fff;
+}
+
+.phonicon {
+  font-size: 20px;
+  color: #2c88f5;
+  cursor: pointer;
+  margin-right: 5px;
+}
+
+.addphonebox {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  padding-top: 50px;
+  color: #2c88f5;
+  cursor: pointer;
+}
+
+.button, .btnform .el-button {
+  width: 80px !important;
+  height: 32px !important;
+  line-height: 8px !important;
+  border-radius: 5px !important;
+}
+
+.btnform {
+  text-align: right;
+}
+/*# sourceMappingURL=cardstyle.css.map */

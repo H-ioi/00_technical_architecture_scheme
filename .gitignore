@@ -1,6 +1,5 @@
 **/node_modules/
 **/dist/
 **/.vitepress/dist/
-test/
 .agents/
 uni-lib/.npmrc

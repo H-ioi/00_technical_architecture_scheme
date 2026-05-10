@@ -1,0 +1,9 @@
+{
+    "version": 3,
+    "mappings": "AAAA,YAAY;AACZ,MAAM,CAAC,MAAM,MAAM,SAAS,EAAE,MAAM;EAClC,AAAA,0BAA0B,CAAC;IACzB,KAAK,EAAE,iBAAiB;GACzB",
+    "sources": [
+        "mediaStyle.scss"
+    ],
+    "names": [],
+    "file": "mediaStyle.css"
+}

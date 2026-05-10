@@ -1,0 +1,127 @@
+.dfcenter {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.avue-sidebar {
+	user-select: none;
+	position: relative;
+	padding-top: 140px;
+	height: 100%;
+	position: relative;
+	// background-color: #20222a;
+	background-color: #fff;
+	transition: width 0.2s;
+	box-sizing: border-box;
+
+	// box-shadow: 2px 0 6px rgba(0,21,41,.35);
+	&--tip {
+		width: 90%;
+		height: 140px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		border-radius: 5px;
+		position: absolute;
+		top: 5px;
+		left: 5%;
+		color: #ccc;
+		z-index: 2;
+		text-align: center;
+		font-size: 14px;
+		background-color: #ffffff;
+	}
+
+	.menu-wrapper {
+		width: 160px;
+
+		.el-submenu {
+			@extend .dfcenter;
+		}
+	}
+
+	.el-menu-item,
+	.el-submenu__title {
+		font-size: 14px;
+		height: 100px;
+		@extend .dfcenter;
+		flex-direction: column;
+		// padding: 15px;
+		box-sizing: border-box;
+
+		span {
+			line-height: 0;
+		}
+	}
+
+	.el-menu-item {
+		&:hover {
+			background-color: #fff;
+		}
+
+		img {
+			&:hover {
+				// background-color: #F5F7FE;
+			}
+		}
+
+		.menu-item-box {
+			width: 90px;
+			@extend .dfcenter;
+			flex-direction: column;
+			padding: 15px;
+			position: relative;
+
+			&:hover {
+				background-color: #f5f7fe;
+				color: #175E67;
+			}
+		}
+	}
+
+	.el-submenu__title {
+		width: 90px;
+
+		span,
+		i {
+			color: rgba(255, 255, 255, 0.7);
+		}
+
+		&:hover {
+
+			i,
+			span {
+				color: #175E67;
+			}
+
+			background-color: #f5f7fe;
+		}
+	}
+
+	// .el-submenu .el-menu-item {
+	//     height: 50px;
+	//     line-height: 50px;
+	//     span,i{
+	//         color:rgba(255, 255, 255, 0.7);
+	//     }
+	//     &.is-active {
+	//         background-color: rgba(0, 0, 0, .8);
+	//         span,
+	//         i {
+	//             color: #175E67
+	//         }
+	//         &:hover {
+	//             background-color: rgba(0, 0, 0, .8);
+	//         }
+	//     }
+	//     &:hover {
+	//         background-color: #F5F7FE;
+	//         color: #175E67;
+	//         // span,
+	//         // i {
+	//         //     color: #175E67;
+	//         // }
+	//     }
+	// }
+}

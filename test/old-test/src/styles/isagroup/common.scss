@@ -1,0 +1,92 @@
+.isa_center_page {
+	.searchFromBox {
+		background-color: #fff;
+		padding: 20px 20px 0;
+
+		.searchFromBox_header {
+			margin-bottom: 20px;
+
+			.searchFromBox_header_titel {
+				font-size: 20px;
+				font-family: AlibabaPuHuiTiM;
+				color: #333333;
+				line-height: 27px;
+				padding-left: 15px;
+				position: relative;
+
+				&::before {
+					content: "";
+					position: absolute;
+					top: 1px;
+					bottom: 1px;
+					left: 0;
+					width: 5px;
+					background: #d4ab85;
+					border-radius: 3px;
+				}
+			}
+		}
+
+		.palyTableBox {
+			padding-top: 10px;
+		}
+	}
+
+	.tabledata {
+		display: flex;
+		align-items: center;
+		flex-wrap: wrap;
+
+		.dataitem {
+			width: 30%;
+			margin-bottom: 20px;
+			padding: 0 10px;
+			text-align: left;
+
+			.dataitem_label {
+				font-size: 16px;
+				color: #333333;
+				line-height: 24px;
+				margin-bottom: 5px;
+			}
+
+			.dataitem_value {
+				font-size: 14px;
+				color: #999999;
+				line-height: 24px;
+			}
+		}
+	}
+}
+
+.isagroup-plain-button {
+	color: #d4ab85 !important;
+	background: #ffffff !important;
+	border-color: #d4ab85 !important;
+
+	&:hover {
+		background: rgba(212, 171, 133, 0.5);
+	}
+}
+
+// tabs样式修改
+.table_tabs {
+	.el-tabs__item::before {
+		width: 0px !important;
+	}
+
+	.el-tabs__item {
+		padding: 0 40px 0 0 !important;
+		margin: 0 !important;
+	}
+
+	.el-tabs__item.is-active,
+	.el-tabs__item:hover {
+		color: #d4ab85 !important;
+	}
+
+	.el-tabs__active-bar {
+		height: 4px !important;
+		background: #d4ab85 !important;
+	}
+}
