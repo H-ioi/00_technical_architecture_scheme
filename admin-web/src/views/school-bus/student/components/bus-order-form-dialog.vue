@@ -179,8 +179,8 @@
                 <el-input-number
                   v-if="
                     canShowPayInfo &&
-                    String(ruleForm.paymentStatus) === '2' &&
-                    String(p.value) === '2'
+                      String(ruleForm.paymentStatus) === '2' &&
+                      String(p.value) === '2'
                   "
                   v-model="ruleForm.paymentAmount"
                   class="bus-order-form__pay-inline"
@@ -397,7 +397,7 @@
             accept="image/*"
             class="bus-order-form__hidden-file"
             @change="onPersonFile"
-          />
+          >
         </template>
       </UniForm>
       <template #footer>
