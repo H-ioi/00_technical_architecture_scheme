@@ -41,12 +41,6 @@ export const useList = () => {
   const busOptions = computed(() => busOpts(t))
   const dormitoryOptions = computed(() => dormOpts(t))
   const ynDispOptions = computed(() => ynDispOpts(t))
-  const valueEnums = computed<Record<string, UniOption[]>>(() => ({
-    busStatus: ynDispOptions.value,
-    dormitoryStatus: ynDispOptions.value,
-    schoolName: schoolOptions.value,
-    studentStatus: statusDispOpts.value
-  }))
   const searchConfig = computed(() =>
     searchForm(
       t,
@@ -58,7 +52,9 @@ export const useList = () => {
       statusOptions.value
     )
   )
-  const columns = computed(() => tableCols(t))
+  const columns = computed(() =>
+    tableCols(t, schoolOptions.value, ynDispOptions.value, statusDispOpts.value)
+  )
   const detailConfig = computed(() => detailForm(t))
 
   const loadData: UniTableRequest = ({ pageNo: current, pageSize: size, filters }) =>
@@ -114,7 +110,6 @@ export const useList = () => {
     search,
     searchConfig,
     tableRef,
-    total,
-    valueEnums
+    total
   }
 }

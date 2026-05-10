@@ -1,6 +1,6 @@
-import type { UniOption, UniTableAction, UniTableRequest } from 'uni-ui-lib'
+import type { UniTableAction, UniTableRequest } from 'uni-ui-lib'
 import { toUniOptions, useUniI18n, useUniListState } from 'uni-ui-lib'
-import { computed, onMounted, ref } from 'vue'
+import { computed, onMounted, ref, watch } from 'vue'
 
 import { membershipApi, schoolBusDriverApi } from '@/api'
 import type { SchoolOptionRecord } from '@/types/modules/membership'
@@ -8,10 +8,77 @@ import type { DriverRecord as Row } from '@/types/modules/school-bus-driver'
 
 import { searchForm, statusOpts, tableCols } from './list.config'
 
-const dispSchool = (row: Row): string =>
-  (typeof row.schoolNames === 'string' && row.schoolNames) ||
-  (typeof row.schoolName === 'string' && row.schoolName) ||
-  ''
+type Loose = Record<string, unknown>
+
+/** 分页体兼容 `{ data:[] }` / `{ records:[] }` / `data: { list:[] }` */
+const unwrapDriverPage = (payload: unknown): { list: Row[]; total: number } => {
+  if (!payload || typeof payload !== 'object') {
+    return { list: [], total: 0 }
+  }
+
+  const r = payload as Loose
+  const num = (value: unknown) =>
+    typeof value === 'number' && Number.isFinite(value) ? value : 0
+
+  if (Array.isArray(r.data)) {
+    return { list: r.data as Row[], total: num(r.total) }
+  }
+
+  if (Array.isArray(r.records)) {
+    return { list: r.records as Row[], total: num(r.total) }
+  }
+
+  if (Array.isArray(r.list)) {
+    return { list: r.list as Row[], total: num(r.total) }
+  }
+
+  const inner = r.data
+
+  if (inner && typeof inner === 'object' && !Array.isArray(inner)) {
+    const obj = inner as Loose
+    let list: Row[] = []
+
+    if (Array.isArray(obj.records)) {
+      list = obj.records as Row[]
+    } else if (Array.isArray(obj.list)) {
+      list = obj.list as Row[]
+    } else if (Array.isArray(obj.data)) {
+      list = obj.data as Row[]
+    } else if (Array.isArray(obj.content)) {
+      list = obj.content as Row[]
+    }
+
+    return {
+      list,
+      total:
+        num(r.total) ||
+        num(obj.total) ||
+        num(obj.totalElements) ||
+        num(r.totalElements)
+    }
+  }
+
+  return {
+    list: [],
+    total: num(r.total) ?? num(r.totalRow) ?? num(r.totalElements)
+  }
+}
+
+const pickSchoolRecords = (payload: unknown): SchoolOptionRecord[] => {
+  if (Array.isArray(payload)) {
+    return payload as SchoolOptionRecord[]
+  }
+
+  if (payload && typeof payload === 'object') {
+    const data = (payload as Loose).data
+
+    if (Array.isArray(data)) {
+      return data as SchoolOptionRecord[]
+    }
+  }
+
+  return []
+}
 
 export const useList = () => {
   const { locale, t } = useUniI18n()
@@ -35,23 +102,16 @@ export const useList = () => {
   const currentRecord = ref<Row | null>(null)
 
   const statusOptions = computed(() => statusOpts(t))
-  const valueEnums = computed<Record<string, UniOption[]>>(() => ({
-    status: statusOptions.value
-  }))
   const searchConfig = computed(() => searchForm(t, schoolOptions.value, statusOptions.value))
-  const columns = computed(() => tableCols(t))
-
-  const normRow = (row: Row): Row => ({
-    ...row,
-    schoolNames: dispSchool(row)
-  })
+  const columns = computed(() => tableCols(t, schoolOptions.value, statusOptions.value))
 
   const loadData: UniTableRequest = async ({ pageNo: current, pageSize: size, filters: f }) => {
     const result = await schoolBusDriverApi.page.get({ current, size, ...f })
+    const { list, total: pageTotal } = unwrapDriverPage(result)
 
     return {
-      data: result.data.map(normRow),
-      total: result.total
+      data: list,
+      total: pageTotal
     }
   }
 
@@ -74,8 +134,19 @@ export const useList = () => {
   }
 
   onMounted(async () => {
-    schoolRecords.value = await membershipApi.school.get()
+    const raw = await membershipApi.school.get()
+    schoolRecords.value = pickSchoolRecords(raw)
   })
+
+  /** 校区字典晚于首屏表格请求时，刷新一次以应用列上 `options` */
+  watch(
+    () => schoolRecords.value.length,
+    (n) => {
+      if (n > 0) {
+        tableRef.value?.refresh()
+      }
+    }
+  )
 
   return {
     actions,
@@ -95,7 +166,6 @@ export const useList = () => {
     searchConfig,
     statusOptions,
     tableRef,
-    total,
-    valueEnums
+    total
   }
 }

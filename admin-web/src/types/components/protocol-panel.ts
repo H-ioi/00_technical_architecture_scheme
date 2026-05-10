@@ -6,7 +6,8 @@ export interface ProtocolPanelProps {
   visible: boolean
   source?: ProtocolRecord | null
   schoolOptions: UniOption[]
-  valueEnums: Record<string, UniOption[]>
+  /** 协议类型 / 模块 / 是否签署 / 状态 等字段的选项映射（详情文案用） */
+  enumOptionMaps: Record<string, UniOption[]>
 }
 
 export type ProtocolPanelEmits = {

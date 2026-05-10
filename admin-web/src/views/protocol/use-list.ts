@@ -42,16 +42,18 @@ export const useList = () => {
   const moduleOptions = computed(() => dictOpts(protocolDict.value.moduleList, locale()))
   const yesNoOptions = computed(() => yesNoOpts(t))
   const statusOptions = computed(() => statusOpts(t))
-  const valueEnums = computed<Record<string, UniOption[]>>(() => ({
-    protocolType: protocolTypeOptions.value,
-    module: moduleOptions.value,
-    needSign: yesNoOptions.value,
-    status: statusOptions.value
-  }))
   const searchConfig = computed(() =>
     searchForm(t, schoolOptions.value, protocolTypeOptions.value, moduleOptions.value, statusOptions.value)
   )
-  const columns = computed(() => tableCols(t))
+  const columns = computed(() =>
+    tableCols(
+      t,
+      protocolTypeOptions.value,
+      moduleOptions.value,
+      yesNoOptions.value,
+      statusOptions.value
+    )
+  )
 
   const normRow = (row: Row): Row => ({
     ...row,
@@ -119,7 +121,6 @@ export const useList = () => {
     statusOptions,
     tableRef,
     total,
-    valueEnums,
     yesNoOptions
   }
 }

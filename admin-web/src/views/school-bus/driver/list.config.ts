@@ -53,12 +53,18 @@ export const searchForm = (
   colProps: { span: 6 }
 })
 
-export const tableCols = (t: Translate): UniTableColumn[] => [
+export const tableCols = (
+  t: Translate,
+  schoolOptions: UniOption[],
+  statusOptions: UniOption[]
+): UniTableColumn[] => [
   { prop: 'id', label: 'ID', type: 'text', width: 88, fixed: 'left' },
   {
-    prop: 'schoolNames',
+    prop: 'schoolIds',
     label: t('schoolBus.driver.fields.school'),
-    type: 'text',
+    type: 'array',
+    options: schoolOptions,
+    lookup: { splitValues: true },
     minWidth: 200,
     showOverflowTooltip: true
   },
@@ -91,12 +97,22 @@ export const tableCols = (t: Translate): UniTableColumn[] => [
     width: 110,
     showOverflowTooltip: true
   },
-  { prop: 'status', label: t('schoolBus.driver.fields.status'), type: 'tag', width: 96 }
+  {
+    prop: 'status',
+    label: t('schoolBus.driver.fields.status'),
+    type: 'tag',
+    options: statusOptions,
+    width: 96
+  }
 ]
 
 export const formRules = (t: Translate): FormRules<DriverFormModel> => ({
-  schoolIds: [{ required: true, message: t('schoolBus.driver.rules.schoolIds'), trigger: 'change' }],
+  schoolIds: [
+    { required: true, message: t('schoolBus.driver.rules.schoolIds'), trigger: 'change' }
+  ],
   name: [{ required: true, message: t('schoolBus.driver.rules.name'), trigger: 'blur' }],
-  employeeNo: [{ required: true, message: t('schoolBus.driver.rules.employeeNo'), trigger: 'blur' }],
+  employeeNo: [
+    { required: true, message: t('schoolBus.driver.rules.employeeNo'), trigger: 'blur' }
+  ],
   status: [{ required: true, message: t('schoolBus.driver.rules.status'), trigger: 'change' }]
 })

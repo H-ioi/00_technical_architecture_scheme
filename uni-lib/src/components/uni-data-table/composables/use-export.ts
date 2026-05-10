@@ -1,7 +1,7 @@
 import { useUniI18n } from "@/locales/use-uni-i18n";
-import type { Recordable, UniOption } from "@/types/shared";
+import type { Recordable } from "@/types/shared";
 import type { UniTableColumn } from "@/types/uni-table";
-import { formatTableCellText } from "@/utils/format";
+import { formatTableCellText, resolveRowCellValue } from "@/utils/format";
 
 const escapeCsvCell = (value: string) => `"${value.replace(/"/g, '""')}"`;
 
@@ -16,7 +16,6 @@ export function useExport(options: {
   getRows: () => Recordable[];
   getColumns: () => UniTableColumn[];
   getFileName: () => string;
-  getValueEnums?: () => Record<string, UniOption[]> | undefined;
 }) {
   const { t } = useUniI18n();
   const getCellText = (
@@ -27,9 +26,8 @@ export function useExport(options: {
     formatTableCellText(
       row,
       column,
-      row[column.prop],
+      resolveRowCellValue(row as Record<string, unknown>, column.prop),
       index,
-      options.getValueEnums?.(),
       t,
     );
 

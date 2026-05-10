@@ -2,7 +2,7 @@
 import { ElMessage } from "element-plus";
 import { onMounted, ref } from "vue";
 
-import type { Recordable, UniOption } from "@/types/shared";
+import type { Recordable } from "@/types/shared";
 import type {
   UniPaginationConfig,
   UniTableToolbarConfig,
@@ -27,7 +27,7 @@ import codeSwitchChange from "../.vitepress/snippets/uni-data-table/switch-chang
 import codeTagSort from "../.vitepress/snippets/uni-data-table/tag-sort.vue?raw";
 import codeToolbarEmpty from "../.vitepress/snippets/uni-data-table/toolbar-empty.vue?raw";
 import codeToolbarTools from "../.vitepress/snippets/uni-data-table/toolbar-tools.vue?raw";
-import codeValueEnums from "../.vitepress/snippets/uni-data-table/value-enums.vue?raw";
+import codeColumnEnumInline from "../.vitepress/snippets/uni-data-table/column-enum-inline.vue?raw";
 
 const columns: UniTableColumn[] = [
   { prop: "name", label: "名称", type: "text", minWidth: 120 },
@@ -163,15 +163,17 @@ const dataTag = [
 
 const columnsEnum: UniTableColumn[] = [
   { prop: "code", label: "编码", type: "text", minWidth: 80 },
-  { prop: "state", label: "状态", type: "enum", minWidth: 100 },
+  {
+    prop: "state",
+    label: "状态",
+    type: "enum",
+    minWidth: 100,
+    options: [
+      { label: "草稿", value: "d" },
+      { label: "已发布", value: "p" },
+    ],
+  },
 ];
-
-const valueEnumsDemo: Record<string, UniOption[]> = {
-  state: [
-    { label: "草稿", value: "d" },
-    { label: "已发布", value: "p" },
-  ],
-};
 
 const dataEnum = [
   { id: 1, code: "A1", state: "d" },
@@ -415,13 +417,14 @@ onMounted(() => {
   />
 </CompDemo>
 
-## valueEnums 注入枚举
+## 列 `options` 映射枚举
 
-<CompDemo title="列上不写 options 时用 valueEnums" :code="codeValueEnums">
+枚举类列（`enum`、`tag`、以及配置了 `lookup` 的 `text`/`array`）请在 **对应列** 上设置 `options`，无需表格级二次注入。
+
+<CompDemo title="enum + 列 options" :code="codeColumnEnumInline">
   <UniDataTable
     :columns="columnsEnum"
     :data="dataEnum"
-    :value-enums="valueEnumsDemo"
     :pagination="false"
     row-key="id"
   />
@@ -550,7 +553,6 @@ onMounted(() => {
 | `emptyText`       | 空数据文案；不传时使用当前语言包                         | `string`                              | i18n 默认 |
 | `maxHeight`       | 表格最大高度；默认自动计算可用视口高度，`false` 关闭     | `number \| string \| false \| 'auto'` | `auto`    |
 | `maxHeightOffset` | 自动计算时距离视口底部的保留间距                         | `number`                              | `16`      |
-| `valueEnums`      | 按列 `prop` 注入枚举选项（展示 enum/tag 等）             | `Record<string, UniOption[]>`         | —         |
 | `toolbar`         | 右侧表格工具配置；`false` 关闭内置工具栏                 | `boolean \| UniTableToolbarConfig`    | 内置默认  |
 
 ## Toolbar Config
@@ -579,7 +581,7 @@ onMounted(() => {
 | `time`         | 时间格式化，默认 `HH:mm:ss`                                                  |
 | `relativeTime` | 相对时间展示，如 `5 分钟前`                                                  |
 | `boolean`      | `true/false` 展示为 `是/否`                                                  |
-| `enum`         | 从列 `options` 或 `valueEnums` 映射文案                                      |
+| `enum`         | 从列 `options` 映射文案                                                      |
 | `tag/tags`     | 标签展示                                                                     |
 | `switch`       | 开关列，变更时触发 `switch-change`                                           |
 | `copy`         | 文本 + 复制按钮                                                              |

@@ -27,6 +27,67 @@ export const omitBlankValues = (model: Record<string, unknown>) =>
 export const formatEmpty = (value: unknown, emptyText = "--") =>
   isEmptyValue(value) ? emptyText : String(value);
 
+/** `schoolIds` → `school_ids` */
+export const propToSnakeCase = (prop: string): string =>
+  prop.replace(/([a-z0-9])([A-Z])/g, "$1_$2").toLowerCase();
+
+/** 优先 camelCase，再 snake_case，再 `schoolIds`→`schoolId` 等常见别名 */
+export const resolveRowCellValue = (
+  row: Record<string, unknown>,
+  prop: string,
+): unknown => {
+  const snakeKey = propToSnakeCase(prop);
+  const singularKey =
+    prop.length > 3 && prop.endsWith("Ids")
+      ? `${prop.slice(0, -3)}Id`
+      : undefined;
+
+  const keys = [
+    prop,
+    ...(snakeKey !== prop ? [snakeKey] : []),
+    ...(singularKey && singularKey !== prop ? [singularKey] : []),
+  ];
+
+  for (const key of keys) {
+    const val = row[key];
+    if (!isBlankValue(val)) {
+      return val;
+    }
+  }
+
+  return undefined;
+};
+
+const normalizeLookupArrayItems = (items: unknown[]): unknown[] =>
+  items.map((item) => (typeof item === "string" ? item.trim() : item));
+
+/** JSON 数组字符串或已为数组时规范化 */
+export const normalizeLookupRawValue = (value: unknown): unknown => {
+  if (Array.isArray(value)) {
+    return normalizeLookupArrayItems(value);
+  }
+
+  if (typeof value !== "string") {
+    return value;
+  }
+
+  const trimmed = value.trim();
+
+  if (trimmed.startsWith("[") && trimmed.endsWith("]")) {
+    try {
+      const parsed = JSON.parse(trimmed) as unknown;
+
+      if (Array.isArray(parsed)) {
+        return normalizeLookupArrayItems(parsed);
+      }
+    } catch {
+      /* ignore */
+    }
+  }
+
+  return value;
+};
+
 export const formatDate = (
   value: unknown,
   format = "YYYY-MM-DD HH:mm:ss",
@@ -86,19 +147,60 @@ export const formatMoney = (value: unknown, emptyText = "--") => {
   });
 };
 
-export const resolveOption = (
-  value: unknown,
-  column?: UniTableColumn,
-  valueEnums?: Record<string, UniOption[]>,
-) => {
-  const key = String(value);
+/** 列上是否具备可用于映射的选项源（仅用列 `options` / `valueEnum`） */
+export const hasLookupOptionSource = (column: UniTableColumn) =>
+  Boolean(
+    column.options?.length ||
+      (column.valueEnum && Object.keys(column.valueEnum).length > 0),
+  );
+
+export const optionValuesLooselyEqual = (
+  optionValue: unknown,
+  cellValue: unknown,
+): boolean => {
+  if (optionValue === cellValue) {
+    return true;
+  }
+
+  const left = typeof cellValue === "string" ? cellValue.trim() : cellValue;
+  const right =
+    typeof optionValue === "string" ? optionValue.trim() : optionValue;
+
+  if (left === right) {
+    return true;
+  }
+
+  const sl = String(left);
+  const sr = String(right);
+
+  if (sl === sr) {
+    return true;
+  }
+
+  const nl = Number(sl);
+  const nr = Number(sr);
+
+  if (
+    sl !== "" &&
+    sr !== "" &&
+    Number.isFinite(nl) &&
+    Number.isFinite(nr) &&
+    nl === nr
+  ) {
+    return true;
+  }
+
+  return false;
+};
+
+export const resolveOption = (value: unknown, column?: UniTableColumn) => {
+  const key = String(typeof value === "string" ? value.trim() : value);
+  /** `[]` 对 `??` 为 truthy，视为未配置 options */
   const options =
-    column?.options ?? (column?.prop ? valueEnums?.[column.prop] : undefined);
+    column?.options && column.options.length > 0 ? column.options : undefined;
 
   if (options?.length) {
-    return options.find(
-      (item) => item.value === value || String(item.value) === key,
-    );
+    return options.find((item) => optionValuesLooselyEqual(item.value, value));
   }
 
   const enumValue = column?.valueEnum?.[key];
@@ -120,6 +222,121 @@ export const toArray = (value: unknown): unknown[] => {
   }
 
   return [value];
+};
+
+const unwrapLookupItemValue = (raw: unknown): unknown => {
+  if (raw === null || raw === undefined) {
+    return raw;
+  }
+
+  if (typeof raw !== "object" || Array.isArray(raw)) {
+    return raw;
+  }
+
+  const o = raw as Record<string, unknown>;
+  const candidate =
+    o.id ?? o.value ?? o.schoolId ?? o.campusId ?? o.code;
+
+  return candidate !== undefined && candidate !== null ? candidate : raw;
+};
+
+/** `text`/`number`/`array`（有 lookup 数据源时）：id / 数组 / 逗号串 → label */
+export const formatLookupCell = (
+  value: unknown,
+  column: UniTableColumn,
+): string | undefined => {
+  if (column.lookup === false || !hasLookupOptionSource(column)) {
+    return undefined;
+  }
+
+  if (isBlankValue(value)) {
+    return formatEmpty(value);
+  }
+
+  const normalized = normalizeLookupRawValue(value);
+
+  if (isBlankValue(normalized)) {
+    return formatEmpty(normalized);
+  }
+
+  const separator =
+    typeof column.lookup === "object"
+      ? (column.lookup.separator ?? "、")
+      : "、";
+
+  let items = toArray(normalized);
+
+  const lookupCfg =
+    typeof column.lookup === "object" ? column.lookup : undefined;
+
+  if (
+    lookupCfg?.splitValues &&
+    items.length === 1 &&
+    typeof items[0] === "string"
+  ) {
+    const delimiter =
+      lookupCfg.splitValues === true
+        ? /[,，]/
+        : lookupCfg.splitValues instanceof RegExp
+          ? lookupCfg.splitValues
+          : /[,，]/;
+
+    items = items[0]
+      .split(delimiter)
+      .map((item) => item.trim())
+      .filter(Boolean);
+  } else if (
+    (column.lookup === undefined || typeof column.lookup === "object") &&
+    items.length === 1 &&
+    typeof items[0] === "string"
+  ) {
+    const raw = items[0];
+    if (/[,，]/.test(raw) && !resolveOption(raw, column)?.label) {
+      const parts = raw
+        .split(/[,，]/)
+        .map((item) => item.trim())
+        .filter(Boolean);
+
+      if (
+        parts.length > 1 &&
+        parts.every((part) =>
+          Boolean(resolveOption(part, column)?.label),
+        )
+      ) {
+        items = parts;
+      }
+    }
+  }
+
+  const labels: string[] = [];
+
+  for (const rawItem of items) {
+    const item =
+      typeof rawItem === "string"
+        ? rawItem.trim()
+        : unwrapLookupItemValue(rawItem);
+
+    if (typeof item === "object" && item !== null && !Array.isArray(item)) {
+      continue;
+    }
+
+    if (item === "" || item === undefined || item === null) {
+      continue;
+    }
+
+    const resolved = resolveOption(item, column);
+    const label = resolved?.label;
+
+    if (label !== undefined && label !== "") {
+      labels.push(String(label));
+    }
+  }
+
+  if (labels.length > 0) {
+    return labels.join(separator);
+  }
+
+  return undefined;
 };
 
 export const formatRelativeTime = (
@@ -196,7 +413,6 @@ export const formatTableCellText = (
   column: UniTableColumn,
   value: unknown,
   index: number,
-  valueEnums?: Record<string, UniOption[]>,
   t: UniTranslate = uniLibTranslate,
 ) => {
   if (column.formatter) {
@@ -204,6 +420,14 @@ export const formatTableCellText = (
   }
 
   const columnType = column.type ?? "text";
+
+  if (columnType === "text" || columnType === "number") {
+    const mapped = formatLookupCell(value, column);
+
+    if (mapped !== undefined) {
+      return mapped;
+    }
+  }
 
   if (
     columnType === "date" ||
@@ -241,12 +465,21 @@ export const formatTableCellText = (
 
   if (columnType === "enum" || columnType === "tag") {
     return (
-      resolveOption(value, column, valueEnums)?.label ?? formatEmpty(value)
+      resolveOption(value, column)?.label ?? formatEmpty(value)
     );
   }
 
   if (columnType === "array") {
+    if (column.lookup !== false && hasLookupOptionSource(column)) {
+      const mapped = formatLookupCell(value, column);
+
+      if (mapped !== undefined) {
+        return mapped;
+      }
+    }
+
     const key = column.array?.itemLabel;
+
     return toArray(value)
       .map((item) => {
         if (key && typeof item === "object" && item) {

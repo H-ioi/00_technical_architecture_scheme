@@ -33,7 +33,6 @@
           :request="loadSignData"
           :pagination="{ pageSize: 10, pageSizes: [10, 20, 50] }"
           :toolbar="false"
-          :value-enums="valueEnums"
           :action-column="{ fixed: false }"
         />
       </section>
@@ -69,7 +68,7 @@ const signSchoolIds = computed(() =>
 )
 
 const enumLabel = (field: string, value: unknown) =>
-  props.valueEnums[field]?.find((item) => item.value === value)?.label ?? String(value ?? '--')
+  props.enumOptionMaps[field]?.find((item) => item.value === value)?.label ?? String(value ?? '--')
 
 const schoolName = computed(
   () =>

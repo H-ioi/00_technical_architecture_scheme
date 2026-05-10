@@ -85,7 +85,13 @@ export const searchForm = (
   colProps: { span: 5 }
 })
 
-export const tableCols = (t: Translate): UniTableColumn[] => [
+export const tableCols = (
+  t: Translate,
+  protocolTypeOptions: UniOption[],
+  moduleOptions: UniOption[],
+  yesNoOptions: UniOption[],
+  statusOptions: UniOption[]
+): UniTableColumn[] => [
   { prop: 'id', label: 'ID', type: 'text', width: 90, fixed: 'left' },
   {
     prop: 'schoolName',
@@ -108,10 +114,34 @@ export const tableCols = (t: Translate): UniTableColumn[] => [
     minWidth: 160,
     showOverflowTooltip: true
   },
-  { prop: 'protocolType', label: t('protocol.fields.protocolType'), type: 'enum', minWidth: 130 },
-  { prop: 'module', label: t('protocol.fields.module'), type: 'enum', minWidth: 130 },
-  { prop: 'needSign', label: t('protocol.fields.needSign'), type: 'tag', width: 130 },
-  { prop: 'status', label: t('protocol.fields.status'), type: 'tag', width: 100 },
+  {
+    prop: 'protocolType',
+    label: t('protocol.fields.protocolType'),
+    type: 'enum',
+    options: protocolTypeOptions,
+    minWidth: 130
+  },
+  {
+    prop: 'module',
+    label: t('protocol.fields.module'),
+    type: 'enum',
+    options: moduleOptions,
+    minWidth: 130
+  },
+  {
+    prop: 'needSign',
+    label: t('protocol.fields.needSign'),
+    type: 'tag',
+    options: yesNoOptions,
+    width: 130
+  },
+  {
+    prop: 'status',
+    label: t('protocol.fields.status'),
+    type: 'tag',
+    options: statusOptions,
+    width: 100
+  },
   {
     prop: 'documentUrl',
     label: t('protocol.fields.documentUrl'),

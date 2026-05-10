@@ -27,7 +27,6 @@
       :filters="filters"
       :pagination="{ pageSize: 10, pageSizes: [10, 20, 50, 100] }"
       :toolbar="{ refresh: true, density: true, columnSetting: true }"
-      :value-enums="valueEnums"
       :actions="actions"
       :action-column="{ width: 100, fixed: 'right' }"
       @load-success="handleLoadSuccess"
@@ -54,8 +53,7 @@ const {
   reset,
   search,
   searchConfig,
-  tableRef,
-  valueEnums
+  tableRef
 } = useList()
 </script>
 

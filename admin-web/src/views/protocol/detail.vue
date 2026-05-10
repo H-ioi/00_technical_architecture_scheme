@@ -20,7 +20,6 @@
             :request="loadSign"
             :pagination="{ pageSize: 10, pageSizes: [10, 20, 50] }"
             :toolbar="{ refresh: true, fullscreen: true, columnSetting: true }"
-            :value-enums="valueEnums"
             :action-column="{ fixed: false }"
           />
         </section>
@@ -58,7 +57,8 @@ const dictOpts = (items: NonNullable<ProtocolDict['protocolTypeList']> = []): Un
 
 const protocolTypeOptions = computed(() => dictOpts(protocolDict.value.protocolTypeList))
 const moduleOptions = computed(() => dictOpts(protocolDict.value.moduleList))
-const valueEnums = computed<Record<string, UniOption[]>>(() => ({
+/** 详情页文案映射（非表格 props） */
+const enumOptionMaps = computed<Record<string, UniOption[]>>(() => ({
   protocolType: protocolTypeOptions.value,
   module: moduleOptions.value,
   needSign: yesNoOpts(t),
@@ -69,7 +69,7 @@ const signSchoolIds = computed(() =>
 )
 
 const enumLabel = (field: string, value: unknown) =>
-  valueEnums.value[field]?.find((item) => item.value === value)?.label ?? String(value ?? '--')
+  enumOptionMaps.value[field]?.find((item) => item.value === value)?.label ?? String(value ?? '--')
 
 const schoolName = computed(
   () =>

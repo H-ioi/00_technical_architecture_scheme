@@ -102,6 +102,16 @@ export interface UniTableColumn {
     digits?: number;
     suffix?: string;
   };
+  /**
+   * `text` / `number` / `array`：存在列 `options` 或 `valueEnum` 时，
+   * 将 id / 数组 id / 逗号串映射为文案；`false` 关闭。
+   */
+  lookup?:
+    | false
+    | {
+        separator?: string;
+        splitValues?: boolean | RegExp;
+      };
   array?: {
     itemLabel?: string;
     separator?: string;

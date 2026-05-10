@@ -115,12 +115,18 @@ export const searchForm = (
   colProps: { span: 6 }
 })
 
-export const tableCols = (t: Translate): UniTableColumn[] => [
+export const tableCols = (
+  t: Translate,
+  schoolOptions: UniOption[],
+  ynDispOptions: UniOption[],
+  statusDispOptions: UniOption[]
+): UniTableColumn[] => [
   { prop: 'id', label: 'ID', type: 'text', width: 90, fixed: 'left' },
   {
     prop: 'schoolName',
     label: t('member.fields.school'),
     type: 'text',
+    options: schoolOptions,
     minWidth: 240,
     showOverflowTooltip: true
   },
@@ -147,9 +153,27 @@ export const tableCols = (t: Translate): UniTableColumn[] => [
   },
   { prop: 'grade', label: t('member.student.fields.grade'), type: 'text', width: 110 },
   { prop: 'formCode', label: t('member.student.fields.form'), type: 'text', width: 110 },
-  { prop: 'busStatus', label: t('member.student.fields.bus'), type: 'tag', width: 90 },
-  { prop: 'dormitoryStatus', label: t('member.student.fields.dormitory'), type: 'tag', width: 90 },
-  { prop: 'studentStatus', label: t('member.fields.status'), type: 'tag', width: 110 }
+  {
+    prop: 'busStatus',
+    label: t('member.student.fields.bus'),
+    type: 'tag',
+    options: ynDispOptions,
+    width: 90
+  },
+  {
+    prop: 'dormitoryStatus',
+    label: t('member.student.fields.dormitory'),
+    type: 'tag',
+    options: ynDispOptions,
+    width: 90
+  },
+  {
+    prop: 'studentStatus',
+    label: t('member.fields.status'),
+    type: 'tag',
+    options: statusDispOptions,
+    width: 110
+  }
 ]
 
 export const detailForm = (t: Translate): UniFormConfig => ({

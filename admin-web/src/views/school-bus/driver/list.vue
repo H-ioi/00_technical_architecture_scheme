@@ -24,7 +24,7 @@
       accept=".xlsx,.xls"
       class="school-bus-driver-page__file"
       @change="onImportFile"
-    >
+    />
 
     <UniSearchForm
       v-model="queryModel"
@@ -37,7 +37,7 @@
       @search="search"
       @reset="reset"
     />
-
+    {{ columns }}
     <UniDataTable
       ref="tableRef"
       row-key="id"
@@ -47,7 +47,6 @@
       :filters="filters"
       :pagination="{ pageSize: 10, pageSizes: [10, 20, 50, 100] }"
       :toolbar="{ refresh: true, density: true, columnSetting: true }"
-      :value-enums="valueEnums"
       :actions="actions"
       :action-column="{ width: 100, fixed: 'right' }"
       @selection-change="onSelectionChange"
@@ -106,8 +105,7 @@ const {
   search,
   searchConfig,
   statusOptions,
-  tableRef,
-  valueEnums
+  tableRef
 } = useList()
 
 const picked = ref<DriverRow[]>([])

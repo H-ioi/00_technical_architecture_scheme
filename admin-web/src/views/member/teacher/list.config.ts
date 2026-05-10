@@ -57,12 +57,17 @@ export const searchForm = (
   colProps: { span: 6 }
 })
 
-export const tableCols = (t: Translate): UniTableColumn[] => [
+export const tableCols = (
+  t: Translate,
+  schoolOptions: UniOption[],
+  archivedStatusOptions: UniOption[]
+): UniTableColumn[] => [
   { prop: 'id', label: 'ID', type: 'text', width: 90, fixed: 'left' },
   {
     prop: 'schoolName',
     label: t('member.fields.school'),
     type: 'text',
+    options: schoolOptions,
     minWidth: 160,
     showOverflowTooltip: true
   },
@@ -109,7 +114,13 @@ export const tableCols = (t: Translate): UniTableColumn[] => [
     minWidth: 120,
     showOverflowTooltip: true
   },
-  { prop: 'archived', label: t('member.fields.status'), type: 'tag', width: 110 },
+  {
+    prop: 'archived',
+    label: t('member.fields.status'),
+    type: 'tag',
+    options: archivedStatusOptions,
+    width: 110
+  },
   { prop: 'createTime', label: t('member.fields.createTime'), type: 'datetime', minWidth: 170 }
 ]
 

@@ -28,14 +28,12 @@ export const useList = () => {
   const roleOptions = ref<UniOption[]>([])
 
   const statusOptions = computed(() => statusOpts(t))
-  const valueEnums = computed<Record<string, UniOption[]>>(() => ({
-    archived: statusOptions.value,
-    schoolName: schoolOptions.value
-  }))
   const searchConfig = computed(() =>
     searchForm(t, schoolOptions.value, roleOptions.value, statusOptions.value)
   )
-  const columns = computed(() => tableCols(t))
+  const columns = computed(() =>
+    tableCols(t, schoolOptions.value, statusOptions.value)
+  )
   const detailConfig = computed(() => detailForm(t))
 
   const loadData: UniTableRequest = ({ pageNo: current, pageSize: size, filters }) =>
@@ -78,7 +76,6 @@ export const useList = () => {
     search,
     searchConfig,
     tableRef,
-    total,
-    valueEnums
+    total
   }
 }
