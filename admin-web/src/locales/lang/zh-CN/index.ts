@@ -1,5 +1,6 @@
 import common from './common'
 import dashboard from './dashboard'
+import base from './modules/base'
 import member from './modules/member'
 import protocol from './modules/protocol'
 import route from './route'
@@ -11,6 +12,7 @@ export default {
   common,
   route,
   dashboard,
+  base,
   member,
   protocol
 }

@@ -4,5 +4,8 @@ export default {
   memberStudent: 'Students',
   memberTeacher: 'Teachers',
   protocol: 'Protocol Management',
-  protocolDetail: 'Protocol Detail'
+  protocolDetail: 'Protocol Detail',
+  base: 'Basic settings',
+  baseSchool: 'Campus configuration',
+  baseGrade: 'Grade configuration'
 }

@@ -13,6 +13,11 @@ const MENU_PATH_ALIASES: Record<string, string> = {
   '/isacommunity/member/student': '/member/student',
   '/isacommunity/member/teacher/index': '/member/teacher',
   '/isacommunity/member/teacher': '/member/teacher',
+  '/isacommunity/base': '/base',
+  '/isacommunity/base/school/index': '/base/school',
+  '/isacommunity/base/school': '/base/school',
+  '/isacommunity/base/grade/index': '/base/grade',
+  '/isacommunity/base/grade': '/base/grade',
   '/isacommunity/protocol': '/protocol',
   '/isacommunity/protocol/index': '/protocol'
 }

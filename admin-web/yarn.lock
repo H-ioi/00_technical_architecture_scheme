@@ -3006,10 +3006,8 @@ undici-types@~7.19.0:
   resolved "https://registry.npmmirror.com/undici-types/-/undici-types-7.19.2.tgz#1b67fc26d0f157a0cba3a58a5b5c1e2276b8ba2a"
   integrity sha512-qYVnV5OEm2AW8cJMCpdV20CDyaN3g0AjDlOGf1OW4iaDEx8MwdtChUp4zu4H0VP3nDRF/8RKWH+IPp9uW0YGZg==
 
-uni-ui-lib@latest:
+"uni-ui-lib@file:../uni-lib":
   version "0.1.5"
-  resolved "https://registry.npmmirror.com/uni-ui-lib/-/uni-ui-lib-0.1.5.tgz#0c7f4fe2ca0be499c41d709ce58ad502dd8f1c6a"
-  integrity sha512-ybSSeWNSjsu6zobzfXQ0XgfGXXPZZ+ZdijAvXHDIvClquUdCDioVgBQyejf1Uftrdz2CupCQsnywDDwZlUz8GA==
 
 unicorn-magic@^0.4.0:
   version "0.4.0"
