@@ -1,21 +1,9 @@
 import type { RouteRecordNormalized } from 'vue-router'
 
+import type { BackendMenuRecord } from '@/types/modules/menu'
 import type { MenuPermissionResult } from '@/types/permission'
 import type { AppMenuRecord, AppRouteMeta } from '@/types/route'
 import { request } from 'uni-ui-lib'
-
-interface BackendMenuRecord {
-  path?: string
-  url?: string
-  name?: string
-  label?: string
-  title?: string
-  icon?: string
-  permission?: string | string[]
-  permissions?: string | string[]
-  authority?: string | string[]
-  children?: BackendMenuRecord[]
-}
 
 const MENU_PATH_ALIASES: Record<string, string> = {
   '/isacommunity/home/index': '/dashboard',

@@ -7,4 +7,4 @@ import menuApi from './modules/menu'
 import protocolApi from './modules/protocol'
 
 export { authApi, captchaApi, membershipApi, studentApi, teacherApi, menuApi, protocolApi }
-export type { CaptchaImageData } from './modules/captcha'
+export type { CaptchaImageData } from '@/types/modules/captcha'

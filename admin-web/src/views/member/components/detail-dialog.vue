@@ -14,17 +14,11 @@
 </template>
 
 <script setup lang="ts">
-import type { Recordable, UniFormConfig } from 'uni-ui-lib'
+import type { MemberDetailDialogEmits, MemberDetailDialogProps } from '@/types/components/member-detail-dialog'
 
-defineProps<{
-  visible: boolean
-  source?: Recordable | null
-  config: UniFormConfig
-}>()
+defineProps<MemberDetailDialogProps>()
 
-const emit = defineEmits<{
-  'update:visible': [visible: boolean]
-}>()
+const emit = defineEmits<MemberDetailDialogEmits>()
 </script>
 
 <style scoped lang="scss"></style>

@@ -1,6 +1,6 @@
 import type { UniFormConfig, UniOption, UniTableColumn } from 'uni-ui-lib'
 
-type Translate = (key: string) => string
+import type { Translate } from '@/types/i18n'
 
 export const createRoleOptions = (roles: string[]): UniOption[] =>
   roles.map((item) => ({ label: item, value: item }))

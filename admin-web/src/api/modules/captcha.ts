@@ -2,18 +2,7 @@ import CryptoJS from 'crypto-js'
 
 import { request } from 'uni-ui-lib'
 
-export interface CaptchaImageData {
-  originalImageBase64: string
-  jigsawImageBase64: string
-  token: string
-  secretKey?: string
-}
-
-interface CaptchaResponse<T> {
-  repCode: string
-  repMsg?: string
-  repData: T
-}
+import type { CaptchaImageData, CaptchaResponse } from '@/types/modules/captcha'
 
 const CAPTCHA_TYPE = 'blockPuzzle'
 

@@ -140,30 +140,18 @@
 <script setup lang="ts">
 import type { FormInstance, UploadRequestOptions, UploadUserFile } from 'element-plus'
 import { ElMessage } from 'element-plus'
-import type { UniOption } from 'uni-ui-lib'
 import { computed, reactive, ref, watch } from 'vue'
 import { useUniI18n } from 'uni-ui-lib'
 
 import { protocolApi } from '@/api'
+import type { ProtocolFormDialogEmits, ProtocolFormDialogProps } from '@/types/components/protocol-form-dialog'
 import type { ProtocolFormModel, ProtocolRecord } from '@/types/modules/protocol'
 
 import { createFormRules } from '../list.config'
 
-const props = defineProps<{
-  visible: boolean
-  mode: 'add' | 'edit'
-  source?: ProtocolRecord | null
-  schoolOptions: UniOption[]
-  protocolTypeOptions: UniOption[]
-  moduleOptions: UniOption[]
-  yesNoOptions: UniOption[]
-  statusOptions: UniOption[]
-}>()
+const props = defineProps<ProtocolFormDialogProps>()
 
-const emit = defineEmits<{
-  'update:visible': [visible: boolean]
-  saved: []
-}>()
+const emit = defineEmits<ProtocolFormDialogEmits>()
 
 const { t } = useUniI18n()
 const formRef = ref<FormInstance>()

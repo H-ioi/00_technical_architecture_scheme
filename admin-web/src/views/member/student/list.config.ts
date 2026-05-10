@@ -1,6 +1,6 @@
 import type { UniFormConfig, UniOption, UniTableColumn } from 'uni-ui-lib'
 
-type Translate = (key: string) => string
+import type { Translate } from '@/types/i18n'
 
 export const createDormitoryOptions = (t: Translate): UniOption[] => [
   { label: t('member.student.options.yes'), value: '1', type: 'success' },

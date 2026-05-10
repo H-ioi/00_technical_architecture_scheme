@@ -1,5 +1,4 @@
 <template>
-
   <main class="error-page">
     <el-result icon="info" title="404" sub-title="访问的页面不存在或已被移除">
       <template #extra>
@@ -9,8 +8,7 @@
   </main>
 </template>
 
-<script setup lang="ts">
-</script>
+<script setup lang="ts"></script>
 
 <style scoped lang="scss">
 .error-page {

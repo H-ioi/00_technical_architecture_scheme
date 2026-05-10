@@ -48,25 +48,22 @@
 </template>
 
 <script setup lang="ts">
-import type { UniOption, UniTableRequest } from 'uni-ui-lib'
+import type { UniTableRequest } from 'uni-ui-lib'
 import { computed, ref, watch } from 'vue'
 import { useUniI18n } from 'uni-ui-lib'
 
 import { protocolApi } from '@/api'
+import type {
+  ProtocolDetailDialogEmits,
+  ProtocolDetailDialogProps
+} from '@/types/components/protocol-detail-dialog'
 import type { ProtocolRecord } from '@/types/modules/protocol'
 
 import { createSignColumns } from '../list.config'
 
-const props = defineProps<{
-  visible: boolean
-  source?: ProtocolRecord | null
-  schoolOptions: UniOption[]
-  valueEnums: Record<string, UniOption[]>
-}>()
+const props = defineProps<ProtocolDetailDialogProps>()
 
-const emit = defineEmits<{
-  'update:visible': [visible: boolean]
-}>()
+const emit = defineEmits<ProtocolDetailDialogEmits>()
 
 const { locale, t } = useUniI18n()
 const detail = ref<ProtocolRecord | null>(null)

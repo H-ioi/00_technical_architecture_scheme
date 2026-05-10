@@ -1,9 +1,8 @@
 import type { FormRules } from 'element-plus'
 import type { UniFormConfig, UniOption, UniTableColumn } from 'uni-ui-lib'
 
+import type { Translate } from '@/types/i18n'
 import type { ProtocolFormModel } from '@/types/modules/protocol'
-
-type Translate = (key: string) => string
 
 export const createYesNoOptions = (t: Translate): UniOption[] => [
   { label: t('protocol.options.yes'), value: 1, type: 'success' },

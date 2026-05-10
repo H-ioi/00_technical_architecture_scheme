@@ -1,29 +1,16 @@
 import CryptoJS from 'crypto-js'
 
-import type { LoginParams } from '@/types/auth'
+import type { LoginParams, OAuthTokenResult, OAuthTokenUserInfo } from '@/types/auth'
 import { request, type UniLoginSnapshot, type UniUserProfile } from 'uni-ui-lib'
 
 const LOGIN_PASSWORD_KEY = 'unixunixunixunix'
 
-interface OAuthTokenResult {
-  access_token: string
-  refresh_token?: string
-  user_info?: {
-    userId?: string | number
-    id?: string | number
-    username?: string
-    nickname?: string
-    avatar?: string
-    authorities?: Array<{ authority?: string } | string>
-  }
-}
-
-const normalizeAuthorities = (authorities?: OAuthTokenResult['user_info']['authorities']) =>
+const normalizeAuthorities = (authorities?: OAuthTokenUserInfo['authorities']) =>
   (authorities ?? [])
     .map((item) => (typeof item === 'string' ? item : item.authority))
     .filter(Boolean) as string[]
 
-const normalizeProfile = (user?: OAuthTokenResult['user_info'], roles: string[] = []): UniUserProfile => ({
+const normalizeProfile = (user?: OAuthTokenUserInfo, roles: string[] = []): UniUserProfile => ({
   id: String(user?.userId ?? user?.id ?? ''),
   username: user?.username,
   name: user?.nickname || user?.username || '',

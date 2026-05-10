@@ -5,7 +5,7 @@ export const constantRoutes: AppRouteRecord[] = [
   {
     path: '/login',
     name: 'Login',
-    component: () => import('@/views/login/login-page.vue'),
+    component: () => import('@/views/login/index.vue'),
     meta: {
       title: '登录',
       titleKey: 'common.login',
@@ -90,7 +90,7 @@ export const constantRoutes: AppRouteRecord[] = [
   {
     path: '/403',
     name: 'Forbidden',
-    component: () => import('@/views/error/forbidden-page.vue'),
+    component: () => import('@/layouts/error/403.vue'),
     meta: {
       title: '无权限',
       titleKey: 'common.forbidden',
@@ -100,7 +100,7 @@ export const constantRoutes: AppRouteRecord[] = [
   {
     path: '/:pathMatch(.*)*',
     name: 'NotFound',
-    component: () => import('@/views/error/not-found-page.vue'),
+    component: () => import('@/layouts/error/404.vue'),
     meta: {
       title: '页面不存在',
       titleKey: 'common.notFound',
