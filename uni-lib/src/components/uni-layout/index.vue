@@ -378,7 +378,7 @@ const resolvedActivePath = computed(() =>
 );
 const resolvedActiveMenuBase = computed(() =>
   props.autoWire
-    ? String(route.meta.activeMenu || route.path)
+    ? String(route.meta?.activeMenu || route.path)
     : props.activeMenu,
 );
 const resolvedActiveMenu = computed(
@@ -402,8 +402,8 @@ const resolvedBreadcrumbs = computed<UniLayoutBreadcrumbItem[]>(() => {
   return [
     { title: tr("common.home", "Home"), titleKey: "common.home" },
     {
-      title: String(route.meta.title ?? ""),
-      titleKey: route.meta.titleKey ? String(route.meta.titleKey) : undefined,
+      title: String(route.meta?.title ?? ""),
+      titleKey: route.meta?.titleKey ? String(route.meta.titleKey) : undefined,
     },
   ];
 });

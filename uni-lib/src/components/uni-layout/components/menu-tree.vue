@@ -3,8 +3,8 @@
     <el-sub-menu v-if="menu.children?.length" :index="menu.path">
       <template #title>
         <slot name="menu-icon" :menu="menu">
-          <el-icon v-if="resolveIcon(menu.meta.icon, iconMap)">
-            <component :is="resolveIcon(menu.meta.icon, iconMap)" />
+          <el-icon v-if="resolveIcon(menu.meta?.icon, iconMap)">
+            <component :is="resolveIcon(menu.meta?.icon, iconMap)" />
           </el-icon>
         </slot>
         <slot
@@ -25,8 +25,8 @@
 
     <el-menu-item v-else :index="menu.path">
       <slot name="menu-icon" :menu="menu">
-        <el-icon v-if="resolveIcon(menu.meta.icon, iconMap)">
-          <component :is="resolveIcon(menu.meta.icon, iconMap)" />
+        <el-icon v-if="resolveIcon(menu.meta?.icon, iconMap)">
+          <component :is="resolveIcon(menu.meta?.icon, iconMap)" />
         </el-icon>
       </slot>
       <template #title>
@@ -93,7 +93,11 @@ const defaultIconMap: Record<string, Component> = {
 const resolveTitle = (
   menu: UniLayoutMenuRecord,
   translate: UniLayoutTranslate,
-) => translate(menu.meta.titleKey, menu.meta.title ?? menu.name ?? menu.path);
+) =>
+  translate(
+    menu.meta?.titleKey,
+    menu.meta?.title ?? menu.name ?? menu.path,
+  );
 
 const resolveIcon = (icon: string | undefined, iconMap: UniLayoutIconMap) =>
   icon ? (iconMap[icon] ?? defaultIconMap[icon]) : undefined;

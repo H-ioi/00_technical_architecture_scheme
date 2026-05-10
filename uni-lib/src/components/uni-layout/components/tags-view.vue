@@ -138,13 +138,15 @@ const syncVisitedTagsFromRoute = () => {
     return;
   }
 
-  const shouldAddTag = !leaf.meta.hidden || Boolean(leaf.meta.activeMenu);
+  const leafMeta = leaf.meta ?? {};
+  const shouldAddTag =
+    !leafMeta.hidden || Boolean(leafMeta.activeMenu);
 
   if (!shouldAddTag) {
     return;
   }
 
-  const meta = leaf.meta as {
+  const meta = leafMeta as {
     title?: string;
     titleKey?: string;
     affix?: boolean;

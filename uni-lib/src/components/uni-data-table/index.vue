@@ -47,8 +47,6 @@
               :value="resolveRowCellValue(row as Record<string, unknown>, column.prop)"
               :row-index="$index"
               @switch-change="(nextRow, nextColumn, value) => emit('switch-change', nextRow, nextColumn, value)" />
-
-            {{ column }}------------
           </span>
         </template>
       </el-table-column>

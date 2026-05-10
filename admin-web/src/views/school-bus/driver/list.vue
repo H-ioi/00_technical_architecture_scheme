@@ -37,7 +37,7 @@
       @search="search"
       @reset="reset"
     />
-    {{ columns }}
+
     <UniDataTable
       ref="tableRef"
       row-key="id"
