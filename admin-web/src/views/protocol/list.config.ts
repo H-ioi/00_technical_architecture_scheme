@@ -207,3 +207,102 @@ export const formRules = (t: Translate): FormRules<ProtocolFormModel> => ({
   status: [{ required: true, message: t('protocol.placeholders.status'), trigger: 'change' }],
   documentUrl: [{ required: true, message: t('protocol.messages.uploadRequired'), trigger: 'change' }]
 })
+
+/** 协议新增/编辑弹窗（UniForm + 附件槽位） */
+export const protocolDialogFormConfig = (
+  t: Translate,
+  schoolOptions: UniOption[],
+  protocolTypeOptions: UniOption[],
+  moduleOptions: UniOption[],
+  yesNoOptions: UniOption[],
+  statusOptions: UniOption[]
+): UniFormConfig => ({
+  formProps: { labelPosition: 'top' },
+  rowProps: { gutter: 16 },
+  colProps: { span: 12 },
+  rules: formRules(t) as UniFormConfig['rules'],
+  schema: [
+    {
+      field: 'schoolIds',
+      label: t('protocol.fields.school'),
+      component: 'ElSelect',
+      options: schoolOptions,
+      colProps: { span: 12 },
+      componentProps: {
+        multiple: true,
+        collapseTags: true,
+        filterable: true,
+        clearable: true,
+        placeholder: t('protocol.placeholders.school'),
+        style: { width: '100%' }
+      }
+    },
+    {
+      field: 'cnName',
+      label: t('protocol.fields.cnName'),
+      component: 'ElInput',
+      componentProps: {
+        maxlength: 50,
+        placeholder: t('protocol.placeholders.cnName')
+      }
+    },
+    {
+      field: 'enName',
+      label: t('protocol.fields.enName'),
+      component: 'ElInput',
+      componentProps: {
+        maxlength: 50,
+        placeholder: t('protocol.placeholders.enName')
+      }
+    },
+    {
+      field: 'protocolType',
+      label: t('protocol.fields.protocolType'),
+      component: 'ElSelect',
+      options: protocolTypeOptions,
+      componentProps: {
+        filterable: true,
+        placeholder: t('protocol.placeholders.protocolType'),
+        style: { width: '100%' }
+      }
+    },
+    {
+      field: 'module',
+      label: t('protocol.fields.module'),
+      component: 'ElSelect',
+      options: moduleOptions,
+      componentProps: {
+        filterable: true,
+        placeholder: t('protocol.placeholders.module'),
+        style: { width: '100%' }
+      }
+    },
+    {
+      field: 'needSign',
+      label: t('protocol.fields.needSign'),
+      component: 'ElSelect',
+      options: yesNoOptions,
+      componentProps: {
+        placeholder: t('protocol.placeholders.needSign'),
+        style: { width: '100%' }
+      }
+    },
+    {
+      field: 'status',
+      label: t('protocol.fields.status'),
+      component: 'ElSelect',
+      options: statusOptions,
+      componentProps: {
+        placeholder: t('protocol.placeholders.status'),
+        style: { width: '100%' }
+      }
+    },
+    {
+      field: 'documentUrl',
+      label: t('protocol.fields.documentUrl'),
+      component: 'ElInput',
+      colProps: { span: 24 },
+      formItemProps: { class: 'protocol-dialog-form__doc-slot' }
+    }
+  ]
+})

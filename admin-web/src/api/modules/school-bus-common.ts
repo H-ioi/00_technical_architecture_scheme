@@ -38,5 +38,17 @@ export default {
     get: async function (this: { url: string }, params?: Record<string, unknown>) {
       return await request.get(this.url, { params })
     }
+  },
+  pickupMethodList: {
+    url: `${API_PATHS.schoolBusCommon}/getPickupMethodList`,
+    get: async function (this: { url: string }) {
+      return await request.get(this.url)
+    }
+  },
+  orderStationList: {
+    url: `${API_PATHS.schoolBusCommon}/getOrderStationList`,
+    get: async function (this: { url: string }, params?: Record<string, unknown>) {
+      return await request.get(this.url, { params })
+    }
   }
 }

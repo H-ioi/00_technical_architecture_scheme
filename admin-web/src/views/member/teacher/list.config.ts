@@ -64,11 +64,12 @@ export const tableCols = (
 ): UniTableColumn[] => [
   { prop: 'id', label: 'ID', type: 'text', width: 90, fixed: 'left' },
   {
-    prop: 'schoolName',
+    prop: 'schoolIds',
     label: t('member.fields.school'),
-    type: 'text',
+    type: 'array',
     options: schoolOptions,
-    minWidth: 160,
+    lookup: { splitValues: true },
+    minWidth: 200,
     showOverflowTooltip: true
   },
   {

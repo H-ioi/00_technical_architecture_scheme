@@ -130,7 +130,9 @@
       </el-table>
 
       <template v-if="String(baseInfo.pickupMethod ?? '') === '2'">
-        <h4 class="order-detail__sub-title">{{ $t('schoolBus.studentApply.detail.personTitle') }}</h4>
+        <h4 class="order-detail__sub-title">
+          {{ $t('schoolBus.studentApply.detail.personTitle') }}
+        </h4>
         <el-table :data="personTableData" border size="small">
           <el-table-column
             prop="pickupRelationships"
@@ -144,7 +146,11 @@
           />
           <el-table-column :label="$t('schoolBus.studentApply.detail.photo')" min-width="120">
             <template #default="{ row }">
-              <el-image v-if="row.pickupImageUrl" :src="String(row.pickupImageUrl)" class="order-detail__thumb" />
+              <el-image
+                v-if="row.pickupImageUrl"
+                :src="String(row.pickupImageUrl)"
+                class="order-detail__thumb"
+              />
               <span v-else>--</span>
             </template>
           </el-table-column>
@@ -242,7 +248,7 @@ const loadDetail = async (id: string | number) => {
     const schools: SchoolOptionRecord[] = Array.isArray(schoolRaw)
       ? (schoolRaw as SchoolOptionRecord[])
       : Array.isArray((schoolRaw as Loose)?.data)
-        ? (((schoolRaw as Loose).data as unknown) as SchoolOptionRecord[])
+        ? ((schoolRaw as Loose).data as unknown as SchoolOptionRecord[])
         : []
     const schoolId = data.schoolId as string | number | undefined
     const locStr = loc()
@@ -270,9 +276,7 @@ const loadDetail = async (id: string | number) => {
       paymentStatusLabel: pickLabel(paymentOpts, data.paymentStatus),
       pickupMethod: data.pickupMethod,
       pickupMethodLabel: pickLabel(pickupOpts, data.pickupMethod),
-      createTime: data.createTime
-        ? dayjs(String(data.createTime)).format('YYYY-MM-DD HH:mm')
-        : '',
+      createTime: data.createTime ? dayjs(String(data.createTime)).format('YYYY-MM-DD HH:mm') : '',
       paymentAmount: data.paymentAmount,
       paymentMethodLabel: pickLabel(payMethodOpts, data.paymentMethod),
       paymentDate: data.paymentDate,

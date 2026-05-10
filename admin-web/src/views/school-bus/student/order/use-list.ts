@@ -3,6 +3,8 @@ import dayjs from 'dayjs'
 import { useUniI18n, useUniListState } from 'uni-ui-lib'
 import { computed, nextTick, onMounted, ref, watch } from 'vue'
 
+import { useBusOrderFormDialog } from '../components/use-bus-order-form-dialog'
+
 import { orderSearchForm, orderTableColumns } from './list.config'
 
 import { schoolBusOrderApi } from '@/api'
@@ -98,6 +100,8 @@ export const useOrderList = () => {
 
   const columns = computed(() => orderTableColumns(t, pickupOpts.value))
 
+  const { formVisible, formMode, editingOrderId, openFormAdd, openFormEdit } = useBusOrderFormDialog()
+
   const detailVisible = ref(false)
   const detailOrderId = ref<string | number | null>(null)
 
@@ -129,6 +133,11 @@ export const useOrderList = () => {
     {
       label: t('schoolBus.driver.actions.look'),
       onClick: (row) => openDetail(row as BusOrderRecord)
+    },
+    {
+      label: t('schoolBus.driver.actions.edit'),
+      code: 'busorder_edit',
+      onClick: (row) => openFormEdit(row as BusOrderRecord)
     }
   ])
 
@@ -170,6 +179,12 @@ export const useOrderList = () => {
     reset,
     search,
     searchConfig,
-    tableRef
+    tableRef,
+    schoolOptions,
+    formVisible,
+    formMode,
+    editingOrderId,
+    openFormAdd,
+    openFormEdit
   }
 }

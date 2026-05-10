@@ -27,15 +27,24 @@ export default defineConfig(({ mode }) => {
     server: {
       host: '0.0.0.0',
       port: 8100,
-      proxy: env.VITE_API_PROXY_TARGET
-        ? {
-            '/api': {
-              target: env.VITE_API_PROXY_TARGET,
-              changeOrigin: true,
-              rewrite: (path) => path.replace(/^\/api/, '')
+      proxy: {
+        ...(env.VITE_API_PROXY_TARGET
+          ? {
+              '/api': {
+                target: env.VITE_API_PROXY_TARGET,
+                changeOrigin: true,
+                rewrite: (path) => path.replace(/^\/api/, '')
+              }
             }
-          }
-        : undefined
+          : {}),
+        // 本地上传走同源代理，避免直连 upload 域名触发 CORS；与 .env.development 中 VITE_UPLOAD_URL=/isa-file-upload/upload/ 对应
+        '/isa-file-upload': {
+          target: env.VITE_UPLOAD_PROXY_TARGET || 'https://upload.isagzth.com',
+          changeOrigin: true,
+          secure: true,
+          rewrite: (path) => path.replace(/^\/isa-file-upload/, '')
+        }
+      }
     },
     build: {
       chunkSizeWarningLimit: 1000,

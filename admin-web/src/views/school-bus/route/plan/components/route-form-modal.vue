@@ -145,11 +145,11 @@
           </template>
         </UniForm>
         <div class="route-form-modal__footer-actions">
-          <el-button type="primary" size="large" @click="submitForm">
-            {{ $t('schoolBus.driver.actions.submit') }}
-          </el-button>
           <el-button size="large" @click="closeModal">
             {{ $t('schoolBus.driver.actions.cancel') }}
+          </el-button>
+          <el-button type="primary" size="large" @click="submitForm">
+            {{ $t('schoolBus.driver.actions.submit') }}
           </el-button>
         </div>
       </div>

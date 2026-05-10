@@ -6,13 +6,16 @@
         <p>{{ $t('schoolBus.studentApply.page.description') }}</p>
       </div>
       <div class="school-bus-student-apply__actions">
-        <el-button v-uni-permission="'busorder_import_intention_order'" @click="downloadIntentionTemplate">
+        <el-button
+          v-uni-permission="'busorder_import_intention_order'"
+          @click="downloadIntentionTemplate"
+        >
           {{ $t('schoolBus.driver.actions.downloadTemplate') }}
         </el-button>
         <el-button v-uni-permission="'busorder_import_intention_order'" @click="pickImport">
           {{ $t('schoolBus.driver.actions.import') }}
         </el-button>
-        <el-button v-uni-permission="'busorder_add'" type="primary" @click="onAddNotReady">
+        <el-button v-uni-permission="'busorder_add'" type="primary" @click="openFormAdd">
           {{ $t('schoolBus.driver.actions.add') }}
         </el-button>
       </div>
@@ -48,7 +51,7 @@
       :pagination="{ pageSize: 10, pageSizes: [10, 20, 50, 100] }"
       :toolbar="{ refresh: true, density: true, columnSetting: true }"
       :actions="actions"
-      :action-column="{ width: 100, fixed: 'right' }"
+      :action-column="{ width: 150, fixed: 'right' }"
       @selection-change="onSelectionChange"
       @load-success="handleLoadSuccess"
     >
@@ -85,10 +88,17 @@
       </template>
     </UniDataTable>
 
-    <OrderDetailDialog
-      :visible="detailVisible"
-      :order-id="detailOrderId"
-      @close="closeDetail"
+    <OrderDetailDialog :visible="detailVisible" :order-id="detailOrderId" @close="closeDetail" />
+
+    <BusOrderFormDialog
+      v-model:visible="formVisible"
+      :mode="formMode"
+      :order-id="editingOrderId"
+      form-type="apply"
+      :school-options="schoolOptions"
+      :default-school-id="defaultSingleSchoolId"
+      :multi-school="multiSchool"
+      @saved="reload"
     />
 
     <el-dialog
@@ -97,26 +107,36 @@
       :title="$t('schoolBus.studentApply.actions.batchReject')"
       destroy-on-close
     >
-      <el-form ref="rejectFormRef" :model="rejectForm" :rules="rejectRules" label-position="top">
-        <el-form-item :label="$t('schoolBus.studentApply.reject.reason')" prop="denyReason">
-          <el-input v-model="rejectForm.denyReason" type="textarea" :rows="5" />
-        </el-form-item>
-      </el-form>
+      <UniForm
+        ref="rejectUniFormRef"
+        v-model="rejectForm"
+        mode="edit"
+        :config="rejectFormConfig"
+      />
       <template #footer>
-        <el-button @click="rejectVisible = false">{{ $t('schoolBus.driver.actions.cancel') }}</el-button>
-        <el-button type="primary" @click="confirmReject">{{ $t('schoolBus.driver.actions.submit') }}</el-button>
+        <el-button @click="rejectVisible = false">
+          {{
+            $t('schoolBus.driver.actions.cancel')
+          }}
+        </el-button>
+        <el-button type="primary" @click="confirmReject">
+          {{
+            $t('schoolBus.driver.actions.submit')
+          }}
+        </el-button>
       </template>
     </el-dialog>
   </section>
 </template>
 
 <script setup lang="ts">
-import type { FormInstance, FormRules } from 'element-plus'
 import { ElMessage, ElMessageBox } from 'element-plus'
-import { useUniI18n } from 'uni-ui-lib'
+import type { UniFormConfig } from 'uni-ui-lib'
+import { UniForm, useUniI18n } from 'uni-ui-lib'
 import { computed, ref } from 'vue'
 
 import OrderDetailDialog from '../components/order-detail-dialog.vue'
+import BusOrderFormDialog from '../components/bus-order-form-dialog.vue'
 import { useApplyList } from './use-list'
 
 import { schoolBusOrderApi } from '@/api'
@@ -127,13 +147,20 @@ const {
   actions,
   closeDetail,
   columns,
+  defaultSingleSchoolId,
   detailOrderId,
   detailVisible,
+  editingOrderId,
   filters,
+  formMode,
+  formVisible,
   handleLoadSuccess,
   loadData,
+  multiSchool,
+  openFormAdd,
   queryModel,
   reset,
+  schoolOptions,
   search,
   searchConfig,
   tableRef
@@ -144,11 +171,30 @@ const picked = ref<BusOrderRecord[]>([])
 const IMPORT_MAX_BYTES = 10 * 1024 * 1024
 
 const rejectVisible = ref(false)
-const rejectFormRef = ref<FormInstance>()
+const rejectUniFormRef = ref<InstanceType<typeof UniForm> | null>(null)
 const rejectForm = ref({ denyReason: '' })
-const rejectRules: FormRules = {
-  denyReason: [{ required: true, message: () => t('schoolBus.studentApply.reject.reasonRequired'), trigger: 'blur' }]
-}
+const rejectFormConfig = computed<UniFormConfig>(() => ({
+  formProps: { labelPosition: 'top' },
+  rowProps: { gutter: 0 },
+  colProps: { span: 24 },
+  rules: {
+    denyReason: [
+      {
+        required: true,
+        message: t('schoolBus.studentApply.reject.reasonRequired'),
+        trigger: 'blur'
+      }
+    ]
+  } as UniFormConfig['rules'],
+  schema: [
+    {
+      field: 'denyReason',
+      label: t('schoolBus.studentApply.reject.reason'),
+      component: 'ElInput',
+      componentProps: { type: 'textarea', rows: 5 }
+    }
+  ]
+}))
 
 const selectionIds = computed(() => picked.value.map((r) => r.id))
 
@@ -156,10 +202,6 @@ const reload = () => tableRef.value?.refresh()
 
 const onSelectionChange = (rows: BusOrderRecord[]) => {
   picked.value = rows
-}
-
-const onAddNotReady = () => {
-  ElMessage.info(t('schoolBus.studentApply.messages.addFormTodo'))
 }
 
 const downloadIntentionTemplate = async () => {
@@ -246,13 +288,8 @@ const openReject = () => {
 }
 
 const confirmReject = async () => {
-  const form = rejectFormRef.value
-  if (!form) {
-    return
-  }
-  try {
-    await form.validate()
-  } catch {
+  const valid = await rejectUniFormRef.value?.validate().catch(() => false)
+  if (!valid) {
     return
   }
   try {

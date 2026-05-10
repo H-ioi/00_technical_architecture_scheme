@@ -10,6 +10,7 @@ export interface TeacherListParams extends PageQuery {
 export interface TeacherRecord {
   id: string | number
   schoolName?: string
+  schoolIds?: string | number | Array<string | number>
   isaTeacherCode?: string
   fullName?: string
   gender?: string

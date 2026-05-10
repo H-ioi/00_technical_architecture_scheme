@@ -6,126 +6,26 @@
     destroy-on-close
     @update:model-value="emit('update:visible', $event)"
   >
-    <el-form ref="formRef" :model="formModel" :rules="rules" label-position="top">
-      <el-row :gutter="16">
-        <el-col :span="12">
-          <el-form-item :label="$t('protocol.fields.school')" prop="schoolIds">
-            <el-select
-              v-model="formModel.schoolIds"
-              multiple
-              collapse-tags
-              filterable
-              clearable
-              :placeholder="$t('protocol.placeholders.school')"
-            >
-              <el-option
-                v-for="option in schoolOptions"
-                :key="String(option.value)"
-                :label="option.label"
-                :value="option.value"
-              />
-            </el-select>
-          </el-form-item>
-        </el-col>
-        <el-col :span="12">
-          <el-form-item :label="$t('protocol.fields.cnName')" prop="cnName">
-            <el-input
-              v-model="formModel.cnName"
-              maxlength="50"
-              :placeholder="$t('protocol.placeholders.cnName')"
-            />
-          </el-form-item>
-        </el-col>
-        <el-col :span="12">
-          <el-form-item :label="$t('protocol.fields.enName')" prop="enName">
-            <el-input
-              v-model="formModel.enName"
-              maxlength="50"
-              :placeholder="$t('protocol.placeholders.enName')"
-            />
-          </el-form-item>
-        </el-col>
-        <el-col :span="12">
-          <el-form-item :label="$t('protocol.fields.protocolType')" prop="protocolType">
-            <el-select
-              v-model="formModel.protocolType"
-              filterable
-              :placeholder="$t('protocol.placeholders.protocolType')"
-            >
-              <el-option
-                v-for="option in protocolTypeOptions"
-                :key="String(option.value)"
-                :label="option.label"
-                :value="option.value"
-              />
-            </el-select>
-          </el-form-item>
-        </el-col>
-        <el-col :span="12">
-          <el-form-item :label="$t('protocol.fields.module')" prop="module">
-            <el-select
-              v-model="formModel.module"
-              filterable
-              :placeholder="$t('protocol.placeholders.module')"
-            >
-              <el-option
-                v-for="option in moduleOptions"
-                :key="String(option.value)"
-                :label="option.label"
-                :value="option.value"
-              />
-            </el-select>
-          </el-form-item>
-        </el-col>
-        <el-col :span="12">
-          <el-form-item :label="$t('protocol.fields.needSign')" prop="needSign">
-            <el-select
-              v-model="formModel.needSign"
-              :placeholder="$t('protocol.placeholders.needSign')"
-            >
-              <el-option
-                v-for="option in yesNoOptions"
-                :key="String(option.value)"
-                :label="option.label"
-                :value="option.value"
-              />
-            </el-select>
-          </el-form-item>
-        </el-col>
-        <el-col :span="12">
-          <el-form-item :label="$t('protocol.fields.status')" prop="status">
-            <el-select v-model="formModel.status" :placeholder="$t('protocol.placeholders.status')">
-              <el-option
-                v-for="option in statusOptions"
-                :key="String(option.value)"
-                :label="option.label"
-                :value="option.value"
-              />
-            </el-select>
-          </el-form-item>
-        </el-col>
-        <el-col :span="24">
-          <el-form-item :label="$t('protocol.fields.documentUrl')" prop="documentUrl">
-            <UniUpload
-              v-model:file-list="fileList"
-              drag
-              accept=".pdf,application/pdf"
-              :limit="1"
-              :max-size="10 * 1024 * 1024"
-              :request="uploadReq"
-              @validate-error="onUploadErr"
-              @remove="clearDoc"
-            >
-              <template #tip>
-                <div class="protocol-form__upload-tip">
-                  {{ $t('protocol.messages.uploadPdfSize') }}
-                </div>
-              </template>
-            </UniUpload>
-          </el-form-item>
-        </el-col>
-      </el-row>
-    </el-form>
+    <UniForm ref="uniFormRef" v-model="formModel" mode="edit" :config="dialogFormConfig">
+      <template #field-documentUrl>
+        <UniUpload
+          v-model:file-list="fileList"
+          drag
+          accept=".pdf,application/pdf"
+          :limit="1"
+          :max-size="10 * 1024 * 1024"
+          :request="uploadReq"
+          @validate-error="onUploadErr"
+          @remove="clearDoc"
+        >
+          <template #tip>
+            <div class="protocol-form__upload-tip">
+              {{ $t('protocol.messages.uploadPdfSize') }}
+            </div>
+          </template>
+        </UniUpload>
+      </template>
+    </UniForm>
 
     <template #footer>
       <el-button @click="close">{{ $t('protocol.actions.cancel') }}</el-button>
@@ -137,56 +37,82 @@
 </template>
 
 <script setup lang="ts">
-import type { FormInstance, UploadRequestOptions, UploadUserFile } from 'element-plus'
+import type { UploadRequestOptions, UploadUserFile } from 'element-plus'
 import { ElMessage } from 'element-plus'
-import { computed, reactive, ref, watch } from 'vue'
-import { useUniI18n } from 'uni-ui-lib'
+import type { UniFormConfig } from 'uni-ui-lib'
+import { UniForm, useUniI18n } from 'uni-ui-lib'
+import { computed, nextTick, ref, watch } from 'vue'
 
 import { protocolApi } from '@/api'
 import type { ProtocolFormEmits, ProtocolFormProps } from '@/types/components/protocol-form'
 import type { ProtocolFormModel, ProtocolRecord } from '@/types/modules/protocol'
 
-import { formRules } from '../list.config'
+import { protocolDialogFormConfig } from '../list.config'
 
 const props = defineProps<ProtocolFormProps>()
 
 const emit = defineEmits<ProtocolFormEmits>()
 
 const { t } = useUniI18n()
-const formRef = ref<FormInstance>()
+const uniFormRef = ref<InstanceType<typeof UniForm> | null>(null)
 const submitting = ref(false)
 const fileList = ref<UploadUserFile[]>([])
-const formModel = reactive<ProtocolFormModel>({})
-const rules = computed(() => formRules(t))
+const formModel = ref<ProtocolFormModel>({})
+const dialogFormConfig = computed<UniFormConfig>(() =>
+  protocolDialogFormConfig(
+    t,
+    props.schoolOptions,
+    props.protocolTypeOptions,
+    props.moduleOptions,
+    props.yesNoOptions,
+    props.statusOptions
+  )
+)
 const title = computed(() =>
   t(props.mode === 'add' ? 'protocol.actions.add' : 'protocol.actions.edit')
 )
 
-const resetForm = () => {
-  Object.keys(formModel).forEach((key) => {
-    delete formModel[key as keyof ProtocolFormModel]
+const revalidateDocument = () => {
+  nextTick(() => {
+    const exposed = uniFormRef.value as unknown as
+      | { validateField?: (prop: string | string[]) => Promise<unknown> }
+      | null
+      | undefined
+    void exposed?.validateField?.('documentUrl')?.catch(() => undefined)
   })
+}
+
+const resetForm = () => {
   fileList.value = []
 
-  if (props.schoolOptions.length === 1) {
-    formModel.schoolIds = [props.schoolOptions[0].value as string | number]
+  const next: ProtocolFormModel = {
+    needSign: 1,
+    status: 1
   }
 
-  formModel.needSign = 1
-  formModel.status = 1
-  formRef.value?.clearValidate()
+  if (props.schoolOptions.length === 1) {
+    next.schoolIds = [props.schoolOptions[0].value as string | number]
+  }
+
+  formModel.value = next
+
+  nextTick(() => {
+    uniFormRef.value?.clearValidate()
+  })
 }
 
 const fillForm = (record: ProtocolRecord) => {
-  formModel.id = record.id
-  formModel.schoolIds = Array.isArray(record.schoolIds) ? record.schoolIds : []
-  formModel.cnName = record.cnName
-  formModel.enName = record.enName
-  formModel.protocolType = record.protocolType
-  formModel.module = record.module
-  formModel.needSign = record.needSign
-  formModel.status = record.status
-  formModel.documentUrl = record.documentUrl
+  formModel.value = {
+    id: record.id,
+    schoolIds: Array.isArray(record.schoolIds) ? record.schoolIds : [],
+    cnName: record.cnName,
+    enName: record.enName,
+    protocolType: record.protocolType,
+    module: record.module,
+    needSign: record.needSign,
+    status: record.status,
+    documentUrl: record.documentUrl
+  }
 
   fileList.value = record.documentUrl
     ? [
@@ -210,9 +136,9 @@ const uploadReq = async (options: UploadRequestOptions) => {
     throw new Error(t('protocol.messages.uploadRequired'))
   }
 
-  formModel.documentUrl = url
+  formModel.value.documentUrl = url
   fileList.value = [{ name: file.name, url }]
-  await formRef.value?.validateField('documentUrl').catch(() => undefined)
+  revalidateDocument()
 
   return { url }
 }
@@ -222,12 +148,12 @@ const onUploadErr = (message: string) => {
 }
 
 const clearDoc = () => {
-  formModel.documentUrl = undefined
+  formModel.value.documentUrl = undefined
   fileList.value = []
 }
 
 const submit = async () => {
-  const valid = await formRef.value?.validate().catch(() => false)
+  const valid = await uniFormRef.value?.validate().catch(() => false)
 
   if (!valid) {
     return
@@ -237,9 +163,9 @@ const submit = async () => {
 
   try {
     if (props.mode === 'add') {
-      await protocolApi.add.post({ ...formModel })
+      await protocolApi.add.post({ ...formModel.value })
     } else {
-      await protocolApi.edit.post({ ...formModel })
+      await protocolApi.edit.post({ ...formModel.value })
     }
 
     ElMessage.success(t('protocol.messages.saveSuccess'))

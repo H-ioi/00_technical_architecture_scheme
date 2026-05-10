@@ -15,7 +15,7 @@
         <el-button v-uni-permission="'busorder_import_order'" @click="pickImport">
           {{ $t('schoolBus.driver.actions.import') }}
         </el-button>
-        <el-button v-uni-permission="'busorder_add'" type="primary" @click="onAddNotReady">
+        <el-button v-uni-permission="'busorder_add'" type="primary" @click="openFormAdd">
           {{ $t('schoolBus.driver.actions.add') }}
         </el-button>
       </div>
@@ -51,7 +51,7 @@
       :pagination="{ pageSize: 10, pageSizes: [10, 20, 50, 100] }"
       :toolbar="{ refresh: true, density: true, columnSetting: true }"
       :actions="actions"
-      :action-column="{ width: 100, fixed: 'right' }"
+      :action-column="{ width: 150, fixed: 'right' }"
       @selection-change="onSelectionChange"
       @load-success="handleLoadSuccess"
     >
@@ -68,6 +68,17 @@
     </UniDataTable>
 
     <OrderDetailDialog :visible="detailVisible" :order-id="detailOrderId" @close="closeDetail" />
+
+    <BusOrderFormDialog
+      v-model:visible="formVisible"
+      :mode="formMode"
+      :order-id="editingOrderId"
+      form-type="order"
+      :school-options="schoolOptions"
+      :default-school-id="defaultSingleSchoolId"
+      :multi-school="multiSchool"
+      @saved="reload"
+    />
   </section>
 </template>
 
@@ -77,6 +88,7 @@ import { useUniI18n } from 'uni-ui-lib'
 import { computed, ref } from 'vue'
 
 import OrderDetailDialog from '../components/order-detail-dialog.vue'
+import BusOrderFormDialog from '../components/bus-order-form-dialog.vue'
 import { useOrderList } from './use-list'
 
 import { schoolBusOrderApi } from '@/api'
@@ -88,13 +100,20 @@ const {
   actions,
   closeDetail,
   columns,
+  defaultSingleSchoolId,
   detailOrderId,
   detailVisible,
+  editingOrderId,
   filters,
+  formMode,
+  formVisible,
   handleLoadSuccess,
   loadData,
+  multiSchool,
+  openFormAdd,
   queryModel,
   reset,
+  schoolOptions,
   search,
   searchConfig,
   tableRef
@@ -110,10 +129,6 @@ const reload = () => tableRef.value?.refresh()
 
 const onSelectionChange = (rows: BusOrderRecord[]) => {
   picked.value = rows
-}
-
-const onAddNotReady = () => {
-  ElMessage.info(t('schoolBus.studentOrder.messages.addFormTodo'))
 }
 
 const downloadOrderTemplate = async () => {

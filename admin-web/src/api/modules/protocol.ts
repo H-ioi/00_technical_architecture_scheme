@@ -21,6 +21,21 @@ const resolveUploadUrl = (uploadUrl: string) => {
   return uploadUrl
 }
 
+/**
+ * 相对路径上传地址（如 /isa-file-upload/upload/）需拼成浏览器绝对 URL，
+ * 否则 axios 会与实例 baseURL（/api）拼成错误路径。
+ */
+const toAbsoluteUploadUrlIfNeeded = (uploadUrl: string): string => {
+  const u = uploadUrl.trim()
+  if (!u || /^https?:\/\//i.test(u)) {
+    return u
+  }
+  if (typeof window === 'undefined') {
+    return u
+  }
+  return u.startsWith('/') ? `${window.location.origin}${u}` : `${window.location.origin}/${u}`
+}
+
 export default {
   page: {
     url: `${API_PATHS.protocol}/getProtocolPage`,
@@ -85,17 +100,23 @@ export default {
   },
 
   upload: {
-    url: import.meta.env.VITE_UPLOAD_URL || '/files/upload',
+    url:
+      import.meta.env.VITE_UPLOAD_URL?.trim() ||
+      'https://upload.isagzth.com/upload/',
     name: '上传协议',
     post: async function (this: { url: string }, file: File) {
       const formData = new FormData()
       formData.append('file', file)
 
-      const result = await request.post<UploadFileResult, UploadFileResult>(resolveUploadUrl(this.url), formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data'
+      const result = await request.post<UploadFileResult, UploadFileResult>(
+        toAbsoluteUploadUrlIfNeeded(resolveUploadUrl(this.url)),
+        formData,
+        {
+          headers: {
+            'Content-Type': 'multipart/form-data'
+          }
         }
-      })
+      )
 
       return result.url ?? result.data?.url ?? ''
     }

@@ -13,6 +13,7 @@ export interface StudentListParams extends PageQuery {
 export interface StudentRecord {
   id: string | number
   schoolName?: string
+  schoolIds?: string | number | Array<string | number>
   admissonNo?: string
   cnFullName?: string
   fullName?: string

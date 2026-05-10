@@ -123,10 +123,11 @@ export const tableCols = (
 ): UniTableColumn[] => [
   { prop: 'id', label: 'ID', type: 'text', width: 90, fixed: 'left' },
   {
-    prop: 'schoolName',
+    prop: 'schoolIds',
     label: t('member.fields.school'),
-    type: 'text',
+    type: 'array',
     options: schoolOptions,
+    lookup: { splitValues: true },
     minWidth: 240,
     showOverflowTooltip: true
   },
