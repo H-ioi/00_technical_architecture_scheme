@@ -5,6 +5,7 @@ import dashboard from './dashboard'
 import base from './modules/base'
 import member from './modules/member'
 import protocol from './modules/protocol'
+import schoolBus from './modules/school-bus'
 import route from './route'
 
 const en: typeof zhCN = {
@@ -16,7 +17,8 @@ const en: typeof zhCN = {
   dashboard,
   base,
   member,
-  protocol
+  protocol,
+  schoolBus
 }
 
 export default en

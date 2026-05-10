@@ -95,6 +95,27 @@ export const routes: AppRouteRecord[] = [
         ]
       },
       {
+        path: 'school-bus',
+        name: 'SchoolBus',
+        redirect: '/school-bus/driver',
+        meta: {
+          title: '校车管理',
+          titleKey: 'route.schoolBus',
+          icon: 'Van'
+        },
+        children: [
+          {
+            path: 'driver',
+            name: 'SchoolBusDriver',
+            component: () => import('@/views/school-bus/driver/list.vue'),
+            meta: {
+              title: '司机管理',
+              titleKey: 'route.schoolBusDriver'
+            }
+          }
+        ]
+      },
+      {
         path: 'protocol',
         name: 'Protocol',
         component: () => import('@/views/protocol/list.vue'),

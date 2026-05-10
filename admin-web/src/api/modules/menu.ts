@@ -19,7 +19,26 @@ const MENU_PATH_ALIASES: Record<string, string> = {
   '/isacommunity/base/grade/index': '/base/grade',
   '/isacommunity/base/grade': '/base/grade',
   '/isacommunity/protocol': '/protocol',
-  '/isacommunity/protocol/index': '/protocol'
+  '/isacommunity/protocol/index': '/protocol',
+  '/isacommunity/schoolbus': '/school-bus',
+  '/isacommunity/schoolbus/route': '/school-bus/route',
+  '/isacommunity/schoolbus/route/plan/index': '/school-bus/route/plan',
+  '/isacommunity/schoolbus/route/plan': '/school-bus/route/plan',
+  '/isacommunity/schoolbus/route/operation/index': '/school-bus/route/operation',
+  '/isacommunity/schoolbus/route/operation': '/school-bus/route/operation',
+  '/isacommunity/schoolbus/route/exception/index': '/school-bus/route/exception',
+  '/isacommunity/schoolbus/route/exception': '/school-bus/route/exception',
+  '/isacommunity/schoolbus/student': '/school-bus/student',
+  '/isacommunity/schoolbus/student/apply/index': '/school-bus/student/apply',
+  '/isacommunity/schoolbus/student/apply': '/school-bus/student/apply',
+  '/isacommunity/schoolbus/student/order/index': '/school-bus/student/order',
+  '/isacommunity/schoolbus/student/order': '/school-bus/student/order',
+  '/isacommunity/schoolbus/driver/index': '/school-bus/driver',
+  '/isacommunity/schoolbus/driver': '/school-bus/driver',
+  '/isacommunity/user/teacher/index': '/school-bus/follow-teacher',
+  '/isacommunity/user/teacher': '/school-bus/follow-teacher',
+  '/isacommunity/schoolbus/car/index': '/school-bus/car',
+  '/isacommunity/schoolbus/car': '/school-bus/car'
 }
 
 const normPath = (path?: string) => {

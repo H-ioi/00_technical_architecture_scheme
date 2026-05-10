@@ -7,5 +7,7 @@ export default {
   protocolDetail: 'Protocol Detail',
   base: 'Basic settings',
   baseSchool: 'Campus configuration',
-  baseGrade: 'Grade configuration'
+  baseGrade: 'Grade configuration',
+  schoolBus: 'School bus',
+  schoolBusDriver: 'Drivers'
 }

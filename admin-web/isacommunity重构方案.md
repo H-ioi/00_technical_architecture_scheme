@@ -133,6 +133,23 @@
 - 跨项目通用能力才抽入 `uni-lib`。
 - `lint`、`type-check`、`build` 通过。
 
+### 2.6 P2 基础设置落地备忘（问题与注意点）
+
+本节记录 **校区配置 / 年级配置**（字典类型 `order_school`、`isacommunity_enroll_level`，接口 `/publik/dict/item/*`）迁入 `admin-web` 时出现的问题与约定，供后续模块对照。
+
+| 类别 | 说明 |
+| --- | --- |
+| **旧代码依据** | 页面与接口以 `test/old-test/src/views/isacommunity/base/school|grade/index.vue` 及 `api/workorder/order/orderlist.js`（`/publik/dict/item/*`）为准，不臆测字段与 URL。 |
+| **新项目落地路径** | 视图：`views/base/school`、`views/base/grade`；共享逻辑：`views/base/components/dict.vue` + `dict.config.ts`（组件文件名尽量简短）；API：`api/modules/base-dict.ts`；类型：`types/modules/base-dict.ts`；菜单别名：`api/modules/menu.ts` 中 `/isacommunity/base/...` → `/base/...`。 |
+| **列表必须用 uni-lib** | 主列表使用 `UniSearchForm` + `useUniListState` + `UniDataTable`（`request`、`filters`、`@load-success`），风格与成员/协议列表一致；配置集中在 `*.config.ts`，避免手写整块 `el-table`（弹窗内二层表同样优先 `UniDataTable`）。 |
+| **分页** | 旧接口为全量列表、业务上无需分页时：`UniDataTable` 设 `:pagination="false"`，`request` 返回完整 `data`，**不要**为迁就组件再前端切片分页。 |
+| **启用状态列** | 有启停接口时，优先列类型 `type: 'switch'` + `@switch-change` 调 enable/disable；操作列不再重复「启用/禁用」链接。`action-column` 用**固定 `width`**（勿仅用 `min-width`），避免最后一列被拉满；必要时 `:deep` 收紧 link 按钮 `padding`。 |
+| **ElSwitch 误触发 change** | Element Plus `ElSwitch` 在 setup 阶段若 `modelValue` 与 `activeValue`/`inactiveValue` **严格相等**不满足（常见：后端 `status` 为 `1`/`0`，列为 `true`/`false`），会 **emit change** 纠错，导致 **一进页面每行都打接口**。解决办法：数据进表前将 `status` **规范为布尔**（与开关取值一致）。 |
+| **数字表单控件** | 排序、数量等语义为数字的字段，表单用 **`ElInputNumber`**（配合 `min`/`step`/`precision`/`controlsPosition`），列表列可用 `type: 'number'`；提交前注意与旧接口约定（空值仍可为 `''` 或统一数字，需在页面层明确）。 |
+| **i18n** | `base.school` / `base.grade` 下补齐 `search`、`actions.search`/`reset` 等与检索条、按钮一致的文案，中英同步注册到 `locales/lang/*/index.ts`。 |
+
+后续迁移其它模块时，凡出现 **表格开关列 + 后端非严格布尔**、**无真实分页的全量列表**、**操作列宽度**，可直接套用本节约定。
+
 ## 三、新项目目录结构
 
 重构后不设置 `views/isacommunity`、`api/modules/isacommunity` 等层级。

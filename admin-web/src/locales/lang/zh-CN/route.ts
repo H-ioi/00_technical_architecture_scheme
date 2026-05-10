@@ -7,5 +7,7 @@ export default {
   protocolDetail: '协议详情',
   base: '基础设置',
   baseSchool: '校区配置',
-  baseGrade: '年级配置'
+  baseGrade: '年级配置',
+  schoolBus: '校车管理',
+  schoolBusDriver: '司机管理'
 }
