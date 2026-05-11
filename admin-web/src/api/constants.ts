@@ -23,5 +23,9 @@ export const API_PATHS = {
   /** 校车车辆（旧 `api/isacommunity/car.js`，`/isacommunity/buscarinfo`） */
   schoolBusCarInfo: '/isacommunity/buscarinfo',
   /** 跟车老师账号（旧 `api/isacommunity/user.js`，`/isacommunity/teacher/user`） */
-  schoolBusFollowTeacher: '/isacommunity/teacher/user'
+  schoolBusFollowTeacher: '/isacommunity/teacher/user',
+  /** 考勤（旧 `api/isacommunity/attendance.js`） */
+  attendance: '/isacommunity/attendance',
+  /** 考勤公共下拉（旧 `${attendance}/common`） */
+  attendanceCommon: '/isacommunity/attendance/common'
 } as const

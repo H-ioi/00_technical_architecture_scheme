@@ -249,6 +249,27 @@ export const routes: AppRouteRecord[] = [
         ]
       },
       {
+        path: 'attendance',
+        name: 'Attendance',
+        redirect: '/attendance/student',
+        meta: {
+          title: '考勤管理',
+          titleKey: 'route.attendance',
+          icon: 'Calendar'
+        },
+        children: [
+          {
+            path: 'student',
+            name: 'AttendanceStudent',
+            component: () => import('@/views/attendance/student/list.vue'),
+            meta: {
+              title: '学生考勤',
+              titleKey: 'route.attendanceStudent'
+            }
+          }
+        ]
+      },
+      {
         path: 'protocol',
         name: 'Protocol',
         component: () => import('@/views/protocol/list.vue'),

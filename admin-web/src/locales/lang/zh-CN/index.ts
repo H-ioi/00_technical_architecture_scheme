@@ -1,5 +1,6 @@
 import common from './common'
 import dashboard from './dashboard'
+import attendance from './modules/attendance'
 import base from './modules/base'
 import member from './modules/member'
 import permission from './modules/permission'
@@ -15,6 +16,7 @@ export default {
   common,
   route,
   dashboard,
+  attendance,
   base,
   member,
   permission,

@@ -1,3 +1,4 @@
+import attendanceStudentApi from './modules/attendance-student'
 import authApi from './modules/auth'
 import baseDictApi from './modules/base-dict'
 import captchaApi from './modules/captcha'
@@ -22,6 +23,7 @@ import schoolBusSectionApi from './modules/school-bus-section'
 import schoolBusStationApi from './modules/school-bus-station'
 
 export {
+  attendanceStudentApi,
   authApi,
   baseDictApi,
   captchaApi,

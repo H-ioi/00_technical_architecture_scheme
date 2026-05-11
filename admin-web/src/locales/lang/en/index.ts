@@ -2,6 +2,7 @@ import type zhCN from '../zh-CN'
 
 import common from './common'
 import dashboard from './dashboard'
+import attendance from './modules/attendance'
 import base from './modules/base'
 import member from './modules/member'
 import permission from './modules/permission'
@@ -17,6 +18,7 @@ const en: typeof zhCN = {
   common,
   route,
   dashboard,
+  attendance,
   base,
   member,
   permission,

@@ -1,0 +1,192 @@
+import type { UniTableAction, UniTableRequest } from 'uni-ui-lib'
+import dayjs from 'dayjs'
+import { toUniOptions, useUniI18n, useUniListState } from 'uni-ui-lib'
+import { computed, ref } from 'vue'
+
+import {
+  attendanceSchoolStatusOpts,
+  attendanceStudentColumns,
+  attendanceStudentDetailForm,
+  attendanceStudentSearchForm,
+  ynOpts
+} from './list.config'
+
+import { attendanceStudentApi, membershipApi } from '@/api'
+import type { AttendanceStudentListParams, AttendanceStudentRecord } from '@/types/modules/attendance-student'
+import type { SchoolOptionRecord } from '@/types/modules/membership'
+
+type Loose = Record<string, unknown>
+
+const unwrapStudentPage = (payload: unknown): { list: Loose[]; total: number } => {
+  if (!payload || typeof payload !== 'object') {
+    return { list: [], total: 0 }
+  }
+  const r = payload as Loose
+  const num = (value: unknown) =>
+    typeof value === 'number' && Number.isFinite(value) ? value : 0
+  if (Array.isArray(r.data)) {
+    return { list: r.data as Loose[], total: num(r.total) }
+  }
+  const inner = r.data
+  if (inner && typeof inner === 'object' && !Array.isArray(inner)) {
+    const obj = inner as Loose
+    const list = Array.isArray(obj.data) ? (obj.data as Loose[]) : []
+    return { list, total: num(r.total) || num(obj.total) }
+  }
+  return { list: [], total: num(r.total) }
+}
+
+const formatMaybeDateTime = (value: unknown) => {
+  if (value == null || value === '') {
+    return ''
+  }
+  const d = dayjs(String(value))
+  return d.isValid() ? d.format('YYYY-MM-DD HH:mm:ss') : String(value)
+}
+
+const formatDateOnly = (value: unknown) => {
+  if (value == null || value === '') {
+    return ''
+  }
+  const d = dayjs(String(value))
+  return d.isValid() ? d.format('YYYY-MM-DD') : String(value)
+}
+
+export const useList = () => {
+  const { locale, t } = useUniI18n()
+  const initialFilters: Record<string, unknown> = {
+    schoolIds: undefined,
+    admissionNo: '',
+    grade: undefined,
+    onBoarding: undefined,
+    onBus: undefined,
+    schoolStatus: undefined,
+    beginDate: undefined,
+    endDate: undefined
+  }
+
+  const { queryModel, filters, tableRef, handleLoadSuccess, reset, search } = useUniListState({
+    initialFilters
+  })
+
+  const schoolRecords = ref<SchoolOptionRecord[]>([])
+  const schoolOptions = computed(() =>
+    toUniOptions(schoolRecords.value, {
+      labelKeys: locale() === 'en' ? ['enName', 'name'] : ['name', 'cnName', 'enName'],
+      valueKey: 'id'
+    })
+  )
+
+  const gradeStrings = ref<string[]>([])
+  const gradeOptions = computed(() =>
+    toUniOptions(
+      gradeStrings.value.map((g) => ({ label: g, value: g })),
+      { labelKeys: ['label'], valueKey: 'value' }
+    )
+  )
+
+  const ynSearchOptions = computed(() => ynOpts(t))
+  const statusSearchOptions = computed(() => attendanceSchoolStatusOpts(t))
+
+  const searchConfig = computed(() =>
+    attendanceStudentSearchForm(
+      t,
+      schoolOptions.value,
+      gradeOptions.value,
+      ynSearchOptions.value,
+      statusSearchOptions.value
+    )
+  )
+
+  const columns = computed(() => attendanceStudentColumns(t))
+
+  const detailConfig = computed(() => attendanceStudentDetailForm(t))
+
+  const detailVisible = ref(false)
+  const currentRecord = ref<AttendanceStudentRecord | null>(null)
+
+  const ynLabel = (raw: unknown) => {
+    const s = String(raw ?? '')
+    if (s === '1') {
+      return t('attendance.student.options.ynYes')
+    }
+    if (s === '0') {
+      return t('attendance.student.options.ynNo')
+    }
+    return '--'
+  }
+
+  const statusLabel = (raw: unknown) => {
+    const row = statusSearchOptions.value.find((o) => String(o.value) === String(raw ?? ''))
+    return row?.label ?? String(raw ?? '--')
+  }
+
+  const decorateRow = (raw: Loose): AttendanceStudentRecord => {
+    const row: AttendanceStudentRecord = {
+      ...(raw as AttendanceStudentRecord),
+      boarding: ynLabel(raw.boarding),
+      schoolBus: ynLabel(raw.schoolBus),
+      schoolStatus: statusLabel(raw.schoolStatus),
+      attendanceDate: formatDateOnly(raw.attendanceDate),
+      entryTime: formatMaybeDateTime(raw.entryTime),
+      leavingTime: formatMaybeDateTime(raw.leavingTime),
+      updatedAt: formatMaybeDateTime(raw.updatedAt),
+      createdAt: formatMaybeDateTime(raw.createdAt)
+    }
+    return row
+  }
+
+  const loadData: UniTableRequest = async ({ pageNo, pageSize, filters: f }) => {
+    const params: AttendanceStudentListParams = {
+      current: pageNo,
+      size: pageSize,
+      ...(f as Record<string, unknown>)
+    }
+    const raw = await attendanceStudentApi.studentPage.get(params)
+    const { list, total } = unwrapStudentPage(raw)
+    return {
+      data: list.map(decorateRow),
+      total
+    }
+  }
+
+  const showDetail = (row: AttendanceStudentRecord) => {
+    currentRecord.value = row
+    detailVisible.value = true
+  }
+
+  /** 旧页「查看」未绑定权限码，全员可见。 */
+  const actions = computed<UniTableAction[]>(() => [
+    {
+      label: t('attendance.student.actions.detail'),
+      onClick: (row) => showDetail(row as AttendanceStudentRecord)
+    }
+  ])
+
+  const loadOpts = async () => {
+    const [schools, grades] = await Promise.all([
+      membershipApi.school.get(),
+      attendanceStudentApi.gradeList.get()
+    ])
+    schoolRecords.value = schools
+    gradeStrings.value = Array.isArray(grades) ? grades : []
+  }
+
+  loadOpts()
+
+  return {
+    actions,
+    columns,
+    currentRecord,
+    detailConfig,
+    detailVisible,
+    filters,
+    handleLoadSuccess,
+    loadData,
+    queryModel,
+    reset,
+    search,
+    searchConfig,
+    tableRef
+  }
+}

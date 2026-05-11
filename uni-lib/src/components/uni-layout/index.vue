@@ -1,37 +1,16 @@
 <template>
-  <el-container
-    class="uni-layout"
-    :class="`uni-layout--${preset}`"
-    direction="horizontal"
-  >
+  <el-container class="uni-layout" :class="`uni-layout--${preset}`" direction="horizontal">
     <slot name="sidebar">
-      <el-aside
-        class="uni-layout__sidebar"
-        :width="resolvedCollapsed ? '64px' : resolvedSidebarWidth"
-      >
+      <el-aside class="uni-layout__sidebar" :width="resolvedCollapsed ? '64px' : resolvedSidebarWidth">
         <div class="uni-layout__brand">
           <slot name="logo">
-            <img
-              v-if="resolvedLogo"
-              class="uni-layout__logo"
-              :src="resolvedLogo"
-              :alt="logoAlt"
-            />
+            <img v-if="resolvedLogo" class="uni-layout__logo" :src="resolvedLogo" :alt="logoAlt" />
           </slot>
         </div>
 
         <div class="uni-layout__menu-wrap">
-          <el-menu
-            class="uni-layout__menu"
-            :collapse="resolvedCollapsed"
-            :default-active="resolvedActiveMenu"
-            @select="(path: string) => onMenuSelect(path)"
-          >
-            <MenuTree
-              :menus="resolvedMenus"
-              :icon-map="iconMap"
-              :translate="tr"
-            >
+          <el-menu class="uni-layout__menu" :collapse="resolvedCollapsed" :default-active="resolvedActiveMenu" @select="(path: string) => onMenuSelect(path)">
+            <MenuTree :menus="resolvedMenus" :icon-map="iconMap" :translate="tr">
               <template #menu-icon="slotProps">
                 <slot name="menu-icon" v-bind="slotProps" />
               </template>
@@ -56,10 +35,7 @@
             </el-button>
             <slot name="breadcrumb">
               <el-breadcrumb separator="/">
-                <el-breadcrumb-item
-                  v-for="item in resolvedBreadcrumbs"
-                  :key="item.titleKey || item.title"
-                >
+                <el-breadcrumb-item v-for="item in resolvedBreadcrumbs" :key="item.titleKey || item.title">
                   {{ tr(item.titleKey, item.title) }}
                 </el-breadcrumb-item>
               </el-breadcrumb>
@@ -68,20 +44,9 @@
 
           <div class="uni-layout__header-right">
             <slot name="header-right">
-              <el-dropdown
-                v-if="showLocale"
-                trigger="click"
-                @command="(value: string) => onChangeLocale(value)"
-              >
-                <button
-                  class="uni-layout__locale uni-layout__action"
-                  type="button"
-                >
-                  <UniIcon
-                    class="uni-layout__locale-icon"
-                    :icon="UniZhEnIcon"
-                    :size="24"
-                  />
+              <el-dropdown v-if="showLocale" trigger="click" @command="(value: string) => onChangeLocale(value)">
+                <button class="uni-layout__locale uni-layout__action" type="button">
+                  <UniIcon class="uni-layout__locale-icon" :icon="UniZhEnIcon" :size="24" />
                   {{ activeLocaleLabel }}
                   <el-icon class="uni-layout__locale-arrow">
                     <ArrowDown />
@@ -89,11 +54,7 @@
                 </button>
                 <template #dropdown>
                   <el-dropdown-menu>
-                    <el-dropdown-item
-                      v-for="item in localeOptions"
-                      :key="item.value"
-                      :command="item.value"
-                    >
+                    <el-dropdown-item v-for="item in localeOptions" :key="item.value" :command="item.value">
                       {{ item.label }}
                     </el-dropdown-item>
                   </el-dropdown-menu>
@@ -102,24 +63,13 @@
 
               <span v-if="showLocale && showUser" class="uni-layout__divider" />
 
-              <el-dropdown
-                v-if="showUser"
-                trigger="click"
-                popper-class="uni-layout-user-dropdown"
-                @command="(command: string) => onUserCommand(command)"
-              >
+              <el-dropdown v-if="showUser" trigger="click" popper-class="uni-layout-user-dropdown" @command="(command: string) => onUserCommand(command)">
                 <button class="uni-layout__user" type="button">
                   <span class="uni-layout__user-info">
                     <strong>{{ displayName }}</strong>
-                    <small v-if="resolvedUser.role">{{
-                      resolvedUser.role
-                    }}</small>
+                    <small v-if="resolvedUser.role">{{ resolvedUser.role }}</small>
                   </span>
-                  <el-avatar
-                    class="uni-layout__avatar"
-                    :src="resolvedUser.avatar"
-                    :size="34"
-                  >
+                  <el-avatar class="uni-layout__avatar" :src="resolvedUser.avatar" :size="34">
                     {{ avatarText }}
                   </el-avatar>
                   <el-icon class="uni-layout__user-arrow">
@@ -128,12 +78,7 @@
                 </button>
                 <template #dropdown>
                   <el-dropdown-menu>
-                    <el-dropdown-item
-                      v-for="item in resolvedUserCommands"
-                      :key="item.command"
-                      :command="item.command"
-                      :divided="item.divided"
-                    >
+                    <el-dropdown-item v-for="item in resolvedUserCommands" :key="item.command" :command="item.command" :divided="item.divided">
                       {{ item.label }}
                     </el-dropdown-item>
                   </el-dropdown-menu>
@@ -156,8 +101,7 @@
           @close="(path) => onTagClose(path)"
           @refresh="(tag) => onTagRefresh(tag)"
           @close-others="(path) => onTagCloseOthers(path)"
-          @close-all="onTagCloseAll()"
-        />
+          @close-all="onTagCloseAll()" />
       </slot>
 
       <el-main class="uni-layout__content">
@@ -177,27 +121,22 @@
       v-model="themeVisible"
       :default-theme="defaultThemeResolved"
       :storage-key="themeStorageKeyResolved"
-      :title="tr('common.themeSettings', 'Theme settings')"
-    />
+      :title="tr('common.themeSettings', 'Theme settings')" />
   </template>
 </template>
 
 <script setup lang="ts">
-import { ArrowDown, Expand, Fold } from "@element-plus/icons-vue";
-import { computed, ref } from "vue";
-import { useI18n } from "vue-i18n";
-import { useRoute, useRouter } from "vue-router";
+import { ArrowDown, Expand, Fold } from '@element-plus/icons-vue'
+import { computed, ref } from 'vue'
+import { useI18n } from 'vue-i18n'
+import { useRoute, useRouter } from 'vue-router'
 
-import { UniIcon } from "@/components/uni-icon";
-import { UniThemeSettings } from "@/components/uni-theme-settings";
-import { UniZhEnIcon } from "@/icons";
-import { tryGetUniConfig } from "@/plugins/config";
-import {
-  useAppStore,
-  useMenuStore,
-  useUniTagsViewStore,
-  useUserStore,
-} from "@/stores";
+import defaultLayoutLogo from '@/assets/images/logo-top.png'
+import { UniIcon } from '@/components/uni-icon'
+import { UniThemeSettings } from '@/components/uni-theme-settings'
+import { UniZhEnIcon } from '@/icons'
+import { tryGetUniConfig } from '@/plugins/config'
+import { useAppStore, useMenuStore, useUniTagsViewStore, useUserStore } from '@/stores'
 import type {
   UniLayoutBreadcrumbItem,
   UniLayoutIconMap,
@@ -206,16 +145,15 @@ import type {
   UniLayoutTag,
   UniLayoutTranslate,
   UniLayoutUser,
-  UniLayoutUserCommand,
-} from "@/types/uni-layout";
-import defaultLayoutLogo from "@/assets/images/logo-top.png";
-import MenuTree from "./components/menu-tree.vue";
-import UniLayoutChangePasswordDialog from "./components/change-password-dialog.vue";
-import TagsView from "./components/tags-view.vue";
+  UniLayoutUserCommand
+} from '@/types/uni-layout'
+import UniLayoutChangePasswordDialog from './components/change-password-dialog.vue'
+import MenuTree from './components/menu-tree.vue'
+import TagsView from './components/tags-view.vue'
 
 defineOptions({
-  name: "UniLayout",
-});
+  name: 'UniLayout'
+})
 
 const props = withDefaults(
   defineProps<{
@@ -223,46 +161,46 @@ const props = withDefaults(
      * 为 true 时从 Pinia（permission / app / user）与 vue-router 自动接线，
      * 模板项目通常只需传 preset；logo 不传则用库内默认图。
      */
-    autoWire?: boolean;
+    autoWire?: boolean
     /** 自动接线时标签栏「关闭全部」等回落路径 */
-    tagsFallback?: string;
+    tagsFallback?: string
     /** 是否内嵌改密弹窗、主题设置（默认命令 password / theme） */
-    shellDialogs?: boolean;
-    menus?: UniLayoutMenuRecord[];
-    tags?: UniLayoutTag[];
-    activePath?: string;
-    activeMenu?: string;
-    collapsed?: boolean;
-    sidebarWidth?: string;
+    shellDialogs?: boolean
+    menus?: UniLayoutMenuRecord[]
+    tags?: UniLayoutTag[]
+    activePath?: string
+    activeMenu?: string
+    collapsed?: boolean
+    sidebarWidth?: string
     /** 侧栏 Logo 地址；不传则用内置默认图；传空字符串可隐藏 */
-    logo?: string;
-    logoAlt?: string;
-    locale?: string;
-    localeOptions?: UniLayoutLocaleOption[];
-    user?: UniLayoutUser;
-    userCommands?: UniLayoutUserCommand[];
-    breadcrumbs?: UniLayoutBreadcrumbItem[];
-    showTags?: boolean;
-    showLocale?: boolean;
-    showUser?: boolean;
-    preset?: "default" | "isa-light" | "custom";
-    iconMap?: UniLayoutIconMap;
-    translate?: UniLayoutTranslate;
+    logo?: string
+    logoAlt?: string
+    locale?: string
+    localeOptions?: UniLayoutLocaleOption[]
+    user?: UniLayoutUser
+    userCommands?: UniLayoutUserCommand[]
+    breadcrumbs?: UniLayoutBreadcrumbItem[]
+    showTags?: boolean
+    showLocale?: boolean
+    showUser?: boolean
+    preset?: 'default' | 'isa-light' | 'custom'
+    iconMap?: UniLayoutIconMap
+    translate?: UniLayoutTranslate
   }>(),
   {
     autoWire: true,
-    tagsFallback: "/dashboard",
+    tagsFallback: '/dashboard',
     shellDialogs: true,
     tags: () => [],
-    activePath: "",
+    activePath: '',
     activeMenu: undefined,
     collapsed: false,
-    sidebarWidth: "220px",
-    logoAlt: "logo",
-    locale: "zh-CN",
+    sidebarWidth: '220px',
+    logoAlt: 'logo',
+    locale: 'zh-CN',
     localeOptions: () => [
-      { label: "简体中文", value: "zh-CN" },
-      { label: "English", value: "en" },
+      { label: '简体中文', value: 'zh-CN' },
+      { label: 'English', value: 'en' }
     ],
     user: () => ({}),
     userCommands: () => [],
@@ -270,310 +208,270 @@ const props = withDefaults(
     showTags: true,
     showLocale: true,
     showUser: true,
-    preset: "default",
+    preset: 'default',
     iconMap: () => ({}),
-    translate: undefined,
-  },
-);
+    translate: undefined
+  }
+)
 
 const emit = defineEmits<{
-  toggleSidebar: [];
-  menuSelect: [path: string];
-  changeLocale: [locale: string];
-  userCommand: [command: string];
-  tagClick: [path: string];
-  tagClose: [path: string];
-  tagRefresh: [tag?: UniLayoutTag];
-  tagCloseOthers: [path?: string];
-  tagCloseAll: [];
-}>();
+  toggleSidebar: []
+  menuSelect: [path: string]
+  changeLocale: [locale: string]
+  userCommand: [command: string]
+  tagClick: [path: string]
+  tagClose: [path: string]
+  tagRefresh: [tag?: UniLayoutTag]
+  tagCloseOthers: [path?: string]
+  tagCloseAll: []
+}>()
 
 const { t, locale: globalLocale } = useI18n({
-  useScope: "global",
-});
-const tr: UniLayoutTranslate = (key?: string, fallback = "") => {
+  useScope: 'global'
+})
+const tr: UniLayoutTranslate = (key?: string, fallback = '') => {
   if (props.translate) {
-    return props.translate(key, fallback);
+    return props.translate(key, fallback)
   }
 
   if (!key) {
-    return fallback;
+    return fallback
   }
 
-  const out = t(key);
+  const out = t(key)
 
-  return out !== key ? out : fallback;
-};
+  return out !== key ? out : fallback
+}
 
 /** 未传 logo 用包内默认图；传空字符串则隐藏 */
 const resolvedLogo = computed(() => {
-  if (props.logo === "") {
-    return "";
+  if (props.logo === '') {
+    return ''
   }
 
   if (props.logo) {
-    return props.logo;
+    return props.logo
   }
 
-  return defaultLayoutLogo;
-});
+  return defaultLayoutLogo
+})
 
-const menuStore = useMenuStore();
-const appStore = useAppStore();
-const userStore = useUserStore();
-const tagsViewStore = useUniTagsViewStore();
-const route = useRoute();
-const router = useRouter();
+const menuStore = useMenuStore()
+const appStore = useAppStore()
+const userStore = useUserStore()
+const tagsViewStore = useUniTagsViewStore()
+const route = useRoute()
+const router = useRouter()
 
-const viewKey = computed(
-  () => `${route?.fullPath ?? ""}-${tagsViewStore.refreshKey}`,
-);
+const viewKey = computed(() => `${route?.fullPath ?? ''}-${tagsViewStore.refreshKey}`)
 
 const findVisitedTagNeighbor = (path: string) => {
-  const tags = tagsViewStore.visitedTags;
-  const index = tags.findIndex((tag) => tag.path === path);
-  const left = index > 0 ? tags[index - 1] : undefined;
-  const right = index < tags.length - 1 ? tags[index + 1] : undefined;
+  const tags = tagsViewStore.visitedTags
+  const index = tags.findIndex((tag) => tag.path === path)
+  const left = index > 0 ? tags[index - 1] : undefined
+  const right = index < tags.length - 1 ? tags[index + 1] : undefined
 
-  return (
-    left ||
-    right ||
-    tagsViewStore.visitedTags[tagsViewStore.visitedTags.length - 1]
-  );
-};
+  return left || right || tagsViewStore.visitedTags[tagsViewStore.visitedTags.length - 1]
+}
 
 const closeTag = (path: string) => {
-  const isActive = route?.fullPath === path;
-  const nextTag = findVisitedTagNeighbor(path);
+  const isActive = route?.fullPath === path
+  const nextTag = findVisitedTagNeighbor(path)
 
-  tagsViewStore.removeTag(path);
+  tagsViewStore.removeTag(path)
 
   if (!isActive) {
-    return;
+    return
   }
 
-  void router.push((nextTag || { path: props.tagsFallback }).path);
-};
+  void router.push((nextTag || { path: props.tagsFallback }).path)
+}
 
 const refreshTag = (tag?: UniLayoutTag) => {
   if (tag && tag.path !== route?.fullPath) {
-    void router.push(tag.path);
+    void router.push(tag.path)
   }
-  tagsViewStore.refreshCurrentTag();
-};
+  tagsViewStore.refreshCurrentTag()
+}
 
-const closeOthers = (path = route?.fullPath ?? "") => {
-  tagsViewStore.removeOtherTags(path);
+const closeOthers = (path = route?.fullPath ?? '') => {
+  tagsViewStore.removeOtherTags(path)
 
   if (path !== route?.fullPath) {
-    void router.push(path);
+    void router.push(path)
   }
-};
+}
 
 const closeAll = () => {
-  tagsViewStore.removeAllTags();
-  void router.push(props.tagsFallback);
-};
+  tagsViewStore.removeAllTags()
+  void router.push(props.tagsFallback)
+}
 
-const resolvedMenus = computed(() =>
-  props.autoWire ? menuStore.menuRoutes : (props.menus ?? []),
-);
-const resolvedTags = computed(() =>
-  props.autoWire ? tagsViewStore.visitedTags : props.tags,
-);
-const resolvedActivePath = computed(() =>
-  props.autoWire ? (route?.fullPath ?? props.activePath) : props.activePath,
-);
-const resolvedActiveMenuBase = computed(() =>
-  props.autoWire
-    ? String(route?.meta?.activeMenu ?? route?.path ?? "")
-    : props.activeMenu,
-);
-const resolvedActiveMenu = computed(
-  () => resolvedActiveMenuBase.value || resolvedActivePath.value,
-);
-const resolvedCollapsed = computed(() =>
-  props.autoWire ? appStore.sidebarCollapsed : props.collapsed,
-);
-const resolvedSidebarWidth = computed(() =>
-  props.autoWire ? appStore.sidebarWidth : props.sidebarWidth,
-);
-const resolvedLocale = computed(() =>
-  props.autoWire ? String(globalLocale.value) : props.locale,
-);
+const resolvedMenus = computed(() => (props.autoWire ? menuStore.menuRoutes : (props.menus ?? [])))
+const resolvedTags = computed(() => (props.autoWire ? tagsViewStore.visitedTags : props.tags))
+const resolvedActivePath = computed(() => (props.autoWire ? (route?.fullPath ?? props.activePath) : props.activePath))
+const resolvedActiveMenuBase = computed(() => (props.autoWire ? String(route?.meta?.activeMenu ?? route?.path ?? '') : props.activeMenu))
+const resolvedActiveMenu = computed(() => resolvedActiveMenuBase.value || resolvedActivePath.value)
+const resolvedCollapsed = computed(() => (props.autoWire ? appStore.sidebarCollapsed : props.collapsed))
+const resolvedSidebarWidth = computed(() => (props.autoWire ? appStore.sidebarWidth : props.sidebarWidth))
+const resolvedLocale = computed(() => (props.autoWire ? String(globalLocale.value) : props.locale))
 
 const resolvedBreadcrumbs = computed<UniLayoutBreadcrumbItem[]>(() => {
   if (!props.autoWire) {
-    return props.breadcrumbs;
+    return props.breadcrumbs
   }
 
   return [
-    { title: tr("common.home", "Home"), titleKey: "common.home" },
+    { title: tr('common.home', 'Home'), titleKey: 'common.home' },
     {
-      title: String(route?.meta?.title ?? ""),
-      titleKey:
-        route?.meta?.titleKey != null
-          ? String(route?.meta?.titleKey)
-          : undefined,
-    },
-  ];
-});
+      title: String(route?.meta?.title ?? ''),
+      titleKey: route?.meta?.titleKey != null ? String(route?.meta?.titleKey) : undefined
+    }
+  ]
+})
 
 const resolvedUser = computed<UniLayoutUser>(() => {
   if (!props.autoWire) {
-    return props.user;
+    return props.user
   }
 
-  const roleLabel =
-    userStore.profile?.roles?.[0]?.replace(/^ROLE_/, "") ||
-    tr("common.adminRole", "Admin");
+  const roleLabel = userStore.profile?.roles?.[0]?.replace(/^ROLE_/, '') || tr('common.adminRole', 'Admin')
 
   return {
-    name: userStore.profile?.name || tr("common.admin", "Admin"),
+    name: userStore.profile?.name || tr('common.admin', 'Admin'),
     username: userStore.profile?.username,
     avatar: userStore.profile?.avatar,
-    role: roleLabel,
-  };
-});
+    role: roleLabel
+  }
+})
 
 const resolvedUserCommands = computed<UniLayoutUserCommand[]>(() => {
   if (!props.autoWire) {
-    return props.userCommands;
+    return props.userCommands
   }
 
   return [
     {
-      label: tr("common.changePassword", "Change password"),
-      command: "password",
+      label: tr('common.changePassword', 'Change password'),
+      command: 'password'
     },
-    { label: tr("common.themeSettings", "Theme settings"), command: "theme" },
-    { label: tr("common.logout", "Logout"), command: "logout", divided: true },
-  ];
-});
+    { label: tr('common.themeSettings', 'Theme settings'), command: 'theme' },
+    { label: tr('common.logout', 'Logout'), command: 'logout', divided: true }
+  ]
+})
 
-const activeLocaleLabel = computed(
-  () =>
-    props.localeOptions.find((item) => item.value === resolvedLocale.value)
-      ?.label ?? resolvedLocale.value,
-);
-const displayName = computed(
-  () =>
-    resolvedUser.value.name ||
-    resolvedUser.value.username ||
-    tr("common.admin", "Admin"),
-);
+const activeLocaleLabel = computed(() => props.localeOptions.find((item) => item.value === resolvedLocale.value)?.label ?? resolvedLocale.value)
+const displayName = computed(() => resolvedUser.value.name || resolvedUser.value.username || tr('common.admin', 'Admin'))
 const avatarText = computed(() => {
-  const firstChar = Array.from(displayName.value.trim())[0] ?? "A";
+  const firstChar = Array.from(displayName.value.trim())[0] ?? 'A'
 
-  return /[a-z]/i.test(firstChar) ? firstChar.toUpperCase() : firstChar;
-});
+  return /[a-z]/i.test(firstChar) ? firstChar.toUpperCase() : firstChar
+})
 
-const passwordVisible = ref(false);
-const themeVisible = ref(false);
+const passwordVisible = ref(false)
+const themeVisible = ref(false)
 
-const themeStorageKeyResolved = computed(
-  () => tryGetUniConfig()?.shell?.themeStorageKey ?? "uni-lib:theme",
-);
+const themeStorageKeyResolved = computed(() => tryGetUniConfig()?.shell?.themeStorageKey ?? 'uni-lib:theme')
 const defaultThemeResolved = computed(
   () =>
     tryGetUniConfig()?.shell?.defaultTheme ?? {
-      primaryColor: "#BA8E62",
-    },
-);
+      primaryColor: '#BA8E62'
+    }
+)
 
 const onToggleSidebar = () => {
   if (props.autoWire) {
-    appStore.toggleSidebar();
+    appStore.toggleSidebar()
   } else {
-    emit("toggleSidebar");
+    emit('toggleSidebar')
   }
-};
+}
 
 const onMenuSelect = (path: string) => {
   if (props.autoWire) {
-    void router.push(path);
+    void router.push(path)
   } else {
-    emit("menuSelect", path);
+    emit('menuSelect', path)
   }
-};
+}
 
 const onChangeLocale = (value: string) => {
   if (props.autoWire) {
-    appStore.setLocale(value);
-    globalLocale.value = value;
-    document.documentElement.lang = value;
+    appStore.setLocale(value)
+    globalLocale.value = value
+    document.documentElement.lang = value
   } else {
-    emit("changeLocale", value);
+    emit('changeLocale', value)
   }
-};
+}
 
 const onTagClick = (path: string) => {
   if (props.autoWire) {
-    void router.push(path);
+    void router.push(path)
   } else {
-    emit("tagClick", path);
+    emit('tagClick', path)
   }
-};
+}
 
 const onTagClose = (path: string) => {
   if (props.autoWire) {
-    closeTag(path);
+    closeTag(path)
   } else {
-    emit("tagClose", path);
+    emit('tagClose', path)
   }
-};
+}
 
 const onTagRefresh = (tag?: UniLayoutTag) => {
   if (props.autoWire) {
-    refreshTag(tag);
+    refreshTag(tag)
   } else {
-    emit("tagRefresh", tag);
+    emit('tagRefresh', tag)
   }
-};
+}
 
 const onTagCloseOthers = (path?: string) => {
   if (props.autoWire) {
-    closeOthers(path);
+    closeOthers(path)
   } else {
-    emit("tagCloseOthers", path);
+    emit('tagCloseOthers', path)
   }
-};
+}
 
 const onTagCloseAll = () => {
   if (props.autoWire) {
-    closeAll();
+    closeAll()
   } else {
-    emit("tagCloseAll");
+    emit('tagCloseAll')
   }
-};
+}
 
 const handleLogout = async () => {
-  await userStore.logout();
-  tagsViewStore.resetTags();
-  const redirect = tryGetUniConfig()?.shell?.logoutRedirect ?? "/login";
-  void router.replace(redirect);
-};
+  await userStore.logout()
+  tagsViewStore.resetTags()
+  const redirect = tryGetUniConfig()?.shell?.logoutRedirect ?? '/login'
+  void router.replace(redirect)
+}
 
 const onUserCommand = (command: string) => {
   if (props.shellDialogs) {
-    if (command === "password") {
-      passwordVisible.value = true;
-      return;
+    if (command === 'password') {
+      passwordVisible.value = true
+      return
     }
 
-    if (command === "theme") {
-      themeVisible.value = true;
-      return;
+    if (command === 'theme') {
+      themeVisible.value = true
+      return
     }
 
-    if (command === "logout") {
-      void handleLogout();
-      return;
+    if (command === 'logout') {
+      void handleLogout()
+      return
     }
   }
 
-  emit("userCommand", command);
-};
+  emit('userCommand', command)
+}
 </script>
 
 <style scoped lang="scss">
@@ -607,7 +505,7 @@ const onUserCommand = (command: string) => {
   &__logo {
     display: block;
     max-width: 100%;
-    height: 28px;
+    height: 80%;
     object-fit: contain;
   }
 

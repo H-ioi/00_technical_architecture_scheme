@@ -23,5 +23,7 @@ export default {
   permissionMenu: 'Menus',
   permissionRole: 'Roles',
   permissionDept: 'Departments',
-  permissionUser: 'Users'
+  permissionUser: 'Users',
+  attendance: 'Attendance',
+  attendanceStudent: 'Student attendance'
 }

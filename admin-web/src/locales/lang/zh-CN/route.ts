@@ -23,5 +23,7 @@ export default {
   permissionMenu: '菜单管理',
   permissionRole: '角色管理',
   permissionDept: '部门管理',
-  permissionUser: '用户管理'
+  permissionUser: '用户管理',
+  attendance: '考勤管理',
+  attendanceStudent: '学生考勤'
 }
