@@ -20,11 +20,7 @@
       @refresh="loadTree"
     >
       <template #column-icon="{ row }">
-        <el-icon v-if="row.icon && menuIconComponent(row.icon)">
-          <component :is="menuIconComponent(row.icon)" />
-        </el-icon>
-        <span v-else-if="row.icon">{{ row.icon }}</span>
-        <span v-else>—</span>
+        <MenuIconDisplay :name="row.icon" />
       </template>
       <template #column-type="{ row }">
         <el-tag v-if="row.type === '0'" type="success">{{ t('permission.menu.type.left') }}</el-tag>
@@ -49,13 +45,12 @@
 </template>
 
 <script setup lang="ts">
-import type { Component } from 'vue'
-import { UniDataTable, uniLayoutDefaultMenuIconMap } from 'uni-ui-lib'
+import { UniDataTable } from 'uni-ui-lib'
+
+import { MenuIconDisplay } from '@/components/menu-sidebar-icon'
 
 import EditDialog from './components/edit-dialog.vue'
 import { useList } from './use-list'
-
-const menuIconComponent = (name: string): Component | undefined => uniLayoutDefaultMenuIconMap[name]
 
 const {
   actions,

@@ -29,5 +29,7 @@ export default {
   admin: 'Admin',
   adminRole: 'Admin',
   notFound: 'Page Not Found',
-  forbidden: 'Forbidden'
+  forbidden: 'Forbidden',
+  iconPicker: 'Icon picker',
+  iconSearch: 'Search icon name'
 }

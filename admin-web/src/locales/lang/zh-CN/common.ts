@@ -29,5 +29,7 @@ export default {
   admin: '管理员',
   adminRole: '管理员',
   notFound: '页面不存在',
-  forbidden: '无权限'
+  forbidden: '无权限',
+  iconPicker: '图标选择器',
+  iconSearch: '搜索图标名称'
 }

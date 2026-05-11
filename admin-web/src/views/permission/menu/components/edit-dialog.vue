@@ -19,7 +19,7 @@ import { UniForm, useUniI18n } from 'uni-ui-lib'
 
 import type { PermissionMenuNode } from '@/types/modules/permission-menu'
 
-import MenuIconPicker from './menu-icon-picker.vue'
+import { MenuIconPicker } from '@/components/menu-sidebar-icon'
 import { menuEditDialogFormConfig, type MenuParentOption } from '../list.config'
 
 type MenuDraft = PermissionMenuNode & { menuId?: string | number }
