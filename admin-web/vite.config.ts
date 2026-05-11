@@ -17,7 +17,12 @@ export default defineConfig(({ mode }) => {
   return {
     base: env.VITE_APP_BASE || '/',
     plugins: [vue()],
+    /** 与 file:../uni-lib 联调：避免把组件库打进 optimize 缓存，否则 rebuild uni-lib 后仍可能读到旧的 deps 缓存 */
+    optimizeDeps: {
+      exclude: ['uni-ui-lib']
+    },
     resolve: {
+      dedupe: ['vue', 'vue-router'],
       alias: {
         '@': fileURLToPath(new URL('./src', import.meta.url)),
         'uni-ui-lib/style.css': uniLibCss,

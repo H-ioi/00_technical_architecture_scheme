@@ -325,7 +325,9 @@ const tagsViewStore = useUniTagsViewStore();
 const route = useRoute();
 const router = useRouter();
 
-const viewKey = computed(() => `${route.fullPath}-${tagsViewStore.refreshKey}`);
+const viewKey = computed(
+  () => `${route?.fullPath ?? ""}-${tagsViewStore.refreshKey}`,
+);
 
 const findVisitedTagNeighbor = (path: string) => {
   const tags = tagsViewStore.visitedTags;
@@ -341,7 +343,7 @@ const findVisitedTagNeighbor = (path: string) => {
 };
 
 const closeTag = (path: string) => {
-  const isActive = route.fullPath === path;
+  const isActive = route?.fullPath === path;
   const nextTag = findVisitedTagNeighbor(path);
 
   tagsViewStore.removeTag(path);
@@ -354,16 +356,16 @@ const closeTag = (path: string) => {
 };
 
 const refreshTag = (tag?: UniLayoutTag) => {
-  if (tag && tag.path !== route.fullPath) {
+  if (tag && tag.path !== route?.fullPath) {
     void router.push(tag.path);
   }
   tagsViewStore.refreshCurrentTag();
 };
 
-const closeOthers = (path = route.fullPath) => {
+const closeOthers = (path = route?.fullPath ?? "") => {
   tagsViewStore.removeOtherTags(path);
 
-  if (path !== route.fullPath) {
+  if (path !== route?.fullPath) {
     void router.push(path);
   }
 };
@@ -380,11 +382,11 @@ const resolvedTags = computed(() =>
   props.autoWire ? tagsViewStore.visitedTags : props.tags,
 );
 const resolvedActivePath = computed(() =>
-  props.autoWire ? route.fullPath : props.activePath,
+  props.autoWire ? (route?.fullPath ?? props.activePath) : props.activePath,
 );
 const resolvedActiveMenuBase = computed(() =>
   props.autoWire
-    ? String(route.meta?.activeMenu || route.path)
+    ? String(route?.meta?.activeMenu ?? route?.path ?? "")
     : props.activeMenu,
 );
 const resolvedActiveMenu = computed(
@@ -408,8 +410,11 @@ const resolvedBreadcrumbs = computed<UniLayoutBreadcrumbItem[]>(() => {
   return [
     { title: tr("common.home", "Home"), titleKey: "common.home" },
     {
-      title: String(route.meta?.title ?? ""),
-      titleKey: route.meta?.titleKey ? String(route.meta.titleKey) : undefined,
+      title: String(route?.meta?.title ?? ""),
+      titleKey:
+        route?.meta?.titleKey != null
+          ? String(route?.meta?.titleKey)
+          : undefined,
     },
   ];
 });
@@ -606,12 +611,26 @@ const onUserCommand = (command: string) => {
     object-fit: contain;
   }
 
-  /** 占用 Logo 以下剩余高度；min-height:0 使 flex 子项可收缩并出现内部滚动条 */
+  /** 占用 Logo 以下剩余高度；min-height:0 可滚动；隐藏滚动条轨迹（仍可滚轮/触控滚动） */
   &__menu-wrap {
     flex: 1;
     min-height: 0;
     overflow-x: hidden;
     overflow-y: auto;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+
+    &::-webkit-scrollbar {
+      display: none !important;
+      width: 0 !important;
+      height: 0 !important;
+      background: transparent;
+    }
+
+    /* 少数 WebKit 下需同时收口轨道（避免仍可拖出占位） */
+    &::-webkit-scrollbar-track {
+      background: transparent;
+    }
   }
 
   &__menu {

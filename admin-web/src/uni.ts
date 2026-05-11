@@ -1,5 +1,6 @@
 import UniLib from 'uni-ui-lib'
 import 'uni-ui-lib/style.css'
+
 import type { App } from 'vue'
 
 import { authApi } from '@/api'

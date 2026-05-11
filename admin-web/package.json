@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "dev:force": "vite --force",
     "build": "vite build",
     "preview": "vite preview",
     "lint": "eslint \"src/**/*.{ts,vue}\" \"*.{ts,mjs,cjs}\" --max-warnings 0",

@@ -2,7 +2,10 @@
   <div
     ref="rootRef"
     class="uni-data-table"
-    :class="{ 'is-fullscreen': fullscreen }"
+    :class="{
+      'is-fullscreen': fullscreen,
+      'is-tree-table': isTreeEnabled,
+    }"
   >
     <el-table
       v-loading="actualLoading"
@@ -13,6 +16,7 @@
       :max-height="actualMaxHeight"
       :size="tableSize"
       :stripe="tableStripe"
+      v-bind="elTableTreeBindings"
       :highlight-current-row="selection === 'single'"
       @selection-change="
         (selection: Recordable[]) => emit('selection-change', selection)
@@ -32,7 +36,7 @@
         v-for="column in visibleColumns"
         :key="column.prop"
         :column-key="column.prop"
-        :prop="column.sortable ? column.prop : undefined"
+        :prop="column.prop"
         :label="column.label"
         :width="column.width"
         :min-width="column.minWidth"
@@ -216,7 +220,7 @@ import {
 import { hasUniPermission } from "@/directives/permission";
 import { useUniI18n } from "@/locales/use-uni-i18n";
 import type { Recordable } from "@/types/shared";
-import type { UniTableSize } from "@/types/uni-data-table";
+import type { UniDataTableTree, UniTableSize } from "@/types/uni-data-table";
 import type {
   UniPaginationConfig,
   UniTableAction,
@@ -240,6 +244,8 @@ const props = withDefaults(
     filters?: Recordable;
     loading?: boolean;
     pagination?: UniPaginationConfig | false;
+    /** 树形表格；对齐 EP `tree-props` / `default-expand-all` / `lazy` / `load`。 */
+    tree?: UniDataTableTree;
     rowKey?: string;
     selection?: boolean | "multiple" | "single";
     selectable?: (row: Recordable, index: number) => boolean;
@@ -283,6 +289,59 @@ const tableStripe = ref(false);
 const autoMaxHeight = ref<number>();
 let resizeObserver: ResizeObserver | undefined;
 const actualEmptyText = computed(() => props.emptyText ?? t("common.empty"));
+
+const treeTableNormalized = computed(() => {
+  const raw = props.tree;
+
+  if (raw == null || raw === false) {
+    return null;
+  }
+
+  if (raw === true) {
+    return {
+      treeProps: { children: "children", hasChildren: "hasChildren" },
+      defaultExpandAll: false,
+      lazy: false as const,
+      load: undefined as undefined,
+    };
+  }
+
+  return {
+    treeProps: {
+      children: raw.props?.children ?? "children",
+      hasChildren: raw.props?.hasChildren ?? "hasChildren",
+    },
+    defaultExpandAll: raw.defaultExpandAll ?? false,
+    lazy: Boolean(raw.lazy),
+    load: raw.lazy ? raw.load : undefined,
+  };
+});
+
+const elTableTreeBindings = computed(() => {
+  const n = treeTableNormalized.value;
+
+  if (!n) {
+    return {};
+  }
+
+  const bindings: Record<string, unknown> = {
+    treeProps: n.treeProps,
+    defaultExpandAll: n.defaultExpandAll,
+  };
+
+  if (n.lazy) {
+    bindings.lazy = true;
+
+    if (n.load) {
+      bindings.load = n.load;
+    }
+  }
+
+  return bindings;
+});
+
+const isTreeEnabled = computed(() => treeTableNormalized.value != null);
+
 const toolbarConfig = computed<Required<UniTableToolbarConfig>>(() => {
   if (props.toolbar === false) {
     return {
@@ -395,7 +454,31 @@ const hasActionColumn = computed(() => {
     return false;
   }
 
-  return actualData.value.some((row) => getVisibleActions(row).length > 0);
+  const data = actualData.value;
+  const tree = treeTableNormalized.value;
+  const childrenField = tree?.treeProps.children ?? "children";
+
+  if (!tree) {
+    return data.some((row) => getVisibleActions(row).length > 0);
+  }
+
+  const walk = (rows: Recordable[]): boolean => {
+    for (const row of rows) {
+      if (getVisibleActions(row).length > 0) {
+        return true;
+      }
+
+      const nested = row[childrenField] as Recordable[] | undefined;
+
+      if (Array.isArray(nested) && nested.length > 0 && walk(nested)) {
+        return true;
+      }
+    }
+
+    return false;
+  };
+
+  return walk(data);
 });
 
 const actualMaxHeight = computed(() => {
@@ -547,6 +630,31 @@ watch(
 
   :deep(.el-table .el-table__cell) {
     padding: 9px 0;
+  }
+
+  &.is-tree-table {
+    /*
+     EP 树表在每格 .cell 内放置缩进/展开占位，与正文同一 flex 行；
+     插槽根节点若用 display:contents 则 UniTableCell 无法成为独立 flex 子项，
+     width:100%/ellipsis 百分比参照错误 → 正文区宽度塌缩为 「…」（tooltip 仍能读到全文）。
+    */
+    :deep(
+      .el-table__body-wrapper .el-table__body tr td.el-table__cell > .cell
+    ) {
+      display: inline-flex;
+      align-items: center;
+      gap: 0;
+      min-width: 0;
+    }
+
+    .uni-data-table__cell-slot-root {
+      display: inline-flex;
+      align-items: center;
+      flex: 1 1 auto;
+      min-width: 0;
+      max-width: 100%;
+      overflow: hidden;
+    }
   }
 
   .uni-data-table__cell-slot-root {

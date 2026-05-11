@@ -22,6 +22,7 @@ import codePaginationRemote from "../.vitepress/snippets/uni-data-table/paginati
 import codeRowClick from "../.vitepress/snippets/uni-data-table/row-click.vue?raw";
 import codeSelection from "../.vitepress/snippets/uni-data-table/selection-actions.vue?raw";
 import codeStatic from "../.vitepress/snippets/uni-data-table/static.vue?raw";
+import codeTree from "../.vitepress/snippets/uni-data-table/tree.vue?raw";
 import codeSelEvents from "../.vitepress/snippets/uni-data-table/selection-events.vue?raw";
 import codeSwitchChange from "../.vitepress/snippets/uni-data-table/switch-change.vue?raw";
 import codeTagSort from "../.vitepress/snippets/uni-data-table/tag-sort.vue?raw";
@@ -38,6 +39,24 @@ const columns: UniTableColumn[] = [
 const data = [
   { id: 1, name: "示例一行", status: "启用", updatedAt: "2026-04-29 10:00" },
   { id: 2, name: "示例二行", status: "停用", updatedAt: "2026-04-28 15:30" },
+];
+
+const treeColumnsDemo: UniTableColumn[] = [
+  { prop: "name", label: "名称", type: "text", minWidth: 160 },
+  { prop: "path", label: "路径", type: "text", minWidth: 120 },
+];
+
+const treeDataDemo = [
+  {
+    id: 1,
+    name: "一级目录",
+    path: "/a",
+    children: [
+      { id: 11, name: "子页 1-1", path: "/a/1", children: [] },
+      { id: 12, name: "子页 1-2", path: "/a/2", children: [] },
+    ],
+  },
+  { id: 2, name: "一级菜单 B", path: "/b", children: [] },
 ];
 
 const allRows = Array.from({ length: 50 }).map((_, i) => ({
@@ -283,6 +302,21 @@ onMounted(() => {
     :data="data"
     :pagination="false"
     row-key="id"
+  />
+</CompDemo>
+
+## 树形表格
+
+数据结构为带子级的树（默认子级字段 **`children`**，可用 `tree.props` 改写）。等价于 EP `tree-props` + `default-expand-all`（可选 **`lazy`** + **`load`** 按需加载）。
+
+<CompDemo title="tree + children 字段" :code="codeTree">
+  <UniDataTable
+    :columns="treeColumnsDemo"
+    :data="treeDataDemo"
+    :pagination="false"
+    row-key="id"
+    :tree="{ defaultExpandAll: true, props: { children: 'children' } }"
+    :toolbar="false"
   />
 </CompDemo>
 
@@ -537,23 +571,24 @@ onMounted(() => {
 
 ## Props
 
-| 属性              | 说明                                                     | 类型                                  | 默认值    |
-| ----------------- | -------------------------------------------------------- | ------------------------------------- | --------- |
-| `columns`         | 列定义                                                   | `UniTableColumn[]`                    | —         |
-| `data`            | 静态数据；与 `request` 二选一                            | `Record<string, unknown>[]`           | `[]`      |
-| `request`         | 分页请求，返回 `{ records, total }`                      | `UniTableRequest`                     | —         |
-| `filters`         | 远程请求附加筛选参数，会透传给 `request`                 | `Record<string, unknown>`             | —         |
-| `loading`         | 外部加载态                                               | `boolean`                             | —         |
-| `pagination`      | 分页配置，`false` 关闭分页                               | `UniPaginationConfig \| false`        | 内置默认  |
-| `rowKey`          | 行主键字段名                                             | `string`                              | `id`      |
-| `selection`       | 多选（`true` / `multiple`）或单选高亮（`single`）        | `boolean \| 'multiple' \| 'single'`   | —         |
-| `selectable`      | 多选时控制某一行是否可勾选                               | `(row, index) => boolean`             | —         |
-| `actions`         | 行操作按钮配置；可见项超过 3 个时第三位自动收纳为更多    | `UniTableAction[]`                    | —         |
-| `actionColumn`    | 操作列配置，可设置 `label`、`width`、`minWidth`、`fixed` | `UniTableActionColumnConfig`          | —         |
-| `emptyText`       | 空数据文案；不传时使用当前语言包                         | `string`                              | i18n 默认 |
-| `maxHeight`       | 表格最大高度；默认自动计算可用视口高度，`false` 关闭     | `number \| string \| false \| 'auto'` | `auto`    |
-| `maxHeightOffset` | 自动计算时距离视口底部的保留间距                         | `number`                              | `16`      |
-| `toolbar`         | 右侧表格工具配置；`false` 关闭内置工具栏                 | `boolean \| UniTableToolbarConfig`    | 内置默认  |
+| 属性              | 说明                                                                                                    | 类型                                  | 默认值    |
+| ----------------- | ------------------------------------------------------------------------------------------------------- | ------------------------------------- | --------- |
+| `columns`         | 列定义                                                                                                  | `UniTableColumn[]`                    | —         |
+| `data`            | 静态数据；与 `request` 二选一                                                                           | `Record<string, unknown>[]`           | `[]`      |
+| `request`         | 分页请求，返回 `{ records, total }`                                                                     | `UniTableRequest`                     | —         |
+| `filters`         | 远程请求附加筛选参数，会透传给 `request`                                                                | `Record<string, unknown>`             | —         |
+| `loading`         | 外部加载态                                                                                              | `boolean`                             | —         |
+| `pagination`      | 分页配置，`false` 关闭分页                                                                              | `UniPaginationConfig \| false`        | 内置默认  |
+| `rowKey`          | 行主键字段名                                                                                            | `string`                              | `id`      |
+| `tree`            | 树形表格：`true`、`{ props, defaultExpandAll, lazy, load }`，语义对齐 EP `tree-props` / `lazy` / `load` | `UniDataTableTree`                    | —         |
+| `selection`       | 多选（`true` / `multiple`）或单选高亮（`single`）                                                       | `boolean \| 'multiple' \| 'single'`   | —         |
+| `selectable`      | 多选时控制某一行是否可勾选                                                                              | `(row, index) => boolean`             | —         |
+| `actions`         | 行操作按钮配置；可见项超过 3 个时第三位自动收纳为更多                                                   | `UniTableAction[]`                    | —         |
+| `actionColumn`    | 操作列配置，可设置 `label`、`width`、`minWidth`、`fixed`                                                | `UniTableActionColumnConfig`          | —         |
+| `emptyText`       | 空数据文案；不传时使用当前语言包                                                                        | `string`                              | i18n 默认 |
+| `maxHeight`       | 表格最大高度；默认自动计算可用视口高度，`false` 关闭                                                    | `number \| string \| false \| 'auto'` | `auto`    |
+| `maxHeightOffset` | 自动计算时距离视口底部的保留间距                                                                        | `number`                              | `16`      |
+| `toolbar`         | 右侧表格工具配置；`false` 关闭内置工具栏                                                                | `boolean \| UniTableToolbarConfig`    | 内置默认  |
 
 ## Toolbar Config
 

@@ -132,7 +132,12 @@ const syncVisitedTagsFromRoute = () => {
     return;
   }
 
-  const leaf = route.matched[route.matched.length - 1];
+  const matched = route?.matched;
+  if (!matched?.length) {
+    return;
+  }
+
+  const leaf = matched[matched.length - 1];
 
   if (!leaf?.name) {
     return;
@@ -154,7 +159,9 @@ const syncVisitedTagsFromRoute = () => {
 
   const paramKey = meta.tagDetailParam;
   const detailId = paramKey
-    ? getRouteParamText(route.params[paramKey] as string | string[] | undefined)
+    ? getRouteParamText(
+        route?.params[paramKey] as string | string[] | undefined,
+      )
     : "";
   const titleKey = detailId ? undefined : (meta.titleKey as string | undefined);
   const title = detailId
@@ -162,7 +169,7 @@ const syncVisitedTagsFromRoute = () => {
     : String(meta.title || String(leaf.name));
 
   tagsViewStore.addTag({
-    path: route.fullPath,
+    path: route?.fullPath ?? "",
     title,
     titleKey,
     affix: Boolean(meta.affix),
@@ -170,7 +177,7 @@ const syncVisitedTagsFromRoute = () => {
 };
 
 watch(
-  [() => route.fullPath, () => props.syncFromRoute],
+  [() => route?.fullPath ?? "", () => props.syncFromRoute],
   () => {
     syncVisitedTagsFromRoute();
   },
@@ -191,7 +198,7 @@ const findVisitedTagNeighbor = (path: string) => {
 };
 
 const removeVisitedTag = (path: string) => {
-  const isActive = route.fullPath === path;
+  const isActive = route?.fullPath === path;
   const nextTag = findVisitedTagNeighbor(path);
 
   tagsViewStore.removeTag(path);
@@ -204,16 +211,16 @@ const removeVisitedTag = (path: string) => {
 };
 
 const refreshTag = (tag?: UniLayoutTag) => {
-  if (tag && tag.path !== route.fullPath) {
+  if (tag && tag.path !== route?.fullPath) {
     void router.push(tag.path);
   }
   tagsViewStore.refreshCurrentTag();
 };
 
-const closeOthers = (path = route.fullPath) => {
+const closeOthers = (path = route?.fullPath ?? "") => {
   tagsViewStore.removeOtherTags(path);
 
-  if (path !== route.fullPath) {
+  if (path !== route?.fullPath) {
     void router.push(path);
   }
 };
@@ -265,7 +272,7 @@ const handleTagsMenuCommand = (
   command: string | number | object,
   tag?: UniLayoutTag,
 ) => {
-  const closeOthersAnchor = tag?.path ?? route.fullPath;
+  const closeOthersAnchor = tag?.path ?? route?.fullPath ?? "";
 
   if (isSelfManaged()) {
     if (command === "refresh") {
