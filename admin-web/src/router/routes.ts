@@ -266,6 +266,33 @@ export const routes: AppRouteRecord[] = [
               title: '学生考勤',
               titleKey: 'route.attendanceStudent'
             }
+          },
+          {
+            path: 'school',
+            name: 'AttendanceSchool',
+            component: () => import('@/views/attendance/school/list.vue'),
+            meta: {
+              title: '校园考勤',
+              titleKey: 'route.attendanceSchool'
+            }
+          },
+          {
+            path: 'access',
+            name: 'AttendanceAccess',
+            component: () => import('@/views/attendance/access/list.vue'),
+            meta: {
+              title: '门禁记录',
+              titleKey: 'route.attendanceAccess'
+            }
+          },
+          {
+            path: 'wechat',
+            name: 'AttendanceWechat',
+            component: () => import('@/views/attendance/wechat/list.vue'),
+            meta: {
+              title: '微信 OpenID',
+              titleKey: 'route.attendanceWechat'
+            }
           }
         ]
       },
