@@ -158,7 +158,7 @@ const {
 })
 
 const reloadTable = () => {
-  tableRef.value?.reload()
+  tableRef.value?.refresh()
 }
 
 const openAdd = () => {

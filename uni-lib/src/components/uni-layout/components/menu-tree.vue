@@ -43,24 +43,12 @@
 </template>
 
 <script setup lang="ts">
-import {
-  Calendar,
-  Document,
-  EditPen,
-  House,
-  Lock,
-  Message,
-  Setting,
-  User,
-  Van,
-} from "@element-plus/icons-vue";
-import type { Component } from "vue";
-
 import type {
   UniLayoutIconMap,
   UniLayoutMenuRecord,
   UniLayoutTranslate,
 } from "@/types/uni-layout";
+import { uniLayoutDefaultMenuIconMap } from "@/utils/layout-menu-icons";
 
 defineOptions({
   name: "UniLayoutMenuTree",
@@ -78,25 +66,13 @@ withDefaults(
   },
 );
 
-const defaultIconMap: Record<string, Component> = {
-  Calendar,
-  Document,
-  EditPen,
-  House,
-  Lock,
-  Message,
-  Setting,
-  User,
-  Van,
-};
-
 const resolveTitle = (
   menu: UniLayoutMenuRecord,
   translate: UniLayoutTranslate,
 ) => translate(menu.meta?.titleKey, menu.meta?.title ?? menu.name ?? menu.path);
 
 const resolveIcon = (icon: string | undefined, iconMap: UniLayoutIconMap) =>
-  icon ? (iconMap[icon] ?? defaultIconMap[icon]) : undefined;
+  icon ? (iconMap[icon] ?? uniLayoutDefaultMenuIconMap[icon]) : undefined;
 </script>
 
 <style scoped lang="scss"></style>

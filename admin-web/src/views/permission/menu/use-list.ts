@@ -14,6 +14,19 @@ import {
   type MenuParentOption
 } from './list.config'
 
+/** 与上级菜单下拉里「根节点」选项的 value（-1）一致，避免接口给字符串 "-1" 时 el-select 匹配不到标签 */
+const MENU_PARENT_ROOT = -1
+
+const normalizeParentIdForSelect = (raw: string | number | undefined | null) => {
+  if (raw === undefined || raw === null || raw === '') {
+    return MENU_PARENT_ROOT
+  }
+  if (raw === MENU_PARENT_ROOT || raw === '-1' || raw === String(MENU_PARENT_ROOT)) {
+    return MENU_PARENT_ROOT
+  }
+  return raw
+}
+
 const flattenParents = (nodes: PermissionMenuNode[], depth = 0): MenuParentOption[] => {
   const pad = '\u3000'.repeat(depth)
   const acc: MenuParentOption[] = []
@@ -62,7 +75,7 @@ export const useList = () => {
   ])
 
   const parentOptions = computed<MenuParentOption[]>(() => {
-    const root: MenuParentOption = { label: t('permission.menu.rootParent'), value: -1 }
+    const root: MenuParentOption = { label: t('permission.menu.rootParent'), value: MENU_PARENT_ROOT }
     const selfId = form.id
     const flat = flattenParents(menuList.value).filter((o) => selfId === undefined || o.value !== selfId)
     return [root, ...flat]
@@ -82,7 +95,7 @@ export const useList = () => {
     Object.assign(form, {
       ...row,
       menuId: row.menuId ?? row.id,
-      parentId: row.parentId === undefined || row.parentId === null ? -1 : row.parentId,
+      parentId: normalizeParentIdForSelect(row.parentId),
       sort: typeof row.sort === 'number' ? row.sort : Number(row.sort ?? 0)
     })
     dialogVisible.value = true
@@ -94,7 +107,7 @@ export const useList = () => {
     try {
       const payload = {
         ...form,
-        parentId: form.parentId === -1 || form.parentId === '-1' ? -1 : form.parentId
+        parentId: normalizeParentIdForSelect(form.parentId)
       }
       await permissionMenuApi.tenantEdit.post(payload)
       ElMessage.success(t('permission.messages.saveOk'))

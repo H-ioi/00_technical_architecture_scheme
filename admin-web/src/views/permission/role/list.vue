@@ -232,7 +232,7 @@ const {
 })
 
 const reloadTable = () => {
-  tableRef.value?.reload()
+  tableRef.value?.refresh()
 }
 </script>
 

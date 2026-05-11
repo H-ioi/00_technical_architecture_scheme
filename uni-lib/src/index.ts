@@ -63,6 +63,7 @@ export * from "./components/uni-theme-settings/runtime";
 export * from "./utils/format";
 export * from "./utils/copy";
 export * from "./utils/options";
+export * from "./utils/layout-menu-icons";
 
 export default {
   install,

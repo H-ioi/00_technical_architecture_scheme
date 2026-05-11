@@ -82,7 +82,7 @@ export const useList = (deptIdRef: Ref<string | number | undefined>, callbacks: 
       label: t('permission.actions.delete'),
       onClick: async (row) => {
         await callbacks.onDelete(row as PermissionUserTableRow)
-        tableRef.value?.reload()
+        tableRef.value?.refresh()
       }
     }
   ])

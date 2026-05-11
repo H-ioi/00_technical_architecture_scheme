@@ -71,7 +71,7 @@ export const useList = (callbacks: RoleListCallbacks) => {
       label: t('permission.actions.delete'),
       onClick: async (row) => {
         await callbacks.onDelete(row as Row)
-        tableRef.value?.reload()
+        tableRef.value?.refresh()
       }
     }
   ])

@@ -20,7 +20,10 @@
       @refresh="loadTree"
     >
       <template #column-icon="{ row }">
-        <i v-if="row.icon" :class="row.icon" />
+        <el-icon v-if="row.icon && menuIconComponent(row.icon)">
+          <component :is="menuIconComponent(row.icon)" />
+        </el-icon>
+        <span v-else-if="row.icon">{{ row.icon }}</span>
         <span v-else>—</span>
       </template>
       <template #column-type="{ row }">
@@ -46,10 +49,13 @@
 </template>
 
 <script setup lang="ts">
-import { UniDataTable } from 'uni-ui-lib'
+import type { Component } from 'vue'
+import { UniDataTable, uniLayoutDefaultMenuIconMap } from 'uni-ui-lib'
 
 import EditDialog from './components/edit-dialog.vue'
 import { useList } from './use-list'
+
+const menuIconComponent = (name: string): Component | undefined => uniLayoutDefaultMenuIconMap[name]
 
 const {
   actions,

@@ -1,6 +1,10 @@
 <template>
   <el-dialog :model-value="visible" destroy-on-close width="520px" :title="t('permission.menu.editTitle')" @update:model-value="$emit('update:visible', $event)">
-    <UniForm ref="uniFormRef" v-model="draft" mode="edit" :config="dialogFormConfig" />
+    <UniForm ref="uniFormRef" v-model="draft" mode="edit" :config="dialogFormConfig">
+      <template #field-icon="{ model }">
+        <MenuIconPicker v-model="model.icon" :placeholder="t('permission.menu.icon')" />
+      </template>
+    </UniForm>
     <template #footer>
       <el-button @click="$emit('update:visible', false)">{{ t('permission.actions.cancel') }}</el-button>
       <el-button type="primary" :loading="submitting" @click="onSaveClick">{{ t('permission.actions.save') }}</el-button>
@@ -15,6 +19,7 @@ import { UniForm, useUniI18n } from 'uni-ui-lib'
 
 import type { PermissionMenuNode } from '@/types/modules/permission-menu'
 
+import MenuIconPicker from './menu-icon-picker.vue'
 import { menuEditDialogFormConfig, type MenuParentOption } from '../list.config'
 
 type MenuDraft = PermissionMenuNode & { menuId?: string | number }
