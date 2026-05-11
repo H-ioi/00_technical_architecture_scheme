@@ -6,7 +6,11 @@
     :title="t('permission.actions.assignMenu')"
     @update:model-value="emit('update:visible', $event)"
   >
-    <div v-loading="loading" class="permission-assign-tree">
+    <div
+      v-loading="loading"
+      class="permission-assign-tree"
+      :element-loading-text="t('common.loading')"
+    >
       <el-tree
         v-if="ready"
         :key="treeKey"
@@ -103,6 +107,8 @@ const submit = async () => {
 
 <style scoped lang="scss">
 .permission-assign-tree {
+  position: relative;
+  min-height: 280px;
   max-height: 440px;
   overflow: auto;
 }
