@@ -5,3 +5,4 @@
 **/.vitepress/dist/
 .agents/
 uni-lib/.npmrc
+test/demo

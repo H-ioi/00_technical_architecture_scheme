@@ -1415,7 +1415,8 @@ const mainFormConfig = computed<UniFormConfig>(() => {
   const showPayDetail = canShowPayInfo.value && String(ruleForm.value.paymentStatus) === '2'
 
   return {
-    formProps: { labelPosition: 'top' },
+    // 审批/缴费联动会更新 rules；关闭「规则变更即校验」，避免点选审批状态就刷出其它必填项红字
+    formProps: { labelPosition: 'top', validateOnRuleChange: false },
     rowProps: { gutter: 16 },
     colProps: { span: 8 },
     rules: (mainDisabled.value ? {} : mainRules.value) as UniFormConfig['rules'],
