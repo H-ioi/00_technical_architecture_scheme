@@ -10,6 +10,19 @@ export const statusOpts = (t: Translate): UniOption[] => [
   { label: t('schoolBus.driver.options.disabled'), value: 0, type: 'info' }
 ]
 
+/** 模块选项 id 与旧版 `form.vue` 中 `moduleOptions` 一致 */
+export const teacherModuleOptions = (t: Translate): UniOption[] => [
+  { label: t('schoolBus.followTeacher.moduleOptions.schoolBus'), value: 1 },
+  { label: t('schoolBus.followTeacher.moduleOptions.activity'), value: 2 }
+]
+
+/** 角色选项 id 与旧版 `form.vue` 中 `roleOptions` 一致 */
+export const teacherRoleOptions = (t: Translate): UniOption[] => [
+  { label: t('schoolBus.followTeacher.roleOptions.busOperation'), value: 1 },
+  { label: t('schoolBus.followTeacher.roleOptions.carTeacher'), value: 2 },
+  { label: t('schoolBus.followTeacher.roleOptions.activityCheckIn'), value: 3 }
+]
+
 export const searchForm = (
   t: Translate,
   schoolOptions: UniOption[],
@@ -72,6 +85,30 @@ export const teacherFormRules = (
     { type: 'email', message: t('schoolBus.followTeacher.rules.emailFormat'), trigger: 'blur' }
   ],
   phone: [{ required: true, message: t('schoolBus.followTeacher.rules.phone'), trigger: 'blur' }],
+  modules: [
+    {
+      validator: (_rule, value, callback) => {
+        if (Array.isArray(value) && value.length > 0) {
+          callback()
+        } else {
+          callback(new Error(t('schoolBus.followTeacher.rules.modules')))
+        }
+      },
+      trigger: 'change'
+    }
+  ],
+  roles: [
+    {
+      validator: (_rule, value, callback) => {
+        if (Array.isArray(value) && value.length > 0) {
+          callback()
+        } else {
+          callback(new Error(t('schoolBus.followTeacher.rules.roles')))
+        }
+      },
+      trigger: 'change'
+    }
+  ],
   status: [{ required: true, message: t('schoolBus.followTeacher.rules.status'), trigger: 'change' }]
 })
 
@@ -79,6 +116,7 @@ export const teacherAddPasswordRule = (t: Translate): FormRules<FollowTeacherFor
   password: [{ required: true, message: t('schoolBus.followTeacher.rules.password'), trigger: 'blur' }]
 })
 
+/** 与旧版 `user/teacher/modal/form.vue` 字段一致（含模块/角色多选）；密码仅新增展示与校验。 */
 export const teacherDialogForm = (
   t: Translate,
   schoolOptions: UniOption[],
@@ -128,6 +166,32 @@ export const teacherDialogForm = (
       label: t('schoolBus.followTeacher.fields.phone'),
       component: 'ElInput',
       componentProps: { maxlength: 50, clearable: true }
+    },
+    {
+      field: 'modules',
+      label: t('schoolBus.followTeacher.fields.modules'),
+      component: 'ElSelect' as const,
+      options: teacherModuleOptions(t),
+      componentProps: {
+        multiple: true,
+        collapseTags: true,
+        collapseTagsTooltip: true,
+        filterable: true,
+        placeholder: t('schoolBus.followTeacher.placeholders.select')
+      }
+    },
+    {
+      field: 'roles',
+      label: t('schoolBus.followTeacher.fields.roles'),
+      component: 'ElSelect' as const,
+      options: teacherRoleOptions(t),
+      componentProps: {
+        multiple: true,
+        collapseTags: true,
+        collapseTagsTooltip: true,
+        filterable: true,
+        placeholder: t('schoolBus.followTeacher.placeholders.select')
+      }
     },
     ...(mode === 'add'
       ? [

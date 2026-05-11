@@ -28,6 +28,10 @@ export interface FollowTeacherFormModel {
   department?: string
   email?: string
   phone?: string
+  /** 模块 id 列表，与旧版 modal `modules` 一致（多选） */
+  modules?: Array<string | number>
+  /** 角色 id 列表，与旧版 modal `roles` 一致（多选） */
+  roles?: Array<string | number>
   password?: string
   status?: string | number
 }

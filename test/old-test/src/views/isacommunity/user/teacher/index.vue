@@ -147,6 +147,17 @@ import Detail from "./modal/detail.vue";
 import BatchUpdload from "./modal/batchupdload.vue";
 // 引入 dayjs
 import dayjs from "dayjs";
+
+const MODULE_OPTIONS = [
+  { id: 1, label: "校巴", enLabel: "School Bus" },
+  { id: 2, label: "活动", enLabel: "Activity" },
+];
+
+const ROLE_OPTIONS = [
+  { id: 1, label: "校巴运营", enLabel: "School Bus Operation" },
+  { id: 2, label: "跟车老师", enLabel: "Car Teacher" },
+  { id: 3, label: "活动签到", enLabel: "Activity Check-in" },
+];
 export default {
   name: "teacher",
   components: { Table, Pagination, Detail, Form, BatchUpdload },
@@ -225,6 +236,8 @@ export default {
           "id"
         );
         item["statusLabel"] = this.$getListLabel(consts["statusType"], item["status"]);
+        item["modulesLabel"] = this.formatOptionLabels(item["modules"], MODULE_OPTIONS);
+        item["rolesLabel"] = this.formatOptionLabels(item["roles"], ROLE_OPTIONS);
         item["lastLoginTime"] = item["lastLoginTime"]
           ? dayjs(item["lastLoginTime"]).format("YYYY-MM-DD HH:mm")
           : "--";
@@ -232,6 +245,13 @@ export default {
           ? dayjs(item["createTime"]).format("YYYY-MM-DD HH:mm")
           : "--";
       });
+    },
+    formatOptionLabels(ids, options) {
+      if (!Array.isArray(ids) || ids.length === 0) return "--";
+      const labelList = options
+        .filter((item) => ids.includes(item.id))
+        .map((item) => (this.i18nlocel == "en" ? item.enLabel : item.label));
+      return labelList.length > 0 ? labelList.join(" / ") : "--";
     },
     playTab(name, item, scope) {
       this.currenntItem = item;

@@ -99,7 +99,7 @@ export const useList = () => {
     { label: t('schoolBus.driver.actions.look'), onClick: (row) => openForm('look', row as FollowTeacherRecord) },
     {
       label: t('schoolBus.driver.actions.edit'),
-      code: 'busorder_edit',
+      code: 'teacheruser_edit',
       onClick: (row) => openForm('edit', row as FollowTeacherRecord)
     }
   ])

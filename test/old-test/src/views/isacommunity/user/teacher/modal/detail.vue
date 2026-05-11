@@ -37,6 +37,17 @@ import consts from "@/const/isacommunity/consts.js";
 import tabletitle from "@/const/isacommunity/tabletitle.js";
 // 引入 dayjs
 import dayjs from "dayjs";
+
+const MODULE_OPTIONS = [
+  { id: 1, label: "校巴", enLabel: "School Bus" },
+  { id: 2, label: "活动", enLabel: "Activity" },
+];
+
+const ROLE_OPTIONS = [
+  { id: 1, label: "校巴运营", enLabel: "School Bus Operation" },
+  { id: 2, label: "跟车老师", enLabel: "Car Teacher" },
+  { id: 3, label: "活动签到", enLabel: "Activity Check-in" },
+];
 export default {
   name: "detail",
   props: {
@@ -75,6 +86,8 @@ export default {
             email,
             phone,
             status,
+            modules,
+            roles,
             lastLoginTime,
             createTime,
           } = res.data.data;
@@ -95,6 +108,8 @@ export default {
               ),
 
               statusLabel: this.$getListLabel(consts["statusType"], status),
+              modulesLabel: this.formatOptionLabels(modules, MODULE_OPTIONS),
+              rolesLabel: this.formatOptionLabels(roles, ROLE_OPTIONS),
               lastLoginTime: lastLoginTime
                 ? dayjs(lastLoginTime).format("YYYY-MM-DD HH:mm")
                 : "--",
@@ -105,6 +120,13 @@ export default {
           });
         }
       });
+    },
+    formatOptionLabels(ids, options) {
+      if (!Array.isArray(ids) || ids.length === 0) return "--";
+      const labelList = options
+        .filter((item) => ids.includes(item.id))
+        .map((item) => (this.i18nlocel == "en" ? item.enLabel : item.label));
+      return labelList.length > 0 ? labelList.join(" / ") : "--";
     },
   },
 };

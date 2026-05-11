@@ -11,7 +11,12 @@
       class="school-bus-follow-teacher-form__body"
       :element-loading-text="$t('common.loading')"
     >
-      <UniForm ref="uniFormRef" v-model="formModel" :mode="uniFormMode" :config="dialogFormConfig" />
+      <UniForm
+        ref="uniFormRef"
+        v-model="formModel"
+        :mode="uniFormMode"
+        :config="dialogFormConfig"
+      />
     </div>
     <template #footer>
       <el-button @click="close">{{ $t('schoolBus.driver.actions.cancel') }}</el-button>
@@ -32,7 +37,10 @@ import { teacherDialogForm } from '../list.config'
 
 import { schoolBusFollowTeacherApi } from '@/api'
 import { useDialogDetailLoading } from '@/composables/use-dialog-detail-loading'
-import type { FollowTeacherFormModel, FollowTeacherRecord } from '@/types/modules/school-bus-follow-teacher'
+import type {
+  FollowTeacherFormModel,
+  FollowTeacherRecord
+} from '@/types/modules/school-bus-follow-teacher'
 
 const props = defineProps<{
   visible: boolean
@@ -82,7 +90,7 @@ const title = computed(() =>
 )
 
 const resetForm = () => {
-  const next: FollowTeacherFormModel = { status: 1 }
+  const next: FollowTeacherFormModel = { status: 1, modules: [], roles: [] }
   if (props.mode === 'add' && props.defaultSchoolId != null && !props.multiSchool) {
     next.school = props.defaultSchoolId
   }
@@ -91,7 +99,11 @@ const resetForm = () => {
 }
 
 const fillForm = (data: FollowTeacherFormModel) => {
-  formModel.value = { ...data }
+  formModel.value = {
+    ...data,
+    modules: Array.isArray(data.modules) ? [...data.modules] : [],
+    roles: Array.isArray(data.roles) ? [...data.roles] : []
+  }
   nextTick(() => uniFormRef.value?.clearValidate())
 }
 

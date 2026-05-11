@@ -141,8 +141,24 @@ export default {
   followTeacher: {
     page: { title: '跟车老师', description: '维护跟车老师账号（对齐旧版 user/teacher）。' },
     columns: { id: 'ID', nickname: '昵称', school: '校区', department: '部门', email: '邮箱', phone: '手机号', status: '状态', lastLogin: '最后登录时间' },
-    fields: { school: '校区', nickname: '昵称', department: '部门', email: '邮箱', phone: '手机号', password: '密码', status: '状态' },
-    placeholders: { keyword: '关键词', school: '请选择学校', status: '状态' },
+    fields: {
+      school: '校区',
+      nickname: '昵称',
+      department: '部门',
+      email: '邮箱',
+      phone: '手机号',
+      modules: '模块',
+      roles: '角色',
+      password: '密码',
+      status: '状态'
+    },
+    moduleOptions: { schoolBus: '校巴', activity: '活动' },
+    roleOptions: {
+      busOperation: '校巴运营',
+      carTeacher: '跟车老师',
+      activityCheckIn: '活动签到'
+    },
+    placeholders: { keyword: '关键词', school: '请选择学校', status: '状态', select: '请选择' },
     rules: {
       school: '请选择校区',
       nickname: '请输入昵称',
@@ -150,6 +166,8 @@ export default {
       email: '请输入邮箱',
       emailFormat: '邮箱格式不正确',
       phone: '请输入手机号',
+      modules: '请选择模块',
+      roles: '请选择角色',
       password: '请输入密码',
       status: '请选择状态'
     },

@@ -141,8 +141,24 @@ export default {
   followTeacher: {
     page: { title: 'Bus teachers', description: 'Bus teacher accounts (legacy user/teacher).' },
     columns: { id: 'ID', nickname: 'Nickname', school: 'Campus', department: 'Dept', email: 'Email', phone: 'Phone', status: 'Status', lastLogin: 'Last login' },
-    fields: { school: 'Campus', nickname: 'Nickname', department: 'Department', email: 'Email', phone: 'Phone', password: 'Password', status: 'Status' },
-    placeholders: { keyword: 'Keyword', school: 'School', status: 'Status' },
+    fields: {
+      school: 'Campus',
+      nickname: 'Nickname',
+      department: 'Department',
+      email: 'Email',
+      phone: 'Phone',
+      modules: 'Module',
+      roles: 'Role',
+      password: 'Password',
+      status: 'Status'
+    },
+    moduleOptions: { schoolBus: 'School Bus', activity: 'Activity' },
+    roleOptions: {
+      busOperation: 'School Bus Operation',
+      carTeacher: 'Car Teacher',
+      activityCheckIn: 'Activity Check-in'
+    },
+    placeholders: { keyword: 'Keyword', school: 'School', status: 'Status', select: 'Select' },
     rules: {
       school: 'Select campus',
       nickname: 'Enter nickname',
@@ -150,6 +166,8 @@ export default {
       email: 'Enter email',
       emailFormat: 'Invalid email',
       phone: 'Enter phone',
+      modules: 'Select module(s)',
+      roles: 'Select role(s)',
       password: 'Enter password',
       status: 'Select status'
     },

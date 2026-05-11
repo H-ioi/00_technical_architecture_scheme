@@ -24,3 +24,17 @@ export interface PermissionUserRecord {
   lockFlag?: string
   createTime?: string
 }
+
+/** 用户新增/编辑弹窗（与 `permission/user/*` 表单一致） */
+export interface PermissionUserFormModel {
+  userId?: string | number
+  username?: string
+  nickname?: string
+  password?: string
+  email?: string
+  phone?: string
+  deptId?: string | number
+  /** 提交给后端：角色 id 数组 */
+  role: (string | number)[]
+  lockFlag: string
+}

@@ -71,6 +71,38 @@
                 maxlength="50"
               ></el-input>
             </el-form-item>
+            <el-form-item :label="'模块'" prop="modules" style="width: 49%">
+              <el-select
+                multiple
+                collapse-tags
+                style="width: 100%"
+                v-model="ruleForm.modules"
+                :placeholder="$t('common.请选择')"
+              >
+                <el-option
+                  v-for="item in moduleOptions"
+                  :key="item.id"
+                  :label="i18nlocel == 'en' ? item.enLabel : item.label"
+                  :value="item.id"
+                ></el-option>
+              </el-select>
+            </el-form-item>
+            <el-form-item :label="'角色'" prop="roles" style="width: 49%">
+              <el-select
+                multiple
+                collapse-tags
+                style="width: 100%"
+                v-model="ruleForm.roles"
+                :placeholder="$t('common.请选择')"
+              >
+                <el-option
+                  v-for="item in roleOptions"
+                  :key="item.id"
+                  :label="i18nlocel == 'en' ? item.enLabel : item.label"
+                  :value="item.id"
+                ></el-option>
+              </el-select>
+            </el-form-item>
             <el-form-item :label="$t('isagroup.密码')" prop="password" style="width: 49%">
               <el-input
                 style="width: 100%"
@@ -125,6 +157,15 @@ export default {
       modalType: "add",
       showModal: false,
       ruleForm: {},
+      moduleOptions: [
+        { id: 1, label: "校巴", enLabel: "School Bus" },
+        { id: 2, label: "活动", enLabel: "Activity" },
+      ],
+      roleOptions: [
+        { id: 1, label: "校巴运营", enLabel: "School Bus Operation" },
+        { id: 2, label: "跟车老师", enLabel: "Car Teacher" },
+        { id: 3, label: "活动签到", enLabel: "Activity Check-in" },
+      ],
       rules: {
         school: [
           { required: true, message: that.$t("isagroup.请选择"), trigger: "blur" },
@@ -142,6 +183,22 @@ export default {
         phone: [
           { required: true, message: that.$t("isagroup.请输入"), trigger: "blur" },
           { validator: formrulesdata["isMobileNumber"], trigger: "blur" },
+        ],
+        modules: [
+          {
+            type: "array",
+            required: true,
+            message: that.$t("isagroup.请选择"),
+            trigger: "change",
+          },
+        ],
+        roles: [
+          {
+            type: "array",
+            required: true,
+            message: that.$t("isagroup.请选择"),
+            trigger: "change",
+          },
         ],
         password: [
           { required: true, message: that.$t("isagroup.请输入"), trigger: "blur" },
@@ -166,6 +223,11 @@ export default {
       if (type != "add") {
         this.getDetail(item["id"]);
       } else {
+        this.ruleForm = {
+          ...this.ruleForm,
+          modules: [],
+          roles: [],
+        };
         if (this.dictionary["school"].length == 1) {
           let schoolId = this.dictionary["school"][0].id;
           this.ruleForm = {
@@ -198,7 +260,16 @@ export default {
     getDetail(id) {
       getTeacherDetail(id).then(async (res) => {
         if (res.data.success) {
-          let { school, nickname, department, email, phone, status } = res.data.data;
+          let {
+            school,
+            nickname,
+            department,
+            email,
+            phone,
+            status,
+            modules,
+            roles,
+          } = res.data.data;
 
           this.$nextTick(() => {
             this.ruleForm = {
@@ -210,6 +281,8 @@ export default {
               email,
               phone,
               status,
+              modules: Array.isArray(modules) ? modules : [],
+              roles: Array.isArray(roles) ? roles : [],
             };
           });
         }
