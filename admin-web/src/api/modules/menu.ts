@@ -38,7 +38,16 @@ const MENU_PATH_ALIASES: Record<string, string> = {
   '/isacommunity/user/teacher/index': '/school-bus/follow-teacher',
   '/isacommunity/user/teacher': '/school-bus/follow-teacher',
   '/isacommunity/schoolbus/car/index': '/school-bus/car',
-  '/isacommunity/schoolbus/car': '/school-bus/car'
+  '/isacommunity/schoolbus/car': '/school-bus/car',
+  '/admin': '/permission',
+  '/admin/menu': '/permission/menu',
+  '/admin/menu/index': '/permission/menu',
+  '/admin/role': '/permission/role',
+  '/admin/role/index': '/permission/role',
+  '/admin/dept': '/permission/dept',
+  '/admin/dept/index': '/permission/dept',
+  '/admin/isauser': '/permission/user',
+  '/admin/isauser/index': '/permission/user'
 }
 
 const normPath = (path?: string) => {

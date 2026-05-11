@@ -18,5 +18,10 @@ export default {
   schoolBusStudentApply: 'Applications',
   schoolBusStudentOrder: 'Riders',
   schoolBusFollowTeacher: 'Bus teachers',
-  schoolBusCar: 'Vehicles'
+  schoolBusCar: 'Vehicles',
+  permission: 'Access control',
+  permissionMenu: 'Menus',
+  permissionRole: 'Roles',
+  permissionDept: 'Departments',
+  permissionUser: 'Users'
 }

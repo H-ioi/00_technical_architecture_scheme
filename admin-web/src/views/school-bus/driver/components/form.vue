@@ -6,12 +6,18 @@
     destroy-on-close
     @update:model-value="emit('update:visible', $event)"
   >
-    <UniForm
-      ref="uniFormRef"
-      v-model="formModel"
-      :mode="uniFormMode"
-      :config="dialogFormConfig"
-    />
+    <div
+      v-loading="detailLoading"
+      class="school-bus-driver-form__body"
+      :element-loading-text="$t('common.loading')"
+    >
+      <UniForm
+        ref="uniFormRef"
+        v-model="formModel"
+        :mode="uniFormMode"
+        :config="dialogFormConfig"
+      />
+    </div>
 
     <template #footer>
       <el-button @click="close">{{ $t('schoolBus.driver.actions.cancel') }}</el-button>
@@ -37,11 +43,14 @@ import type { DriverFormModel, DriverRecord } from '@/types/modules/school-bus-d
 
 import { driverDialogFormConfig } from '../list.config'
 
+import { useDialogDetailLoading } from '@/composables/use-dialog-detail-loading'
+
 const props = defineProps<SchoolBusDriverFormProps>()
 
 const emit = defineEmits<SchoolBusDriverFormEmits>()
 
 const { t } = useUniI18n()
+const { detailLoading, runWithDetailLoading } = useDialogDetailLoading()
 const uniFormRef = ref<InstanceType<typeof UniForm> | null>(null)
 const submitting = ref(false)
 const formModel = ref<DriverFormModel>({})
@@ -151,7 +160,9 @@ watch(
     resetForm()
 
     if ((props.mode === 'edit' || props.mode === 'look') && props.source?.id) {
-      fillForm(await schoolBusDriverApi.detail.get(props.source.id))
+      await runWithDetailLoading(async () => {
+        fillForm(await schoolBusDriverApi.detail.get(props.source!.id))
+      })
     }
   }
 )

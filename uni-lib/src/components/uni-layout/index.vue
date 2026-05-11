@@ -20,21 +20,27 @@
           </slot>
         </div>
 
-        <el-menu
-          class="uni-layout__menu"
-          :collapse="resolvedCollapsed"
-          :default-active="resolvedActiveMenu"
-          @select="(path: string) => onMenuSelect(path)"
-        >
-          <MenuTree :menus="resolvedMenus" :icon-map="iconMap" :translate="tr">
-            <template #menu-icon="slotProps">
-              <slot name="menu-icon" v-bind="slotProps" />
-            </template>
-            <template #menu-title="slotProps">
-              <slot name="menu-title" v-bind="slotProps" />
-            </template>
-          </MenuTree>
-        </el-menu>
+        <div class="uni-layout__menu-wrap">
+          <el-menu
+            class="uni-layout__menu"
+            :collapse="resolvedCollapsed"
+            :default-active="resolvedActiveMenu"
+            @select="(path: string) => onMenuSelect(path)"
+          >
+            <MenuTree
+              :menus="resolvedMenus"
+              :icon-map="iconMap"
+              :translate="tr"
+            >
+              <template #menu-icon="slotProps">
+                <slot name="menu-icon" v-bind="slotProps" />
+              </template>
+              <template #menu-title="slotProps">
+                <slot name="menu-title" v-bind="slotProps" />
+              </template>
+            </MenuTree>
+          </el-menu>
+        </div>
       </el-aside>
     </slot>
 
@@ -574,6 +580,9 @@ const onUserCommand = (command: string) => {
   background: var(--uni-layout-bg);
 
   &__sidebar {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
     overflow: hidden;
     background: var(--uni-layout-sidebar-bg);
     border-right: 1px solid var(--uni-layout-border);
@@ -582,6 +591,7 @@ const onUserCommand = (command: string) => {
 
   &__brand {
     display: flex;
+    flex-shrink: 0;
     align-items: center;
     justify-content: center;
     height: var(--uni-layout-header-height);
@@ -594,6 +604,14 @@ const onUserCommand = (command: string) => {
     max-width: 100%;
     height: 28px;
     object-fit: contain;
+  }
+
+  /** 占用 Logo 以下剩余高度；min-height:0 使 flex 子项可收缩并出现内部滚动条 */
+  &__menu-wrap {
+    flex: 1;
+    min-height: 0;
+    overflow-x: hidden;
+    overflow-y: auto;
   }
 
   &__menu {

@@ -6,7 +6,13 @@
     :close-on-click-modal="false"
     :title="stationDialogTitle"
   >
-    <UniForm ref="uniFormRef" v-model="formModel" mode="edit" :config="formConfig" />
+    <div
+      v-loading="detailLoading"
+      class="station-form-dialog__body"
+      :element-loading-text="$t('common.loading')"
+    >
+      <UniForm ref="uniFormRef" v-model="formModel" mode="edit" :config="formConfig" />
+    </div>
 
     <template #footer>
       <el-button @click="innerVisible = false">
@@ -26,6 +32,7 @@ import type { UniFormConfig } from 'uni-ui-lib'
 import { computed, ref, watch } from 'vue'
 
 import { schoolBusStationApi } from '@/api'
+import { useDialogDetailLoading } from '@/composables/use-dialog-detail-loading'
 import type { SchoolOptionRecord } from '@/types/modules/membership'
 
 import { stationDialogFormConfig } from '../tab.config'
@@ -52,6 +59,7 @@ const emit = defineEmits<{
 }>()
 
 const { locale, t } = useUniI18n()
+const { detailLoading, runWithDetailLoading } = useDialogDetailLoading()
 
 const innerVisible = computed({
   get: () => props.modelValue,
@@ -167,7 +175,7 @@ watch(
     }
 
     if (props.editingId != null && props.editingId !== '') {
-      await loadDetail()
+      await runWithDetailLoading(loadDetail)
     } else {
       reset()
     }

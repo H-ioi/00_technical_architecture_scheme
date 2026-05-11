@@ -6,7 +6,12 @@
     destroy-on-close
     @update:model-value="emit('update:visible', $event)"
   >
-    <UniForm ref="uniFormRef" v-model="formModel" mode="edit" :config="dialogFormConfig">
+    <div
+      v-loading="detailLoading"
+      class="protocol-form__body"
+      :element-loading-text="$t('common.loading')"
+    >
+      <UniForm ref="uniFormRef" v-model="formModel" mode="edit" :config="dialogFormConfig">
       <template #field-documentUrl>
         <UniUpload
           v-model:file-list="fileList"
@@ -26,6 +31,7 @@
         </UniUpload>
       </template>
     </UniForm>
+    </div>
 
     <template #footer>
       <el-button @click="close">{{ $t('protocol.actions.cancel') }}</el-button>
@@ -44,6 +50,7 @@ import { UniForm, useUniI18n } from 'uni-ui-lib'
 import { computed, nextTick, ref, watch } from 'vue'
 
 import { protocolApi } from '@/api'
+import { useDialogDetailLoading } from '@/composables/use-dialog-detail-loading'
 import type { ProtocolFormEmits, ProtocolFormProps } from '@/types/components/protocol-form'
 import type { ProtocolFormModel, ProtocolRecord } from '@/types/modules/protocol'
 
@@ -54,6 +61,7 @@ const props = defineProps<ProtocolFormProps>()
 const emit = defineEmits<ProtocolFormEmits>()
 
 const { t } = useUniI18n()
+const { detailLoading, runWithDetailLoading } = useDialogDetailLoading()
 const uniFormRef = ref<InstanceType<typeof UniForm> | null>(null)
 const submitting = ref(false)
 const fileList = ref<UploadUserFile[]>([])
@@ -186,7 +194,9 @@ watch(
     resetForm()
 
     if (props.mode === 'edit' && props.source?.id) {
-      fillForm(await protocolApi.info.get(props.source.id))
+      await runWithDetailLoading(async () => {
+        fillForm(await protocolApi.info.get(props.source!.id))
+      })
     }
   }
 )

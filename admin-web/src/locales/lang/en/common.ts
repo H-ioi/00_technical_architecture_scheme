@@ -1,4 +1,5 @@
 export default {
+  loading: 'Loading…',
   home: 'Home',
   logout: 'Log out',
   changePassword: 'Change Password',

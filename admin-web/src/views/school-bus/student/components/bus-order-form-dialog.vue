@@ -7,7 +7,12 @@
     :close-on-click-modal="false"
     @closed="onClosed"
   >
-    <div v-if="innerVisible" class="bus-order-form">
+    <div
+      v-if="innerVisible"
+      v-loading="formDetailLoading"
+      class="bus-order-form"
+      :element-loading-text="$t('common.loading')"
+    >
       <div class="bus-order-form__scroll">
         <UniForm
           ref="mainUniFormRef"
@@ -516,6 +521,9 @@ const personModalMode = ref<'add' | 'edit'>('add')
 const personEditIndex = ref(-1)
 const personForm = ref<PersonRow>({})
 
+/** 编辑模式：详情与级联选项加载完成前遮罩，避免空白表单 */
+const formDetailLoading = ref(false)
+
 const approvalOpts = computed(() => approvalStatusOptions(t))
 const paymentOpts = computed(() =>
   paymentStatusOptions(t).map((p) => ({ ...p, value: String(p.value) }))
@@ -871,7 +879,12 @@ watch(
       return
     }
     if (props.orderId != null) {
-      await loadDetail(props.orderId)
+      formDetailLoading.value = true
+      try {
+        await loadDetail(props.orderId)
+      } finally {
+        formDetailLoading.value = false
+      }
     }
   }
 )

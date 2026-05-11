@@ -6,18 +6,24 @@
     destroy-on-close
     @update:model-value="emit('update:visible', $event)"
   >
-    <UniForm ref="uniFormRef" v-model="formModel" :mode="uniFormMode" :config="dialogFormConfig" />
+    <div
+      v-loading="detailLoading"
+      class="school-bus-car-form__body"
+      :element-loading-text="$t('common.loading')"
+    >
+      <UniForm ref="uniFormRef" v-model="formModel" :mode="uniFormMode" :config="dialogFormConfig" />
 
-    <div v-if="!isLook" class="car-form__upload">
-      <div class="car-form__upload-label">{{ $t('schoolBus.car.fields.carImage') }}</div>
-      <el-upload
-        :show-file-list="false"
-        accept="image/*"
-        :before-upload="beforeUpload"
-      >
-        <el-button type="primary">{{ $t('schoolBus.car.actions.pickImage') }}</el-button>
-      </el-upload>
-      <span v-if="formModel.carImageUrl" class="car-form__url">{{ formModel.carImageUrl }}</span>
+      <div v-if="!isLook" class="car-form__upload">
+        <div class="car-form__upload-label">{{ $t('schoolBus.car.fields.carImage') }}</div>
+        <el-upload
+          :show-file-list="false"
+          accept="image/*"
+          :before-upload="beforeUpload"
+        >
+          <el-button type="primary">{{ $t('schoolBus.car.actions.pickImage') }}</el-button>
+        </el-upload>
+        <span v-if="formModel.carImageUrl" class="car-form__url">{{ formModel.carImageUrl }}</span>
+      </div>
     </div>
 
     <template #footer>
@@ -38,6 +44,7 @@ import { computed, nextTick, ref, watch } from 'vue'
 import { carDialogFormConfig, type CarFormModel } from '../list.config'
 
 import { protocolApi, schoolBusCarApi, schoolBusCommonApi } from '@/api'
+import { useDialogDetailLoading } from '@/composables/use-dialog-detail-loading'
 import type { CarRecord } from '@/types/modules/school-bus-car'
 
 const props = defineProps<{
@@ -56,6 +63,7 @@ const emit = defineEmits<{
 }>()
 
 const { t } = useUniI18n()
+const { detailLoading, runWithDetailLoading } = useDialogDetailLoading()
 const uniFormRef = ref<InstanceType<typeof UniForm> | null>(null)
 const submitting = ref(false)
 const formModel = ref<CarFormModel>({})
@@ -150,9 +158,12 @@ watch(
         await pickDriversTeachers(formModel.value.schoolIds)
       }
     } else if (props.source) {
-      const raw = await schoolBusCarApi.detail.get(props.source.id)
-      const data = raw && typeof raw === 'object' && 'data' in raw ? (raw as { data: CarRecord }).data : (raw as CarRecord)
-      await fillForm(data)
+      await runWithDetailLoading(async () => {
+        const raw = await schoolBusCarApi.detail.get(props.source!.id)
+        const data =
+          raw && typeof raw === 'object' && 'data' in raw ? (raw as { data: CarRecord }).data : (raw as CarRecord)
+        await fillForm(data)
+      })
     }
   }
 )

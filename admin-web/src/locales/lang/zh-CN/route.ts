@@ -18,5 +18,10 @@ export default {
   schoolBusStudentApply: '申请意向管理',
   schoolBusStudentOrder: '乘车学生管理',
   schoolBusFollowTeacher: '跟车老师',
-  schoolBusCar: '车辆管理'
+  schoolBusCar: '车辆管理',
+  permission: '权限管理',
+  permissionMenu: '菜单管理',
+  permissionRole: '角色管理',
+  permissionDept: '部门管理',
+  permissionUser: '用户管理'
 }

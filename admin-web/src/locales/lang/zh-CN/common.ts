@@ -1,4 +1,5 @@
 export default {
+  loading: '加载中…',
   home: '首页',
   logout: '退出登录',
   changePassword: '修改密码',

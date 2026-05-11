@@ -6,7 +6,11 @@
     destroy-on-close
     @update:model-value="emit('update:visible', $event)"
   >
-    <div class="school-bus-operation-form__wrap">
+    <div
+      v-loading="detailLoading"
+      class="school-bus-operation-form__wrap"
+      :element-loading-text="$t('common.loading')"
+    >
       <UniForm ref="uniFormRef" v-model="formModel" :mode="uniFormMode" :config="dialogFormConfig" />
     </div>
     <template #footer>
@@ -26,6 +30,7 @@ import { UniForm, useUniI18n } from 'uni-ui-lib'
 import { computed, nextTick, ref, watch } from 'vue'
 
 import { schoolBusCommonApi, schoolBusOperationApi } from '@/api'
+import { useDialogDetailLoading } from '@/composables/use-dialog-detail-loading'
 import type { SchoolOptionRecord } from '@/types/modules/membership'
 import type { OperationFormModel, OperationRecord } from '@/types/modules/school-bus-operation'
 
@@ -75,6 +80,7 @@ const emit = defineEmits<{
 }>()
 
 const { t, locale } = useUniI18n()
+const { detailLoading, runWithDetailLoading } = useDialogDetailLoading()
 
 const uniFormRef = ref<InstanceType<typeof UniForm> | null>(null)
 const submitting = ref(false)
@@ -510,7 +516,9 @@ watch(
     }
 
     if ((props.mode === 'edit' || props.mode === 'look') && props.source?.id) {
-      await loadDetail(props.source.id)
+      await runWithDetailLoading(async () => {
+        await loadDetail(props.source!.id)
+      })
     }
   }
 )

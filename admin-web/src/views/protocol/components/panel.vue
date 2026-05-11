@@ -6,7 +6,12 @@
     destroy-on-close
     @update:model-value="emit('update:visible', $event)"
   >
-    <div v-if="detail" class="protocol-detail">
+    <div
+      v-loading="detailLoading"
+      class="protocol-detail-loading-wrap"
+      :element-loading-text="$t('common.loading')"
+    >
+      <div v-if="detail" class="protocol-detail">
       <el-descriptions :column="2" border>
         <el-descriptions-item v-for="item in displayItems" :key="item.label" :label="item.label">
           {{ item.value || '--' }}
@@ -37,6 +42,7 @@
         />
       </section>
     </div>
+    </div>
 
     <template #footer>
       <el-button @click="emit('update:visible', false)">{{ $t('protocol.actions.close') }}</el-button>
@@ -50,6 +56,7 @@ import { computed, ref, watch } from 'vue'
 import { useUniI18n } from 'uni-ui-lib'
 
 import { protocolApi } from '@/api'
+import { useDialogDetailLoading } from '@/composables/use-dialog-detail-loading'
 import type { ProtocolPanelEmits, ProtocolPanelProps } from '@/types/components/protocol-panel'
 import type { ProtocolRecord } from '@/types/modules/protocol'
 
@@ -60,6 +67,7 @@ const props = defineProps<ProtocolPanelProps>()
 const emit = defineEmits<ProtocolPanelEmits>()
 
 const { locale, t } = useUniI18n()
+const { detailLoading, runWithDetailLoading } = useDialogDetailLoading()
 const detail = ref<ProtocolRecord | null>(null)
 const signTableRef = ref<{ refresh: () => void } | null>(null)
 const signColumns = computed(() => signCols(t))
@@ -122,13 +130,20 @@ watch(
       return
     }
 
-    detail.value = await protocolApi.info.get(props.source.id)
-    signTableRef.value?.refresh()
+    detail.value = null
+    await runWithDetailLoading(async () => {
+      detail.value = await protocolApi.info.get(props.source!.id)
+      signTableRef.value?.refresh()
+    })
   }
 )
 </script>
 
 <style scoped lang="scss">
+.protocol-detail-loading-wrap {
+  min-height: 200px;
+}
+
 .protocol-detail {
   display: grid;
   gap: 20px;

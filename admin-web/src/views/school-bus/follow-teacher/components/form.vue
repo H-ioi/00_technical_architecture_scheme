@@ -6,7 +6,13 @@
     destroy-on-close
     @update:model-value="emit('update:visible', $event)"
   >
-    <UniForm ref="uniFormRef" v-model="formModel" :mode="uniFormMode" :config="dialogFormConfig" />
+    <div
+      v-loading="detailLoading"
+      class="school-bus-follow-teacher-form__body"
+      :element-loading-text="$t('common.loading')"
+    >
+      <UniForm ref="uniFormRef" v-model="formModel" :mode="uniFormMode" :config="dialogFormConfig" />
+    </div>
     <template #footer>
       <el-button @click="close">{{ $t('schoolBus.driver.actions.cancel') }}</el-button>
       <el-button v-if="!isLook" type="primary" :loading="submitting" @click="submit">
@@ -25,6 +31,7 @@ import { computed, nextTick, ref, watch } from 'vue'
 import { teacherDialogForm } from '../list.config'
 
 import { schoolBusFollowTeacherApi } from '@/api'
+import { useDialogDetailLoading } from '@/composables/use-dialog-detail-loading'
 import type { FollowTeacherFormModel, FollowTeacherRecord } from '@/types/modules/school-bus-follow-teacher'
 
 const props = defineProps<{
@@ -43,6 +50,7 @@ const emit = defineEmits<{
 }>()
 
 const { t } = useUniI18n()
+const { detailLoading, runWithDetailLoading } = useDialogDetailLoading()
 const uniFormRef = ref<InstanceType<typeof UniForm> | null>(null)
 const submitting = ref(false)
 const formModel = ref<FollowTeacherFormModel>({})
@@ -96,12 +104,15 @@ watch(
     if (props.mode === 'add') {
       resetForm()
     } else if (props.source) {
-      const raw = await schoolBusFollowTeacherApi.detail.get(props.source.id)
-      const data =
-        raw && typeof raw === 'object' && 'data' in raw
-          ? (raw as { data: FollowTeacherFormModel }).data
-          : (raw as FollowTeacherFormModel)
-      fillForm(data)
+      await runWithDetailLoading(async () => {
+        resetForm()
+        const raw = await schoolBusFollowTeacherApi.detail.get(props.source!.id)
+        const data =
+          raw && typeof raw === 'object' && 'data' in raw
+            ? (raw as { data: FollowTeacherFormModel }).data
+            : (raw as FollowTeacherFormModel)
+        fillForm(data)
+      })
     }
   }
 )

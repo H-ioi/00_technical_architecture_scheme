@@ -5,6 +5,10 @@ import membershipApi from './modules/membership'
 import studentApi from './modules/member-student'
 import teacherApi from './modules/member-teacher'
 import menuApi from './modules/menu'
+import permissionDeptApi from './modules/permission-dept'
+import permissionMenuApi from './modules/permission-menu'
+import permissionRoleApi from './modules/permission-role'
+import permissionUserApi from './modules/permission-user'
 import protocolApi from './modules/protocol'
 import schoolBusCarApi from './modules/school-bus-car'
 import schoolBusCommonApi from './modules/school-bus-common'
@@ -25,6 +29,10 @@ export {
   studentApi,
   teacherApi,
   menuApi,
+  permissionDeptApi,
+  permissionMenuApi,
+  permissionRoleApi,
+  permissionUserApi,
   protocolApi,
   schoolBusCarApi,
   schoolBusCommonApi,

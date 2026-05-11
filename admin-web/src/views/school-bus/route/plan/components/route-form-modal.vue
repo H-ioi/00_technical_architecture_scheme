@@ -9,7 +9,7 @@
       destroy-on-close
       :title="routeDialogTitle"
     >
-      <div v-if="showModal" class="route-form-modal__body">
+      <div v-if="showModal" v-loading="detailLoading" class="route-form-modal__body" :element-loading-text="$t('common.loading')">
         <UniForm ref="uniFormRef" v-model="ruleForm" mode="edit" :config="mainFormConfig">
           <template #field-routeStopsEditor>
             <div class="route-form-modal__stops">
@@ -304,7 +304,9 @@ export default {
       currentWeekDayIndex: -1,
       currentStationIndex: -1,
       /** `el-collapse` 手风琴当前展开项（name 与 weekDays 下标对应） */
-      activeSchedulePanel: '0'
+      activeSchedulePanel: '0',
+      /** 编辑态拉取路线详情时遮罩表单区 */
+      detailLoading: false
     }
   },
 
@@ -425,7 +427,12 @@ export default {
       this.ruleForm = { routeStopsEditor: '' }
 
       if (type !== 'add') {
-        await this.getDetail(item.id as string | number)
+        this.detailLoading = true
+        try {
+          await this.getDetail(item.id as string | number)
+        } finally {
+          this.detailLoading = false
+        }
         return
       }
 
