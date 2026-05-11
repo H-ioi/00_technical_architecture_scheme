@@ -186,8 +186,7 @@ export const routes: AppRouteRecord[] = [
             component: () => import('@/views/school-bus/follow-teacher/list.vue'),
             meta: {
               title: '跟车老师',
-              titleKey: 'route.schoolBusFollowTeacher',
-              icon: 'User'
+              titleKey: 'route.schoolBusFollowTeacher'
             }
           },
           {
