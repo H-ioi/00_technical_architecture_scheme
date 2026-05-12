@@ -26,6 +26,7 @@ export default {
   permissionUser: '用户管理',
   attendance: '考勤管理',
   attendanceStudent: '学生考勤',
+  attendanceDaily: '学生每日考勤',
   attendanceSchool: '校园考勤',
   attendanceAccess: '门禁记录',
   attendanceWechat: '微信 OpenID',

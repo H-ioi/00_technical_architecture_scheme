@@ -268,6 +268,15 @@ export const routes: AppRouteRecord[] = [
             }
           },
           {
+            path: 'daily',
+            name: 'AttendanceDaily',
+            component: () => import('@/views/attendance/daily/list.vue'),
+            meta: {
+              title: '学生每日考勤',
+              titleKey: 'route.attendanceDaily'
+            }
+          },
+          {
             path: 'school',
             name: 'AttendanceSchool',
             component: () => import('@/views/attendance/school/list.vue'),

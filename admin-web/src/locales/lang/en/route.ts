@@ -26,6 +26,7 @@ export default {
   permissionUser: 'Users',
   attendance: 'Attendance',
   attendanceStudent: 'Student attendance',
+  attendanceDaily: 'Daily attendance',
   attendanceSchool: 'Campus attendance',
   attendanceAccess: 'Access records',
   attendanceWechat: 'WeChat OpenID',

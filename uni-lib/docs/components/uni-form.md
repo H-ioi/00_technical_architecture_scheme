@@ -373,6 +373,8 @@ const formConfigLoad: UniFormConfig = {
 
 查看态会优先使用字段上的 `viewRender`，其次可通过 `viewType` 复用枚举、日期等格式化逻辑；空值文案可在 `config.view.emptyText` 中统一配置。
 
+**长文本与 JSON 字符串**：默认 **`ellipsis`**（单行省略；仅当内容实际溢出时出现 **`Tooltip`** 展示全文）。可在 `config.view.viewOverflow` 或字段 **`viewOverflow`** 上改为 **`wrap`**（自动换行）或 **`none`**（不截断）。`viewRender` 若返回对象，会经 `JSON.stringify` 转为可读字符串。
+
 <CompDemo title="mode=view + viewType / viewRender" :code="codeViewRender">
   <UniForm v-model="formModelView" :config="formConfigView" mode="view" />
 </CompDemo>

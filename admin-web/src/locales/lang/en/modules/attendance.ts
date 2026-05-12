@@ -48,6 +48,59 @@ export default {
       statusAbsent: 'Absent'
     }
   },
+  daily: {
+    page: {
+      title: 'Daily student attendance',
+      description:
+        'Filter by campus, admission No., bus/boarding, date range, source and status; APIs match legacy `holiday.js` (export had no separate permission).'
+    },
+    actions: {
+      export: 'Export'
+    },
+    messages: {
+      exportSuccess: 'Export started'
+    },
+    placeholders: {
+      school: 'Campus',
+      admissionNo: 'Admission No.',
+      busStatus: 'School bus',
+      dormitoryStatus: 'Boarding',
+      beginTime: 'Start date',
+      endTime: 'End date',
+      dataFrom: 'Source',
+      status: 'Status'
+    },
+    columns: {
+      schoolName: 'Campus',
+      admissionNo: 'Admission No.',
+      studentName: 'Name',
+      grade: 'Grade',
+      form: 'Class',
+      busStatus: 'School bus',
+      dormitoryStatus: 'Boarding',
+      date: 'Date',
+      attendanceTime: 'Time',
+      status: 'Status',
+      dataFrom: 'Source',
+      comment: 'Remark',
+      createdAt: 'Created'
+    },
+    options: {
+      ynYes: 'Yes',
+      ynNo: 'No',
+      dataFromGate: 'Gate',
+      dataFromSchoolBus: 'School bus',
+      dataFromCommunity: 'Community',
+      dataFromMb: 'MB',
+      statusPresent: 'Present',
+      statusLate: 'Late',
+      statusLeave: 'Leave',
+      statusAbsent: 'Absent',
+      statusEnter: 'Enter',
+      statusExit: 'Exit'
+    },
+    mbLesson: 'Period {period}'
+  },
   school: {
     page: {
       title: 'Campus attendance',

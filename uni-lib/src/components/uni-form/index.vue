@@ -27,9 +27,10 @@
               :field="field"
               :model="formModel" />
 
-            <span v-else-if="formMode === 'view'" class="uni-form__view-value">
-              {{ renderViewValue(field) }}
-            </span>
+            <UniFormViewValueText
+              v-else-if="formMode === 'view'"
+              :display="getViewDisplayString(field)"
+              :overflow="resolveViewOverflow(field)" />
 
             <component
               :is="field.component"
@@ -113,9 +114,16 @@
 import type { FormInstance, RowProps } from 'element-plus'
 import { computed, reactive, ref, watch } from 'vue'
 
+import UniFormViewValueText from './components/view-value-text.vue'
 import UniUpload from '@/components/uni-upload/index.vue'
 import type { Recordable, UniOption } from '@/types/shared'
-import type { UniFormActions, UniFormConfig, UniFormField, UniFormMode } from '@/types/uni-form'
+import type {
+  UniFormActions,
+  UniFormConfig,
+  UniFormField,
+  UniFormMode,
+  UniFormViewOverflow
+} from '@/types/uni-form'
 import { formatDate, formatEmpty, resolveOption } from '@/utils/format'
 
 const props = withDefaults(
@@ -287,7 +295,25 @@ const handleFieldChange = async (field: UniFormField, value: unknown) => {
   emit('field-change', { field: field.field, value, model: formModel.value })
 }
 
-const renderViewValue = (field: UniFormField) => {
+const normalizeViewDisplay = (raw: unknown): string => {
+  if (raw == null) {
+    return ''
+  }
+  const t = typeof raw
+  if (t === 'string' || t === 'number' || t === 'boolean') {
+    return String(raw)
+  }
+  if (t === 'object') {
+    try {
+      return JSON.stringify(raw as object)
+    } catch {
+      return String(raw)
+    }
+  }
+  return String(raw)
+}
+
+const resolveViewRawValue = (field: UniFormField): unknown => {
   const context = createContext(field)
 
   if (field.viewRender) {
@@ -313,6 +339,12 @@ const renderViewValue = (field: UniFormField) => {
 
   return formatEmpty(context.value, field.emptyText ?? props.config.view?.emptyText)
 }
+
+const getViewDisplayString = (field: UniFormField): string =>
+  normalizeViewDisplay(resolveViewRawValue(field))
+
+const resolveViewOverflow = (field: UniFormField): UniFormViewOverflow =>
+  field.viewOverflow ?? props.config.view?.viewOverflow ?? 'ellipsis'
 
 const handleSubmit = async () => {
   const valid = await formRef.value?.validate().catch(() => false)
@@ -362,6 +394,10 @@ defineExpose({
 
 <style scoped lang="scss">
 .uni-form {
+  :deep(.el-form-item__content) {
+    min-width: 0;
+  }
+
   &__section-description {
     font-size: 12px;
     color: var(--vp-c-text-2);
@@ -380,10 +416,6 @@ defineExpose({
       margin: 4px 0 0;
       color: var(--uni-text-color-secondary);
     }
-  }
-
-  &__view-value {
-    color: var(--uni-text-color);
   }
 
   &__actions {

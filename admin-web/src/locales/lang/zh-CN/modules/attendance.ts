@@ -47,6 +47,59 @@ export default {
       statusAbsent: '缺勤'
     }
   },
+  daily: {
+    page: {
+      title: '学生每日考勤',
+      description:
+        '按校区、学号、校巴/住宿、日期区间、来源与状态查询每日考勤；接口与旧 `holiday.js` 一致（导出无单独权限码）。'
+    },
+    actions: {
+      export: '导出'
+    },
+    messages: {
+      exportSuccess: '导出已开始'
+    },
+    placeholders: {
+      school: '请选择学校',
+      admissionNo: '学号',
+      busStatus: '是否坐校巴',
+      dormitoryStatus: '是否住宿',
+      beginTime: '开始日期',
+      endTime: '结束日期',
+      dataFrom: '来源',
+      status: '状态'
+    },
+    columns: {
+      schoolName: '学校',
+      admissionNo: '学号',
+      studentName: '姓名',
+      grade: '年级',
+      form: '班级',
+      busStatus: '是否坐校巴',
+      dormitoryStatus: '是否住宿',
+      date: '出勤日期',
+      attendanceTime: '考勤时间',
+      status: '状态',
+      dataFrom: '来源',
+      comment: '备注',
+      createdAt: '创建时间'
+    },
+    options: {
+      ynYes: '是',
+      ynNo: '否',
+      dataFromGate: '闸机',
+      dataFromSchoolBus: '校巴',
+      dataFromCommunity: '爱莎圈',
+      dataFromMb: 'MB',
+      statusPresent: '出勤',
+      statusLate: '迟到',
+      statusLeave: '请假',
+      statusAbsent: '缺勤',
+      statusEnter: '入校',
+      statusExit: '离校'
+    },
+    mbLesson: '第{period}节课'
+  },
   school: {
     page: {
       title: '校园考勤',

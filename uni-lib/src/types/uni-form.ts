@@ -5,6 +5,9 @@ import type { UniTableColumnType } from './uni-table'
 
 export type UniFormMode = 'view' | 'edit'
 
+/** 查看态纯文本展示：默认单行省略，悬停可看全文；`wrap` 自动换行；`none` 不截断 */
+export type UniFormViewOverflow = 'ellipsis' | 'wrap' | 'none'
+
 export interface UniFormActions {
   setValue: (field: string, value: unknown) => void
   clearValue: (field: string) => void
@@ -39,6 +42,8 @@ export interface UniFormField {
   onHidden?: (context: UniFormContext) => void
   viewRender?: (context: UniFormContext) => unknown
   viewType?: UniTableColumnType
+  /** 查看态文本排版；未设时使用 `config.view.viewOverflow`，默认 `ellipsis` */
+  viewOverflow?: UniFormViewOverflow
   emptyText?: string
   formItemProps?: Recordable & { rules?: FormItemRule | FormItemRule[] }
   componentProps?: Recordable
@@ -69,6 +74,8 @@ export interface UniFormConfig {
     labelSuffix?: string
     emptyText?: string
     showColon?: boolean
+    /** 查看态默认文本排版；字段级 `viewOverflow` 可覆盖 */
+    viewOverflow?: UniFormViewOverflow
   }
   linkage?: Recordable
 }
