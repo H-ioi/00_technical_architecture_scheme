@@ -1,19 +1,19 @@
 <template>
-  <div class="menu-icon-picker">
+  <div class="icon-picker">
     <el-input
       :model-value="modelValue || ''"
       readonly
       clearable
-      class="menu-icon-picker__input"
+      class="icon-picker__input"
       :placeholder="placeholder"
       @clear="onClear">
       <template #prefix>
-        <el-icon v-if="currentComp" class="menu-icon-picker__prefix-ico">
+        <el-icon v-if="currentComp" class="icon-picker__prefix-ico">
           <component :is="currentComp" />
         </el-icon>
       </template>
       <template #suffix>
-        <el-button type="primary" link class="menu-icon-picker__open" @click="pickerOpen = true">
+        <el-button type="primary" link class="icon-picker__open" @click="pickerOpen = true">
           ···
         </el-button>
       </template>
@@ -25,24 +25,24 @@
       width="560px"
       append-to-body
       destroy-on-close
-      class="menu-icon-picker__dialog"
+      class="icon-picker__dialog"
       @closed="filterKeyword = ''">
       <el-input
         v-model="filterKeyword"
         clearable
-        class="menu-icon-picker__search"
+        class="icon-picker__search"
         :placeholder="t('common.iconSearch')" />
-      <div class="menu-icon-picker__grid-wrap">
-        <div class="menu-icon-picker__grid">
+      <div class="icon-picker__grid-wrap">
+        <div class="icon-picker__grid">
           <button
             v-for="name in filteredNames"
             :key="name"
             type="button"
-            class="menu-icon-picker__cell"
+            class="icon-picker__cell"
             :class="{ 'is-active': name === modelValue }"
             :title="name"
             @click="pick(name)">
-            <el-icon class="menu-icon-picker__cell-ico">
+            <el-icon class="icon-picker__cell-ico">
               <component :is="iconMap[name]" />
             </el-icon>
           </button>
@@ -57,7 +57,7 @@ import type { Component } from 'vue'
 import { computed, ref } from 'vue'
 import { useUniI18n } from 'uni-ui-lib'
 
-import { menuSidebarIconMap, menuSidebarIconNames } from './registry'
+import { sidebarIconMap, sidebarIconNames } from './registry'
 
 const props = defineProps<{
   modelValue?: string
@@ -70,8 +70,8 @@ const emit = defineEmits<{
 
 const { t } = useUniI18n()
 
-const iconMap = menuSidebarIconMap
-const allNames = menuSidebarIconNames
+const iconMap = sidebarIconMap
+const allNames = sidebarIconNames
 
 const pickerOpen = ref(false)
 const filterKeyword = ref('')
@@ -103,33 +103,33 @@ const onClear = () => {
 </script>
 
 <style scoped lang="scss">
-.menu-icon-picker__input {
+.icon-picker__input {
   width: 100%;
 }
-.menu-icon-picker__prefix-ico {
+.icon-picker__prefix-ico {
   font-size: 18px;
 }
-.menu-icon-picker__open {
+.icon-picker__open {
   padding: 0 4px;
   font-weight: 700;
   letter-spacing: 1px;
 }
-.menu-icon-picker__search {
+.icon-picker__search {
   margin-bottom: 12px;
 }
-.menu-icon-picker__grid-wrap {
+.icon-picker__grid-wrap {
   max-height: 360px;
   overflow-y: auto;
   border: 1px solid var(--el-border-color-lighter);
   border-radius: 6px;
   padding: 8px;
 }
-.menu-icon-picker__grid {
+.icon-picker__grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(48px, 1fr));
   gap: 8px;
 }
-.menu-icon-picker__cell {
+.icon-picker__cell {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -153,7 +153,7 @@ const onClear = () => {
     background: var(--el-color-primary-light-9);
   }
 }
-.menu-icon-picker__cell-ico {
+.icon-picker__cell-ico {
   font-size: 22px;
 }
 </style>

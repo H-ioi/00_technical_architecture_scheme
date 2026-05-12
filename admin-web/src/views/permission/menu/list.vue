@@ -19,7 +19,7 @@
       :action-column="menuActionColumn"
       @refresh="loadTree">
       <template #column-icon="{ row }">
-        <MenuIconDisplay :name="row.icon" />
+        <IconDisplay :name="row.icon" />
       </template>
       <template #column-type="{ row }">
         <el-tag v-if="row.type === '0'" type="success">{{ t('permission.menu.type.left') }}</el-tag>
@@ -51,7 +51,7 @@
 <script setup lang="ts">
 import { UniDataTable } from 'uni-ui-lib'
 
-import { MenuIconDisplay } from '@/components/menu-sidebar-icon'
+import { IconDisplay } from '@/components/sidebar-icon'
 
 import EditDialog from './components/edit-dialog.vue'
 import { useList } from './use-list'

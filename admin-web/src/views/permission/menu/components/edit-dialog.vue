@@ -7,7 +7,7 @@
     @update:model-value="$emit('update:visible', $event)">
     <UniForm ref="uniFormRef" v-model="draft" mode="edit" :config="dialogFormConfig">
       <template #field-icon="{ model }">
-        <MenuIconPicker v-model="model.icon" :placeholder="t('permission.menu.icon')" />
+        <IconPicker v-model="model.icon" :placeholder="t('permission.menu.icon')" />
       </template>
     </UniForm>
     <template #footer>
@@ -28,7 +28,7 @@ import { UniForm, useUniI18n } from 'uni-ui-lib'
 
 import type { PermissionMenuNode } from '@/types/modules/permission-menu'
 
-import { MenuIconPicker } from '@/components/menu-sidebar-icon'
+import { IconPicker } from '@/components/sidebar-icon'
 import { menuEditDialogFormConfig, type MenuParentOption } from '../list.config'
 
 type MenuDraft = PermissionMenuNode & { menuId?: string | number }

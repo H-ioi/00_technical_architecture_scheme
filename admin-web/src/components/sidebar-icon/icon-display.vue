@@ -10,7 +10,7 @@
 import type { Component } from 'vue'
 import { computed } from 'vue'
 
-import { menuSidebarIconMap } from './registry'
+import { sidebarIconMap } from './registry'
 
 const props = defineProps<{
   name?: string
@@ -21,6 +21,6 @@ const resolved = computed<Component | undefined>(() => {
   if (!n) {
     return undefined
   }
-  return menuSidebarIconMap[n]
+  return sidebarIconMap[n]
 })
 </script>
