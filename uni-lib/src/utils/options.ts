@@ -1,29 +1,24 @@
-import type { OptionValue, UniOption } from "@/types/shared";
-import type { OptionSource, ToUniOptionsConfig } from "@/types/uni-options";
+import type { OptionValue, UniOption } from '@/types/shared'
+import type { OptionSource, ToUniOptionsConfig } from '@/types/uni-options'
 
-export type { OptionSource, ToUniOptionsConfig } from "@/types/uni-options";
+export type { OptionSource, ToUniOptionsConfig } from '@/types/uni-options'
 
 const toOptionValue = (value: unknown): OptionValue =>
-  typeof value === "string" ||
-  typeof value === "number" ||
-  typeof value === "boolean"
+  typeof value === 'string' || typeof value === 'number' || typeof value === 'boolean'
     ? value
-    : String(value ?? "");
+    : String(value ?? '')
 
-const getFirstText = <T extends OptionSource>(
-  item: T,
-  keys: Array<keyof T>,
-) => {
+const getFirstText = <T extends OptionSource>(item: T, keys: Array<keyof T>) => {
   for (const key of keys) {
-    const value = item[key];
+    const value = item[key]
 
-    if (value !== undefined && value !== null && String(value) !== "") {
-      return String(value);
+    if (value !== undefined && value !== null && String(value) !== '') {
+      return String(value)
     }
   }
 
-  return "";
-};
+  return ''
+}
 
 /**
  * Convert backend dictionary records into `UniOption[]`.
@@ -32,24 +27,22 @@ const getFirstText = <T extends OptionSource>(
  */
 export const toUniOptions = <T extends OptionSource>(
   items: T[] = [],
-  config: ToUniOptionsConfig<T> = {},
+  config: ToUniOptionsConfig<T> = {}
 ): UniOption[] => {
-  const valueKey = config.valueKey ?? ("id" as keyof T);
-  const labelKeys =
-    config.labelKeys ??
-    (["label", "name", "cnName", "enName"] as Array<keyof T>);
+  const valueKey = config.valueKey ?? ('id' as keyof T)
+  const labelKeys = config.labelKeys ?? (['label', 'name', 'cnName', 'enName'] as Array<keyof T>)
 
   return items.map((item) => {
-    const value = toOptionValue(item[valueKey]);
-    const label = getFirstText(item, labelKeys) || String(value);
-    const type = config.typeKey ? item[config.typeKey] : undefined;
-    const color = config.colorKey ? item[config.colorKey] : undefined;
+    const value = toOptionValue(item[valueKey])
+    const label = getFirstText(item, labelKeys) || String(value)
+    const type = config.typeKey ? item[config.typeKey] : undefined
+    const color = config.colorKey ? item[config.colorKey] : undefined
 
     return {
       label,
       value,
-      ...(typeof type === "string" ? { type: type as UniOption["type"] } : {}),
-      ...(typeof color === "string" ? { color } : {}),
-    };
-  });
-};
+      ...(typeof type === 'string' ? { type: type as UniOption['type'] } : {}),
+      ...(typeof color === 'string' ? { color } : {})
+    }
+  })
+}

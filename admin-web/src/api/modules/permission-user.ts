@@ -1,5 +1,8 @@
 import type { PageResult } from '@/types/api'
-import type { PermissionUserListParams, PermissionUserRecord } from '@/types/modules/permission-user'
+import type {
+  PermissionUserListParams,
+  PermissionUserRecord
+} from '@/types/modules/permission-user'
 import { request } from 'uni-ui-lib'
 
 export default {
@@ -7,10 +10,10 @@ export default {
     url: '/upms/user/page',
     name: '用户分页',
     get: async function (this: { url: string }, params: PermissionUserListParams) {
-      return await request.get<
-        PageResult<PermissionUserRecord>,
-        PageResult<PermissionUserRecord>
-      >(this.url, { params })
+      return await request.get<PageResult<PermissionUserRecord>, PageResult<PermissionUserRecord>>(
+        this.url,
+        { params }
+      )
     }
   },
 

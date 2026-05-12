@@ -1,66 +1,66 @@
 /** 项目名称，用作 localStorage 键前缀（`{name}:key`） */
-let appName = "uni-lib";
+let appName = 'uni-lib'
 
 export const setUniAppName = (name: string) => {
-  appName = name;
-};
+  appName = name
+}
 
 const resolveKey = (key: string): string => {
-  const prefix = `${appName}:`;
+  const prefix = `${appName}:`
 
-  return key.startsWith(prefix) ? key : `${prefix}${key}`;
-};
+  return key.startsWith(prefix) ? key : `${prefix}${key}`
+}
 
 export const storage = {
   key: resolveKey,
 
   get<T = string>(key: string): T | null {
-    if (typeof window === "undefined") {
-      return null;
+    if (typeof window === 'undefined') {
+      return null
     }
 
-    const rawValue = window.localStorage.getItem(resolveKey(key));
+    const rawValue = window.localStorage.getItem(resolveKey(key))
 
     if (!rawValue) {
-      return null;
+      return null
     }
 
     try {
-      return JSON.parse(rawValue) as T;
+      return JSON.parse(rawValue) as T
     } catch {
-      return rawValue as T;
+      return rawValue as T
     }
   },
 
   set<T>(key: string, value: T): void {
-    if (typeof window === "undefined") {
-      return;
+    if (typeof window === 'undefined') {
+      return
     }
 
-    const nextValue = typeof value === "string" ? value : JSON.stringify(value);
+    const nextValue = typeof value === 'string' ? value : JSON.stringify(value)
 
-    window.localStorage.setItem(resolveKey(key), nextValue);
+    window.localStorage.setItem(resolveKey(key), nextValue)
   },
 
   remove(key: string): void {
-    if (typeof window === "undefined") {
-      return;
+    if (typeof window === 'undefined') {
+      return
     }
 
-    window.localStorage.removeItem(resolveKey(key));
+    window.localStorage.removeItem(resolveKey(key))
   },
 
   clear(): void {
-    if (typeof window === "undefined") {
-      return;
+    if (typeof window === 'undefined') {
+      return
     }
 
-    const prefix = `${appName}:`;
+    const prefix = `${appName}:`
 
     Object.keys(window.localStorage).forEach((key) => {
       if (key.startsWith(prefix)) {
-        window.localStorage.removeItem(key);
+        window.localStorage.removeItem(key)
       }
-    });
-  },
-};
+    })
+  }
+}

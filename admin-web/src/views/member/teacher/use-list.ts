@@ -1,8 +1,4 @@
-import type {
-  UniOption,
-  UniTableAction,
-  UniTableRequest
-} from 'uni-ui-lib'
+import type { UniOption, UniTableAction, UniTableRequest } from 'uni-ui-lib'
 import { toUniOptions, useUniI18n, useUniListState } from 'uni-ui-lib'
 import { computed, onMounted, ref } from 'vue'
 
@@ -19,9 +15,10 @@ export const useList = () => {
     role: undefined,
     archived: undefined
   }
-  const { queryModel, filters, tableRef, total, search, reset, handleLoadSuccess } = useUniListState({
-    initialFilters
-  })
+  const { queryModel, filters, tableRef, total, search, reset, handleLoadSuccess } =
+    useUniListState({
+      initialFilters
+    })
   const detailVisible = ref(false)
   const currentRecord = ref<Row | null>(null)
   const schoolOptions = ref<UniOption[]>([])
@@ -31,9 +28,7 @@ export const useList = () => {
   const searchConfig = computed(() =>
     searchForm(t, schoolOptions.value, roleOptions.value, statusOptions.value)
   )
-  const columns = computed(() =>
-    tableCols(t, schoolOptions.value, statusOptions.value)
-  )
+  const columns = computed(() => tableCols(t, schoolOptions.value, statusOptions.value))
   const detailConfig = computed(() => detailForm(t))
 
   const loadData: UniTableRequest = ({ pageNo: current, pageSize: size, filters }) =>

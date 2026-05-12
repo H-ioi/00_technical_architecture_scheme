@@ -4,14 +4,16 @@
     :title="title"
     width="1000px"
     destroy-on-close
-    @update:model-value="emit('update:visible', $event)"
-  >
+    @update:model-value="emit('update:visible', $event)">
     <div
       v-loading="detailLoading"
       class="school-bus-exception-form__wrap"
-      :element-loading-text="$t('common.loading')"
-    >
-      <UniForm ref="uniFormRef" v-model="formModel" :mode="uniFormMode" :config="dialogFormConfig" />
+      :element-loading-text="$t('common.loading')">
+      <UniForm
+        ref="uniFormRef"
+        v-model="formModel"
+        :mode="uniFormMode"
+        :config="dialogFormConfig" />
     </div>
     <template #footer>
       <el-button @click="close">{{ $t('schoolBus.driver.actions.cancel') }}</el-button>
@@ -109,14 +111,14 @@ const schoolUniOptions = computed(() =>
 
 const sectionUniOptions = computed(() =>
   sectionOptions.value.map((s) => ({
-    label: (locale.value === 'en' ? (s.enName || s.cnName) : (s.cnName || s.enName)) as string,
+    label: (locale.value === 'en' ? s.enName || s.cnName : s.cnName || s.enName) as string,
     value: s.id
   }))
 )
 
 const lineUniOptions = computed(() =>
   lineOptionsFiltered.value.map((l) => ({
-    label: (locale.value === 'en' ? (l.enName || l.cnName) : (l.cnName || l.enName)) as string,
+    label: (locale.value === 'en' ? l.enName || l.cnName : l.cnName || l.enName) as string,
     value: l.id
   }))
 )
@@ -147,20 +149,36 @@ const needDispatchUniOptions = computed(() => [
 
 const dialogRules = computed<FormRules<ExceptionFormModel>>(() => {
   const r: FormRules<ExceptionFormModel> = {
-    sectionId: [{ required: true, message: t('schoolBus.routeException.pleaseSelect'), trigger: 'change' }],
-    lineId: [{ required: true, message: t('schoolBus.routeException.pleaseSelect'), trigger: 'change' }],
-    carId: [{ required: true, message: t('schoolBus.routeException.pleaseSelect'), trigger: 'change' }],
-    exceptionDate: [{ required: true, message: t('schoolBus.routeException.pleaseSelect'), trigger: 'change' }],
-    exceptionType: [{ required: true, message: t('schoolBus.routeException.pleaseSelect'), trigger: 'change' }],
-    details: [{ required: true, message: t('schoolBus.routeException.pleaseSelect'), trigger: 'blur' }]
+    sectionId: [
+      { required: true, message: t('schoolBus.routeException.pleaseSelect'), trigger: 'change' }
+    ],
+    lineId: [
+      { required: true, message: t('schoolBus.routeException.pleaseSelect'), trigger: 'change' }
+    ],
+    carId: [
+      { required: true, message: t('schoolBus.routeException.pleaseSelect'), trigger: 'change' }
+    ],
+    exceptionDate: [
+      { required: true, message: t('schoolBus.routeException.pleaseSelect'), trigger: 'change' }
+    ],
+    exceptionType: [
+      { required: true, message: t('schoolBus.routeException.pleaseSelect'), trigger: 'change' }
+    ],
+    details: [
+      { required: true, message: t('schoolBus.routeException.pleaseSelect'), trigger: 'blur' }
+    ]
   }
 
   if (multiSchool.value) {
-    r.school = [{ required: true, message: t('schoolBus.driver.rules.schoolIds'), trigger: 'change' }]
+    r.school = [
+      { required: true, message: t('schoolBus.driver.rules.schoolIds'), trigger: 'change' }
+    ]
   }
 
   if (formModel.value.exceptionType === '1') {
-    r.needDispatch = [{ required: true, message: t('schoolBus.routeException.pleaseSelect'), trigger: 'change' }]
+    r.needDispatch = [
+      { required: true, message: t('schoolBus.routeException.pleaseSelect'), trigger: 'change' }
+    ]
     if (formModel.value.needDispatch === 1) {
       r.dispatchCarId = [
         { required: true, message: t('schoolBus.routeException.pleaseSelect'), trigger: 'change' }
@@ -343,12 +361,17 @@ const unwrapDetail = (payload: unknown): Record<string, unknown> => {
   return payload as Record<string, unknown>
 }
 
-const unwrapArray = <T>(payload: unknown): T[] => {
+const unwrapArray = <T,>(payload: unknown): T[] => {
   if (Array.isArray(payload)) {
     return payload as T[]
   }
 
-  if (payload && typeof payload === 'object' && 'data' in payload && Array.isArray((payload as { data: unknown }).data)) {
+  if (
+    payload &&
+    typeof payload === 'object' &&
+    'data' in payload &&
+    Array.isArray((payload as { data: unknown }).data)
+  ) {
     return (payload as { data: T[] }).data
   }
 
@@ -576,7 +599,11 @@ const submit = async () => {
     ...formModel.value
   }
 
-  if (!multiSchool.value && props.defaultSchoolId != null && (data.school == null || data.school.length === 0)) {
+  if (
+    !multiSchool.value &&
+    props.defaultSchoolId != null &&
+    (data.school == null || data.school.length === 0)
+  ) {
     data.school = [props.defaultSchoolId]
   }
 

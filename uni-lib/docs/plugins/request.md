@@ -5,18 +5,18 @@
 ## 基础用法
 
 ```ts
-import { createUniRequest } from "uni-ui-lib";
+import { createUniRequest } from 'uni-ui-lib'
 
 const request = createUniRequest({
   baseURL: import.meta.env.VITE_API_BASE_URL,
   getAccessToken: () => userStore.accessToken,
   getTenantId: () => tenantStore.currentTenantId,
   onUnauthorized: () => userStore.logout(),
-  onForbidden: () => router.replace("/403"),
+  onForbidden: () => router.replace('/403'),
   onError: (error) => {
-    console.error(error);
-  },
-});
+    console.error(error)
+  }
+})
 ```
 
 ## 配置项
@@ -46,9 +46,9 @@ const request = createUniRequest({
   preventDuplicate: true,
   progress: {
     start: () => NProgress.start(),
-    done: () => NProgress.done(),
-  },
-});
+    done: () => NProgress.done()
+  }
+})
 ```
 
 组件库只负责请求实例与通用协议，不写死具体接口路径、错误码全集或登录跳转路由。

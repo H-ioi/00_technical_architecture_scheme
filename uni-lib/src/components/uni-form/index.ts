@@ -1,13 +1,13 @@
-import type { App } from "vue";
+import type { App } from 'vue'
 
-import UniForm from "./index.vue";
+import UniForm from './index.vue'
 
-export { UniForm };
-export * from "@/types/shared";
-export * from "@/types/uni-form";
+export { UniForm }
+export * from '@/types/shared'
+export * from '@/types/uni-form'
 
 export default {
   install(app: App) {
-    app.component("UniForm", UniForm);
-  },
-};
+    app.component('UniForm', UniForm)
+  }
+}

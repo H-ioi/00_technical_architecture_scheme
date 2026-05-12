@@ -21,5 +21,5 @@ export default {
   member,
   permission,
   protocol,
-  schoolBus: { ...schoolBus, ...schoolBusMore },
+  schoolBus: { ...schoolBus, ...schoolBusMore }
 }

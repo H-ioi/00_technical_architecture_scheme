@@ -5,21 +5,18 @@
     destroy-on-close
     :title="dialogTitle"
     :close-on-click-modal="false"
-    @closed="onClosed"
-  >
+    @closed="onClosed">
     <div
       v-if="innerVisible"
       v-loading="formDetailLoading"
       class="bus-order-form"
-      :element-loading-text="$t('common.loading')"
-    >
+      :element-loading-text="$t('common.loading')">
       <div class="bus-order-form__scroll">
         <UniForm
           ref="mainUniFormRef"
           v-model="ruleForm"
           :mode="mainUniFormMode"
-          :config="mainFormConfig"
-        >
+          :config="mainFormConfig">
           <template #field-admissionNo>
             <el-autocomplete
               v-model="ruleForm.admissionNo"
@@ -31,8 +28,7 @@
               value-key="value"
               :placeholder="$t('schoolBus.studentApply.placeholders.keyword')"
               :disabled="mainDisabled"
-              @select="onStudentPick"
-            >
+              @select="onStudentPick">
               <template #default="{ item }">
                 <div>{{ suggestLine(item) }}</div>
               </template>
@@ -46,8 +42,7 @@
                   v-if="!mainDisabled && routeTableData.length < 2"
                   type="primary"
                   link
-                  @click="openRouteAdd"
-                >
+                  @click="openRouteAdd">
                   {{ $t('schoolBus.studentOrder.form.addRoute') }}
                 </el-button>
               </div>
@@ -55,43 +50,35 @@
                 <el-table-column
                   prop="lineName"
                   :label="$t('schoolBus.studentApply.detail.routeLine')"
-                  min-width="100"
-                />
+                  min-width="100" />
                 <el-table-column
                   prop="stationName"
                   :label="$t('schoolBus.studentApply.detail.routeStation')"
-                  min-width="100"
-                />
+                  min-width="100" />
                 <el-table-column
                   prop="lineTypeName"
                   :label="$t('schoolBus.studentApply.detail.lineType')"
-                  width="120"
-                />
+                  width="120" />
                 <el-table-column
                   prop="weekDaysLabel"
                   :label="$t('schoolBus.studentOrder.form.dateOption')"
-                  width="100"
-                />
+                  width="100" />
                 <el-table-column
                   prop="ridingWeekDay"
                   :label="$t('schoolBus.studentApply.detail.ridingWeekDay')"
-                  min-width="100"
-                />
+                  min-width="100" />
                 <el-table-column
                   prop="ridingRange"
                   :label="$t('schoolBus.studentOrder.form.rideRange')"
-                  width="200"
-                />
+                  width="200" />
                 <el-table-column
                   prop="carNumber"
                   :label="$t('schoolBus.studentOrder.form.plate')"
-                  width="100"
-                />
+                  width="100" />
                 <el-table-column
                   :label="$t('schoolBus.studentOrder.form.ops')"
                   width="140"
-                  fixed="right"
-                >
+                  fixed="right">
                   <template #default="{ row, $index }">
                     <el-button type="primary" link @click="openRouteEdit(row, $index)">
                       {{ $t('schoolBus.driver.actions.edit') }}
@@ -116,28 +103,24 @@
               <el-table :data="personTableData" border size="small">
                 <el-table-column
                   prop="pickupRelationships"
-                  :label="$t('schoolBus.studentApply.detail.relation')"
-                />
+                  :label="$t('schoolBus.studentApply.detail.relation')" />
                 <el-table-column
                   prop="pickupPhone"
                   :label="$t('schoolBus.studentApply.detail.phone')"
-                  width="140"
-                />
+                  width="140" />
                 <el-table-column :label="$t('schoolBus.studentApply.detail.photo')" min-width="120">
                   <template #default="{ row }">
                     <el-image
                       v-if="row.pickupImageUrl"
                       :src="String(row.pickupImageUrl)"
-                      class="bus-order-form__thumb"
-                    />
+                      class="bus-order-form__thumb" />
                     <span v-else>--</span>
                   </template>
                 </el-table-column>
                 <el-table-column
                   :label="$t('schoolBus.studentOrder.form.ops')"
                   width="140"
-                  fixed="right"
-                >
+                  fixed="right">
                   <template #default="{ row, $index }">
                     <el-button type="primary" link @click="openPersonEdit(row, $index)">
                       {{ $t('schoolBus.driver.actions.edit') }}
@@ -156,8 +139,7 @@
               v-if="formType === 'apply'"
               v-model="ruleForm.approvalStatus"
               :disabled="mainDisabled || String(ruleForm.approvalStatus ?? '') === '2'"
-              @change="onApprovalChange"
-            >
+              @change="onApprovalChange">
               <el-radio v-for="a in approvalOpts" :key="String(a.value)" :label="String(a.value)">
                 {{ a.label }}
               </el-radio>
@@ -166,8 +148,7 @@
               v-else
               v-model="ruleForm.approvalStatus"
               :disabled="mainDisabled"
-              @change="onApprovalChange"
-            >
+              @change="onApprovalChange">
               <el-radio label="1">{{ approvalOpts.find((x) => x.value === '1')?.label }}</el-radio>
             </el-radio-group>
           </template>
@@ -177,31 +158,28 @@
               v-if="formType === 'apply'"
               v-model="ruleForm.paymentStatus"
               :disabled="mainDisabled"
-              @change="onPaymentChange"
-            >
+              @change="onPaymentChange">
               <el-radio v-for="p in paymentOpts" :key="String(p.value)" :label="String(p.value)">
                 <span>{{ p.label }}</span>
                 <el-input-number
                   v-if="
                     canShowPayInfo &&
-                      String(ruleForm.paymentStatus) === '2' &&
-                      String(p.value) === '2'
+                    String(ruleForm.paymentStatus) === '2' &&
+                    String(p.value) === '2'
                   "
                   v-model="ruleForm.paymentAmount"
                   class="bus-order-form__pay-inline"
                   :min="0"
                   :step="0.1"
                   :precision="2"
-                  :disabled="mainDisabled || !canEditPayInfo"
-                />
+                  :disabled="mainDisabled || !canEditPayInfo" />
               </el-radio>
             </el-radio-group>
             <el-radio-group
               v-else
               v-model="ruleForm.paymentStatus"
               :disabled="mainDisabled"
-              @change="onPaymentChange"
-            >
+              @change="onPaymentChange">
               <el-radio label="2">
                 {{ paymentOpts.find((x) => String(x.value) === '2')?.label }}
                 <el-input-number
@@ -211,8 +189,7 @@
                   :min="0"
                   :step="0.1"
                   :precision="2"
-                  :disabled="mainDisabled || !canEditPayInfo"
-                />
+                  :disabled="mainDisabled || !canEditPayInfo" />
               </el-radio>
             </el-radio-group>
           </template>
@@ -230,16 +207,14 @@
                 fit="contain"
                 class="bus-order-form__sign-image"
                 :preview-src-list="[String(ruleForm.signImageUrl)]"
-                preview-teleported
-              />
+                preview-teleported />
             </div>
             <input
               ref="signFileRef"
               type="file"
               accept="image/*"
               class="bus-order-form__hidden-file"
-              @change="onSignFile"
-            >
+              @change="onSignFile" />
           </template>
 
           <template #field-paymentDetailSlot>
@@ -252,14 +227,12 @@
                   <el-select
                     v-model="ruleForm.paymentMethod"
                     style="width: 100%"
-                    :disabled="mainDisabled || !canEditPayInfo"
-                  >
+                    :disabled="mainDisabled || !canEditPayInfo">
                     <el-option
                       v-for="m in paymentMethodOpts"
                       :key="String(m.value)"
                       :label="m.label"
-                      :value="m.value"
-                    />
+                      :value="m.value" />
                   </el-select>
                 </div>
               </el-col>
@@ -274,8 +247,7 @@
                     style="width: 100%"
                     value-format="YYYY-MM-DD HH:mm:ss"
                     format="YYYY-MM-DD HH:mm:ss"
-                    :disabled="mainDisabled || !canEditPayInfo"
-                  />
+                    :disabled="mainDisabled || !canEditPayInfo" />
                 </div>
               </el-col>
               <el-col :span="8">
@@ -285,8 +257,7 @@
                   </div>
                   <el-input
                     v-model="ruleForm.paymentAccount"
-                    :disabled="mainDisabled || !canEditPayInfo"
-                  />
+                    :disabled="mainDisabled || !canEditPayInfo" />
                 </div>
               </el-col>
             </el-row>
@@ -298,8 +269,7 @@
                   </div>
                   <el-input
                     v-model="ruleForm.paymentOrderNo"
-                    :disabled="mainDisabled || !canEditPayInfo"
-                  />
+                    :disabled="mainDisabled || !canEditPayInfo" />
                 </div>
               </el-col>
               <el-col :span="8">
@@ -309,8 +279,7 @@
                   </div>
                   <el-input
                     v-model="ruleForm.receivingAccount"
-                    :disabled="mainDisabled || !canEditPayInfo"
-                  />
+                    :disabled="mainDisabled || !canEditPayInfo" />
                 </div>
               </el-col>
             </el-row>
@@ -332,22 +301,19 @@
       append-to-body
       :title="routeDialogTitle"
       destroy-on-close
-      @closed="resetRouteForm"
-    >
+      @closed="resetRouteForm">
       <UniForm
         ref="routeUniFormRef"
         v-model="routeForm"
         mode="edit"
-        :config="routeDialogFormConfig"
-      >
+        :config="routeDialogFormConfig">
         <template #field-ridingWeekDay>
           <el-select
             v-model="routeFormRidingWeekMulti"
             multiple
             clearable
             style="width: 100%"
-            :disabled="mainDisabled"
-          >
+            :disabled="mainDisabled">
             <el-option v-for="d in ridingWeekDaySelectOpts" :key="d" :label="d" :value="d" />
           </el-select>
         </template>
@@ -359,8 +325,7 @@
             value-format="YYYY-MM-DD"
             :disabled-date="disabledRidingDate"
             :disabled="mainDisabled"
-            @change="onRidingRangeChange"
-          />
+            @change="onRidingRangeChange" />
         </template>
       </UniForm>
       <template #footer>
@@ -379,14 +344,12 @@
       append-to-body
       :title="personDialogTitle"
       destroy-on-close
-      @closed="resetPersonForm"
-    >
+      @closed="resetPersonForm">
       <UniForm
         ref="personUniFormRef"
         v-model="personForm"
         mode="edit"
-        :config="personDialogFormConfig"
-      >
+        :config="personDialogFormConfig">
         <template #field-pickupImageUrl>
           <div class="bus-order-form__upload-row">
             <el-button @click="triggerPersonPick">
@@ -401,8 +364,7 @@
             type="file"
             accept="image/*"
             class="bus-order-form__hidden-file"
-            @change="onPersonFile"
-          >
+            @change="onPersonFile" />
         </template>
       </UniForm>
       <template #footer>

@@ -8,8 +8,7 @@
       <div class="school-bus-student-apply__actions">
         <el-button
           v-uni-permission="'busorder_import_intention_order'"
-          @click="downloadIntentionTemplate"
-        >
+          @click="downloadIntentionTemplate">
           {{ $t('schoolBus.driver.actions.downloadTemplate') }}
         </el-button>
         <el-button v-uni-permission="'busorder_import_intention_order'" @click="pickImport">
@@ -26,8 +25,7 @@
       type="file"
       accept=".xlsx,.xls"
       class="school-bus-student-apply__file"
-      @change="onImportFile"
-    >
+      @change="onImportFile" />
 
     <UniSearchForm
       v-model="queryModel"
@@ -38,8 +36,7 @@
       :submit-text="$t('schoolBus.driver.actions.search')"
       :reset-text="$t('schoolBus.driver.actions.reset')"
       @search="search"
-      @reset="reset"
-    />
+      @reset="reset" />
 
     <UniDataTable
       ref="tableRef"
@@ -53,36 +50,31 @@
       :actions="actions"
       :action-column="{ width: 150, fixed: 'right' }"
       @selection-change="onSelectionChange"
-      @load-success="handleLoadSuccess"
-    >
+      @load-success="handleLoadSuccess">
       <template #toolbar>
         <el-button
           v-uni-permission="'busorder_batch_approve'"
           :disabled="picked.length === 0"
-          @click="batchApprove"
-        >
+          @click="batchApprove">
           {{ $t('schoolBus.studentApply.actions.batchApprove') }}
         </el-button>
         <el-button
           v-uni-permission="'busorder_batch_deny'"
           :disabled="picked.length === 0"
-          @click="openReject"
-        >
+          @click="openReject">
           {{ $t('schoolBus.studentApply.actions.batchReject') }}
         </el-button>
         <el-button
           v-uni-permission="'busorder_batch_update_payment_status'"
           :disabled="picked.length === 0"
-          @click="batchPayment"
-        >
+          @click="batchPayment">
           {{ $t('schoolBus.studentApply.actions.batchPayment') }}
         </el-button>
         <el-button
           v-uni-permission="'busintentionorder_del'"
           type="danger"
           :disabled="picked.length === 0"
-          @click="del"
-        >
+          @click="del">
           {{ $t('schoolBus.driver.actions.delete') }}
         </el-button>
       </template>
@@ -98,31 +90,20 @@
       :school-options="schoolOptions"
       :default-school-id="defaultSingleSchoolId"
       :multi-school="multiSchool"
-      @saved="reload"
-    />
+      @saved="reload" />
 
     <el-dialog
       v-model="rejectVisible"
       width="520px"
       :title="$t('schoolBus.studentApply.actions.batchReject')"
-      destroy-on-close
-    >
-      <UniForm
-        ref="rejectUniFormRef"
-        v-model="rejectForm"
-        mode="edit"
-        :config="rejectFormConfig"
-      />
+      destroy-on-close>
+      <UniForm ref="rejectUniFormRef" v-model="rejectForm" mode="edit" :config="rejectFormConfig" />
       <template #footer>
         <el-button @click="rejectVisible = false">
-          {{
-            $t('schoolBus.driver.actions.cancel')
-          }}
+          {{ $t('schoolBus.driver.actions.cancel') }}
         </el-button>
         <el-button type="primary" @click="confirmReject">
-          {{
-            $t('schoolBus.driver.actions.submit')
-          }}
+          {{ $t('schoolBus.driver.actions.submit') }}
         </el-button>
       </template>
     </el-dialog>

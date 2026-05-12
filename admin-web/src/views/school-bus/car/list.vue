@@ -23,8 +23,7 @@
       type="file"
       accept=".xlsx,.xls"
       class="school-bus-car-page__file"
-      @change="onImportFile"
-    >
+      @change="onImportFile" />
 
     <UniSearchForm
       v-model="queryModel"
@@ -35,8 +34,7 @@
       :submit-text="$t('schoolBus.driver.actions.search')"
       :reset-text="$t('schoolBus.driver.actions.reset')"
       @search="search"
-      @reset="reset"
-    />
+      @reset="reset" />
 
     <UniDataTable
       ref="tableRef"
@@ -50,15 +48,13 @@
       :actions="actions"
       :action-column="{ width: 140, fixed: 'right' }"
       @selection-change="onSelectionChange"
-      @load-success="handleLoadSuccess"
-    >
+      @load-success="handleLoadSuccess">
       <template #toolbar>
         <el-button
           v-uni-permission="'buscarinfo_del'"
           type="danger"
           :disabled="ids.length === 0"
-          @click="del"
-        >
+          @click="del">
           {{ $t('schoolBus.driver.actions.delete') }}
         </el-button>
       </template>
@@ -72,8 +68,7 @@
       :school-options="schoolOptions"
       :status-options="statusOptions"
       :multi-school="multiSchool"
-      @saved="reload"
-    />
+      @saved="reload" />
   </section>
 </template>
 
@@ -166,9 +161,13 @@ const del = async () => {
     return
   }
   try {
-    await ElMessageBox.confirm(t('schoolBus.car.messages.confirmDelete'), t('schoolBus.driver.actions.delete'), {
-      type: 'warning'
-    })
+    await ElMessageBox.confirm(
+      t('schoolBus.car.messages.confirmDelete'),
+      t('schoolBus.driver.actions.delete'),
+      {
+        type: 'warning'
+      }
+    )
   } catch {
     return
   }

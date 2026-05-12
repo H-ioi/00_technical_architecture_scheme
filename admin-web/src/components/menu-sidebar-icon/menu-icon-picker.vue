@@ -6,8 +6,7 @@
       clearable
       class="menu-icon-picker__input"
       :placeholder="placeholder"
-      @clear="onClear"
-    >
+      @clear="onClear">
       <template #prefix>
         <el-icon v-if="currentComp" class="menu-icon-picker__prefix-ico">
           <component :is="currentComp" />
@@ -27,14 +26,12 @@
       append-to-body
       destroy-on-close
       class="menu-icon-picker__dialog"
-      @closed="filterKeyword = ''"
-    >
+      @closed="filterKeyword = ''">
       <el-input
         v-model="filterKeyword"
         clearable
         class="menu-icon-picker__search"
-        :placeholder="t('common.iconSearch')"
-      />
+        :placeholder="t('common.iconSearch')" />
       <div class="menu-icon-picker__grid-wrap">
         <div class="menu-icon-picker__grid">
           <button
@@ -44,8 +41,7 @@
             class="menu-icon-picker__cell"
             :class="{ 'is-active': name === modelValue }"
             :title="name"
-            @click="pick(name)"
-          >
+            @click="pick(name)">
             <el-icon class="menu-icon-picker__cell-ico">
               <component :is="iconMap[name]" />
             </el-icon>

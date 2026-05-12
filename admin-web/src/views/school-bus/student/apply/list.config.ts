@@ -114,7 +114,13 @@ export const applyTableColumns = (
   paymentOptions: UniOption[],
   pickupOptions: UniOption[]
 ): UniTableColumn[] => [
-  { prop: 'id', label: t('schoolBus.studentApply.columns.id'), type: 'text', width: 88, fixed: 'left' },
+  {
+    prop: 'id',
+    label: t('schoolBus.studentApply.columns.id'),
+    type: 'text',
+    width: 88,
+    fixed: 'left'
+  },
   {
     prop: 'createTime',
     label: t('schoolBus.studentApply.columns.applyTime'),

@@ -121,7 +121,10 @@ export const attendanceStudentSearchForm = (
   colProps: { span: 6 }
 })
 
-export const attendanceStudentColumns = (t: Translate, schoolOptions: UniOption[]): UniTableColumn[] => [
+export const attendanceStudentColumns = (
+  t: Translate,
+  schoolOptions: UniOption[]
+): UniTableColumn[] => [
   { prop: 'id', label: t('attendance.student.columns.id'), type: 'text', width: 90, fixed: 'left' },
   {
     prop: 'schoolId',
@@ -201,7 +204,10 @@ export const attendanceStudentColumns = (t: Translate, schoolOptions: UniOption[
   }
 ]
 
-export const attendanceStudentDetailForm = (t: Translate, schoolOptions: UniOption[]): UniFormConfig => ({
+export const attendanceStudentDetailForm = (
+  t: Translate,
+  schoolOptions: UniOption[]
+): UniFormConfig => ({
   mode: 'view',
   formProps: { labelWidth: '110px' },
   rowProps: { gutter: 16 },
@@ -216,16 +222,36 @@ export const attendanceStudentDetailForm = (t: Translate, schoolOptions: UniOpti
       viewType: 'enum',
       options: schoolOptions
     },
-    { field: 'studentName', label: t('attendance.student.columns.studentName'), component: 'ElInput' },
-    { field: 'admissionNo', label: t('attendance.student.columns.admissionNo'), component: 'ElInput' },
+    {
+      field: 'studentName',
+      label: t('attendance.student.columns.studentName'),
+      component: 'ElInput'
+    },
+    {
+      field: 'admissionNo',
+      label: t('attendance.student.columns.admissionNo'),
+      component: 'ElInput'
+    },
     { field: 'grade', label: t('attendance.student.columns.grade'), component: 'ElInput' },
     { field: 'form', label: t('attendance.student.columns.form'), component: 'ElInput' },
     { field: 'boarding', label: t('attendance.student.columns.boarding'), component: 'ElInput' },
     { field: 'schoolBus', label: t('attendance.student.columns.schoolBus'), component: 'ElInput' },
-    { field: 'schoolStatus', label: t('attendance.student.columns.schoolStatus'), component: 'ElInput' },
-    { field: 'attendanceDate', label: t('attendance.student.columns.attendanceDate'), component: 'ElInput' },
+    {
+      field: 'schoolStatus',
+      label: t('attendance.student.columns.schoolStatus'),
+      component: 'ElInput'
+    },
+    {
+      field: 'attendanceDate',
+      label: t('attendance.student.columns.attendanceDate'),
+      component: 'ElInput'
+    },
     { field: 'entryTime', label: t('attendance.student.columns.entryTime'), component: 'ElInput' },
-    { field: 'leavingTime', label: t('attendance.student.columns.leavingTime'), component: 'ElInput' },
+    {
+      field: 'leavingTime',
+      label: t('attendance.student.columns.leavingTime'),
+      component: 'ElInput'
+    },
     { field: 'updatedAt', label: t('attendance.student.columns.updatedAt'), component: 'ElInput' },
     { field: 'createdAt', label: t('attendance.student.columns.createdAt'), component: 'ElInput' }
   ]

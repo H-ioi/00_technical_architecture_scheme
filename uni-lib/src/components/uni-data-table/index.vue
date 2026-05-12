@@ -4,9 +4,8 @@
     class="uni-data-table"
     :class="{
       'is-fullscreen': fullscreen,
-      'is-tree-table': isTreeEnabled,
-    }"
-  >
+      'is-tree-table': isTreeEnabled
+    }">
     <el-table
       v-loading="actualLoading"
       :data="actualData"
@@ -18,19 +17,15 @@
       :stripe="tableStripe"
       v-bind="elTableTreeBindings"
       :highlight-current-row="selection === 'single'"
-      @selection-change="
-        (selection: Recordable[]) => emit('selection-change', selection)
-      "
+      @selection-change="(selection: Recordable[]) => emit('selection-change', selection)"
       @current-change="handleSingleSelectionChange"
       @sort-change="handleSortChange"
-      @row-click="(row: Recordable) => emit('row-click', row)"
-    >
+      @row-click="(row: Recordable) => emit('row-click', row)">
       <el-table-column
         v-if="selection === true || selection === 'multiple'"
         type="selection"
         width="48"
-        :selectable="selectable"
-      />
+        :selectable="selectable" />
 
       <el-table-column
         v-for="column in visibleColumns"
@@ -43,12 +38,9 @@
         :fixed="column.fixed"
         :align="column.align"
         :sortable="column.sortable"
-        :show-overflow-tooltip="column.showOverflowTooltip"
-      >
+        :show-overflow-tooltip="column.showOverflowTooltip">
         <template #header>
-          <slot :name="`header-${column.prop}`" :column="column">{{
-            column.label
-          }}</slot>
+          <slot :name="`header-${column.prop}`" :column="column">{{ column.label }}</slot>
         </template>
         <template #default="{ row, $index }">
           <!-- EP：插槽顶层若全是 Comment 会退回 defaultRenderCell，直接展示 row[prop] -->
@@ -57,24 +49,17 @@
               v-if="$slots[`column-${column.prop}`]"
               :name="`column-${column.prop}`"
               :row="row"
-              :value="
-                resolveRowCellValue(row as Record<string, unknown>, column.prop)
-              "
-              :index="$index"
-            />
+              :value="resolveRowCellValue(row as Record<string, unknown>, column.prop)"
+              :index="$index" />
             <UniTableCell
               v-else
               :row="row"
               :column="column"
-              :value="
-                resolveRowCellValue(row as Record<string, unknown>, column.prop)
-              "
+              :value="resolveRowCellValue(row as Record<string, unknown>, column.prop)"
               :row-index="$index"
               @switch-change="
-                (nextRow, nextColumn, value) =>
-                  emit('switch-change', nextRow, nextColumn, value)
-              "
-            />
+                (nextRow, nextColumn, value) => emit('switch-change', nextRow, nextColumn, value)
+              " />
           </span>
         </template>
       </el-table-column>
@@ -82,43 +67,31 @@
       <el-table-column
         v-if="hasActionColumn"
         :label="actionColumn?.label ?? $t('dataTable.actions')"
-        :fixed="
-          actionColumn?.fixed === false
-            ? false
-            : (actionColumn?.fixed ?? 'right')
-        "
+        :fixed="actionColumn?.fixed === false ? false : (actionColumn?.fixed ?? 'right')"
         :width="actionColumn?.width ?? 180"
-        :min-width="actionColumn?.minWidth"
-      >
+        :min-width="actionColumn?.minWidth">
         <template #default="{ row, $index }">
           <slot name="actions" :row="row" :index="$index">
             <template
               v-for="(action, actionIndex) in getInlineActions(row)"
-              :key="getActionKey(action, actionIndex)"
-            >
+              :key="getActionKey(action, actionIndex)">
               <el-button
                 link
                 :type="action.type ?? 'primary'"
                 :disabled="isActionDisabled(action, row)"
-                @click="action.onClick(row, $index)"
-              >
+                @click="action.onClick(row, $index)">
                 {{ action.label }}
               </el-button>
             </template>
             <el-dropdown
               v-if="getMoreActions(row).length"
               trigger="click"
-              @command="
-                (action: UniTableAction) =>
-                  handleMoreActionCommand(action, row, $index)
-              "
-            >
+              @command="(action: UniTableAction) => handleMoreActionCommand(action, row, $index)">
               <el-button
                 link
                 type="primary"
                 class="uni-data-table__more-action"
-                :aria-label="$t('dataTable.moreActions')"
-              >
+                :aria-label="$t('dataTable.moreActions')">
                 <el-icon>
                   <MoreFilled />
                 </el-icon>
@@ -129,8 +102,7 @@
                     v-for="(action, actionIndex) in getMoreActions(row)"
                     :key="getActionKey(action, actionIndex)"
                     :command="action"
-                    :disabled="isActionDisabled(action, row)"
-                  >
+                    :disabled="isActionDisabled(action, row)">
                     {{ action.label }}
                   </el-dropdown-item>
                 </el-dropdown-menu>
@@ -152,14 +124,9 @@
         (paginationConfig && paginationConfig.enabled !== false)
       "
       ref="paginationRef"
-      class="uni-data-table__footer"
-    >
+      class="uni-data-table__footer">
       <div class="uni-data-table__toolbar">
-        <el-button-group
-          size="small"
-          v-if="$slots.toolbar"
-          class="uni-data-table__toolbar-left"
-        >
+        <el-button-group size="small" v-if="$slots.toolbar" class="uni-data-table__toolbar-left">
           <slot name="toolbar" />
         </el-button-group>
         <el-divider v-if="$slots.toolbar" direction="vertical" />
@@ -173,16 +140,14 @@
             :loading="actualLoading"
             @refresh="handleToolbarRefresh"
             @column-drag-start="handleColumnDragStart"
-            @column-drop="handleColumnDrop"
-          />
+            @column-drop="handleColumnDrop" />
         </div>
       </div>
 
       <div
         v-if="paginationConfig && paginationConfig.enabled !== false"
         class="uni-data-table__pagination"
-        :class="`is-${paginationConfig.position}`"
-      >
+        :class="`is-${paginationConfig.position}`">
         <el-pagination
           :background="paginationConfig.background"
           :layout="paginationConfig.layout"
@@ -193,8 +158,7 @@
           size="small"
           :total="actualTotal"
           @current-change="handleCurrentChange"
-          @size-change="handleSizeChange"
-        />
+          @size-change="handleSizeChange" />
       </div>
     </div>
   </div>
@@ -204,8 +168,8 @@
 /**
  * 数据表格：列定义驱动渲染 + 可选本地/远程分页、选择列、行操作与表格工具栏。
  */
-import { MoreFilled } from "@element-plus/icons-vue";
-import type { Sort } from "element-plus";
+import { MoreFilled } from '@element-plus/icons-vue'
+import type { Sort } from 'element-plus'
 import {
   computed,
   nextTick,
@@ -214,13 +178,13 @@ import {
   onUpdated,
   ref,
   useSlots,
-  watch,
-} from "vue";
+  watch
+} from 'vue'
 
-import { hasUniPermission } from "@/directives/permission";
-import { useUniI18n } from "@/locales/use-uni-i18n";
-import type { Recordable } from "@/types/shared";
-import type { UniDataTableTree, UniTableSize } from "@/types/uni-data-table";
+import { hasUniPermission } from '@/directives/permission'
+import { useUniI18n } from '@/locales/use-uni-i18n'
+import type { Recordable } from '@/types/shared'
+import type { UniDataTableTree, UniTableSize } from '@/types/uni-data-table'
 import type {
   UniPaginationConfig,
   UniTableAction,
@@ -228,119 +192,119 @@ import type {
   UniTableColumn,
   UniTableRequest,
   UniTableRequestResult,
-  UniTableToolbarConfig,
-} from "@/types/uni-table";
-import { resolveRowCellValue } from "@/utils/format";
-import UniTableCell from "./components/cell.vue";
-import UniTableToolbar from "./components/toolbar.vue";
-import { useColumns } from "./composables/use-columns";
-import { useData } from "./composables/use-data";
+  UniTableToolbarConfig
+} from '@/types/uni-table'
+import { resolveRowCellValue } from '@/utils/format'
+import UniTableCell from './components/cell.vue'
+import UniTableToolbar from './components/toolbar.vue'
+import { useColumns } from './composables/use-columns'
+import { useData } from './composables/use-data'
 
 const props = withDefaults(
   defineProps<{
-    columns: UniTableColumn[];
-    data?: Recordable[];
-    request?: UniTableRequest;
-    filters?: Recordable;
-    loading?: boolean;
-    pagination?: UniPaginationConfig | false;
+    columns: UniTableColumn[]
+    data?: Recordable[]
+    request?: UniTableRequest
+    filters?: Recordable
+    loading?: boolean
+    pagination?: UniPaginationConfig | false
     /** 树形表格；对齐 EP `tree-props` / `default-expand-all` / `lazy` / `load`。 */
-    tree?: UniDataTableTree;
-    rowKey?: string;
-    selection?: boolean | "multiple" | "single";
-    selectable?: (row: Recordable, index: number) => boolean;
-    actions?: UniTableAction[];
-    actionColumn?: UniTableActionColumnConfig;
-    emptyText?: string;
-    maxHeight?: number | string | false | "auto";
-    maxHeightOffset?: number;
-    toolbar?: boolean | UniTableToolbarConfig;
+    tree?: UniDataTableTree
+    rowKey?: string
+    selection?: boolean | 'multiple' | 'single'
+    selectable?: (row: Recordable, index: number) => boolean
+    actions?: UniTableAction[]
+    actionColumn?: UniTableActionColumnConfig
+    emptyText?: string
+    maxHeight?: number | string | false | 'auto'
+    maxHeightOffset?: number
+    toolbar?: boolean | UniTableToolbarConfig
   }>(),
   {
     data: () => [],
-    maxHeight: "auto",
+    maxHeight: 'auto',
     maxHeightOffset: 16,
     pagination: undefined,
-    rowKey: "id",
-    toolbar: undefined,
-  },
-);
+    rowKey: 'id',
+    toolbar: undefined
+  }
+)
 
 const emit = defineEmits<{
-  "update:pageNo": [value: number];
-  "update:pageSize": [value: number];
-  "selection-change": [selection: Recordable[]];
-  "sort-change": [sort: Sort];
-  "row-click": [row: Recordable];
-  refresh: [];
-  "load-success": [result: UniTableRequestResult];
-  "request-error": [error: unknown];
-  "switch-change": [row: Recordable, column: UniTableColumn, value: unknown];
-}>();
+  'update:pageNo': [value: number]
+  'update:pageSize': [value: number]
+  'selection-change': [selection: Recordable[]]
+  'sort-change': [sort: Sort]
+  'row-click': [row: Recordable]
+  refresh: []
+  'load-success': [result: UniTableRequestResult]
+  'request-error': [error: unknown]
+  'switch-change': [row: Recordable, column: UniTableColumn, value: unknown]
+}>()
 
-const { t } = useUniI18n();
-const slots = useSlots();
-const rootRef = ref<HTMLElement>();
-const paginationRef = ref<HTMLElement>();
-const tableSize = ref<UniTableSize>("default");
-const fullscreen = ref(false);
-const tableBorder = ref(false);
-const tableStripe = ref(false);
-const autoMaxHeight = ref<number>();
-let resizeObserver: ResizeObserver | undefined;
-const actualEmptyText = computed(() => props.emptyText ?? t("common.empty"));
+const { t } = useUniI18n()
+const slots = useSlots()
+const rootRef = ref<HTMLElement>()
+const paginationRef = ref<HTMLElement>()
+const tableSize = ref<UniTableSize>('default')
+const fullscreen = ref(false)
+const tableBorder = ref(false)
+const tableStripe = ref(false)
+const autoMaxHeight = ref<number>()
+let resizeObserver: ResizeObserver | undefined
+const actualEmptyText = computed(() => props.emptyText ?? t('common.empty'))
 
 const treeTableNormalized = computed(() => {
-  const raw = props.tree;
+  const raw = props.tree
 
   if (raw == null || raw === false) {
-    return null;
+    return null
   }
 
   if (raw === true) {
     return {
-      treeProps: { children: "children", hasChildren: "hasChildren" },
+      treeProps: { children: 'children', hasChildren: 'hasChildren' },
       defaultExpandAll: false,
       lazy: false as const,
-      load: undefined as undefined,
-    };
+      load: undefined as undefined
+    }
   }
 
   return {
     treeProps: {
-      children: raw.props?.children ?? "children",
-      hasChildren: raw.props?.hasChildren ?? "hasChildren",
+      children: raw.props?.children ?? 'children',
+      hasChildren: raw.props?.hasChildren ?? 'hasChildren'
     },
     defaultExpandAll: raw.defaultExpandAll ?? false,
     lazy: Boolean(raw.lazy),
-    load: raw.lazy ? raw.load : undefined,
-  };
-});
+    load: raw.lazy ? raw.load : undefined
+  }
+})
 
 const elTableTreeBindings = computed(() => {
-  const n = treeTableNormalized.value;
+  const n = treeTableNormalized.value
 
   if (!n) {
-    return {};
+    return {}
   }
 
   const bindings: Record<string, unknown> = {
     treeProps: n.treeProps,
-    defaultExpandAll: n.defaultExpandAll,
-  };
+    defaultExpandAll: n.defaultExpandAll
+  }
 
   if (n.lazy) {
-    bindings.lazy = true;
+    bindings.lazy = true
 
     if (n.load) {
-      bindings.load = n.load;
+      bindings.load = n.load
     }
   }
 
-  return bindings;
-});
+  return bindings
+})
 
-const isTreeEnabled = computed(() => treeTableNormalized.value != null);
+const isTreeEnabled = computed(() => treeTableNormalized.value != null)
 
 const toolbarConfig = computed<Required<UniTableToolbarConfig>>(() => {
   if (props.toolbar === false) {
@@ -352,8 +316,8 @@ const toolbarConfig = computed<Required<UniTableToolbarConfig>>(() => {
       fullscreen: false,
       export: false,
       print: false,
-      exportFileName: "table-data",
-    };
+      exportFileName: 'table-data'
+    }
   }
 
   return {
@@ -364,24 +328,21 @@ const toolbarConfig = computed<Required<UniTableToolbarConfig>>(() => {
     fullscreen: true,
     export: true,
     print: true,
-    exportFileName: "table-data",
-    ...(typeof props.toolbar === "object" ? props.toolbar : {}),
-  };
-});
+    exportFileName: 'table-data',
+    ...(typeof props.toolbar === 'object' ? props.toolbar : {})
+  }
+})
 const hasToolbarTools = computed(
   () =>
     toolbarConfig.value.enabled &&
     (toolbarConfig.value.refresh ||
       toolbarConfig.value.columnSetting ||
-      toolbarConfig.value.fullscreen),
-);
+      toolbarConfig.value.fullscreen)
+)
 
-const {
-  columnStates,
-  visibleColumns,
-  handleColumnDragStart,
-  handleColumnDrop,
-} = useColumns(() => props.columns);
+const { columnStates, visibleColumns, handleColumnDragStart, handleColumnDrop } = useColumns(
+  () => props.columns
+)
 
 const {
   actualData,
@@ -392,188 +353,173 @@ const {
   paginationState,
   setSort,
   handleCurrentChange,
-  handleSizeChange,
+  handleSizeChange
 } = useData({
   getData: () => props.data,
   getLoading: () => props.loading,
   getPagination: () => props.pagination,
   getRequest: () => props.request,
   getFilters: () => props.filters,
-  emitLoadSuccess: (result) => emit("load-success", result),
-  emitRequestError: (error) => emit("request-error", error),
-  emitUpdatePageNo: (value) => emit("update:pageNo", value),
-  emitUpdatePageSize: (value) => emit("update:pageSize", value),
-});
+  emitLoadSuccess: (result) => emit('load-success', result),
+  emitRequestError: (error) => emit('request-error', error),
+  emitUpdatePageNo: (value) => emit('update:pageNo', value),
+  emitUpdatePageSize: (value) => emit('update:pageSize', value)
+})
 
 const handleSortChange = (sort: Sort) => {
-  emit("sort-change", sort);
-  setSort(sort);
-};
+  emit('sort-change', sort)
+  setSort(sort)
+}
 
 const handleSingleSelectionChange = (row?: Recordable) => {
-  if (props.selection !== "single") {
-    return;
+  if (props.selection !== 'single') {
+    return
   }
 
-  emit("selection-change", row ? [row] : []);
-};
+  emit('selection-change', row ? [row] : [])
+}
 
 const handleToolbarRefresh = () => {
-  emit("refresh");
+  emit('refresh')
 
   if (props.request) {
-    loadData();
+    loadData()
   }
-};
+}
 
 const isActionVisible = (action: UniTableAction, row: Recordable) => {
-  const visible =
-    typeof action.visible === "function" ? action.visible(row) : action.visible;
-  const permitted = action.code ? hasUniPermission(action.code) : true;
+  const visible = typeof action.visible === 'function' ? action.visible(row) : action.visible
+  const permitted = action.code ? hasUniPermission(action.code) : true
 
-  return visible !== false && permitted;
-};
+  return visible !== false && permitted
+}
 
 const isActionDisabled = (action: UniTableAction, row: Recordable) =>
-  typeof action.disabled === "function"
-    ? action.disabled(row)
-    : Boolean(action.disabled);
+  typeof action.disabled === 'function' ? action.disabled(row) : Boolean(action.disabled)
 
-const ACTION_VISIBLE_LIMIT = 3;
-const ACTION_INLINE_LIMIT_WHEN_MORE = ACTION_VISIBLE_LIMIT - 1;
+const ACTION_VISIBLE_LIMIT = 3
+const ACTION_INLINE_LIMIT_WHEN_MORE = ACTION_VISIBLE_LIMIT - 1
 
 const getVisibleActions = (row: Recordable) =>
-  (props.actions ?? []).filter((action) => isActionVisible(action, row));
+  (props.actions ?? []).filter((action) => isActionVisible(action, row))
 
 const hasActionColumn = computed(() => {
   if (slots.actions) {
-    return true;
+    return true
   }
 
   if (!props.actions?.length) {
-    return false;
+    return false
   }
 
-  const data = actualData.value;
-  const tree = treeTableNormalized.value;
-  const childrenField = tree?.treeProps.children ?? "children";
+  const data = actualData.value
+  const tree = treeTableNormalized.value
+  const childrenField = tree?.treeProps.children ?? 'children'
 
   if (!tree) {
-    return data.some((row) => getVisibleActions(row).length > 0);
+    return data.some((row) => getVisibleActions(row).length > 0)
   }
 
   const walk = (rows: Recordable[]): boolean => {
     for (const row of rows) {
       if (getVisibleActions(row).length > 0) {
-        return true;
+        return true
       }
 
-      const nested = row[childrenField] as Recordable[] | undefined;
+      const nested = row[childrenField] as Recordable[] | undefined
 
       if (Array.isArray(nested) && nested.length > 0 && walk(nested)) {
-        return true;
+        return true
       }
     }
 
-    return false;
-  };
+    return false
+  }
 
-  return walk(data);
-});
+  return walk(data)
+})
 
 const actualMaxHeight = computed(() => {
   if (props.maxHeight === false) {
-    return undefined;
+    return undefined
   }
 
-  if (props.maxHeight !== "auto") {
-    return props.maxHeight;
+  if (props.maxHeight !== 'auto') {
+    return props.maxHeight
   }
 
-  return autoMaxHeight.value;
-});
+  return autoMaxHeight.value
+})
 
 const updateAutoMaxHeight = () => {
-  if (props.maxHeight !== "auto" || typeof window === "undefined") {
-    return;
+  if (props.maxHeight !== 'auto' || typeof window === 'undefined') {
+    return
   }
 
-  const tableElement = rootRef.value?.querySelector<HTMLElement>(".el-table");
+  const tableElement = rootRef.value?.querySelector<HTMLElement>('.el-table')
 
   if (!tableElement) {
-    return;
+    return
   }
 
-  const tableTop = tableElement.getBoundingClientRect().top;
-  const paginationHeight =
-    paginationRef.value?.getBoundingClientRect().height ?? 0;
-  const paginationGap = paginationHeight > 0 ? 10 : 0;
+  const tableTop = tableElement.getBoundingClientRect().top
+  const paginationHeight = paginationRef.value?.getBoundingClientRect().height ?? 0
+  const paginationGap = paginationHeight > 0 ? 10 : 0
   const availableHeight =
-    window.innerHeight -
-    tableTop -
-    paginationHeight -
-    paginationGap -
-    props.maxHeightOffset -
-    22;
+    window.innerHeight - tableTop - paginationHeight - paginationGap - props.maxHeightOffset - 22
 
-  autoMaxHeight.value = Math.max(160, Math.floor(availableHeight));
-};
+  autoMaxHeight.value = Math.max(160, Math.floor(availableHeight))
+}
 
 const scheduleUpdateAutoMaxHeight = () => {
-  void nextTick(updateAutoMaxHeight);
-};
+  void nextTick(updateAutoMaxHeight)
+}
 
 const getInlineActions = (row: Recordable) => {
-  const actions = getVisibleActions(row);
+  const actions = getVisibleActions(row)
 
   return actions.length > ACTION_VISIBLE_LIMIT
     ? actions.slice(0, ACTION_INLINE_LIMIT_WHEN_MORE)
-    : actions;
-};
+    : actions
+}
 
 const getMoreActions = (row: Recordable) => {
-  const actions = getVisibleActions(row);
+  const actions = getVisibleActions(row)
 
-  return actions.length > ACTION_VISIBLE_LIMIT
-    ? actions.slice(ACTION_INLINE_LIMIT_WHEN_MORE)
-    : [];
-};
+  return actions.length > ACTION_VISIBLE_LIMIT ? actions.slice(ACTION_INLINE_LIMIT_WHEN_MORE) : []
+}
 
 const getActionKey = (action: UniTableAction, index: number) =>
-  `${action.code ? JSON.stringify(action.code) : action.label}-${index}`;
+  `${action.code ? JSON.stringify(action.code) : action.label}-${index}`
 
-const handleMoreActionCommand = (
-  action: UniTableAction,
-  row: Recordable,
-  index: number,
-) => {
+const handleMoreActionCommand = (action: UniTableAction, row: Recordable, index: number) => {
   if (isActionDisabled(action, row)) {
-    return;
+    return
   }
 
-  action.onClick(row, index);
-};
+  action.onClick(row, index)
+}
 
 defineExpose({
-  refresh: handleToolbarRefresh,
-});
+  refresh: handleToolbarRefresh
+})
 
 onMounted(() => {
-  scheduleUpdateAutoMaxHeight();
-  window.addEventListener("resize", scheduleUpdateAutoMaxHeight);
+  scheduleUpdateAutoMaxHeight()
+  window.addEventListener('resize', scheduleUpdateAutoMaxHeight)
 
-  if (typeof ResizeObserver !== "undefined" && rootRef.value) {
-    resizeObserver = new ResizeObserver(scheduleUpdateAutoMaxHeight);
-    resizeObserver.observe(rootRef.value);
+  if (typeof ResizeObserver !== 'undefined' && rootRef.value) {
+    resizeObserver = new ResizeObserver(scheduleUpdateAutoMaxHeight)
+    resizeObserver.observe(rootRef.value)
   }
-});
+})
 
-onUpdated(scheduleUpdateAutoMaxHeight);
+onUpdated(scheduleUpdateAutoMaxHeight)
 
 onBeforeUnmount(() => {
-  window.removeEventListener("resize", scheduleUpdateAutoMaxHeight);
-  resizeObserver?.disconnect();
-});
+  window.removeEventListener('resize', scheduleUpdateAutoMaxHeight)
+  resizeObserver?.disconnect()
+})
 
 watch(
   () => [
@@ -581,10 +527,10 @@ watch(
     actualData.value.length,
     paginationConfig.value,
     fullscreen.value,
-    tableSize.value,
+    tableSize.value
   ],
-  scheduleUpdateAutoMaxHeight,
-);
+  scheduleUpdateAutoMaxHeight
+)
 </script>
 
 <style scoped lang="scss">
@@ -638,9 +584,7 @@ watch(
      插槽根节点若用 display:contents 则 UniTableCell 无法成为独立 flex 子项，
      width:100%/ellipsis 百分比参照错误 → 正文区宽度塌缩为 「…」（tooltip 仍能读到全文）。
     */
-    :deep(
-      .el-table__body-wrapper .el-table__body tr td.el-table__cell > .cell
-    ) {
+    :deep(.el-table__body-wrapper .el-table__body tr td.el-table__cell > .cell) {
       display: inline-flex;
       align-items: center;
       gap: 0;

@@ -19,8 +19,7 @@
           default-expand-all
           :props="{ label: 'name', children: 'children' }"
           class="permission-user__tree"
-          @node-click="onDeptNode"
-        />
+          @node-click="onDeptNode" />
       </el-col>
       <el-col :xs="24" :sm="17" :md="18">
         <UniSearchForm
@@ -32,8 +31,7 @@
           :submit-text="t('permission.actions.search')"
           :reset-text="t('permission.actions.reset')"
           @search="search"
-          @reset="reset"
-        />
+          @reset="reset" />
         <UniDataTable
           ref="tableRef"
           row-key="userId"
@@ -45,8 +43,7 @@
           :actions="actions"
           :action-column="{ width: 160, fixed: 'right' }"
           class="permission-user__table"
-          @load-success="handleLoadSuccess"
-        />
+          @load-success="handleLoadSuccess" />
       </el-col>
     </el-row>
 
@@ -56,8 +53,7 @@
       :record="formRecord"
       :dept-options="deptFlat"
       :role-options="roleFlat"
-      @saved="reloadTable"
-    />
+      @saved="reloadTable" />
   </section>
 </template>
 

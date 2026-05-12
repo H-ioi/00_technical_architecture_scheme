@@ -1,81 +1,70 @@
-import { computed, ref, watch } from "vue";
+import { computed, ref, watch } from 'vue'
 
-import type { UniTableColumn } from "@/types/uni-table";
-import type {
-  UniTableColumnState,
-  UniTableColumnWithState,
-} from "@/types/uni-data-table";
+import type { UniTableColumn } from '@/types/uni-table'
+import type { UniTableColumnState, UniTableColumnWithState } from '@/types/uni-data-table'
 
 export function useColumns(getColumns: () => UniTableColumn[]) {
-  const columnStates = ref<UniTableColumnState[]>([]);
-  const draggingColumnProp = ref("");
+  const columnStates = ref<UniTableColumnState[]>([])
+  const draggingColumnProp = ref('')
 
   const visibleColumns = computed(
     () =>
       columnStates.value
         .filter((state) => state.visible)
         .map((state) => {
-          const column = getColumns().find((item) => item.prop === state.prop);
+          const column = getColumns().find((item) => item.prop === state.prop)
 
-          return column ? { ...column, fixed: state.fixed } : undefined;
+          return column ? { ...column, fixed: state.fixed } : undefined
         })
-        .filter(Boolean) as UniTableColumnWithState[],
-  );
+        .filter(Boolean) as UniTableColumnWithState[]
+  )
 
   const syncColumnStates = () => {
-    const previousStates = new Map(
-      columnStates.value.map((state) => [state.prop, state]),
-    );
+    const previousStates = new Map(columnStates.value.map((state) => [state.prop, state]))
 
     columnStates.value = getColumns().map((column) => {
-      const previousState = previousStates.get(column.prop);
+      const previousState = previousStates.get(column.prop)
 
       return {
         prop: column.prop,
         label: column.label,
         visible: previousState?.visible ?? true,
-        fixed:
-          previousState?.fixed ??
-          (column.fixed === true ? "left" : column.fixed),
-      };
-    });
-  };
+        fixed: previousState?.fixed ?? (column.fixed === true ? 'left' : column.fixed)
+      }
+    })
+  }
 
   const handleColumnDragStart = (prop: string) => {
-    draggingColumnProp.value = prop;
-  };
+    draggingColumnProp.value = prop
+  }
 
   const handleColumnDrop = (targetProp: string) => {
-    const sourceProp = draggingColumnProp.value;
+    const sourceProp = draggingColumnProp.value
 
     if (!sourceProp || sourceProp === targetProp) {
-      draggingColumnProp.value = "";
-      return;
+      draggingColumnProp.value = ''
+      return
     }
 
-    const nextStates = [...columnStates.value];
-    const sourceIndex = nextStates.findIndex(
-      (item) => item.prop === sourceProp,
-    );
-    const targetIndex = nextStates.findIndex(
-      (item) => item.prop === targetProp,
-    );
+    const nextStates = [...columnStates.value]
+    const sourceIndex = nextStates.findIndex((item) => item.prop === sourceProp)
+    const targetIndex = nextStates.findIndex((item) => item.prop === targetProp)
 
     if (sourceIndex >= 0 && targetIndex >= 0) {
-      const [source] = nextStates.splice(sourceIndex, 1);
-      nextStates.splice(targetIndex, 0, source);
-      columnStates.value = nextStates;
+      const [source] = nextStates.splice(sourceIndex, 1)
+      nextStates.splice(targetIndex, 0, source)
+      columnStates.value = nextStates
     }
 
-    draggingColumnProp.value = "";
-  };
+    draggingColumnProp.value = ''
+  }
 
-  watch(() => getColumns(), syncColumnStates, { immediate: true, deep: true });
+  watch(() => getColumns(), syncColumnStates, { immediate: true, deep: true })
 
   return {
     columnStates,
     visibleColumns,
     handleColumnDragStart,
-    handleColumnDrop,
-  };
+    handleColumnDrop
+  }
 }

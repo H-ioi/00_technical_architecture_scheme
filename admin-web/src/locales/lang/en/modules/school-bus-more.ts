@@ -1,6 +1,9 @@
 export default {
   studentApply: {
-    page: { title: 'Applications', description: 'Manage school bus ride applications (legacy parity).' },
+    page: {
+      title: 'Applications',
+      description: 'Manage school bus ride applications (legacy parity).'
+    },
     columns: {
       id: 'ID',
       applyTime: 'Applied at',
@@ -76,8 +79,19 @@ export default {
       createTime: 'Created',
       car: 'Plate'
     },
-    placeholders: { school: 'School', section: 'Term', line: 'Route', station: 'Stop', keyword: 'Student no. / name', car: 'Vehicle' },
-    messages: { exportSuccess: 'Exported', confirmDelete: 'Delete selected?', addFormTodo: 'Add/edit form comes in a follow-up.' },
+    placeholders: {
+      school: 'School',
+      section: 'Term',
+      line: 'Route',
+      station: 'Stop',
+      keyword: 'Student no. / name',
+      car: 'Vehicle'
+    },
+    messages: {
+      exportSuccess: 'Exported',
+      confirmDelete: 'Delete selected?',
+      addFormTodo: 'Add/edit form comes in a follow-up.'
+    },
     form: {
       school: 'Campus',
       section: 'Term',
@@ -124,8 +138,23 @@ export default {
       createTime: 'Created',
       updateTime: 'Updated'
     },
-    fields: { school: 'Campus', carNumber: 'Plate', carTeacher: 'Bus teacher', seatNumber: 'Seats', driver: 'Driver', status: 'Status', carImage: 'Photo' },
-    placeholders: { school: 'School', carNumber: 'Plate', driver: 'Driver', carTeacher: 'Bus teacher', status: 'Status', imageUrl: 'URL after upload' },
+    fields: {
+      school: 'Campus',
+      carNumber: 'Plate',
+      carTeacher: 'Bus teacher',
+      seatNumber: 'Seats',
+      driver: 'Driver',
+      status: 'Status',
+      carImage: 'Photo'
+    },
+    placeholders: {
+      school: 'School',
+      carNumber: 'Plate',
+      driver: 'Driver',
+      carTeacher: 'Bus teacher',
+      status: 'Status',
+      imageUrl: 'URL after upload'
+    },
     options: { free: 'Free', used: 'In use', repair: 'Repair' },
     rules: {
       schoolIds: 'Select campus',
@@ -140,7 +169,16 @@ export default {
   },
   followTeacher: {
     page: { title: 'Bus teachers', description: 'Bus teacher accounts (legacy user/teacher).' },
-    columns: { id: 'ID', nickname: 'Nickname', school: 'Campus', department: 'Dept', email: 'Email', phone: 'Phone', status: 'Status', lastLogin: 'Last login' },
+    columns: {
+      id: 'ID',
+      nickname: 'Nickname',
+      school: 'Campus',
+      department: 'Dept',
+      email: 'Email',
+      phone: 'Phone',
+      status: 'Status',
+      lastLogin: 'Last login'
+    },
     fields: {
       school: 'Campus',
       nickname: 'Nickname',
@@ -172,6 +210,10 @@ export default {
       status: 'Select status'
     },
     actions: { enable: 'Enable', disable: 'Disable' },
-    messages: { confirmEnable: 'Enable selected?', confirmDisable: 'Disable selected?', confirmDelete: 'Delete selected?' }
+    messages: {
+      confirmEnable: 'Enable selected?',
+      confirmDisable: 'Disable selected?',
+      confirmDelete: 'Delete selected?'
+    }
   }
 }

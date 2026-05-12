@@ -6,13 +6,12 @@
     :show-close="false"
     destroy-on-close
     append-to-body
-    @update:model-value="emit('update:visible', $event)"
-  >
+    @update:model-value="emit('update:visible', $event)">
     <template #header>
       <div class="security-verify__header">
         <div>
-          <h3>{{ $t("login.securityTitle") }}</h3>
-          <p>{{ $t("login.securitySubtitle") }}</p>
+          <h3>{{ $t('login.securityTitle') }}</h3>
+          <p>{{ $t('login.securitySubtitle') }}</p>
         </div>
         <el-button text circle :icon="Close" @click="close" />
       </div>
@@ -24,9 +23,8 @@
         :style="{
           width: `${imageWidth}px`,
           height: `${imageHeight}px`,
-          backgroundImage,
-        }"
-      >
+          backgroundImage
+        }">
         <button class="security-verify__refresh" type="button" @click="refresh">
           <el-icon><RefreshRight /></el-icon>
         </button>
@@ -37,34 +35,23 @@
             width: `${blockSize}px`,
             height: `${imageHeight}px`,
             transform: `translateX(${dragLeft}px)`,
-            backgroundImage: blockImage,
-          }"
-        />
-        <div
-          v-if="tip"
-          class="security-verify__tip"
-          :class="{ 'is-success': verified }"
-        >
+            backgroundImage: blockImage
+          }" />
+        <div v-if="tip" class="security-verify__tip" :class="{ 'is-success': verified }">
           {{ tip }}
         </div>
       </div>
 
       <div class="security-verify__track">
-        <div
-          class="security-verify__progress"
-          :style="{ width: progressWidth }"
-        />
-        <span>{{
-          verified ? $t("login.verified") : $t("login.dragSlider")
-        }}</span>
+        <div class="security-verify__progress" :style="{ width: progressWidth }" />
+        <span>{{ verified ? $t('login.verified') : $t('login.dragSlider') }}</span>
         <button
           class="security-verify__handle"
           type="button"
           :class="{ 'is-dragging': dragging, 'is-success': verified }"
           :style="{ transform: `translateX(${dragLeft}px)` }"
           @mousedown="startDrag($event.clientX)"
-          @touchstart.prevent="startDrag($event.touches[0]?.clientX ?? 0)"
-        >
+          @touchstart.prevent="startDrag($event.touches[0]?.clientX ?? 0)">
           <el-icon><Right /></el-icon>
         </button>
       </div>
@@ -73,174 +60,167 @@
 </template>
 
 <script setup lang="ts">
-import { computed, nextTick, ref, watch } from "vue";
-import { ElMessage } from "element-plus";
-import { Close, RefreshRight, Right } from "@element-plus/icons-vue";
+import { computed, nextTick, ref, watch } from 'vue'
+import { ElMessage } from 'element-plus'
+import { Close, RefreshRight, Right } from '@element-plus/icons-vue'
 
-import { useUniI18n } from "@/locales/use-uni-i18n";
-import type { UniCaptchaClient, UniCaptchaImageData } from "@/types/uni-login";
+import { useUniI18n } from '@/locales/use-uni-i18n'
+import type { UniCaptchaClient, UniCaptchaImageData } from '@/types/uni-login'
 
 const props = defineProps<{
-  visible: boolean;
-  captchaClient: UniCaptchaClient;
-}>();
+  visible: boolean
+  captchaClient: UniCaptchaClient
+}>()
 
 const emit = defineEmits<{
-  "update:visible": [visible: boolean];
-  success: [captchaVerification: string];
-}>();
+  'update:visible': [visible: boolean]
+  success: [captchaVerification: string]
+}>()
 
-const { t } = useUniI18n();
+const { t } = useUniI18n()
 
-const imageWidth = 330;
-const imageHeight = 155;
-const blockSize = 48;
-const captcha = ref<UniCaptchaImageData | null>(null);
-const loading = ref(false);
-const checking = ref(false);
-const dragging = ref(false);
-const verified = ref(false);
-const dragLeft = ref(0);
-const startX = ref(0);
-const startLeft = ref(0);
-const tip = ref("");
+const imageWidth = 330
+const imageHeight = 155
+const blockSize = 48
+const captcha = ref<UniCaptchaImageData | null>(null)
+const loading = ref(false)
+const checking = ref(false)
+const dragging = ref(false)
+const verified = ref(false)
+const dragLeft = ref(0)
+const startX = ref(0)
+const startLeft = ref(0)
+const tip = ref('')
 
-const maxLeft = computed(() => Math.max(0, imageWidth - blockSize));
+const maxLeft = computed(() => Math.max(0, imageWidth - blockSize))
 const backgroundImage = computed(() =>
   captcha.value?.originalImageBase64
     ? `url(data:image/png;base64,${captcha.value.originalImageBase64})`
-    : "none",
-);
+    : 'none'
+)
 const blockImage = computed(() =>
   captcha.value?.jigsawImageBase64
     ? `url(data:image/png;base64,${captcha.value.jigsawImageBase64})`
-    : "none",
-);
-const progressWidth = computed(() => `${dragLeft.value + blockSize / 2}px`);
+    : 'none'
+)
+const progressWidth = computed(() => `${dragLeft.value + blockSize / 2}px`)
 
 const resetDrag = () => {
-  dragLeft.value = 0;
-  verified.value = false;
-  tip.value = "";
-};
+  dragLeft.value = 0
+  verified.value = false
+  tip.value = ''
+}
 
 const refresh = async () => {
-  loading.value = true;
-  resetDrag();
+  loading.value = true
+  resetDrag()
 
   try {
-    captcha.value = await props.captchaClient.fetchImage();
+    captcha.value = await props.captchaClient.fetchImage()
   } finally {
-    loading.value = false;
+    loading.value = false
   }
-};
+}
 
 const close = () => {
-  emit("update:visible", false);
-};
+  emit('update:visible', false)
+}
 
-const resolvePointX = () => (dragLeft.value * 310) / imageWidth;
+const resolvePointX = () => (dragLeft.value * 310) / imageWidth
 
 const verify = async () => {
   if (!captcha.value || checking.value) {
-    return;
+    return
   }
 
-  checking.value = true;
+  checking.value = true
 
   try {
-    const point = { x: resolvePointX(), y: 5.0 };
-    const pointJson = props.captchaClient.encrypt(
-      JSON.stringify(point),
-      captcha.value.secretKey,
-    );
+    const point = { x: resolvePointX(), y: 5.0 }
+    const pointJson = props.captchaClient.encrypt(JSON.stringify(point), captcha.value.secretKey)
 
     await props.captchaClient.verify({
       pointJson,
-      token: captcha.value.token,
-    });
+      token: captcha.value.token
+    })
 
-    verified.value = true;
-    tip.value = t("login.verified");
+    verified.value = true
+    tip.value = t('login.verified')
     const captchaVerification = props.captchaClient.encrypt(
       `${captcha.value.token}---${JSON.stringify(point)}`,
-      captcha.value.secretKey,
-    );
+      captcha.value.secretKey
+    )
 
     window.setTimeout(() => {
-      emit("success", captchaVerification);
-      close();
-    }, 300);
+      emit('success', captchaVerification)
+      close()
+    }, 300)
   } catch (error) {
-    tip.value =
-      error instanceof Error ? error.message : t("login.verifyFailed");
-    ElMessage.warning(tip.value);
+    tip.value = error instanceof Error ? error.message : t('login.verifyFailed')
+    ElMessage.warning(tip.value)
     window.setTimeout(() => {
-      refresh();
-    }, 600);
+      refresh()
+    }, 600)
   } finally {
-    checking.value = false;
+    checking.value = false
   }
-};
+}
 
 const moveTo = (clientX: number) => {
-  const delta = clientX - startX.value;
-  const nextLeft = Math.min(
-    maxLeft.value,
-    Math.max(0, startLeft.value + delta),
-  );
+  const delta = clientX - startX.value
+  const nextLeft = Math.min(maxLeft.value, Math.max(0, startLeft.value + delta))
 
-  dragLeft.value = nextLeft;
-};
+  dragLeft.value = nextLeft
+}
 
 const stopDrag = () => {
   if (!dragging.value) {
-    return;
+    return
   }
 
-  dragging.value = false;
-  window.removeEventListener("mousemove", handleMouseMove);
-  window.removeEventListener("mouseup", stopDrag);
-  window.removeEventListener("touchmove", handleTouchMove);
-  window.removeEventListener("touchend", stopDrag);
-  verify();
-};
+  dragging.value = false
+  window.removeEventListener('mousemove', handleMouseMove)
+  window.removeEventListener('mouseup', stopDrag)
+  window.removeEventListener('touchmove', handleTouchMove)
+  window.removeEventListener('touchend', stopDrag)
+  verify()
+}
 
 const startDrag = (clientX: number) => {
   if (!captcha.value || loading.value || checking.value || verified.value) {
-    return;
+    return
   }
 
-  dragging.value = true;
-  startX.value = clientX;
-  startLeft.value = dragLeft.value;
-  window.addEventListener("mousemove", handleMouseMove);
-  window.addEventListener("mouseup", stopDrag);
-  window.addEventListener("touchmove", handleTouchMove, { passive: false });
-  window.addEventListener("touchend", stopDrag);
-};
+  dragging.value = true
+  startX.value = clientX
+  startLeft.value = dragLeft.value
+  window.addEventListener('mousemove', handleMouseMove)
+  window.addEventListener('mouseup', stopDrag)
+  window.addEventListener('touchmove', handleTouchMove, { passive: false })
+  window.addEventListener('touchend', stopDrag)
+}
 
 function handleMouseMove(event: MouseEvent) {
-  moveTo(event.clientX);
+  moveTo(event.clientX)
 }
 
 function handleTouchMove(event: TouchEvent) {
-  event.preventDefault();
-  moveTo(event.touches[0]?.clientX ?? startX.value);
+  event.preventDefault()
+  moveTo(event.touches[0]?.clientX ?? startX.value)
 }
 
 watch(
   () => props.visible,
   async (visible) => {
     if (!visible) {
-      resetDrag();
-      return;
+      resetDrag()
+      return
     }
 
-    await nextTick();
-    await refresh();
-  },
-);
+    await nextTick()
+    await refresh()
+  }
+)
 </script>
 
 <style scoped lang="scss">

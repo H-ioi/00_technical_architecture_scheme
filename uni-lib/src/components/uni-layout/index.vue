@@ -1,7 +1,9 @@
 <template>
   <el-container class="uni-layout" :class="`uni-layout--${preset}`" direction="horizontal">
     <slot name="sidebar">
-      <el-aside class="uni-layout__sidebar" :width="resolvedCollapsed ? '64px' : resolvedSidebarWidth">
+      <el-aside
+        class="uni-layout__sidebar"
+        :width="resolvedCollapsed ? '64px' : resolvedSidebarWidth">
         <div class="uni-layout__brand">
           <slot name="logo">
             <img v-if="resolvedLogo" class="uni-layout__logo" :src="resolvedLogo" :alt="logoAlt" />
@@ -9,7 +11,11 @@
         </div>
 
         <div class="uni-layout__menu-wrap">
-          <el-menu class="uni-layout__menu" :collapse="resolvedCollapsed" :default-active="resolvedActiveMenu" @select="(path: string) => onMenuSelect(path)">
+          <el-menu
+            class="uni-layout__menu"
+            :collapse="resolvedCollapsed"
+            :default-active="resolvedActiveMenu"
+            @select="(path: string) => onMenuSelect(path)">
             <MenuTree :menus="resolvedMenus" :icon-map="iconMap" :translate="tr">
               <template #menu-icon="slotProps">
                 <slot name="menu-icon" v-bind="slotProps" />
@@ -35,7 +41,9 @@
             </el-button>
             <slot name="breadcrumb">
               <el-breadcrumb separator="/">
-                <el-breadcrumb-item v-for="item in resolvedBreadcrumbs" :key="item.titleKey || item.title">
+                <el-breadcrumb-item
+                  v-for="item in resolvedBreadcrumbs"
+                  :key="item.titleKey || item.title">
                   {{ tr(item.titleKey, item.title) }}
                 </el-breadcrumb-item>
               </el-breadcrumb>
@@ -44,7 +52,10 @@
 
           <div class="uni-layout__header-right">
             <slot name="header-right">
-              <el-dropdown v-if="showLocale" trigger="click" @command="(value: string) => onChangeLocale(value)">
+              <el-dropdown
+                v-if="showLocale"
+                trigger="click"
+                @command="(value: string) => onChangeLocale(value)">
                 <button class="uni-layout__locale uni-layout__action" type="button">
                   <UniIcon class="uni-layout__locale-icon" :icon="UniZhEnIcon" :size="24" />
                   {{ activeLocaleLabel }}
@@ -54,7 +65,10 @@
                 </button>
                 <template #dropdown>
                   <el-dropdown-menu>
-                    <el-dropdown-item v-for="item in localeOptions" :key="item.value" :command="item.value">
+                    <el-dropdown-item
+                      v-for="item in localeOptions"
+                      :key="item.value"
+                      :command="item.value">
                       {{ item.label }}
                     </el-dropdown-item>
                   </el-dropdown-menu>
@@ -63,7 +77,11 @@
 
               <span v-if="showLocale && showUser" class="uni-layout__divider" />
 
-              <el-dropdown v-if="showUser" trigger="click" popper-class="uni-layout-user-dropdown" @command="(command: string) => onUserCommand(command)">
+              <el-dropdown
+                v-if="showUser"
+                trigger="click"
+                popper-class="uni-layout-user-dropdown"
+                @command="(command: string) => onUserCommand(command)">
                 <button class="uni-layout__user" type="button">
                   <span class="uni-layout__user-info">
                     <strong>{{ displayName }}</strong>
@@ -78,7 +96,11 @@
                 </button>
                 <template #dropdown>
                   <el-dropdown-menu>
-                    <el-dropdown-item v-for="item in resolvedUserCommands" :key="item.command" :command="item.command" :divided="item.divided">
+                    <el-dropdown-item
+                      v-for="item in resolvedUserCommands"
+                      :key="item.command"
+                      :command="item.command"
+                      :divided="item.divided">
                       {{ item.label }}
                     </el-dropdown-item>
                   </el-dropdown-menu>
@@ -309,11 +331,19 @@ const closeAll = () => {
 
 const resolvedMenus = computed(() => (props.autoWire ? menuStore.menuRoutes : (props.menus ?? [])))
 const resolvedTags = computed(() => (props.autoWire ? tagsViewStore.visitedTags : props.tags))
-const resolvedActivePath = computed(() => (props.autoWire ? (route?.fullPath ?? props.activePath) : props.activePath))
-const resolvedActiveMenuBase = computed(() => (props.autoWire ? String(route?.meta?.activeMenu ?? route?.path ?? '') : props.activeMenu))
+const resolvedActivePath = computed(() =>
+  props.autoWire ? (route?.fullPath ?? props.activePath) : props.activePath
+)
+const resolvedActiveMenuBase = computed(() =>
+  props.autoWire ? String(route?.meta?.activeMenu ?? route?.path ?? '') : props.activeMenu
+)
 const resolvedActiveMenu = computed(() => resolvedActiveMenuBase.value || resolvedActivePath.value)
-const resolvedCollapsed = computed(() => (props.autoWire ? appStore.sidebarCollapsed : props.collapsed))
-const resolvedSidebarWidth = computed(() => (props.autoWire ? appStore.sidebarWidth : props.sidebarWidth))
+const resolvedCollapsed = computed(() =>
+  props.autoWire ? appStore.sidebarCollapsed : props.collapsed
+)
+const resolvedSidebarWidth = computed(() =>
+  props.autoWire ? appStore.sidebarWidth : props.sidebarWidth
+)
 const resolvedLocale = computed(() => (props.autoWire ? String(globalLocale.value) : props.locale))
 
 const resolvedBreadcrumbs = computed<UniLayoutBreadcrumbItem[]>(() => {
@@ -335,7 +365,8 @@ const resolvedUser = computed<UniLayoutUser>(() => {
     return props.user
   }
 
-  const roleLabel = userStore.profile?.roles?.[0]?.replace(/^ROLE_/, '') || tr('common.adminRole', 'Admin')
+  const roleLabel =
+    userStore.profile?.roles?.[0]?.replace(/^ROLE_/, '') || tr('common.adminRole', 'Admin')
 
   return {
     name: userStore.profile?.name || tr('common.admin', 'Admin'),
@@ -360,8 +391,14 @@ const resolvedUserCommands = computed<UniLayoutUserCommand[]>(() => {
   ]
 })
 
-const activeLocaleLabel = computed(() => props.localeOptions.find((item) => item.value === resolvedLocale.value)?.label ?? resolvedLocale.value)
-const displayName = computed(() => resolvedUser.value.name || resolvedUser.value.username || tr('common.admin', 'Admin'))
+const activeLocaleLabel = computed(
+  () =>
+    props.localeOptions.find((item) => item.value === resolvedLocale.value)?.label ??
+    resolvedLocale.value
+)
+const displayName = computed(
+  () => resolvedUser.value.name || resolvedUser.value.username || tr('common.admin', 'Admin')
+)
 const avatarText = computed(() => {
   const firstChar = Array.from(displayName.value.trim())[0] ?? 'A'
 
@@ -371,7 +408,9 @@ const avatarText = computed(() => {
 const passwordVisible = ref(false)
 const themeVisible = ref(false)
 
-const themeStorageKeyResolved = computed(() => tryGetUniConfig()?.shell?.themeStorageKey ?? 'uni-lib:theme')
+const themeStorageKeyResolved = computed(
+  () => tryGetUniConfig()?.shell?.themeStorageKey ?? 'uni-lib:theme'
+)
 const defaultThemeResolved = computed(
   () =>
     tryGetUniConfig()?.shell?.defaultTheme ?? {

@@ -131,7 +131,10 @@ export const attendanceSchoolSearchForm = (
   colProps: { span: 6 }
 })
 
-export const attendanceSchoolColumns = (t: Translate, schoolOptions: UniOption[]): UniTableColumn[] => [
+export const attendanceSchoolColumns = (
+  t: Translate,
+  schoolOptions: UniOption[]
+): UniTableColumn[] => [
   { prop: 'id', label: t('attendance.school.columns.id'), type: 'text', width: 90, fixed: 'left' },
   {
     prop: 'schoolId',
@@ -169,8 +172,18 @@ export const attendanceSchoolColumns = (t: Translate, schoolOptions: UniOption[]
     minWidth: 110,
     showOverflowTooltip: true
   },
-  { prop: 'schoolStatus', label: t('attendance.school.columns.schoolStatus'), type: 'text', width: 100 },
-  { prop: 'entryOpenType', label: t('attendance.school.columns.entryOpenType'), type: 'text', width: 110 },
+  {
+    prop: 'schoolStatus',
+    label: t('attendance.school.columns.schoolStatus'),
+    type: 'text',
+    width: 100
+  },
+  {
+    prop: 'entryOpenType',
+    label: t('attendance.school.columns.entryOpenType'),
+    type: 'text',
+    width: 110
+  },
   {
     prop: 'entryTime',
     label: t('attendance.school.columns.entryTime'),
@@ -205,7 +218,12 @@ export const attendanceSchoolColumns = (t: Translate, schoolOptions: UniOption[]
     minWidth: 110,
     showOverflowTooltip: true
   },
-  { prop: 'attendanceDate', label: t('attendance.school.columns.attendanceDate'), type: 'text', width: 120 },
+  {
+    prop: 'attendanceDate',
+    label: t('attendance.school.columns.attendanceDate'),
+    type: 'text',
+    width: 120
+  },
   {
     prop: 'createdAt',
     label: t('attendance.school.columns.createdAt'),
@@ -215,7 +233,10 @@ export const attendanceSchoolColumns = (t: Translate, schoolOptions: UniOption[]
   }
 ]
 
-export const attendanceSchoolDetailForm = (t: Translate, schoolOptions: UniOption[]): UniFormConfig => ({
+export const attendanceSchoolDetailForm = (
+  t: Translate,
+  schoolOptions: UniOption[]
+): UniFormConfig => ({
   mode: 'view',
   formProps: { labelWidth: '110px' },
   rowProps: { gutter: 16 },
@@ -234,18 +255,42 @@ export const attendanceSchoolDetailForm = (t: Translate, schoolOptions: UniOptio
     { field: 'personName', label: t('attendance.school.columns.personName'), component: 'ElInput' },
     { field: 'deptName', label: t('attendance.school.columns.deptName'), component: 'ElInput' },
     { field: 'cardNumber', label: t('attendance.school.columns.cardNumber'), component: 'ElInput' },
-    { field: 'schoolStatus', label: t('attendance.school.columns.schoolStatus'), component: 'ElInput' },
-    { field: 'entryOpenType', label: t('attendance.school.columns.entryOpenType'), component: 'ElInput' },
+    {
+      field: 'schoolStatus',
+      label: t('attendance.school.columns.schoolStatus'),
+      component: 'ElInput'
+    },
+    {
+      field: 'entryOpenType',
+      label: t('attendance.school.columns.entryOpenType'),
+      component: 'ElInput'
+    },
     { field: 'entryTime', label: t('attendance.school.columns.entryTime'), component: 'ElInput' },
-    { field: 'entryAcsChannel', label: t('attendance.school.columns.entryChannel'), component: 'ElInput' },
-    { field: 'leavingOpenType', label: t('attendance.school.columns.leavingOpenType'), component: 'ElInput' },
-    { field: 'leavingTime', label: t('attendance.school.columns.leavingTime'), component: 'ElInput' },
+    {
+      field: 'entryAcsChannel',
+      label: t('attendance.school.columns.entryChannel'),
+      component: 'ElInput'
+    },
+    {
+      field: 'leavingOpenType',
+      label: t('attendance.school.columns.leavingOpenType'),
+      component: 'ElInput'
+    },
+    {
+      field: 'leavingTime',
+      label: t('attendance.school.columns.leavingTime'),
+      component: 'ElInput'
+    },
     {
       field: 'leavingAcsChannel',
       label: t('attendance.school.columns.leavingChannel'),
       component: 'ElInput'
     },
-    { field: 'attendanceDate', label: t('attendance.school.columns.attendanceDate'), component: 'ElInput' },
+    {
+      field: 'attendanceDate',
+      label: t('attendance.school.columns.attendanceDate'),
+      component: 'ElInput'
+    },
     { field: 'createdAt', label: t('attendance.school.columns.createdAt'), component: 'ElInput' }
   ]
 })

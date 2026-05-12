@@ -20,8 +20,7 @@
             :request="loadSign"
             :pagination="{ pageSize: 10, pageSizes: [10, 20, 50] }"
             :toolbar="{ refresh: true, fullscreen: true, columnSetting: true }"
-            :action-column="{ fixed: false }"
-          />
+            :action-column="{ fixed: false }" />
         </section>
       </div>
     </el-card>
@@ -53,7 +52,9 @@ const pid = computed(() => String(route.params.id ?? ''))
 const protocolTypeOptions = computed(() =>
   buildProtocolDictOptions(protocolDict.value.protocolTypeList, locale())
 )
-const moduleOptions = computed(() => buildProtocolDictOptions(protocolDict.value.moduleList, locale()))
+const moduleOptions = computed(() =>
+  buildProtocolDictOptions(protocolDict.value.moduleList, locale())
+)
 /** 详情页文案映射（非表格 props） */
 const enumOptionMaps = computed<Record<string, UniOption[]>>(() => ({
   protocolType: protocolTypeOptions.value,

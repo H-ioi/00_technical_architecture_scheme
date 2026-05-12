@@ -4,19 +4,16 @@
     :title="title"
     width="640px"
     destroy-on-close
-    @update:model-value="emit('update:visible', $event)"
-  >
+    @update:model-value="emit('update:visible', $event)">
     <div
       v-loading="detailLoading"
       class="school-bus-driver-form__body"
-      :element-loading-text="$t('common.loading')"
-    >
+      :element-loading-text="$t('common.loading')">
       <UniForm
         ref="uniFormRef"
         v-model="formModel"
         :mode="uniFormMode"
-        :config="dialogFormConfig"
-      />
+        :config="dialogFormConfig" />
     </div>
 
     <template #footer>
@@ -111,8 +108,7 @@ const fillForm = (record: DriverRecord) => {
     contact: record.contact,
     age: toNum(record.age),
     licenseType: record.licenseType,
-    status:
-      record.status === undefined || record.status === null ? 1 : Number(record.status)
+    status: record.status === undefined || record.status === null ? 1 : Number(record.status)
   }
 }
 

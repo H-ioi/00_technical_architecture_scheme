@@ -75,9 +75,14 @@ export const useList = () => {
   ])
 
   const parentOptions = computed<MenuParentOption[]>(() => {
-    const root: MenuParentOption = { label: t('permission.menu.rootParent'), value: MENU_PARENT_ROOT }
+    const root: MenuParentOption = {
+      label: t('permission.menu.rootParent'),
+      value: MENU_PARENT_ROOT
+    }
     const selfId = form.id
-    const flat = flattenParents(menuList.value).filter((o) => selfId === undefined || o.value !== selfId)
+    const flat = flattenParents(menuList.value).filter(
+      (o) => selfId === undefined || o.value !== selfId
+    )
     return [root, ...flat]
   })
 

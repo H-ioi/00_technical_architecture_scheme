@@ -96,8 +96,17 @@ export const attendanceWechatOpenidSearchForm = (
   colProps: { span: 6 }
 })
 
-export const attendanceWechatOpenidColumns = (t: Translate, schoolOptions: UniOption[]): UniTableColumn[] => [
-  { prop: 'id', label: t('attendance.wechatOpenid.columns.id'), type: 'text', width: 90, fixed: 'left' },
+export const attendanceWechatOpenidColumns = (
+  t: Translate,
+  schoolOptions: UniOption[]
+): UniTableColumn[] => [
+  {
+    prop: 'id',
+    label: t('attendance.wechatOpenid.columns.id'),
+    type: 'text',
+    width: 90,
+    fixed: 'left'
+  },
   {
     prop: 'schoolId',
     label: t('attendance.wechatOpenid.columns.schoolName'),
@@ -144,7 +153,10 @@ export const attendanceWechatOpenidColumns = (t: Translate, schoolOptions: UniOp
   }
 ]
 
-export const attendanceWechatOpenidDetailForm = (t: Translate, schoolOptions: UniOption[]): UniFormConfig => ({
+export const attendanceWechatOpenidDetailForm = (
+  t: Translate,
+  schoolOptions: UniOption[]
+): UniFormConfig => ({
   mode: 'view',
   formProps: { labelWidth: '110px' },
   rowProps: { gutter: 16 },
@@ -164,14 +176,26 @@ export const attendanceWechatOpenidDetailForm = (t: Translate, schoolOptions: Un
       label: t('attendance.wechatOpenid.columns.admissionNo'),
       component: 'ElInput'
     },
-    { field: 'nickname', label: t('attendance.wechatOpenid.columns.nickname'), component: 'ElInput' },
+    {
+      field: 'nickname',
+      label: t('attendance.wechatOpenid.columns.nickname'),
+      component: 'ElInput'
+    },
     { field: 'status', label: t('attendance.wechatOpenid.columns.status'), component: 'ElInput' },
     {
       field: 'encryptedOpenId',
       label: t('attendance.wechatOpenid.columns.encryptedOpenId'),
       component: 'ElInput'
     },
-    { field: 'updateTime', label: t('attendance.wechatOpenid.columns.updateTime'), component: 'ElInput' },
-    { field: 'createTime', label: t('attendance.wechatOpenid.columns.createTime'), component: 'ElInput' }
+    {
+      field: 'updateTime',
+      label: t('attendance.wechatOpenid.columns.updateTime'),
+      component: 'ElInput'
+    },
+    {
+      field: 'createTime',
+      label: t('attendance.wechatOpenid.columns.createTime'),
+      component: 'ElInput'
+    }
   ]
 })

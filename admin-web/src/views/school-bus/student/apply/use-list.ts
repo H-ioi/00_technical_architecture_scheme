@@ -26,8 +26,7 @@ const unwrapIntentionPage = (payload: unknown): { list: BusOrderRecord[]; total:
     return { list: [], total: 0 }
   }
   const r = payload as Loose
-  const num = (value: unknown) =>
-    typeof value === 'number' && Number.isFinite(value) ? value : 0
+  const num = (value: unknown) => (typeof value === 'number' && Number.isFinite(value) ? value : 0)
   if (Array.isArray(r.data)) {
     return { list: r.data as BusOrderRecord[], total: num(r.total) }
   }
@@ -47,10 +46,8 @@ const decorateRow = (
 ): BusOrderRecord => {
   const r = { ...row }
   r.createTime = r.createTime ? dayjs(String(r.createTime)).format('YYYY-MM-DD HH:mm') : ''
-  r.showLineName =
-    loc === 'en' ? String(r.buslineEnName ?? '') : String(r.buslineCnName ?? '')
-  r.showSectionName =
-    loc === 'en' ? String(r.sectionEnName ?? '') : String(r.sectionCnName ?? '')
+  r.showLineName = loc === 'en' ? String(r.buslineEnName ?? '') : String(r.buslineCnName ?? '')
+  r.showSectionName = loc === 'en' ? String(r.sectionEnName ?? '') : String(r.sectionCnName ?? '')
   r.showStationName =
     loc === 'en' ? String(r.busStationEnName ?? '') : String(r.busStationCnName ?? '')
   const rawSid = r.schoolId ?? r.schoolIds
@@ -127,7 +124,8 @@ export const useApplyList = () => {
     }
   }
 
-  const { formVisible, formMode, editingOrderId, openFormAdd, openFormEdit } = useBusOrderFormDialog()
+  const { formVisible, formMode, editingOrderId, openFormAdd, openFormEdit } =
+    useBusOrderFormDialog()
 
   const detailVisible = ref(false)
   const detailOrderId = ref<string | number | null>(null)

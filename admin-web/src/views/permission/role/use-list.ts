@@ -42,7 +42,9 @@ export interface RoleListCallbacks {
 export const useList = (callbacks: RoleListCallbacks) => {
   const { t } = useUniI18n()
   const initialFilters = { roleName: '', roleCode: '', dpType: undefined as number | undefined }
-  const { queryModel, filters, tableRef, search, reset, handleLoadSuccess } = useUniListState({ initialFilters })
+  const { queryModel, filters, tableRef, search, reset, handleLoadSuccess } = useUniListState({
+    initialFilters
+  })
 
   const dpOpts = computed(() => dpTypeOptions(t))
   const searchConfig = computed(() => searchForm(t, dpOpts.value))

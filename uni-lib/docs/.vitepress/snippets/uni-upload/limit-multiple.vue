@@ -5,22 +5,21 @@
     :limit="2"
     multiple
     :request="mock"
-    @exceed="onExceed"
-  />
+    @exceed="onExceed" />
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue";
-import { ElMessage } from "element-plus";
-import type { UploadRequestOptions, UploadUserFile } from "element-plus";
+import { ref } from 'vue'
+import { ElMessage } from 'element-plus'
+import type { UploadRequestOptions, UploadUserFile } from 'element-plus'
 
-const files = ref<UploadUserFile[]>([]);
+const files = ref<UploadUserFile[]>([])
 
 async function mock(options: UploadRequestOptions) {
-  options.onSuccess?.({} as never);
+  options.onSuccess?.({} as never)
 }
 
 function onExceed() {
-  ElMessage.warning("最多 2 个文件，可在 @exceed 中提示");
+  ElMessage.warning('最多 2 个文件，可在 @exceed 中提示')
 }
 </script>

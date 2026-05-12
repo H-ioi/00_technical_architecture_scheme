@@ -96,11 +96,14 @@ export const orderSearchForm = (
   colProps: { span: 6 }
 })
 
-export const orderTableColumns = (
-  t: Translate,
-  pickupOptions: UniOption[]
-): UniTableColumn[] => [
-  { prop: 'id', label: t('schoolBus.studentOrder.columns.id'), type: 'text', width: 88, fixed: 'left' },
+export const orderTableColumns = (t: Translate, pickupOptions: UniOption[]): UniTableColumn[] => [
+  {
+    prop: 'id',
+    label: t('schoolBus.studentOrder.columns.id'),
+    type: 'text',
+    width: 88,
+    fixed: 'left'
+  },
   {
     prop: 'showSchoolName',
     label: t('schoolBus.studentOrder.columns.school'),

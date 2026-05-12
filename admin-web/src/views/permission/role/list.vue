@@ -19,8 +19,7 @@
       :submit-text="t('permission.actions.search')"
       :reset-text="t('permission.actions.reset')"
       @search="search"
-      @reset="reset"
-    />
+      @reset="reset" />
 
     <UniDataTable
       ref="tableRef"
@@ -32,30 +31,41 @@
       :toolbar="{ refresh: true, density: true, columnSetting: true }"
       :actions="actions"
       :action-column="{ width: 220, fixed: 'right' }"
-      @load-success="handleLoadSuccess"
-    />
+      @load-success="handleLoadSuccess" />
 
-    <AssignMenuDialog v-model:visible="assignVisible" :role-id="assignRole?.roleId" @saved="reloadTable" />
+    <AssignMenuDialog
+      v-model:visible="assignVisible"
+      :role-id="assignRole?.roleId"
+      @saved="reloadTable" />
 
     <el-dialog
       v-model="roleFormVisible"
       destroy-on-close
       width="640px"
-      :title="roleFormMode === 'add' ? t('permission.role.formAdd') : t('permission.role.formEdit')"
-    >
+      :title="
+        roleFormMode === 'add' ? t('permission.role.formAdd') : t('permission.role.formEdit')
+      ">
       <el-form ref="roleFormRef" :model="roleForm" :rules="roleRules" label-width="108px">
         <el-form-item :label="t('permission.role.columns.name')" prop="roleName">
           <el-input v-model="roleForm.roleName" clearable maxlength="40" />
         </el-form-item>
         <el-form-item :label="t('permission.role.columns.code')" prop="roleCode">
-          <el-input v-model="roleForm.roleCode" :disabled="roleFormMode === 'edit'" clearable maxlength="40" />
+          <el-input
+            v-model="roleForm.roleCode"
+            :disabled="roleFormMode === 'edit'"
+            clearable
+            maxlength="40" />
         </el-form-item>
         <el-form-item :label="t('permission.role.columns.desc')" prop="roleDesc">
           <el-input v-model="roleForm.roleDesc" type="textarea" maxlength="128" :rows="3" />
         </el-form-item>
         <el-form-item :label="t('permission.role.columns.dpType')" prop="dpType">
           <el-select v-model.number="roleForm.dpType" class="perm-role-scope-select" filterable>
-            <el-option v-for="o in dpOptions" :key="String(o.value)" :label="o.label" :value="Number(o.value)" />
+            <el-option
+              v-for="o in dpOptions"
+              :key="String(o.value)"
+              :label="o.label"
+              :value="Number(o.value)" />
           </el-select>
         </el-form-item>
         <el-form-item v-if="roleForm.dpType === 6">
@@ -71,13 +81,14 @@
             highlight-current
             default-expand-all
             check-strictly
-            :props="{ label: 'name', children: 'children' }"
-          />
+            :props="{ label: 'name', children: 'children' }" />
         </el-form-item>
       </el-form>
       <template #footer>
         <el-button @click="roleFormVisible = false">{{ t('permission.actions.cancel') }}</el-button>
-        <el-button type="primary" :loading="roleSaving" @click="saveRole">{{ t('permission.actions.save') }}</el-button>
+        <el-button type="primary" :loading="roleSaving" @click="saveRole">{{
+          t('permission.actions.save')
+        }}</el-button>
       </template>
     </el-dialog>
   </section>

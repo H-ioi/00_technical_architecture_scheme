@@ -7,17 +7,19 @@
       align-center
       :close-on-click-modal="false"
       destroy-on-close
-      :title="routeDialogTitle"
-    >
-      <div v-if="showModal" v-loading="detailLoading" class="route-form-modal__body" :element-loading-text="$t('common.loading')">
+      :title="routeDialogTitle">
+      <div
+        v-if="showModal"
+        v-loading="detailLoading"
+        class="route-form-modal__body"
+        :element-loading-text="$t('common.loading')">
         <UniForm ref="uniFormRef" v-model="ruleForm" mode="edit" :config="mainFormConfig">
           <template #field-routeStopsEditor>
             <div class="route-form-modal__stops">
               <el-divider
                 content-position="left"
                 border-style="solid"
-                class="route-form-modal__split"
-              >
+                class="route-form-modal__split">
                 <span class="route-form-modal__split-title">{{
                   $t('schoolBus.routePlan.form.routeScheduleSection')
                 }}</span>
@@ -27,13 +29,11 @@
                   <el-collapse
                     v-model="activeSchedulePanel"
                     accordion
-                    class="route-form-modal__collapse"
-                  >
+                    class="route-form-modal__collapse">
                     <el-collapse-item
                       v-for="(item, index) in weekDays"
                       :key="`schedule-${index}`"
-                      :name="String(index)"
-                    >
+                      :name="String(index)">
                       <template #title>
                         <div class="route-form-modal__collapse-title">
                           <span class="route-form-modal__collapse-title-text">{{
@@ -45,38 +45,35 @@
                             link
                             size="small"
                             class="route-form-modal__remove-group-btn"
-                            @click.stop="delWeekDays(index)"
-                          >
+                            @click.stop="delWeekDays(index)">
                             {{ $t('schoolBus.routePlan.form.removeWeekRow') }}
                           </el-button>
                         </div>
                       </template>
                       <div class="route-form-modal__block-body">
                         <div class="route-form-modal__toolbar-row">
-                          <label class="route-form-modal__field-label route-form-modal__field-label--inline">{{
-                            $t('schoolBus.routePlan.form.routeWeekdays')
-                          }}</label>
+                          <label
+                            class="route-form-modal__field-label route-form-modal__field-label--inline"
+                            >{{ $t('schoolBus.routePlan.form.routeWeekdays') }}</label
+                          >
                           <el-select
                             v-model="item.weekDays"
                             class="route-form-modal__weekday-select"
                             multiple
                             collapse-tags
                             collapse-tags-tooltip
-                            :placeholder="$t('schoolBus.routeOperation.pleaseSelect')"
-                          >
+                            :placeholder="$t('schoolBus.routeOperation.pleaseSelect')">
                             <el-option
                               v-for="(d, k) in consts.WeeklyDays"
                               :key="k"
                               :label="d.label"
                               :value="d.value"
-                              :disabled="isOptionDisabled(d.value, index)"
-                            />
+                              :disabled="isOptionDisabled(d.value, index)" />
                           </el-select>
                           <el-button
                             type="primary"
                             class="route-form-modal__add-stop-btn"
-                            @click="addStation(index)"
-                          >
+                            @click="addStation(index)">
                             {{ $t('schoolBus.routePlan.form.bindAddStop') }}
                           </el-button>
                         </div>
@@ -88,8 +85,7 @@
                           stripe
                           size="small"
                           :header-cell-style="stationTableHeaderStyle"
-                          :empty-text="$t('schoolBus.routePlan.form.stationTableEmpty')"
-                        >
+                          :empty-text="$t('schoolBus.routePlan.form.stationTableEmpty')">
                           <el-table-column
                             v-for="col in bindStationCols"
                             :key="col.prop"
@@ -97,31 +93,27 @@
                             :label="$t(col.labelKey)"
                             :width="col.width"
                             :min-width="col.minWidth"
-                            show-overflow-tooltip
-                          />
+                            show-overflow-tooltip />
                           <el-table-column
                             fixed="right"
                             class-name="route-form-modal__col-actions"
                             :label="$t('schoolBus.routePlan.form.actionsColumn')"
                             width="132"
-                            align="center"
-                          >
+                            align="center">
                             <template #default="scope">
                               <div class="route-form-modal__row-actions">
                                 <el-button
                                   type="primary"
                                   link
                                   size="small"
-                                  @click="editCurrentStation(scope.row, scope.$index, index)"
-                                >
+                                  @click="editCurrentStation(scope.row, scope.$index, index)">
                                   {{ $t('schoolBus.driver.actions.edit') }}
                                 </el-button>
                                 <el-button
                                   type="danger"
                                   link
                                   size="small"
-                                  @click="delCurrentStation(scope.$index, index)"
-                                >
+                                  @click="delCurrentStation(scope.$index, index)">
                                   {{ $t('schoolBus.driver.actions.delete') }}
                                 </el-button>
                               </div>
@@ -136,8 +128,7 @@
                   class="route-form-modal__add-group-btn"
                   plain
                   :disabled="!canAdd"
-                  @click="addWeekDays"
-                >
+                  @click="addWeekDays">
                   {{ $t('schoolBus.routePlan.form.addScheduleGroup') }}
                 </el-button>
               </div>
@@ -160,14 +151,12 @@
         width="380px"
         destroy-on-close
         append-to-body
-        :close-on-click-modal="false"
-      >
+        :close-on-click-modal="false">
         <UniForm
           ref="nestedUniFormRef"
           v-model="addStationForm"
           mode="edit"
-          :config="nestedStationFormConfig"
-        />
+          :config="nestedStationFormConfig" />
         <div class="route-form-modal__nested-footer">
           <el-button size="small" @click="closeAddStationModal">
             {{ $t('schoolBus.driver.actions.cancel') }}

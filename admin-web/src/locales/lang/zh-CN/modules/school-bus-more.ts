@@ -1,6 +1,9 @@
 export default {
   studentApply: {
-    page: { title: '申请意向管理', description: '维护校车乘车意向申请、审批与缴费状态（对齐旧版）。' },
+    page: {
+      title: '申请意向管理',
+      description: '维护校车乘车意向申请、审批与缴费状态（对齐旧版）。'
+    },
     columns: {
       id: 'ID',
       applyTime: '申请时间',
@@ -76,8 +79,19 @@ export default {
       createTime: '创建时间',
       car: '车牌号'
     },
-    placeholders: { school: '请选择学校', section: '请选择学期', line: '请选择路线', station: '请选择站点', keyword: '输入学号姓名', car: '请选择车辆' },
-    messages: { exportSuccess: '导出成功', confirmDelete: '确定要删除吗？', addFormTodo: '新增/编辑表单对齐旧版，后续迭代接入' },
+    placeholders: {
+      school: '请选择学校',
+      section: '请选择学期',
+      line: '请选择路线',
+      station: '请选择站点',
+      keyword: '输入学号姓名',
+      car: '请选择车辆'
+    },
+    messages: {
+      exportSuccess: '导出成功',
+      confirmDelete: '确定要删除吗？',
+      addFormTodo: '新增/编辑表单对齐旧版，后续迭代接入'
+    },
     form: {
       school: '校区',
       section: '学期',
@@ -124,8 +138,23 @@ export default {
       createTime: '创建时间',
       updateTime: '更新时间'
     },
-    fields: { school: '校区', carNumber: '车牌号', carTeacher: '跟车老师', seatNumber: '座位数', driver: '司机', status: '状态', carImage: '车辆照片' },
-    placeholders: { school: '请选择学校', carNumber: '车牌号', driver: '司机姓名', carTeacher: '跟车老师', status: '状态', imageUrl: '上传后自动填入图片地址' },
+    fields: {
+      school: '校区',
+      carNumber: '车牌号',
+      carTeacher: '跟车老师',
+      seatNumber: '座位数',
+      driver: '司机',
+      status: '状态',
+      carImage: '车辆照片'
+    },
+    placeholders: {
+      school: '请选择学校',
+      carNumber: '车牌号',
+      driver: '司机姓名',
+      carTeacher: '跟车老师',
+      status: '状态',
+      imageUrl: '上传后自动填入图片地址'
+    },
     options: { free: '空闲', used: '使用', repair: '维修' },
     rules: {
       schoolIds: '请选择校区',
@@ -140,7 +169,16 @@ export default {
   },
   followTeacher: {
     page: { title: '跟车老师', description: '维护跟车老师账号（对齐旧版 user/teacher）。' },
-    columns: { id: 'ID', nickname: '昵称', school: '校区', department: '部门', email: '邮箱', phone: '手机号', status: '状态', lastLogin: '最后登录时间' },
+    columns: {
+      id: 'ID',
+      nickname: '昵称',
+      school: '校区',
+      department: '部门',
+      email: '邮箱',
+      phone: '手机号',
+      status: '状态',
+      lastLogin: '最后登录时间'
+    },
     fields: {
       school: '校区',
       nickname: '昵称',
@@ -172,6 +210,10 @@ export default {
       status: '请选择状态'
     },
     actions: { enable: '启用', disable: '禁用' },
-    messages: { confirmEnable: '确定要启用吗？', confirmDisable: '确定要禁用吗？', confirmDelete: '确定要删除吗？' }
+    messages: {
+      confirmEnable: '确定要启用吗？',
+      confirmDisable: '确定要禁用吗？',
+      confirmDelete: '确定要删除吗？'
+    }
   }
 }

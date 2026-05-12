@@ -1,9 +1,9 @@
-import type { Recordable } from "./shared";
+import type { Recordable } from './shared'
 
 export interface UniListTableExpose {
-  refresh: () => void;
+  refresh: () => void
 }
 
 export interface UniListStateOptions {
-  initialFilters: Recordable;
+  initialFilters: Recordable
 }

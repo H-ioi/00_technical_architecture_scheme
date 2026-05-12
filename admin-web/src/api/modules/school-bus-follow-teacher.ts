@@ -1,5 +1,8 @@
 import { API_PATHS } from '@/api/constants'
-import type { FollowTeacherFormModel, FollowTeacherListParams } from '@/types/modules/school-bus-follow-teacher'
+import type {
+  FollowTeacherFormModel,
+  FollowTeacherListParams
+} from '@/types/modules/school-bus-follow-teacher'
 import { downloadBlob } from '@/utils/download'
 import { request } from 'uni-ui-lib'
 

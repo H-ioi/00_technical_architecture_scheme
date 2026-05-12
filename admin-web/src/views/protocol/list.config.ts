@@ -193,7 +193,12 @@ export const detailForm = (t: Translate): UniFormConfig => ({
     { field: 'statusName', label: t('protocol.fields.status'), component: 'ElInput' },
     { field: 'createTime', label: t('protocol.fields.createTime'), component: 'ElInput' },
     { field: 'updateTime', label: t('protocol.fields.updateTime'), component: 'ElInput' },
-    { field: 'documentUrl', label: t('protocol.fields.documentUrl'), component: 'ElInput', colProps: { span: 24 } }
+    {
+      field: 'documentUrl',
+      label: t('protocol.fields.documentUrl'),
+      component: 'ElInput',
+      colProps: { span: 24 }
+    }
   ]
 })
 
@@ -201,11 +206,15 @@ export const formRules = (t: Translate): FormRules<ProtocolFormModel> => ({
   schoolIds: [{ required: true, message: t('protocol.placeholders.school'), trigger: 'change' }],
   cnName: [{ required: true, message: t('protocol.placeholders.cnName'), trigger: 'blur' }],
   enName: [{ required: true, message: t('protocol.placeholders.enName'), trigger: 'blur' }],
-  protocolType: [{ required: true, message: t('protocol.placeholders.protocolType'), trigger: 'change' }],
+  protocolType: [
+    { required: true, message: t('protocol.placeholders.protocolType'), trigger: 'change' }
+  ],
   module: [{ required: true, message: t('protocol.placeholders.module'), trigger: 'change' }],
   needSign: [{ required: true, message: t('protocol.placeholders.needSign'), trigger: 'change' }],
   status: [{ required: true, message: t('protocol.placeholders.status'), trigger: 'change' }],
-  documentUrl: [{ required: true, message: t('protocol.messages.uploadRequired'), trigger: 'change' }]
+  documentUrl: [
+    { required: true, message: t('protocol.messages.uploadRequired'), trigger: 'change' }
+  ]
 })
 
 /** 协议新增/编辑弹窗（UniForm + 附件槽位） */

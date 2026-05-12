@@ -40,7 +40,10 @@ const rolesLabel = (row: PermissionUserRecord) => {
   if (!Array.isArray(row.roleList)) {
     return '—'
   }
-  const s = row.roleList.map((x) => x.roleName).filter(Boolean).join(', ')
+  const s = row.roleList
+    .map((x) => x.roleName)
+    .filter(Boolean)
+    .join(', ')
   return s || '—'
 }
 
@@ -49,10 +52,15 @@ export interface UserListCallbacks {
   onDelete: (row: PermissionUserTableRow) => Promise<void>
 }
 
-export const useList = (deptIdRef: Ref<string | number | undefined>, callbacks: UserListCallbacks) => {
+export const useList = (
+  deptIdRef: Ref<string | number | undefined>,
+  callbacks: UserListCallbacks
+) => {
   const { t } = useUniI18n()
   const initialFilters = { username: '', nickname: '' }
-  const { queryModel, filters, tableRef, search, reset, handleLoadSuccess } = useUniListState({ initialFilters })
+  const { queryModel, filters, tableRef, search, reset, handleLoadSuccess } = useUniListState({
+    initialFilters
+  })
 
   const lockList = computed(() => lockOpts(t))
   const searchConfig = computed(() => searchForm(t))
@@ -63,7 +71,9 @@ export const useList = (deptIdRef: Ref<string | number | undefined>, callbacks: 
       current: pageNo,
       size: pageSize,
       ...f,
-      ...(deptIdRef.value !== undefined && deptIdRef.value !== null ? { deptId: deptIdRef.value } : {})
+      ...(deptIdRef.value !== undefined && deptIdRef.value !== null
+        ? { deptId: deptIdRef.value }
+        : {})
     })
     const { list, total } = unwrapUserPage(raw)
     const data: PermissionUserTableRow[] = list.map((r) => ({

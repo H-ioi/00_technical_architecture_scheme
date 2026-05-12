@@ -23,4 +23,3 @@ export interface TeacherRecord {
   teacherIdInt?: string | number
   [key: string]: unknown
 }
-

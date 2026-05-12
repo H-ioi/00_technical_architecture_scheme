@@ -10,7 +10,10 @@ export const operationStatusMeta = (t: Translate): UniOption[] => [
   { label: t('schoolBus.routeOperation.status.arrive'), value: '3' }
 ]
 
-export const createOperationColumns = (t: Translate, schoolOptions: UniOption[]): UniTableColumn[] => [
+export const createOperationColumns = (
+  t: Translate,
+  schoolOptions: UniOption[]
+): UniTableColumn[] => [
   { prop: 'id', label: t('schoolBus.routeOperation.columns.id'), width: 88, fixed: 'left' },
   {
     prop: 'statusLabel',

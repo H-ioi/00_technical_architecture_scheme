@@ -1,17 +1,12 @@
 export default {
-
   driver: {
-
     page: {
-
       title: '司机管理',
 
       description: '维护校车司机档案，支持按校区与关键字筛选、批量导入与删除。'
-
     },
 
     fields: {
-
       school: '所属校区',
 
       name: '姓名',
@@ -25,11 +20,9 @@ export default {
       licenseType: '准驾车型',
 
       status: '状态'
-
     },
 
     placeholders: {
-
       school: '请选择校区',
 
       keyword: '姓名 / 工号',
@@ -43,11 +36,9 @@ export default {
       contact: '请输入联系方式',
 
       licenseType: '如 C1、A1'
-
     },
 
     actions: {
-
       search: '查询',
 
       reset: '重置',
@@ -69,11 +60,9 @@ export default {
       cancel: '取消',
 
       submit: '确定'
-
     },
 
     messages: {
-
       saveSuccess: '保存成功',
 
       deleteSuccess: '删除成功',
@@ -85,19 +74,15 @@ export default {
       importTooLarge: '文件大小不能超过 10MB',
 
       confirmDelete: '确定删除所选司机吗？'
-
     },
 
     options: {
-
       enabled: '启用',
 
       disabled: '停用'
-
     },
 
     rules: {
-
       schoolIds: '请选择所属校区',
 
       name: '请输入姓名',
@@ -113,33 +98,25 @@ export default {
       licenseType: '请输入准驾车型',
 
       status: '请选择状态'
-
     }
-
   },
 
   routePlan: {
-
     page: {
-
       title: '路线规划',
 
       description: '维护路线、学期与站点基础数据（与旧版三 Tab 一致）。'
-
     },
 
     tabs: {
-
       routes: '全部路线',
 
       term: '学期配置',
 
       station: '站点配置'
-
     },
 
     placeholders: {
-
       section: '请选择学期',
 
       station: '请选择站点',
@@ -151,14 +128,10 @@ export default {
       termKeyword: '输入学期',
 
       stationNameKeyword: '输入站点名称'
-
     },
 
     messages: {
-
-      needWeekdaysAndStops:
-
-        '请至少选择一条「路线日期」，并为该日期添加站点后再保存。',
+      needWeekdaysAndStops: '请至少选择一条「路线日期」，并为该日期添加站点后再保存。',
 
       selectRowsFirst: '请先勾选路线',
 
@@ -169,27 +142,21 @@ export default {
       confirmDeleteTerms: '确定删除所选学期？删除后不可恢复。',
       selectStationsFirst: '请先勾选站点',
       confirmDeleteStations: '确定删除所选站点？删除后不可恢复。'
-
     },
 
     routeType: {
-
       daily: '日车',
 
       weekly: '周车'
-
     },
 
     visible: {
-
       yes: '可见',
 
       no: '不可见'
-
     },
 
     term: {
-
       intentStart: '申请开始',
 
       intentEnd: '申请结束',
@@ -197,17 +164,13 @@ export default {
       serviceStart: '服务开始',
 
       serviceEnd: '服务结束'
-
     },
 
     fields: {
-
       stationName: '站点'
-
     },
 
     actions: {
-
       addRoute: '新增路线',
 
       importRoute: '导入',
@@ -227,11 +190,9 @@ export default {
       downloadStationTemplate: '下载模板',
 
       editRoute: '编辑路线'
-
     },
 
     form: {
-
       cnName: '中文名',
 
       enName: '英文名',
@@ -281,7 +242,6 @@ export default {
       addScheduleGroup: '+ 添加路线日期组',
 
       stationCol: {
-
         name: '站点',
 
         goTime: '上学上车时间',
@@ -291,27 +251,20 @@ export default {
         price: '单次价',
 
         weekPrice: '周价格'
-
       }
-
     }
-
   },
 
   routeOperation: {
-
     pleaseSelect: '请选择',
 
     page: {
-
       title: '路线运营',
 
       description: '查询与维护校车运营记录；字段与权限与旧系统一致。'
-
     },
 
     columns: {
-
       id: 'ID',
 
       status: '状态',
@@ -341,11 +294,9 @@ export default {
       updateTime: '更新时间',
 
       remark: '备注'
-
     },
 
     placeholders: {
-
       school: '请选择学校',
 
       line: '请选择路线',
@@ -357,11 +308,9 @@ export default {
       rideDateStart: '开始日期',
 
       rideDateEnd: '结束日期'
-
     },
 
     form: {
-
       school: '校区',
 
       section: '学期',
@@ -389,11 +338,9 @@ export default {
       schoolTrip: '上学时间',
 
       homeTrip: '放学时间'
-
     },
 
     status: {
-
       early: '早点',
 
       onTime: '准点',
@@ -401,33 +348,25 @@ export default {
       late: '晚点',
 
       arrive: '到站'
-
     },
 
     messages: {
-
       confirmDelete: '确定删除所选运营记录吗？',
 
       exportSuccess: '导出成功'
-
     }
-
   },
 
   routeException: {
-
     pleaseSelect: '请选择',
 
     page: {
-
       title: '异常上报',
 
       description: '查询与维护校车异常上报记录。'
-
     },
 
     columns: {
-
       id: 'ID',
 
       schoolEnNames: '校区',
@@ -455,11 +394,9 @@ export default {
       createTime: '创建时间',
 
       details: '详情'
-
     },
 
     placeholders: {
-
       school: '请选择学校',
 
       section: '请选择学期',
@@ -475,11 +412,9 @@ export default {
       exceptionDateStart: '开始日期',
 
       exceptionDateEnd: '结束日期'
-
     },
 
     form: {
-
       school: '校区',
 
       section: '学期',
@@ -503,34 +438,24 @@ export default {
       dispatchDriver: '调度司机',
 
       details: '详情'
-
     },
 
     exceptionType: {
-
       behavior: '行为异常',
 
       vehicle: '车辆异常'
-
     },
 
     options: {
-
       yes: '是',
 
       no: '否'
-
     },
 
     messages: {
-
       confirmDelete: '确定删除所选异常记录吗？',
 
       exportSuccess: '导出成功'
-
     }
-
   }
-
 }
-

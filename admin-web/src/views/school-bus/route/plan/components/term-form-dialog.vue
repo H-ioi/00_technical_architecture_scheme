@@ -4,13 +4,11 @@
     width="520px"
     destroy-on-close
     :close-on-click-modal="false"
-    :title="termDialogTitle"
-  >
+    :title="termDialogTitle">
     <div
       v-loading="detailLoading"
       class="term-form-dialog__body"
-      :element-loading-text="$t('common.loading')"
-    >
+      :element-loading-text="$t('common.loading')">
       <UniForm ref="uniFormRef" v-model="formModel" mode="edit" :config="formConfig" />
     </div>
 

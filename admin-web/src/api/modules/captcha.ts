@@ -52,7 +52,10 @@ export default {
   check: {
     url: '/code/check',
     name: '校验滑块',
-    post: async function (this: { url: string }, data: { pointJson: string; token: string }): Promise<void> {
+    post: async function (
+      this: { url: string },
+      data: { pointJson: string; token: string }
+    ): Promise<void> {
       const response = await request.post<
         CaptchaResponse<unknown> | { data: CaptchaResponse<unknown> },
         CaptchaResponse<unknown> | { data: CaptchaResponse<unknown> }

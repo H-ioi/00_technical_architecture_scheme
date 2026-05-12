@@ -6,7 +6,10 @@ export default {
   treeTenant: {
     url: '/upms/menu/tenant/get',
     name: '租户菜单树',
-    get: async function (this: { url: string }, params?: { lazy?: boolean; parentId?: string | number }) {
+    get: async function (
+      this: { url: string },
+      params?: { lazy?: boolean; parentId?: string | number }
+    ) {
       return await request.get<PermissionMenuNode[], PermissionMenuNode[]>(this.url, {
         params: params ?? { lazy: false }
       })

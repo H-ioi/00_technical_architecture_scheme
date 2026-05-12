@@ -4,22 +4,20 @@
     :title="title"
     width="720px"
     destroy-on-close
-    @update:model-value="emit('update:visible', $event)"
-  >
+    @update:model-value="emit('update:visible', $event)">
     <div
       v-loading="detailLoading"
       class="school-bus-car-form__body"
-      :element-loading-text="$t('common.loading')"
-    >
-      <UniForm ref="uniFormRef" v-model="formModel" :mode="uniFormMode" :config="dialogFormConfig" />
+      :element-loading-text="$t('common.loading')">
+      <UniForm
+        ref="uniFormRef"
+        v-model="formModel"
+        :mode="uniFormMode"
+        :config="dialogFormConfig" />
 
       <div v-if="!isLook" class="car-form__upload">
         <div class="car-form__upload-label">{{ $t('schoolBus.car.fields.carImage') }}</div>
-        <el-upload
-          :show-file-list="false"
-          accept="image/*"
-          :before-upload="beforeUpload"
-        >
+        <el-upload :show-file-list="false" accept="image/*" :before-upload="beforeUpload">
           <el-button type="primary">{{ $t('schoolBus.car.actions.pickImage') }}</el-button>
         </el-upload>
         <span v-if="formModel.carImageUrl" class="car-form__url">{{ formModel.carImageUrl }}</span>
@@ -108,14 +106,26 @@ const pickDriversTeachers = async (schoolIds: Array<string | number> | undefined
     schoolBusCommonApi.driverList.get({ schoolIds }),
     schoolBusCommonApi.teacherList.get({ schoolIds })
   ])
-  const dList = Array.isArray(dRes) ? dRes : Array.isArray((dRes as { data?: unknown }).data) ? (dRes as { data: unknown[] }).data : []
-  const tList = Array.isArray(tRes) ? tRes : Array.isArray((tRes as { data?: unknown }).data) ? (tRes as { data: unknown[] }).data : []
-  driverOptions.value = (dList as { id: string | number; name?: string; status?: number }[]).map((i) => ({
-    label: String(i.name ?? i.id),
-    value: i.id,
-    disabled: i.status === 0
-  }))
-  teacherOptions.value = (tList as { id: string | number; nickname?: string; status?: number }[]).map((i) => ({
+  const dList = Array.isArray(dRes)
+    ? dRes
+    : Array.isArray((dRes as { data?: unknown }).data)
+      ? (dRes as { data: unknown[] }).data
+      : []
+  const tList = Array.isArray(tRes)
+    ? tRes
+    : Array.isArray((tRes as { data?: unknown }).data)
+      ? (tRes as { data: unknown[] }).data
+      : []
+  driverOptions.value = (dList as { id: string | number; name?: string; status?: number }[]).map(
+    (i) => ({
+      label: String(i.name ?? i.id),
+      value: i.id,
+      disabled: i.status === 0
+    })
+  )
+  teacherOptions.value = (
+    tList as { id: string | number; nickname?: string; status?: number }[]
+  ).map((i) => ({
     label: String(i.nickname ?? i.id),
     value: i.id,
     disabled: i.status === 0
@@ -161,7 +171,9 @@ watch(
       await runWithDetailLoading(async () => {
         const raw = await schoolBusCarApi.detail.get(props.source!.id)
         const data =
-          raw && typeof raw === 'object' && 'data' in raw ? (raw as { data: CarRecord }).data : (raw as CarRecord)
+          raw && typeof raw === 'object' && 'data' in raw
+            ? (raw as { data: CarRecord }).data
+            : (raw as CarRecord)
         await fillForm(data)
       })
     }

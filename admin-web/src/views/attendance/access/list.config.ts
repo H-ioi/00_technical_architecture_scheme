@@ -115,7 +115,10 @@ export const attendanceAccessSearchForm = (
   colProps: { span: 6 }
 })
 
-export const attendanceAccessColumns = (t: Translate, schoolOptions: UniOption[]): UniTableColumn[] => [
+export const attendanceAccessColumns = (
+  t: Translate,
+  schoolOptions: UniOption[]
+): UniTableColumn[] => [
   { prop: 'id', label: t('attendance.access.columns.id'), type: 'text', width: 90, fixed: 'left' },
   {
     prop: 'schoolId',
@@ -153,8 +156,18 @@ export const attendanceAccessColumns = (t: Translate, schoolOptions: UniOption[]
     minWidth: 120,
     showOverflowTooltip: true
   },
-  { prop: 'attendanceDate', label: t('attendance.access.columns.attendanceDate'), type: 'text', width: 120 },
-  { prop: 'enterOrExit', label: t('attendance.access.columns.enterOrExit'), type: 'text', width: 90 },
+  {
+    prop: 'attendanceDate',
+    label: t('attendance.access.columns.attendanceDate'),
+    type: 'text',
+    width: 120
+  },
+  {
+    prop: 'enterOrExit',
+    label: t('attendance.access.columns.enterOrExit'),
+    type: 'text',
+    width: 90
+  },
   { prop: 'openType', label: t('attendance.access.columns.openType'), type: 'text', width: 110 },
   { prop: 'openResult', label: t('attendance.access.columns.openResult'), type: 'text', width: 90 },
   {
@@ -187,7 +200,10 @@ export const attendanceAccessColumns = (t: Translate, schoolOptions: UniOption[]
   }
 ]
 
-export const attendanceAccessDetailForm = (t: Translate, schoolOptions: UniOption[]): UniFormConfig => ({
+export const attendanceAccessDetailForm = (
+  t: Translate,
+  schoolOptions: UniOption[]
+): UniFormConfig => ({
   mode: 'view',
   formProps: { labelWidth: '110px' },
   rowProps: { gutter: 16 },
@@ -215,7 +231,11 @@ export const attendanceAccessDetailForm = (t: Translate, schoolOptions: UniOptio
       label: t('attendance.access.columns.attendanceDate'),
       component: 'ElInput'
     },
-    { field: 'enterOrExit', label: t('attendance.access.columns.enterOrExit'), component: 'ElInput' },
+    {
+      field: 'enterOrExit',
+      label: t('attendance.access.columns.enterOrExit'),
+      component: 'ElInput'
+    },
     { field: 'openType', label: t('attendance.access.columns.openType'), component: 'ElInput' },
     { field: 'openResult', label: t('attendance.access.columns.openResult'), component: 'ElInput' },
     { field: 'cardNumber', label: t('attendance.access.columns.cardNumber'), component: 'ElInput' },

@@ -11,30 +11,30 @@ npm install uni-ui-lib
 ## 使用
 
 ```ts
-import { createApp } from "vue";
-import UniLib from "uni-ui-lib";
-import "uni-ui-lib/style.css";
+import { createApp } from 'vue'
+import UniLib from 'uni-ui-lib'
+import 'uni-ui-lib/style.css'
 
 createApp(App)
   .use(UniLib, {
     permission: {
-      hasPermission: (code) => permissionStore.hasPermission(code),
-    },
+      hasPermission: (code) => permissionStore.hasPermission(code)
+    }
   })
-  .mount("#app");
+  .mount('#app')
 ```
 
 也可以按需使用命名导出：
 
 ```ts
-import { UniDataTable, UniForm, UniSearchForm, UniUpload } from "uni-ui-lib";
+import { UniDataTable, UniForm, UniSearchForm, UniUpload } from 'uni-ui-lib'
 ```
 
 或使用组件子路径：
 
 ```ts
-import { UniDataTable } from "uni-ui-lib/components/uni-data-table";
-import "uni-ui-lib/components/uni-data-table/style.css";
+import { UniDataTable } from 'uni-ui-lib/components/uni-data-table'
+import 'uni-ui-lib/components/uni-data-table/style.css'
 ```
 
 ## Scripts

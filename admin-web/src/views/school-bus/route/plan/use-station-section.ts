@@ -169,7 +169,9 @@ export const useStationSection = (schoolRecords: SchoolRecordsRef) => {
     normalizeSchoolIdsField(row)
     const loc = locale()
     row.showStationName = loc === 'en' ? row.enName : row.cnName
-    row.createTime = row.createTime ? dayjs(String(row.createTime)).format('YYYY-MM-DD HH:mm') : '--'
+    row.createTime = row.createTime
+      ? dayjs(String(row.createTime)).format('YYYY-MM-DD HH:mm')
+      : '--'
 
     return row
   }

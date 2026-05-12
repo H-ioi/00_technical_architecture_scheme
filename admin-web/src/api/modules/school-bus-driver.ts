@@ -1,6 +1,10 @@
 import { API_PATHS } from '@/api/constants'
 import type { PageResult } from '@/types/api'
-import type { DriverFormModel, DriverListParams, DriverRecord } from '@/types/modules/school-bus-driver'
+import type {
+  DriverFormModel,
+  DriverListParams,
+  DriverRecord
+} from '@/types/modules/school-bus-driver'
 import { downloadBlob } from '@/utils/download'
 import { request } from 'uni-ui-lib'
 

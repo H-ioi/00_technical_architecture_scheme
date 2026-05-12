@@ -14,7 +14,10 @@ import {
 import { attendanceOpenTypeOpts } from '../school/list.config'
 
 import { attendanceAccessApi, attendanceSchoolApi, membershipApi } from '@/api'
-import type { AttendanceAccessListParams, AttendanceAccessRecord } from '@/types/modules/attendance-access'
+import type {
+  AttendanceAccessListParams,
+  AttendanceAccessRecord
+} from '@/types/modules/attendance-access'
 import type { SchoolOptionRecord } from '@/types/modules/membership'
 
 type Loose = Record<string, unknown>
@@ -24,8 +27,7 @@ const unwrapAccessPage = (payload: unknown): { list: Loose[]; total: number } =>
     return { list: [], total: 0 }
   }
   const r = payload as Loose
-  const num = (value: unknown) =>
-    typeof value === 'number' && Number.isFinite(value) ? value : 0
+  const num = (value: unknown) => (typeof value === 'number' && Number.isFinite(value) ? value : 0)
   if (Array.isArray(r.data)) {
     return { list: r.data as Loose[], total: num(r.total) }
   }

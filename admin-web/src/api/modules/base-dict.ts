@@ -15,7 +15,11 @@ const unwrapData = <T>(body: unknown): T | undefined => {
     return undefined
   }
 
-  if (typeof body === 'object' && 'data' in body && (body as { data: unknown }).data !== undefined) {
+  if (
+    typeof body === 'object' &&
+    'data' in body &&
+    (body as { data: unknown }).data !== undefined
+  ) {
     return (body as { data: T }).data
   }
 

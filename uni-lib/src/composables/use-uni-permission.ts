@@ -1,5 +1,5 @@
-import { hasUniPermission } from "@/directives/permission";
+import { hasUniPermission } from '@/directives/permission'
 
 export const useUniPermission = () => ({
-  hasPermission: hasUniPermission,
-});
+  hasPermission: hasUniPermission
+})

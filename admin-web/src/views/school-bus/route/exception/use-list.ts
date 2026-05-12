@@ -17,8 +17,7 @@ const unwrapPage = (payload: unknown): { list: ExceptionRecord[]; total: number 
   }
 
   const r = payload as Loose
-  const num = (value: unknown) =>
-    typeof value === 'number' && Number.isFinite(value) ? value : 0
+  const num = (value: unknown) => (typeof value === 'number' && Number.isFinite(value) ? value : 0)
 
   if (Array.isArray(r.data)) {
     return { list: r.data as ExceptionRecord[], total: num(r.total) }
@@ -42,11 +41,7 @@ const unwrapPage = (payload: unknown): { list: ExceptionRecord[]; total: number 
 
     return {
       list,
-      total:
-        num(r.total) ||
-        num(obj.total) ||
-        num(obj.totalElements) ||
-        num(r.totalElements)
+      total: num(r.total) || num(obj.total) || num(obj.totalElements) || num(r.totalElements)
     }
   }
 
@@ -100,10 +95,8 @@ interface CarEntity {
   carNumber?: string
 }
 
-const labelOf = (
-  options: { value: string; label: string }[],
-  value: unknown
-): string => options.find((x) => String(x.value) === String(value))?.label ?? String(value ?? '--')
+const labelOf = (options: { value: string; label: string }[], value: unknown): string =>
+  options.find((x) => String(x.value) === String(value))?.label ?? String(value ?? '--')
 
 /** 将接口里的 schoolIds（或单 id / 逗号串）规范为数组。 */
 const normalizeSchoolIdsField = (row: Loose): void => {
@@ -158,9 +151,7 @@ const formatExceptionRow = (
   next.exceptionDate = row.exceptionDate
     ? dayjs(String(row.exceptionDate)).format('YYYY-MM-DD')
     : '--'
-  next.createTime = row.createTime
-    ? dayjs(String(row.createTime)).format('YYYY-MM-DD HH:mm')
-    : '--'
+  next.createTime = row.createTime ? dayjs(String(row.createTime)).format('YYYY-MM-DD HH:mm') : '--'
 
   return next
 }

@@ -8,20 +8,20 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue";
-import type { UniFormConfig } from "uni-ui-lib";
+import { ref } from 'vue'
+import type { UniFormConfig } from 'uni-ui-lib'
 
-const model = ref<Record<string, unknown>>({ note: "" });
+const model = ref<Record<string, unknown>>({ note: '' })
 
 const config: UniFormConfig = {
   schema: [
     {
-      field: "note",
-      label: "备注",
-      component: "ElInput",
-      colProps: { span: 24 },
-    },
+      field: 'note',
+      label: '备注',
+      component: 'ElInput',
+      colProps: { span: 24 }
+    }
   ],
-  colProps: { span: 12 },
-};
+  colProps: { span: 12 }
+}
 </script>

@@ -4,13 +4,11 @@
     destroy-on-close
     width="640px"
     :title="t('permission.actions.assignMenu')"
-    @update:model-value="emit('update:visible', $event)"
-  >
+    @update:model-value="emit('update:visible', $event)">
     <div
       v-loading="loading"
       class="permission-assign-tree"
-      :element-loading-text="t('common.loading')"
-    >
+      :element-loading-text="t('common.loading')">
       <el-tree
         v-if="ready"
         :key="treeKey"
@@ -21,12 +19,15 @@
         highlight-current
         default-expand-all
         :props="{ label: 'name', children: 'children' }"
-        :default-checked-keys="checkedKeys"
-      />
+        :default-checked-keys="checkedKeys" />
     </div>
     <template #footer>
-      <el-button @click="emit('update:visible', false)">{{ t('permission.actions.cancel') }}</el-button>
-      <el-button type="primary" :loading="saving" @click="submit">{{ t('permission.actions.save') }}</el-button>
+      <el-button @click="emit('update:visible', false)">{{
+        t('permission.actions.cancel')
+      }}</el-button>
+      <el-button type="primary" :loading="saving" @click="submit">{{
+        t('permission.actions.save')
+      }}</el-button>
     </template>
   </el-dialog>
 </template>

@@ -16,7 +16,9 @@
     </template>
 
     <template v-else-if="columnType === 'video' || columnType === 'videos'">
-      <el-link v-for="url in linkItems" :key="url" type="primary" :href="url" target="_blank">查看视频</el-link>
+      <el-link v-for="url in linkItems" :key="url" type="primary" :href="url" target="_blank"
+        >查看视频</el-link
+      >
       <span v-if="linkItems.length === 0">--</span>
     </template>
 
@@ -35,7 +37,11 @@
         :model-value="value"
         :active-value="column.switch?.activeValue ?? true"
         :inactive-value="column.switch?.inactiveValue ?? false"
-        :disabled="typeof column.switch?.disabled === 'function' ? column.switch.disabled(row) : column.switch?.disabled"
+        :disabled="
+          typeof column.switch?.disabled === 'function'
+            ? column.switch.disabled(row)
+            : column.switch?.disabled
+        "
         @change="handleSwitchChange" />
     </template>
 
@@ -52,9 +58,18 @@
       <span v-if="linkItems.length === 0">--</span>
     </template>
 
-    <div v-else-if="columnType === 'copy' || column.copyable" class="uni-table-cell__copy-container">
+    <div
+      v-else-if="columnType === 'copy' || column.copyable"
+      class="uni-table-cell__copy-container">
       <span class="uni-table-cell__text">{{ displayValue }}</span>
-      <el-button v-if="canCopy" class="uni-table-cell__copy" link type="primary" aria-label="复制" title="复制" @click="copyCurrentValue">
+      <el-button
+        v-if="canCopy"
+        class="uni-table-cell__copy"
+        link
+        type="primary"
+        aria-label="复制"
+        title="复制"
+        @click="copyCurrentValue">
         <el-icon>
           <DocumentCopy />
         </el-icon>
@@ -90,7 +105,13 @@ import { useUniI18n } from '@/locales/use-uni-i18n'
 import type { Recordable } from '@/types/shared'
 import type { UniTableColumn } from '@/types/uni-table'
 import { copyText } from '@/utils/copy'
-import { formatEmpty, formatTableCellText, isBlankValue, resolveOption, toArray } from '@/utils/format'
+import {
+  formatEmpty,
+  formatTableCellText,
+  isBlankValue,
+  resolveOption,
+  toArray
+} from '@/utils/format'
 
 const props = defineProps<{
   row: Recordable
@@ -106,14 +127,23 @@ const emit = defineEmits<{
 const { t } = useUniI18n()
 const columnType = computed(() => props.column.type ?? 'text')
 const option = computed(() => resolveOption(props.value, props.column))
-const displayValue = computed(() => formatTableCellText(props.row, props.column, props.value, props.rowIndex, t))
+const displayValue = computed(() =>
+  formatTableCellText(props.row, props.column, props.value, props.rowIndex, t)
+)
 
 const imageUrls = computed(() => toArray(props.value).map(String).filter(Boolean))
 const linkItems = computed(() => toArray(props.value).map(String).filter(Boolean))
-const arrayItems = computed(() => displayValue.value.split(props.column.array?.separator ?? '、').filter(Boolean))
+const arrayItems = computed(() =>
+  displayValue.value.split(props.column.array?.separator ?? '、').filter(Boolean)
+)
 const emptyCopyTexts = new Set(['-', '--', '—', '暂无数据'])
 const copyTextValue = computed(() => String(displayValue.value ?? '').trim())
-const canCopy = computed(() => !isBlankValue(props.value) && !isBlankValue(copyTextValue.value) && !emptyCopyTexts.has(copyTextValue.value))
+const canCopy = computed(
+  () =>
+    !isBlankValue(props.value) &&
+    !isBlankValue(copyTextValue.value) &&
+    !emptyCopyTexts.has(copyTextValue.value)
+)
 
 const copyCurrentValue = async () => {
   if (!canCopy.value) {

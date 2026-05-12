@@ -4,8 +4,7 @@
     :title="$t('attendance.school.actions.detail')"
     width="880px"
     destroy-on-close
-    @update:model-value="emit('update:visible', $event)"
-  >
+    @update:model-value="emit('update:visible', $event)">
     <UniForm v-if="source" :model-value="source" :config="config" mode="view" />
     <template #footer>
       <el-button @click="emit('update:visible', false)">{{ $t('member.actions.close') }}</el-button>

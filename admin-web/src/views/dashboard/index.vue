@@ -23,8 +23,7 @@
           :key="item.path"
           class="dash__shortcut"
           type="button"
-          @click="go(item)"
-        >
+          @click="go(item)">
           <strong>{{ item.label }}</strong>
           <span>{{ item.description }}</span>
           <em>{{ $t('dashboard.enter') }}</em>

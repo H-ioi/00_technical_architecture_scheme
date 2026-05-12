@@ -4,48 +4,46 @@
     :title="$t('protocol.detail.title')"
     width="1080px"
     destroy-on-close
-    @update:model-value="emit('update:visible', $event)"
-  >
+    @update:model-value="emit('update:visible', $event)">
     <div
       v-loading="detailLoading"
       class="protocol-detail-loading-wrap"
-      :element-loading-text="$t('common.loading')"
-    >
+      :element-loading-text="$t('common.loading')">
       <div v-if="detail" class="protocol-detail">
-      <el-descriptions :column="2" border>
-        <el-descriptions-item v-for="item in displayItems" :key="item.label" :label="item.label">
-          {{ item.value || '--' }}
-        </el-descriptions-item>
-        <el-descriptions-item :label="$t('protocol.fields.documentUrl')" :span="2">
-          <el-link
-            v-if="detail.documentUrl"
-            type="primary"
-            :href="detail.documentUrl"
-            target="_blank"
-          >
-            {{ detail.documentUrl }}
-          </el-link>
-          <span v-else>--</span>
-        </el-descriptions-item>
-      </el-descriptions>
+        <el-descriptions :column="2" border>
+          <el-descriptions-item v-for="item in displayItems" :key="item.label" :label="item.label">
+            {{ item.value || '--' }}
+          </el-descriptions-item>
+          <el-descriptions-item :label="$t('protocol.fields.documentUrl')" :span="2">
+            <el-link
+              v-if="detail.documentUrl"
+              type="primary"
+              :href="detail.documentUrl"
+              target="_blank">
+              {{ detail.documentUrl }}
+            </el-link>
+            <span v-else>--</span>
+          </el-descriptions-item>
+        </el-descriptions>
 
-      <section class="protocol-detail__sign">
-        <h3>{{ $t('protocol.detail.signRecords') }}</h3>
-        <UniDataTable
-          ref="signTableRef"
-          row-key="id"
-          :columns="signColumns"
-          :request="loadSignData"
-          :pagination="{ pageSize: 10, pageSizes: [10, 20, 50] }"
-          :toolbar="false"
-          :action-column="{ fixed: false }"
-        />
-      </section>
-    </div>
+        <section class="protocol-detail__sign">
+          <h3>{{ $t('protocol.detail.signRecords') }}</h3>
+          <UniDataTable
+            ref="signTableRef"
+            row-key="id"
+            :columns="signColumns"
+            :request="loadSignData"
+            :pagination="{ pageSize: 10, pageSizes: [10, 20, 50] }"
+            :toolbar="false"
+            :action-column="{ fixed: false }" />
+        </section>
+      </div>
     </div>
 
     <template #footer>
-      <el-button @click="emit('update:visible', false)">{{ $t('protocol.actions.close') }}</el-button>
+      <el-button @click="emit('update:visible', false)">{{
+        $t('protocol.actions.close')
+      }}</el-button>
     </template>
   </el-dialog>
 </template>

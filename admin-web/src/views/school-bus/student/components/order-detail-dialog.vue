@@ -4,8 +4,7 @@
     width="85%"
     destroy-on-close
     :title="$t('schoolBus.studentApply.detail.title')"
-    @closed="emit('close')"
-  >
+    @closed="emit('close')">
     <div v-if="loading" class="order-detail__loading">
       {{ $t('schoolBus.studentApply.detail.loading') }}
     </div>
@@ -47,8 +46,7 @@
         <el-descriptions-item
           v-if="String(baseInfo.approvalStatus ?? '') === '2'"
           :label="$t('schoolBus.studentApply.detail.denyReason')"
-          :span="4"
-        >
+          :span="4">
           {{ baseInfo.denyReason ?? '--' }}
         </el-descriptions-item>
       </el-descriptions>
@@ -83,8 +81,7 @@
           v-if="signImageUrl"
           :src="signImageUrl"
           fit="contain"
-          class="order-detail__sign-img"
-        />
+          class="order-detail__sign-img" />
         <span v-else>--</span>
       </div>
 
@@ -94,39 +91,32 @@
           prop="lineName"
           :label="$t('schoolBus.studentApply.detail.routeLine')"
           min-width="120"
-          show-overflow-tooltip
-        />
+          show-overflow-tooltip />
         <el-table-column
           prop="stationName"
           :label="$t('schoolBus.studentApply.detail.routeStation')"
           min-width="120"
-          show-overflow-tooltip
-        />
+          show-overflow-tooltip />
         <el-table-column
           prop="lineTypeName"
           :label="$t('schoolBus.studentApply.detail.lineType')"
-          width="120"
-        />
+          width="120" />
         <el-table-column
           prop="ridingWeekDay"
           :label="$t('schoolBus.studentApply.detail.ridingWeekDay')"
-          width="120"
-        />
+          width="120" />
         <el-table-column
           prop="carNumber"
           :label="$t('schoolBus.studentOrder.columns.car')"
-          width="120"
-        />
+          width="120" />
         <el-table-column
           prop="ridingStartDay"
           :label="$t('schoolBus.studentApply.detail.startDay')"
-          width="120"
-        />
+          width="120" />
         <el-table-column
           prop="ridingEndDay"
           :label="$t('schoolBus.studentApply.detail.endDay')"
-          width="120"
-        />
+          width="120" />
       </el-table>
 
       <template v-if="String(baseInfo.pickupMethod ?? '') === '2'">
@@ -137,20 +127,17 @@
           <el-table-column
             prop="pickupRelationships"
             :label="$t('schoolBus.studentApply.detail.relation')"
-            min-width="100"
-          />
+            min-width="100" />
           <el-table-column
             prop="pickupPhone"
             :label="$t('schoolBus.studentApply.detail.phone')"
-            width="140"
-          />
+            width="140" />
           <el-table-column :label="$t('schoolBus.studentApply.detail.photo')" min-width="120">
             <template #default="{ row }">
               <el-image
                 v-if="row.pickupImageUrl"
                 :src="String(row.pickupImageUrl)"
-                class="order-detail__thumb"
-              />
+                class="order-detail__thumb" />
               <span v-else>--</span>
             </template>
           </el-table-column>

@@ -33,7 +33,10 @@ export const searchForm = (
       field: 'keyword',
       label: '',
       component: 'ElInput',
-      componentProps: { placeholder: t('schoolBus.followTeacher.placeholders.keyword'), clearable: true },
+      componentProps: {
+        placeholder: t('schoolBus.followTeacher.placeholders.keyword'),
+        clearable: true
+      },
       colProps: { span: 8 }
     },
     ...(multiSchool
@@ -60,14 +63,46 @@ export const searchForm = (
 })
 
 export const tableCols = (t: Translate, statusOptions: UniOption[]): UniTableColumn[] => [
-  { prop: 'id', label: t('schoolBus.followTeacher.columns.id'), width: 88, fixed: 'left', type: 'text' },
-  { prop: 'nickname', label: t('schoolBus.followTeacher.columns.nickname'), type: 'text', minWidth: 120 },
-  { prop: 'schoolLabel', label: t('schoolBus.followTeacher.columns.school'), type: 'text', minWidth: 120 },
-  { prop: 'department', label: t('schoolBus.followTeacher.columns.department'), type: 'text', minWidth: 100 },
+  {
+    prop: 'id',
+    label: t('schoolBus.followTeacher.columns.id'),
+    width: 88,
+    fixed: 'left',
+    type: 'text'
+  },
+  {
+    prop: 'nickname',
+    label: t('schoolBus.followTeacher.columns.nickname'),
+    type: 'text',
+    minWidth: 120
+  },
+  {
+    prop: 'schoolLabel',
+    label: t('schoolBus.followTeacher.columns.school'),
+    type: 'text',
+    minWidth: 120
+  },
+  {
+    prop: 'department',
+    label: t('schoolBus.followTeacher.columns.department'),
+    type: 'text',
+    minWidth: 100
+  },
   { prop: 'email', label: t('schoolBus.followTeacher.columns.email'), type: 'text', minWidth: 160 },
   { prop: 'phone', label: t('schoolBus.followTeacher.columns.phone'), type: 'text', width: 130 },
-  { prop: 'status', label: t('schoolBus.followTeacher.columns.status'), type: 'tag', options: statusOptions, width: 96 },
-  { prop: 'lastLoginTime', label: t('schoolBus.followTeacher.columns.lastLogin'), type: 'text', minWidth: 160 }
+  {
+    prop: 'status',
+    label: t('schoolBus.followTeacher.columns.status'),
+    type: 'tag',
+    options: statusOptions,
+    width: 96
+  },
+  {
+    prop: 'lastLoginTime',
+    label: t('schoolBus.followTeacher.columns.lastLogin'),
+    type: 'text',
+    minWidth: 160
+  }
 ]
 
 export const teacherFormRules = (
@@ -76,10 +111,18 @@ export const teacherFormRules = (
   _mode: 'add' | 'edit' | 'look'
 ): FormRules<FollowTeacherFormModel> => ({
   ...(multiSchool
-    ? { school: [{ required: true, message: t('schoolBus.followTeacher.rules.school'), trigger: 'change' }] }
+    ? {
+        school: [
+          { required: true, message: t('schoolBus.followTeacher.rules.school'), trigger: 'change' }
+        ]
+      }
     : {}),
-  nickname: [{ required: true, message: t('schoolBus.followTeacher.rules.nickname'), trigger: 'blur' }],
-  department: [{ required: true, message: t('schoolBus.followTeacher.rules.department'), trigger: 'blur' }],
+  nickname: [
+    { required: true, message: t('schoolBus.followTeacher.rules.nickname'), trigger: 'blur' }
+  ],
+  department: [
+    { required: true, message: t('schoolBus.followTeacher.rules.department'), trigger: 'blur' }
+  ],
   email: [
     { required: true, message: t('schoolBus.followTeacher.rules.email'), trigger: 'blur' },
     { type: 'email', message: t('schoolBus.followTeacher.rules.emailFormat'), trigger: 'blur' }
@@ -109,11 +152,15 @@ export const teacherFormRules = (
       trigger: 'change'
     }
   ],
-  status: [{ required: true, message: t('schoolBus.followTeacher.rules.status'), trigger: 'change' }]
+  status: [
+    { required: true, message: t('schoolBus.followTeacher.rules.status'), trigger: 'change' }
+  ]
 })
 
 export const teacherAddPasswordRule = (t: Translate): FormRules<FollowTeacherFormModel> => ({
-  password: [{ required: true, message: t('schoolBus.followTeacher.rules.password'), trigger: 'blur' }]
+  password: [
+    { required: true, message: t('schoolBus.followTeacher.rules.password'), trigger: 'blur' }
+  ]
 })
 
 /** 与旧版 `user/teacher/modal/form.vue` 字段一致（含模块/角色多选）；密码仅新增展示与校验。 */

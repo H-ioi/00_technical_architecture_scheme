@@ -17,8 +17,7 @@ const unwrapCarPage = (payload: unknown): { list: CarRecord[]; total: number } =
     return { list: [], total: 0 }
   }
   const r = payload as Loose
-  const num = (value: unknown) =>
-    typeof value === 'number' && Number.isFinite(value) ? value : 0
+  const num = (value: unknown) => (typeof value === 'number' && Number.isFinite(value) ? value : 0)
   if (Array.isArray(r.data)) {
     return { list: r.data as CarRecord[], total: num(r.total) }
   }
@@ -51,16 +50,16 @@ export const useList = () => {
     initialFilters
   })
   const schoolRecords = ref<SchoolOptionRecord[]>([])
-  const schoolOptions = computed(() =>
-    membershipSchoolToOptions(schoolRecords.value, locale())
-  )
+  const schoolOptions = computed(() => membershipSchoolToOptions(schoolRecords.value, locale()))
   const multiSchool = computed(() => schoolRecords.value.length > 1)
   const defaultSchoolId = computed(() =>
     schoolRecords.value.length === 1 ? schoolRecords.value[0].id : null
   )
 
   const statusOptions = computed(() => carStatusOpts(t))
-  const searchConfig = computed(() => searchForm(t, schoolOptions.value, statusOptions.value, multiSchool.value))
+  const searchConfig = computed(() =>
+    searchForm(t, schoolOptions.value, statusOptions.value, multiSchool.value)
+  )
   const columns = computed(() => tableCols(t, statusOptions.value))
 
   const formVisible = ref(false)
@@ -104,7 +103,10 @@ export const useList = () => {
   }
 
   const actions = computed<UniTableAction[]>(() => [
-    { label: t('schoolBus.driver.actions.look'), onClick: (row) => openForm('look', row as CarRecord) },
+    {
+      label: t('schoolBus.driver.actions.look'),
+      onClick: (row) => openForm('look', row as CarRecord)
+    },
     {
       label: t('schoolBus.driver.actions.edit'),
       code: 'buscarinfo_edit',

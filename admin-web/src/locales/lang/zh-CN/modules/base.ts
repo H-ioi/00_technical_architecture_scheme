@@ -2,7 +2,8 @@ export default {
   school: {
     page: {
       title: '校区配置',
-      description: '维护校区名称、排序与启用状态；接口与旧系统「基础设置 / 校区配置」一致（字典类型 order_school）。'
+      description:
+        '维护校区名称、排序与启用状态；接口与旧系统「基础设置 / 校区配置」一致（字典类型 order_school）。'
     },
     search: {
       keywordPlaceholder: '按类型名称筛选'
@@ -61,7 +62,8 @@ export default {
   grade: {
     page: {
       title: '年级配置',
-      description: '维护年级名称、排序与启用状态；接口与旧系统「基础设置 / 年级配置」一致（字典类型 isacommunity_enroll_level）。'
+      description:
+        '维护年级名称、排序与启用状态；接口与旧系统「基础设置 / 年级配置」一致（字典类型 isacommunity_enroll_level）。'
     },
     search: {
       keywordPlaceholder: '按类型名称筛选'

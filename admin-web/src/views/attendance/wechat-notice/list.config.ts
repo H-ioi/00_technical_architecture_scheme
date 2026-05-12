@@ -96,8 +96,17 @@ export const attendanceWechatNoticeSearchForm = (
   colProps: { span: 6 }
 })
 
-export const attendanceWechatNoticeColumns = (t: Translate, schoolOptions: UniOption[]): UniTableColumn[] => [
-  { prop: 'id', label: t('attendance.wechatNotice.columns.id'), type: 'text', width: 90, fixed: 'left' },
+export const attendanceWechatNoticeColumns = (
+  t: Translate,
+  schoolOptions: UniOption[]
+): UniTableColumn[] => [
+  {
+    prop: 'id',
+    label: t('attendance.wechatNotice.columns.id'),
+    type: 'text',
+    width: 90,
+    fixed: 'left'
+  },
   {
     prop: 'schoolId',
     label: t('attendance.wechatNotice.columns.schoolName'),
@@ -120,7 +129,12 @@ export const attendanceWechatNoticeColumns = (t: Translate, schoolOptions: UniOp
     minWidth: 100,
     showOverflowTooltip: true
   },
-  { prop: 'sendStatus', label: t('attendance.wechatNotice.columns.sendStatus'), type: 'text', width: 90 },
+  {
+    prop: 'sendStatus',
+    label: t('attendance.wechatNotice.columns.sendStatus'),
+    type: 'text',
+    width: 90
+  },
   {
     prop: 'sendOpenId',
     label: t('attendance.wechatNotice.columns.sendOpenId'),
@@ -151,7 +165,10 @@ export const attendanceWechatNoticeColumns = (t: Translate, schoolOptions: UniOp
   }
 ]
 
-export const attendanceWechatNoticeDetailForm = (t: Translate, schoolOptions: UniOption[]): UniFormConfig => ({
+export const attendanceWechatNoticeDetailForm = (
+  t: Translate,
+  schoolOptions: UniOption[]
+): UniFormConfig => ({
   mode: 'view',
   formProps: { labelWidth: '110px' },
   rowProps: { gutter: 16 },
@@ -171,15 +188,31 @@ export const attendanceWechatNoticeDetailForm = (t: Translate, schoolOptions: Un
       label: t('attendance.wechatNotice.columns.admissionNo'),
       component: 'ElInput'
     },
-    { field: 'personName', label: t('attendance.wechatNotice.columns.personName'), component: 'ElInput' },
-    { field: 'sendStatus', label: t('attendance.wechatNotice.columns.sendStatus'), component: 'ElInput' },
+    {
+      field: 'personName',
+      label: t('attendance.wechatNotice.columns.personName'),
+      component: 'ElInput'
+    },
+    {
+      field: 'sendStatus',
+      label: t('attendance.wechatNotice.columns.sendStatus'),
+      component: 'ElInput'
+    },
     {
       field: 'sendOpenId',
       label: t('attendance.wechatNotice.columns.sendOpenId'),
       component: 'ElInput'
     },
     { field: 'result', label: t('attendance.wechatNotice.columns.result'), component: 'ElInput' },
-    { field: 'updateTime', label: t('attendance.wechatNotice.columns.updateTime'), component: 'ElInput' },
-    { field: 'createTime', label: t('attendance.wechatNotice.columns.createTime'), component: 'ElInput' }
+    {
+      field: 'updateTime',
+      label: t('attendance.wechatNotice.columns.updateTime'),
+      component: 'ElInput'
+    },
+    {
+      field: 'createTime',
+      label: t('attendance.wechatNotice.columns.createTime'),
+      component: 'ElInput'
+    }
   ]
 })

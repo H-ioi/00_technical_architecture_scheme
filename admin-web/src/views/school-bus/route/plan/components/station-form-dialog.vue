@@ -4,13 +4,11 @@
     width="520px"
     destroy-on-close
     :close-on-click-modal="false"
-    :title="stationDialogTitle"
-  >
+    :title="stationDialogTitle">
     <div
       v-loading="detailLoading"
       class="station-form-dialog__body"
-      :element-loading-text="$t('common.loading')"
-    >
+      :element-loading-text="$t('common.loading')">
       <UniForm ref="uniFormRef" v-model="formModel" mode="edit" :config="formConfig" />
     </div>
 

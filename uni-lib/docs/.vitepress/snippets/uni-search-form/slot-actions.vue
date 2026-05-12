@@ -8,20 +8,20 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue";
-import type { UniFormConfig } from "uni-ui-lib";
+import { ref } from 'vue'
+import type { UniFormConfig } from 'uni-ui-lib'
 
-const query = ref<Record<string, unknown>>({});
+const query = ref<Record<string, unknown>>({})
 const searchConfig: UniFormConfig = {
-  formProps: { labelWidth: "auto" },
+  formProps: { labelWidth: 'auto' },
   schema: [
     {
-      field: "name",
-      label: "名称",
-      component: "ElInput",
-      colProps: { span: 8 },
-    },
+      field: 'name',
+      label: '名称',
+      component: 'ElInput',
+      colProps: { span: 8 }
+    }
   ],
-  colProps: { span: 8 },
-};
+  colProps: { span: 8 }
+}
 </script>

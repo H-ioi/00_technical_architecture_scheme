@@ -4,14 +4,16 @@
     :title="title"
     width="1000px"
     destroy-on-close
-    @update:model-value="emit('update:visible', $event)"
-  >
+    @update:model-value="emit('update:visible', $event)">
     <div
       v-loading="detailLoading"
       class="school-bus-operation-form__wrap"
-      :element-loading-text="$t('common.loading')"
-    >
-      <UniForm ref="uniFormRef" v-model="formModel" :mode="uniFormMode" :config="dialogFormConfig" />
+      :element-loading-text="$t('common.loading')">
+      <UniForm
+        ref="uniFormRef"
+        v-model="formModel"
+        :mode="uniFormMode"
+        :config="dialogFormConfig" />
     </div>
     <template #footer>
       <el-button @click="close">{{ $t('schoolBus.driver.actions.cancel') }}</el-button>
@@ -118,21 +120,21 @@ const schoolUniOptions = computed(() =>
 
 const sectionUniOptions = computed(() =>
   sectionOptions.value.map((s) => ({
-    label: (locale.value === 'en' ? (s.enName || s.cnName) : (s.cnName || s.enName)) as string,
+    label: (locale.value === 'en' ? s.enName || s.cnName : s.cnName || s.enName) as string,
     value: s.id
   }))
 )
 
 const lineUniOptions = computed(() =>
   lineOptionsFiltered.value.map((l) => ({
-    label: (locale.value === 'en' ? (l.enName || l.cnName) : (l.cnName || l.enName)) as string,
+    label: (locale.value === 'en' ? l.enName || l.cnName : l.cnName || l.enName) as string,
     value: l.id
   }))
 )
 
 const stationUniOptions = computed(() =>
   stationOptionsFiltered.value.map((st) => ({
-    label: (locale.value === 'en' ? (st.enName || st.cnName) : (st.cnName || st.enName)) as string,
+    label: (locale.value === 'en' ? st.enName || st.cnName : st.cnName || st.enName) as string,
     value: st.id
   }))
 )
@@ -146,17 +148,33 @@ const carUniOptions = computed(() =>
 
 const dialogRules = computed<FormRules<OperationFormModel>>(() => {
   const r: FormRules<OperationFormModel> = {
-    sectionId: [{ required: true, message: t('schoolBus.routeOperation.pleaseSelect'), trigger: 'change' }],
-    lineId: [{ required: true, message: t('schoolBus.routeOperation.pleaseSelect'), trigger: 'change' }],
-    stationId: [{ required: true, message: t('schoolBus.routeOperation.pleaseSelect'), trigger: 'change' }],
-    schoolTimeType: [{ required: true, message: t('schoolBus.routeOperation.pleaseSelect'), trigger: 'change' }],
-    carId: [{ required: true, message: t('schoolBus.routeOperation.pleaseSelect'), trigger: 'change' }],
-    rideDate: [{ required: true, message: t('schoolBus.routeOperation.pleaseSelect'), trigger: 'change' }],
-    arrivalTime: [{ required: true, message: t('schoolBus.routeOperation.pleaseSelect'), trigger: 'change' }]
+    sectionId: [
+      { required: true, message: t('schoolBus.routeOperation.pleaseSelect'), trigger: 'change' }
+    ],
+    lineId: [
+      { required: true, message: t('schoolBus.routeOperation.pleaseSelect'), trigger: 'change' }
+    ],
+    stationId: [
+      { required: true, message: t('schoolBus.routeOperation.pleaseSelect'), trigger: 'change' }
+    ],
+    schoolTimeType: [
+      { required: true, message: t('schoolBus.routeOperation.pleaseSelect'), trigger: 'change' }
+    ],
+    carId: [
+      { required: true, message: t('schoolBus.routeOperation.pleaseSelect'), trigger: 'change' }
+    ],
+    rideDate: [
+      { required: true, message: t('schoolBus.routeOperation.pleaseSelect'), trigger: 'change' }
+    ],
+    arrivalTime: [
+      { required: true, message: t('schoolBus.routeOperation.pleaseSelect'), trigger: 'change' }
+    ]
   }
 
   if (multiSchool.value) {
-    r.school = [{ required: true, message: t('schoolBus.driver.rules.schoolIds'), trigger: 'change' }]
+    r.school = [
+      { required: true, message: t('schoolBus.driver.rules.schoolIds'), trigger: 'change' }
+    ]
   }
 
   return r
@@ -318,12 +336,17 @@ const unwrapDetail = (payload: unknown): Record<string, unknown> => {
   return payload as Record<string, unknown>
 }
 
-const unwrapArray = <T>(payload: unknown): T[] => {
+const unwrapArray = <T,>(payload: unknown): T[] => {
   if (Array.isArray(payload)) {
     return payload as T[]
   }
 
-  if (payload && typeof payload === 'object' && 'data' in payload && Array.isArray((payload as { data: unknown }).data)) {
+  if (
+    payload &&
+    typeof payload === 'object' &&
+    'data' in payload &&
+    Array.isArray((payload as { data: unknown }).data)
+  ) {
     return (payload as { data: T[] }).data
   }
 
@@ -399,9 +422,7 @@ const onLineChange = async (lineId: string | number | undefined) => {
     return
   }
 
-  const st = unwrapArray<StationRow>(
-    await schoolBusCommonApi.stationList.get({ lineId })
-  )
+  const st = unwrapArray<StationRow>(await schoolBusCommonApi.stationList.get({ lineId }))
 
   stationOptionsFiltered.value = st
 

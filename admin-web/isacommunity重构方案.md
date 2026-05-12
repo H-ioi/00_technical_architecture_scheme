@@ -2,10 +2,10 @@
 
 本仓库内需同时对照两套目录开展工作：
 
-| 角色 | 路径（相对仓库根） | 说明 |
-| --- | --- | --- |
-| **旧系统参考代码** | `test/old-test`（Windows 亦可 `test\old-test`） | 业务行为、接口、权限、页面的**对齐依据**，不作为本期交付产物 |
-| **重构后的管理后台** | `admin-web` | 本期重构的**落地工程**（Vue3 + `uni-lib`/`uni-ui-lib` 等） |
+| 角色                 | 路径（相对仓库根）                              | 说明                                                         |
+| -------------------- | ----------------------------------------------- | ------------------------------------------------------------ |
+| **旧系统参考代码**   | `test/old-test`（Windows 亦可 `test\old-test`） | 业务行为、接口、权限、页面的**对齐依据**，不作为本期交付产物 |
+| **重构后的管理后台** | `admin-web`                                     | 本期重构的**落地工程**（Vue3 + `uni-lib`/`uni-ui-lib` 等）   |
 
 **当前进度**：重构方案已**阶段性完成**一部分模块；**现已进入下一轮**——以 `admin-web` 为实施目录，**凡新功能或未迁页面**，均须先对照 `test/old-test` 逐条核对后再编码，严禁无旧代码依据的臆测扩展。
 
@@ -13,19 +13,19 @@
 
 ## 〇、方案执行提示（强制遵守）
 
-1. **旧项目 `test/old-test` 为唯一事实来源（路径与对齐方式）**  
-   - **对照仓库**：旧可运行页面与接口以 **`test/old-test`** 为准（与本仓库根目录相对；PowerShell／资源管理器中可写作 `test\old-test`）。典型目录：`test/old-test/src/views/isacommunity/...` 及同模块下的 **`api`、`mixins`、共用组件**等真实调用链。  
-   - **开发与接口**：页面功能边界、交互、**接口路径、请求/响应字段、权限码**一律以旧项目代码为准逐项对齐。**开发过程中严禁揣测功能或接口形态**（不凭习惯补字段、不改路径语义、不为“更好用”而自造旧页不存在的操作）。**有疑问必须先查旧项目再动手**；无法在旧代码中印证的能力默认不落地。  
+1. **旧项目 `test/old-test` 为唯一事实来源（路径与对齐方式）**
+   - **对照仓库**：旧可运行页面与接口以 **`test/old-test`** 为准（与本仓库根目录相对；PowerShell／资源管理器中可写作 `test\old-test`）。典型目录：`test/old-test/src/views/isacommunity/...` 及同模块下的 **`api`、`mixins`、共用组件**等真实调用链。
+   - **开发与接口**：页面功能边界、交互、**接口路径、请求/响应字段、权限码**一律以旧项目代码为准逐项对齐。**开发过程中严禁揣测功能或接口形态**（不凭习惯补字段、不改路径语义、不为“更好用”而自造旧页不存在的操作）。**有疑问必须先查旧项目再动手**；无法在旧代码中印证的能力默认不落地。
 
-2. **组件库 `uni-lib`（发布依赖名 `uni-ui-lib`）：改库必发布、业务项目用 Yarn 拉最新**  
-   - **组件库源码所在**：本仓库内 **`uni-lib/`** 目录（非 npm 安装目录）。通用 UI/协议能力以 **`uni-lib` 的实现与导出**为准。  
-   - **若本次迭代改动了 `uni-lib` 源码**：必须在 **`uni-lib` 仓库根目录**执行 **`npm run release`**，按既有流程完成版本递增与发布提交（脚本见 `scripts/publish.mjs` 等）；**不得在只改源码却不 release 的情况下**，让其他人仅靠本地构建猜测版本。  
-   - **`admin-web` 对齐已发布组件库**：release 完成后，在 **`admin-web`** 目录使用 **Yarn** 将依赖更新到对应版本，例如 **`yarn upgrade uni-ui-lib`**（或 **`yarn upgrade uni-ui-lib@<版本号>`** / 按需调整 `package.json` 后用 **`yarn install`**），确保拉取到**已发布**的构建，而不是长期依赖手工 `yarn link`/本地拷贝导致与 CI、他机不一致。  
-   - **未改 `uni-lib` 时**：不要重复 release；仅改 **`admin-web` 业务代码**时按常规划分提交即可。  
+2. **组件库 `uni-lib`（发布依赖名 `uni-ui-lib`）：改库必发布、业务项目用 Yarn 拉最新**
+   - **组件库源码所在**：本仓库内 **`uni-lib/`** 目录（非 npm 安装目录）。通用 UI/协议能力以 **`uni-lib` 的实现与导出**为准。
+   - **若本次迭代改动了 `uni-lib` 源码**：必须在 **`uni-lib` 仓库根目录**执行 **`npm run release`**，按既有流程完成版本递增与发布提交（脚本见 `scripts/publish.mjs` 等）；**不得在只改源码却不 release 的情况下**，让其他人仅靠本地构建猜测版本。
+   - **`admin-web` 对齐已发布组件库**：release 完成后，在 **`admin-web`** 目录使用 **Yarn** 将依赖更新到对应版本，例如 **`yarn upgrade uni-ui-lib`**（或 **`yarn upgrade uni-ui-lib@<版本号>`** / 按需调整 `package.json` 后用 **`yarn install`**），确保拉取到**已发布**的构建，而不是长期依赖手工 `yarn link`/本地拷贝导致与 CI、他机不一致。
+   - **未改 `uni-lib` 时**：不要重复 release；仅改 **`admin-web` 业务代码**时按常规划分提交即可。
 
-3. **迭代节奏与当前轮次**  
-   - 方案按阶段（P0～P9 / Phase 0～10）推进；**每完成一块可交付切片**（单业务域、单列表/表单闭环）应在 **`admin-web`** 目录执行 **`yarn lint`、`yarn type-check`、`yarn build`**（以 `package.json` 脚本为准），合并前代码评审。  
-   - **当前状态（下一轮起点）**：`admin-web` 中已落地多阶段能力（登录/首页/成员、部分 **Phase 2 基础设置**、**Phase 3 校车**、**Phase 4 协议**等子页）；**未完部分以实际路由与菜单为准**。  
+3. **迭代节奏与当前轮次**
+   - 方案按阶段（P0～P9 / Phase 0～10）推进；**每完成一块可交付切片**（单业务域、单列表/表单闭环）应在 **`admin-web`** 目录执行 **`yarn lint`、`yarn type-check`、`yarn build`**（以 `package.json` 脚本为准），合并前代码评审。
+   - **当前状态（下一轮起点）**：`admin-web` 中已落地多阶段能力（登录/首页/成员、部分 **Phase 2 基础设置**、**Phase 3 校车**、**Phase 4 协议**等子页）；**未完部分以实际路由与菜单为准**。
    - **下一轮执行方式**：认领下一批菜单/页面 → **先在 `test/old-test` 中定位对应旧页与调用链并完成盘点** → 再在 **`admin-web`** 补齐类型、API、`views`、i18n、路由与映射；继续在 **Phase 3 残留**、**Phase 4～** 滚动推进。**Phase 5 之后默认顺序**：权限 → 考勤 → **群发邮件 → 活动管理 → 内容管理（内容置于 Phase 9、收尾 Phase 10 之前）**。**严禁跳步、严禁无旧代码依据的新能力**。
 
 ## 一、重构目标
@@ -40,11 +40,11 @@
 
 第一轮只重构以下模块：
 
-| 模块 | 范围 | 说明 |
-| --- | --- | --- |
-| 登录 | 登录页、认证流程、退出流程 | UI 保留旧项目风格并优化，认证逻辑走 `uni-lib` |
-| 首页 | 首页入口、基础卡片、快捷入口 | 用于承载独立项目首页，不照搬模板 demo |
-| 成员管理 | 学生列表、教师列表 | 来源为旧菜单 `成员管理`，不包含校车下的跟车老师列表 |
+| 模块     | 范围                         | 说明                                                |
+| -------- | ---------------------------- | --------------------------------------------------- |
+| 登录     | 登录页、认证流程、退出流程   | UI 保留旧项目风格并优化，认证逻辑走 `uni-lib`       |
+| 首页     | 首页入口、基础卡片、快捷入口 | 用于承载独立项目首页，不照搬模板 demo               |
+| 成员管理 | 学生列表、教师列表           | 来源为旧菜单 `成员管理`，不包含校车下的跟车老师列表 |
 
 第一轮不处理校车管理、协议管理、基础设置、权限管理、考勤管理、内容管理、群发邮件、活动管理等模块，只预留菜单和后续扩展边界。
 
@@ -52,18 +52,18 @@
 
 全量重构不按旧目录机械搬迁，而是按后台业务域拆分。每个业务域独立维护 `views`、`api/modules`、`types/modules`、`locales/lang/*/modules`、`router/modules`。
 
-| 阶段 | 业务域 | 主要功能 | 交付目标 |
-| --- | --- | --- | --- |
-| P0 | 项目底座 | 登录、退出、路由、权限、菜单、请求、i18n、布局、标签页 | 建立可持续扩展的模板基础 |
-| P1 | 首页和成员管理 | 首页概览、学生列表、教师列表 | 完成首个完整业务闭环 |
-| P2 | 基础设置 | 校区配置、年级配置 | 建立成员、校车、考勤等模块的基础数据 |
-| P3 | 校车管理 | 路线规划、路线运营、异常上报、申请意向、乘车学生、司机、跟车老师、车辆 | 完成校车完整业务链 |
-| P4 | 协议管理 | 协议列表、协议详情、协议编辑、发布/停用 | 完成独立低耦合模块 |
-| P5 | 权限管理 | 菜单、角色、部门、用户 | 完成后台权限闭环 |
-| P6 | 考勤管理 | 学生考勤、校园考勤、门禁记录、微信 Openid、微信通知、每日考勤、请假、流程、任务、配置、放行条 | 完成考勤和流程模块 |
-| P7 | 群发邮件 | 群组配置、发件箱配置、发件列表 | 完成邮件触达模块 |
-| P8 | 活动管理 | 活动列表、活动项目、奖品、投票节目、问卷、家长学生关联、微信配置、邮箱配置 | 完成活动运营链路 |
-| P9 | 内容管理 | 公告、动态内容、文章、讨论管理 | 完成内容运营模块 |
+| 阶段 | 业务域         | 主要功能                                                                                      | 交付目标                             |
+| ---- | -------------- | --------------------------------------------------------------------------------------------- | ------------------------------------ |
+| P0   | 项目底座       | 登录、退出、路由、权限、菜单、请求、i18n、布局、标签页                                        | 建立可持续扩展的模板基础             |
+| P1   | 首页和成员管理 | 首页概览、学生列表、教师列表                                                                  | 完成首个完整业务闭环                 |
+| P2   | 基础设置       | 校区配置、年级配置                                                                            | 建立成员、校车、考勤等模块的基础数据 |
+| P3   | 校车管理       | 路线规划、路线运营、异常上报、申请意向、乘车学生、司机、跟车老师、车辆                        | 完成校车完整业务链                   |
+| P4   | 协议管理       | 协议列表、协议详情、协议编辑、发布/停用                                                       | 完成独立低耦合模块                   |
+| P5   | 权限管理       | 菜单、角色、部门、用户                                                                        | 完成后台权限闭环                     |
+| P6   | 考勤管理       | 学生考勤、校园考勤、门禁记录、微信 Openid、微信通知、每日考勤、请假、流程、任务、配置、放行条 | 完成考勤和流程模块                   |
+| P7   | 群发邮件       | 群组配置、发件箱配置、发件列表                                                                | 完成邮件触达模块                     |
+| P8   | 活动管理       | 活动列表、活动项目、奖品、投票节目、问卷、家长学生关联、微信配置、邮箱配置                    | 完成活动运营链路                     |
+| P9   | 内容管理       | 公告、动态内容、文章、讨论管理                                                                | 完成内容运营模块                     |
 
 ### 2.2 重构节奏
 
@@ -83,69 +83,69 @@
 
 ### 2.3 阶段节奏要求
 
-| 阶段 | 建议节奏 | 说明 |
-| --- | --- | --- |
-| P0 | 先行完成 | 底座不稳定时不进入大规模页面迁移 |
-| P1 | 单模块完整闭环 | 成员管理作为后续模块模板，必须做到代码结构、命名、权限、接口、i18n 全部规范 |
-| P2-P4 | 每次一个业务域 | 基础设置、校车、协议都属于基础业务能力，优先保证结构一致 |
-| P5 | 独立评审后实施 | 权限管理会影响菜单、路由、按钮、数据范围，不能夹在普通页面迁移里顺手做 |
+| 阶段  | 建议节奏                           | 说明                                                                                                                                        |
+| ----- | ---------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
+| P0    | 先行完成                           | 底座不稳定时不进入大规模页面迁移                                                                                                            |
+| P1    | 单模块完整闭环                     | 成员管理作为后续模块模板，必须做到代码结构、命名、权限、接口、i18n 全部规范                                                                 |
+| P2-P4 | 每次一个业务域                     | 基础设置、校车、协议都属于基础业务能力，优先保证结构一致                                                                                    |
+| P5    | 独立评审后实施                     | 权限管理会影响菜单、路由、按钮、数据范围，不能夹在普通页面迁移里顺手做                                                                      |
 | P6-P9 | 按阶段顺序滚动推进（**内容置末**） | 默认依次为考勤、群发邮件、活动；内容运营模块（富文本与多子模块）**排在 P9、收尾 Phase 10 之前**；若上线急需可单列插单，仍以旧代码对齐为前提 |
 
 ### 2.4 旧菜单到新模块映射
 
 新项目菜单划分以旧菜单数据为主要参考，但去掉 `/isacommunity`、`/admin` 等旧路径前缀。
 
-| 一级菜单 | 二级/三级菜单 | 新模块建议 | 说明 |
-| --- | --- | --- | --- |
-| 首页 | - | `dashboard` | 新路径建议 `/dashboard` |
-| 成员管理 | 学生列表 | `member/student` | 新路径建议 `/member/student` |
-| 成员管理 | 教师列表 | `member/teacher` | 新路径建议 `/member/teacher` |
-| 校车管理 | 路线管理 / 路线规划 | `school-bus/route/plan` | 对应旧路线规划 |
-| 校车管理 | 路线管理 / 路线运营 | `school-bus/route/operation` | 对应旧路线运营 |
-| 校车管理 | 路线管理 / 异常上报 | `school-bus/route/exception` | 对应旧异常上报 |
-| 校车管理 | 学生管理 / 申请意向管理 | `school-bus/student/apply` | 对应旧申请意向 |
-| 校车管理 | 学生管理 / 乘车学生管理 | `school-bus/student/order` | 对应旧乘车学生 |
-| 校车管理 | 司机管理 | `school-bus/driver` | 对应旧司机管理 |
-| 校车管理 | 跟车老师列表 | `school-bus/follow-teacher` | 旧路径是 `/isacommunity/user/teacher/index`，归属校车管理 |
-| 校车管理 | 车辆管理 | `school-bus/car` | 对应旧车辆管理 |
-| 协议管理 | - | `protocol` | 独立一级模块 |
-| 基础设置 | 校区配置 | `base/school` | 基础数据 |
-| 基础设置 | 年级配置 | `base/grade` | 基础数据 |
-| 权限管理 | 菜单管理 | `permission/menu` | 旧 `/admin/menu/index` |
-| 权限管理 | 角色管理 | `permission/role` | 旧 `/admin/role/index` |
-| 权限管理 | 部门管理 | `permission/dept` | 旧 `/admin/dept/index` |
-| 权限管理 | 用户管理 | `permission/user` | 旧 `/admin/isauser/index` |
-| 活动管理 | 活动列表 | `activity/list` | 活动主列表 |
-| 活动管理 | 活动项目 | `activity/program` | 活动项目配置 |
-| 活动管理 | 奖品列表 | `activity/prize` | 奖品配置 |
-| 活动管理 | 投票节目 | `activity/vote-program` | 投票节目 |
-| 活动管理 | 问卷管理 | `activity/questionnaire` | 问卷 |
-| 活动管理 | 家长学生关联管理 | `activity/parent-student` | 关联关系 |
-| 活动管理 | 微信配置 | `activity/wechat-school` | 微信配置 |
-| 活动管理 | 邮箱配置 | `activity/email-school` | 邮箱配置 |
-| 考勤管理 | 学生考勤 | `attendance/student` | 学生考勤 |
-| 考勤管理 | 校园考勤 | `attendance/school` | 校园考勤 |
-| 考勤管理 | 门禁记录 | `attendance/access` | 门禁记录 |
-| 考勤管理 | 微信Openid | `attendance/wechat` | 微信身份 |
-| 考勤管理 | 微信通知 | `attendance/wechat-notice` | 微信通知 |
-| 考勤管理 | 学生每日考勤 | `attendance/daily` | 每日考勤 |
-| 考勤管理 | 请假管理 | `attendance/holiday` | 请假流程 |
-| 考勤管理 | 流程设计 | `attendance/holiday/flow` | 流程设计 |
-| 考勤管理 | 任务处理 | `attendance/holiday/task` | 任务处理 |
-| 考勤管理 | 配置管理 | `attendance/holiday/config` | 流程配置 |
-| 考勤管理 | 放行条管理 | `attendance/holiday/pass` | 放行条 |
-| 内容管理 | 公告内容 | `content/announcement` | 公告 |
-| 内容管理 | 动态内容 / 一周食谱 | `content/moment/food-weekly` | 旧目录 `moent` 统一修正为 `moment` |
-| 内容管理 | 动态内容 / 校园生活 | `content/moment/school-life` | 校园生活 |
-| 内容管理 | 文章管理 / 文章内容 | `content/article/list` | 文章内容 |
-| 内容管理 | 文章管理 / 文章分类 | `content/article/category` | 文章分类 |
-| 内容管理 | 讨论管理 / 内容列表 | `content/discussion/list` | 讨论内容 |
-| 内容管理 | 讨论管理 / 讨论标签 | `content/discussion/tag` | 讨论标签 |
-| 内容管理 | 讨论管理 / 讨论评论 | `content/discussion/comment` | 评论 |
-| 内容管理 | 讨论管理 / 点赞收藏 | `content/discussion/like-save` | 点赞收藏 |
-| 群发邮件 | 群组配置 | `email/group` | 群组 |
-| 群发邮件 | 发件箱配置 | `email/send` | 发件箱 |
-| 群发邮件 | 发件列表 | `email/outbox` | 发件列表 |
+| 一级菜单 | 二级/三级菜单           | 新模块建议                     | 说明                                                      |
+| -------- | ----------------------- | ------------------------------ | --------------------------------------------------------- |
+| 首页     | -                       | `dashboard`                    | 新路径建议 `/dashboard`                                   |
+| 成员管理 | 学生列表                | `member/student`               | 新路径建议 `/member/student`                              |
+| 成员管理 | 教师列表                | `member/teacher`               | 新路径建议 `/member/teacher`                              |
+| 校车管理 | 路线管理 / 路线规划     | `school-bus/route/plan`        | 对应旧路线规划                                            |
+| 校车管理 | 路线管理 / 路线运营     | `school-bus/route/operation`   | 对应旧路线运营                                            |
+| 校车管理 | 路线管理 / 异常上报     | `school-bus/route/exception`   | 对应旧异常上报                                            |
+| 校车管理 | 学生管理 / 申请意向管理 | `school-bus/student/apply`     | 对应旧申请意向                                            |
+| 校车管理 | 学生管理 / 乘车学生管理 | `school-bus/student/order`     | 对应旧乘车学生                                            |
+| 校车管理 | 司机管理                | `school-bus/driver`            | 对应旧司机管理                                            |
+| 校车管理 | 跟车老师列表            | `school-bus/follow-teacher`    | 旧路径是 `/isacommunity/user/teacher/index`，归属校车管理 |
+| 校车管理 | 车辆管理                | `school-bus/car`               | 对应旧车辆管理                                            |
+| 协议管理 | -                       | `protocol`                     | 独立一级模块                                              |
+| 基础设置 | 校区配置                | `base/school`                  | 基础数据                                                  |
+| 基础设置 | 年级配置                | `base/grade`                   | 基础数据                                                  |
+| 权限管理 | 菜单管理                | `permission/menu`              | 旧 `/admin/menu/index`                                    |
+| 权限管理 | 角色管理                | `permission/role`              | 旧 `/admin/role/index`                                    |
+| 权限管理 | 部门管理                | `permission/dept`              | 旧 `/admin/dept/index`                                    |
+| 权限管理 | 用户管理                | `permission/user`              | 旧 `/admin/isauser/index`                                 |
+| 活动管理 | 活动列表                | `activity/list`                | 活动主列表                                                |
+| 活动管理 | 活动项目                | `activity/program`             | 活动项目配置                                              |
+| 活动管理 | 奖品列表                | `activity/prize`               | 奖品配置                                                  |
+| 活动管理 | 投票节目                | `activity/vote-program`        | 投票节目                                                  |
+| 活动管理 | 问卷管理                | `activity/questionnaire`       | 问卷                                                      |
+| 活动管理 | 家长学生关联管理        | `activity/parent-student`      | 关联关系                                                  |
+| 活动管理 | 微信配置                | `activity/wechat-school`       | 微信配置                                                  |
+| 活动管理 | 邮箱配置                | `activity/email-school`        | 邮箱配置                                                  |
+| 考勤管理 | 学生考勤                | `attendance/student`           | 学生考勤                                                  |
+| 考勤管理 | 校园考勤                | `attendance/school`            | 校园考勤                                                  |
+| 考勤管理 | 门禁记录                | `attendance/access`            | 门禁记录                                                  |
+| 考勤管理 | 微信Openid              | `attendance/wechat`            | 微信身份                                                  |
+| 考勤管理 | 微信通知                | `attendance/wechat-notice`     | 微信通知                                                  |
+| 考勤管理 | 学生每日考勤            | `attendance/daily`             | 每日考勤                                                  |
+| 考勤管理 | 请假管理                | `attendance/holiday`           | 请假流程                                                  |
+| 考勤管理 | 流程设计                | `attendance/holiday/flow`      | 流程设计                                                  |
+| 考勤管理 | 任务处理                | `attendance/holiday/task`      | 任务处理                                                  |
+| 考勤管理 | 配置管理                | `attendance/holiday/config`    | 流程配置                                                  |
+| 考勤管理 | 放行条管理              | `attendance/holiday/pass`      | 放行条                                                    |
+| 内容管理 | 公告内容                | `content/announcement`         | 公告                                                      |
+| 内容管理 | 动态内容 / 一周食谱     | `content/moment/food-weekly`   | 旧目录 `moent` 统一修正为 `moment`                        |
+| 内容管理 | 动态内容 / 校园生活     | `content/moment/school-life`   | 校园生活                                                  |
+| 内容管理 | 文章管理 / 文章内容     | `content/article/list`         | 文章内容                                                  |
+| 内容管理 | 文章管理 / 文章分类     | `content/article/category`     | 文章分类                                                  |
+| 内容管理 | 讨论管理 / 内容列表     | `content/discussion/list`      | 讨论内容                                                  |
+| 内容管理 | 讨论管理 / 讨论标签     | `content/discussion/tag`       | 讨论标签                                                  |
+| 内容管理 | 讨论管理 / 讨论评论     | `content/discussion/comment`   | 评论                                                      |
+| 内容管理 | 讨论管理 / 点赞收藏     | `content/discussion/like-save` | 点赞收藏                                                  |
+| 群发邮件 | 群组配置                | `email/group`                  | 群组                                                      |
+| 群发邮件 | 发件箱配置              | `email/send`                   | 发件箱                                                    |
+| 群发邮件 | 发件列表                | `email/outbox`                 | 发件列表                                                  |
 
 ### 2.5 每个模块的完成标准
 
@@ -165,16 +165,16 @@
 
 本节记录 **校区配置 / 年级配置**（字典类型 `order_school`、`isacommunity_enroll_level`，接口 `/publik/dict/item/*`）迁入 `admin-web` 时出现的问题与约定，供后续模块对照。
 
-| 类别 | 说明 |
-| --- | --- |
-| **旧代码依据** | 页面与接口以 `test/old-test/src/views/isacommunity/base/school|grade/index.vue` 及 `api/workorder/order/orderlist.js`（`/publik/dict/item/*`）为准，不臆测字段与 URL。 |
-| **新项目落地路径** | 视图：`views/base/school`、`views/base/grade`；共享逻辑：`views/base/components/dict.vue` + `dict.config.ts`（组件文件名尽量简短）；API：`api/modules/base-dict.ts`；类型：`types/modules/base-dict.ts`；菜单别名：`api/modules/menu.ts` 中 `/isacommunity/base/...` → `/base/...`。 |
-| **列表必须用 uni-lib** | 主列表使用 `UniSearchForm` + `useUniListState` + `UniDataTable`（`request`、`filters`、`@load-success`），风格与成员/协议列表一致；配置集中在 `*.config.ts`，避免手写整块 `el-table`（弹窗内二层表同样优先 `UniDataTable`）。 |
-| **分页** | 旧接口为全量列表、业务上无需分页时：`UniDataTable` 设 `:pagination="false"`，`request` 返回完整 `data`，**不要**为迁就组件再前端切片分页。 |
-| **启用状态列** | 有启停接口时，优先列类型 `type: 'switch'` + `@switch-change` 调 enable/disable；操作列不再重复「启用/禁用」链接。`action-column` 用**固定 `width`**（勿仅用 `min-width`），避免最后一列被拉满；必要时 `:deep` 收紧 link 按钮 `padding`。 |
+| 类别                       | 说明                                                                                                                                                                                                                                                                                        |
+| -------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------ |
+| **旧代码依据**             | 页面与接口以 `test/old-test/src/views/isacommunity/base/school                                                                                                                                                                                                                              | grade/index.vue`及`api/workorder/order/orderlist.js`（`/publik/dict/item/\*`）为准，不臆测字段与 URL。 |
+| **新项目落地路径**         | 视图：`views/base/school`、`views/base/grade`；共享逻辑：`views/base/components/dict.vue` + `dict.config.ts`（组件文件名尽量简短）；API：`api/modules/base-dict.ts`；类型：`types/modules/base-dict.ts`；菜单别名：`api/modules/menu.ts` 中 `/isacommunity/base/...` → `/base/...`。        |
+| **列表必须用 uni-lib**     | 主列表使用 `UniSearchForm` + `useUniListState` + `UniDataTable`（`request`、`filters`、`@load-success`），风格与成员/协议列表一致；配置集中在 `*.config.ts`，避免手写整块 `el-table`（弹窗内二层表同样优先 `UniDataTable`）。                                                               |
+| **分页**                   | 旧接口为全量列表、业务上无需分页时：`UniDataTable` 设 `:pagination="false"`，`request` 返回完整 `data`，**不要**为迁就组件再前端切片分页。                                                                                                                                                  |
+| **启用状态列**             | 有启停接口时，优先列类型 `type: 'switch'` + `@switch-change` 调 enable/disable；操作列不再重复「启用/禁用」链接。`action-column` 用**固定 `width`**（勿仅用 `min-width`），避免最后一列被拉满；必要时 `:deep` 收紧 link 按钮 `padding`。                                                    |
 | **ElSwitch 误触发 change** | Element Plus `ElSwitch` 在 setup 阶段若 `modelValue` 与 `activeValue`/`inactiveValue` **严格相等**不满足（常见：后端 `status` 为 `1`/`0`，列为 `true`/`false`），会 **emit change** 纠错，导致 **一进页面每行都打接口**。解决办法：数据进表前将 `status` **规范为布尔**（与开关取值一致）。 |
-| **数字表单控件** | 排序、数量等语义为数字的字段，表单用 **`ElInputNumber`**（配合 `min`/`step`/`precision`/`controlsPosition`），列表列可用 `type: 'number'`；提交前注意与旧接口约定（空值仍可为 `''` 或统一数字，需在页面层明确）。 |
-| **i18n** | `base.school` / `base.grade` 下补齐 `search`、`actions.search`/`reset` 等与检索条、按钮一致的文案，中英同步注册到 `locales/lang/*/index.ts`。 |
+| **数字表单控件**           | 排序、数量等语义为数字的字段，表单用 **`ElInputNumber`**（配合 `min`/`step`/`precision`/`controlsPosition`），列表列可用 `type: 'number'`；提交前注意与旧接口约定（空值仍可为 `''` 或统一数字，需在页面层明确）。                                                                           |
+| **i18n**                   | `base.school` / `base.grade` 下补齐 `search`、`actions.search`/`reset` 等与检索条、按钮一致的文案，中英同步注册到 `locales/lang/*/index.ts`。                                                                                                                                               |
 
 后续迁移其它模块时，凡出现 **表格开关列 + 后端非严格布尔**、**无真实分页的全量列表**、**操作列宽度**，可直接套用本节约定。
 
@@ -255,14 +255,14 @@ admin-web/src/
 
 第一轮重构必须使用 `uni-lib` 承担后台高频业务组件能力。
 
-| 场景 | 使用方式 |
-| --- | --- |
-| 列表表格 | `UniDataTable` |
-| 查询条件 | `UniSearchForm` |
+| 场景                             | 使用方式                                                                                                                                                                                                                                                                |
+| -------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 列表表格                         | `UniDataTable`                                                                                                                                                                                                                                                          |
+| 查询条件                         | `UniSearchForm`                                                                                                                                                                                                                                                         |
 | 详情 / 新增 / 编辑表单（含弹窗） | `UniForm`：`schema`、`rules`、选项类字段放在同目录 `list.config.ts`；**多 Tab 聚合页**（如路线规划）主文件为 **`tab.vue`**，配置为 **`tab.config.ts`**。禁止在已能映射为 `UniFormConfig` 的场景下直接使用裸 `el-form`；若组件库暂不支持，须在方案或 PR 中写明例外原因。 |
-| 权限控制 | `v-uni-permission` / `useUniPermission` |
-| 请求封装 | `createUniRequest` 或 `admin-web` 当前 `request` 适配后统一出口 |
-| 登录认证 | `createUniAuth` / 项目 `userStore` |
+| 权限控制                         | `v-uni-permission` / `useUniPermission`                                                                                                                                                                                                                                 |
+| 请求封装                         | `createUniRequest` 或 `admin-web` 当前 `request` 适配后统一出口                                                                                                                                                                                                         |
+| 登录认证                         | `createUniAuth` / 项目 `userStore`                                                                                                                                                                                                                                      |
 
 页面私有 UI 放在对应页面目录的 `components` 下，例如 `views/member/teacher/components`。跨页面复用但不跨项目的能力放在 `components/business`。跨项目可复用能力才进入 `uni-lib`。
 
@@ -432,8 +432,8 @@ api/modules/member-teacher.ts
 
 成员列表接口命名示例：
 
-| 旧接口 | 新接口方法 |
-| --- | --- |
+| 旧接口           | 新接口方法         |
+| ---------------- | ------------------ |
 | `getStudentPage` | `fetchStudentPage` |
 | `getTeacherPage` | `fetchTeacherPage` |
 
@@ -442,7 +442,9 @@ API 注释使用精炼单句。
 ```ts
 /** 分页查询教师列表。 */
 export const fetchTeacherPage = (params: TeacherListParams) => {
-  return request.get<PageResult<TeacherRecord>>('/isacommunity/membership/getTeacherPage', { params })
+  return request.get<PageResult<TeacherRecord>>('/isacommunity/membership/getTeacherPage', {
+    params
+  })
 }
 ```
 
@@ -536,8 +538,8 @@ export interface TeacherRecord {
 
 成员管理旧页面真实使用的按钮权限：
 
-| 操作 | 权限码 |
-| --- | --- |
+| 操作     | 权限码               |
+| -------- | -------------------- |
 | 查看详情 | `dataform_file_look` |
 
 按钮示例：
@@ -675,7 +677,9 @@ API 文件必须使用 TypeScript，并为每个接口方法添加精炼注释�
 ```ts
 /** 分页查询教师列表。 */
 export const fetchTeacherPage = (params: TeacherListParams) => {
-  return request.get<PageResult<TeacherRecord>>('/isacommunity/membership/getTeacherPage', { params })
+  return request.get<PageResult<TeacherRecord>>('/isacommunity/membership/getTeacherPage', {
+    params
+  })
 }
 ```
 
@@ -719,16 +723,16 @@ if (status === 401) {
 
 旧系统逻辑保留思路，不保留实现：
 
-| 旧逻辑 | 新实现 |
-| --- | --- |
-| `store.getters.access_token` 判断登录态 | `userStore.isLoggedIn` |
-| `meta.isAuth === false` 白名单 | `whiteList` + 路由 `meta.public` |
-| `permissions[...]` 页面按钮判断 | `v-uni-permission` / `useUniPermission` |
-| AVUE tag 添加 | `tags-view` store |
-| `canEnterPage` 路由跳转判断 | 路由 meta + permission store |
-| 多登录入口跳转 | 项目登录页 + 可配置 redirect |
-| 外链菜单打开新窗口 | 菜单 meta 标记 external |
-| 锁屏逻辑 | 第一轮不迁移，后续单独评估 |
+| 旧逻辑                                  | 新实现                                  |
+| --------------------------------------- | --------------------------------------- |
+| `store.getters.access_token` 判断登录态 | `userStore.isLoggedIn`                  |
+| `meta.isAuth === false` 白名单          | `whiteList` + 路由 `meta.public`        |
+| `permissions[...]` 页面按钮判断         | `v-uni-permission` / `useUniPermission` |
+| AVUE tag 添加                           | `tags-view` store                       |
+| `canEnterPage` 路由跳转判断             | 路由 meta + permission store            |
+| 多登录入口跳转                          | 项目登录页 + 可配置 redirect            |
+| 外链菜单打开新窗口                      | 菜单 meta 标记 external                 |
+| 锁屏逻辑                                | 第一轮不迁移，后续单独评估              |
 
 ### 14.2 菜单数据来源和兼容原则
 
@@ -771,70 +775,70 @@ if (status === 401) {
 
 完整旧菜单映射：
 
-| 旧菜单层级 | 旧菜单路径 | 新路由 / 新模块 |
-| --- | --- | --- |
-| 首页 | `/isacommunity/home/index` | `/dashboard` |
-| 成员管理 | `/isacommunity/member` | `/member` |
-| 成员管理 / 学生列表 | `/isacommunity/member/student/index` | `/member/student` |
-| 成员管理 / 教师列表 | `/isacommunity/member/teacher/index` | `/member/teacher` |
-| 校车管理 | `/isacommunity/schoolbus` | `/school-bus` |
-| 校车管理 / 路线管理 | `/isacommunity/schoolbus/route` | `/school-bus/route` |
-| 校车管理 / 路线管理 / 路线规划 | `/isacommunity/schoolbus/route/plan/index` | `/school-bus/route/plan`（页面 `tab.vue`，配置 `tab.config.ts`） |
-| 校车管理 / 路线管理 / 路线运营 | `/isacommunity/schoolbus/route/operation/index` | `/school-bus/route/operation` |
-| 校车管理 / 路线管理 / 异常上报 | `/isacommunity/schoolbus/route/exception/index` | `/school-bus/route/exception` |
-| 校车管理 / 学生管理 | `/isacommunity/schoolbus/student` | `/school-bus/student` |
-| 校车管理 / 学生管理 / 申请意向管理 | `/isacommunity/schoolbus/student/apply/index` | `/school-bus/student/apply` |
-| 校车管理 / 学生管理 / 乘车学生管理 | `/isacommunity/schoolbus/student/order/index` | `/school-bus/student/order` |
-| 校车管理 / 司机管理 | `/isacommunity/schoolbus/driver/index` | `/school-bus/driver` |
-| 校车管理 / 跟车老师列表 | `/isacommunity/user/teacher/index` | `/school-bus/follow-teacher` |
-| 校车管理 / 车辆管理 | `/isacommunity/schoolbus/car/index` | `/school-bus/car` |
-| 协议管理 | `/isacommunity/protocol/index` | `/protocol` |
-| 基础设置 | `/isacommunity/base` | `/base` |
-| 基础设置 / 校区配置 | `/isacommunity/base/school/index` | `/base/school` |
-| 基础设置 / 年级配置 | `/isacommunity/base/grade/index` | `/base/grade` |
-| 权限管理 | `/admin` | `/permission` |
-| 权限管理 / 菜单管理 | `/admin/menu/index` | `/permission/menu` |
-| 权限管理 / 角色管理 | `/admin/role/index` | `/permission/role` |
-| 权限管理 / 部门管理 | `/admin/dept/index` | `/permission/dept` |
-| 权限管理 / 用户管理 | `/admin/isauser/index` | `/permission/user` |
-| 活动管理 | `/isacommunity/activity` | `/activity` |
-| 活动管理 / 活动列表 | `/isacommunity/activity/list/index` | `/activity/list` |
-| 活动管理 / 活动项目 | `/isacommunity/activity/program/index` | `/activity/program` |
-| 活动管理 / 奖品列表 | `/isacommunity/activity/prize/index` | `/activity/prize` |
-| 活动管理 / 投票节目 | `/isacommunity/activity/voteprogram/index` | `/activity/vote-program` |
-| 活动管理 / 问卷管理 | `/isacommunity/activity/questionnaire/index` | `/activity/questionnaire` |
-| 活动管理 / 家长学生关联管理 | `/isacommunity/activity/parentstudent/index` | `/activity/parent-student` |
-| 活动管理 / 微信配置 | `/isacommunity/activity/wechatSchool/index` | `/activity/wechat-school` |
-| 活动管理 / 邮箱配置 | `/isacommunity/activity/emailSchool/index` | `/activity/email-school` |
-| 考勤管理 | `/isacommunity/attendance` | `/attendance` |
-| 考勤管理 / 学生考勤 | `/isacommunity/attendance/student/index` | `/attendance/student` |
-| 考勤管理 / 校园考勤 | `/isacommunity/attendance/school/index` | `/attendance/school` |
-| 考勤管理 / 门禁记录 | `/isacommunity/attendance/access/index` | `/attendance/access` |
-| 考勤管理 / 微信Openid | `/isacommunity/attendance/wechat/index` | `/attendance/wechat` |
-| 考勤管理 / 微信通知 | `/isacommunity/attendance/wechatnotice/index` | `/attendance/wechat-notice` |
-| 考勤管理 / 学生每日考勤 | `/isacommunity/attendance/index` | `/attendance/daily` |
-| 考勤管理 / 请假管理 | `/isacommunity/attendance/holiday/index` | `/attendance/holiday` |
-| 考勤管理 / 流程设计 | `/isacommunity/attendance/holiday/flow` | `/attendance/holiday/flow` |
-| 考勤管理 / 任务处理 | `/isacommunity/attendance/holiday/task` | `/attendance/holiday/task` |
-| 考勤管理 / 配置管理 | `/isacommunity/attendance/holiday/config` | `/attendance/holiday/config` |
-| 考勤管理 / 放行条管理 | `/isacommunity/attendance/holiday/pass` | `/attendance/holiday/pass` |
-| 内容管理 | `/isacommunity/content` | `/content` |
-| 内容管理 / 公告内容 | `/isacommunity/content/announcement/index` | `/content/announcement` |
-| 内容管理 / 动态内容 | `/isacommunity/content/moent` | `/content/moment` |
-| 内容管理 / 动态内容 / 一周食谱 | `/isacommunity/content/moent/foodweekly/index` | `/content/moment/food-weekly` |
-| 内容管理 / 动态内容 / 校园生活 | `/isacommunity/content/moent/schoollife/index` | `/content/moment/school-life` |
-| 内容管理 / 文章管理 | `/isacommunity/content/article` | `/content/article` |
-| 内容管理 / 文章管理 / 文章内容 | `/isacommunity/content/article/list/index` | `/content/article/list` |
-| 内容管理 / 文章管理 / 文章分类 | `/isacommunity/content/article/category/index` | `/content/article/category` |
-| 内容管理 / 讨论管理 | `/isacommunity/content/discussion` | `/content/discussion` |
-| 内容管理 / 讨论管理 / 内容列表 | `/isacommunity/content/discussion/list/index` | `/content/discussion/list` |
-| 内容管理 / 讨论管理 / 讨论标签 | `/isacommunity/content/discussion/tag/index` | `/content/discussion/tag` |
-| 内容管理 / 讨论管理 / 讨论评论 | `/isacommunity/content/discussion/comment/index` | `/content/discussion/comment` |
-| 内容管理 / 讨论管理 / 点赞收藏 | `/isacommunity/content/discussion/likeandsave/index` | `/content/discussion/like-save` |
-| 群发邮件 | `/isacommunity/email` | `/email` |
-| 群发邮件 / 群组配置 | `/isacommunity/email/group` | `/email/group` |
-| 群发邮件 / 发件箱配置 | `/isacommunity/email/send/index` | `/email/send` |
-| 群发邮件 / 发件列表 | `/isacommunity/email/outgo/index` | `/email/outbox` |
+| 旧菜单层级                         | 旧菜单路径                                           | 新路由 / 新模块                                                  |
+| ---------------------------------- | ---------------------------------------------------- | ---------------------------------------------------------------- |
+| 首页                               | `/isacommunity/home/index`                           | `/dashboard`                                                     |
+| 成员管理                           | `/isacommunity/member`                               | `/member`                                                        |
+| 成员管理 / 学生列表                | `/isacommunity/member/student/index`                 | `/member/student`                                                |
+| 成员管理 / 教师列表                | `/isacommunity/member/teacher/index`                 | `/member/teacher`                                                |
+| 校车管理                           | `/isacommunity/schoolbus`                            | `/school-bus`                                                    |
+| 校车管理 / 路线管理                | `/isacommunity/schoolbus/route`                      | `/school-bus/route`                                              |
+| 校车管理 / 路线管理 / 路线规划     | `/isacommunity/schoolbus/route/plan/index`           | `/school-bus/route/plan`（页面 `tab.vue`，配置 `tab.config.ts`） |
+| 校车管理 / 路线管理 / 路线运营     | `/isacommunity/schoolbus/route/operation/index`      | `/school-bus/route/operation`                                    |
+| 校车管理 / 路线管理 / 异常上报     | `/isacommunity/schoolbus/route/exception/index`      | `/school-bus/route/exception`                                    |
+| 校车管理 / 学生管理                | `/isacommunity/schoolbus/student`                    | `/school-bus/student`                                            |
+| 校车管理 / 学生管理 / 申请意向管理 | `/isacommunity/schoolbus/student/apply/index`        | `/school-bus/student/apply`                                      |
+| 校车管理 / 学生管理 / 乘车学生管理 | `/isacommunity/schoolbus/student/order/index`        | `/school-bus/student/order`                                      |
+| 校车管理 / 司机管理                | `/isacommunity/schoolbus/driver/index`               | `/school-bus/driver`                                             |
+| 校车管理 / 跟车老师列表            | `/isacommunity/user/teacher/index`                   | `/school-bus/follow-teacher`                                     |
+| 校车管理 / 车辆管理                | `/isacommunity/schoolbus/car/index`                  | `/school-bus/car`                                                |
+| 协议管理                           | `/isacommunity/protocol/index`                       | `/protocol`                                                      |
+| 基础设置                           | `/isacommunity/base`                                 | `/base`                                                          |
+| 基础设置 / 校区配置                | `/isacommunity/base/school/index`                    | `/base/school`                                                   |
+| 基础设置 / 年级配置                | `/isacommunity/base/grade/index`                     | `/base/grade`                                                    |
+| 权限管理                           | `/admin`                                             | `/permission`                                                    |
+| 权限管理 / 菜单管理                | `/admin/menu/index`                                  | `/permission/menu`                                               |
+| 权限管理 / 角色管理                | `/admin/role/index`                                  | `/permission/role`                                               |
+| 权限管理 / 部门管理                | `/admin/dept/index`                                  | `/permission/dept`                                               |
+| 权限管理 / 用户管理                | `/admin/isauser/index`                               | `/permission/user`                                               |
+| 活动管理                           | `/isacommunity/activity`                             | `/activity`                                                      |
+| 活动管理 / 活动列表                | `/isacommunity/activity/list/index`                  | `/activity/list`                                                 |
+| 活动管理 / 活动项目                | `/isacommunity/activity/program/index`               | `/activity/program`                                              |
+| 活动管理 / 奖品列表                | `/isacommunity/activity/prize/index`                 | `/activity/prize`                                                |
+| 活动管理 / 投票节目                | `/isacommunity/activity/voteprogram/index`           | `/activity/vote-program`                                         |
+| 活动管理 / 问卷管理                | `/isacommunity/activity/questionnaire/index`         | `/activity/questionnaire`                                        |
+| 活动管理 / 家长学生关联管理        | `/isacommunity/activity/parentstudent/index`         | `/activity/parent-student`                                       |
+| 活动管理 / 微信配置                | `/isacommunity/activity/wechatSchool/index`          | `/activity/wechat-school`                                        |
+| 活动管理 / 邮箱配置                | `/isacommunity/activity/emailSchool/index`           | `/activity/email-school`                                         |
+| 考勤管理                           | `/isacommunity/attendance`                           | `/attendance`                                                    |
+| 考勤管理 / 学生考勤                | `/isacommunity/attendance/student/index`             | `/attendance/student`                                            |
+| 考勤管理 / 校园考勤                | `/isacommunity/attendance/school/index`              | `/attendance/school`                                             |
+| 考勤管理 / 门禁记录                | `/isacommunity/attendance/access/index`              | `/attendance/access`                                             |
+| 考勤管理 / 微信Openid              | `/isacommunity/attendance/wechat/index`              | `/attendance/wechat`                                             |
+| 考勤管理 / 微信通知                | `/isacommunity/attendance/wechatnotice/index`        | `/attendance/wechat-notice`                                      |
+| 考勤管理 / 学生每日考勤            | `/isacommunity/attendance/index`                     | `/attendance/daily`                                              |
+| 考勤管理 / 请假管理                | `/isacommunity/attendance/holiday/index`             | `/attendance/holiday`                                            |
+| 考勤管理 / 流程设计                | `/isacommunity/attendance/holiday/flow`              | `/attendance/holiday/flow`                                       |
+| 考勤管理 / 任务处理                | `/isacommunity/attendance/holiday/task`              | `/attendance/holiday/task`                                       |
+| 考勤管理 / 配置管理                | `/isacommunity/attendance/holiday/config`            | `/attendance/holiday/config`                                     |
+| 考勤管理 / 放行条管理              | `/isacommunity/attendance/holiday/pass`              | `/attendance/holiday/pass`                                       |
+| 内容管理                           | `/isacommunity/content`                              | `/content`                                                       |
+| 内容管理 / 公告内容                | `/isacommunity/content/announcement/index`           | `/content/announcement`                                          |
+| 内容管理 / 动态内容                | `/isacommunity/content/moent`                        | `/content/moment`                                                |
+| 内容管理 / 动态内容 / 一周食谱     | `/isacommunity/content/moent/foodweekly/index`       | `/content/moment/food-weekly`                                    |
+| 内容管理 / 动态内容 / 校园生活     | `/isacommunity/content/moent/schoollife/index`       | `/content/moment/school-life`                                    |
+| 内容管理 / 文章管理                | `/isacommunity/content/article`                      | `/content/article`                                               |
+| 内容管理 / 文章管理 / 文章内容     | `/isacommunity/content/article/list/index`           | `/content/article/list`                                          |
+| 内容管理 / 文章管理 / 文章分类     | `/isacommunity/content/article/category/index`       | `/content/article/category`                                      |
+| 内容管理 / 讨论管理                | `/isacommunity/content/discussion`                   | `/content/discussion`                                            |
+| 内容管理 / 讨论管理 / 内容列表     | `/isacommunity/content/discussion/list/index`        | `/content/discussion/list`                                       |
+| 内容管理 / 讨论管理 / 讨论标签     | `/isacommunity/content/discussion/tag/index`         | `/content/discussion/tag`                                        |
+| 内容管理 / 讨论管理 / 讨论评论     | `/isacommunity/content/discussion/comment/index`     | `/content/discussion/comment`                                    |
+| 内容管理 / 讨论管理 / 点赞收藏     | `/isacommunity/content/discussion/likeandsave/index` | `/content/discussion/like-save`                                  |
+| 群发邮件                           | `/isacommunity/email`                                | `/email`                                                         |
+| 群发邮件 / 群组配置                | `/isacommunity/email/group`                          | `/email/group`                                                   |
+| 群发邮件 / 发件箱配置              | `/isacommunity/email/send/index`                     | `/email/send`                                                    |
+| 群发邮件 / 发件列表                | `/isacommunity/email/outgo/index`                    | `/email/outbox`                                                  |
 
 当前第一轮代码只接入首页、成员管理、协议管理相关映射；其余路径作为后续迁移规划，迁移到对应模块时再同步加入 `MENU_PATH_ALIASES`。
 
@@ -931,11 +935,11 @@ sidebar.vue
 
 权限分三层：
 
-| 类型 | 用法 | 示例 |
-| --- | --- | --- |
-| 路由权限 | `route.meta.permission` | `member:view` |
-| 按钮权限 | `v-uni-permission` | `dataform_file_look` |
-| 业务逻辑权限 | `useUniPermission()` | 查看前判断 |
+| 类型         | 用法                    | 示例                 |
+| ------------ | ----------------------- | -------------------- |
+| 路由权限     | `route.meta.permission` | `member:view`        |
+| 按钮权限     | `v-uni-permission`      | `dataform_file_look` |
+| 业务逻辑权限 | `useUniPermission()`    | 查看前判断           |
 
 第一轮允许暂时沿用旧权限码，但新代码不直接读 `permissions[...]`。
 
@@ -993,19 +997,19 @@ sidebar.vue
 
 全量重构按“基座优先、低风险 CRUD 先行、复杂流程后置”的节奏推进。**Phase 5 之后**依次为：**Phase 6 考勤** → **Phase 7 群发邮件** → **Phase 8 活动管理**（多 tab、批量微信、多导出等）→ **Phase 9 内容管理**（富文本与互动子模块较重）→ **Phase 10 收尾**。
 
-| 阶段 | 模块 | 重构内容 | 目标 |
-| --- | --- | --- | --- |
-| Phase 0 | 基座准备 | 路由、菜单、权限、请求、字典、下载、主题、布局 | 建立可复制页面范式 |
-| Phase 1 | 登录、首页、成员管理 | 登录认证、首页概览、学生列表、教师列表 | 完成第一条业务闭环 |
-| Phase 2 | 基础设置 | 校区配置、年级配置 | 先稳定基础字典和筛选来源 |
-| Phase 3 | 校车管理 | 路线规划、路线运营、异常上报、申请意向、乘车学生、司机、跟车老师、车辆 | 完成校车完整业务链 |
-| Phase 4 | 协议管理 | 协议列表、协议详情、协议配置 | 独立迁移低耦合模块 |
-| Phase 5 | 权限管理 | 菜单、角色、部门、用户 | 完成后台权限闭环 |
-| Phase 6 | 考勤管理 | 学生考勤、校园考勤、门禁记录、微信 Openid、微信通知、每日考勤、请假、流程、任务、配置、放行条 | 迁移考勤和流程链路 |
-| Phase 7 | 群发邮件 | 群组配置、发件箱配置、发件列表 | 迁移消息触达模块 |
-| Phase 8 | 活动管理 | 活动列表、活动项目、奖品、投票节目、问卷、家长学生关联、微信配置、邮箱配置 | 迁移活动运营链路 |
-| Phase 9 | 内容管理 | 公告、动态内容、文章、讨论管理 | 迁移内容发布和互动模块 |
-| Phase 10 | 收尾优化 | 测试、类型补齐、构建优化、遗留样式清理 | 进入稳定交付状态 |
+| 阶段     | 模块                 | 重构内容                                                                                      | 目标                     |
+| -------- | -------------------- | --------------------------------------------------------------------------------------------- | ------------------------ |
+| Phase 0  | 基座准备             | 路由、菜单、权限、请求、字典、下载、主题、布局                                                | 建立可复制页面范式       |
+| Phase 1  | 登录、首页、成员管理 | 登录认证、首页概览、学生列表、教师列表                                                        | 完成第一条业务闭环       |
+| Phase 2  | 基础设置             | 校区配置、年级配置                                                                            | 先稳定基础字典和筛选来源 |
+| Phase 3  | 校车管理             | 路线规划、路线运营、异常上报、申请意向、乘车学生、司机、跟车老师、车辆                        | 完成校车完整业务链       |
+| Phase 4  | 协议管理             | 协议列表、协议详情、协议配置                                                                  | 独立迁移低耦合模块       |
+| Phase 5  | 权限管理             | 菜单、角色、部门、用户                                                                        | 完成后台权限闭环         |
+| Phase 6  | 考勤管理             | 学生考勤、校园考勤、门禁记录、微信 Openid、微信通知、每日考勤、请假、流程、任务、配置、放行条 | 迁移考勤和流程链路       |
+| Phase 7  | 群发邮件             | 群组配置、发件箱配置、发件列表                                                                | 迁移消息触达模块         |
+| Phase 8  | 活动管理             | 活动列表、活动项目、奖品、投票节目、问卷、家长学生关联、微信配置、邮箱配置                    | 迁移活动运营链路         |
+| Phase 9  | 内容管理             | 公告、动态内容、文章、讨论管理                                                                | 迁移内容发布和互动模块   |
+| Phase 10 | 收尾优化             | 测试、类型补齐、构建优化、遗留样式清理                                                        | 进入稳定交付状态         |
 
 ### 15.1 Phase 0：基座准备
 
@@ -1134,44 +1138,44 @@ sidebar.vue
 
 这些能力必须在第一轮或前两轮稳定进入 `uni-lib`：
 
-| 能力 | 组件库形态 | 说明 |
-| --- | --- | --- |
-| 标准列表 | `UniDataTable` | 列配置、分页、选择、操作列、加载态 |
-| 查询表单 | `UniSearchForm` | 查询、重置、展开收起、选项加载、空值清理 |
-| 动态表单 | `UniForm` | 新增、编辑、详情查看共用 schema |
-| 上传 | `UniUpload` | 导入、图片、附件上传统一交互 |
-| 权限 | `v-uni-permission`、`useUniPermission` | UI 和 JS 权限统一 |
-| 请求 | `createUniRequest` | token、错误码、401、403、重复请求 |
-| 认证 | `createUniAuth` | 登录、退出、刷新、清理 token |
-| 主题 | `UniThemeSettings`、`setupUniTheme`、`applyUniTheme` | 主题抽屉、持久化、Element Plus 变量覆盖 |
-| 下载 | `downloadBlob` / `useUniDownload` | 导出、模板下载 |
-| 格式化 | `formatEmpty`、`formatDate`、`formatOptionLabel` | 空值、日期、枚举回显 |
+| 能力     | 组件库形态                                           | 说明                                     |
+| -------- | ---------------------------------------------------- | ---------------------------------------- |
+| 标准列表 | `UniDataTable`                                       | 列配置、分页、选择、操作列、加载态       |
+| 查询表单 | `UniSearchForm`                                      | 查询、重置、展开收起、选项加载、空值清理 |
+| 动态表单 | `UniForm`                                            | 新增、编辑、详情查看共用 schema          |
+| 上传     | `UniUpload`                                          | 导入、图片、附件上传统一交互             |
+| 权限     | `v-uni-permission`、`useUniPermission`               | UI 和 JS 权限统一                        |
+| 请求     | `createUniRequest`                                   | token、错误码、401、403、重复请求        |
+| 认证     | `createUniAuth`                                      | 登录、退出、刷新、清理 token             |
+| 主题     | `UniThemeSettings`、`setupUniTheme`、`applyUniTheme` | 主题抽屉、持久化、Element Plus 变量覆盖  |
+| 下载     | `downloadBlob` / `useUniDownload`                    | 导出、模板下载                           |
+| 格式化   | `formatEmpty`、`formatDate`、`formatOptionLabel`     | 空值、日期、枚举回显                     |
 
 ### 16.2 第二优先级
 
 这些能力在两个以上模块复用后再进入 `uni-lib`：
 
-| 能力 | 建议形态 | 触发条件 |
-| --- | --- | --- |
-| 字典选择 | `UniDictSelect` | 多模块都需要字典下拉 |
-| 远程选择弹窗 | `UniPickerDialog` | 成员、学校、活动、收件人等选择模式稳定 |
-| 导入弹窗 | `UniImportDialog` | 多模块导入流程一致 |
-| 确认弹窗 | `UniConfirmDialog` | 删除、启用、禁用确认文案和交互稳定 |
-| 日志时间线 | `UniLogTimeline` | 审批、操作日志、状态流转复用 |
-| 步骤条 | `UniStepBox` | 活动、考勤、流程等复用 |
-| 二维码 | `UniQrCode` | 多模块生成、复制、下载二维码 |
+| 能力         | 建议形态           | 触发条件                               |
+| ------------ | ------------------ | -------------------------------------- |
+| 字典选择     | `UniDictSelect`    | 多模块都需要字典下拉                   |
+| 远程选择弹窗 | `UniPickerDialog`  | 成员、学校、活动、收件人等选择模式稳定 |
+| 导入弹窗     | `UniImportDialog`  | 多模块导入流程一致                     |
+| 确认弹窗     | `UniConfirmDialog` | 删除、启用、禁用确认文案和交互稳定     |
+| 日志时间线   | `UniLogTimeline`   | 审批、操作日志、状态流转复用           |
+| 步骤条       | `UniStepBox`       | 活动、考勤、流程等复用                 |
+| 二维码       | `UniQrCode`        | 多模块生成、复制、下载二维码           |
 
 ### 16.3 第三优先级
 
 这些能力依赖重、业务差异大，后期专项评估：
 
-| 能力 | 建议形态 | 说明 |
-| --- | --- | --- |
-| 富文本 | `UniRichTextEditor` | 上传、资源路径、工具栏差异需先稳定 |
-| 流程设计器 | `UniBpmnDesigner` | 考勤流程稳定后再评估 |
-| 表单设计器 | `UniFormDesigner` | 等 `UniForm` schema 稳定后再做 |
-| 日历 | `UniCalendar` | 若活动和考勤同时复用再抽 |
-| 签名 | `UniSignaturePad` | 仅多端签字场景明确后再抽 |
+| 能力       | 建议形态            | 说明                               |
+| ---------- | ------------------- | ---------------------------------- |
+| 富文本     | `UniRichTextEditor` | 上传、资源路径、工具栏差异需先稳定 |
+| 流程设计器 | `UniBpmnDesigner`   | 考勤流程稳定后再评估               |
+| 表单设计器 | `UniFormDesigner`   | 等 `UniForm` schema 稳定后再做     |
+| 日历       | `UniCalendar`       | 若活动和考勤同时复用再抽           |
+| 签名       | `UniSignaturePad`   | 仅多端签字场景明确后再抽           |
 
 ### 16.4 不进入组件库
 
@@ -1190,16 +1194,16 @@ sidebar.vue
 
 不适合进 `uni-lib` 但可在 `admin-web` 内复用的能力，放在 `components/business`、`composables` 或业务模块目录。
 
-| 能力 | 放置位置 | 说明 |
-| --- | --- | --- |
-| 学校选择器 | `components/business/school-select` | 绑定本项目学校字典 |
-| 状态操作按钮组 | `components/business/status-actions` | 启用、禁用、删除等项目文案 |
-| 业务导入弹窗 | `components/business/import-dialog` | 若多个模块导入规则一致 |
-| 业务下载工具 | `utils/download.ts` | 文件名解析、导出提示 |
-| 学校字典 | `composables/use-school-options.ts` | 本项目学校选项和默认学校 |
-| 成员模块逻辑 | `views/member/<sub-module>/use-list.ts` | 只服务对应成员子模块 |
-| 活动详情 tab | `views/activity/components` | 只服务活动管理 |
-| 考勤审批弹窗 | `views/attendance/components` | 只服务考勤流程 |
+| 能力           | 放置位置                                | 说明                       |
+| -------------- | --------------------------------------- | -------------------------- |
+| 学校选择器     | `components/business/school-select`     | 绑定本项目学校字典         |
+| 状态操作按钮组 | `components/business/status-actions`    | 启用、禁用、删除等项目文案 |
+| 业务导入弹窗   | `components/business/import-dialog`     | 若多个模块导入规则一致     |
+| 业务下载工具   | `utils/download.ts`                     | 文件名解析、导出提示       |
+| 学校字典       | `composables/use-school-options.ts`     | 本项目学校选项和默认学校   |
+| 成员模块逻辑   | `views/member/<sub-module>/use-list.ts` | 只服务对应成员子模块       |
+| 活动详情 tab   | `views/activity/components`             | 只服务活动管理             |
+| 考勤审批弹窗   | `views/attendance/components`           | 只服务考勤流程             |
 
 业务模块内部推荐保持：
 
@@ -1265,4 +1269,3 @@ views/activity/
 9. 实现成员详情弹窗。
 10. 联调请求、分页和错误处理。
 11. 执行 lint、type-check、build。
-

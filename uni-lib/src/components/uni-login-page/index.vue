@@ -5,30 +5,22 @@
     <section class="uni-login-page__panel">
       <div class="uni-login-page__intro">
         <div class="uni-login-page__logo">{{ logoText }}</div>
-        <p class="uni-login-page__eyebrow">{{ $t("login.eyebrow") }}</p>
-        <h1>{{ $t("login.title") }}</h1>
-        <p>{{ $t("login.description") }}</p>
+        <p class="uni-login-page__eyebrow">{{ $t('login.eyebrow') }}</p>
+        <h1>{{ $t('login.title') }}</h1>
+        <p>{{ $t('login.description') }}</p>
       </div>
 
       <el-card class="uni-login-page__card" shadow="never">
         <template #header>
           <div>
-            <h2>{{ $t("login.cardTitle") }}</h2>
-            <p>{{ $t("login.cardDescription") }}</p>
+            <h2>{{ $t('login.cardTitle') }}</h2>
+            <p>{{ $t('login.cardDescription') }}</p>
           </div>
         </template>
 
-        <el-form
-          ref="formRef"
-          :model="formModel"
-          :rules="formRules"
-          label-position="top"
-        >
+        <el-form ref="formRef" :model="formModel" :rules="formRules" label-position="top">
           <el-form-item :label="$t('common.username')" prop="username">
-            <el-input
-              v-model="formModel.username"
-              :placeholder="$t('login.usernamePlaceholder')"
-            />
+            <el-input v-model="formModel.username" :placeholder="$t('login.usernamePlaceholder')" />
           </el-form-item>
           <el-form-item :label="$t('common.password')" prop="password">
             <el-input
@@ -36,16 +28,14 @@
               :placeholder="$t('login.passwordPlaceholder')"
               show-password
               type="password"
-              @keyup.enter="submitLogin"
-            />
+              @keyup.enter="submitLogin" />
           </el-form-item>
           <el-button
             type="primary"
             class="uni-login-page__submit"
             :loading="loading"
-            @click="submitLogin"
-          >
-            {{ $t("common.login") }}
+            @click="submitLogin">
+            {{ $t('common.login') }}
           </el-button>
         </el-form>
       </el-card>
@@ -54,79 +44,74 @@
     <UniLoginSecurityVerifyDialog
       v-model:visible="verifyVisible"
       :captcha-client="captchaClient"
-      @success="loginWithCaptcha"
-    />
+      @success="loginWithCaptcha" />
   </main>
 </template>
 
 <script setup lang="ts">
-import type { FormInstance, FormRules } from "element-plus";
-import { computed, reactive, ref } from "vue";
+import type { FormInstance, FormRules } from 'element-plus'
+import { computed, reactive, ref } from 'vue'
 
-import { useUniI18n } from "@/locales/use-uni-i18n";
-import type { UniCaptchaClient } from "@/types/uni-login";
+import { useUniI18n } from '@/locales/use-uni-i18n'
+import type { UniCaptchaClient } from '@/types/uni-login'
 
-import UniLoginSecurityVerifyDialog from "./security-verify-dialog.vue";
+import UniLoginSecurityVerifyDialog from './security-verify-dialog.vue'
 
 const props = withDefaults(
   defineProps<{
     /** 左侧品牌区 Logo 文案 */
-    logoText?: string;
+    logoText?: string
     /** 滑块验证码能力（拉图 / 加密 / 校验由宿主注入） */
-    captchaClient: UniCaptchaClient;
+    captchaClient: UniCaptchaClient
     /** 登录接口约定的验证码类型，随表单一并提交 */
-    randomStr?: string;
+    randomStr?: string
     /** 提交登录（含滑块产物），由宿主调用 store / 接口 */
     loginRequest: (payload: {
-      username: string;
-      password: string;
-      captchaVerification: string;
-      randomStr: string;
-    }) => Promise<void>;
+      username: string
+      password: string
+      captchaVerification: string
+      randomStr: string
+    }) => Promise<void>
   }>(),
   {
-    logoText: "ISA",
-    randomStr: "blockPuzzle",
-  },
-);
+    logoText: 'ISA',
+    randomStr: 'blockPuzzle'
+  }
+)
 
-const { t } = useUniI18n();
-const formRef = ref<FormInstance>();
-const loading = ref(false);
-const verifyVisible = ref(false);
+const { t } = useUniI18n()
+const formRef = ref<FormInstance>()
+const loading = ref(false)
+const verifyVisible = ref(false)
 
 const formModel = reactive({
-  username: "",
-  password: "",
-});
+  username: '',
+  password: ''
+})
 
 const formRules = computed<FormRules<typeof formModel>>(() => ({
-  username: [
-    { required: true, message: t("login.usernameRequired"), trigger: "blur" },
-  ],
-  password: [
-    { required: true, message: t("login.passwordRequired"), trigger: "blur" },
-  ],
-}));
+  username: [{ required: true, message: t('login.usernameRequired'), trigger: 'blur' }],
+  password: [{ required: true, message: t('login.passwordRequired'), trigger: 'blur' }]
+}))
 
 const submitLogin = async () => {
-  await formRef.value?.validate();
-  verifyVisible.value = true;
-};
+  await formRef.value?.validate()
+  verifyVisible.value = true
+}
 
 const loginWithCaptcha = async (captchaVerification: string) => {
-  loading.value = true;
+  loading.value = true
 
   try {
     await props.loginRequest({
       ...formModel,
       captchaVerification,
-      randomStr: props.randomStr,
-    });
+      randomStr: props.randomStr
+    })
   } finally {
-    loading.value = false;
+    loading.value = false
   }
-};
+}
 </script>
 
 <style scoped lang="scss">

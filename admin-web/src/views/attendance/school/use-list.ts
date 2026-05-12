@@ -13,7 +13,10 @@ import {
 import { attendanceSchoolStatusOpts } from '../student/list.config'
 
 import { attendanceSchoolApi, membershipApi } from '@/api'
-import type { AttendanceSchoolListParams, AttendanceSchoolRecord } from '@/types/modules/attendance-school'
+import type {
+  AttendanceSchoolListParams,
+  AttendanceSchoolRecord
+} from '@/types/modules/attendance-school'
 import type { SchoolOptionRecord } from '@/types/modules/membership'
 
 type Loose = Record<string, unknown>
@@ -23,8 +26,7 @@ const unwrapSchoolPage = (payload: unknown): { list: Loose[]; total: number } =>
     return { list: [], total: 0 }
   }
   const r = payload as Loose
-  const num = (value: unknown) =>
-    typeof value === 'number' && Number.isFinite(value) ? value : 0
+  const num = (value: unknown) => (typeof value === 'number' && Number.isFinite(value) ? value : 0)
   if (Array.isArray(r.data)) {
     return { list: r.data as Loose[], total: num(r.total) }
   }

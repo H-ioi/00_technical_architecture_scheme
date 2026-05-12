@@ -17,8 +17,7 @@ const unwrapDriverPage = (payload: unknown): { list: Row[]; total: number } => {
   }
 
   const r = payload as Loose
-  const num = (value: unknown) =>
-    typeof value === 'number' && Number.isFinite(value) ? value : 0
+  const num = (value: unknown) => (typeof value === 'number' && Number.isFinite(value) ? value : 0)
 
   if (Array.isArray(r.data)) {
     return { list: r.data as Row[], total: num(r.total) }
@@ -50,11 +49,7 @@ const unwrapDriverPage = (payload: unknown): { list: Row[]; total: number } => {
 
     return {
       list,
-      total:
-        num(r.total) ||
-        num(obj.total) ||
-        num(obj.totalElements) ||
-        num(r.totalElements)
+      total: num(r.total) || num(obj.total) || num(obj.totalElements) || num(r.totalElements)
     }
   }
 
@@ -87,9 +82,10 @@ export const useList = () => {
     keyword: '',
     status: undefined as string | number | undefined
   }
-  const { queryModel, filters, tableRef, total, search, reset, handleLoadSuccess } = useUniListState({
-    initialFilters
-  })
+  const { queryModel, filters, tableRef, total, search, reset, handleLoadSuccess } =
+    useUniListState({
+      initialFilters
+    })
   const schoolRecords = ref<SchoolOptionRecord[]>([])
   const schoolOptions = computed(() =>
     toUniOptions(schoolRecords.value, {

@@ -4,12 +4,15 @@
     destroy-on-close
     width="520px"
     :title="mode === 'add' ? t('permission.user.formAdd') : t('permission.user.formEdit')"
-    @update:model-value="$emit('update:visible', $event)"
-  >
+    @update:model-value="$emit('update:visible', $event)">
     <UniForm ref="uniFormRef" v-model="formModel" mode="edit" :config="dialogFormConfig" />
     <template #footer>
-      <el-button @click="$emit('update:visible', false)">{{ t('permission.actions.cancel') }}</el-button>
-      <el-button type="primary" :loading="saving" @click="submit">{{ t('permission.actions.save') }}</el-button>
+      <el-button @click="$emit('update:visible', false)">{{
+        t('permission.actions.cancel')
+      }}</el-button>
+      <el-button type="primary" :loading="saving" @click="submit">{{
+        t('permission.actions.save')
+      }}</el-button>
     </template>
   </el-dialog>
 </template>
@@ -73,7 +76,10 @@ const hydrateFromRecord = (r: PermissionUserRecord) => {
     deptId: r.deptId,
     lockFlag: r.lockFlag ?? '0',
     role: Array.isArray(r.roleList)
-      ? r.roleList.map((x) => x.roleId).filter((x) => x !== undefined && x !== null) as (string | number)[]
+      ? (r.roleList.map((x) => x.roleId).filter((x) => x !== undefined && x !== null) as (
+          | string
+          | number
+        )[])
       : []
   }
 }

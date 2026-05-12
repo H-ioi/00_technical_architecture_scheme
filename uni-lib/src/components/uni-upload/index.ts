@@ -1,11 +1,11 @@
-import type { App } from "vue";
+import type { App } from 'vue'
 
-import UniUpload from "./index.vue";
+import UniUpload from './index.vue'
 
-export { UniUpload };
+export { UniUpload }
 
 export default {
   install(app: App) {
-    app.component("UniUpload", UniUpload);
-  },
-};
+    app.component('UniUpload', UniUpload)
+  }
+}

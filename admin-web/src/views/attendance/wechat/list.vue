@@ -16,8 +16,7 @@
       :submit-text="$t('member.actions.search')"
       :reset-text="$t('member.actions.reset')"
       @search="search"
-      @reset="reset"
-    />
+      @reset="reset" />
 
     <UniDataTable
       ref="tableRef"
@@ -31,21 +30,18 @@
       :actions="actions"
       :action-column="{ width: 88, fixed: 'right' }"
       @selection-change="onSelectionChange"
-      @load-success="handleLoadSuccess"
-    >
+      @load-success="handleLoadSuccess">
       <template #toolbar>
         <el-button
           v-uni-permission="'archive_wx_openid'"
           :disabled="picked.length === 0"
-          @click="batchStatus(1)"
-        >
+          @click="batchStatus(1)">
           {{ $t('attendance.wechatOpenid.actions.archive') }}
         </el-button>
         <el-button
           v-uni-permission="'archive_wx_openid'"
           :disabled="picked.length === 0"
-          @click="batchStatus(0)"
-        >
+          @click="batchStatus(0)">
           {{ $t('attendance.wechatOpenid.actions.activate') }}
         </el-button>
       </template>

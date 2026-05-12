@@ -4,19 +4,16 @@
     :title="title"
     width="640px"
     destroy-on-close
-    @update:model-value="emit('update:visible', $event)"
-  >
+    @update:model-value="emit('update:visible', $event)">
     <div
       v-loading="detailLoading"
       class="school-bus-follow-teacher-form__body"
-      :element-loading-text="$t('common.loading')"
-    >
+      :element-loading-text="$t('common.loading')">
       <UniForm
         ref="uniFormRef"
         v-model="formModel"
         :mode="uniFormMode"
-        :config="dialogFormConfig"
-      />
+        :config="dialogFormConfig" />
     </div>
     <template #footer>
       <el-button @click="close">{{ $t('schoolBus.driver.actions.cancel') }}</el-button>

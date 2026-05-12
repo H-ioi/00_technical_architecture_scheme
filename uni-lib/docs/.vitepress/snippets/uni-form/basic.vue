@@ -7,33 +7,33 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue";
-import type { UniFormConfig } from "uni-ui-lib";
+import { ref } from 'vue'
+import type { UniFormConfig } from 'uni-ui-lib'
 
-const mode = ref<"edit" | "view">("edit");
+const mode = ref<'edit' | 'view'>('edit')
 
 const formModel = ref<Record<string, unknown>>({
-  name: "",
-  remark: "",
-});
+  name: '',
+  remark: ''
+})
 
 const formConfig: UniFormConfig = {
   schema: [
     {
-      field: "name",
-      label: "名称",
-      component: "ElInput",
-      componentProps: { placeholder: "请输入" },
-      colProps: { span: 12 },
+      field: 'name',
+      label: '名称',
+      component: 'ElInput',
+      componentProps: { placeholder: '请输入' },
+      colProps: { span: 12 }
     },
     {
-      field: "remark",
-      label: "备注",
-      component: "ElInput",
-      componentProps: { type: "textarea", rows: 3 },
-      colProps: { span: 24 },
-    },
+      field: 'remark',
+      label: '备注',
+      component: 'ElInput',
+      componentProps: { type: 'textarea', rows: 3 },
+      colProps: { span: 24 }
+    }
   ],
-  colProps: { span: 12 },
-};
+  colProps: { span: 12 }
+}
 </script>

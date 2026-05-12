@@ -1,11 +1,11 @@
-import type { App } from "vue";
+import type { App } from 'vue'
 
-import UniIcon from "./index.vue";
+import UniIcon from './index.vue'
 
-export { UniIcon };
+export { UniIcon }
 
 export default {
   install(app: App) {
-    app.component("UniIcon", UniIcon);
-  },
-};
+    app.component('UniIcon', UniIcon)
+  }
+}

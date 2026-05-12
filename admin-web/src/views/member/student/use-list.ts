@@ -27,9 +27,10 @@ export const useList = () => {
     busStatus: undefined,
     studentStatus: undefined
   }
-  const { queryModel, filters, tableRef, total, search, reset, handleLoadSuccess } = useUniListState({
-    initialFilters
-  })
+  const { queryModel, filters, tableRef, total, search, reset, handleLoadSuccess } =
+    useUniListState({
+      initialFilters
+    })
   const schoolOptions = ref<UniOption[]>([])
   const yearGroupOptions = ref<UniOption[]>([])
   const formOptions = ref<UniOption[]>([])
@@ -84,14 +85,20 @@ export const useList = () => {
       labelKeys: locale() === 'en' ? ['enName', 'name'] : ['name', 'cnName', 'enName'],
       valueKey: 'id'
     })
-    yearGroupOptions.value = toUniOptions(yearGroups.map((item) => ({ label: item, value: item })), {
-      labelKeys: ['label'],
-      valueKey: 'value'
-    })
-    formOptions.value = toUniOptions(forms.map((item) => ({ label: item, value: item })), {
-      labelKeys: ['label'],
-      valueKey: 'value'
-    })
+    yearGroupOptions.value = toUniOptions(
+      yearGroups.map((item) => ({ label: item, value: item })),
+      {
+        labelKeys: ['label'],
+        valueKey: 'value'
+      }
+    )
+    formOptions.value = toUniOptions(
+      forms.map((item) => ({ label: item, value: item })),
+      {
+        labelKeys: ['label'],
+        valueKey: 'value'
+      }
+    )
   }
 
   loadOpts()

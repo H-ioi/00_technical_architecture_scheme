@@ -2,7 +2,8 @@ export default {
   driver: {
     page: {
       title: 'Drivers',
-      description: 'Manage school bus drivers: filter by campus or keyword, import and batch delete.'
+      description:
+        'Manage school bus drivers: filter by campus or keyword, import and batch delete.'
     },
     fields: {
       school: 'Campus',
@@ -77,8 +78,7 @@ export default {
       stationNameKeyword: 'Stop name'
     },
     messages: {
-      needWeekdaysAndStops:
-        'Pick at least one weekday row and add stops before saving.',
+      needWeekdaysAndStops: 'Pick at least one weekday row and add stops before saving.',
       selectRowsFirst: 'Select at least one route first',
       copySuccess: 'Routes copied',
       confirmDeleteLines: 'Delete selected routes? This cannot be undone.',

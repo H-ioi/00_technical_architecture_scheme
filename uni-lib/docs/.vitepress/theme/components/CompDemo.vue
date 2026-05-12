@@ -1,49 +1,49 @@
 <script setup lang="ts">
-import { CaretBottom, CaretTop, DocumentCopy } from "@element-plus/icons-vue";
-import { ElIcon, ElMessage } from "element-plus";
-import { onMounted, ref, watch } from "vue";
+import { CaretBottom, CaretTop, DocumentCopy } from '@element-plus/icons-vue'
+import { ElIcon, ElMessage } from 'element-plus'
+import { onMounted, ref, watch } from 'vue'
 
 const props = withDefaults(
   defineProps<{
     /** 示例标题，展示在预览区上方 */
-    title?: string;
+    title?: string
     /** 与示例对应的完整代码，用于展示与复制 */
-    code: string;
+    code: string
     /** 进入页面时是否展开代码区 */
-    defaultExpand?: boolean;
+    defaultExpand?: boolean
   }>(),
   {
-    defaultExpand: false,
-  },
-);
+    defaultExpand: false
+  }
+)
 
-const expanded = ref(props.defaultExpand);
-const mounted = ref(false);
+const expanded = ref(props.defaultExpand)
+const mounted = ref(false)
 
 onMounted(() => {
-  mounted.value = true;
-});
+  mounted.value = true
+})
 
 watch(
   () => props.defaultExpand,
   (v) => {
-    expanded.value = v;
-  },
-);
+    expanded.value = v
+  }
+)
 
 async function copyCode() {
-  const text = props.code.replace(/\n$/, "").trim();
+  const text = props.code.replace(/\n$/, '').trim()
 
   try {
-    await navigator.clipboard.writeText(text);
-    ElMessage.success("已复制到剪贴板");
+    await navigator.clipboard.writeText(text)
+    ElMessage.success('已复制到剪贴板')
   } catch {
-    ElMessage.error("复制失败，请手动选择代码复制");
+    ElMessage.error('复制失败，请手动选择代码复制')
   }
 }
 
 function toggle() {
-  expanded.value = !expanded.value;
+  expanded.value = !expanded.value
 }
 </script>
 
@@ -66,8 +66,7 @@ function toggle() {
           :aria-expanded="expanded"
           :aria-label="expanded ? '收起代码' : '展开代码'"
           :title="expanded ? '收起代码' : '展开代码'"
-          @click="toggle"
-        >
+          @click="toggle">
           <ElIcon :size="17">
             <CaretTop v-if="expanded" />
             <CaretBottom v-else />
@@ -78,8 +77,7 @@ function toggle() {
           class="comp-demo__btn"
           aria-label="复制代码"
           title="复制代码"
-          @click="copyCode"
-        >
+          @click="copyCode">
           <ElIcon :size="17">
             <DocumentCopy />
           </ElIcon>
@@ -88,9 +86,7 @@ function toggle() {
     </div>
     <Transition name="comp-demo-expand">
       <div v-show="expanded" class="comp-demo__code-panel">
-        <pre
-          class="comp-demo__pre"
-        ><code class="comp-demo__code">{{ code }}</code></pre>
+        <pre class="comp-demo__pre"><code class="comp-demo__code">{{ code }}</code></pre>
       </div>
     </Transition>
   </div>

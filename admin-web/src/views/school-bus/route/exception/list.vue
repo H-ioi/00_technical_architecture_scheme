@@ -26,8 +26,7 @@
       type="file"
       accept=".xlsx,.xls"
       class="school-bus-route-exception__file"
-      @change="onImportFile"
-    >
+      @change="onImportFile" />
 
     <UniSearchForm
       v-model="queryModel"
@@ -38,8 +37,7 @@
       :submit-text="$t('schoolBus.driver.actions.search')"
       :reset-text="$t('schoolBus.driver.actions.reset')"
       @search="search"
-      @reset="reset"
-    />
+      @reset="reset" />
 
     <UniDataTable
       ref="tableRef"
@@ -53,15 +51,13 @@
       :actions="actions"
       :action-column="{ width: 160, fixed: 'right' }"
       @selection-change="onSelectionChange"
-      @load-success="handleLoadSuccess"
-    >
+      @load-success="handleLoadSuccess">
       <template #toolbar>
         <el-button
           v-uni-permission="'busexception_del'"
           type="danger"
           :disabled="ids.length === 0"
-          @click="del"
-        >
+          @click="del">
           {{ $t('schoolBus.driver.actions.delete') }}
         </el-button>
       </template>
@@ -73,8 +69,7 @@
       :source="currentRecord"
       :default-school-id="defaultSchoolId"
       :school-records="schoolRecords"
-      @saved="reload"
-    />
+      @saved="reload" />
 
     <el-dialog v-model="detailVisible" width="900px" :title="$t('schoolBus.driver.actions.look')">
       <el-descriptions v-if="detailRecord" :column="2" border>

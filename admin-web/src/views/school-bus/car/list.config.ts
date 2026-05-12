@@ -78,10 +78,7 @@ export const searchForm = (
   colProps: { span: 6 }
 })
 
-export const tableCols = (
-  t: Translate,
-  statusOptions: UniOption[]
-): UniTableColumn[] => [
+export const tableCols = (t: Translate, statusOptions: UniOption[]): UniTableColumn[] => [
   { prop: 'id', label: t('schoolBus.car.columns.id'), width: 88, fixed: 'left', type: 'text' },
   {
     prop: 'showSchoolNames',
@@ -144,11 +141,15 @@ export interface CarFormModel {
 export const carFormRules = (t: Translate, multiSchool: boolean): FormRules<CarFormModel> => ({
   ...(multiSchool
     ? {
-        schoolIds: [{ required: true, message: t('schoolBus.car.rules.schoolIds'), trigger: 'change' }]
+        schoolIds: [
+          { required: true, message: t('schoolBus.car.rules.schoolIds'), trigger: 'change' }
+        ]
       }
     : {}),
   carNumber: [{ required: true, message: t('schoolBus.car.rules.carNumber'), trigger: 'blur' }],
-  carTeacherId: [{ required: true, message: t('schoolBus.car.rules.carTeacherId'), trigger: 'change' }],
+  carTeacherId: [
+    { required: true, message: t('schoolBus.car.rules.carTeacherId'), trigger: 'change' }
+  ],
   seatNumber: [{ required: true, message: t('schoolBus.car.rules.seatNumber'), trigger: 'change' }],
   driverId: [{ required: true, message: t('schoolBus.car.rules.driverId'), trigger: 'change' }],
   status: [{ required: true, message: t('schoolBus.car.rules.status'), trigger: 'change' }]
@@ -196,7 +197,11 @@ export const carDialogFormConfig = (
       label: t('schoolBus.car.fields.carTeacher'),
       component: 'ElSelect',
       options: teacherOptions,
-      componentProps: { filterable: true, clearable: true, placeholder: t('schoolBus.car.placeholders.carTeacher') }
+      componentProps: {
+        filterable: true,
+        clearable: true,
+        placeholder: t('schoolBus.car.placeholders.carTeacher')
+      }
     },
     {
       field: 'seatNumber',
@@ -216,7 +221,11 @@ export const carDialogFormConfig = (
       label: t('schoolBus.car.fields.driver'),
       component: 'ElSelect',
       options: driverOptions,
-      componentProps: { filterable: true, clearable: true, placeholder: t('schoolBus.car.placeholders.driver') }
+      componentProps: {
+        filterable: true,
+        clearable: true,
+        placeholder: t('schoolBus.car.placeholders.driver')
+      }
     },
     {
       field: 'status',
@@ -230,7 +239,11 @@ export const carDialogFormConfig = (
       label: t('schoolBus.car.fields.carImage'),
       component: 'ElInput',
       colProps: { span: 24 },
-      componentProps: { type: 'textarea', rows: 2, placeholder: t('schoolBus.car.placeholders.imageUrl') }
+      componentProps: {
+        type: 'textarea',
+        rows: 2,
+        placeholder: t('schoolBus.car.placeholders.imageUrl')
+      }
     }
   ]
 })

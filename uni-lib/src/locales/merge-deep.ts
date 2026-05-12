@@ -3,30 +3,27 @@
  */
 export function mergeDeep<T extends Record<string, unknown>>(
   base: T,
-  override: Record<string, unknown>,
+  override: Record<string, unknown>
 ): T {
-  const out: Record<string, unknown> = { ...base };
+  const out: Record<string, unknown> = { ...base }
 
   for (const key of Object.keys(override)) {
-    const oVal = override[key];
-    const bVal = out[key];
+    const oVal = override[key]
+    const bVal = out[key]
 
     if (
       oVal !== null &&
-      typeof oVal === "object" &&
+      typeof oVal === 'object' &&
       !Array.isArray(oVal) &&
       bVal !== null &&
-      typeof bVal === "object" &&
+      typeof bVal === 'object' &&
       !Array.isArray(bVal)
     ) {
-      out[key] = mergeDeep(
-        bVal as Record<string, unknown>,
-        oVal as Record<string, unknown>,
-      );
+      out[key] = mergeDeep(bVal as Record<string, unknown>, oVal as Record<string, unknown>)
     } else {
-      out[key] = oVal;
+      out[key] = oVal
     }
   }
 
-  return out as T;
+  return out as T
 }

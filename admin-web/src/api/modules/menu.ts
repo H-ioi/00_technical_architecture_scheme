@@ -150,7 +150,10 @@ export default {
   user: {
     url: '/upms/menu/user',
     name: '用户菜单',
-    get: async function (this: { url: string }, routes: RouteRecordNormalized[]): Promise<MenuPermissionResult> {
+    get: async function (
+      this: { url: string },
+      routes: RouteRecordNormalized[]
+    ): Promise<MenuPermissionResult> {
       const raw = await request.get<unknown>(this.url)
 
       return buildMenus(parseTree(raw), routes)

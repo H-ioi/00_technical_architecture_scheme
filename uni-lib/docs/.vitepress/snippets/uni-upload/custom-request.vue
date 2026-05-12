@@ -3,13 +3,13 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue";
-import type { UploadRequestOptions, UploadUserFile } from "element-plus";
+import { ref } from 'vue'
+import type { UploadRequestOptions, UploadUserFile } from 'element-plus'
 
-const files = ref<UploadUserFile[]>([]);
+const files = ref<UploadUserFile[]>([])
 
 async function mockUpload(options: UploadRequestOptions) {
-  await new Promise((r) => setTimeout(r, 400));
-  options.onSuccess?.({ ok: true } as never);
+  await new Promise((r) => setTimeout(r, 400))
+  options.onSuccess?.({ ok: true } as never)
 }
 </script>

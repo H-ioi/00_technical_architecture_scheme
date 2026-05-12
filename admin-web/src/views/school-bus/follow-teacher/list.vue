@@ -26,8 +26,7 @@
       type="file"
       accept=".xlsx,.xls"
       class="school-bus-follow-teacher__file"
-      @change="onImportFile"
-    >
+      @change="onImportFile" />
 
     <UniSearchForm
       v-model="queryModel"
@@ -38,8 +37,7 @@
       :submit-text="$t('schoolBus.driver.actions.search')"
       :reset-text="$t('schoolBus.driver.actions.reset')"
       @search="search"
-      @reset="reset"
-    />
+      @reset="reset" />
 
     <UniDataTable
       ref="tableRef"
@@ -53,30 +51,26 @@
       :actions="actions"
       :action-column="{ width: 140, fixed: 'right' }"
       @selection-change="onSelectionChange"
-      @load-success="handleLoadSuccess"
-    >
+      @load-success="handleLoadSuccess">
       <template #toolbar>
         <!-- 权限标识与旧系统一致，后端为历史拼写 teacheruser_enble -->
         <el-button
           v-uni-permission="'teacheruser_enble'"
           :disabled="ids.length === 0"
-          @click="batchEnable"
-        >
+          @click="batchEnable">
           {{ $t('schoolBus.followTeacher.actions.enable') }}
         </el-button>
         <el-button
           v-uni-permission="'teacheruser_disable'"
           :disabled="ids.length === 0"
-          @click="batchDisable"
-        >
+          @click="batchDisable">
           {{ $t('schoolBus.followTeacher.actions.disable') }}
         </el-button>
         <el-button
           v-uni-permission="'teacheruser_del'"
           type="danger"
           :disabled="ids.length === 0"
-          @click="del"
-        >
+          @click="del">
           {{ $t('schoolBus.driver.actions.delete') }}
         </el-button>
       </template>
@@ -90,8 +84,7 @@
       :school-options="schoolOptions"
       :status-options="statusOptions"
       :multi-school="multiSchool"
-      @saved="reload"
-    />
+      @saved="reload" />
   </section>
 </template>
 

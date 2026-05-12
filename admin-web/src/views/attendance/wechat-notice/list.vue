@@ -16,8 +16,7 @@
       :submit-text="$t('member.actions.search')"
       :reset-text="$t('member.actions.reset')"
       @search="search"
-      @reset="reset"
-    />
+      @reset="reset" />
 
     <UniDataTable
       ref="tableRef"
@@ -29,8 +28,7 @@
       :toolbar="{ refresh: true, density: true, columnSetting: true }"
       :actions="actions"
       :action-column="{ width: 88, fixed: 'right' }"
-      @load-success="handleLoadSuccess"
-    />
+      @load-success="handleLoadSuccess" />
 
     <DetailDialog v-model:visible="detailVisible" :source="currentRecord" :config="detailConfig" />
   </section>

@@ -4,16 +4,14 @@
       <el-button type="success" plain>选择文件</el-button>
     </template>
     <template #tip>
-      <div class="el-upload__tip">
-        仅示例；实际项目请配置 :action 或 :request
-      </div>
+      <div class="el-upload__tip">仅示例；实际项目请配置 :action 或 :request</div>
     </template>
   </UniUpload>
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue";
-import type { UploadUserFile } from "element-plus";
+import { ref } from 'vue'
+import type { UploadUserFile } from 'element-plus'
 
-const files = ref<UploadUserFile[]>([]);
+const files = ref<UploadUserFile[]>([])
 </script>

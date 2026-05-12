@@ -98,7 +98,8 @@ export default {
   access: {
     page: {
       title: '门禁记录',
-      description: '按校区、部门、人员与通道查询门禁刷卡记录；旧版列表未开放导出按钮，此处保持一致。'
+      description:
+        '按校区、部门、人员与通道查询门禁刷卡记录；旧版列表未开放导出按钮，此处保持一致。'
     },
     actions: {
       detail: '查看'
@@ -141,7 +142,8 @@ export default {
   wechatOpenid: {
     page: {
       title: '微信 OpenID',
-      description: '绑定账号与微信公众号身份的状态维护；批量归档/使用接口与旧系统一致（导出按钮旧版未开放）。'
+      description:
+        '绑定账号与微信公众号身份的状态维护；批量归档/使用接口与旧系统一致（导出按钮旧版未开放）。'
     },
     actions: {
       detail: '查看',
@@ -181,7 +183,8 @@ export default {
   wechatNotice: {
     page: {
       title: '微信通知',
-      description: '查看推送微信通知的记录；筛选「状态」与旧页一致（成功=0、失败=1）；列表未开放导出。'
+      description:
+        '查看推送微信通知的记录；筛选「状态」与旧页一致（成功=0、失败=1）；列表未开放导出。'
     },
     actions: {
       detail: '查看'

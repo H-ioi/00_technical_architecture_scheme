@@ -1,5 +1,8 @@
 import type { PageResult } from '@/types/api'
-import type { PermissionRoleListParams, PermissionRoleRecord } from '@/types/modules/permission-role'
+import type {
+  PermissionRoleListParams,
+  PermissionRoleRecord
+} from '@/types/modules/permission-role'
 import { request } from 'uni-ui-lib'
 
 export default {
@@ -7,10 +10,10 @@ export default {
     url: '/upms/role/page',
     name: '角色分页',
     get: async function (this: { url: string }, params: PermissionRoleListParams) {
-      return await request.get<
-        PageResult<PermissionRoleRecord>,
-        PageResult<PermissionRoleRecord>
-      >(this.url, { params })
+      return await request.get<PageResult<PermissionRoleRecord>, PageResult<PermissionRoleRecord>>(
+        this.url,
+        { params }
+      )
     }
   },
 
@@ -41,7 +44,10 @@ export default {
   assignMenu: {
     url: '/upms/role/menu',
     name: '角色分配菜单',
-    put: async function (this: { url: string }, body: { roleId: string | number; menuIds: string }) {
+    put: async function (
+      this: { url: string },
+      body: { roleId: string | number; menuIds: string }
+    ) {
       return await request.put<unknown>(this.url, body)
     }
   },

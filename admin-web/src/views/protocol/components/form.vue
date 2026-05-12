@@ -4,33 +4,30 @@
     :title="title"
     width="920px"
     destroy-on-close
-    @update:model-value="emit('update:visible', $event)"
-  >
+    @update:model-value="emit('update:visible', $event)">
     <div
       v-loading="detailLoading"
       class="protocol-form__body"
-      :element-loading-text="$t('common.loading')"
-    >
+      :element-loading-text="$t('common.loading')">
       <UniForm ref="uniFormRef" v-model="formModel" mode="edit" :config="dialogFormConfig">
-      <template #field-documentUrl>
-        <UniUpload
-          v-model:file-list="fileList"
-          drag
-          accept=".pdf,application/pdf"
-          :limit="1"
-          :max-size="10 * 1024 * 1024"
-          :request="uploadReq"
-          @validate-error="onUploadErr"
-          @remove="clearDoc"
-        >
-          <template #tip>
-            <div class="protocol-form__upload-tip">
-              {{ $t('protocol.messages.uploadPdfSize') }}
-            </div>
-          </template>
-        </UniUpload>
-      </template>
-    </UniForm>
+        <template #field-documentUrl>
+          <UniUpload
+            v-model:file-list="fileList"
+            drag
+            accept=".pdf,application/pdf"
+            :limit="1"
+            :max-size="10 * 1024 * 1024"
+            :request="uploadReq"
+            @validate-error="onUploadErr"
+            @remove="clearDoc">
+            <template #tip>
+              <div class="protocol-form__upload-tip">
+                {{ $t('protocol.messages.uploadPdfSize') }}
+              </div>
+            </template>
+          </UniUpload>
+        </template>
+      </UniForm>
     </div>
 
     <template #footer>

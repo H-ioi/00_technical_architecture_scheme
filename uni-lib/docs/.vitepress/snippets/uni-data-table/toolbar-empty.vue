@@ -10,9 +10,7 @@
 </template>
 
 <script setup lang="ts">
-import type { UniTableColumn } from "uni-ui-lib";
+import type { UniTableColumn } from 'uni-ui-lib'
 
-const columns: UniTableColumn[] = [
-  { prop: "name", label: "名称", type: "text", minWidth: 120 },
-];
+const columns: UniTableColumn[] = [{ prop: 'name', label: '名称', type: 'text', minWidth: 120 }]
 </script>

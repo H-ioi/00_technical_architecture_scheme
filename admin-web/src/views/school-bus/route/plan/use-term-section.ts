@@ -181,7 +181,9 @@ export const useTermSection = (schoolRecords: SchoolRecordsRef) => {
     row.serviceEndDate = row.serviceEndDate
       ? dayjs(String(row.serviceEndDate)).format('YYYY-MM-DD')
       : '--'
-    row.createTime = row.createTime ? dayjs(String(row.createTime)).format('YYYY-MM-DD HH:mm') : '--'
+    row.createTime = row.createTime
+      ? dayjs(String(row.createTime)).format('YYYY-MM-DD HH:mm')
+      : '--'
 
     return row
   }

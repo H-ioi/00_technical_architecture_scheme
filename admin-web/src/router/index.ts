@@ -1,12 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 
 import { menuApi } from '@/api'
-import {
-  useMenuStore,
-  usePermissionCodeStore,
-  useRouteAccessStore,
-  useUserStore
-} from 'uni-ui-lib'
+import { useMenuStore, usePermissionCodeStore, useRouteAccessStore, useUserStore } from 'uni-ui-lib'
 
 import { routes } from './routes'
 

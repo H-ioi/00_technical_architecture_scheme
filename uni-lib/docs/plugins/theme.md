@@ -5,16 +5,16 @@
 ## 基础用法
 
 ```ts
-import { createUniTheme } from "uni-ui-lib";
+import { createUniTheme } from 'uni-ui-lib'
 
 const theme = createUniTheme({
-  primaryColor: "#1677ff",
-  pageBgColor: "#f5f7fb",
-});
+  primaryColor: '#1677ff',
+  pageBgColor: '#f5f7fb'
+})
 
 theme.apply({
-  primaryColor: "#13c2c2",
-});
+  primaryColor: '#13c2c2'
+})
 ```
 
 也可以在安装组件库时传入：
@@ -22,9 +22,9 @@ theme.apply({
 ```ts
 app.use(UniLib, {
   theme: {
-    primaryColor: "#1677ff",
-  },
-});
+    primaryColor: '#1677ff'
+  }
+})
 ```
 
 ## Token

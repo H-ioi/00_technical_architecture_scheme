@@ -30,16 +30,23 @@ export const searchForm = (t: Translate): UniFormConfig => ({
   colProps: { span: 8 }
 })
 
-export const tableCols = (
-  t: Translate,
-  lockOptsList: UniOption[]
-): UniTableColumn[] => [
+export const tableCols = (t: Translate, lockOptsList: UniOption[]): UniTableColumn[] => [
   { prop: 'username', label: t('permission.user.columns.username'), minWidth: 120 },
   { prop: 'nickname', label: t('permission.user.columns.nickname'), minWidth: 120 },
-  { prop: 'email', label: t('permission.user.columns.email'), minWidth: 160, showOverflowTooltip: true },
+  {
+    prop: 'email',
+    label: t('permission.user.columns.email'),
+    minWidth: 160,
+    showOverflowTooltip: true
+  },
   { prop: 'phone', label: t('permission.user.columns.phone'), width: 120 },
   { prop: 'deptName', label: t('permission.user.columns.dept'), minWidth: 120 },
-  { prop: 'rolesLabel', label: t('permission.user.columns.roles'), minWidth: 160, showOverflowTooltip: true },
+  {
+    prop: 'rolesLabel',
+    label: t('permission.user.columns.roles'),
+    minWidth: 160,
+    showOverflowTooltip: true
+  },
   {
     prop: 'lockFlag',
     label: t('permission.user.columns.status'),

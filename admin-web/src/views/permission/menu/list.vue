@@ -17,19 +17,24 @@
       :toolbar="menuTableToolbar"
       :actions="actions"
       :action-column="menuActionColumn"
-      @refresh="loadTree"
-    >
+      @refresh="loadTree">
       <template #column-icon="{ row }">
         <MenuIconDisplay :name="row.icon" />
       </template>
       <template #column-type="{ row }">
         <el-tag v-if="row.type === '0'" type="success">{{ t('permission.menu.type.left') }}</el-tag>
-        <el-tag v-else-if="row.type === '2'" type="success">{{ t('permission.menu.type.top') }}</el-tag>
-        <el-tag v-else-if="row.type === '1'" type="info">{{ t('permission.menu.type.button') }}</el-tag>
+        <el-tag v-else-if="row.type === '2'" type="success">{{
+          t('permission.menu.type.top')
+        }}</el-tag>
+        <el-tag v-else-if="row.type === '1'" type="info">{{
+          t('permission.menu.type.button')
+        }}</el-tag>
         <span v-else>{{ t('permission.menu.type.unknown') }}</span>
       </template>
       <template #column-keepAlive="{ row }">
-        <el-tag v-if="row.keepAlive === '1'" type="success">{{ t('permission.menu.cacheOn') }}</el-tag>
+        <el-tag v-if="row.keepAlive === '1'" type="success">{{
+          t('permission.menu.cacheOn')
+        }}</el-tag>
         <el-tag v-else type="info">{{ t('permission.menu.cacheOff') }}</el-tag>
       </template>
     </UniDataTable>
@@ -39,8 +44,7 @@
       :snapshot="form"
       :parent-options="parentOptions"
       :submitting="submitting"
-      @save="submitFromDraft"
-    />
+      @save="submitFromDraft" />
   </section>
 </template>
 

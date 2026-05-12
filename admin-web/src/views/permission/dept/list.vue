@@ -30,8 +30,7 @@
           highlight-current
           default-expand-all
           class="permission-dept__tree"
-          @node-click="onNodeClick"
-        />
+          @node-click="onNodeClick" />
       </el-col>
       <el-col :xs="24" :sm="16">
         <el-card shadow="never">
@@ -43,17 +42,28 @@
               <el-input v-model="form.deptId" disabled />
             </el-form-item>
             <el-form-item :label="t('permission.dept.name')" prop="name">
-              <el-input v-model="form.name" :disabled="formEdit" :placeholder="t('permission.dept.name')" />
+              <el-input
+                v-model="form.name"
+                :disabled="formEdit"
+                :placeholder="t('permission.dept.name')" />
             </el-form-item>
             <el-form-item :label="t('permission.dept.sort')" prop="sort">
-              <el-input v-model="form.sort" :disabled="formEdit" type="number" :placeholder="t('permission.dept.sort')" />
+              <el-input
+                v-model="form.sort"
+                :disabled="formEdit"
+                type="number"
+                :placeholder="t('permission.dept.sort')" />
             </el-form-item>
             <el-form-item v-if="formStatus === 'update'">
-              <el-button type="primary" @click="update">{{ t('permission.actions.deptUpdate') }}</el-button>
+              <el-button type="primary" @click="update">{{
+                t('permission.actions.deptUpdate')
+              }}</el-button>
               <el-button @click="onCancel">{{ t('permission.actions.cancel') }}</el-button>
             </el-form-item>
             <el-form-item v-if="formStatus === 'create'">
-              <el-button type="primary" @click="create">{{ t('permission.actions.saveDept') }}</el-button>
+              <el-button type="primary" @click="create">{{
+                t('permission.actions.saveDept')
+              }}</el-button>
               <el-button @click="onCancel">{{ t('permission.actions.cancel') }}</el-button>
             </el-form-item>
           </el-form>

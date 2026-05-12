@@ -1,8 +1,4 @@
-import type {
-  UniOption,
-  UniTableAction,
-  UniTableRequest
-} from 'uni-ui-lib'
+import type { UniOption, UniTableAction, UniTableRequest } from 'uni-ui-lib'
 import { toUniOptions, useUniI18n, useUniListState } from 'uni-ui-lib'
 import { computed, onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
@@ -24,9 +20,10 @@ export const useList = () => {
     module: undefined,
     status: undefined
   }
-  const { queryModel, filters, tableRef, total, search, reset, handleLoadSuccess } = useUniListState({
-    initialFilters
-  })
+  const { queryModel, filters, tableRef, total, search, reset, handleLoadSuccess } =
+    useUniListState({
+      initialFilters
+    })
   const formVisible = ref(false)
   const formMode = ref<'add' | 'edit'>('add')
   const currentRecord = ref<Row | null>(null)
@@ -36,11 +33,19 @@ export const useList = () => {
   const protocolTypeOptions = computed(() =>
     buildProtocolDictOptions(protocolDict.value.protocolTypeList, locale())
   )
-  const moduleOptions = computed(() => buildProtocolDictOptions(protocolDict.value.moduleList, locale()))
+  const moduleOptions = computed(() =>
+    buildProtocolDictOptions(protocolDict.value.moduleList, locale())
+  )
   const yesNoOptions = computed(() => yesNoOpts(t))
   const statusOptions = computed(() => statusOpts(t))
   const searchConfig = computed(() =>
-    searchForm(t, schoolOptions.value, protocolTypeOptions.value, moduleOptions.value, statusOptions.value)
+    searchForm(
+      t,
+      schoolOptions.value,
+      protocolTypeOptions.value,
+      moduleOptions.value,
+      statusOptions.value
+    )
   )
   const columns = computed(() =>
     tableCols(

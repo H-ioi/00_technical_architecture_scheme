@@ -18,8 +18,7 @@ const unwrapPage = (payload: unknown): { list: OperationRecord[]; total: number 
   }
 
   const r = payload as Loose
-  const num = (value: unknown) =>
-    typeof value === 'number' && Number.isFinite(value) ? value : 0
+  const num = (value: unknown) => (typeof value === 'number' && Number.isFinite(value) ? value : 0)
 
   if (Array.isArray(r.data)) {
     return { list: r.data as OperationRecord[], total: num(r.total) }
@@ -43,11 +42,7 @@ const unwrapPage = (payload: unknown): { list: OperationRecord[]; total: number 
 
     return {
       list,
-      total:
-        num(r.total) ||
-        num(obj.total) ||
-        num(obj.totalElements) ||
-        num(r.totalElements)
+      total: num(r.total) || num(obj.total) || num(obj.totalElements) || num(r.totalElements)
     }
   }
 
@@ -99,10 +94,8 @@ interface NamedEntity {
   name?: string
 }
 
-const labelOf = (
-  options: { value: string; label: string }[],
-  value: unknown
-): string => options.find((x) => String(x.value) === String(value))?.label ?? String(value ?? '--')
+const labelOf = (options: { value: string; label: string }[], value: unknown): string =>
+  options.find((x) => String(x.value) === String(value))?.label ?? String(value ?? '--')
 
 const normalizeSchoolIdsField = (row: Loose): void => {
   if (row.schoolIds == null && row.schoolId != null) {
@@ -156,12 +149,8 @@ const formatOperationRow = (
   next.arrivalTime = row.arrivalTime
     ? dayjs(String(row.arrivalTime)).format('YYYY-MM-DD HH:mm')
     : '--'
-  next.createTime = row.createTime
-    ? dayjs(String(row.createTime)).format('YYYY-MM-DD HH:mm')
-    : '--'
-  next.updateTime = row.updateTime
-    ? dayjs(String(row.updateTime)).format('YYYY-MM-DD HH:mm')
-    : '--'
+  next.createTime = row.createTime ? dayjs(String(row.createTime)).format('YYYY-MM-DD HH:mm') : '--'
+  next.updateTime = row.updateTime ? dayjs(String(row.updateTime)).format('YYYY-MM-DD HH:mm') : '--'
 
   return next
 }
@@ -233,7 +222,8 @@ export const useList = () => {
 
   const lineOptions = computed(() =>
     toUniOptions(filterBySchools(lineSource.value), {
-      labelKeys: locale() === 'en' ? ['enName', 'lineName', 'name'] : ['cnName', 'lineName', 'name'],
+      labelKeys:
+        locale() === 'en' ? ['enName', 'lineName', 'name'] : ['cnName', 'lineName', 'name'],
       valueKey: 'id'
     })
   )

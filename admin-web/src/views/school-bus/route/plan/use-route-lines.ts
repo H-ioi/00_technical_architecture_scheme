@@ -196,7 +196,8 @@ export const useRouteLines = (
 
   const stationOptions = computed(() =>
     toUniOptions(filterBySchools(stationSource.value), {
-      labelKeys: locale() === 'en' ? ['enName', 'stationName', 'name'] : ['cnName', 'stationName', 'name'],
+      labelKeys:
+        locale() === 'en' ? ['enName', 'stationName', 'name'] : ['cnName', 'stationName', 'name'],
       valueKey: 'id'
     })
   )
@@ -304,8 +305,12 @@ export const useRouteLines = (
       row.visible === true || row.visible === 'true' || row.visible === 1
         ? t('schoolBus.routePlan.visible.yes')
         : t('schoolBus.routePlan.visible.no')
-    row.createTime = row.createTime ? dayjs(String(row.createTime)).format('YYYY-MM-DD HH:mm') : '--'
-    row.updateTime = row.updateTime ? dayjs(String(row.updateTime)).format('YYYY-MM-DD HH:mm') : '--'
+    row.createTime = row.createTime
+      ? dayjs(String(row.createTime)).format('YYYY-MM-DD HH:mm')
+      : '--'
+    row.updateTime = row.updateTime
+      ? dayjs(String(row.updateTime)).format('YYYY-MM-DD HH:mm')
+      : '--'
 
     return row
   }

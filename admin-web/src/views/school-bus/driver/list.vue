@@ -23,8 +23,7 @@
       type="file"
       accept=".xlsx,.xls"
       class="school-bus-driver-page__file"
-      @change="onImportFile"
-    >
+      @change="onImportFile" />
 
     <UniSearchForm
       v-model="queryModel"
@@ -35,8 +34,7 @@
       :submit-text="$t('schoolBus.driver.actions.search')"
       :reset-text="$t('schoolBus.driver.actions.reset')"
       @search="search"
-      @reset="reset"
-    />
+      @reset="reset" />
 
     <UniDataTable
       ref="tableRef"
@@ -50,15 +48,13 @@
       :actions="actions"
       :action-column="{ width: 160, fixed: 'right' }"
       @selection-change="onSelectionChange"
-      @load-success="handleLoadSuccess"
-    >
+      @load-success="handleLoadSuccess">
       <template #toolbar>
         <el-button
           v-uni-permission="'busdriver_del'"
           type="danger"
           :disabled="ids.length === 0"
-          @click="del"
-        >
+          @click="del">
           {{ $t('schoolBus.driver.actions.delete') }}
         </el-button>
       </template>
@@ -71,8 +67,7 @@
       :default-school-id="defaultSchoolId"
       :school-options="schoolOptions"
       :status-options="statusOptions"
-      @saved="reload"
-    />
+      @saved="reload" />
   </section>
 </template>
 

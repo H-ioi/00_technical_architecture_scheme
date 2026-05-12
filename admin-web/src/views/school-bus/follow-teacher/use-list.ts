@@ -7,7 +7,10 @@ import { searchForm, statusOpts, tableCols } from './list.config'
 
 import { membershipApi, schoolBusFollowTeacherApi } from '@/api'
 import type { SchoolOptionRecord } from '@/types/modules/membership'
-import type { FollowTeacherListParams, FollowTeacherRecord } from '@/types/modules/school-bus-follow-teacher'
+import type {
+  FollowTeacherListParams,
+  FollowTeacherRecord
+} from '@/types/modules/school-bus-follow-teacher'
 import { membershipSchoolLabel, membershipSchoolToOptions } from '@/utils/membership-school'
 
 type Loose = Record<string, unknown>
@@ -17,8 +20,7 @@ const unwrapTeacherPage = (payload: unknown): { list: FollowTeacherRecord[]; tot
     return { list: [], total: 0 }
   }
   const r = payload as Loose
-  const num = (value: unknown) =>
-    typeof value === 'number' && Number.isFinite(value) ? value : 0
+  const num = (value: unknown) => (typeof value === 'number' && Number.isFinite(value) ? value : 0)
   if (Array.isArray(r.records)) {
     return { list: r.records as FollowTeacherRecord[], total: num(r.total) }
   }
@@ -52,9 +54,7 @@ export const useList = () => {
   })
 
   const schoolRecords = ref<SchoolOptionRecord[]>([])
-  const schoolOptions = computed(() =>
-    membershipSchoolToOptions(schoolRecords.value, locale())
-  )
+  const schoolOptions = computed(() => membershipSchoolToOptions(schoolRecords.value, locale()))
   const multiSchool = computed(() => schoolRecords.value.length > 1)
   const defaultSchoolId = computed(() =>
     schoolRecords.value.length === 1 ? schoolRecords.value[0].id : null
@@ -68,8 +68,7 @@ export const useList = () => {
   const formMode = ref<'add' | 'edit' | 'look'>('add')
   const currentRecord = ref<FollowTeacherRecord | null>(null)
 
-  const schoolLabel = (id: unknown) =>
-    membershipSchoolLabel(schoolRecords.value, id, locale())
+  const schoolLabel = (id: unknown) => membershipSchoolLabel(schoolRecords.value, id, locale())
 
   const decorate = (row: FollowTeacherRecord): FollowTeacherRecord => ({
     ...row,
@@ -96,7 +95,10 @@ export const useList = () => {
   }
 
   const actions = computed<UniTableAction[]>(() => [
-    { label: t('schoolBus.driver.actions.look'), onClick: (row) => openForm('look', row as FollowTeacherRecord) },
+    {
+      label: t('schoolBus.driver.actions.look'),
+      onClick: (row) => openForm('look', row as FollowTeacherRecord)
+    },
     {
       label: t('schoolBus.driver.actions.edit'),
       code: 'teacheruser_edit',

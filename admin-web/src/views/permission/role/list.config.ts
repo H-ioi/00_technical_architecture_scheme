@@ -32,7 +32,11 @@ export const searchForm = (t: Translate, dpOptions: UniOption[]): UniFormConfig 
       label: '',
       component: 'ElSelect',
       options: dpOptions,
-      componentProps: { placeholder: t('permission.role.columns.dpType'), clearable: true, filterable: true },
+      componentProps: {
+        placeholder: t('permission.role.columns.dpType'),
+        clearable: true,
+        filterable: true
+      },
       colProps: { span: 8 }
     }
   ],
@@ -43,7 +47,13 @@ export const searchForm = (t: Translate, dpOptions: UniOption[]): UniFormConfig 
 export const tableCols = (t: Translate): UniTableColumn[] => [
   { prop: 'roleName', label: t('permission.role.columns.name'), minWidth: 140, type: 'text' },
   { prop: 'roleCode', label: t('permission.role.columns.code'), minWidth: 120, type: 'text' },
-  { prop: 'roleDesc', label: t('permission.role.columns.desc'), minWidth: 160, type: 'text', showOverflowTooltip: true },
+  {
+    prop: 'roleDesc',
+    label: t('permission.role.columns.desc'),
+    minWidth: 160,
+    type: 'text',
+    showOverflowTooltip: true
+  },
   { prop: 'dpType', label: t('permission.role.columns.dpType'), width: 140, type: 'number' },
   { prop: 'createTime', label: t('permission.role.columns.created'), width: 168, type: 'datetime' }
 ]

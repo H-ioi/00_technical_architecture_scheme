@@ -1,20 +1,20 @@
 # 快速开始
 
 ```ts
-import { createApp } from "vue";
-import UniLib from "uni-ui-lib";
-import "uni-ui-lib/style.css";
+import { createApp } from 'vue'
+import UniLib from 'uni-ui-lib'
+import 'uni-ui-lib/style.css'
 
 createApp(App)
   .use(UniLib, {
     permission: {
-      hasPermission: (code) => permissionStore.hasPermission(code),
+      hasPermission: (code) => permissionStore.hasPermission(code)
     },
     theme: {
-      primaryColor: "#1677ff",
-    },
+      primaryColor: '#1677ff'
+    }
   })
-  .mount("#app");
+  .mount('#app')
 ```
 
 先在宿主创建 **`createUniLibI18n`** 导出的实例并 **`app.use(i18n)`**（合并宿主文案后同 key 由宿主覆盖库）。再在根组件用 `UniConfigProvider` 包裹，使 **Element Plus 原子组件**（日期、分页等）与 `vue-i18n` 语言一致。
@@ -32,8 +32,8 @@ createApp(App)
 ## 按需导入
 
 ```ts
-import { UniDataTable } from "uni-ui-lib/components/uni-data-table";
-import "uni-ui-lib/components/uni-data-table/style.css";
+import { UniDataTable } from 'uni-ui-lib/components/uni-data-table'
+import 'uni-ui-lib/components/uni-data-table/style.css'
 ```
 
 当前组件样式会复用全量样式出口；按需路径用于稳定类型和组件导入。

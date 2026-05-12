@@ -10,40 +10,40 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue";
-import type { UniFormConfig } from "uni-ui-lib";
+import { ref } from 'vue'
+import type { UniFormConfig } from 'uni-ui-lib'
 
 const model = ref<Record<string, unknown>>({
-  name: "",
-  code: "",
-});
+  name: '',
+  code: ''
+})
 
 const config: UniFormConfig = {
   sections: [
     {
-      title: "基础信息",
-      description: "可用插槽替换默认标题",
-      fields: ["name"],
+      title: '基础信息',
+      description: '可用插槽替换默认标题',
+      fields: ['name']
     },
-    { title: "扩展信息", fields: ["code"] },
+    { title: '扩展信息', fields: ['code'] }
   ],
   schema: [
     {
-      field: "name",
-      label: "名称",
-      component: "ElInput",
-      colProps: { span: 12 },
+      field: 'name',
+      label: '名称',
+      component: 'ElInput',
+      colProps: { span: 12 }
     },
     {
-      field: "code",
-      label: "编码",
-      component: "ElInput",
-      colProps: { span: 12 },
-    },
+      field: 'code',
+      label: '编码',
+      component: 'ElInput',
+      colProps: { span: 12 }
+    }
   ],
   rowProps: { gutter: 12 },
-  colProps: { span: 12 },
-};
+  colProps: { span: 12 }
+}
 </script>
 
 <style scoped>

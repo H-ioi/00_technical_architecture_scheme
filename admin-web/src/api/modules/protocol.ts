@@ -93,16 +93,17 @@ export default {
     url: `${API_PATHS.protocolSign}/getProtocolSignPage`,
     name: '签署分页',
     get: async function (this: { url: string }, params: ProtocolSignListParams) {
-      return await request.get<PageResult<ProtocolSignRecord>, PageResult<ProtocolSignRecord>>(this.url, {
-        params
-      })
+      return await request.get<PageResult<ProtocolSignRecord>, PageResult<ProtocolSignRecord>>(
+        this.url,
+        {
+          params
+        }
+      )
     }
   },
 
   upload: {
-    url:
-      import.meta.env.VITE_UPLOAD_URL?.trim() ||
-      'https://upload.isagzth.com/upload/',
+    url: import.meta.env.VITE_UPLOAD_URL?.trim() || 'https://upload.isagzth.com/upload/',
     name: '上传协议',
     post: async function (this: { url: string }, file: File) {
       const formData = new FormData()

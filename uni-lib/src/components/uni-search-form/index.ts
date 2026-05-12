@@ -1,11 +1,11 @@
-import type { App } from "vue";
+import type { App } from 'vue'
 
-import UniSearchForm from "./index.vue";
+import UniSearchForm from './index.vue'
 
-export { UniSearchForm };
+export { UniSearchForm }
 
 export default {
   install(app: App) {
-    app.component("UniSearchForm", UniSearchForm);
-  },
-};
+    app.component('UniSearchForm', UniSearchForm)
+  }
+}

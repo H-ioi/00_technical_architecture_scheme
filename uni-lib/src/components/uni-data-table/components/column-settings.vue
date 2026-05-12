@@ -17,7 +17,12 @@
       <el-checkbox v-model="column.visible">
         {{ column.label }}
       </el-checkbox>
-      <el-select v-model="column.fixed" size="small" clearable :placeholder="$t('dataTable.fixed')" style="width: 72px">
+      <el-select
+        v-model="column.fixed"
+        size="small"
+        clearable
+        :placeholder="$t('dataTable.fixed')"
+        style="width: 72px">
         <el-option :label="$t('dataTable.fixedLeft')" value="left" />
         <el-option :label="$t('dataTable.fixedRight')" value="right" />
       </el-select>
