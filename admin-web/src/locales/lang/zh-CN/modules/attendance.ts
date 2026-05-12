@@ -177,5 +177,39 @@ export default {
       /** 归档 */
       archived: '归档'
     }
+  },
+  wechatNotice: {
+    page: {
+      title: '微信通知',
+      description: '查看推送微信通知的记录；筛选「状态」与旧页一致（成功=0、失败=1）；列表未开放导出。'
+    },
+    actions: {
+      detail: '查看'
+    },
+    placeholders: {
+      school: '请选择学校',
+      admissionNo: '学号',
+      personName: '姓名',
+      openId: 'OpenID',
+      sendStatus: '状态',
+      beginDate: '开始时间',
+      endDate: '结束时间'
+    },
+    columns: {
+      id: 'ID',
+      schoolName: '校区',
+      admissionNo: '学号',
+      personName: '人员姓名',
+      sendStatus: '状态',
+      sendOpenId: 'OpenID',
+      result: '通知结果',
+      updateTime: '更新时间',
+      createTime: '创建时间'
+    },
+    options: {
+      /** 与旧页一致：value 0 成功，1 失败 */
+      sendOk: '成功',
+      sendFail: '失败'
+    }
   }
 }

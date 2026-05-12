@@ -28,5 +28,6 @@ export default {
   attendanceStudent: '学生考勤',
   attendanceSchool: '校园考勤',
   attendanceAccess: '门禁记录',
-  attendanceWechat: '微信 OpenID'
+  attendanceWechat: '微信 OpenID',
+  attendanceWechatNotice: '微信通知'
 }

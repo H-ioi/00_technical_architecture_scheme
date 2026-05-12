@@ -1,6 +1,7 @@
 import attendanceAccessApi from './modules/attendance-access'
 import attendanceSchoolApi from './modules/attendance-school'
 import attendanceStudentApi from './modules/attendance-student'
+import attendanceWechatNoticeApi from './modules/attendance-wechat-notice'
 import attendanceWechatOpenidApi from './modules/attendance-wechat-openid'
 import authApi from './modules/auth'
 import baseDictApi from './modules/base-dict'
@@ -29,6 +30,7 @@ export {
   attendanceAccessApi,
   attendanceSchoolApi,
   attendanceStudentApi,
+  attendanceWechatNoticeApi,
   attendanceWechatOpenidApi,
   authApi,
   baseDictApi,

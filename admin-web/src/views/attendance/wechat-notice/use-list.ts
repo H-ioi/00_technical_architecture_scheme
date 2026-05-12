@@ -4,22 +4,22 @@ import { toUniOptions, useUniI18n, useUniListState } from 'uni-ui-lib'
 import { computed, ref } from 'vue'
 
 import {
-  attendanceWechatOpenidColumns,
-  attendanceWechatOpenidDetailForm,
-  attendanceWechatOpenidSearchForm,
-  wechatOpenidStatusOpts
+  attendanceWechatNoticeColumns,
+  attendanceWechatNoticeDetailForm,
+  attendanceWechatNoticeSearchForm,
+  wechatNoticeSendStatusOpts
 } from './list.config'
 
-import { attendanceWechatOpenidApi, membershipApi } from '@/api'
+import { attendanceWechatNoticeApi, membershipApi } from '@/api'
 import type {
-  AttendanceWechatOpenidListParams,
-  AttendanceWechatOpenidRecord
-} from '@/types/modules/attendance-wechat-openid'
+  AttendanceWechatNoticeListParams,
+  AttendanceWechatNoticeRecord
+} from '@/types/modules/attendance-wechat-notice'
 import type { SchoolOptionRecord } from '@/types/modules/membership'
 
 type Loose = Record<string, unknown>
 
-const unwrapOpenidPage = (payload: unknown): { list: Loose[]; total: number } => {
+const unwrapNoticePage = (payload: unknown): { list: Loose[]; total: number } => {
   if (!payload || typeof payload !== 'object') {
     return { list: [], total: 0 }
   }
@@ -51,17 +51,16 @@ export const useList = () => {
   const initialFilters: Record<string, unknown> = {
     schoolId: undefined,
     admissionNo: '',
-    nickname: '',
+    personName: '',
     openId: '',
-    status: undefined,
+    sendStatus: undefined,
     beginDate: undefined,
     endDate: undefined
   }
 
-  const { queryModel, filters, tableRef, handleLoadSuccess, reset, search, refreshTable } =
-    useUniListState({
-      initialFilters
-    })
+  const { queryModel, filters, tableRef, handleLoadSuccess, reset, search } = useUniListState({
+    initialFilters
+  })
 
   const schoolRecords = ref<SchoolOptionRecord[]>([])
   const schoolOptions = computed(() =>
@@ -71,59 +70,55 @@ export const useList = () => {
     })
   )
 
-  const statusSearchOptions = computed(() => wechatOpenidStatusOpts(t))
+  const sendStatusSearchOptions = computed(() => wechatNoticeSendStatusOpts(t))
 
   const searchConfig = computed(() =>
-    attendanceWechatOpenidSearchForm(t, schoolOptions.value, statusSearchOptions.value)
+    attendanceWechatNoticeSearchForm(t, schoolOptions.value, sendStatusSearchOptions.value)
   )
 
-  const columns = computed(() => attendanceWechatOpenidColumns(t, schoolOptions.value))
+  const columns = computed(() => attendanceWechatNoticeColumns(t, schoolOptions.value))
 
-  const detailConfig = computed(() => attendanceWechatOpenidDetailForm(t, schoolOptions.value))
+  const detailConfig = computed(() => attendanceWechatNoticeDetailForm(t, schoolOptions.value))
 
   const detailVisible = ref(false)
-  const currentRecord = ref<AttendanceWechatOpenidRecord | null>(null)
+  const currentRecord = ref<AttendanceWechatNoticeRecord | null>(null)
 
-  const picked = ref<AttendanceWechatOpenidRecord[]>([])
-  const onSelectionChange = (rows: unknown[]) => {
-    picked.value = rows as AttendanceWechatOpenidRecord[]
+  const sendStatusLabel = (raw: unknown) => {
+    const s = String(raw ?? '')
+    const row = sendStatusSearchOptions.value.find((o) => String(o.value) === s)
+    return row?.label ?? (s === '' ? '--' : s)
   }
 
-  const statusLabel = (raw: unknown) => {
-    const row = statusSearchOptions.value.find((o) => String(o.value) === String(raw ?? ''))
-    return row?.label ?? String(raw ?? '--')
-  }
-
-  const decorateRow = (raw: Loose): AttendanceWechatOpenidRecord => ({
-    ...(raw as AttendanceWechatOpenidRecord),
-    status: statusLabel(raw.status),
+  const decorateRow = (raw: Loose): AttendanceWechatNoticeRecord => ({
+    ...(raw as AttendanceWechatNoticeRecord),
+    sendStatus: sendStatusLabel(raw.sendStatus),
     updateTime: formatMaybeDateTime(raw.updateTime),
     createTime: formatMaybeDateTime(raw.createTime)
   })
 
   const loadData: UniTableRequest = async ({ pageNo, pageSize, filters: f }) => {
-    const params: AttendanceWechatOpenidListParams = {
+    const params: AttendanceWechatNoticeListParams = {
       current: pageNo,
       size: pageSize,
       ...(f as Record<string, unknown>)
     }
-    const raw = await attendanceWechatOpenidApi.openidPage.get(params)
-    const { list, total } = unwrapOpenidPage(raw)
+    const raw = await attendanceWechatNoticeApi.noticePage.get(params)
+    const { list, total } = unwrapNoticePage(raw)
     return {
       data: list.map(decorateRow),
       total
     }
   }
 
-  const showDetail = (row: AttendanceWechatOpenidRecord) => {
+  const showDetail = (row: AttendanceWechatNoticeRecord) => {
     currentRecord.value = row
     detailVisible.value = true
   }
 
   const actions = computed<UniTableAction[]>(() => [
     {
-      label: t('attendance.wechatOpenid.actions.detail'),
-      onClick: (row) => showDetail(row as AttendanceWechatOpenidRecord)
+      label: t('attendance.wechatNotice.actions.detail'),
+      onClick: (row) => showDetail(row as AttendanceWechatNoticeRecord)
     }
   ])
 
@@ -142,10 +137,7 @@ export const useList = () => {
     filters,
     handleLoadSuccess,
     loadData,
-    onSelectionChange,
-    picked,
     queryModel,
-    refreshTable,
     reset,
     search,
     searchConfig,

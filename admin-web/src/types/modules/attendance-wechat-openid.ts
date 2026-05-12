@@ -2,7 +2,7 @@ import type { PageQuery } from '@/types/api'
 
 /** 分页查询（对齐旧页 `getWechatOpenidPage`）。 */
 export interface AttendanceWechatOpenidListParams extends PageQuery {
-  schoolIds?: string | number
+  schoolId?: string | number
   admissionNo?: string
   nickname?: string
   openId?: string
@@ -14,6 +14,7 @@ export interface AttendanceWechatOpenidListParams extends PageQuery {
 
 export interface AttendanceWechatOpenidRecord {
   id: string | number
+  schoolId?: string | number
   schoolName?: string
   admissionNo?: string
   nickname?: string

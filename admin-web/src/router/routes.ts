@@ -293,6 +293,15 @@ export const routes: AppRouteRecord[] = [
               title: '微信 OpenID',
               titleKey: 'route.attendanceWechat'
             }
+          },
+          {
+            path: 'wechat-notice',
+            name: 'AttendanceWechatNotice',
+            component: () => import('@/views/attendance/wechat-notice/list.vue'),
+            meta: {
+              title: '微信通知',
+              titleKey: 'route.attendanceWechatNotice'
+            }
           }
         ]
       },

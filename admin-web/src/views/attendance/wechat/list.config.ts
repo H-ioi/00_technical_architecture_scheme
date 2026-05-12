@@ -15,7 +15,7 @@ export const attendanceWechatOpenidSearchForm = (
 ): UniFormConfig => ({
   schema: [
     {
-      field: 'schoolIds',
+      field: 'schoolId',
       label: '',
       component: 'ElSelect',
       options: schoolOptions,
@@ -96,12 +96,13 @@ export const attendanceWechatOpenidSearchForm = (
   colProps: { span: 6 }
 })
 
-export const attendanceWechatOpenidColumns = (t: Translate): UniTableColumn[] => [
+export const attendanceWechatOpenidColumns = (t: Translate, schoolOptions: UniOption[]): UniTableColumn[] => [
   { prop: 'id', label: t('attendance.wechatOpenid.columns.id'), type: 'text', width: 90, fixed: 'left' },
   {
-    prop: 'schoolName',
+    prop: 'schoolId',
     label: t('attendance.wechatOpenid.columns.schoolName'),
     type: 'text',
+    options: schoolOptions,
     minWidth: 120,
     showOverflowTooltip: true
   },
@@ -143,7 +144,7 @@ export const attendanceWechatOpenidColumns = (t: Translate): UniTableColumn[] =>
   }
 ]
 
-export const attendanceWechatOpenidDetailForm = (t: Translate): UniFormConfig => ({
+export const attendanceWechatOpenidDetailForm = (t: Translate, schoolOptions: UniOption[]): UniFormConfig => ({
   mode: 'view',
   formProps: { labelWidth: '110px' },
   rowProps: { gutter: 16 },
@@ -151,7 +152,13 @@ export const attendanceWechatOpenidDetailForm = (t: Translate): UniFormConfig =>
   view: { emptyText: '-' },
   schema: [
     { field: 'id', label: t('attendance.wechatOpenid.columns.id'), component: 'ElInput' },
-    { field: 'schoolName', label: t('attendance.wechatOpenid.columns.schoolName'), component: 'ElInput' },
+    {
+      field: 'schoolId',
+      label: t('attendance.wechatOpenid.columns.schoolName'),
+      component: 'ElInput',
+      viewType: 'enum',
+      options: schoolOptions
+    },
     {
       field: 'admissionNo',
       label: t('attendance.wechatOpenid.columns.admissionNo'),

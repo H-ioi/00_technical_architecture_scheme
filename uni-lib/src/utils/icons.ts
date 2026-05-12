@@ -4,6 +4,8 @@
  *
  * **Element Plus**：全量 `@element-plus/icons-vue`（与 admin `menu-sidebar-icon/registry` 一致）。
  * **组件库**：`UniZhEnIcon` 等置于后合并对象。全量导入会增加使用方打包体积。
+ *
+ * 使用 `.ts` 而非 `.vue`：无模板时 SFC 会强制要求 `export default` 以满足打包器对组件模块的约定。
  */
 import * as ElementPlusIconsVue from "@element-plus/icons-vue";
 import type { Component } from "vue";

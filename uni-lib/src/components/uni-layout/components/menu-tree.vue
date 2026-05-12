@@ -48,7 +48,7 @@ import type {
   UniLayoutMenuRecord,
   UniLayoutTranslate,
 } from "@/types/uni-layout";
-import { uniLayoutDefaultMenuIconMap } from "@/utils/layout-menu-icons";
+import { uniLayoutDefaultMenuIconMap } from "@/utils/icons";
 
 defineOptions({
   name: "UniLayoutMenuTree",

@@ -28,5 +28,6 @@ export default {
   attendanceStudent: 'Student attendance',
   attendanceSchool: 'Campus attendance',
   attendanceAccess: 'Access records',
-  attendanceWechat: 'WeChat OpenID'
+  attendanceWechat: 'WeChat OpenID',
+  attendanceWechatNotice: 'WeChat notifications'
 }

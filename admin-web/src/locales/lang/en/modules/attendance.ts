@@ -179,5 +179,39 @@ export default {
       active: 'Active',
       archived: 'Archived'
     }
+  },
+  wechatNotice: {
+    page: {
+      title: 'WeChat notifications',
+      description:
+        'Notification delivery log; send status filter matches legacy (success=0, fail=1); export disabled like legacy UI.'
+    },
+    actions: {
+      detail: 'View'
+    },
+    placeholders: {
+      school: 'Campus',
+      admissionNo: 'Admission No.',
+      personName: 'Name',
+      openId: 'OpenID',
+      sendStatus: 'Status',
+      beginDate: 'Start date',
+      endDate: 'End date'
+    },
+    columns: {
+      id: 'ID',
+      schoolName: 'Campus',
+      admissionNo: 'Admission No.',
+      personName: 'Name',
+      sendStatus: 'Status',
+      sendOpenId: 'OpenID',
+      result: 'Result',
+      updateTime: 'Updated',
+      createTime: 'Created'
+    },
+    options: {
+      sendOk: 'Success',
+      sendFail: 'Fail'
+    }
   }
 }

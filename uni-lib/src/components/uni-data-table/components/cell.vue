@@ -1,8 +1,5 @@
 <template>
-  <div
-    class="uni-table-cell"
-    :class="{ 'is-overflow-tooltip': column.showOverflowTooltip }"
-  >
+  <div class="uni-table-cell" :class="{ 'is-overflow-tooltip': column.showOverflowTooltip }">
     <template v-if="columnType === 'image' || columnType === 'images'">
       <el-image
         v-for="url in imageUrls"
@@ -12,37 +9,23 @@
         :preview-src-list="column.image?.preview === false ? [] : imageUrls"
         :style="{
           width: `${column.image?.width ?? 40}px`,
-          height: `${column.image?.height ?? 40}px`,
+          height: `${column.image?.height ?? 40}px`
         }"
-        fit="cover"
-      />
+        fit="cover" />
       <span v-if="imageUrls.length === 0">--</span>
     </template>
 
     <template v-else-if="columnType === 'video' || columnType === 'videos'">
-      <el-link
-        v-for="url in linkItems"
-        :key="url"
-        type="primary"
-        :href="url"
-        target="_blank"
-        >查看视频</el-link
-      >
+      <el-link v-for="url in linkItems" :key="url" type="primary" :href="url" target="_blank">查看视频</el-link>
       <span v-if="linkItems.length === 0">--</span>
     </template>
 
     <template v-else-if="columnType === 'tag' || columnType === 'enum'">
-      <el-tag :type="option?.type as never" :color="option?.color">{{
-        displayValue
-      }}</el-tag>
+      <el-tag :type="option?.type as never" :color="option?.color">{{ displayValue }}</el-tag>
     </template>
 
     <template v-else-if="columnType === 'tags'">
-      <el-tag
-        v-for="item in toArray(value)"
-        :key="String(item)"
-        class="uni-table-cell__tag"
-      >
+      <el-tag v-for="item in toArray(value)" :key="String(item)" class="uni-table-cell__tag">
         {{ formatEmpty(item) }}
       </el-tag>
     </template>
@@ -52,13 +35,8 @@
         :model-value="value"
         :active-value="column.switch?.activeValue ?? true"
         :inactive-value="column.switch?.inactiveValue ?? false"
-        :disabled="
-          typeof column.switch?.disabled === 'function'
-            ? column.switch.disabled(row)
-            : column.switch?.disabled
-        "
-        @change="handleSwitchChange"
-      />
+        :disabled="typeof column.switch?.disabled === 'function' ? column.switch.disabled(row) : column.switch?.disabled"
+        @change="handleSwitchChange" />
     </template>
 
     <template v-else-if="columnType === 'link' || columnType === 'links'">
@@ -68,41 +46,22 @@
         type="primary"
         :href="getLinkHref(item)"
         :target="column.link?.target ?? '_blank'"
-        @click="column.link?.onClick?.(row, item)"
-      >
+        @click="column.link?.onClick?.(row, item)">
         {{ item }}
       </el-link>
       <span v-if="linkItems.length === 0">--</span>
     </template>
 
-    <div
-      v-else-if="columnType === 'copy' || column.copyable"
-      class="uni-table-cell__copy-container"
-    >
+    <div v-else-if="columnType === 'copy' || column.copyable" class="uni-table-cell__copy-container">
       <span class="uni-table-cell__text">{{ displayValue }}</span>
-      <el-button
-        v-if="canCopy"
-        class="uni-table-cell__copy"
-        link
-        type="primary"
-        aria-label="复制"
-        title="复制"
-        @click="copyCurrentValue"
-      >
+      <el-button v-if="canCopy" class="uni-table-cell__copy" link type="primary" aria-label="复制" title="复制" @click="copyCurrentValue">
         <el-icon>
           <DocumentCopy />
         </el-icon>
       </el-button>
     </div>
-    <template
-      v-else-if="columnType === 'array' && column.array?.renderMode === 'tag'"
-    >
-      <el-tag
-        v-for="item in arrayItems"
-        :key="item"
-        class="uni-table-cell__tag"
-        >{{ item }}</el-tag
-      >
+    <template v-else-if="columnType === 'array' && column.array?.renderMode === 'tag'">
+      <el-tag v-for="item in arrayItems" :key="item" class="uni-table-cell__tag">{{ item }}</el-tag>
     </template>
 
     <template v-else-if="columnType === 'json'">
@@ -123,93 +82,69 @@
  * 开关、图片、链接等；可配合列 `formatter`、列 `options`；
  * `text`/`number`/`array`（lookup）可将 id / 数组 id 解析为文案。
  */
-import { DocumentCopy } from "@element-plus/icons-vue";
-import { ElMessage } from "element-plus";
-import { computed } from "vue";
+import { DocumentCopy } from '@element-plus/icons-vue'
+import { ElMessage } from 'element-plus'
+import { computed } from 'vue'
 
-import { useUniI18n } from "@/locales/use-uni-i18n";
-import type { Recordable } from "@/types/shared";
-import type { UniTableColumn } from "@/types/uni-table";
-import { copyText } from "@/utils/copy";
-import {
-  formatEmpty,
-  formatTableCellText,
-  isBlankValue,
-  resolveOption,
-  toArray,
-} from "@/utils/format";
+import { useUniI18n } from '@/locales/use-uni-i18n'
+import type { Recordable } from '@/types/shared'
+import type { UniTableColumn } from '@/types/uni-table'
+import { copyText } from '@/utils/copy'
+import { formatEmpty, formatTableCellText, isBlankValue, resolveOption, toArray } from '@/utils/format'
 
 const props = defineProps<{
-  row: Recordable;
-  column: UniTableColumn;
-  value: unknown;
-  rowIndex: number;
-}>();
+  row: Recordable
+  column: UniTableColumn
+  value: unknown
+  rowIndex: number
+}>()
 
 const emit = defineEmits<{
-  switchChange: [row: Recordable, column: UniTableColumn, value: unknown];
-}>();
+  switchChange: [row: Recordable, column: UniTableColumn, value: unknown]
+}>()
 
-const { t } = useUniI18n();
-const columnType = computed(() => props.column.type ?? "text");
-const option = computed(() => resolveOption(props.value, props.column));
-const displayValue = computed(() =>
-  formatTableCellText(props.row, props.column, props.value, props.rowIndex, t),
-);
+const { t } = useUniI18n()
+const columnType = computed(() => props.column.type ?? 'text')
+const option = computed(() => resolveOption(props.value, props.column))
+const displayValue = computed(() => formatTableCellText(props.row, props.column, props.value, props.rowIndex, t))
 
-const imageUrls = computed(() =>
-  toArray(props.value).map(String).filter(Boolean),
-);
-const linkItems = computed(() =>
-  toArray(props.value).map(String).filter(Boolean),
-);
-const arrayItems = computed(() =>
-  displayValue.value
-    .split(props.column.array?.separator ?? "、")
-    .filter(Boolean),
-);
-const emptyCopyTexts = new Set(["-", "--", "—", "暂无数据"]);
-const copyTextValue = computed(() => String(displayValue.value ?? "").trim());
-const canCopy = computed(
-  () =>
-    !isBlankValue(props.value) &&
-    !isBlankValue(copyTextValue.value) &&
-    !emptyCopyTexts.has(copyTextValue.value),
-);
+const imageUrls = computed(() => toArray(props.value).map(String).filter(Boolean))
+const linkItems = computed(() => toArray(props.value).map(String).filter(Boolean))
+const arrayItems = computed(() => displayValue.value.split(props.column.array?.separator ?? '、').filter(Boolean))
+const emptyCopyTexts = new Set(['-', '--', '—', '暂无数据'])
+const copyTextValue = computed(() => String(displayValue.value ?? '').trim())
+const canCopy = computed(() => !isBlankValue(props.value) && !isBlankValue(copyTextValue.value) && !emptyCopyTexts.has(copyTextValue.value))
 
 const copyCurrentValue = async () => {
   if (!canCopy.value) {
-    return;
+    return
   }
 
   try {
-    await copyText(copyTextValue.value);
-    ElMessage.success(t("common.copySuccess"));
+    await copyText(copyTextValue.value)
+    ElMessage.success(t('common.copySuccess'))
   } catch {
-    ElMessage.error(t("common.copyFailed"));
+    ElMessage.error(t('common.copyFailed'))
   }
-};
+}
 
 const getLinkHref = (value: unknown) => {
-  if (typeof props.column.link?.href === "function") {
-    return props.column.link.href(props.row, value);
+  if (typeof props.column.link?.href === 'function') {
+    return props.column.link.href(props.row, value)
   }
 
-  return props.column.link?.href ?? String(value ?? "");
-};
+  return props.column.link?.href ?? String(value ?? '')
+}
 
 const handleSwitchChange = async (nextValue: unknown) => {
-  const canChange = await props.column.switch?.beforeChange?.(
-    props.row,
-    nextValue,
-  );
+  const canChange = await props.column.switch?.beforeChange?.(props.row, nextValue)
 
   if (canChange === false) {
-    return;
+    return
   }
 
-  emit("switchChange", props.row, props.column, nextValue);
-};
+  emit('switchChange', props.row, props.column, nextValue)
+}
 </script>
 
 <style scoped lang="scss">

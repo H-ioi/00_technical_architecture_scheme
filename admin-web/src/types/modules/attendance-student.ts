@@ -2,7 +2,7 @@ import type { PageQuery } from '@/types/api'
 
 /** 分页查询（对齐旧页 `getAttendanceStudentPage`，分页 `current`/`size`）。 */
 export interface AttendanceStudentListParams extends PageQuery {
-  schoolIds?: string | number
+  schoolId?: string | number
   admissionNo?: string
   grade?: string
   /** 是否住宿（旧 `onBoarding`，枚举 `yesOrno`） */
@@ -18,6 +18,7 @@ export interface AttendanceStudentListParams extends PageQuery {
 /** 表格行（列表接口原始字段 + 展示用格式化字段）。 */
 export interface AttendanceStudentRecord {
   id: string | number
+  schoolId?: string | number
   schoolName?: string
   studentName?: string
   admissionNo?: string

@@ -26,7 +26,7 @@ export const attendanceStudentSearchForm = (
 ): UniFormConfig => ({
   schema: [
     {
-      field: 'schoolIds',
+      field: 'schoolId',
       label: '',
       component: 'ElSelect',
       options: schoolOptions,
@@ -121,12 +121,13 @@ export const attendanceStudentSearchForm = (
   colProps: { span: 6 }
 })
 
-export const attendanceStudentColumns = (t: Translate): UniTableColumn[] => [
+export const attendanceStudentColumns = (t: Translate, schoolOptions: UniOption[]): UniTableColumn[] => [
   { prop: 'id', label: t('attendance.student.columns.id'), type: 'text', width: 90, fixed: 'left' },
   {
-    prop: 'schoolName',
+    prop: 'schoolId',
     label: t('attendance.student.columns.schoolName'),
     type: 'text',
+    options: schoolOptions,
     minWidth: 140,
     showOverflowTooltip: true
   },
@@ -200,7 +201,7 @@ export const attendanceStudentColumns = (t: Translate): UniTableColumn[] => [
   }
 ]
 
-export const attendanceStudentDetailForm = (t: Translate): UniFormConfig => ({
+export const attendanceStudentDetailForm = (t: Translate, schoolOptions: UniOption[]): UniFormConfig => ({
   mode: 'view',
   formProps: { labelWidth: '110px' },
   rowProps: { gutter: 16 },
@@ -208,7 +209,13 @@ export const attendanceStudentDetailForm = (t: Translate): UniFormConfig => ({
   view: { emptyText: '-' },
   schema: [
     { field: 'id', label: t('attendance.student.columns.id'), component: 'ElInput' },
-    { field: 'schoolName', label: t('attendance.student.columns.schoolName'), component: 'ElInput' },
+    {
+      field: 'schoolId',
+      label: t('attendance.student.columns.schoolName'),
+      component: 'ElInput',
+      viewType: 'enum',
+      options: schoolOptions
+    },
     { field: 'studentName', label: t('attendance.student.columns.studentName'), component: 'ElInput' },
     { field: 'admissionNo', label: t('attendance.student.columns.admissionNo'), component: 'ElInput' },
     { field: 'grade', label: t('attendance.student.columns.grade'), component: 'ElInput' },

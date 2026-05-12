@@ -55,7 +55,7 @@ const formatDateOnly = (value: unknown) => {
 export const useList = () => {
   const { locale, t } = useUniI18n()
   const initialFilters: Record<string, unknown> = {
-    schoolIds: undefined,
+    schoolId: undefined,
     admissionNo: '',
     grade: undefined,
     onBoarding: undefined,
@@ -98,9 +98,9 @@ export const useList = () => {
     )
   )
 
-  const columns = computed(() => attendanceStudentColumns(t))
+  const columns = computed(() => attendanceStudentColumns(t, schoolOptions.value))
 
-  const detailConfig = computed(() => attendanceStudentDetailForm(t))
+  const detailConfig = computed(() => attendanceStudentDetailForm(t, schoolOptions.value))
 
   const detailVisible = ref(false)
   const currentRecord = ref<AttendanceStudentRecord | null>(null)
