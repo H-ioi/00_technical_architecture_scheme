@@ -22,7 +22,7 @@ export const useList = (callbacks: RoleListCallbacks) => {
   })
 
   const dpOpts = computed(() => dpTypeOptions(t))
-  const searchConfig = computed(() => searchForm(t, dpOpts.value))
+  const searchCfg = computed(() => searchForm(t, dpOpts.value))
   const columns = computed(() => tableCols(t))
 
   const loadData: UniTableRequest = async ({ pageNo, pageSize, filters: f }) => {
@@ -62,7 +62,7 @@ export const useList = (callbacks: RoleListCallbacks) => {
     queryModel,
     reset,
     search,
-    searchConfig,
+    searchCfg,
     tableRef,
     t
   }

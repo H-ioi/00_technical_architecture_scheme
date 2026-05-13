@@ -2,7 +2,7 @@
   <div>
     <UniSearchForm
       v-model="queryModel"
-      :config="searchConfig"
+      :config="searchCfg"
       :collapsed="true"
       :collapsed-rows="1"
       :action-min-span="0"
@@ -43,7 +43,7 @@ const { queryModel, filters, tableRef, handleLoadSuccess, reset, search } = useU
   initialFilters: { key: '' }
 })
 
-const searchConfig = computed<UniFormConfig>(() => ({
+const searchCfg = computed<UniFormConfig>(() => ({
   schema: [
     {
       field: 'key',

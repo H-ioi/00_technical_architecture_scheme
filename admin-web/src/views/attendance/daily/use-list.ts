@@ -110,7 +110,7 @@ export const useList = () => {
   const dataFromSearchOptions = computed(() => dataFromOpts(t))
   const statusSearchOptions = computed(() => dailyStatusOpts(t))
 
-  const searchConfig = computed(() =>
+  const searchCfg = computed(() =>
     attendanceDailySearchForm(
       t,
       schoolOptions.value,
@@ -175,7 +175,7 @@ export const useList = () => {
     queryModel,
     reset,
     search,
-    searchConfig,
+    searchCfg,
     tableRef
   }
 }

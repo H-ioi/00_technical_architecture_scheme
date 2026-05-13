@@ -55,7 +55,7 @@ export const useList = () => {
 
   const statusSearchOptions = computed(() => wechatOpenidStatusOpts(t))
 
-  const searchConfig = computed(() =>
+  const searchCfg = computed(() =>
     attendanceWechatOpenidSearchForm(t, schoolOptions.value, statusSearchOptions.value)
   )
 
@@ -64,11 +64,11 @@ export const useList = () => {
   const detailConfig = computed(() => attendanceWechatOpenidDetailForm(t, schoolOptions.value))
 
   const detailVisible = ref(false)
-  const currentRecord = ref<AttendanceWechatOpenidRecord | null>(null)
+  const activeRow = ref<AttendanceWechatOpenidRecord | null>(null)
 
-  const picked = ref<AttendanceWechatOpenidRecord[]>([])
+  const selection = ref<AttendanceWechatOpenidRecord[]>([])
   const onSelectionChange = (rows: unknown[]) => {
-    picked.value = rows as AttendanceWechatOpenidRecord[]
+    selection.value = rows as AttendanceWechatOpenidRecord[]
   }
 
   const statusLabel = (raw: unknown) => {
@@ -98,7 +98,7 @@ export const useList = () => {
   }
 
   const showDetail = (row: AttendanceWechatOpenidRecord) => {
-    currentRecord.value = row
+    activeRow.value = row
     detailVisible.value = true
   }
 
@@ -118,19 +118,19 @@ export const useList = () => {
   return {
     actions,
     columns,
-    currentRecord,
+    activeRow,
     detailConfig,
     detailVisible,
     filters,
     handleLoadSuccess,
     loadData,
     onSelectionChange,
-    picked,
+    selection,
     queryModel,
     refreshTable,
     reset,
     search,
-    searchConfig,
+    searchCfg,
     tableRef
   }
 }

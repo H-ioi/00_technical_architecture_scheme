@@ -47,12 +47,12 @@ export const useList = () => {
   )
 
   const statusOptions = computed(() => statusOpts(t))
-  const searchConfig = computed(() => searchForm(t, schoolOptions.value, multiSchool.value))
+  const searchCfg = computed(() => searchForm(t, schoolOptions.value, multiSchool.value))
   const columns = computed(() => tableCols(t, statusOptions.value))
 
   const formVisible = ref(false)
   const formMode = ref<'add' | 'edit' | 'look'>('add')
-  const currentRecord = ref<FollowTeacherRecord | null>(null)
+  const activeRow = ref<FollowTeacherRecord | null>(null)
 
   const schoolLabel = (id: unknown) => membershipSchoolLabel(schoolRecords.value, id, locale())
 
@@ -76,7 +76,7 @@ export const useList = () => {
 
   const openForm = (mode: 'add' | 'edit' | 'look', row?: FollowTeacherRecord) => {
     formMode.value = mode
-    currentRecord.value = row ?? null
+    activeRow.value = row ?? null
     formVisible.value = true
   }
 
@@ -112,7 +112,7 @@ export const useList = () => {
   return {
     actions,
     columns,
-    currentRecord,
+    activeRow,
     defaultSchoolId,
     filters,
     formMode,
@@ -125,7 +125,7 @@ export const useList = () => {
     reset,
     schoolOptions,
     search,
-    searchConfig,
+    searchCfg,
     statusOptions,
     tableRef
   }

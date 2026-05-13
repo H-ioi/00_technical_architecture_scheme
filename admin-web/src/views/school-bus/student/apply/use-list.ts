@@ -72,7 +72,7 @@ export const useApplyList = () => {
   const paymentOpts = computed(() => paymentStatusOptions(t))
   const pickupOpts = computed(() => pickupMethodOptions(t))
 
-  const searchConfig = computed(() =>
+  const searchCfg = computed(() =>
     applySearchForm(
       t,
       schoolOptions.value,
@@ -169,7 +169,7 @@ export const useApplyList = () => {
     queryModel,
     reset,
     search,
-    searchConfig,
+    searchCfg,
     tableRef,
     schoolOptions,
     detailVisible,

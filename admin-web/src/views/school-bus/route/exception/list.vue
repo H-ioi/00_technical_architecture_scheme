@@ -30,7 +30,7 @@
 
     <UniSearchForm
       v-model="queryModel"
-      :config="searchConfig"
+      :config="searchCfg"
       :collapsed="true"
       :collapsed-rows="1"
       :action-min-span="0"
@@ -66,7 +66,7 @@
     <ExceptionForm
       v-model:visible="formVisible"
       :mode="formMode"
-      :source="currentRecord"
+      :source="activeRow"
       :default-school-id="defaultSchoolId"
       :school-records="schoolRecords"
       @saved="reload" />
@@ -99,7 +99,7 @@ const fileRef = ref<HTMLInputElement | null>(null)
 const {
   actions,
   columns,
-  currentRecord,
+  activeRow,
   defaultSchoolId,
   detailRecord,
   detailVisible,
@@ -114,15 +114,15 @@ const {
   reset,
   schoolRecords,
   search,
-  searchConfig,
+  searchCfg,
   tableRef
 } = useList()
 
-const picked = ref<ExceptionRecord[]>([])
-const ids = computed(() => picked.value.map((item) => item.id))
+const selection = ref<ExceptionRecord[]>([])
+const ids = computed(() => selection.value.map((item) => item.id))
 
 const onSelectionChange = (rows: ExceptionRecord[]) => {
-  picked.value = rows
+  selection.value = rows
 }
 
 const reload = () => {
@@ -229,7 +229,7 @@ const del = async () => {
 
   await schoolBusExceptionApi.delete.delete(ids.value)
   ElMessage.success(t('schoolBus.driver.messages.deleteSuccess'))
-  picked.value = []
+  selection.value = []
   reload()
 }
 </script>

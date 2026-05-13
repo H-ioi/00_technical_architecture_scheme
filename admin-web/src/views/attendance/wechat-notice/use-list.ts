@@ -54,7 +54,7 @@ export const useList = () => {
 
   const sendStatusSearchOptions = computed(() => wechatNoticeSendStatusOpts(t))
 
-  const searchConfig = computed(() =>
+  const searchCfg = computed(() =>
     attendanceWechatNoticeSearchForm(t, schoolOptions.value, sendStatusSearchOptions.value)
   )
 
@@ -63,7 +63,7 @@ export const useList = () => {
   const detailConfig = computed(() => attendanceWechatNoticeDetailForm(t, schoolOptions.value))
 
   const detailVisible = ref(false)
-  const currentRecord = ref<AttendanceWechatNoticeRecord | null>(null)
+  const activeRow = ref<AttendanceWechatNoticeRecord | null>(null)
 
   const sendStatusLabel = (raw: unknown) => {
     const s = String(raw ?? '')
@@ -93,7 +93,7 @@ export const useList = () => {
   }
 
   const showDetail = (row: AttendanceWechatNoticeRecord) => {
-    currentRecord.value = row
+    activeRow.value = row
     detailVisible.value = true
   }
 
@@ -113,7 +113,7 @@ export const useList = () => {
   return {
     actions,
     columns,
-    currentRecord,
+    activeRow,
     detailConfig,
     detailVisible,
     filters,
@@ -122,7 +122,7 @@ export const useList = () => {
     queryModel,
     reset,
     search,
-    searchConfig,
+    searchCfg,
     tableRef
   }
 }

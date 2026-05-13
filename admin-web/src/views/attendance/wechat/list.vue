@@ -9,7 +9,7 @@
 
     <UniSearchForm
       v-model="queryModel"
-      :config="searchConfig"
+      :config="searchCfg"
       :collapsed="true"
       :collapsed-rows="1"
       :action-min-span="0"
@@ -34,20 +34,20 @@
       <template #toolbar>
         <el-button
           v-uni-permission="'archive_wx_openid'"
-          :disabled="picked.length === 0"
+          :disabled="selection.length === 0"
           @click="batchStatus(1)">
           {{ $t('attendance.wechatOpenid.actions.archive') }}
         </el-button>
         <el-button
           v-uni-permission="'archive_wx_openid'"
-          :disabled="picked.length === 0"
+          :disabled="selection.length === 0"
           @click="batchStatus(0)">
           {{ $t('attendance.wechatOpenid.actions.activate') }}
         </el-button>
       </template>
     </UniDataTable>
 
-    <DetailDialog v-model:visible="detailVisible" :source="currentRecord" :config="detailConfig" />
+    <DetailDialog v-model:visible="detailVisible" :source="activeRow" :config="detailConfig" />
   </section>
 </template>
 
@@ -65,32 +65,32 @@ const { t } = useUniI18n()
 const {
   actions,
   columns,
-  currentRecord,
+  activeRow,
   detailConfig,
   detailVisible,
   filters,
   handleLoadSuccess,
   loadData,
   onSelectionChange,
-  picked,
+  selection,
   queryModel,
   refreshTable,
   reset,
   search,
-  searchConfig,
+  searchCfg,
   tableRef
 } = useList()
 
 const batchStatus = async (status: number) => {
-  if (picked.value.length === 0) {
+  if (selection.value.length === 0) {
     ElMessage.warning(t('attendance.wechatOpenid.messages.needSelection'))
     return
   }
-  const ids = picked.value.map((r) => r.id)
+  const ids = selection.value.map((r) => r.id)
   try {
     await attendanceWechatOpenidApi.batchUpdateStatus.post(ids, status)
     ElMessage.success(t('attendance.wechatOpenid.messages.batchSuccess'))
-    picked.value = []
+    selection.value = []
     await refreshTable()
   } catch {
     /* request 层已提示 */

@@ -26,7 +26,7 @@
       <el-col :xs="24" :sm="17" :md="18">
         <UniSearchForm
           v-model="queryModel"
-          :config="searchConfig"
+          :config="searchCfg"
           :collapsed="true"
           :collapsed-rows="1"
           :action-min-span="0"
@@ -140,7 +140,7 @@ const {
   queryModel,
   reset,
   search,
-  searchConfig,
+  searchCfg,
   tableRef
 } = useList(selectedDeptId, {
   onEdit: openEdit,

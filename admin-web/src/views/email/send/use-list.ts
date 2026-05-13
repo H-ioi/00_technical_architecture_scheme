@@ -23,17 +23,17 @@ export const useList = () => {
     initialFilters: { keyword: '', status: '' }
   })
   const statusOpts = computed(() => emailSendStatusOpts(tr))
-  const searchConfig = computed(() => emailSendSearchForm(tr, statusOpts.value))
+  const searchCfg = computed(() => emailSendSearchForm(tr, statusOpts.value))
   const columns = computed(() => emailSendColumns(tr))
 
   const dialogVisible = ref(false)
   const viewVisible = ref(false)
   const dialogMode = ref<'add' | 'edit'>('add')
-  const selectedRows = ref<Loose[]>([])
-  const batchDisabled = computed(() => selectedRows.value.length === 0)
+  const selection = ref<Loose[]>([])
+  const batchDisabled = computed(() => selection.value.length === 0)
 
   const onSelectionChange = (rows: Record<string, unknown>[]) => {
-    selectedRows.value = rows as Loose[]
+    selection.value = rows as Loose[]
   }
 
   const viewModel = ref<{
@@ -126,7 +126,7 @@ export const useList = () => {
   }
 
   const batchStatus = (status: number) => {
-    const rows = selectedRows.value
+    const rows = selection.value
     if (rows.length === 0) {
       ElMessage.warning(tr('email.selectRows'))
       return
@@ -167,7 +167,7 @@ export const useList = () => {
     queryModel,
     reset,
     search,
-    searchConfig,
+    searchCfg,
     tableRef,
     viewModel,
     viewVisible

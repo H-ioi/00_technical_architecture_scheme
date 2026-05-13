@@ -107,7 +107,7 @@ const {
   queryModel: leaveQueryModel,
   reset: resetLeaveSearch,
   search: searchLeave,
-  searchConfig: leaveSearchConfig,
+  searchCfg: leaveSearchConfig,
   tableRef: leaveTableRef
 } = useHolidayLeave(schoolRecords)
 
@@ -124,7 +124,7 @@ const {
   queryModel: returnQueryModel,
   reset: resetReturnSearch,
   search: searchReturn,
-  searchConfig: returnSearchConfig,
+  searchCfg: returnSearchConfig,
   tableRef: returnTableRef
 } = useHolidayReturn(schoolRecords)
 

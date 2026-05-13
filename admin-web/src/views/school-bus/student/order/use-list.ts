@@ -64,7 +64,7 @@ export const useOrderList = () => {
   const multiSchool = computed(() => schoolRecords.value.length > 1)
   const pickupOpts = computed(() => pickupMethodOptions(t))
 
-  const searchConfig = computed(() =>
+  const searchCfg = computed(() =>
     orderSearchForm(
       t,
       schoolOptions.value,
@@ -157,7 +157,7 @@ export const useOrderList = () => {
     queryModel,
     reset,
     search,
-    searchConfig,
+    searchCfg,
     tableRef,
     schoolOptions,
     formVisible,

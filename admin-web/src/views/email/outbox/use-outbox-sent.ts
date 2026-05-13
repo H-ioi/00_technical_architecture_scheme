@@ -22,7 +22,7 @@ export const useOutboxSent = () => {
     initialFilters: { keyword: '', dateRange: null as string[] | null }
   })
 
-  const searchConfig = computed(() => emailOutboxSearchForm(tr))
+  const searchCfg = computed(() => emailOutboxSearchForm(tr))
   const columns = computed(() => emailOutboxSentColumns(tr))
 
   const loadData: UniTableRequest = async ({ pageNo, pageSize, filters: f }) => {
@@ -98,7 +98,7 @@ export const useOutboxSent = () => {
     queryModel,
     reset,
     search,
-    searchConfig,
+    searchCfg,
     tableRef,
     viewModel,
     viewVisible

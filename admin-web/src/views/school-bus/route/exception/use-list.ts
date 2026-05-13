@@ -142,7 +142,7 @@ export const useList = () => {
 
   const formVisible = ref(false)
   const formMode = ref<'add' | 'edit' | 'look'>('add')
-  const currentRecord = ref<ExceptionRecord | null>(null)
+  const activeRow = ref<ExceptionRecord | null>(null)
   const detailVisible = ref(false)
   const detailRecord = ref<ExceptionRecord | null>(null)
 
@@ -210,7 +210,7 @@ export const useList = () => {
   const exceptionTypeOptions = computed(() => exceptionTypeMeta(t))
   const yesNoOptions = computed(() => yesNoMeta(t))
 
-  const searchConfig = computed<UniFormConfig>(() => {
+  const searchCfg = computed<UniFormConfig>(() => {
     const schoolSchema = multiSchool.value
       ? [
           {
@@ -351,7 +351,7 @@ export const useList = () => {
 
   const openForm = (mode: 'add' | 'edit' | 'look', row?: ExceptionRecord) => {
     formMode.value = mode
-    currentRecord.value = row ?? null
+    activeRow.value = row ?? null
     formVisible.value = true
   }
 
@@ -403,7 +403,7 @@ export const useList = () => {
   return {
     actions,
     columns,
-    currentRecord,
+    activeRow,
     defaultSchoolId,
     detailRecord,
     detailVisible,
@@ -419,7 +419,7 @@ export const useList = () => {
     reset,
     schoolOptions,
     search,
-    searchConfig,
+    searchCfg,
     tableRef,
     schoolRecords
   }

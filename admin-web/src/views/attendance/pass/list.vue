@@ -14,7 +14,7 @@
 
     <UniSearchForm
       v-model="queryModel"
-      :config="searchConfig"
+      :config="searchCfg"
       :collapsed="true"
       :collapsed-rows="1"
       :action-min-span="0"
@@ -39,14 +39,14 @@
       <template #toolbar>
         <el-button
           v-if="hasPermission('pass-generated-batch')"
-          :disabled="selectedRows.length === 0"
+          :disabled="selection.length === 0"
           @click="openBatch">
           {{ $t('attendance.holidayPass.actions.batchGenerate') }}
         </el-button>
         <el-button
           v-if="hasPermission('pass-delete')"
           type="danger"
-          :disabled="selectedRows.length === 0"
+          :disabled="selection.length === 0"
           @click="batchDelete">
           {{ $t('attendance.holiday.actions.delete') }}
         </el-button>
@@ -89,8 +89,8 @@ const {
   refresh,
   reset,
   search,
-  searchConfig,
-  selectedRows,
+  searchCfg,
+  selection,
   tableRef
 } = useList()
 

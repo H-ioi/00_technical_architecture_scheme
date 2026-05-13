@@ -73,7 +73,7 @@ export const useList = () => {
   const ynSearchOptions = computed(() => ynOpts(t))
   const statusSearchOptions = computed(() => attendanceSchoolStatusOpts(t))
 
-  const searchConfig = computed(() =>
+  const searchCfg = computed(() =>
     attendanceStudentSearchForm(
       t,
       schoolOptions.value,
@@ -88,7 +88,7 @@ export const useList = () => {
   const detailConfig = computed(() => attendanceStudentDetailForm(t, schoolOptions.value))
 
   const detailVisible = ref(false)
-  const currentRecord = ref<AttendanceStudentRecord | null>(null)
+  const activeRow = ref<AttendanceStudentRecord | null>(null)
 
   const ynLabel = (raw: unknown) => {
     const s = String(raw ?? '')
@@ -136,7 +136,7 @@ export const useList = () => {
   }
 
   const showDetail = (row: AttendanceStudentRecord) => {
-    currentRecord.value = row
+    activeRow.value = row
     detailVisible.value = true
   }
 
@@ -162,7 +162,7 @@ export const useList = () => {
   return {
     actions,
     columns,
-    currentRecord,
+    activeRow,
     detailConfig,
     detailVisible,
     filters,
@@ -171,7 +171,7 @@ export const useList = () => {
     queryModel,
     reset,
     search,
-    searchConfig,
+    searchCfg,
     tableRef
   }
 }

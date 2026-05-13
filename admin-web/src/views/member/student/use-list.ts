@@ -35,14 +35,14 @@ export const useList = () => {
   const yearGroupOptions = ref<UniOption[]>([])
   const formOptions = ref<UniOption[]>([])
   const detailVisible = ref(false)
-  const currentRecord = ref<Row | null>(null)
+  const activeRow = ref<Row | null>(null)
 
   const statusOptions = computed(() => statusOpts(t))
   const statusDispOpts = computed(() => stDispOpts(t))
   const busOptions = computed(() => busOpts(t))
   const dormitoryOptions = computed(() => dormOpts(t))
   const ynDispOptions = computed(() => ynDispOpts(t))
-  const searchConfig = computed(() =>
+  const searchCfg = computed(() =>
     searchForm(
       t,
       schoolOptions.value,
@@ -62,7 +62,7 @@ export const useList = () => {
     studentApi.page.get({ current, size, ...filters })
 
   const show = (row: Row) => {
-    currentRecord.value = row
+    activeRow.value = row
     detailVisible.value = true
   }
 
@@ -106,7 +106,7 @@ export const useList = () => {
   return {
     actions,
     columns,
-    currentRecord,
+    activeRow,
     detailConfig,
     detailVisible,
     filters,
@@ -115,7 +115,7 @@ export const useList = () => {
     queryModel,
     reset,
     search,
-    searchConfig,
+    searchCfg,
     tableRef,
     total
   }

@@ -15,7 +15,7 @@
     <!-- UniSearchForm 统一承载查询条件、重置和空值清理，页面只接收过滤后的查询参数。 -->
     <UniSearchForm
       v-model="queryModel"
-      :config="searchConfig"
+      :config="searchCfg"
       :collapsed="true"
       :collapsed-rows="1"
       :action-min-span="0"
@@ -36,7 +36,7 @@
       :toolbar="{ refresh: true, fullscreen: true, columnSetting: true }"
       :actions="actions"
       :action-column="{ width: 130, fixed: 'right' }"
-      @selection-change="picked = $event as ProtocolRecord[]"
+      @selection-change="selection = $event as ProtocolRecord[]"
       @load-success="handleLoadSuccess">
       <!-- toolbar 插槽放表格勾选后的批量操作，组件内部会和刷新/最大化/列设置工具合并到底部工具栏。 -->
       <template #toolbar>
@@ -55,7 +55,7 @@
     <PForm
       v-model:visible="formVisible"
       :mode="formMode"
-      :source="currentRecord"
+      :source="activeRow"
       :school-options="schoolOptions"
       :protocol-type-options="protocolTypeOptions"
       :module-options="moduleOptions"
@@ -80,7 +80,7 @@ const { t } = useUniI18n()
 const {
   actions,
   columns,
-  currentRecord,
+  activeRow,
   filters,
   formMode,
   formVisible,
@@ -93,14 +93,14 @@ const {
   reset,
   schoolOptions,
   search,
-  searchConfig,
+  searchCfg,
   statusOptions,
   tableRef,
   yesNoOptions
 } = useList()
 
-const picked = ref<ProtocolRecord[]>([])
-const ids = computed(() => picked.value.map((item) => item.id))
+const selection = ref<ProtocolRecord[]>([])
+const ids = computed(() => selection.value.map((item) => item.id))
 
 const reload = () => {
   tableRef.value?.refresh()
@@ -119,7 +119,7 @@ const del = async () => {
 
   await protocolApi.delete.delete(ids.value)
   ElMessage.success(t('protocol.messages.deleteSuccess'))
-  picked.value = []
+  selection.value = []
   reload()
 }
 </script>

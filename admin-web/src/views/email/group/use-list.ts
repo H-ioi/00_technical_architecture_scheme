@@ -30,13 +30,13 @@ export const useList = (options: UseGroupListOptions = {}) => {
   })
   const ynOpts = computed(() => emailGroupYnOpts(tr))
   const stOpts = computed(() => emailGroupStatusOpts(tr))
-  const searchConfig = computed(() => emailGroupSearchForm(tr, ynOpts.value, stOpts.value))
+  const searchCfg = computed(() => emailGroupSearchForm(tr, ynOpts.value, stOpts.value))
   const columns = computed(() => emailGroupColumns(tr))
 
-  const selectedRows = ref<Loose[]>([])
-  const batchDisabled = computed(() => selectedRows.value.length === 0)
+  const selection = ref<Loose[]>([])
+  const batchDisabled = computed(() => selection.value.length === 0)
   const onSelectionChange = (rows: Record<string, unknown>[]) => {
-    selectedRows.value = rows as Loose[]
+    selection.value = rows as Loose[]
   }
 
   const viewVisible = ref(false)
@@ -97,7 +97,7 @@ export const useList = (options: UseGroupListOptions = {}) => {
   }
 
   const batchStatus = (status: number) => {
-    const rows = selectedRows.value
+    const rows = selection.value
     if (rows.length === 0) {
       ElMessage.warning(tr('email.selectRows'))
       return
@@ -146,7 +146,7 @@ export const useList = (options: UseGroupListOptions = {}) => {
     queryModel,
     reset,
     search,
-    searchConfig,
+    searchCfg,
     tableRef,
     viewLabels,
     viewMeta,

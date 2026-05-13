@@ -47,7 +47,7 @@ export const useList = () => {
   )
   const formVisible = ref(false)
   const formMode = ref<'add' | 'edit' | 'look'>('add')
-  const currentRecord = ref<Row | null>(null)
+  const activeRow = ref<Row | null>(null)
 
   /** 与旧系统一致：仅一所学校时列表默认带 schoolIds，新增表单默认勾选该校 */
   const defaultSchoolId = computed(() =>
@@ -55,7 +55,7 @@ export const useList = () => {
   )
 
   const statusOptions = computed(() => statusOpts(t))
-  const searchConfig = computed(() =>
+  const searchCfg = computed(() =>
     searchForm(t, schoolOptions.value, statusOptions.value, defaultSchoolId.value ?? undefined)
   )
   const columns = computed(() => tableCols(t, schoolOptions.value, statusOptions.value))
@@ -72,7 +72,7 @@ export const useList = () => {
 
   const openForm = (mode: 'add' | 'edit' | 'look', row?: Row) => {
     formMode.value = mode
-    currentRecord.value = row ?? null
+    activeRow.value = row ?? null
     formVisible.value = true
   }
 
@@ -113,7 +113,7 @@ export const useList = () => {
   return {
     actions,
     columns,
-    currentRecord,
+    activeRow,
     defaultSchoolId,
     downloadImportTemplate,
     filters,
@@ -126,7 +126,7 @@ export const useList = () => {
     reset,
     schoolOptions,
     search,
-    searchConfig,
+    searchCfg,
     statusOptions,
     tableRef,
     total

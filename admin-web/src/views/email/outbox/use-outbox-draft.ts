@@ -23,7 +23,7 @@ export const useOutboxDraft = () => {
     initialFilters: { keyword: '', dateRange: null as string[] | null }
   })
 
-  const searchConfig = computed(() => emailOutboxSearchForm(tr))
+  const searchCfg = computed(() => emailOutboxSearchForm(tr))
   const columns = computed(() => emailOutboxDraftColumns(tr))
 
   const mailSenderOptions = ref<Loose[]>([])
@@ -222,7 +222,7 @@ export const useOutboxDraft = () => {
     queryModel,
     reset,
     search,
-    searchConfig,
+    searchCfg,
     submitComposeForm,
     tableRef
   }

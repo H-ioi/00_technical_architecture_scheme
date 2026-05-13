@@ -72,7 +72,7 @@ export const useList = () => {
     )
   )
 
-  const searchConfig = computed(() =>
+  const searchCfg = computed(() =>
     attendanceAccessSearchForm(t, schoolOptions.value, deptOptions.value)
   )
 
@@ -81,7 +81,7 @@ export const useList = () => {
   const detailConfig = computed(() => attendanceAccessDetailForm(t, schoolOptions.value))
 
   const detailVisible = ref(false)
-  const currentRecord = ref<AttendanceAccessRecord | null>(null)
+  const activeRow = ref<AttendanceAccessRecord | null>(null)
 
   const openTypeOptions = computed(() => attendanceOpenTypeOpts(t))
   const enterExitOptions = computed(() => accessEnterExitOpts(t))
@@ -130,7 +130,7 @@ export const useList = () => {
   }
 
   const showDetail = (row: AttendanceAccessRecord) => {
-    currentRecord.value = row
+    activeRow.value = row
     detailVisible.value = true
   }
 
@@ -155,7 +155,7 @@ export const useList = () => {
   return {
     actions,
     columns,
-    currentRecord,
+    activeRow,
     detailConfig,
     detailVisible,
     filters,
@@ -164,7 +164,7 @@ export const useList = () => {
     queryModel,
     reset,
     search,
-    searchConfig,
+    searchCfg,
     tableRef
   }
 }

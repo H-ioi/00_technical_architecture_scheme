@@ -34,7 +34,7 @@ export const useList = () => {
 
   const departmentOptions = computed(() => departmentOptionsForForm(t))
 
-  const searchConfig = computed(() => holidayConfigSearchForm(t, schoolOptions.value))
+  const searchCfg = computed(() => holidayConfigSearchForm(t, schoolOptions.value))
   const columns = computed(() => holidayConfigColumns(t))
 
   const formVisible = ref(false)
@@ -121,7 +121,7 @@ export const useList = () => {
     reset,
     search,
     schoolOptions,
-    searchConfig,
+    searchCfg,
     tableRef
   }
 }

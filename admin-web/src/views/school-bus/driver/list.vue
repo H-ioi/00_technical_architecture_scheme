@@ -27,7 +27,7 @@
 
     <UniSearchForm
       v-model="queryModel"
-      :config="searchConfig"
+      :config="searchCfg"
       :collapsed="true"
       :collapsed-rows="1"
       :action-min-span="0"
@@ -63,7 +63,7 @@
     <DriverForm
       v-model:visible="formVisible"
       :mode="formMode"
-      :source="currentRecord"
+      :source="activeRow"
       :default-school-id="defaultSchoolId"
       :school-options="schoolOptions"
       :status-options="statusOptions"
@@ -87,7 +87,7 @@ const fileRef = ref<HTMLInputElement | null>(null)
 const {
   actions,
   columns,
-  currentRecord,
+  activeRow,
   defaultSchoolId,
   downloadImportTemplate,
   filters,
@@ -100,7 +100,7 @@ const {
   reset,
   schoolOptions,
   search,
-  searchConfig,
+  searchCfg,
   statusOptions,
   tableRef
 } = useList()
@@ -112,11 +112,11 @@ const isSpreadsheetFilename = (name: string) => {
   return lower.endsWith('.xls') || lower.endsWith('.xlsx')
 }
 
-const picked = ref<DriverRow[]>([])
-const ids = computed(() => picked.value.map((item) => item.id))
+const selection = ref<DriverRow[]>([])
+const ids = computed(() => selection.value.map((item) => item.id))
 
 const onSelectionChange = (rows: DriverRow[]) => {
-  picked.value = rows
+  selection.value = rows
 }
 
 const reload = () => {
@@ -177,7 +177,7 @@ const del = async () => {
 
   await schoolBusDriverApi.delete.delete(ids.value)
   ElMessage.success(t('schoolBus.driver.messages.deleteSuccess'))
-  picked.value = []
+  selection.value = []
   reload()
 }
 </script>

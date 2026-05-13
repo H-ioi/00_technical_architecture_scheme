@@ -114,9 +114,9 @@ export const useRouteLines = (
   const detailVisible = ref(false)
   const detailRecord = ref<Loose | null>(null)
 
-  const picked = ref<Loose[]>([])
+  const selection = ref<Loose[]>([])
   const selectedIds = computed(() =>
-    picked.value.map((item) => item.id as string | number).filter((id) => id != null && id !== '')
+    selection.value.map((item) => item.id as string | number).filter((id) => id != null && id !== '')
   )
 
   const schoolOptions = computed(() =>
@@ -179,7 +179,7 @@ export const useRouteLines = (
     { value: false, label: t('schoolBus.routePlan.visible.no') }
   ])
 
-  const searchConfig = computed<UniFormConfig>(() => {
+  const searchCfg = computed<UniFormConfig>(() => {
     const schoolSchema = multiSchool.value
       ? [
           {
@@ -354,7 +354,7 @@ export const useRouteLines = (
   ])
 
   const onSelectionChange = (rows: Loose[]) => {
-    picked.value = rows
+    selection.value = rows
   }
 
   const copySelected = async () => {
@@ -369,7 +369,7 @@ export const useRouteLines = (
       await schoolBusLineApi.batchCopy.get({ ids } as Record<string, unknown>)
       ElMessage.success(t('schoolBus.routePlan.messages.copySuccess'))
       tableRef.value?.refresh()
-      picked.value = []
+      selection.value = []
     } catch {
       /* request 层已提示 */
     }
@@ -397,7 +397,7 @@ export const useRouteLines = (
       await schoolBusLineApi.delete.delete(ids)
       ElMessage.success(t('schoolBus.driver.messages.deleteSuccess'))
       tableRef.value?.refresh()
-      picked.value = []
+      selection.value = []
     } catch {
       /* request 层已提示 */
     }
@@ -436,7 +436,7 @@ export const useRouteLines = (
     queryModel,
     reset,
     search,
-    searchConfig,
+    searchCfg,
     selectedIds,
     tableRef,
     copySelected,

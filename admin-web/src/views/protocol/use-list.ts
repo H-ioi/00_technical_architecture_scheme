@@ -26,7 +26,7 @@ export const useList = () => {
     })
   const formVisible = ref(false)
   const formMode = ref<'add' | 'edit'>('add')
-  const currentRecord = ref<Row | null>(null)
+  const activeRow = ref<Row | null>(null)
   const schoolOptions = ref<UniOption[]>([])
   const protocolDict = ref<ProtocolDict>({})
 
@@ -38,7 +38,7 @@ export const useList = () => {
   )
   const yesNoOptions = computed(() => yesNoOpts(t))
   const statusOptions = computed(() => statusOpts(t))
-  const searchConfig = computed(() =>
+  const searchCfg = computed(() =>
     searchForm(
       t,
       schoolOptions.value,
@@ -74,7 +74,7 @@ export const useList = () => {
 
   const openForm = (mode: 'add' | 'edit', row?: Row) => {
     formMode.value = mode
-    currentRecord.value = row ?? null
+    activeRow.value = row ?? null
     formVisible.value = true
   }
 
@@ -103,7 +103,7 @@ export const useList = () => {
   return {
     actions,
     columns,
-    currentRecord,
+    activeRow,
     filters,
     formMode,
     formVisible,
@@ -116,7 +116,7 @@ export const useList = () => {
     reset,
     schoolOptions,
     search,
-    searchConfig,
+    searchCfg,
     statusOptions,
     tableRef,
     total,

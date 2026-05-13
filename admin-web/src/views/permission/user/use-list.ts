@@ -38,7 +38,7 @@ export const useList = (
   })
 
   const lockList = computed(() => lockOpts(t))
-  const searchConfig = computed(() => searchForm(t))
+  const searchCfg = computed(() => searchForm(t))
   const columns = computed(() => tableCols(t, lockList.value))
 
   const loadData: UniTableRequest = async ({ pageNo, pageSize, filters: f }) => {
@@ -81,7 +81,7 @@ export const useList = (
     queryModel,
     reset,
     search,
-    searchConfig,
+    searchCfg,
     tableRef,
     t
   }

@@ -20,12 +20,12 @@ export const useList = () => {
       initialFilters
     })
   const detailVisible = ref(false)
-  const currentRecord = ref<Row | null>(null)
+  const activeRow = ref<Row | null>(null)
   const schoolOptions = ref<UniOption[]>([])
   const roleOptions = ref<UniOption[]>([])
 
   const statusOptions = computed(() => statusOpts(t))
-  const searchConfig = computed(() =>
+  const searchCfg = computed(() =>
     searchForm(t, schoolOptions.value, roleOptions.value, statusOptions.value)
   )
   const columns = computed(() => tableCols(t, schoolOptions.value, statusOptions.value))
@@ -35,7 +35,7 @@ export const useList = () => {
     teacherApi.page.get({ current, size, ...filters })
 
   const show = (row: Row) => {
-    currentRecord.value = row
+    activeRow.value = row
     detailVisible.value = true
   }
 
@@ -60,7 +60,7 @@ export const useList = () => {
   return {
     actions,
     columns,
-    currentRecord,
+    activeRow,
     detailConfig,
     detailVisible,
     filters,
@@ -69,7 +69,7 @@ export const useList = () => {
     queryModel,
     reset,
     search,
-    searchConfig,
+    searchCfg,
     tableRef,
     total
   }

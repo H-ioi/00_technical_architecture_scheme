@@ -12,7 +12,7 @@
 
     <UniSearchForm
       v-model="queryModel"
-      :config="searchConfig"
+      :config="searchCfg"
       :collapsed="true"
       :collapsed-rows="1"
       :action-min-span="0"
@@ -172,7 +172,7 @@ const ruleForm = ref<{ label: string; sort: number | undefined }>({
 const columns = computed(() => dictItemColumns(mt))
 const attrColumns = computed(() => dictAttrColumns(mt))
 const formConfig = computed(() => dictItemFormConfig(mt))
-const searchConfig = computed(() => dictSearchForm(mt))
+const searchCfg = computed(() => dictSearchForm(mt))
 
 const reloadTable = () => {
   tableRef.value?.refresh()

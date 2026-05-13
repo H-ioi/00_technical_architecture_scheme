@@ -12,7 +12,7 @@
 
     <UniSearchForm
       v-model="queryModel"
-      :config="searchConfig"
+      :config="searchCfg"
       :collapsed="true"
       :collapsed-rows="1"
       :action-min-span="0"
@@ -69,7 +69,7 @@ const {
   reset,
   search,
   schoolOptions,
-  searchConfig,
+  searchCfg,
   tableRef
 } = useList()
 

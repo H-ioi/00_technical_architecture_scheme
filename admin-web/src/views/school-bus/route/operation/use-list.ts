@@ -136,7 +136,7 @@ export const useList = () => {
   const stationSource = ref<NamedEntity[]>([])
   const formVisible = ref(false)
   const formMode = ref<'add' | 'edit' | 'look'>('add')
-  const currentRecord = ref<OperationRecord | null>(null)
+  const activeRow = ref<OperationRecord | null>(null)
   const detailVisible = ref(false)
   const detailRecord = ref<OperationRecord | null>(null)
 
@@ -198,7 +198,7 @@ export const useList = () => {
 
   const statusOptions = computed(() => operationStatusMeta(t))
 
-  const searchConfig = computed<UniFormConfig>(() => {
+  const searchCfg = computed<UniFormConfig>(() => {
     const schoolSchema = multiSchool.value
       ? [
           {
@@ -315,7 +315,7 @@ export const useList = () => {
 
   const openForm = (mode: 'add' | 'edit' | 'look', row?: OperationRecord) => {
     formMode.value = mode
-    currentRecord.value = row ?? null
+    activeRow.value = row ?? null
     formVisible.value = true
   }
 
@@ -365,7 +365,7 @@ export const useList = () => {
   return {
     actions,
     columns,
-    currentRecord,
+    activeRow,
     defaultSchoolId,
     detailRecord,
     detailVisible,
@@ -382,7 +382,7 @@ export const useList = () => {
     reset,
     schoolOptions,
     search,
-    searchConfig,
+    searchCfg,
     stationOptions,
     statusOptions,
     tableRef,

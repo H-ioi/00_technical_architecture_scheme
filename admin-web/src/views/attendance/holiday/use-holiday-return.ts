@@ -53,7 +53,7 @@ export const useHolidayReturn = (schoolRecords: Ref<SchoolOptionRecord[]>) => {
     })
   )
 
-  const searchConfig = computed(() => attendanceHolidayReturnSearchForm(t, schoolOptions.value))
+  const searchCfg = computed(() => attendanceHolidayReturnSearchForm(t, schoolOptions.value))
   const columns = computed(() => attendanceHolidayReturnColumns(t))
   const detailConfig = computed(() => attendanceHolidayDetailForm(t))
 
@@ -122,7 +122,7 @@ export const useHolidayReturn = (schoolRecords: Ref<SchoolOptionRecord[]>) => {
     queryModel,
     reset,
     search,
-    searchConfig,
+    searchCfg,
     tableRef
   }
 }

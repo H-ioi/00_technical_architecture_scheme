@@ -29,7 +29,7 @@
 
     <UniSearchForm
       v-model="queryModel"
-      :config="searchConfig"
+      :config="searchCfg"
       :collapsed="true"
       :collapsed-rows="1"
       :action-min-span="0"
@@ -54,26 +54,26 @@
       <template #toolbar>
         <el-button
           v-uni-permission="'busorder_batch_approve'"
-          :disabled="picked.length === 0"
+          :disabled="selection.length === 0"
           @click="batchApprove">
           {{ $t('schoolBus.studentApply.actions.batchApprove') }}
         </el-button>
         <el-button
           v-uni-permission="'busorder_batch_deny'"
-          :disabled="picked.length === 0"
+          :disabled="selection.length === 0"
           @click="openReject">
           {{ $t('schoolBus.studentApply.actions.batchReject') }}
         </el-button>
         <el-button
           v-uni-permission="'busorder_batch_update_payment_status'"
-          :disabled="picked.length === 0"
+          :disabled="selection.length === 0"
           @click="batchPayment">
           {{ $t('schoolBus.studentApply.actions.batchPayment') }}
         </el-button>
         <el-button
           v-uni-permission="'busintentionorder_del'"
           type="danger"
-          :disabled="picked.length === 0"
+          :disabled="selection.length === 0"
           @click="del">
           {{ $t('schoolBus.driver.actions.delete') }}
         </el-button>
@@ -143,12 +143,12 @@ const {
   reset,
   schoolOptions,
   search,
-  searchConfig,
+  searchCfg,
   tableRef
 } = useApplyList()
 
 const fileRef = ref<HTMLInputElement | null>(null)
-const picked = ref<BusOrderRecord[]>([])
+const selection = ref<BusOrderRecord[]>([])
 const IMPORT_MAX_BYTES = 10 * 1024 * 1024
 
 const rejectVisible = ref(false)
@@ -177,12 +177,12 @@ const rejectFormConfig = computed<UniFormConfig>(() => ({
   ]
 }))
 
-const selectionIds = computed(() => picked.value.map((r) => r.id))
+const selectionIds = computed(() => selection.value.map((r) => r.id))
 
 const reload = () => tableRef.value?.refresh()
 
 const onSelectionChange = (rows: BusOrderRecord[]) => {
-  picked.value = rows
+  selection.value = rows
 }
 
 const downloadIntentionTemplate = async () => {
@@ -230,10 +230,10 @@ const validateAllPending = (rows: BusOrderRecord[]) => {
 }
 
 const batchApprove = async () => {
-  if (picked.value.length === 0) {
+  if (selection.value.length === 0) {
     return
   }
-  if (!validateAllPending(picked.value)) {
+  if (!validateAllPending(selection.value)) {
     ElMessage.warning(t('schoolBus.studentApply.messages.onlyPending'))
     return
   }
@@ -249,7 +249,7 @@ const batchApprove = async () => {
   try {
     await schoolBusOrderApi.batchApprove.get({ ids: selectionIds.value })
     ElMessage.success(t('schoolBus.studentApply.messages.success'))
-    picked.value = []
+    selection.value = []
     reload()
   } catch {
     /* request 层已提示 */
@@ -257,10 +257,10 @@ const batchApprove = async () => {
 }
 
 const openReject = () => {
-  if (picked.value.length === 0) {
+  if (selection.value.length === 0) {
     return
   }
-  if (!validateAllPending(picked.value)) {
+  if (!validateAllPending(selection.value)) {
     ElMessage.warning(t('schoolBus.studentApply.messages.onlyPending'))
     return
   }
@@ -280,7 +280,7 @@ const confirmReject = async () => {
     })
     ElMessage.success(t('schoolBus.studentApply.messages.success'))
     rejectVisible.value = false
-    picked.value = []
+    selection.value = []
     reload()
   } catch {
     /* request 层已提示 */
@@ -288,10 +288,10 @@ const confirmReject = async () => {
 }
 
 const batchPayment = async () => {
-  if (picked.value.length === 0) {
+  if (selection.value.length === 0) {
     return
   }
-  const invalid = picked.value.filter(
+  const invalid = selection.value.filter(
     (r) => String(r.approvalStatus) !== '1' || String(r.paymentStatus) !== '1'
   )
   if (invalid.length) {
@@ -310,7 +310,7 @@ const batchPayment = async () => {
   try {
     await schoolBusOrderApi.batchUpdatePaymentStatus.get({ ids: selectionIds.value })
     ElMessage.success(t('schoolBus.studentApply.messages.success'))
-    picked.value = []
+    selection.value = []
     reload()
   } catch {
     /* request 层已提示 */
@@ -318,7 +318,7 @@ const batchPayment = async () => {
 }
 
 const del = async () => {
-  if (picked.value.length === 0) {
+  if (selection.value.length === 0) {
     return
   }
   try {
@@ -333,7 +333,7 @@ const del = async () => {
   try {
     await schoolBusOrderApi.delIntentionOrder.delete(selectionIds.value)
     ElMessage.success(t('schoolBus.studentApply.messages.success'))
-    picked.value = []
+    selection.value = []
     reload()
   } catch {
     /* request 层已提示 */

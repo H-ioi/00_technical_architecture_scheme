@@ -30,7 +30,7 @@
 
     <UniSearchForm
       v-model="queryModel"
-      :config="searchConfig"
+      :config="searchCfg"
       :collapsed="true"
       :collapsed-rows="1"
       :action-min-span="0"
@@ -56,7 +56,7 @@
         <el-button
           v-uni-permission="'busorder_del'"
           type="danger"
-          :disabled="picked.length === 0"
+          :disabled="selection.length === 0"
           @click="del">
           {{ $t('schoolBus.driver.actions.delete') }}
         </el-button>
@@ -110,20 +110,20 @@ const {
   reset,
   schoolOptions,
   search,
-  searchConfig,
+  searchCfg,
   tableRef
 } = useOrderList()
 
 const fileRef = ref<HTMLInputElement | null>(null)
-const picked = ref<BusOrderRecord[]>([])
+const selection = ref<BusOrderRecord[]>([])
 const IMPORT_MAX_BYTES = 10 * 1024 * 1024
 
-const selectionIds = computed(() => picked.value.map((r) => r.id))
+const selectionIds = computed(() => selection.value.map((r) => r.id))
 
 const reload = () => tableRef.value?.refresh()
 
 const onSelectionChange = (rows: BusOrderRecord[]) => {
-  picked.value = rows
+  selection.value = rows
 }
 
 const downloadOrderTemplate = async () => {
@@ -179,7 +179,7 @@ const exportData = async () => {
 }
 
 const del = async () => {
-  if (picked.value.length === 0) {
+  if (selection.value.length === 0) {
     return
   }
   try {
@@ -194,7 +194,7 @@ const del = async () => {
   try {
     await schoolBusOrderApi.delOrder.delete(selectionIds.value)
     ElMessage.success(t('schoolBus.studentApply.messages.success'))
-    picked.value = []
+    selection.value = []
     reload()
   } catch {
     /* request 层已提示 */

@@ -99,7 +99,7 @@ const {
   queryModel: sentQueryModel,
   reset: resetSentSearch,
   search: searchSent,
-  searchConfig: sentSearchConfig,
+  searchCfg: sentSearchConfig,
   tableRef: sentTableRef,
   viewModel,
   viewVisible
@@ -121,7 +121,7 @@ const {
   queryModel: draftQueryModel,
   reset: resetDraftSearch,
   search: searchDraft,
-  searchConfig: draftSearchConfig,
+  searchCfg: draftSearchConfig,
   submitComposeForm,
   tableRef: draftTableRef
 } = useOutboxDraft()

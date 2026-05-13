@@ -46,14 +46,14 @@ export const useList = () => {
   )
 
   const statusOptions = computed(() => carStatusOpts(t))
-  const searchConfig = computed(() =>
+  const searchCfg = computed(() =>
     searchForm(t, schoolOptions.value, statusOptions.value, multiSchool.value)
   )
   const columns = computed(() => tableCols(t, statusOptions.value))
 
   const formVisible = ref(false)
   const formMode = ref<'add' | 'edit' | 'look'>('add')
-  const currentRecord = ref<CarRecord | null>(null)
+  const activeRow = ref<CarRecord | null>(null)
 
   const decorate = (row: CarRecord): CarRecord => {
     const loc = locale()
@@ -87,7 +87,7 @@ export const useList = () => {
 
   const openForm = (mode: 'add' | 'edit' | 'look', row?: CarRecord) => {
     formMode.value = mode
-    currentRecord.value = row ?? null
+    activeRow.value = row ?? null
     formVisible.value = true
   }
 
@@ -123,7 +123,7 @@ export const useList = () => {
   return {
     actions,
     columns,
-    currentRecord,
+    activeRow,
     defaultSchoolId,
     filters,
     formMode,
@@ -136,7 +136,7 @@ export const useList = () => {
     reset,
     schoolOptions,
     search,
-    searchConfig,
+    searchCfg,
     statusOptions,
     tableRef
   }

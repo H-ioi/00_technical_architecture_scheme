@@ -9,7 +9,7 @@
 
     <UniSearchForm
       v-model="queryModel"
-      :config="searchConfig"
+      :config="searchCfg"
       :collapsed="true"
       :collapsed-rows="1"
       :action-min-span="0"
@@ -30,7 +30,7 @@
       :action-column="{ width: 88, fixed: 'right' }"
       @load-success="handleLoadSuccess" />
 
-    <DetailDialog v-model:visible="detailVisible" :source="currentRecord" :config="detailConfig" />
+    <DetailDialog v-model:visible="detailVisible" :source="activeRow" :config="detailConfig" />
   </section>
 </template>
 
@@ -41,7 +41,7 @@ import { useList } from './use-list'
 const {
   actions,
   columns,
-  currentRecord,
+  activeRow,
   detailConfig,
   detailVisible,
   filters,
@@ -50,7 +50,7 @@ const {
   queryModel,
   reset,
   search,
-  searchConfig,
+  searchCfg,
   tableRef
 } = useList()
 </script>

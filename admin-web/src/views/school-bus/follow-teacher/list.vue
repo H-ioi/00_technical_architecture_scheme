@@ -30,7 +30,7 @@
 
     <UniSearchForm
       v-model="queryModel"
-      :config="searchConfig"
+      :config="searchCfg"
       :collapsed="true"
       :collapsed-rows="1"
       :action-min-span="0"
@@ -79,7 +79,7 @@
     <TeacherForm
       v-model:visible="formVisible"
       :mode="formMode"
-      :source="currentRecord"
+      :source="activeRow"
       :default-school-id="defaultSchoolId"
       :school-options="schoolOptions"
       :status-options="statusOptions"
@@ -106,7 +106,7 @@ const fileRef = ref<HTMLInputElement | null>(null)
 const {
   actions,
   columns,
-  currentRecord,
+  activeRow,
   defaultSchoolId,
   filters,
   formMode,
@@ -119,19 +119,19 @@ const {
   reset,
   schoolOptions,
   search,
-  searchConfig,
+  searchCfg,
   statusOptions,
   tableRef
 } = useList()
 
 const IMPORT_MAX_BYTES = 10 * 1024 * 1024
-const picked = ref<FollowTeacherRecord[]>([])
-const ids = computed(() => picked.value.map((r) => r.id))
+const selection = ref<FollowTeacherRecord[]>([])
+const ids = computed(() => selection.value.map((r) => r.id))
 
 const reload = () => tableRef.value?.refresh()
 
 const onSelectionChange = (rows: FollowTeacherRecord[]) => {
-  picked.value = rows
+  selection.value = rows
 }
 
 const downloadTemplate = async () => {
@@ -202,7 +202,7 @@ const batchEnable = async () => {
   try {
     await schoolBusFollowTeacherApi.enable.post(ids.value)
     ElMessage.success(t('schoolBus.studentApply.messages.success'))
-    picked.value = []
+    selection.value = []
     reload()
   } catch {
     /* request 层已提示 */
@@ -225,7 +225,7 @@ const batchDisable = async () => {
   try {
     await schoolBusFollowTeacherApi.disable.post(ids.value)
     ElMessage.success(t('schoolBus.studentApply.messages.success'))
-    picked.value = []
+    selection.value = []
     reload()
   } catch {
     /* request 层已提示 */
@@ -248,7 +248,7 @@ const del = async () => {
   try {
     await schoolBusFollowTeacherApi.delete.delete(ids.value)
     ElMessage.success(t('schoolBus.driver.messages.deleteSuccess'))
-    picked.value = []
+    selection.value = []
     reload()
   } catch {
     /* request 层已提示 */

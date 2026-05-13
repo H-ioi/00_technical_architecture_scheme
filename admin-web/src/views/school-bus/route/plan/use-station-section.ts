@@ -80,9 +80,9 @@ export const useStationSection = (schoolRecords: SchoolRecordsRef) => {
   const stationDetailVisible = ref(false)
   const stationDetailRecord = ref<Loose | null>(null)
 
-  const picked = ref<Loose[]>([])
+  const selection = ref<Loose[]>([])
   const selectedIds = computed(() =>
-    picked.value.map((item) => item.id as string | number).filter((id) => id != null && id !== '')
+    selection.value.map((item) => item.id as string | number).filter((id) => id != null && id !== '')
   )
 
   const schoolOptions = computed(() =>
@@ -97,7 +97,7 @@ export const useStationSection = (schoolRecords: SchoolRecordsRef) => {
     schoolRecords.value.length === 1 ? schoolRecords.value[0].id : null
   )
 
-  const searchConfig = computed<UniFormConfig>(() => {
+  const searchCfg = computed<UniFormConfig>(() => {
     const schoolSchema = multiSchool.value
       ? [
           {
@@ -217,7 +217,7 @@ export const useStationSection = (schoolRecords: SchoolRecordsRef) => {
   ])
 
   const onSelectionChange = (rows: Loose[]) => {
-    picked.value = rows
+    selection.value = rows
   }
 
   const deleteStationsSelected = async () => {
@@ -242,7 +242,7 @@ export const useStationSection = (schoolRecords: SchoolRecordsRef) => {
       await schoolBusStationApi['delete'].delete(ids)
       ElMessage.success(t('schoolBus.driver.messages.deleteSuccess'))
       tableRef.value?.refresh()
-      picked.value = []
+      selection.value = []
     } catch {
       /* request 层已提示 */
     }
@@ -271,7 +271,7 @@ export const useStationSection = (schoolRecords: SchoolRecordsRef) => {
     queryModel,
     reset,
     search,
-    searchConfig,
+    searchCfg,
     selectedIds,
     tableRef,
     stationDetailRecord,
