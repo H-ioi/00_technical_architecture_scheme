@@ -10,6 +10,8 @@ export default {
   submit: 'Submit',
   reset: 'Reset',
   cancel: 'Cancel',
+  tip: 'Tip',
+  close: 'Close',
   primaryColor: 'Primary Color',
   search: 'Search',
   notification: 'Notifications',

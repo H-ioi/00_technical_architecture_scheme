@@ -10,6 +10,9 @@ export default {
   submit: '提交',
   reset: '重置',
   cancel: '取消',
+  /** 轻提示、确认框标题等 */
+  tip: '提示',
+  close: '关闭',
   primaryColor: '主题色',
   search: '搜索',
   notification: '消息通知',

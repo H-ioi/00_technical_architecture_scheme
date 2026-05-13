@@ -36,5 +36,9 @@ export default {
   attendanceSchool: '校园考勤',
   attendanceAccess: '门禁记录',
   attendanceWechat: '微信 OpenID',
-  attendanceWechatNotice: '微信通知'
+  attendanceWechatNotice: '微信通知',
+  email: '群发邮件',
+  emailGroup: '群组配置',
+  emailSend: '发件箱配置',
+  emailOutbox: '发件列表'
 }

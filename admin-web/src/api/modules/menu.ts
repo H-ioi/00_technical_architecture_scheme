@@ -70,7 +70,13 @@ const MENU_PATH_ALIASES: Record<string, string> = {
   '/admin/dept': '/permission/dept',
   '/admin/dept/index': '/permission/dept',
   '/admin/isauser': '/permission/user',
-  '/admin/isauser/index': '/permission/user'
+  '/admin/isauser/index': '/permission/user',
+  '/isacommunity/email': '/email',
+  '/isacommunity/email/group': '/email/group',
+  '/isacommunity/email/send/index': '/email/send',
+  '/isacommunity/email/send': '/email/send',
+  '/isacommunity/email/outgo/index': '/email/outbox',
+  '/isacommunity/email/outgo': '/email/outbox'
 }
 
 const normPath = (path?: string) => {

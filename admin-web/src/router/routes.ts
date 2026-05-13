@@ -286,7 +286,7 @@ export const routes: AppRouteRecord[] = [
             }
           },
           {
-            path: 'flow/design/create',
+            path: 'flow/edit/create',
             name: 'AttendanceHolidayFlowDesignCreate',
             component: () => import('@/views/attendance/flow/edit.vue'),
             meta: {
@@ -297,7 +297,7 @@ export const routes: AppRouteRecord[] = [
             }
           },
           {
-            path: 'flow/design/:id',
+            path: 'flow/edit/:id',
             name: 'AttendanceHolidayFlowDesignEdit',
             component: () => import('@/views/attendance/flow/edit.vue'),
             meta: {
@@ -307,6 +307,17 @@ export const routes: AppRouteRecord[] = [
               activeMenu: '/attendance/flow',
               tagDetailParam: 'id'
             }
+          },
+          /** 旧 URL `/attendance/flow/design/*` 兼容 */
+          {
+            path: 'flow/design/create',
+            redirect: '/attendance/flow/edit/create'
+          },
+          {
+            path: 'flow/design/:id',
+            redirect: (to) => ({
+              path: `/attendance/flow/edit/${encodeURIComponent(String(to.params.id))}`
+            })
           },
           {
             path: 'flow',
@@ -347,11 +358,13 @@ export const routes: AppRouteRecord[] = [
           /** 旧书签 / 后端仍下发 `/attendance/holiday/*` 时的兼容跳转 */
           {
             path: 'holiday/flow/design/create',
-            redirect: '/attendance/flow/design/create'
+            redirect: '/attendance/flow/edit/create'
           },
           {
             path: 'holiday/flow/design/:id',
-            redirect: (to) => ({ path: `/attendance/flow/design/${encodeURIComponent(String(to.params.id))}` })
+            redirect: (to) => ({
+              path: `/attendance/flow/edit/${encodeURIComponent(String(to.params.id))}`
+            })
           },
           {
             path: 'holiday/flow',
@@ -403,6 +416,45 @@ export const routes: AppRouteRecord[] = [
             meta: {
               title: '微信通知',
               titleKey: 'route.attendanceWechatNotice'
+            }
+          }
+        ]
+      },
+      {
+        path: 'email',
+        name: 'Email',
+        redirect: '/email/group',
+        meta: {
+          title: '群发邮件',
+          titleKey: 'route.email',
+          icon: 'Message'
+        },
+        children: [
+          {
+            path: 'group',
+            name: 'EmailGroup',
+            component: () => import('@/views/email/group/list.vue'),
+            meta: {
+              title: '群组配置',
+              titleKey: 'route.emailGroup'
+            }
+          },
+          {
+            path: 'send',
+            name: 'EmailSend',
+            component: () => import('@/views/email/send/list.vue'),
+            meta: {
+              title: '发件箱配置',
+              titleKey: 'route.emailSend'
+            }
+          },
+          {
+            path: 'outbox',
+            name: 'EmailOutbox',
+            component: () => import('@/views/email/outbox/tab.vue'),
+            meta: {
+              title: '发件列表',
+              titleKey: 'route.emailOutbox'
             }
           }
         ]

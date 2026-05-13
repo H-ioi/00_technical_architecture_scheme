@@ -29,5 +29,7 @@ export const API_PATHS = {
   /** 考勤公共下拉（旧 `${attendance}/common`） */
   attendanceCommon: '/isacommunity/attendance/common',
   /** 考勤请假 REST 前缀（旧 `holiday.js` baseUrl `/attendance`，含学生每日考勤 getData/getData2） */
-  attendanceHolidayRest: '/attendance'
+  attendanceHolidayRest: '/attendance',
+  /** 群发邮件（旧 `api/isacommunity/mail.js`，`/isacommunity/mailing`） */
+  mailing: '/isacommunity/mailing'
 } as const

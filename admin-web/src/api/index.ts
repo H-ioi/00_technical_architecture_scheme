@@ -6,6 +6,7 @@ import attendanceStudentApi from './modules/attendance-student'
 import attendanceWechatNoticeApi from './modules/attendance-wechat-notice'
 import attendanceWechatOpenidApi from './modules/attendance-wechat-openid'
 import authApi from './modules/auth'
+import bulkEmailApi from './modules/bulk-email'
 import baseDictApi from './modules/base-dict'
 import captchaApi from './modules/captcha'
 import membershipApi from './modules/membership'
@@ -38,6 +39,7 @@ export {
   attendanceWechatOpenidApi,
   authApi,
   baseDictApi,
+  bulkEmailApi,
   captchaApi,
   membershipApi,
   studentApi,
