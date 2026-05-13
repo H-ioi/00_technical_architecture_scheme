@@ -1,12 +1,8 @@
 /**
- * 后台接口响应信封 / 分页结构在历史演进与各模块间不一致，前端需在取值前做统一映射。
+ * 仅封装「当前后端仍混用」的几种分页 / 信封形态；新接口应在网关或封装层统一成一种结构，页面侧尽量不再追加分支。
  *
- * 已观测形态（不同接口混用，故集中在此兼容）：
- * - 分页：顶层 `{ records, total }`（Spring Page）；顶层 `{ list, totalCount }`（Flowable 待办等）；
- *   顶层 `{ data: T[] }`；顶层 `{ total / totalCount / totalElements / totalRow }` + 嵌套 `{ records | list | data | content }`；
- *   群发邮件等：`{ totalCount, data: { records | data } }`。
- * - 单体：`{ data: { ...实体 } }` 或顶层即实体；会员检索偶见 `{ data: { data: ... } }`。
- * - 列表（非分页）：`T[]` 或 `{ data: T[] }`。
+ * 仍兼容的常见形状：`records|list|data[]`、`total|totalCount|totalElements`；嵌套 `data: { records|list|data }`；单层 `{ data: 对象 }`；
+ * 会员检索 `{ data: { data } }`；校车详情 `success + data`（见 `normalizeSchoolBusDetailBody`）。
  */
 
 type Loose = Record<string, unknown>
@@ -58,10 +54,6 @@ function extractListFromNested(obj: Loose): unknown[] | null {
 export function normalizeApiPagedBody<T = unknown>(raw: unknown): { list: T[]; total: number } {
   const empty: { list: T[]; total: number } = { list: [], total: 0 }
 
-  if (Array.isArray(raw)) {
-    return { list: raw as T[], total: raw.length }
-  }
-
   if (!raw || typeof raw !== 'object') {
     return empty
   }
@@ -87,8 +79,7 @@ export function normalizeApiPagedBody<T = unknown>(raw: unknown): { list: T[]; t
     }
   }
 
-  const tailTotal = pickTotal(r)
-  return tailTotal > 0 ? { list: [], total: tailTotal } : empty
+  return empty
 }
 
 /**
@@ -152,23 +143,8 @@ export function normalizeApiArrayBody(raw: unknown): unknown[] {
       return nested
     }
   }
-  const { list } = normalizeApiPagedBody(raw)
-  return list
-}
 
-/**
- * 详情接口：信封内对象优先；无效输入返回 `null`（下单编辑弹窗等）。
- */
-export function normalizeApiDetailBody(raw: unknown): Loose | null {
-  if (!raw || typeof raw !== 'object') {
-    return null
-  }
-  const r = raw as Loose
-  const d = r.data
-  if (d !== undefined && d !== null && typeof d === 'object' && !Array.isArray(d)) {
-    return d as Loose
-  }
-  return r as Loose
+  return []
 }
 
 /**

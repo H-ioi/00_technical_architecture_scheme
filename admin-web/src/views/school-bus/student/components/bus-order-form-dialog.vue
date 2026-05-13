@@ -395,7 +395,7 @@ import {
 } from '../use-student-order-filters'
 
 import { protocolApi, schoolBusCommonApi, schoolBusOrderApi } from '@/api'
-import { normalizeApiDetailBody } from '@/utils/api-response-normalize'
+import { normalizeApiEnvelope } from '@/utils/api-response-normalize'
 import type { BusOrderFormModel } from '@/types/modules/school-bus-order'
 
 type Loose = Record<string, unknown>
@@ -706,8 +706,8 @@ const applyDefaultStatusForAdd = () => {
 const loadDetail = async (id: string | number) => {
   canComputedPrice.value = false
   const raw = await schoolBusOrderApi.detail.get(id)
-  const data = normalizeApiDetailBody(raw)
-  if (!data) {
+  const data = normalizeApiEnvelope(raw)
+  if (!Object.keys(data).length) {
     return
   }
   const schoolId = data.schoolId as string | number
