@@ -43,16 +43,18 @@
                 field.component === 'ElCascader' ||
                 field.component === 'ElTreeSelect'
               "
-              v-model="fieldVm(field)"
+              :model-value="model[field.field]"
               :disabled="isFieldDisabled(field)"
               :readonly="isFieldReadonly(field)"
-              v-bind="field.componentProps" />
+              v-bind="field.componentProps"
+              @update:model-value="(value: unknown) => handleFieldChange(field, value)" />
 
             <el-select
               v-else-if="field.component === 'ElSelect'"
-              v-model="fieldVm(field)"
+              :model-value="model[field.field]"
               :disabled="isFieldDisabled(field)"
-              v-bind="field.componentProps">
+              v-bind="field.componentProps"
+              @update:model-value="(value: unknown) => handleFieldChange(field, value)">
               <el-option
                 v-for="option in getFieldOptions(field)"
                 :key="String(option.value)"
@@ -62,9 +64,10 @@
 
             <el-radio-group
               v-else-if="field.component === 'ElRadioGroup'"
-              v-model="fieldVm(field)"
+              :model-value="model[field.field]"
               :disabled="isFieldDisabled(field)"
-              v-bind="field.componentProps">
+              v-bind="field.componentProps"
+              @update:model-value="(value: unknown) => handleFieldChange(field, value)">
               <el-radio
                 v-for="option in getFieldOptions(field)"
                 :key="String(option.value)"
@@ -75,9 +78,10 @@
 
             <el-checkbox-group
               v-else-if="field.component === 'ElCheckboxGroup'"
-              v-model="fieldVm(field)"
+              :model-value="model[field.field]"
               :disabled="isFieldDisabled(field)"
-              v-bind="field.componentProps">
+              v-bind="field.componentProps"
+              @update:model-value="(value: unknown) => handleFieldChange(field, value)">
               <el-checkbox
                 v-for="option in getFieldOptions(field)"
                 :key="String(option.value)"
@@ -108,7 +112,7 @@
  * `rules` 校验、联动显隐、异步选项、`edit`/`view` 模式及 `#field-xxx` / `#actions` 插槽。
  */
 import type { FormInstance, RowProps } from 'element-plus'
-import { computed, reactive, ref, watch, type WritableComputedRef } from 'vue'
+import { computed, reactive, ref, watch } from 'vue'
 
 import UniFormViewValueText from './components/view-value-text.vue'
 import UniUpload from '@/components/uni-upload/index.vue'
@@ -281,25 +285,6 @@ const handleFieldChange = async (field: UniFormField, value: unknown) => {
   emit('field-change', { field: field.field, value, model: model.value })
 }
 
-/** 与 EP 子组件 `v-model` 对齐：写入仍统一走 `handleFieldChange`（联动/事件不丢） */
-const fieldVmCache = new Map<string, WritableComputedRef<unknown>>()
-
-function fieldVm<T = unknown>(field: UniFormField): WritableComputedRef<T> {
-  const key = field.field
-  let entry = fieldVmCache.get(key) as WritableComputedRef<T> | undefined
-  if (!entry) {
-    entry = computed({
-      get: () => model.value[key] as T,
-      set: (v: unknown) => {
-        const f = props.config.schema.find((item) => item.field === key)
-        if (f) void handleFieldChange(f, v)
-      }
-    }) as WritableComputedRef<T>
-    fieldVmCache.set(key, entry as WritableComputedRef<unknown>)
-  }
-  return entry
-}
-
 const normalizeViewDisplay = (raw: unknown): string => {
   if (raw == null) {
     return ''
@@ -368,7 +353,6 @@ const handleReset = () => {
 watch(
   () => props.config.schema,
   async (schema) => {
-    fieldVmCache.clear()
     await Promise.allSettled(
       schema.map(async (field) => {
         if (field.loadOptions) {
