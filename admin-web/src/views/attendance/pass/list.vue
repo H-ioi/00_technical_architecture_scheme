@@ -2,12 +2,12 @@
   <section class="uni-list-page">
     <div class="uni-list-page__header">
       <div>
-        <h1>{{ $t('attendance.holidayPass.page.title') }}</h1>
-        <p>{{ $t('attendance.holidayPass.page.description') }}</p>
+        <h1>{{ $t('attendance.holidayPass.title') }}</h1>
+        <p>{{ $t('attendance.holidayPass.pageDesc') }}</p>
       </div>
       <div class="uni-list-page__header-actions">
         <el-button v-if="hasPermission('pass-add')" type="primary" @click="openAdd">{{
-          $t('attendance.holidayPass.actions.add')
+          $t('attendance.add')
         }}</el-button>
       </div>
     </div>
@@ -41,14 +41,14 @@
           v-if="hasPermission('pass-generated-batch')"
           :disabled="selection.length === 0"
           @click="openBatch">
-          {{ $t('attendance.holidayPass.actions.batchGenerate') }}
+          {{ $t('attendance.holidayPass.batchGenerate') }}
         </el-button>
         <el-button
           v-if="hasPermission('pass-delete')"
           type="danger"
           :disabled="selection.length === 0"
           @click="batchDelete">
-          {{ $t('attendance.holiday.actions.delete') }}
+          {{ $t('attendance.delete') }}
         </el-button>
       </template>
     </UniDataTable>

@@ -2,18 +2,18 @@
   <section class="uni-list-page">
     <div class="uni-list-page__header">
       <div>
-        <h1>{{ $t('attendance.holiday.page.title') }}</h1>
-        <p>{{ $t('attendance.holiday.page.description') }}</p>
+        <h1>{{ $t('attendance.holiday.pageTitle') }}</h1>
+        <p>{{ $t('attendance.holiday.pageDesc') }}</p>
       </div>
       <div v-if="activeTab === 'leave'" class="uni-list-page__header-actions">
         <el-button type="primary" @click="leaveAddVisible = true">{{
-          $t('attendance.holiday.actions.add')
+          $t('attendance.add')
         }}</el-button>
       </div>
     </div>
 
     <el-tabs v-model="activeTab" class="attendance-holiday-tab__tabs">
-      <el-tab-pane :label="$t('attendance.holiday.tabs.leave')" name="leave">
+      <el-tab-pane :label="$t('attendance.holiday.tabLeave')" name="leave">
         <UniSearchForm
           v-model="leaveQueryModel"
           :config="leaveSearchConfig"
@@ -37,7 +37,7 @@
           @load-success="handleLeaveLoadSuccess" />
       </el-tab-pane>
 
-      <el-tab-pane :label="$t('attendance.holiday.tabs.return')" name="return">
+      <el-tab-pane :label="$t('attendance.holiday.tabReturn')" name="return">
         <UniSearchForm
           v-model="returnQueryModel"
           :config="returnSearchConfig"

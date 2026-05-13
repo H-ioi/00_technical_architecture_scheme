@@ -29,10 +29,10 @@ const formatMaybeDateTime = (value: unknown) => {
 const ynLabel = (raw: unknown, t: Translate) => {
   const n = Number(raw)
   if (n === 1) {
-    return t('attendance.daily.options.ynYes')
+    return t('attendance.yes')
   }
   if (n === 0) {
-    return t('attendance.daily.options.ynNo')
+    return t('attendance.no')
   }
   return '--'
 }
@@ -40,12 +40,12 @@ const ynLabel = (raw: unknown, t: Translate) => {
 const statusLabel = (raw: unknown, t: Translate) => {
   const key = String(raw ?? '')
   const map: Record<string, string> = {
-    Late: t('attendance.daily.options.statusLate'),
-    Present: t('attendance.daily.options.statusPresent'),
-    Leave: t('attendance.daily.options.statusLeave'),
-    Absent: t('attendance.daily.options.statusAbsent'),
-    Exit: t('attendance.daily.options.statusExit'),
-    Enter: t('attendance.daily.options.statusEnter')
+    Late: t('attendance.daily.statusLate'),
+    Present: t('attendance.daily.statusPresent'),
+    Leave: t('attendance.daily.statusLeave'),
+    Absent: t('attendance.daily.statusAbsent'),
+    Exit: t('attendance.daily.statusExit'),
+    Enter: t('attendance.daily.statusEnter')
   }
   return map[key] || (key ? key : '--')
 }
@@ -53,10 +53,10 @@ const statusLabel = (raw: unknown, t: Translate) => {
 const dataFromLabel = (raw: unknown, t: Translate) => {
   const key = String(raw ?? '')
   const map: Record<string, string> = {
-    MB: t('attendance.daily.options.dataFromMb'),
-    schoolBus: t('attendance.daily.options.dataFromSchoolBus'),
-    gate: t('attendance.daily.options.dataFromGate'),
-    community: t('attendance.daily.options.dataFromCommunity')
+    MB: t('attendance.daily.dataFromMb'),
+    schoolBus: t('attendance.daily.dataFromSchoolBus'),
+    gate: t('attendance.daily.dataFromGate'),
+    community: t('attendance.daily.dataFromCommunity')
   }
   return map[key] || key || '--'
 }

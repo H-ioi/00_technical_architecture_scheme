@@ -2,8 +2,8 @@
   <section class="uni-list-page">
     <div class="uni-list-page__header">
       <div>
-        <h1>{{ $t('attendance.access.page.title') }}</h1>
-        <p>{{ $t('attendance.access.page.description') }}</p>
+        <h1>{{ $t('attendance.access.pageTitle') }}</h1>
+        <p>{{ $t('attendance.access.pageDesc') }}</p>
       </div>
     </div>
 

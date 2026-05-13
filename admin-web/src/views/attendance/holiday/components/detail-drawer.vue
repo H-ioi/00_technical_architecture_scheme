@@ -1,7 +1,7 @@
 <template>
   <el-drawer
     v-model="visible"
-    :title="$t('attendance.holiday.actions.detail')"
+    :title="$t('attendance.detail')"
     direction="rtl"
     size="560px"
     destroy-on-close>

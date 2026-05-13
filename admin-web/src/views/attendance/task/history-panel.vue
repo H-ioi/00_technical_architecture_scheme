@@ -56,8 +56,8 @@ const columns = computed<UniTableColumn[]>(() => {
     base.push({ prop: 'userName', label: t('attendance.holidayTask.colStarter'), type: 'text', minWidth: 100 })
   }
   base.push(
-    { prop: 'studentSchool', label: t('attendance.holiday.columns.school'), type: 'text', minWidth: 120 },
-    { prop: 'studentName', label: t('attendance.holiday.columns.studentName'), type: 'text', minWidth: 100 },
+    { prop: 'studentSchool', label: t('attendance.school'), type: 'text', minWidth: 120 },
+    { prop: 'studentName', label: t('attendance.studentName'), type: 'text', minWidth: 100 },
     { prop: 'startDate', label: t('attendance.holidayTask.colStartTime'), type: 'text', minWidth: 140 },
     { prop: 'endDate', label: t('attendance.holidayTask.colEndTime'), type: 'text', minWidth: 140 },
     { prop: 'flowProceId', label: t('attendance.holidayTask.colInstanceId'), type: 'text', minWidth: 140 }

@@ -14,21 +14,21 @@
 
     <el-dialog v-model="approveVisible" :title="$t('attendance.holidayTask.approveTitle')" width="640px" destroy-on-close>
       <div class="holiday-task-approve__grid">
-        <p><strong>{{ $t('attendance.holiday.columns.studentName') }}：</strong>{{ formData.studentName || formData.name || '—' }}</p>
-        <p><strong>{{ $t('attendance.holiday.columns.admissionNo') }}：</strong>{{ formData.admissonNo || '—' }}</p>
-        <p><strong>{{ $t('attendance.holiday.columns.school') }}：</strong>{{ formData.studentSchool || '—' }}</p>
-        <p><strong>{{ $t('attendance.holiday.columns.grade') }}：</strong>{{ formData.studentGrade || '—' }}</p>
-        <p><strong>{{ $t('attendance.holiday.columns.className') }}：</strong>{{ formData.studentClass || '—' }}</p>
+        <p><strong>{{ $t('attendance.studentName') }}：</strong>{{ formData.studentName || formData.name || '—' }}</p>
+        <p><strong>{{ $t('attendance.admissionNo') }}：</strong>{{ formData.admissonNo || '—' }}</p>
+        <p><strong>{{ $t('attendance.school') }}：</strong>{{ formData.studentSchool || '—' }}</p>
+        <p><strong>{{ $t('attendance.grade') }}：</strong>{{ formData.studentGrade || '—' }}</p>
+        <p><strong>{{ $t('attendance.className') }}：</strong>{{ formData.studentClass || '—' }}</p>
         <p>
-          <strong>{{ $t('attendance.holiday.detail.beginTime') }}：</strong
+          <strong>{{ $t('attendance.holiday.detailBeginTime') }}：</strong
           >{{ formData.beginTime ? `${formData.beginTime} ${$t('attendance.holidayTask.to')} ${formData.endTime}` : '—' }}
         </p>
-        <p class="holiday-task-approve__full"><strong>{{ $t('attendance.holiday.columns.reason') }}：</strong>{{ formData.reason || '—' }}</p>
+        <p class="holiday-task-approve__full"><strong>{{ $t('attendance.holiday.reason') }}：</strong>{{ formData.reason || '—' }}</p>
         <div v-if="taskName === '护士审批'" class="holiday-task-approve__full">
-          <span class="required">{{ $t('attendance.holiday.columns.infectious') }}</span>
+          <span class="required">{{ $t('attendance.holiday.infectious') }}</span>
           <el-radio-group v-model="formData.isInfectious">
-            <el-radio label="101">{{ $t('attendance.holiday.options.yes') }}</el-radio>
-            <el-radio label="102">{{ $t('attendance.holiday.options.no') }}</el-radio>
+            <el-radio label="101">{{ $t('attendance.yes') }}</el-radio>
+            <el-radio label="102">{{ $t('attendance.no') }}</el-radio>
           </el-radio-group>
         </div>
         <div v-if="taskName === '护士审批' && formData.isInfectious === '101'" class="holiday-task-approve__full">
@@ -40,7 +40,7 @@
             format="YYYY-MM-DD HH:mm"
             style="width: 100%" />
         </div>
-        <el-input v-model="formData.remark" type="textarea" :rows="3" :placeholder="$t('attendance.holiday.detail.beginTime')" />
+        <el-input v-model="formData.remark" type="textarea" :rows="3" :placeholder="$t('attendance.holiday.detailBeginTime')" />
       </div>
       <template #footer>
         <el-button @click="approveVisible = false">{{ $t('common.cancel') }}</el-button>
@@ -98,8 +98,8 @@ const columns = computed<UniTableColumn[]>(() => [
   { prop: 'taskName', label: t('attendance.holidayTask.colTaskName'), type: 'text', minWidth: 120, showOverflowTooltip: true },
   { prop: 'procDefName', label: t('attendance.holidayTask.colProcName'), type: 'text', minWidth: 120, showOverflowTooltip: true },
   { prop: 'startUserName', label: t('attendance.holidayTask.colStarter'), type: 'text', minWidth: 100 },
-  { prop: 'studentSchool', label: t('attendance.holiday.columns.school'), type: 'text', minWidth: 120 },
-  { prop: 'studentName', label: t('attendance.holiday.columns.studentName'), type: 'text', minWidth: 100 },
+  { prop: 'studentSchool', label: t('attendance.school'), type: 'text', minWidth: 120 },
+  { prop: 'studentName', label: t('attendance.studentName'), type: 'text', minWidth: 100 },
   { prop: 'startTime', label: t('attendance.holidayTask.colStartTime'), type: 'datetime', minWidth: 160 },
   { prop: 'assigneeName', label: t('attendance.holidayTask.colAssignee'), type: 'text', minWidth: 100 }
 ])
@@ -138,7 +138,7 @@ const approve = async () => {
       body.endTime = formData.dateRange
     }
     await attendanceHolidayApi.flowCompleteTask.post(body)
-    ElMessage.success(t('attendance.holiday.messages.withdrawSuccess'))
+    ElMessage.success(t('attendance.holiday.withdrawSuccess'))
     approveVisible.value = false
     tableRef.value?.refresh()
   } finally {

@@ -2,11 +2,11 @@
   <section class="uni-list-page">
     <div class="uni-list-page__header">
       <div>
-        <h1>{{ $t('attendance.daily.page.title') }}</h1>
-        <p>{{ $t('attendance.daily.page.description') }}</p>
+        <h1>{{ $t('attendance.daily.pageTitle') }}</h1>
+        <p>{{ $t('attendance.daily.pageDesc') }}</p>
       </div>
       <div class="uni-list-page__header-actions">
-        <el-button type="primary" @click="exportData">{{ $t('attendance.daily.actions.export') }}</el-button>
+        <el-button type="primary" @click="exportData">{{ $t('attendance.export') }}</el-button>
       </div>
     </div>
 
@@ -63,7 +63,7 @@ const exportData = async () => {
   try {
     const blob = await attendanceDailyApi.dailyExport.get(raw)
     downloadBlob(blob, 'daily-attendance-export.xlsx')
-    ElMessage.success(t('attendance.daily.messages.exportSuccess'))
+    ElMessage.success(t('attendance.exportStarted'))
   } catch {
     /* request 层已提示 */
   }

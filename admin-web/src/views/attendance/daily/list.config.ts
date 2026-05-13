@@ -3,24 +3,24 @@ import type { UniFormConfig, UniOption, UniTableColumn } from 'uni-ui-lib'
 import type { Translate } from '@/types/i18n'
 
 export const ynOpts = (t: Translate): UniOption[] => [
-  { label: t('attendance.daily.options.ynYes'), value: '1' },
-  { label: t('attendance.daily.options.ynNo'), value: '0' }
+  { label: t('attendance.yes'), value: '1' },
+  { label: t('attendance.no'), value: '0' }
 ]
 
 export const dataFromOpts = (t: Translate): UniOption[] => [
-  { label: t('attendance.daily.options.dataFromGate'), value: 'gate' },
-  { label: t('attendance.daily.options.dataFromSchoolBus'), value: 'schoolBus' },
-  { label: t('attendance.daily.options.dataFromCommunity'), value: 'community' },
-  { label: t('attendance.daily.options.dataFromMb'), value: 'MB' }
+  { label: t('attendance.daily.dataFromGate'), value: 'gate' },
+  { label: t('attendance.daily.dataFromSchoolBus'), value: 'schoolBus' },
+  { label: t('attendance.daily.dataFromCommunity'), value: 'community' },
+  { label: t('attendance.daily.dataFromMb'), value: 'MB' }
 ]
 
 export const dailyStatusOpts = (t: Translate): UniOption[] => [
-  { label: t('attendance.daily.options.statusPresent'), value: 'Present' },
-  { label: t('attendance.daily.options.statusLate'), value: 'Late' },
-  { label: t('attendance.daily.options.statusLeave'), value: 'Leave' },
-  { label: t('attendance.daily.options.statusAbsent'), value: 'Absent' },
-  { label: t('attendance.daily.options.statusEnter'), value: 'Enter' },
-  { label: t('attendance.daily.options.statusExit'), value: 'Exit' }
+  { label: t('attendance.daily.statusPresent'), value: 'Present' },
+  { label: t('attendance.daily.statusLate'), value: 'Late' },
+  { label: t('attendance.daily.statusLeave'), value: 'Leave' },
+  { label: t('attendance.daily.statusAbsent'), value: 'Absent' },
+  { label: t('attendance.daily.statusEnter'), value: 'Enter' },
+  { label: t('attendance.daily.statusExit'), value: 'Exit' }
 ]
 
 export const searchForm = (
@@ -37,7 +37,7 @@ export const searchForm = (
       component: 'ElSelect',
       options: schoolOptions,
       componentProps: {
-        placeholder: t('attendance.daily.placeholders.school'),
+        placeholder: t('attendance.phSchool'),
         clearable: true,
         filterable: true
       },
@@ -48,7 +48,7 @@ export const searchForm = (
       label: '',
       component: 'ElInput',
       componentProps: {
-        placeholder: t('attendance.daily.placeholders.admissionNo'),
+        placeholder: t('attendance.phAdmissionNo'),
         clearable: true
       },
       colProps: { span: 6 }
@@ -59,7 +59,7 @@ export const searchForm = (
       component: 'ElSelect',
       options: ynOptions,
       componentProps: {
-        placeholder: t('attendance.daily.placeholders.busStatus'),
+        placeholder: t('attendance.phBusStatus'),
         clearable: true
       },
       colProps: { span: 6 }
@@ -70,7 +70,7 @@ export const searchForm = (
       component: 'ElSelect',
       options: ynOptions,
       componentProps: {
-        placeholder: t('attendance.daily.placeholders.dormitoryStatus'),
+        placeholder: t('attendance.phDormitoryStatus'),
         clearable: true
       },
       colProps: { span: 6 }
@@ -81,7 +81,7 @@ export const searchForm = (
       component: 'ElDatePicker',
       componentProps: {
         type: 'date',
-        placeholder: t('attendance.daily.placeholders.beginTime'),
+        placeholder: t('attendance.beginDate'),
         valueFormat: 'YYYY-MM-DD',
         clearable: true
       },
@@ -93,7 +93,7 @@ export const searchForm = (
       component: 'ElDatePicker',
       componentProps: {
         type: 'date',
-        placeholder: t('attendance.daily.placeholders.endTime'),
+        placeholder: t('attendance.endDate'),
         valueFormat: 'YYYY-MM-DD',
         clearable: true
       },
@@ -105,7 +105,7 @@ export const searchForm = (
       component: 'ElSelect',
       options: dataFromOptions,
       componentProps: {
-        placeholder: t('attendance.daily.placeholders.dataFrom'),
+        placeholder: t('attendance.phDataFrom'),
         clearable: true
       },
       colProps: { span: 6 }
@@ -116,7 +116,7 @@ export const searchForm = (
       component: 'ElSelect',
       options: statusOptions,
       componentProps: {
-        placeholder: t('attendance.daily.placeholders.status'),
+        placeholder: t('attendance.phStatus'),
         clearable: true
       },
       colProps: { span: 6 }
@@ -129,74 +129,74 @@ export const searchForm = (
 export const tableCols = (t: Translate): UniTableColumn[] => [
   {
     prop: 'schoolName',
-    label: t('attendance.daily.columns.schoolName'),
+    label: t('attendance.campus'),
     type: 'text',
     minWidth: 160,
     showOverflowTooltip: true
   },
   {
     prop: 'admissionNo',
-    label: t('attendance.daily.columns.admissionNo'),
+    label: t('attendance.admissionNo'),
     type: 'text',
     width: 120,
     showOverflowTooltip: true
   },
   {
     prop: 'studentName',
-    label: t('attendance.daily.columns.studentName'),
+    label: t('attendance.studentName'),
     type: 'text',
     minWidth: 110,
     showOverflowTooltip: true
   },
-  { prop: 'grade', label: t('attendance.daily.columns.grade'), type: 'text', width: 100 },
-  { prop: 'form', label: t('attendance.daily.columns.form'), type: 'text', width: 100 },
+  { prop: 'grade', label: t('attendance.grade'), type: 'text', width: 100 },
+  { prop: 'form', label: t('attendance.className'), type: 'text', width: 100 },
   {
     prop: 'busStatusLabel',
-    label: t('attendance.daily.columns.busStatus'),
+    label: t('attendance.schoolBus'),
     type: 'text',
     width: 110
   },
   {
     prop: 'dormitoryStatusLabel',
-    label: t('attendance.daily.columns.dormitoryStatus'),
+    label: t('attendance.boarding'),
     type: 'text',
     width: 110
   },
   {
     prop: 'date',
-    label: t('attendance.daily.columns.date'),
+    label: t('attendance.daily.date'),
     type: 'text',
     width: 120
   },
   {
     prop: 'attendanceTimeLabel',
-    label: t('attendance.daily.columns.attendanceTime'),
+    label: t('attendance.daily.attendanceTime'),
     type: 'text',
     minWidth: 140,
     showOverflowTooltip: true
   },
   {
     prop: 'statusLabel',
-    label: t('attendance.daily.columns.status'),
+    label: t('attendance.status'),
     type: 'text',
     width: 100
   },
   {
     prop: 'dataFromLabel',
-    label: t('attendance.daily.columns.dataFrom'),
+    label: t('attendance.dataFrom'),
     type: 'text',
     width: 100
   },
   {
     prop: 'comment',
-    label: t('attendance.daily.columns.comment'),
+    label: t('attendance.comment'),
     type: 'text',
     minWidth: 140,
     showOverflowTooltip: true
   },
   {
     prop: 'createdAt',
-    label: t('attendance.daily.columns.createdAt'),
+    label: t('attendance.createdAt'),
     type: 'text',
     width: 160,
     showOverflowTooltip: true

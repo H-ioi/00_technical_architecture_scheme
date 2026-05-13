@@ -4,10 +4,10 @@ import type { Translate } from '@/types/i18n'
 
 /** 开门类型（对齐旧 `consts.attendanceOpenType`）。 */
 export const attendanceOpenTypeOpts = (t: Translate): UniOption[] => [
-  { label: t('attendance.school.options.openCard'), value: '51' },
-  { label: t('attendance.school.options.openIllegalCard'), value: '52' },
-  { label: t('attendance.school.options.openFace'), value: '61' },
-  { label: t('attendance.school.options.openIllegalFace'), value: '62' }
+  { label: t('attendance.schoolAtt.openCard'), value: '51' },
+  { label: t('attendance.schoolAtt.openIllegalCard'), value: '52' },
+  { label: t('attendance.schoolAtt.openFace'), value: '61' },
+  { label: t('attendance.schoolAtt.openIllegalFace'), value: '62' }
 ]
 
 export const searchForm = (
@@ -23,7 +23,7 @@ export const searchForm = (
       component: 'ElSelect',
       options: schoolOptions,
       componentProps: {
-        placeholder: t('attendance.school.placeholders.school'),
+        placeholder: t('attendance.phSchool'),
         clearable: true,
         filterable: true
       },
@@ -35,7 +35,7 @@ export const searchForm = (
       component: 'ElSelect',
       options: deptOptions,
       componentProps: {
-        placeholder: t('attendance.school.placeholders.dept'),
+        placeholder: t('attendance.phDept'),
         clearable: true,
         filterable: true
       },
@@ -46,7 +46,7 @@ export const searchForm = (
       label: '',
       component: 'ElInput',
       componentProps: {
-        placeholder: t('attendance.school.placeholders.personName'),
+        placeholder: t('attendance.phStaffName'),
         clearable: true
       },
       colProps: { span: 6 }
@@ -56,7 +56,7 @@ export const searchForm = (
       label: '',
       component: 'ElInput',
       componentProps: {
-        placeholder: t('attendance.school.placeholders.personCode'),
+        placeholder: t('attendance.phPersonCode'),
         clearable: true
       },
       colProps: { span: 6 }
@@ -67,7 +67,7 @@ export const searchForm = (
       component: 'ElSelect',
       options: statusOptions,
       componentProps: {
-        placeholder: t('attendance.school.placeholders.schoolStatus'),
+        placeholder: t('attendance.phSchoolStatus'),
         clearable: true
       },
       colProps: { span: 6 }
@@ -77,7 +77,7 @@ export const searchForm = (
       label: '',
       component: 'ElInput',
       componentProps: {
-        placeholder: t('attendance.school.placeholders.cardNumber'),
+        placeholder: t('attendance.phCardNumber'),
         clearable: true
       },
       colProps: { span: 6 }
@@ -87,7 +87,7 @@ export const searchForm = (
       label: '',
       component: 'ElInput',
       componentProps: {
-        placeholder: t('attendance.school.placeholders.entryChannel'),
+        placeholder: t('attendance.phEntryChannel'),
         clearable: true
       },
       colProps: { span: 6 }
@@ -97,7 +97,7 @@ export const searchForm = (
       label: '',
       component: 'ElInput',
       componentProps: {
-        placeholder: t('attendance.school.placeholders.leavingChannel'),
+        placeholder: t('attendance.phLeavingChannel'),
         clearable: true
       },
       colProps: { span: 6 }
@@ -108,7 +108,7 @@ export const searchForm = (
       component: 'ElDatePicker',
       componentProps: {
         type: 'date',
-        placeholder: t('attendance.school.placeholders.beginDate'),
+        placeholder: t('attendance.beginAttendance'),
         valueFormat: 'YYYY-MM-DD',
         clearable: true
       },
@@ -120,7 +120,7 @@ export const searchForm = (
       component: 'ElDatePicker',
       componentProps: {
         type: 'date',
-        placeholder: t('attendance.school.placeholders.endDate'),
+        placeholder: t('attendance.endAttendance'),
         valueFormat: 'YYYY-MM-DD',
         clearable: true
       },
@@ -135,10 +135,10 @@ export const tableCols = (
   t: Translate,
   schoolOptions: UniOption[]
 ): UniTableColumn[] => [
-  { prop: 'id', label: t('attendance.school.columns.id'), type: 'text', width: 90, fixed: 'left' },
+  { prop: 'id', label: t('attendance.id'), type: 'text', width: 90, fixed: 'left' },
   {
     prop: 'schoolId',
-    label: t('attendance.school.columns.schoolName'),
+    label: t('attendance.campus'),
     type: 'text',
     options: schoolOptions,
     minWidth: 120,
@@ -146,87 +146,87 @@ export const tableCols = (
   },
   {
     prop: 'personCode',
-    label: t('attendance.school.columns.personCode'),
+    label: t('attendance.personCode'),
     type: 'text',
     minWidth: 110,
     showOverflowTooltip: true
   },
   {
     prop: 'personName',
-    label: t('attendance.school.columns.personName'),
+    label: t('attendance.staffName'),
     type: 'text',
     minWidth: 100,
     showOverflowTooltip: true
   },
   {
     prop: 'deptName',
-    label: t('attendance.school.columns.deptName'),
+    label: t('attendance.dept'),
     type: 'text',
     minWidth: 120,
     showOverflowTooltip: true
   },
   {
     prop: 'cardNumber',
-    label: t('attendance.school.columns.cardNumber'),
+    label: t('attendance.cardNumber'),
     type: 'text',
     minWidth: 110,
     showOverflowTooltip: true
   },
   {
     prop: 'schoolStatus',
-    label: t('attendance.school.columns.schoolStatus'),
+    label: t('attendance.status'),
     type: 'text',
     width: 100
   },
   {
     prop: 'entryOpenType',
-    label: t('attendance.school.columns.entryOpenType'),
+    label: t('attendance.schoolAtt.entryOpenType'),
     type: 'text',
     width: 110
   },
   {
     prop: 'entryTime',
-    label: t('attendance.school.columns.entryTime'),
+    label: t('attendance.entryTime'),
     type: 'text',
     minWidth: 160,
     showOverflowTooltip: true
   },
   {
     prop: 'entryAcsChannel',
-    label: t('attendance.school.columns.entryChannel'),
+    label: t('attendance.schoolAtt.entryChannel'),
     type: 'text',
     minWidth: 110,
     showOverflowTooltip: true
   },
   {
     prop: 'leavingOpenType',
-    label: t('attendance.school.columns.leavingOpenType'),
+    label: t('attendance.schoolAtt.leavingOpenType'),
     type: 'text',
     width: 110
   },
   {
     prop: 'leavingTime',
-    label: t('attendance.school.columns.leavingTime'),
+    label: t('attendance.leavingTime'),
     type: 'text',
     minWidth: 160,
     showOverflowTooltip: true
   },
   {
     prop: 'leavingAcsChannel',
-    label: t('attendance.school.columns.leavingChannel'),
+    label: t('attendance.schoolAtt.leavingChannel'),
     type: 'text',
     minWidth: 110,
     showOverflowTooltip: true
   },
   {
     prop: 'attendanceDate',
-    label: t('attendance.school.columns.attendanceDate'),
+    label: t('attendance.attendanceDate'),
     type: 'text',
     width: 120
   },
   {
     prop: 'createdAt',
-    label: t('attendance.school.columns.createdAt'),
+    label: t('attendance.createdAt'),
     type: 'text',
     minWidth: 160,
     showOverflowTooltip: true
@@ -243,54 +243,54 @@ export const detailForm = (
   colProps: { span: 12 },
   view: { emptyText: '-' },
   schema: [
-    { field: 'id', label: t('attendance.school.columns.id'), component: 'ElInput' },
+    { field: 'id', label: t('attendance.id'), component: 'ElInput' },
     {
       field: 'schoolId',
-      label: t('attendance.school.columns.schoolName'),
+      label: t('attendance.campus'),
       component: 'ElInput',
       viewType: 'enum',
       options: schoolOptions
     },
-    { field: 'personCode', label: t('attendance.school.columns.personCode'), component: 'ElInput' },
-    { field: 'personName', label: t('attendance.school.columns.personName'), component: 'ElInput' },
-    { field: 'deptName', label: t('attendance.school.columns.deptName'), component: 'ElInput' },
-    { field: 'cardNumber', label: t('attendance.school.columns.cardNumber'), component: 'ElInput' },
+    { field: 'personCode', label: t('attendance.personCode'), component: 'ElInput' },
+    { field: 'personName', label: t('attendance.staffName'), component: 'ElInput' },
+    { field: 'deptName', label: t('attendance.dept'), component: 'ElInput' },
+    { field: 'cardNumber', label: t('attendance.cardNumber'), component: 'ElInput' },
     {
       field: 'schoolStatus',
-      label: t('attendance.school.columns.schoolStatus'),
+      label: t('attendance.status'),
       component: 'ElInput'
     },
     {
       field: 'entryOpenType',
-      label: t('attendance.school.columns.entryOpenType'),
+      label: t('attendance.schoolAtt.entryOpenType'),
       component: 'ElInput'
     },
-    { field: 'entryTime', label: t('attendance.school.columns.entryTime'), component: 'ElInput' },
+    { field: 'entryTime', label: t('attendance.entryTime'), component: 'ElInput' },
     {
       field: 'entryAcsChannel',
-      label: t('attendance.school.columns.entryChannel'),
+      label: t('attendance.schoolAtt.entryChannel'),
       component: 'ElInput'
     },
     {
       field: 'leavingOpenType',
-      label: t('attendance.school.columns.leavingOpenType'),
+      label: t('attendance.schoolAtt.leavingOpenType'),
       component: 'ElInput'
     },
     {
       field: 'leavingTime',
-      label: t('attendance.school.columns.leavingTime'),
+      label: t('attendance.leavingTime'),
       component: 'ElInput'
     },
     {
       field: 'leavingAcsChannel',
-      label: t('attendance.school.columns.leavingChannel'),
+      label: t('attendance.schoolAtt.leavingChannel'),
       component: 'ElInput'
     },
     {
       field: 'attendanceDate',
-      label: t('attendance.school.columns.attendanceDate'),
+      label: t('attendance.attendanceDate'),
       component: 'ElInput'
     },
-    { field: 'createdAt', label: t('attendance.school.columns.createdAt'), component: 'ElInput' }
+    { field: 'createdAt', label: t('attendance.createdAt'), component: 'ElInput' }
   ]
 })

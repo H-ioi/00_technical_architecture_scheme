@@ -1,7 +1,7 @@
 <template>
   <el-drawer
     v-model="open"
-    :title="$t('attendance.holiday.form.title')"
+    :title="$t('attendance.holiday.formTitle')"
     direction="rtl"
     size="min(750px, 94vw)"
     destroy-on-close
@@ -13,11 +13,11 @@
       :rules="rules"
       label-width="132px"
       class="holiday-form-drawer__form">
-      <el-form-item :label="$t('attendance.holiday.form.pickStudent')" prop="admissonNo">
+      <el-form-item :label="$t('attendance.holiday.pickStudent')" prop="admissonNo">
         <el-autocomplete
           v-model="displayStudent"
           :fetch-suggestions="queryStudents"
-          :placeholder="$t('attendance.holiday.form.pickStudentPh')"
+          :placeholder="$t('attendance.holiday.pickStudentPh')"
           :trigger-on-focus="false"
           clearable
           style="width: 100%"
@@ -25,54 +25,54 @@
           @clear="onStudentClear" />
         <div v-if="studentInfo.name || studentInfo.fullName" class="holiday-form-drawer__student">
           <p>
-            <span class="label">{{ $t('attendance.holiday.columns.studentName') }}：</span
+            <span class="label">{{ $t('attendance.studentName') }}：</span
             >{{ studentInfo.name || studentInfo.fullName || '—' }}
           </p>
           <p>
-            <span class="label">{{ $t('attendance.holiday.columns.school') }}：</span
+            <span class="label">{{ $t('attendance.school') }}：</span
             >{{ studentInfo.schoolName || studentInfo.enName || '—' }}
           </p>
           <p>
-            <span class="label">{{ $t('attendance.holiday.columns.grade') }}：</span
+            <span class="label">{{ $t('attendance.grade') }}：</span
             >{{ studentInfo.gradeName || studentInfo.grade || '—' }}
           </p>
           <p>
-            <span class="label">{{ $t('attendance.holiday.columns.className') }}：</span
+            <span class="label">{{ $t('attendance.className') }}：</span
             >{{ studentInfo.formCode || '—' }}
           </p>
         </div>
       </el-form-item>
 
-      <el-form-item :label="$t('attendance.holiday.columns.leaveType')" prop="type">
+      <el-form-item :label="$t('attendance.holiday.leaveType')" prop="type">
         <el-select
           v-model="form.type"
           style="width: 100%"
-          :placeholder="$t('attendance.holiday.form.selectType')">
-          <el-option :label="$t('attendance.holiday.options.leavePersonal')" value="101" />
-          <el-option :label="$t('attendance.holiday.options.leaveSick')" value="102" />
+          :placeholder="$t('attendance.holiday.selectType')">
+          <el-option :label="$t('attendance.holiday.leavePersonal')" value="101" />
+          <el-option :label="$t('attendance.holiday.leaveSick')" value="102" />
         </el-select>
       </el-form-item>
 
-      <el-form-item :label="$t('attendance.holiday.columns.scope')" prop="scope">
+      <el-form-item :label="$t('attendance.holiday.scope')" prop="scope">
         <el-checkbox-group v-model="form.scope">
           <el-checkbox label="course">{{
-            $t('attendance.holiday.options.scopeCourse')
+            $t('attendance.holiday.scopeCourse')
           }}</el-checkbox>
-          <el-checkbox label="dorm">{{ $t('attendance.holiday.options.scopeDorm') }}</el-checkbox>
-          <el-checkbox label="bus">{{ $t('attendance.holiday.options.scopeBus') }}</el-checkbox>
+          <el-checkbox label="dorm">{{ $t('attendance.holiday.scopeDorm') }}</el-checkbox>
+          <el-checkbox label="bus">{{ $t('attendance.holiday.scopeBus') }}</el-checkbox>
         </el-checkbox-group>
       </el-form-item>
 
-      <el-form-item :label="$t('attendance.holiday.columns.fixed')" prop="fixed">
+      <el-form-item :label="$t('attendance.holiday.fixed')" prop="fixed">
         <el-select v-model="form.fixed" style="width: 100%" @change="onFixedChange">
-          <el-option :label="$t('attendance.holiday.options.yes')" value="101" />
-          <el-option :label="$t('attendance.holiday.options.no')" value="102" />
+          <el-option :label="$t('attendance.yes')" value="101" />
+          <el-option :label="$t('attendance.no')" value="102" />
         </el-select>
       </el-form-item>
 
       <el-form-item
         v-if="form.fixed === '101'"
-        :label="$t('attendance.holiday.columns.weekDays')"
+        :label="$t('attendance.holiday.weekDays')"
         prop="weekDays">
         <el-checkbox-group v-model="form.weekDays">
           <el-checkbox v-for="d in weekOpts" :key="d.value" :label="d.value">{{
@@ -83,14 +83,14 @@
 
       <el-form-item
         v-if="form.fixed === '102'"
-        :label="$t('attendance.holiday.columns.dateRange')"
+        :label="$t('attendance.holiday.dateRange')"
         prop="dateRange">
         <el-date-picker
           v-model="form.dateRange"
           type="datetimerange"
           range-separator="~"
-          :start-placeholder="$t('attendance.holiday.placeholders.beginTime')"
-          :end-placeholder="$t('attendance.holiday.placeholders.endTime')"
+          :start-placeholder="$t('attendance.beginDate')"
+          :end-placeholder="$t('attendance.endDate')"
           value-format="YYYY-MM-DD HH:mm"
           format="YYYY-MM-DD HH:mm"
           style="width: 100%" />
@@ -98,14 +98,14 @@
 
       <el-form-item
         v-if="form.fixed === '101'"
-        :label="$t('attendance.holiday.columns.dateRange')"
+        :label="$t('attendance.holiday.dateRange')"
         prop="dateRange">
         <el-date-picker
           v-model="form.dateRange"
           type="daterange"
           range-separator="-"
-          :start-placeholder="$t('attendance.holiday.placeholders.beginTime')"
-          :end-placeholder="$t('attendance.holiday.placeholders.endTime')"
+          :start-placeholder="$t('attendance.beginDate')"
+          :end-placeholder="$t('attendance.endDate')"
           value-format="YYYY-MM-DD"
           format="YYYY-MM-DD"
           style="width: 100%" />
@@ -113,28 +113,28 @@
 
       <el-form-item
         v-if="form.fixed === '101'"
-        :label="$t('attendance.holiday.columns.timeSlot')"
+        :label="$t('attendance.holiday.timeSlot')"
         prop="dateLimit">
         <el-time-picker
           v-model="form.dateLimit"
           is-range
           range-separator="-"
-          :start-placeholder="$t('attendance.holiday.form.timeStart')"
-          :end-placeholder="$t('attendance.holiday.form.timeEnd')"
+          :start-placeholder="$t('attendance.holiday.timeStart')"
+          :end-placeholder="$t('attendance.holiday.timeEnd')"
           value-format="HH:mm"
           format="HH:mm"
           style="width: 100%" />
       </el-form-item>
 
-      <el-form-item :label="$t('attendance.holiday.columns.reason')" prop="reason">
+      <el-form-item :label="$t('attendance.holiday.reason')" prop="reason">
         <el-input
           v-model="form.reason"
           type="textarea"
           :rows="4"
-          :placeholder="$t('attendance.holiday.form.reasonPh')" />
+          :placeholder="$t('attendance.holiday.reasonPh')" />
       </el-form-item>
 
-      <el-form-item :label="$t('attendance.holiday.form.attachments')">
+      <el-form-item :label="$t('attendance.holiday.attachments')">
         <el-upload
           list-type="picture-card"
           :file-list="fileList"
@@ -146,10 +146,10 @@
         </el-upload>
       </el-form-item>
 
-      <el-form-item :label="$t('attendance.holiday.form.needPass')" prop="needPass">
+      <el-form-item :label="$t('attendance.holiday.needPass')" prop="needPass">
         <el-select v-model="form.needPass" style="width: 100%">
-          <el-option :label="$t('attendance.holiday.options.yes')" value="101" />
-          <el-option :label="$t('attendance.holiday.options.no')" value="102" />
+          <el-option :label="$t('attendance.yes')" value="101" />
+          <el-option :label="$t('attendance.no')" value="102" />
         </el-select>
       </el-form-item>
     </el-form>
@@ -157,11 +157,11 @@
     <template #footer>
       <div class="holiday-form-drawer__footer">
         <el-checkbox v-model="form.parentResponsible" class="holiday-form-drawer__parent">
-          {{ $t('attendance.holiday.form.parentAck') }}
+          {{ $t('attendance.holiday.parentAck') }}
         </el-checkbox>
         <el-button @click="open = false">{{ $t('common.cancel') }}</el-button>
         <el-button type="primary" :loading="submitting" @click="submit">
-          {{ $t('attendance.holiday.form.submit') }}
+          {{ $t('attendance.holiday.submitApply') }}
         </el-button>
       </div>
     </template>
@@ -201,11 +201,11 @@ const previewUrl = ref('')
 const studentInfo = ref<Loose>({})
 
 const weekOpts = computed(() => [
-  { value: 'monday', label: t('attendance.holiday.form.weekMon') },
-  { value: 'tuesday', label: t('attendance.holiday.form.weekTue') },
-  { value: 'wednesday', label: t('attendance.holiday.form.weekWed') },
-  { value: 'thursday', label: t('attendance.holiday.form.weekThu') },
-  { value: 'friday', label: t('attendance.holiday.form.weekFri') }
+  { value: 'monday', label: t('attendance.holiday.weekMon') },
+  { value: 'tuesday', label: t('attendance.holiday.weekTue') },
+  { value: 'wednesday', label: t('attendance.holiday.weekWed') },
+  { value: 'thursday', label: t('attendance.holiday.weekThu') },
+  { value: 'friday', label: t('attendance.holiday.weekFri') }
 ])
 
 const form = reactive({
@@ -223,18 +223,18 @@ const form = reactive({
 
 const rules = computed<FormRules>(() => ({
   admissonNo: [
-    { required: true, message: t('attendance.holiday.form.ruleStudent'), trigger: 'change' }
+    { required: true, message: t('attendance.holiday.ruleStudent'), trigger: 'change' }
   ],
-  type: [{ required: true, message: t('attendance.holiday.form.ruleType'), trigger: 'change' }],
-  scope: [{ required: true, message: t('attendance.holiday.form.ruleScope'), trigger: 'change' }],
-  reason: [{ required: true, message: t('attendance.holiday.form.ruleReason'), trigger: 'blur' }],
+  type: [{ required: true, message: t('attendance.holiday.ruleType'), trigger: 'change' }],
+  scope: [{ required: true, message: t('attendance.holiday.ruleScope'), trigger: 'change' }],
+  reason: [{ required: true, message: t('attendance.holiday.ruleReason'), trigger: 'blur' }],
   dateRange: [
-    { required: true, message: t('attendance.holiday.form.ruleDate'), trigger: 'change' }
+    { required: true, message: t('attendance.holiday.ruleDate'), trigger: 'change' }
   ],
   dateLimit: [
-    { required: true, message: t('attendance.holiday.form.ruleSlot'), trigger: 'change' }
+    { required: true, message: t('attendance.holiday.ruleSlot'), trigger: 'change' }
   ],
-  weekDays: [{ required: true, message: t('attendance.holiday.form.ruleWeek'), trigger: 'change' }]
+  weekDays: [{ required: true, message: t('attendance.holiday.ruleWeek'), trigger: 'change' }]
 }))
 
 const queryStudents = (
@@ -309,7 +309,7 @@ const resetInner = () => {
 const beforeUpload = async (file: File) => {
   const ok = file.size / 1024 / 1024 < 20
   if (!ok) {
-    ElMessage.warning(t('attendance.holiday.form.fileTooLarge'))
+    ElMessage.warning(t('attendance.holiday.fileTooLarge'))
     return false
   }
   try {
@@ -317,7 +317,7 @@ const beforeUpload = async (file: File) => {
     fileList.value = [...fileList.value, { name: file.name, url, uid: Date.now() + Math.random() }]
     return false
   } catch {
-    ElMessage.error(t('attendance.holiday.form.uploadFail'))
+    ElMessage.error(t('attendance.holiday.uploadFail'))
     return false
   }
 }
@@ -376,11 +376,11 @@ const submit = async () => {
     return
   }
   if (form.type === '102' && fileList.value.length === 0) {
-    ElMessage.error(t('attendance.holiday.form.ruleSickAttach'))
+    ElMessage.error(t('attendance.holiday.ruleSickAttach'))
     return
   }
   if (!form.parentResponsible) {
-    ElMessage.error(t('attendance.holiday.form.ruleParent'))
+    ElMessage.error(t('attendance.holiday.ruleParent'))
     return
   }
   await doSubmit()
@@ -391,11 +391,11 @@ const doSubmit = async () => {
   try {
     const payload = buildPayload()
     await attendanceHolidayApi.holidaySave.post(payload)
-    ElMessage.success(t('attendance.holiday.form.saveOk'))
+    ElMessage.success(t('attendance.holiday.saveOk'))
     open.value = false
     emit('success')
   } catch {
-    ElMessage.error(t('attendance.holiday.form.saveFail'))
+    ElMessage.error(t('attendance.holiday.saveFail'))
   } finally {
     submitting.value = false
   }

@@ -2,11 +2,11 @@
   <section class="uni-list-page">
     <div class="uni-list-page__header">
       <div>
-        <h1>{{ $t('attendance.holidayConfig.page.title') }}</h1>
-        <p>{{ $t('attendance.holidayConfig.page.description') }}</p>
+        <h1>{{ $t('attendance.holidayConfig.pageTitle') }}</h1>
+        <p>{{ $t('attendance.holidayConfig.pageDesc') }}</p>
       </div>
       <div class="uni-list-page__header-actions">
-        <el-button type="primary" @click="openAdd">{{ $t('attendance.holidayConfig.actions.add') }}</el-button>
+        <el-button type="primary" @click="openAdd">{{ $t('attendance.addConfig') }}</el-button>
       </div>
     </div>
 

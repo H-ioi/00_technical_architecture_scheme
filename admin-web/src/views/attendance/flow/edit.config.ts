@@ -54,7 +54,7 @@ export function buildFlowEditFormConfig(t: Translate, schoolOptions: UniOption[]
       },
       {
         field: 'schools',
-        label: t('attendance.holiday.columns.school'),
+        label: t('attendance.school'),
         component: 'ElSelect',
         options: schoolOptions,
         componentProps: {
@@ -70,8 +70,8 @@ export function buildFlowEditFormConfig(t: Translate, schoolOptions: UniOption[]
         label: t('attendance.holidayFlow.flowDef.colLeaveType'),
         component: 'ElSelect',
         options: [
-          { label: t('attendance.holiday.options.leavePersonal'), value: '101' },
-          { label: t('attendance.holiday.options.leaveSick'), value: '102' }
+          { label: t('attendance.holiday.leavePersonal'), value: '101' },
+          { label: t('attendance.holiday.leaveSick'), value: '102' }
         ],
         componentProps: {
           clearable: true,
@@ -83,8 +83,8 @@ export function buildFlowEditFormConfig(t: Translate, schoolOptions: UniOption[]
         label: t('attendance.holidayFlow.flowDef.needApproval'),
         component: 'ElSelect',
         options: [
-          { label: t('attendance.holiday.options.yes'), value: '101' },
-          { label: t('attendance.holiday.options.no'), value: '102' }
+          { label: t('attendance.yes'), value: '101' },
+          { label: t('attendance.no'), value: '102' }
         ],
         componentProps: {
           style: { width: '360px', maxWidth: '100%' }

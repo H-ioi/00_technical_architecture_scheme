@@ -9,7 +9,7 @@ export const searchForm = (t: Translate, schoolOptions: UniOption[]): UniFormCon
       component: 'ElSelect',
       options: schoolOptions,
       componentProps: {
-        placeholder: t('attendance.holidayPass.placeholders.school'),
+        placeholder: t('attendance.phSchoolOrg'),
         clearable: true,
         filterable: true
       },
@@ -20,12 +20,12 @@ export const searchForm = (t: Translate, schoolOptions: UniOption[]): UniFormCon
       label: '',
       component: 'ElSelect',
       options: [
-        { label: t('attendance.holiday.options.yes'), value: '1' },
-        { label: t('attendance.holiday.options.no'), value: '0' }
+        { label: t('attendance.yes'), value: '1' },
+        { label: t('attendance.no'), value: '0' }
       ],
       componentProps: {
         clearable: true,
-        placeholder: t('attendance.holidayPass.placeholders.dorm')
+        placeholder: t('attendance.holidayPass.phDorm')
       },
       colProps: { span: 4 }
     },
@@ -35,7 +35,7 @@ export const searchForm = (t: Translate, schoolOptions: UniOption[]): UniFormCon
       component: 'ElInput',
       componentProps: {
         clearable: true,
-        placeholder: t('attendance.holidayPass.placeholders.keyword')
+        placeholder: t('attendance.phKeyword')
       },
       colProps: { span: 6 }
     }
@@ -47,71 +47,71 @@ export const searchForm = (t: Translate, schoolOptions: UniOption[]): UniFormCon
 export const tableCols = (t: Translate): UniTableColumn[] => [
   {
     prop: 'studentNo',
-    label: t('attendance.holidayPass.columns.studentNo'),
+    label: t('attendance.holidayPass.colStudentNo'),
     type: 'text',
     minWidth: 110,
     fixed: 'left'
   },
   {
     prop: 'studentName',
-    label: t('attendance.holidayPass.columns.studentName'),
+    label: t('attendance.studentName'),
     type: 'text',
     minWidth: 180
   },
   {
     prop: 'studentSchool',
-    label: t('attendance.holidayPass.columns.school'),
+    label: t('attendance.school'),
     type: 'text',
     minWidth: 200,
     showOverflowTooltip: true
   },
   {
     prop: 'studentGrade',
-    label: t('attendance.holidayPass.columns.grade'),
+    label: t('attendance.grade'),
     type: 'text',
     minWidth: 88
   },
   {
     prop: 'studentClass',
-    label: t('attendance.holidayPass.columns.className'),
+    label: t('attendance.className'),
     type: 'text',
     minWidth: 88
   },
   {
     prop: 'studentDormitoryStatus',
-    label: t('attendance.holidayPass.columns.dorm'),
+    label: t('attendance.boarding'),
     type: 'text',
     minWidth: 88,
     formatter: (row) => {
       const v = (row as { studentDormitoryStatus?: number }).studentDormitoryStatus
-      return v === 1 ? t('attendance.holiday.options.yes') : t('attendance.holiday.options.no')
+      return v === 1 ? t('attendance.yes') : t('attendance.no')
     }
   },
   {
     prop: 'createdBy',
-    label: t('attendance.holidayPass.columns.releasedBy'),
+    label: t('attendance.holidayPass.releasedBy'),
     type: 'text',
     minWidth: 100
   },
   {
     prop: 'way',
-    label: t('attendance.holidayPass.columns.way'),
+    label: t('attendance.holidayPass.way'),
     type: 'text',
     minWidth: 100,
     formatter: (row) => {
       const w = String((row as { way?: string }).way ?? '')
       if (w === 'parents') {
-        return t('attendance.holidayPass.options.wayParents')
+        return t('attendance.holidayPass.wayParents')
       }
       if (w === 'self') {
-        return t('attendance.holidayPass.options.waySelf')
+        return t('attendance.holidayPass.waySelf')
       }
       return w || '—'
     }
   },
   {
     prop: 'leaveRange',
-    label: t('attendance.holidayPass.columns.leaveRange'),
+    label: t('attendance.holidayPass.leaveRange'),
     type: 'text',
     minWidth: 280,
     formatter: (row) => {
@@ -124,23 +124,23 @@ export const tableCols = (t: Translate): UniTableColumn[] => [
   },
   {
     prop: 'passTime',
-    label: t('attendance.holidayPass.columns.passTime'),
+    label: t('attendance.holidayPass.passTime'),
     type: 'text',
     minWidth: 110
   },
   {
     prop: 'isLeave',
-    label: t('attendance.holidayPass.columns.isLeave'),
+    label: t('attendance.holidayPass.isLeave'),
     type: 'text',
     minWidth: 88,
     formatter: (row) => {
       const v = (row as { isLeave?: number }).isLeave
-      return v === 0 ? t('attendance.holiday.options.yes') : t('attendance.holiday.options.no')
+      return v === 0 ? t('attendance.yes') : t('attendance.no')
     }
   },
   {
     prop: 'dateLimit',
-    label: t('attendance.holidayPass.columns.slot'),
+    label: t('attendance.holidayPass.slot'),
     type: 'text',
     minWidth: 110,
     formatter: (row) => {
@@ -153,23 +153,23 @@ export const tableCols = (t: Translate): UniTableColumn[] => [
   },
   {
     prop: 'status',
-    label: t('attendance.holiday.columns.status'),
+    label: t('attendance.status'),
     type: 'text',
     minWidth: 96,
     formatter: (row) => {
       const s = String((row as { status?: number }).status ?? '')
       const map: Record<string, string> = {
-        '0': t('attendance.holidayPass.status.active'),
-        '1': t('attendance.holidayPass.status.voided'),
-        '2': t('attendance.holidayPass.status.pendingGenerate'),
-        '3': t('attendance.holidayPass.status.expired')
+        '0': t('attendance.holidayPass.stActive'),
+        '1': t('attendance.holidayPass.stVoided'),
+        '2': t('attendance.holidayPass.stPendingGenerate'),
+        '3': t('attendance.holidayPass.stExpired')
       }
       return map[s] ?? '—'
     }
   },
   {
     prop: 'createdAt',
-    label: t('attendance.holiday.columns.createdAt'),
+    label: t('attendance.createdAt'),
     type: 'datetime',
     minWidth: 160,
     showOverflowTooltip: true

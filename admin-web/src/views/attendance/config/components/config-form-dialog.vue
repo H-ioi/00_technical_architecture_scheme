@@ -1,13 +1,13 @@
 <template>
   <el-dialog v-model="innerVisible" :title="title" width="520px" destroy-on-close @closed="onClosed">
     <el-form ref="formRef" :model="model" :rules="rules" label-width="100px">
-      <el-form-item :label="$t('attendance.holidayConfig.form.school')" prop="school">
+      <el-form-item :label="$t('attendance.holidayConfig.school')" prop="school">
         <el-select
           v-model="model.school"
           filterable
           clearable
           style="width: 100%"
-          :placeholder="$t('attendance.holidayConfig.placeholders.school')">
+          :placeholder="$t('attendance.phSchool')">
           <el-option
             v-for="s in schoolOptions"
             :key="String(s.value)"
@@ -15,11 +15,11 @@
             :value="s.value" />
         </el-select>
       </el-form-item>
-      <el-form-item :label="$t('attendance.holidayConfig.form.department')" prop="department">
+      <el-form-item :label="$t('attendance.holidayConfig.department')" prop="department">
         <el-select
           v-model="model.department"
           style="width: 100%"
-          :placeholder="$t('attendance.holidayConfig.form.department')">
+          :placeholder="$t('attendance.holidayConfig.department')">
           <el-option
             v-for="d in departmentOptions"
             :key="d.value"
@@ -29,19 +29,19 @@
       </el-form-item>
       <el-form-item
         v-if="gradeVisible"
-        :label="$t('attendance.holidayConfig.form.grades')"
+        :label="$t('attendance.holidayConfig.grades')"
         prop="grades">
         <el-select
           v-model="model.grades"
           multiple
           filterable
           style="width: 100%"
-          :placeholder="$t('attendance.holidayConfig.form.grades')">
+          :placeholder="$t('attendance.holidayConfig.grades')">
           <el-option v-for="g in gradeOptions" :key="g.value" :label="g.label" :value="g.value" />
         </el-select>
       </el-form-item>
-      <el-form-item :label="$t('attendance.holidayConfig.form.email')" prop="email">
-        <el-input v-model="model.email" :placeholder="$t('attendance.holidayConfig.form.email')" />
+      <el-form-item :label="$t('attendance.holidayConfig.email')" prop="email">
+        <el-input v-model="model.email" :placeholder="$t('attendance.holidayConfig.email')" />
       </el-form-item>
     </el-form>
     <template #footer>
@@ -101,11 +101,11 @@ const formRef = ref<FormInstance>()
 const submitting = ref(false)
 
 const rules = computed<FormRules>(() => ({
-  school: [{ required: true, message: t('attendance.holidayConfig.rules.school'), trigger: 'change' }],
-  department: [{ required: true, message: t('attendance.holidayConfig.rules.department'), trigger: 'change' }],
+  school: [{ required: true, message: t('attendance.holidayConfig.ruleSchool'), trigger: 'change' }],
+  department: [{ required: true, message: t('attendance.holidayConfig.ruleDepartment'), trigger: 'change' }],
   email: [
-    { required: true, message: t('attendance.holidayConfig.rules.email'), trigger: 'blur' },
-    { type: 'email', message: t('attendance.holidayConfig.form.emailInvalid'), trigger: 'blur' }
+    { required: true, message: t('attendance.holidayConfig.ruleEmail'), trigger: 'blur' },
+    { type: 'email', message: t('attendance.holidayConfig.emailInvalid'), trigger: 'blur' }
   ]
 }))
 
@@ -131,7 +131,7 @@ const submit = async () => {
   try {
     const api = model.id ? attendanceHolidayApi.sysConfigUpdate : attendanceHolidayApi.sysConfigSave
     await api.post({ ...model })
-    ElMessage.success(model.id ? t('attendance.holidayConfig.messages.saveOk') : t('attendance.holidayConfig.messages.addOk'))
+    ElMessage.success(model.id ? t('attendance.holidayConfig.saveOk') : t('attendance.holidayConfig.addOk'))
     emit('success')
     innerVisible.value = false
   } finally {

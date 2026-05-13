@@ -4,8 +4,8 @@ import type { Translate } from '@/types/i18n'
 
 /** 微信 OpenID 状态（对齐旧 `consts.wechatOpenidType`，`0` 使用中 `1` 归档）。 */
 export const wechatOpenidStatusOpts = (t: Translate): UniOption[] => [
-  { label: t('attendance.wechatOpenid.options.active'), value: '0', type: 'success' },
-  { label: t('attendance.wechatOpenid.options.archived'), value: '1', type: 'info' }
+  { label: t('attendance.wechatOpenid.activeOption'), value: '0', type: 'success' },
+  { label: t('attendance.wechatOpenid.archivedOption'), value: '1', type: 'info' }
 ]
 
 export const searchForm = (
@@ -20,7 +20,7 @@ export const searchForm = (
       component: 'ElSelect',
       options: schoolOptions,
       componentProps: {
-        placeholder: t('attendance.wechatOpenid.placeholders.school'),
+        placeholder: t('attendance.phSchool'),
         clearable: true,
         filterable: true
       },
@@ -31,7 +31,7 @@ export const searchForm = (
       label: '',
       component: 'ElInput',
       componentProps: {
-        placeholder: t('attendance.wechatOpenid.placeholders.admissionNo'),
+        placeholder: t('attendance.phAdmissionNo'),
         clearable: true
       },
       colProps: { span: 6 }
@@ -41,7 +41,7 @@ export const searchForm = (
       label: '',
       component: 'ElInput',
       componentProps: {
-        placeholder: t('attendance.wechatOpenid.placeholders.nickname'),
+        placeholder: t('attendance.phNickname'),
         clearable: true
       },
       colProps: { span: 6 }
@@ -51,7 +51,7 @@ export const searchForm = (
       label: '',
       component: 'ElInput',
       componentProps: {
-        placeholder: t('attendance.wechatOpenid.placeholders.openId'),
+        placeholder: t('attendance.phOpenId'),
         clearable: true
       },
       colProps: { span: 6 }
@@ -62,7 +62,7 @@ export const searchForm = (
       component: 'ElSelect',
       options: statusOptions,
       componentProps: {
-        placeholder: t('attendance.wechatOpenid.placeholders.status'),
+        placeholder: t('attendance.phStatus'),
         clearable: true
       },
       colProps: { span: 6 }
@@ -73,7 +73,7 @@ export const searchForm = (
       component: 'ElDatePicker',
       componentProps: {
         type: 'date',
-        placeholder: t('attendance.wechatOpenid.placeholders.beginDate'),
+        placeholder: t('attendance.beginTime'),
         valueFormat: 'YYYY-MM-DD',
         clearable: true
       },
@@ -85,7 +85,7 @@ export const searchForm = (
       component: 'ElDatePicker',
       componentProps: {
         type: 'date',
-        placeholder: t('attendance.wechatOpenid.placeholders.endDate'),
+        placeholder: t('attendance.endTime'),
         valueFormat: 'YYYY-MM-DD',
         clearable: true
       },
@@ -102,14 +102,14 @@ export const tableCols = (
 ): UniTableColumn[] => [
   {
     prop: 'id',
-    label: t('attendance.wechatOpenid.columns.id'),
+    label: t('attendance.id'),
     type: 'text',
     width: 90,
     fixed: 'left'
   },
   {
     prop: 'schoolId',
-    label: t('attendance.wechatOpenid.columns.schoolName'),
+    label: t('attendance.campus'),
     type: 'text',
     options: schoolOptions,
     minWidth: 120,
@@ -117,36 +117,36 @@ export const tableCols = (
   },
   {
     prop: 'admissionNo',
-    label: t('attendance.wechatOpenid.columns.admissionNo'),
+    label: t('attendance.admissionNo'),
     type: 'text',
     minWidth: 110,
     showOverflowTooltip: true
   },
   {
     prop: 'nickname',
-    label: t('attendance.wechatOpenid.columns.nickname'),
+    label: t('attendance.staffName'),
     type: 'text',
     minWidth: 100,
     showOverflowTooltip: true
   },
-  { prop: 'status', label: t('attendance.wechatOpenid.columns.status'), type: 'text', width: 100 },
+  { prop: 'status', label: t('attendance.status'), type: 'text', width: 100 },
   {
     prop: 'encryptedOpenId',
-    label: t('attendance.wechatOpenid.columns.encryptedOpenId'),
+    label: t('attendance.encryptedOpenId'),
     type: 'text',
     minWidth: 200,
     showOverflowTooltip: true
   },
   {
     prop: 'updateTime',
-    label: t('attendance.wechatOpenid.columns.updateTime'),
+    label: t('attendance.updateTime'),
     type: 'text',
     minWidth: 160,
     showOverflowTooltip: true
   },
   {
     prop: 'createTime',
-    label: t('attendance.wechatOpenid.columns.createTime'),
+    label: t('attendance.createTime'),
     type: 'text',
     minWidth: 160,
     showOverflowTooltip: true
@@ -163,38 +163,38 @@ export const detailForm = (
   colProps: { span: 12 },
   view: { emptyText: '-' },
   schema: [
-    { field: 'id', label: t('attendance.wechatOpenid.columns.id'), component: 'ElInput' },
+    { field: 'id', label: t('attendance.id'), component: 'ElInput' },
     {
       field: 'schoolId',
-      label: t('attendance.wechatOpenid.columns.schoolName'),
+      label: t('attendance.campus'),
       component: 'ElInput',
       viewType: 'enum',
       options: schoolOptions
     },
     {
       field: 'admissionNo',
-      label: t('attendance.wechatOpenid.columns.admissionNo'),
+      label: t('attendance.admissionNo'),
       component: 'ElInput'
     },
     {
       field: 'nickname',
-      label: t('attendance.wechatOpenid.columns.nickname'),
+      label: t('attendance.staffName'),
       component: 'ElInput'
     },
-    { field: 'status', label: t('attendance.wechatOpenid.columns.status'), component: 'ElInput' },
+    { field: 'status', label: t('attendance.status'), component: 'ElInput' },
     {
       field: 'encryptedOpenId',
-      label: t('attendance.wechatOpenid.columns.encryptedOpenId'),
+      label: t('attendance.encryptedOpenId'),
       component: 'ElInput'
     },
     {
       field: 'updateTime',
-      label: t('attendance.wechatOpenid.columns.updateTime'),
+      label: t('attendance.updateTime'),
       component: 'ElInput'
     },
     {
       field: 'createTime',
-      label: t('attendance.wechatOpenid.columns.createTime'),
+      label: t('attendance.createTime'),
       component: 'ElInput'
     }
   ]

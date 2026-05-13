@@ -2,12 +2,12 @@
   <section class="uni-list-page">
     <div class="uni-list-page__header">
       <div>
-        <h1>{{ $t('attendance.student.page.title') }}</h1>
-        <p>{{ $t('attendance.student.page.description') }}</p>
+        <h1>{{ $t('attendance.student.pageTitle') }}</h1>
+        <p>{{ $t('attendance.student.pageDesc') }}</p>
       </div>
       <div class="uni-list-page__header-actions">
         <el-button v-uni-permission="'student_attendance_export'" @click="exportData">
-          {{ $t('attendance.student.actions.export') }}
+          {{ $t('attendance.export') }}
         </el-button>
       </div>
     </div>
@@ -74,7 +74,7 @@ const exportData = async () => {
   try {
     const blob = await attendanceStudentApi.studentExport.get(raw)
     downloadBlob(blob, 'student-attendance-export.xlsx')
-    ElMessage.success(t('attendance.student.messages.exportSuccess'))
+    ElMessage.success(t('attendance.exportStarted'))
   } catch {
     /* request 层已提示 */
   }

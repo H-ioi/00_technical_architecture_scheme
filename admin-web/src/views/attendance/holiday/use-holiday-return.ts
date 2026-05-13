@@ -100,7 +100,7 @@ export const useHolidayReturn = (schoolRecords: Ref<SchoolOptionRecord[]>) => {
 
   const actions = computed<UniTableAction[]>(() => [
     {
-      label: t('attendance.holiday.actions.detail'),
+      label: t('attendance.detail'),
       visible: (row) => {
         const id = resolveHolidayDetailId(row as AttendanceHolidayRecord)
         return id != null && id !== ''

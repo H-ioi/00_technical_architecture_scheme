@@ -115,16 +115,16 @@ export const useHolidayLeave = (schoolRecords: Ref<SchoolOptionRecord[]>) => {
     const procId = row.procId
     const holidayId = row.id
     if (holidayId == null || holidayId === '') {
-      ElMessage.warning(t('attendance.holiday.messages.withdrawMissingId'))
+      ElMessage.warning(t('attendance.holiday.withdrawMissingId'))
       return
     }
     const procSeg = holidayBackProcPathSegment(procId)
     ElMessageBox.confirm(
-      t('attendance.holiday.messages.withdrawConfirm', {
+      t('attendance.holiday.withdrawConfirm', {
         procId: String(procSeg),
         id: String(holidayId ?? '')
       }),
-      t('attendance.holiday.messages.withdrawPrompt'),
+      t('attendance.tipTitle'),
       {
         type: 'warning',
         confirmButtonText: t('common.submit'),
@@ -134,10 +134,10 @@ export const useHolidayLeave = (schoolRecords: Ref<SchoolOptionRecord[]>) => {
       .then(async () => {
         try {
           await attendanceHolidayApi.holidayCancelFlow.get(procSeg, holidayId)
-          ElMessage.success(t('attendance.holiday.messages.withdrawSuccess'))
+          ElMessage.success(t('attendance.holiday.withdrawSuccess'))
           tableRef.value?.refresh()
         } catch {
-          ElMessage.error(t('attendance.holiday.messages.withdrawFail'))
+          ElMessage.error(t('attendance.holiday.withdrawFail'))
         }
       })
       .catch(() => {})
@@ -148,8 +148,8 @@ export const useHolidayLeave = (schoolRecords: Ref<SchoolOptionRecord[]>) => {
       return
     }
     ElMessageBox.confirm(
-      t('attendance.holiday.messages.deleteConfirm', { id: String(row.id) }),
-      t('attendance.holiday.messages.deletePrompt'),
+      t('attendance.holiday.deleteConfirm', { id: String(row.id) }),
+      t('attendance.tipTitle'),
       {
         type: 'warning',
         confirmButtonText: t('common.submit'),
@@ -158,7 +158,7 @@ export const useHolidayLeave = (schoolRecords: Ref<SchoolOptionRecord[]>) => {
     )
       .then(async () => {
         await attendanceHolidayApi.holidayDelete.remove(row.id)
-        ElMessage.success(t('attendance.holiday.messages.deleteSuccess'))
+        ElMessage.success(t('attendance.holiday.deleteSuccess'))
         tableRef.value?.refresh()
       })
       .catch(() => {})
@@ -166,16 +166,16 @@ export const useHolidayLeave = (schoolRecords: Ref<SchoolOptionRecord[]>) => {
 
   const actions = computed<UniTableAction[]>(() => [
     {
-      label: t('attendance.holiday.actions.withdraw'),
+      label: t('attendance.holiday.withdraw'),
       visible: (row) => withdrawVisible(row as AttendanceHolidayRecord),
       onClick: (row) => withdraw(row as AttendanceHolidayRecord)
     },
     {
-      label: t('attendance.holiday.actions.detail'),
+      label: t('attendance.detail'),
       onClick: (row) => openDetail(row as AttendanceHolidayRecord)
     },
     {
-      label: t('attendance.holiday.actions.delete'),
+      label: t('attendance.delete'),
       visible: (row) => deleteVisible(row as AttendanceHolidayRecord),
       onClick: (row) => removeRow(row as AttendanceHolidayRecord)
     }

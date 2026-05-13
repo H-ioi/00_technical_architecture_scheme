@@ -2,11 +2,11 @@ import type { Translate } from '@/types/i18n'
 import type { UniFormConfig, UniOption, UniTableColumn } from 'uni-ui-lib'
 
 const DEPARTMENT_OPTS: { labelKey: string; value: string }[] = [
-  { labelKey: 'attendance.holidayConfig.department.all', value: 'all' },
-  { labelKey: 'attendance.holidayConfig.department.course', value: 'course' },
-  { labelKey: 'attendance.holidayConfig.department.dorm', value: 'dorm' },
-  { labelKey: 'attendance.holidayConfig.department.bus', value: 'bus' },
-  { labelKey: 'attendance.holidayConfig.department.doctor', value: 'doctor' }
+  { labelKey: 'attendance.holidayConfig.deptAll', value: 'all' },
+  { labelKey: 'attendance.holidayConfig.deptCourse', value: 'course' },
+  { labelKey: 'attendance.holidayConfig.deptDorm', value: 'dorm' },
+  { labelKey: 'attendance.holidayConfig.deptBus', value: 'bus' },
+  { labelKey: 'attendance.holidayConfig.deptDoctor', value: 'doctor' }
 ]
 
 /** 与旧 `config.vue` 年级下拉一致。 */
@@ -38,7 +38,7 @@ export const searchForm = (t: Translate, schoolOptions: UniOption[]): UniFormCon
       component: 'ElSelect',
       options: schoolOptions,
       componentProps: {
-        placeholder: t('attendance.holidayConfig.placeholders.school'),
+        placeholder: t('attendance.phSchool'),
         clearable: true,
         filterable: true
       },
@@ -51,14 +51,14 @@ export const searchForm = (t: Translate, schoolOptions: UniOption[]): UniFormCon
 export const tableCols = (t: Translate): UniTableColumn[] => [
   {
     prop: 'school',
-    label: t('attendance.holidayConfig.columns.school'),
+    label: t('attendance.holidayConfig.school'),
     type: 'text',
     minWidth: 140,
     showOverflowTooltip: true
   },
   {
     prop: 'grades',
-    label: t('attendance.holidayConfig.columns.grades'),
+    label: t('attendance.holidayConfig.grades'),
     type: 'text',
     minWidth: 200,
     formatter: (row) => {
@@ -68,7 +68,7 @@ export const tableCols = (t: Translate): UniTableColumn[] => [
   },
   {
     prop: 'department',
-    label: t('attendance.holidayConfig.columns.department'),
+    label: t('attendance.holidayConfig.department'),
     type: 'text',
     minWidth: 100,
     formatter: (row) => {
@@ -79,7 +79,7 @@ export const tableCols = (t: Translate): UniTableColumn[] => [
   },
   {
     prop: 'email',
-    label: t('attendance.holidayConfig.columns.email'),
+    label: t('attendance.holidayConfig.email'),
     type: 'text',
     minWidth: 180,
     showOverflowTooltip: true

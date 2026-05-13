@@ -1,497 +1,297 @@
+/** Attendance: shared copy flattened at module root; feature-specific strings live one level under their feature key. */
 export default {
+  export: 'Export',
+  exportStarted: 'Export started',
+  detail: 'View',
+  add: 'Create',
+  addConfig: 'Add configuration',
+  delete: 'Delete',
+  edit: 'Edit',
+  save: 'Save',
+  cancel: 'Cancel',
+  submit: 'OK',
+  yes: 'Yes',
+  no: 'No',
+  tipTitle: 'Notice',
+
+  id: 'ID',
+  campus: 'Campus',
+  school: 'School',
+  admissionNo: 'Admission No.',
+  grade: 'Grade',
+  className: 'Class',
+  studentName: 'Name',
+  staffName: 'Name',
+  status: 'Status',
+  boarding: 'Boarding',
+  schoolBus: 'School bus',
+  attendanceDate: 'Date',
+  entryTime: 'Entry',
+  leavingTime: 'Leaving',
+  updatedAt: 'Updated',
+  createdAt: 'Created',
+  createTime: 'Created',
+  updateTime: 'Updated',
+  dept: 'Department',
+  personCode: 'Staff ID',
+  cardNumber: 'Card No.',
+  channel: 'Channel',
+  remark: 'Remark',
+  comment: 'Remark',
+  dataFrom: 'Source',
+  enterSchool: 'Enter',
+  leaveSchool: 'Exit',
+  leaveAsk: 'Leave',
+  absent: 'Absent',
+
+  phSchool: 'Campus',
+  phAdmissionNo: 'Admission No.',
+  phGrade: 'Grade',
+  phBoarding: 'Boarding',
+  phSchoolBus: 'School bus',
+  phSchoolStatus: 'Status',
+  beginAttendance: 'Attendance start',
+  endAttendance: 'Attendance end',
+  phDept: 'Department',
+  phStaffName: 'Name',
+  phPersonCode: 'Staff ID',
+  phCardNumber: 'Card No.',
+  phChannel: 'Channel',
+  phEntryChannel: 'Entry channel',
+  phLeavingChannel: 'Exit channel',
+  beginDate: 'Start date',
+  endDate: 'End date',
+  phDataFrom: 'Source',
+  phStatus: 'Status',
+  phNickname: 'Name',
+  phOpenId: 'OpenID',
+  phSendStatus: 'Status',
+  beginTime: 'Start time',
+  endTime: 'End time',
+  phLeaveType: 'Leave type',
+  phScope: 'Scope',
+  phKeyword: 'Admission No. / name',
+  phSchoolOrg: 'School',
+  phBusStatus: 'School bus',
+  phDormitoryStatus: 'Boarding',
+
+  encryptedOpenId: 'OpenID',
+  notifyResult: 'Result',
+
   student: {
-    page: {
-      title: 'Student attendance',
-      description:
-        'Filter by campus, admission number, grade and date range; export aligns with legacy permission.'
-    },
-    actions: {
-      export: 'Export',
-      detail: 'View'
-    },
-    messages: {
-      exportSuccess: 'Export started'
-    },
-    placeholders: {
-      school: 'Campus',
-      admissionNo: 'Admission No.',
-      grade: 'Grade',
-      boarding: 'Boarding',
-      onBus: 'School bus',
-      schoolStatus: 'Status',
-      beginDate: 'Attendance start',
-      endDate: 'Attendance end'
-    },
-    columns: {
-      id: 'ID',
-      schoolName: 'Campus',
-      studentName: 'Name',
-      admissionNo: 'Admission No.',
-      grade: 'Grade',
-      form: 'Class',
-      boarding: 'Boarding',
-      schoolBus: 'School bus',
-      schoolStatus: 'Status',
-      attendanceDate: 'Date',
-      entryTime: 'Entry',
-      leavingTime: 'Leaving',
-      updatedAt: 'Updated',
-      createdAt: 'Created'
-    },
-    options: {
-      ynYes: 'Yes',
-      ynNo: 'No',
-      statusNoRecord: 'No record',
-      statusOnSite: 'On site',
-      statusOffSite: 'Off site',
-      statusLeave: 'Leave',
-      statusAbsent: 'Absent'
-    }
+    pageTitle: 'Student attendance',
+    pageDesc:
+      'Filter by campus, admission number, grade and date range; export aligns with legacy permission.',
+    statusNoRecord: 'No record',
+    statusOnSite: 'On site',
+    statusOffSite: 'Off site',
+    statusLeave: 'Leave',
+    statusAbsent: 'Absent'
   },
+
   daily: {
-    page: {
-      title: 'Daily student attendance',
-      description:
-        'Filter by campus, admission No., bus/boarding, date range, source and status; APIs match legacy `holiday.js` (export had no separate permission).'
-    },
-    actions: {
-      export: 'Export'
-    },
-    messages: {
-      exportSuccess: 'Export started'
-    },
-    placeholders: {
-      school: 'Campus',
-      admissionNo: 'Admission No.',
-      busStatus: 'School bus',
-      dormitoryStatus: 'Boarding',
-      beginTime: 'Start date',
-      endTime: 'End date',
-      dataFrom: 'Source',
-      status: 'Status'
-    },
-    columns: {
-      schoolName: 'Campus',
-      admissionNo: 'Admission No.',
-      studentName: 'Name',
-      grade: 'Grade',
-      form: 'Class',
-      busStatus: 'School bus',
-      dormitoryStatus: 'Boarding',
-      date: 'Date',
-      attendanceTime: 'Time',
-      status: 'Status',
-      dataFrom: 'Source',
-      comment: 'Remark',
-      createdAt: 'Created'
-    },
-    options: {
-      ynYes: 'Yes',
-      ynNo: 'No',
-      dataFromGate: 'Gate',
-      dataFromSchoolBus: 'School bus',
-      dataFromCommunity: 'Community',
-      dataFromMb: 'MB',
-      statusPresent: 'Present',
-      statusLate: 'Late',
-      statusLeave: 'Leave',
-      statusAbsent: 'Absent',
-      statusEnter: 'Enter',
-      statusExit: 'Exit'
-    },
-    mbLesson: 'Period {period}'
+    pageTitle: 'Daily student attendance',
+    pageDesc:
+      'Filter by campus, admission No., bus/boarding, date range, source and status; APIs match legacy `holiday.js` (export had no separate permission).',
+    date: 'Date',
+    attendanceTime: 'Time',
+    mbLesson: 'Period {period}',
+    dataFromGate: 'Gate',
+    dataFromSchoolBus: 'School bus',
+    dataFromCommunity: 'Community',
+    dataFromMb: 'MB',
+    statusPresent: 'Present',
+    statusLate: 'Late',
+    statusLeave: 'Leave',
+    statusAbsent: 'Absent',
+    statusEnter: 'Enter',
+    statusExit: 'Exit'
   },
-  school: {
-    page: {
-      title: 'Campus attendance',
-      description:
-        'Filter staff attendance by campus, department, person and channels; export matches legacy permission.'
-    },
-    actions: {
-      export: 'Export',
-      detail: 'View'
-    },
-    messages: {
-      exportSuccess: 'Export started'
-    },
-    placeholders: {
-      school: 'Campus',
-      dept: 'Department',
-      personName: 'Name',
-      personCode: 'Staff ID',
-      schoolStatus: 'Status',
-      cardNumber: 'Card No.',
-      entryChannel: 'Entry channel',
-      leavingChannel: 'Exit channel',
-      beginDate: 'Attendance start',
-      endDate: 'Attendance end'
-    },
-    columns: {
-      id: 'ID',
-      schoolName: 'Campus',
-      personCode: 'Staff ID',
-      personName: 'Name',
-      deptName: 'Department',
-      cardNumber: 'Card No.',
-      schoolStatus: 'Status',
-      entryOpenType: 'Entry type',
-      entryTime: 'Entry time',
-      entryChannel: 'Entry channel',
-      leavingOpenType: 'Exit type',
-      leavingTime: 'Exit time',
-      leavingChannel: 'Exit channel',
-      attendanceDate: 'Date',
-      createdAt: 'Created'
-    },
-    options: {
-      openCard: 'Card open',
-      openIllegalCard: 'Illegal card open',
-      openFace: 'Face open',
-      openIllegalFace: 'Illegal face open'
-    }
+
+  schoolAtt: {
+    pageTitle: 'Campus attendance',
+    pageDesc:
+      'Filter staff attendance by campus, department, person and channels; export matches legacy permission.',
+    entryOpenType: 'Entry type',
+    leavingOpenType: 'Exit type',
+    entryChannel: 'Entry channel',
+    leavingChannel: 'Exit channel',
+    openCard: 'Card open',
+    openIllegalCard: 'Illegal card open',
+    openFace: 'Face open',
+    openIllegalFace: 'Illegal face open'
   },
+
   access: {
-    page: {
-      title: 'Access records',
-      description:
-        'Filter door access by campus, department, person and channel; legacy UI had export commented out — same here.'
-    },
-    actions: {
-      detail: 'View'
-    },
-    placeholders: {
-      school: 'Campus',
-      dept: 'Department',
-      personName: 'Name',
-      personCode: 'Staff ID',
-      cardNumber: 'Card No.',
-      channel: 'Channel',
-      beginDate: 'Start date',
-      endDate: 'End date'
-    },
-    columns: {
-      id: 'ID',
-      schoolName: 'Campus',
-      deptName: 'Department',
-      personCode: 'Staff ID',
-      personName: 'Name',
-      acsChannelName: 'Channel',
-      attendanceDate: 'Date',
-      enterOrExit: 'Direction',
-      openType: 'Open type',
-      openResult: 'Result',
-      cardNumber: 'Card No.',
-      deviceName: 'Device',
-      swingTime: 'Swipe time',
-      createTime: 'Created'
-    },
-    options: {
-      enter: 'Enter',
-      exit: 'Exit',
-      leave: 'Leave',
-      absent: 'Absent',
-      resultSuccess: 'Success',
-      resultFail: 'Fail'
-    }
+    pageTitle: 'Access records',
+    pageDesc:
+      'Filter door access by campus, department, person and channel; legacy UI had export commented out — same here.',
+    enterOrExit: 'Direction',
+    openType: 'Open type',
+    openResult: 'Result',
+    deviceName: 'Device',
+    swingTime: 'Swipe time',
+    resultSuccess: 'Success',
+    resultFail: 'Fail'
   },
+
   wechatOpenid: {
-    page: {
-      title: 'WeChat OpenID',
-      description:
-        'Campus member binding state for WeChat OpenID; batch archive/activate matches legacy (export was disabled in legacy UI).'
-    },
-    actions: {
-      detail: 'View',
-      archive: 'Archive',
-      activate: 'Activate'
-    },
-    messages: {
-      needSelection: 'Select at least one row',
-      batchSuccess: 'Done'
-    },
-    placeholders: {
-      school: 'Campus',
-      admissionNo: 'Admission No.',
-      nickname: 'Name',
-      openId: 'OpenID',
-      status: 'Status',
-      beginDate: 'Start date',
-      endDate: 'End date'
-    },
-    columns: {
-      id: 'ID',
-      schoolName: 'Campus',
-      admissionNo: 'Admission No.',
-      nickname: 'Name',
-      status: 'Status',
-      encryptedOpenId: 'OpenID',
-      updateTime: 'Updated',
-      createTime: 'Created'
-    },
-    options: {
-      active: 'Active',
-      archived: 'Archived'
-    }
+    pageTitle: 'WeChat OpenID',
+    pageDesc:
+      'Campus member binding state for WeChat OpenID; batch archive/activate matches legacy (export was disabled in legacy UI).',
+    archive: 'Archive',
+    activate: 'Activate',
+    activeOption: 'Active',
+    archivedOption: 'Archived',
+    needSelection: 'Select at least one row',
+    batchSuccess: 'Done'
   },
+
   wechatNotice: {
-    page: {
-      title: 'WeChat notifications',
-      description:
-        'Notification delivery log; send status filter matches legacy (success=0, fail=1); export disabled like legacy UI.'
-    },
-    actions: {
-      detail: 'View'
-    },
-    placeholders: {
-      school: 'Campus',
-      admissionNo: 'Admission No.',
-      personName: 'Name',
-      openId: 'OpenID',
-      sendStatus: 'Status',
-      beginDate: 'Start date',
-      endDate: 'End date'
-    },
-    columns: {
-      id: 'ID',
-      schoolName: 'Campus',
-      admissionNo: 'Admission No.',
-      personName: 'Name',
-      sendStatus: 'Status',
-      sendOpenId: 'OpenID',
-      result: 'Result',
-      updateTime: 'Updated',
-      createTime: 'Created'
-    },
-    options: {
-      sendOk: 'Success',
-      sendFail: 'Fail'
-    }
+    pageTitle: 'WeChat notifications',
+    pageDesc:
+      'Notification delivery log; send status filter matches legacy (success=0, fail=1); export disabled like legacy UI.',
+    sendOk: 'Success',
+    sendFail: 'Fail',
+    personName: 'Name'
   },
+
   holiday: {
-    page: {
-      title: 'Leave requests',
-      description:
-        'Two tabs — leave list (`GET /attendance/holiday/page`) and return/cancel list (`GET /attendance/holiday-return/return-page`, legacy `listHolidayEnd`). Layout follows the school-bus route planning tab page.'
-    },
-    tabs: {
-      leave: 'Leave',
-      return: 'Return'
-    },
-    actions: {
-      add: 'Create',
-      withdraw: 'Revoke',
-      detail: 'View',
-      delete: 'Delete'
-    },
-    messages: {
-      withdrawPrompt: 'Notice',
-      withdrawConfirm: 'Revoke this leave workflow? (procId={procId}, id={id})',
-      withdrawSuccess: 'Revoked',
-      withdrawMissingId: 'Cannot revoke: leave id is missing.',
-      withdrawFail: 'Revoke failed. Retry later or inspect the network response.',
-      deletePrompt: 'Notice',
-      deleteConfirm: 'Delete this leave record? (id={id})',
-      deleteSuccess: 'Deleted'
-    },
-    form: {
-      title: 'Leave request',
-      pickStudent: 'Student',
-      pickStudentPh: 'Search by admission No. or name',
-      selectType: 'Select leave type',
-      reasonPh: 'Describe the reason',
-      attachments: 'Attachments',
-      needPass: 'Release pass required',
-      parentAck: 'Parents are responsible for student safety during leave',
-      submit: 'Submit',
-      timeStart: 'Start time',
-      timeEnd: 'End time',
-      ruleStudent: 'Select a student',
-      ruleType: 'Select leave type',
-      ruleScope: 'Select scope',
-      ruleReason: 'Enter reason',
-      ruleDate: 'Select dates',
-      ruleSlot: 'Select time slot',
-      ruleWeek: 'Select weekday(s)',
-      ruleSickAttach: 'Sick leave requires an attachment',
-      ruleParent: 'Confirm parent safety acknowledgement',
-      fileTooLarge: 'File must be under 20MB',
-      uploadFail: 'Upload failed',
-      saveOk: 'Submitted',
-      saveFail: 'Submit failed',
-      weekMon: 'Mon',
-      weekTue: 'Tue',
-      weekWed: 'Wed',
-      weekThu: 'Thu',
-      weekFri: 'Fri'
-    },
-    placeholders: {
-      leaveType: 'Leave type',
-      school: 'Campus',
-      scope: 'Scope',
-      beginTime: 'Start date',
-      endTime: 'End date',
-      keyword: 'Admission No. / name'
-    },
-    columns: {
-      id: 'ID',
-      admissionNo: 'Admission No.',
-      studentName: 'Name',
-      school: 'Campus',
-      grade: 'Grade',
-      className: 'Class',
-      leaveType: 'Leave type',
-      scope: 'Scope',
-      reason: 'Reason',
-      dateRange: 'Leave window',
-      timeSlot: 'Time slot',
-      infectious: 'Infectious disease',
-      fixed: 'Fixed pattern',
-      weekDays: 'Weekdays',
-      status: 'Status',
-      createdAt: 'Created at'
-    },
-    return: {
-      columns: {
-        returnSchoolTime: 'Return to school time'
-      }
-    },
-    detail: {
-      beginTime: 'Starts',
-      endTime: 'Ends',
-      procId: 'Process id',
-      parentResponsible: 'Parent acknowledgement'
-    },
-    options: {
-      leavePersonal: 'Personal leave',
-      leaveSick: 'Sick leave',
-      scopeCourse: 'Classes',
-      scopeDorm: 'Boarding',
-      scopeBus: 'School bus',
-      yes: 'Yes',
-      no: 'No',
-      statusPending: 'Pending approval',
-      statusRejected: 'Rejected',
-      statusWithdrawn: 'Withdrawn',
-      statusOnLeave: 'On leave',
-      statusFinished: 'Finished',
-      statusLeaveSoon: 'Awaiting leave'
-    }
+    pageTitle: 'Leave requests',
+    pageDesc:
+      'Two tabs — leave list (`GET /attendance/holiday/page`) and return/cancel list (`GET /attendance/holiday-return/return-page`, legacy `listHolidayEnd`). Layout follows the school-bus route planning tab page.',
+    tabLeave: 'Leave',
+    tabReturn: 'Return',
+    withdraw: 'Revoke',
+    withdrawConfirm: 'Revoke this leave workflow? (procId={procId}, id={id})',
+    withdrawSuccess: 'Revoked',
+    withdrawMissingId: 'Cannot revoke: leave id is missing.',
+    withdrawFail: 'Revoke failed. Retry later or inspect the network response.',
+    deleteConfirm: 'Delete this leave record? (id={id})',
+    deleteSuccess: 'Deleted',
+
+    leaveType: 'Leave type',
+    scope: 'Scope',
+    reason: 'Reason',
+    dateRange: 'Leave window',
+    timeSlot: 'Time slot',
+    infectious: 'Infectious disease',
+    fixed: 'Fixed pattern',
+    weekDays: 'Weekdays',
+
+    returnSchoolTime: 'Return to school time',
+
+    detailBeginTime: 'Starts',
+    detailEndTime: 'Ends',
+    procId: 'Process id',
+    parentResponsible: 'Parent acknowledgement',
+
+    leavePersonal: 'Personal leave',
+    leaveSick: 'Sick leave',
+    scopeCourse: 'Classes',
+    scopeDorm: 'Boarding',
+    scopeBus: 'School bus',
+    statusPending: 'Pending approval',
+    statusRejected: 'Rejected',
+    statusWithdrawn: 'Withdrawn',
+    statusOnLeave: 'On leave',
+    statusFinished: 'Finished',
+    statusLeaveSoon: 'Awaiting leave',
+
+    formTitle: 'Leave request',
+    pickStudent: 'Student',
+    pickStudentPh: 'Search by admission No. or name',
+    selectType: 'Select leave type',
+    reasonPh: 'Describe the reason',
+    attachments: 'Attachments',
+    needPass: 'Release pass required',
+    parentAck: 'Parents are responsible for student safety during leave',
+    submitApply: 'Submit',
+    timeStart: 'Start time',
+    timeEnd: 'End time',
+    ruleStudent: 'Select a student',
+    ruleType: 'Select leave type',
+    ruleScope: 'Select scope',
+    ruleReason: 'Enter reason',
+    ruleDate: 'Select dates',
+    ruleSlot: 'Select time slot',
+    ruleWeek: 'Select weekday(s)',
+    ruleSickAttach: 'Sick leave requires an attachment',
+    ruleParent: 'Confirm parent safety acknowledgement',
+    fileTooLarge: 'File must be under 20MB',
+    uploadFail: 'Upload failed',
+    saveOk: 'Submitted',
+    saveFail: 'Submit failed',
+    weekMon: 'Mon',
+    weekTue: 'Tue',
+    weekWed: 'Wed',
+    weekThu: 'Thu',
+    weekFri: 'Fri'
   },
+
   holidayConfig: {
-    page: {
-      title: 'Leave module config',
-      description: 'School, department, grades and notification emails; `GET/POST /attendance/sys/config/*` (legacy `config.vue`).'
-    },
-    placeholders: {
-      school: 'Campus'
-    },
-    columns: {
-      school: 'School',
-      grades: 'Grades',
-      department: 'Department',
-      email: 'Email'
-    },
-    form: {
-      school: 'School',
-      department: 'Department',
-      grades: 'Grades',
-      email: 'Email',
-      emailInvalid: 'Invalid email'
-    },
-    department: {
-      all: 'All',
-      course: 'Academic',
-      dorm: 'Boarding',
-      bus: 'Bus',
-      doctor: 'Clinic'
-    },
-    rules: {
-      school: 'Select a school',
-      department: 'Select a department',
-      email: 'Enter an email'
-    },
-    actions: {
-      add: 'Add',
-      edit: 'Edit',
-      delete: 'Delete'
-    },
-    messages: {
-      deleteConfirm: 'Delete this config?',
-      deleteTitle: 'Notice',
-      addOk: 'Created',
-      saveOk: 'Saved'
-    }
+    pageTitle: 'Leave module config',
+    pageDesc:
+      'School, department, grades and notification emails; `GET/POST /attendance/sys/config/*` (legacy `config.vue`).',
+    school: 'School',
+    grades: 'Grades',
+    department: 'Department',
+    email: 'Email',
+    emailInvalid: 'Invalid email',
+    deptAll: 'All',
+    deptCourse: 'Academic',
+    deptDorm: 'Boarding',
+    deptBus: 'Bus',
+    deptDoctor: 'Clinic',
+    ruleSchool: 'Select a school',
+    ruleDepartment: 'Select a department',
+    ruleEmail: 'Enter an email',
+    deleteConfirm: 'Delete this config?',
+    addOk: 'Created',
+    saveOk: 'Saved'
   },
+
   holidayPass: {
-    page: {
-      title: 'Gate pass',
-      description: 'Legacy `pass.vue`; `GET /attendance/leave/pass/page`; permissions `pass-add`, etc.'
-    },
-    placeholders: {
-      school: 'Campus',
-      dorm: 'Boarding',
-      keyword: 'Admission No. / name'
-    },
-    columns: {
-      studentNo: 'Admission No.',
-      studentName: 'Name',
-      school: 'Campus',
-      grade: 'Grade',
-      className: 'Class',
-      dorm: 'Boarding',
-      releasedBy: 'Released by',
-      way: 'Mode',
-      leaveRange: 'Leave window',
-      passTime: 'Pass date',
-      isLeave: 'Leave campus',
-      slot: 'Time slot'
-    },
-    options: {
-      wayParents: 'Parent pickup',
-      waySelf: 'Leave alone'
-    },
-    status: {
-      active: 'Active',
-      voided: 'Voided',
-      pendingGenerate: 'Pending generate',
-      expired: 'Expired'
-    },
-    actions: {
-      add: 'Add',
-      batchGenerate: 'Batch generate',
-      void: 'Void',
-      generate: 'Generate'
-    },
-    form: {
-      way: 'Release mode'
-    },
-    rules: {
-      way: 'Select mode',
-      passTime: 'Select date',
-      slot: 'Select time slot'
-    },
-    dialog: {
-      addTitle: 'Gate pass',
-      editTitle: 'Gate pass',
-      batchTitle: 'Batch gate pass'
-    },
-    messages: {
-      needSelection: 'Select rows first',
-      batchOnlyPending: 'Only “pending generate” rows',
-      cannotDeleteActive: 'Active rows cannot be deleted',
-      batchDeleteConfirm: 'Delete selected rows?',
-      actionConfirm: 'Confirm this action?'
-    }
+    title: 'Gate pass',
+    pageDesc:
+      'Legacy `pass.vue`; `GET /attendance/leave/pass/page`; permissions `pass-add`, etc.',
+    phDorm: 'Boarding',
+    colStudentNo: 'Admission No.',
+    releasedBy: 'Released by',
+    way: 'Mode',
+    leaveRange: 'Leave window',
+    passTime: 'Pass date',
+    isLeave: 'Leave campus',
+    slot: 'Time slot',
+    wayParents: 'Parent pickup',
+    waySelf: 'Leave alone',
+    stActive: 'Active',
+    stVoided: 'Voided',
+    stPendingGenerate: 'Pending generate',
+    stExpired: 'Expired',
+    batchGenerate: 'Batch generate',
+    void: 'Void',
+    generate: 'Generate',
+    ruleWay: 'Select mode',
+    rulePassTime: 'Select date',
+    ruleSlot: 'Select time slot',
+    dlgAddTitle: 'Gate pass',
+    dlgEditTitle: 'Gate pass',
+    dlgBatchTitle: 'Batch gate pass',
+    needSelection: 'Select rows first',
+    batchOnlyPending: 'Only “pending generate” rows',
+    cannotDeleteActive: 'Active rows cannot be deleted',
+    batchDeleteConfirm: 'Delete selected rows?',
+    actionConfirm: 'Confirm this action?'
   },
+
   holidayFlow: {
-    page: {
-      title: 'Workflow',
-      description: 'Definitions and deployments; legacy `flow.vue` / `flowdef.vue` / `procdef.vue`.'
-    },
-    tabs: {
-      model: 'Definitions',
-      deployed: 'Deployments'
-    },
+    pageTitle: 'Workflow',
+    pageDesc: 'Definitions and deployments; legacy `flow.vue` / `flowdef.vue` / `procdef.vue`.',
+
+    tabModel: 'Definitions',
+    tabDeployed: 'Deployments',
+
     flowDef: {
       add: 'New',
       searchKey: 'Keyword',
@@ -507,6 +307,7 @@ export default {
       deployOk: 'Deployed',
       deleteConfirm: 'Delete definition id={id}?'
     },
+
     procDef: {
       colDefId: 'Definition id',
       colType: 'Type',
@@ -519,12 +320,14 @@ export default {
       deleteConfirm: 'Delete this deployment?',
       assignOk: 'Saved'
     },
+
     design: {
       tabForm: 'Metadata',
       tabBpmn: 'Designer',
       pageTitleCreate: 'New definition',
       pageTitleEdit: 'Edit definition (ID: {id})',
-      pageDescription: 'Configure process metadata and the BPMN diagram; saving returns you to Flow design.',
+      pageDescription:
+        'Configure process metadata and the BPMN diagram; saving returns you to Flow design.',
       flowType: 'Type',
       typeLeave: 'Leave',
       typeReturn: 'Return',
@@ -544,16 +347,15 @@ export default {
       ruleScope: 'Select scope'
     }
   },
+
   holidayTask: {
-    page: {
-      title: 'Tasks',
-      description: 'Todo / done / started; legacy `task.vue` and `flow/instance/*`.'
-    },
-    tabs: {
-      todo: 'My todo',
-      done: 'My done',
-      instance: 'My instances'
-    },
+    pageTitle: 'Tasks',
+    pageDesc: 'Todo / done / started; legacy `task.vue` and `flow/instance/*`.',
+
+    tabTodo: 'My todo',
+    tabDone: 'My done',
+    tabInstance: 'My instances',
+
     colTaskId: 'Task id',
     colTaskName: 'Task',
     colProcName: 'Process',

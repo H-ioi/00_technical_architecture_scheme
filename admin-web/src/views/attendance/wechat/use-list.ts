@@ -104,7 +104,7 @@ export const useList = () => {
 
   const actions = computed<UniTableAction[]>(() => [
     {
-      label: t('attendance.wechatOpenid.actions.detail'),
+      label: t('attendance.detail'),
       onClick: (row) => showDetail(row as AttendanceWechatOpenidRecord)
     }
   ])

@@ -136,7 +136,7 @@ export const useList = () => {
 
   const actions = computed<UniTableAction[]>(() => [
     {
-      label: t('attendance.access.actions.detail'),
+      label: t('attendance.detail'),
       onClick: (row) => showDetail(row as AttendanceAccessRecord)
     }
   ])

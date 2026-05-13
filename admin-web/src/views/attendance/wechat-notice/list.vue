@@ -2,8 +2,8 @@
   <section class="uni-list-page">
     <div class="uni-list-page__header">
       <div>
-        <h1>{{ $t('attendance.wechatNotice.page.title') }}</h1>
-        <p>{{ $t('attendance.wechatNotice.page.description') }}</p>
+        <h1>{{ $t('attendance.wechatNotice.pageTitle') }}</h1>
+        <p>{{ $t('attendance.wechatNotice.pageDesc') }}</p>
       </div>
     </div>
 

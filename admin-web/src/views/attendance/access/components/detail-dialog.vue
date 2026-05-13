@@ -1,7 +1,7 @@
 <template>
   <el-dialog
     v-model="visible"
-    :title="$t('attendance.access.actions.detail')"
+    :title="$t('attendance.detail')"
     width="880px"
     destroy-on-close>
     <UniForm v-if="source" v-model="viewFormModel" :config="config" mode="view" />

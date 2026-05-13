@@ -9,26 +9,26 @@
     <!-- 对齐旧版 passModel.vue：批量时展示选中行列表，放行方式 / 日期 / 时段 / 备注 与单行生成共用表单 -->
     <div v-if="isBatch" class="holiday-pass-dialog__batch">
       <el-table :data="batchRows" size="small" max-height="220">
-        <el-table-column prop="studentNo" :label="$t('attendance.holidayPass.columns.studentNo')" width="120" />
-        <el-table-column prop="studentName" :label="$t('attendance.holidayPass.columns.studentName')" width="100" />
-        <el-table-column prop="studentSchool" :label="$t('attendance.holidayPass.columns.school')" min-width="120" />
-        <el-table-column prop="studentGrade" :label="$t('attendance.holidayPass.columns.grade')" width="88" />
-        <el-table-column prop="studentClass" :label="$t('attendance.holidayPass.columns.className')" width="88" />
-        <el-table-column :label="$t('attendance.holidayPass.columns.dorm')" width="88">
+        <el-table-column prop="studentNo" :label="$t('attendance.holidayPass.colStudentNo')" width="120" />
+        <el-table-column prop="studentName" :label="$t('attendance.studentName')" width="100" />
+        <el-table-column prop="studentSchool" :label="$t('attendance.school')" min-width="120" />
+        <el-table-column prop="studentGrade" :label="$t('attendance.grade')" width="88" />
+        <el-table-column prop="studentClass" :label="$t('attendance.className')" width="88" />
+        <el-table-column :label="$t('attendance.boarding')" width="88">
           <template #default="{ row }">{{
-            row.studentDormitoryStatus === 1 ? $t('attendance.holiday.options.yes') : $t('attendance.holiday.options.no')
+            row.studentDormitoryStatus === 1 ? $t('attendance.yes') : $t('attendance.no')
           }}</template>
         </el-table-column>
       </el-table>
     </div>
 
     <el-form ref="formRef" :model="form" :rules="rules" label-width="140px" :disabled="viewOnly">
-      <el-form-item v-if="!isBatch" :label="$t('attendance.holiday.form.pickStudent')" prop="studentNo">
+      <el-form-item v-if="!isBatch" :label="$t('attendance.holiday.pickStudent')" prop="studentNo">
         <el-autocomplete
           v-model="displayStudent"
           style="width: 100%"
           :fetch-suggestions="queryStudents"
-          :placeholder="$t('attendance.holiday.form.pickStudentPh')"
+          :placeholder="$t('attendance.holiday.pickStudentPh')"
           :trigger-on-focus="false"
           clearable
           :disabled="viewOnly || !!form.id"
@@ -37,23 +37,23 @@
         <div v-if="studentLine" class="holiday-pass-dialog__hint">{{ studentLine }}</div>
       </el-form-item>
 
-      <el-form-item :label="$t('attendance.holidayPass.form.way')" prop="way">
-        <el-select v-model="form.way" style="width: 100%" :placeholder="$t('attendance.holidayPass.form.way')">
-          <el-option :label="$t('attendance.holidayPass.options.wayParents')" value="parents" />
-          <el-option :label="$t('attendance.holidayPass.options.waySelf')" value="self" />
+      <el-form-item :label="$t('attendance.holidayPass.way')" prop="way">
+        <el-select v-model="form.way" style="width: 100%" :placeholder="$t('attendance.holidayPass.way')">
+          <el-option :label="$t('attendance.holidayPass.wayParents')" value="parents" />
+          <el-option :label="$t('attendance.holidayPass.waySelf')" value="self" />
         </el-select>
       </el-form-item>
 
-      <el-form-item :label="$t('attendance.holidayPass.columns.passTime')" prop="passTime">
+      <el-form-item :label="$t('attendance.holidayPass.passTime')" prop="passTime">
         <el-date-picker
           v-model="form.passTime"
           type="date"
           value-format="YYYY-MM-DD"
           style="width: 100%"
-          :placeholder="$t('attendance.holidayPass.columns.passTime')" />
+          :placeholder="$t('attendance.holidayPass.passTime')" />
       </el-form-item>
 
-      <el-form-item :label="$t('attendance.holidayPass.columns.slot')" prop="dateLimit">
+      <el-form-item :label="$t('attendance.holidayPass.slot')" prop="dateLimit">
         <el-time-picker
           v-model="timeRangeModel"
           is-range
@@ -61,11 +61,11 @@
           value-format="HH:mm"
           format="HH:mm"
           style="width: 100%"
-          :start-placeholder="$t('attendance.holiday.form.timeStart')"
-          :end-placeholder="$t('attendance.holiday.form.timeEnd')" />
+          :start-placeholder="$t('attendance.holiday.timeStart')"
+          :end-placeholder="$t('attendance.holiday.timeEnd')" />
       </el-form-item>
 
-      <el-form-item :label="$t('attendance.holiday.form.reasonPh')">
+      <el-form-item :label="$t('attendance.holiday.reasonPh')">
         <el-input v-model="form.memo" type="textarea" :rows="3" resize="none" />
       </el-form-item>
     </el-form>
@@ -114,12 +114,12 @@ const isBatch = computed(() => (props.batchRows?.length ?? 0) > 0)
 
 const dialogTitle = computed(() =>
   isBatch.value
-    ? t('attendance.holidayPass.dialog.batchTitle')
+    ? t('attendance.holidayPass.dlgBatchTitle')
     : props.viewOnly
-      ? t('attendance.holiday.actions.detail')
+      ? t('attendance.detail')
       : form.id
-        ? t('attendance.holidayPass.dialog.editTitle')
-        : t('attendance.holidayPass.dialog.addTitle')
+        ? t('attendance.holidayPass.dlgEditTitle')
+        : t('attendance.holidayPass.dlgAddTitle')
 )
 
 const viewOnly = computed(() => props.viewOnly)
@@ -153,7 +153,7 @@ const studentLine = computed(() => {
   if (!name) {
     return ''
   }
-  return `${t('attendance.holiday.columns.studentName')}：${name} · ${s.schoolName ?? s.enName ?? ''}`
+  return `${t('attendance.studentName')}：${name} · ${s.schoolName ?? s.enName ?? ''}`
 })
 
 const rules = computed<FormRules>(() => ({
@@ -165,7 +165,7 @@ const rules = computed<FormRules>(() => ({
           return
         }
         if (!value) {
-          cb(new Error(t('attendance.holiday.form.ruleStudent')))
+          cb(new Error(t('attendance.holiday.ruleStudent')))
           return
         }
         cb()
@@ -173,13 +173,13 @@ const rules = computed<FormRules>(() => ({
       trigger: 'change'
     }
   ],
-  way: [{ required: true, message: t('attendance.holidayPass.rules.way'), trigger: 'change' }],
-  passTime: [{ required: true, message: t('attendance.holidayPass.rules.passTime'), trigger: 'change' }],
+  way: [{ required: true, message: t('attendance.holidayPass.ruleWay'), trigger: 'change' }],
+  passTime: [{ required: true, message: t('attendance.holidayPass.rulePassTime'), trigger: 'change' }],
   dateLimit: [
     {
       validator: (_rule, _value, cb) => {
         if (!Array.isArray(timeRangeModel.value) || timeRangeModel.value.length !== 2) {
-          cb(new Error(t('attendance.holidayPass.rules.slot')))
+          cb(new Error(t('attendance.holidayPass.ruleSlot')))
           return
         }
         cb()
@@ -321,7 +321,7 @@ const submit = async () => {
     return
   }
   if (!Array.isArray(timeRangeModel.value) || timeRangeModel.value.length !== 2) {
-    ElMessage.error(t('attendance.holidayPass.rules.slot'))
+    ElMessage.error(t('attendance.holidayPass.ruleSlot'))
     return
   }
 
@@ -347,7 +347,7 @@ const submit = async () => {
           )
         })
       )
-      ElMessage.success(t('attendance.holiday.messages.withdrawSuccess'))
+      ElMessage.success(t('attendance.holiday.withdrawSuccess'))
       emit('success')
       open.value = false
     } finally {
@@ -360,7 +360,7 @@ const submit = async () => {
     const body = buildPayload({})
     const api = form.id ? attendanceHolidayApi.leavePassUpdate : attendanceHolidayApi.leavePassSave
     await api.post(body as unknown as Record<string, unknown>)
-    ElMessage.success(t('attendance.holiday.messages.withdrawSuccess'))
+    ElMessage.success(t('attendance.holiday.withdrawSuccess'))
     emit('success')
     open.value = false
   } finally {

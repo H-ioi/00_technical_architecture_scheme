@@ -2,11 +2,11 @@
   <section class="uni-list-page">
     <div class="uni-list-page__header">
       <div>
-        <h1>{{ $t('attendance.holidayFlow.page.title') }}</h1>
+        <h1>{{ $t('attendance.holidayFlow.pageTitle') }}</h1>
         <p class="attendance-flow-list__desc">{{
           active === 'def'
             ? $t('attendance.holidayFlow.flowDef.deployHint')
-            : $t('attendance.holidayFlow.page.description')
+            : $t('attendance.holidayFlow.pageDesc')
         }}</p>
       </div>
       <div v-if="active === 'def'" class="uni-list-page__header-actions">
@@ -14,10 +14,10 @@
       </div>
     </div>
     <el-tabs v-model="active" class="attendance-flow-list__tabs">
-      <el-tab-pane :label="$t('attendance.holidayFlow.tabs.model')" name="def">
+      <el-tab-pane :label="$t('attendance.holidayFlow.tabModel')" name="def">
         <FlowDefPanel />
       </el-tab-pane>
-      <el-tab-pane :label="$t('attendance.holidayFlow.tabs.deployed')" name="proc">
+      <el-tab-pane :label="$t('attendance.holidayFlow.tabDeployed')" name="proc">
         <ProcDefPanel />
       </el-tab-pane>
     </el-tabs>

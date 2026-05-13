@@ -93,10 +93,10 @@ export const useList = () => {
   const ynLabel = (raw: unknown) => {
     const s = String(raw ?? '')
     if (s === '1') {
-      return t('attendance.student.options.ynYes')
+      return t('attendance.yes')
     }
     if (s === '0') {
-      return t('attendance.student.options.ynNo')
+      return t('attendance.no')
     }
     return '--'
   }
@@ -143,7 +143,7 @@ export const useList = () => {
   /** 旧页「查看」未绑定权限码，全员可见。 */
   const actions = computed<UniTableAction[]>(() => [
     {
-      label: t('attendance.student.actions.detail'),
+      label: t('attendance.detail'),
       onClick: (row) => showDetail(row as AttendanceStudentRecord)
     }
   ])

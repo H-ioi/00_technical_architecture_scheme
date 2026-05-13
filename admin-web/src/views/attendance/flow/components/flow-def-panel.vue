@@ -87,23 +87,23 @@ const columns = computed<UniTableColumn[]>(() => [
     formatter: (row) => {
       const v = String((row as Loose).leaveType ?? '')
       if (v === '101') {
-        return t('attendance.holiday.options.leavePersonal')
+        return t('attendance.holiday.leavePersonal')
       }
       if (v === '102') {
-        return t('attendance.holiday.options.leaveSick')
+        return t('attendance.holiday.leaveSick')
       }
       return v || '—'
     }
   },
-  { prop: 'school', label: t('attendance.holiday.columns.school'), type: 'text', minWidth: 220 },
+  { prop: 'school', label: t('attendance.school'), type: 'text', minWidth: 220 },
   {
     prop: 'needApproval',
     label: t('attendance.holidayFlow.flowDef.needApproval'),
     type: 'text',
     minWidth: 100,
     options: [
-      { label: t('attendance.holiday.options.yes'), value: '101' },
-      { label: t('attendance.holiday.options.no'), value: '102' }
+      { label: t('attendance.yes'), value: '101' },
+      { label: t('attendance.no'), value: '102' }
     ]
   },
   {
@@ -114,7 +114,7 @@ const columns = computed<UniTableColumn[]>(() => [
   },
   {
     prop: 'created',
-    label: t('attendance.holiday.columns.createdAt'),
+    label: t('attendance.createdAt'),
     type: 'datetime',
     minWidth: 160
   }
@@ -145,7 +145,7 @@ const deploy = (row: Loose) => {
   }
   ElMessageBox.confirm(
     t('attendance.holidayFlow.flowDef.deployConfirm', { id: String(id) }),
-    t('attendance.holiday.messages.withdrawPrompt'),
+    t('attendance.tipTitle'),
     {
       type: 'warning',
       confirmButtonText: t('common.submit'),
@@ -167,7 +167,7 @@ const removeRow = (row: Loose) => {
   }
   ElMessageBox.confirm(
     t('attendance.holidayFlow.flowDef.deleteConfirm', { id: String(id) }),
-    t('attendance.holiday.messages.withdrawPrompt'),
+    t('attendance.tipTitle'),
     {
       type: 'warning',
       confirmButtonText: t('common.submit'),
@@ -176,7 +176,7 @@ const removeRow = (row: Loose) => {
   )
     .then(async () => {
       await attendanceHolidayApi.flowDefDelete.remove(id)
-      ElMessage.success(t('attendance.holiday.messages.deleteSuccess'))
+      ElMessage.success(t('attendance.holiday.deleteSuccess'))
       tableRef.value?.refresh()
     })
     .catch(() => {})
@@ -184,10 +184,10 @@ const removeRow = (row: Loose) => {
 
 const actions = computed<UniTableAction[]>(() => [
   {
-    label: t('attendance.holidayConfig.actions.edit'),
+    label: t('attendance.edit'),
     onClick: (row) => goDesign((row as Loose).id)
   },
-  { label: t('attendance.holiday.actions.delete'), onClick: (row) => removeRow(row as Loose) },
+  { label: t('attendance.delete'), onClick: (row) => removeRow(row as Loose) },
   { label: t('attendance.holidayFlow.flowDef.deploy'), onClick: (row) => deploy(row as Loose) }
 ])
 </script>

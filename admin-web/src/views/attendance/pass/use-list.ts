@@ -50,7 +50,7 @@ export const useList = () => {
   const refresh = () => tableRef.value?.refresh()
 
   const updateRowStatus = (row: AttendanceLeavePassRecord, status: number) => {
-    ElMessageBox.confirm(t('attendance.holidayPass.messages.actionConfirm'), t('attendance.holiday.messages.withdrawPrompt'), {
+    ElMessageBox.confirm(t('attendance.holidayPass.actionConfirm'), t('attendance.tipTitle'), {
       type: 'warning',
       confirmButtonText: t('common.submit'),
       cancelButtonText: t('common.cancel')
@@ -62,7 +62,7 @@ export const useList = () => {
           status,
           dataFrom: 'admin'
         })
-        ElMessage.success(t('attendance.holiday.messages.withdrawSuccess'))
+        ElMessage.success(t('attendance.holiday.withdrawSuccess'))
         refresh()
       })
       .catch(() => {})
@@ -84,12 +84,12 @@ export const useList = () => {
 
   const openBatch = () => {
     if (selection.value.length === 0) {
-      ElMessage.warning(t('attendance.holidayPass.messages.needSelection'))
+      ElMessage.warning(t('attendance.holidayPass.needSelection'))
       return
     }
     const bad = selection.value.some((item) => String(item.status) !== '2')
     if (bad) {
-      ElMessage.warning(t('attendance.holidayPass.messages.batchOnlyPending'))
+      ElMessage.warning(t('attendance.holidayPass.batchOnlyPending'))
       return
     }
     dialogEdit.value = null
@@ -100,15 +100,15 @@ export const useList = () => {
 
   const batchDelete = () => {
     if (selection.value.length === 0) {
-      ElMessage.warning(t('attendance.holidayPass.messages.needSelection'))
+      ElMessage.warning(t('attendance.holidayPass.needSelection'))
       return
     }
     const bad = selection.value.some((item) => String(item.status) === '0')
     if (bad) {
-      ElMessage.warning(t('attendance.holidayPass.messages.cannotDeleteActive'))
+      ElMessage.warning(t('attendance.holidayPass.cannotDeleteActive'))
       return
     }
-    ElMessageBox.confirm(t('attendance.holidayPass.messages.batchDeleteConfirm'), t('attendance.holiday.messages.withdrawPrompt'), {
+    ElMessageBox.confirm(t('attendance.holidayPass.batchDeleteConfirm'), t('attendance.tipTitle'), {
       type: 'warning',
       confirmButtonText: t('common.submit'),
       cancelButtonText: t('common.cancel')
@@ -116,7 +116,7 @@ export const useList = () => {
       .then(async () => {
         const ids = selection.value.map((r) => r.id).filter((id) => id != null)
         await attendanceHolidayApi.leavePassUpdateBatchStatus.post({ ids, status: -1 })
-        ElMessage.success(t('attendance.holiday.messages.withdrawSuccess'))
+        ElMessage.success(t('attendance.holiday.withdrawSuccess'))
         refresh()
       })
       .catch(() => {})
@@ -128,14 +128,14 @@ export const useList = () => {
 
   const actions = computed<UniTableAction[]>(() => [
     {
-      label: t('attendance.holiday.actions.delete'),
+      label: t('attendance.delete'),
       visible: (row) =>
         hasPermission('pass-delete') &&
         String((row as AttendanceLeavePassRecord).status) !== '0',
       onClick: (row) => updateRowStatus(row as AttendanceLeavePassRecord, -1)
     },
     {
-      label: t('attendance.holidayPass.actions.void'),
+      label: t('attendance.holidayPass.void'),
       visible: (row) => {
         const st = Number((row as AttendanceLeavePassRecord).status)
         return hasPermission('pass-voided') && ![3, 2, 1].includes(st)
@@ -143,11 +143,11 @@ export const useList = () => {
       onClick: (row) => updateRowStatus(row as AttendanceLeavePassRecord, 1)
     },
     {
-      label: t('attendance.holiday.actions.detail'),
+      label: t('attendance.detail'),
       onClick: (row) => openView(row as AttendanceLeavePassRecord, true)
     },
     {
-      label: t('attendance.holidayPass.actions.generate'),
+      label: t('attendance.holidayPass.generate'),
       visible: (row) =>
         hasPermission('pass-generated') && String((row as AttendanceLeavePassRecord).status) === '2',
       onClick: (row) => openView(row as AttendanceLeavePassRecord, false)

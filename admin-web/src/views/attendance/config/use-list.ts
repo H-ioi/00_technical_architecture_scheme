@@ -56,13 +56,13 @@ export const useList = () => {
   }
 
   const openAdd = () => {
-    formTitle.value = t('attendance.holidayConfig.actions.add')
+    formTitle.value = t('attendance.addConfig')
     formModel.value = { id: '', school: '', grades: [], department: '', email: '' }
     formVisible.value = true
   }
 
   const openEdit = (row: AttendanceHolidaySysConfigRecord) => {
-    formTitle.value = t('attendance.holidayConfig.actions.edit')
+    formTitle.value = t('attendance.edit')
     formModel.value = {
       id: row.id ?? '',
       school: row.school ?? '',
@@ -77,7 +77,7 @@ export const useList = () => {
     if (row.id == null || row.id === '') {
       return
     }
-    ElMessageBox.confirm(t('attendance.holidayConfig.messages.deleteConfirm'), t('common.tip'), {
+    ElMessageBox.confirm(t('attendance.holidayConfig.deleteConfirm'), t('common.tip'), {
       type: 'warning',
       confirmButtonText: t('common.submit'),
       cancelButtonText: t('common.cancel')
@@ -90,8 +90,8 @@ export const useList = () => {
   }
 
   const actions = computed<UniTableAction[]>(() => [
-    { label: t('attendance.holidayConfig.actions.edit'), onClick: (row) => openEdit(row as AttendanceHolidaySysConfigRecord) },
-    { label: t('attendance.holidayConfig.actions.delete'), onClick: (row) => remove(row as AttendanceHolidaySysConfigRecord) }
+    { label: t('attendance.edit'), onClick: (row) => openEdit(row as AttendanceHolidaySysConfigRecord) },
+    { label: t('attendance.delete'), onClick: (row) => remove(row as AttendanceHolidaySysConfigRecord) }
   ])
 
   const onFormSuccess = () => {

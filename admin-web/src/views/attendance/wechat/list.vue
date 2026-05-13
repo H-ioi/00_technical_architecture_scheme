@@ -2,8 +2,8 @@
   <section class="uni-list-page">
     <div class="uni-list-page__header">
       <div>
-        <h1>{{ $t('attendance.wechatOpenid.page.title') }}</h1>
-        <p>{{ $t('attendance.wechatOpenid.page.description') }}</p>
+        <h1>{{ $t('attendance.wechatOpenid.pageTitle') }}</h1>
+        <p>{{ $t('attendance.wechatOpenid.pageDesc') }}</p>
       </div>
     </div>
 
@@ -36,13 +36,13 @@
           v-uni-permission="'archive_wx_openid'"
           :disabled="selection.length === 0"
           @click="batchStatus(1)">
-          {{ $t('attendance.wechatOpenid.actions.archive') }}
+          {{ $t('attendance.wechatOpenid.archive') }}
         </el-button>
         <el-button
           v-uni-permission="'archive_wx_openid'"
           :disabled="selection.length === 0"
           @click="batchStatus(0)">
-          {{ $t('attendance.wechatOpenid.actions.activate') }}
+          {{ $t('attendance.wechatOpenid.activate') }}
         </el-button>
       </template>
     </UniDataTable>
@@ -83,13 +83,13 @@ const {
 
 const batchStatus = async (status: number) => {
   if (selection.value.length === 0) {
-    ElMessage.warning(t('attendance.wechatOpenid.messages.needSelection'))
+    ElMessage.warning(t('attendance.wechatOpenid.needSelection'))
     return
   }
   const ids = selection.value.map((r) => r.id)
   try {
     await attendanceWechatOpenidApi.batchUpdateStatus.post(ids, status)
-    ElMessage.success(t('attendance.wechatOpenid.messages.batchSuccess'))
+    ElMessage.success(t('attendance.wechatOpenid.batchSuccess'))
     selection.value = []
     await refreshTable()
   } catch {
