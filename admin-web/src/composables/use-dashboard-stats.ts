@@ -11,14 +11,14 @@ import {
   teacherApi
 } from '@/api'
 import type { DashboardStatsPayload } from '@/types/modules/dashboard'
-import { normalizeApiPagedBody } from '@/utils/api-response-normalize'
+import { normalizePaged } from '@/utils/api-response-normalize'
 
 const TREND_DAYS = 7
 
 async function fetchPagedTotal(getter: () => Promise<unknown>): Promise<number> {
   try {
     const raw = await getter()
-    return normalizeApiPagedBody(raw).total
+    return normalizePaged(raw).total
   } catch {
     return 0
   }

@@ -3,7 +3,7 @@ import { useUniI18n, useUniListState } from 'uni-ui-lib'
 import { computed } from 'vue'
 
 import { permissionRoleApi } from '@/api'
-import { normalizeApiPagedBody } from '@/utils/api-response-normalize'
+import { normalizePaged } from '@/utils/api-response-normalize'
 import type { PermissionRoleRecord as Row } from '@/types/modules/permission-role'
 
 import { dpTypeOptions, searchForm, tableCols } from './list.config'
@@ -31,7 +31,7 @@ export const useList = (callbacks: RoleListCallbacks) => {
       size: pageSize,
       ...f
     })
-    const { list, total } = normalizeApiPagedBody<Row>(raw)
+    const { list, total } = normalizePaged<Row>(raw)
     return { data: list, total }
   }
 

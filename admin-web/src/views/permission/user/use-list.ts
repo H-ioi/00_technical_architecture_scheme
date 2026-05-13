@@ -4,7 +4,7 @@ import { useUniI18n, useUniListState } from 'uni-ui-lib'
 import { computed } from 'vue'
 
 import { permissionUserApi } from '@/api'
-import { normalizeApiPagedBody } from '@/utils/api-response-normalize'
+import { normalizePaged } from '@/utils/api-response-normalize'
 import type { PermissionUserRecord } from '@/types/modules/permission-user'
 
 import { lockOpts, searchForm, tableCols } from './list.config'
@@ -50,7 +50,7 @@ export const useList = (
         ? { deptId: deptIdRef.value }
         : {})
     })
-    const { list, total } = normalizeApiPagedBody<PermissionUserRecord>(raw)
+    const { list, total } = normalizePaged<PermissionUserRecord>(raw)
     const data: PermissionUserTableRow[] = list.map((r) => ({
       ...r,
       rolesLabel: rolesLabel(r)

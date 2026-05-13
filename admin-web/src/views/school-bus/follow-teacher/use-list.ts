@@ -6,7 +6,7 @@ import { computed, nextTick, onMounted, ref, watch } from 'vue'
 import { searchForm, statusOpts, tableCols } from './list.config'
 
 import { membershipApi, schoolBusFollowTeacherApi } from '@/api'
-import { normalizeApiPagedBody } from '@/utils/api-response-normalize'
+import { normalizePaged } from '@/utils/api-response-normalize'
 import type { SchoolOptionRecord } from '@/types/modules/membership'
 import type {
   FollowTeacherListParams,
@@ -70,7 +70,7 @@ export const useList = () => {
       raw.schoolIds = defaultSchoolId.value
     }
     const result = await schoolBusFollowTeacherApi.page.get(raw)
-    const { list, total } = normalizeApiPagedBody<FollowTeacherRecord>(result)
+    const { list, total } = normalizePaged<FollowTeacherRecord>(result)
     return { data: list.map(decorate), total }
   }
 

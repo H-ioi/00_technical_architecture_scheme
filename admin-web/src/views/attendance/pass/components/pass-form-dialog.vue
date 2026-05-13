@@ -85,7 +85,7 @@ import { computed, nextTick, reactive, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 
 import { attendanceHolidayApi, membershipApi } from '@/api'
-import { normalizeApiArrayBody, normalizeApiPayload } from '@/utils/api-response-normalize'
+import { normalizeArray, normalizePayload } from '@/utils/api-response-normalize'
 import type { AttendanceLeavePassRecord } from '@/types/modules/attendance-holiday'
 
 type Loose = Record<string, unknown>
@@ -242,7 +242,7 @@ watch(
     displayStudent.value = no
     if (no) {
       membershipApi.studentInfo.get(no).then((res) => {
-        const data = normalizeApiPayload(res) as Loose
+        const data = normalizePayload(res) as Loose
         studentInfo.value = data && typeof data === 'object' ? data : {}
       })
     } else {
@@ -264,7 +264,7 @@ const queryStudents = (query: string, cb: (rows: { value: string; studentNo: str
   membershipApi.searchStudent
     .get(q)
     .then((res) => {
-      const list = normalizeApiArrayBody(res) as Loose[]
+      const list = normalizeArray(res) as Loose[]
       cb(
         list.map((item) => ({
           value: `${item.showName ?? item.name ?? ''}(${item.admissonNo ?? item.admissionNo ?? ''})`,
@@ -279,7 +279,7 @@ const onStudentSelect = (item: { studentNo: string }) => {
   form.studentNo = item.studentNo
   displayStudent.value = item.value
   membershipApi.studentInfo.get(item.studentNo).then((res) => {
-    const data = normalizeApiPayload(res) as Loose
+    const data = normalizePayload(res) as Loose
     studentInfo.value = data && typeof data === 'object' ? data : {}
   })
 }

@@ -6,7 +6,7 @@ import { computed, nextTick, onMounted, ref, watch } from 'vue'
 import { searchForm, tableCols, carStatusOpts } from './list.config'
 
 import { membershipApi, schoolBusCarApi } from '@/api'
-import { normalizeApiPagedBody } from '@/utils/api-response-normalize'
+import { normalizePaged } from '@/utils/api-response-normalize'
 import type { SchoolOptionRecord } from '@/types/modules/membership'
 import type { CarListParams, CarRecord } from '@/types/modules/school-bus-car'
 import { membershipSchoolLabelsJoined, membershipSchoolToOptions } from '@/utils/membership-school'
@@ -81,7 +81,7 @@ export const useList = () => {
       raw.schoolIds = defaultSchoolId.value
     }
     const result = await schoolBusCarApi.page.get(raw)
-    const { list, total } = normalizeApiPagedBody<CarRecord>(result)
+    const { list, total } = normalizePaged<CarRecord>(result)
     return { data: list.map(decorate), total }
   }
 

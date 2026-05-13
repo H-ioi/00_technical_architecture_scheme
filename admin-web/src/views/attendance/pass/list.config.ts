@@ -1,7 +1,7 @@
 import type { Translate } from '@/types/i18n'
 import type { UniFormConfig, UniOption, UniTableColumn } from 'uni-ui-lib'
 
-export const leavePassSearchForm = (t: Translate, schoolOptions: UniOption[]): UniFormConfig => ({
+export const searchForm = (t: Translate, schoolOptions: UniOption[]): UniFormConfig => ({
   schema: [
     {
       field: 'studentSchool',
@@ -44,7 +44,7 @@ export const leavePassSearchForm = (t: Translate, schoolOptions: UniOption[]): U
   colProps: { span: 6 }
 })
 
-export const leavePassColumns = (t: Translate): UniTableColumn[] => [
+export const tableCols = (t: Translate): UniTableColumn[] => [
   {
     prop: 'studentNo',
     label: t('attendance.holidayPass.columns.studentNo'),

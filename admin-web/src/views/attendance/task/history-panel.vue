@@ -31,7 +31,7 @@ import { UniDataTable, useUniI18n, useUniListState } from 'uni-ui-lib'
 import { computed, ref } from 'vue'
 
 import { attendanceHolidayApi } from '@/api'
-import { normalizeApiPagedBody } from '@/utils/api-response-normalize'
+import { normalizePaged } from '@/utils/api-response-normalize'
 
 type Loose = Record<string, unknown>
 
@@ -71,7 +71,7 @@ const loadData: UniTableRequest = async ({ pageNo, pageSize }) => {
       ? attendanceHolidayApi.flowMyComplete
       : attendanceHolidayApi.flowMyStart
   const raw = await api.get({ page: pageNo, limit: pageSize })
-  const { list, total } = normalizeApiPagedBody<Loose>(raw)
+  const { list, total } = normalizePaged<Loose>(raw)
   return { data: list, total }
 }
 

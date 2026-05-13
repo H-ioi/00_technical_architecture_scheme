@@ -6,7 +6,7 @@ import type { Ref } from 'vue'
 import { computed, ref, watch } from 'vue'
 
 import { schoolBusSectionApi } from '@/api'
-import { normalizeApiPagedBody } from '@/utils/api-response-normalize'
+import { normalizePaged } from '@/utils/api-response-normalize'
 import type { SchoolOptionRecord } from '@/types/modules/membership'
 import type { SectionListParams } from '@/types/modules/school-bus-section'
 
@@ -197,7 +197,7 @@ export const useTermSection = (schoolRecords: SchoolRecordsRef) => {
 
     const params = stripEmptyParams(base)
     const result = await schoolBusSectionApi.page.get(params)
-    const { list, total } = normalizeApiPagedBody<Loose>(result)
+    const { list, total } = normalizePaged<Loose>(result)
 
     return {
       data: list.map((r) => fmtRowTerm({ ...r })),

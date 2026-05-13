@@ -3,7 +3,7 @@ import type { UniFormConfig, UniTableColumn } from 'uni-ui-lib'
 
 type Loose = Record<string, unknown>
 
-export const emailOutboxSearchForm = (t: Translate): UniFormConfig => ({
+export const searchForm = (t: Translate): UniFormConfig => ({
   rowProps: { gutter: 16 },
   schema: [
     {
@@ -28,7 +28,7 @@ export const emailOutboxSearchForm = (t: Translate): UniFormConfig => ({
   ]
 })
 
-export const emailOutboxSentColumns = (t: Translate): UniTableColumn[] => [
+export const tableCols = (t: Translate): UniTableColumn[] => [
   { prop: 'subject', label: t('email.outbox.colSubject'), type: 'text', minWidth: 160, showOverflowTooltip: true },
   { prop: 'username', label: t('email.outbox.colUser'), type: 'text', width: 110 },
   { prop: 'email', label: t('email.outbox.colFrom'), type: 'text', minWidth: 160 },
@@ -52,7 +52,7 @@ export const emailOutboxSentColumns = (t: Translate): UniTableColumn[] => [
   { prop: 'createdAt', label: t('email.outbox.colSentAt'), type: 'datetime', minWidth: 170 }
 ]
 
-export const emailOutboxDraftColumns = (t: Translate): UniTableColumn[] => [
+export const draftTableCols = (t: Translate): UniTableColumn[] => [
   { prop: 'subject', label: t('email.outbox.colSubject'), type: 'text', minWidth: 160, showOverflowTooltip: true },
   { prop: 'username', label: t('email.outbox.colUser'), type: 'text', width: 110 },
   { prop: 'email', label: t('email.outbox.colFrom'), type: 'text', minWidth: 160 }

@@ -32,7 +32,7 @@ import { computed, nextTick, ref, watch } from 'vue'
 
 import { schoolBusCommonApi, schoolBusExceptionApi } from '@/api'
 import { useDialogDetailLoading } from '@/composables/use-dialog-detail-loading'
-import { normalizeApiArrayBody, normalizeApiEnvelope } from '@/utils/api-response-normalize'
+import { normalizeArray, normalizeEnvelope } from '@/utils/api-response-normalize'
 import type { SchoolOptionRecord } from '@/types/modules/membership'
 import type { ExceptionFormModel, ExceptionRecord } from '@/types/modules/school-bus-exception'
 
@@ -379,11 +379,11 @@ const onSchoolChange = async (e: Array<string | number> | string | number) => {
 
   const ids = Array.isArray(e) ? e : e != null ? [e] : []
 
-  sectionOptions.value = normalizeApiArrayBody(
+  sectionOptions.value = normalizeArray(
     await schoolBusCommonApi.sectionList.get({ schoolIds: ids })
   ) as SectionRow[]
 
-  dispatchCarList.value = normalizeApiArrayBody(
+  dispatchCarList.value = normalizeArray(
     await schoolBusCommonApi.carinfoList.get({ isAll: 0, schoolIds: ids })
   ) as CarRow[]
 }
@@ -395,7 +395,7 @@ const onSectionChange = async (sectionId: string | number | undefined) => {
   formModel.value.driver = undefined
   carList.value = []
 
-  lineOptionsFiltered.value = normalizeApiArrayBody(
+  lineOptionsFiltered.value = normalizeArray(
     await schoolBusCommonApi.lineList.get({
       schoolIds: schoolIdsForApi(),
       sectionId
@@ -478,7 +478,7 @@ const resetForm = () => {
 
 const loadDetail = async (id: string | number) => {
   const res = await schoolBusExceptionApi.detail.get(id)
-  const row = normalizeApiEnvelope(res)
+  const row = normalizeEnvelope(res)
 
   const schoolIds = row.schoolIds as Array<string | number> | undefined
   const sectionId = row.sectionId as string | number | undefined
@@ -486,11 +486,11 @@ const loadDetail = async (id: string | number) => {
   const carId = row.carId as string | number | undefined
   const dispatchCarId = row.dispatchCarId as string | number | undefined
 
-  sectionOptions.value = normalizeApiArrayBody(
+  sectionOptions.value = normalizeArray(
     await schoolBusCommonApi.sectionList.get({ schoolIds: schoolIds ?? [] })
   ) as SectionRow[]
 
-  lineOptionsFiltered.value = normalizeApiArrayBody(
+  lineOptionsFiltered.value = normalizeArray(
     await schoolBusCommonApi.lineList.get({
       schoolIds: schoolIds ?? [],
       sectionId
@@ -500,7 +500,7 @@ const loadDetail = async (id: string | number) => {
   const line = lineOptionsFiltered.value.find((l) => String(l.id) === String(lineId))
   carList.value = line?.carList ?? []
 
-  dispatchCarList.value = normalizeApiArrayBody(
+  dispatchCarList.value = normalizeArray(
     await schoolBusCommonApi.carinfoList.get({ isAll: 0, schoolIds: schoolIds ?? [] })
   ) as CarRow[]
 

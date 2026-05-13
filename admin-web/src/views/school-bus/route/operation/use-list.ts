@@ -3,10 +3,10 @@ import dayjs from 'dayjs'
 import { toUniOptions, useUniI18n, useUniListState } from 'uni-ui-lib'
 import { computed, nextTick, onMounted, ref, watch } from 'vue'
 
-import { createOperationColumns, operationStatusMeta } from './list.config'
+import { operationStatusMeta, tableCols } from './list.config'
 
 import { membershipApi, schoolBusCommonApi, schoolBusOperationApi } from '@/api'
-import { normalizeApiPagedBody } from '@/utils/api-response-normalize'
+import { normalizePaged } from '@/utils/api-response-normalize'
 import type { SchoolOptionRecord } from '@/types/modules/membership'
 import type { OperationListParams, OperationRecord } from '@/types/modules/school-bus-operation'
 
@@ -290,7 +290,7 @@ export const useList = () => {
     }
   })
 
-  const columns = computed(() => createOperationColumns(t, schoolOptions.value))
+  const columns = computed(() => tableCols(t, schoolOptions.value))
 
   const loadData: UniTableRequest = async ({ pageNo, pageSize, filters: f }) => {
     const params: OperationListParams = {
@@ -304,7 +304,7 @@ export const useList = () => {
     }
 
     const result = await schoolBusOperationApi.page.get(params)
-    const { list, total } = normalizeApiPagedBody<OperationRecord>(result)
+    const { list, total } = normalizePaged<OperationRecord>(result)
     const opts = operationStatusMeta(t).map((x) => ({ value: String(x.value), label: x.label }))
 
     return {

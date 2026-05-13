@@ -3,10 +3,10 @@ import dayjs from 'dayjs'
 import { toUniOptions, useUniI18n, useUniListState } from 'uni-ui-lib'
 import { computed, nextTick, onMounted, ref, watch } from 'vue'
 
-import { createExceptionColumns, exceptionTypeMeta, yesNoMeta } from './list.config'
+import { exceptionTypeMeta, tableCols, yesNoMeta } from './list.config'
 
 import { membershipApi, schoolBusCommonApi, schoolBusExceptionApi } from '@/api'
-import { normalizeApiPagedBody } from '@/utils/api-response-normalize'
+import { normalizePaged } from '@/utils/api-response-normalize'
 import type { SchoolOptionRecord } from '@/types/modules/membership'
 import type { ExceptionListParams, ExceptionRecord } from '@/types/modules/school-bus-exception'
 
@@ -325,7 +325,7 @@ export const useList = () => {
     }
   })
 
-  const columns = computed(() => createExceptionColumns(t, schoolOptions.value))
+  const columns = computed(() => tableCols(t, schoolOptions.value))
 
   const loadData: UniTableRequest = async ({ pageNo, pageSize, filters: f }) => {
     const params: ExceptionListParams = {
@@ -339,7 +339,7 @@ export const useList = () => {
     }
 
     const result = await schoolBusExceptionApi.page.get(params)
-    const { list, total } = normalizeApiPagedBody<ExceptionRecord>(result)
+    const { list, total } = normalizePaged<ExceptionRecord>(result)
     const exOpts = exceptionTypeMeta(t).map((x) => ({ value: String(x.value), label: x.label }))
     const ynOpts = yesNoMeta(t).map((x) => ({ value: String(x.value), label: x.label }))
 

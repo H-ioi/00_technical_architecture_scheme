@@ -4,14 +4,14 @@ import { toUniOptions, useUniI18n, useUniListState } from 'uni-ui-lib'
 import { computed, ref } from 'vue'
 
 import {
-  attendanceWechatNoticeColumns,
-  attendanceWechatNoticeDetailForm,
-  attendanceWechatNoticeSearchForm,
+  detailForm,
+  searchForm,
+  tableCols,
   wechatNoticeSendStatusOpts
 } from './list.config'
 
 import { attendanceWechatNoticeApi, membershipApi } from '@/api'
-import { normalizeApiPagedBody } from '@/utils/api-response-normalize'
+import { normalizePaged } from '@/utils/api-response-normalize'
 import type {
   AttendanceWechatNoticeListParams,
   AttendanceWechatNoticeRecord
@@ -55,12 +55,12 @@ export const useList = () => {
   const sendStatusSearchOptions = computed(() => wechatNoticeSendStatusOpts(t))
 
   const searchCfg = computed(() =>
-    attendanceWechatNoticeSearchForm(t, schoolOptions.value, sendStatusSearchOptions.value)
+    searchForm(t, schoolOptions.value, sendStatusSearchOptions.value)
   )
 
-  const columns = computed(() => attendanceWechatNoticeColumns(t, schoolOptions.value))
+  const columns = computed(() => tableCols(t, schoolOptions.value))
 
-  const detailConfig = computed(() => attendanceWechatNoticeDetailForm(t, schoolOptions.value))
+  const detailConfig = computed(() => detailForm(t, schoolOptions.value))
 
   const detailVisible = ref(false)
   const activeRow = ref<AttendanceWechatNoticeRecord | null>(null)
@@ -85,7 +85,7 @@ export const useList = () => {
       ...(f as Record<string, unknown>)
     }
     const raw = await attendanceWechatNoticeApi.noticePage.get(params)
-    const { list, total } = normalizeApiPagedBody<Loose>(raw)
+    const { list, total } = normalizePaged<Loose>(raw)
     return {
       data: list.map(decorateRow),
       total

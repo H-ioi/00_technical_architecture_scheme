@@ -32,7 +32,7 @@ import { computed, ref, watch } from 'vue'
 import { schoolBusSectionApi } from '@/api'
 import { useDialogDetailLoading } from '@/composables/use-dialog-detail-loading'
 import type { SchoolOptionRecord } from '@/types/modules/membership'
-import { normalizeSchoolBusDetailBody } from '@/utils/api-response-normalize'
+import { normalizeSchoolBusDetail } from '@/utils/api-response-normalize'
 
 import { termDialogFormConfig } from '../tab.config'
 
@@ -128,7 +128,7 @@ const loadDetail = async () => {
   }
 
   const raw = await schoolBusSectionApi.detail.get(id)
-  const body = normalizeSchoolBusDetailBody(raw)
+  const body = normalizeSchoolBusDetail(raw)
 
   if (!body) {
     return

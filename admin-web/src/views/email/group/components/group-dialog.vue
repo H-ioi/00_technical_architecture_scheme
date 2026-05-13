@@ -228,7 +228,7 @@ import { computed, reactive, ref, watch } from 'vue'
 import { attendanceStudentApi, bulkEmailApi } from '@/api'
 import { useUniI18n } from 'uni-ui-lib'
 
-import { normalizeApiEnvelope } from '@/utils/api-response-normalize'
+import { normalizeEnvelope } from '@/utils/api-response-normalize'
 import { formatMailGroupScopeDisplay } from '../../mail-page-utils'
 
 type Loose = Record<string, unknown>
@@ -301,7 +301,7 @@ const form = reactive({
 
 const loadSchools = async () => {
   const raw = await bulkEmailApi.commonOldSchoolList.get()
-  const env = normalizeApiEnvelope(raw)
+  const env = normalizeEnvelope(raw)
   const list = Array.isArray(env)
     ? env
     : Array.isArray((env as Loose).data)
@@ -312,7 +312,7 @@ const loadSchools = async () => {
 
 const loadGrades = async () => {
   const raw = await attendanceStudentApi.gradeList.get()
-  const env = normalizeApiEnvelope(raw)
+  const env = normalizeEnvelope(raw)
   const list = Array.isArray(env)
     ? env
     : Array.isArray((env as Loose).data)
@@ -380,7 +380,7 @@ const searchStudent = async () => {
       schoolName: form.schoolName || undefined,
       admissionNo: form.admissionNo
     })
-    const env = normalizeApiEnvelope(raw)
+    const env = normalizeEnvelope(raw)
     const list = Array.isArray(env)
       ? env
       : Array.isArray((env as Loose).data)
@@ -417,14 +417,14 @@ const handleSchoolChange = async (schoolName: string) => {
     bulkEmailApi.commonBoardingHouseList.post({ schoolName }),
     bulkEmailApi.commonDivisionNameList.post({ schoolName })
   ])
-  const bhEnv = normalizeApiEnvelope(bh)
+  const bhEnv = normalizeEnvelope(bh)
   const bhData = Array.isArray(bhEnv)
     ? bhEnv
     : Array.isArray((bhEnv as Loose).data)
       ? ((bhEnv as Loose).data as string[])
       : []
   boardingHouseList.value = bhData as string[]
-  const divEnv = normalizeApiEnvelope(div)
+  const divEnv = normalizeEnvelope(div)
   const divRaw = Array.isArray(divEnv)
     ? divEnv
     : Array.isArray((divEnv as Loose).data)

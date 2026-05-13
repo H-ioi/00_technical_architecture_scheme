@@ -6,12 +6,12 @@ import { computed, ref } from 'vue'
 import {
   departmentOptionsForForm,
   HOLIDAY_CONFIG_GRADE_OPTS,
-  holidayConfigColumns,
-  holidayConfigSearchForm
+  searchForm,
+  tableCols
 } from './list.config'
 
 import { attendanceHolidayApi, membershipApi } from '@/api'
-import { normalizeApiArrayBody } from '@/utils/api-response-normalize'
+import { normalizeArray } from '@/utils/api-response-normalize'
 import type { AttendanceHolidaySysConfigRecord } from '@/types/modules/attendance-holiday'
 import type { SchoolOptionRecord } from '@/types/modules/membership'
 
@@ -34,8 +34,8 @@ export const useList = () => {
 
   const departmentOptions = computed(() => departmentOptionsForForm(t))
 
-  const searchCfg = computed(() => holidayConfigSearchForm(t, schoolOptions.value))
-  const columns = computed(() => holidayConfigColumns(t))
+  const searchCfg = computed(() => searchForm(t, schoolOptions.value))
+  const columns = computed(() => tableCols(t))
 
   const formVisible = ref(false)
   const formTitle = ref('')
@@ -51,7 +51,7 @@ export const useList = () => {
     const raw = await attendanceHolidayApi.sysConfigList.get({
       school: String((f as Loose).school ?? '')
     })
-    const list = normalizeApiArrayBody(raw) as Loose[]
+    const list = normalizeArray(raw) as Loose[]
     return { data: list, total: list.length }
   }
 

@@ -64,7 +64,7 @@ import { ElMessage, ElMessageBox } from 'element-plus'
 import { computed, ref } from 'vue'
 
 import { attendanceHolidayApi } from '@/api'
-import { normalizeApiEnvelope, normalizeApiPagedBody } from '@/utils/api-response-normalize'
+import { normalizeEnvelope, normalizePaged } from '@/utils/api-response-normalize'
 
 type Loose = Record<string, unknown>
 
@@ -144,7 +144,7 @@ const loadData: UniTableRequest = async ({ pageNo, pageSize }) => {
     page: pageNo,
     limit: pageSize
   })
-  const { list, total } = normalizeApiPagedBody<Loose>(raw)
+  const { list, total } = normalizePaged<Loose>(raw)
   return { data: list, total }
 }
 
@@ -158,7 +158,7 @@ const openAssign = async (id: string | number, tenantId: string) => {
   currentFlowId.value = id
   currentTenantId.value = tenantId
   const raw = await attendanceHolidayApi.flowDeployDefGet.get(id)
-  const body = normalizeApiEnvelope(raw)
+  const body = normalizeEnvelope(raw)
   const fields = (body.data ?? body.form ?? []) as AssignField[]
   assignFields.value = Array.isArray(fields)
     ? fields.map((f) => ({ ...f, value: f.value ?? (f.type === 'group' ? [] : '') }))

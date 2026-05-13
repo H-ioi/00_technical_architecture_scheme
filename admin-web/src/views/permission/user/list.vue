@@ -65,7 +65,7 @@ import { onMounted, ref } from 'vue'
 import { UniDataTable, UniSearchForm, useUniI18n } from 'uni-ui-lib'
 
 import { permissionDeptApi, permissionRoleApi, permissionUserApi } from '@/api'
-import { normalizeApiArrayBody } from '@/utils/api-response-normalize'
+import { normalizeArray } from '@/utils/api-response-normalize'
 import type { PermissionDeptRecord } from '@/types/modules/permission-dept'
 import type { PermissionUserRecord } from '@/types/modules/permission-user'
 
@@ -104,7 +104,7 @@ async function loadDeptAndRoles() {
   deptFlat.value = flattenDeptTree(treeOk)
 
   const rolesRaw = await permissionRoleApi.listSimple.get()
-  roleFlat.value = normalizeApiArrayBody(rolesRaw).map((item) => {
+  roleFlat.value = normalizeArray(rolesRaw).map((item) => {
     const row = item as Record<string, unknown>
     const value = row.roleId ?? row.id
     const label = String(row.roleName ?? row.label ?? '')

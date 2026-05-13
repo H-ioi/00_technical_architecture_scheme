@@ -4,14 +4,14 @@ import { toUniOptions, useUniI18n, useUniListState } from 'uni-ui-lib'
 import { computed, ref } from 'vue'
 
 import {
-  attendanceWechatOpenidColumns,
-  attendanceWechatOpenidDetailForm,
-  attendanceWechatOpenidSearchForm,
+  detailForm,
+  searchForm,
+  tableCols,
   wechatOpenidStatusOpts
 } from './list.config'
 
 import { attendanceWechatOpenidApi, membershipApi } from '@/api'
-import { normalizeApiPagedBody } from '@/utils/api-response-normalize'
+import { normalizePaged } from '@/utils/api-response-normalize'
 import type {
   AttendanceWechatOpenidListParams,
   AttendanceWechatOpenidRecord
@@ -56,12 +56,12 @@ export const useList = () => {
   const statusSearchOptions = computed(() => wechatOpenidStatusOpts(t))
 
   const searchCfg = computed(() =>
-    attendanceWechatOpenidSearchForm(t, schoolOptions.value, statusSearchOptions.value)
+    searchForm(t, schoolOptions.value, statusSearchOptions.value)
   )
 
-  const columns = computed(() => attendanceWechatOpenidColumns(t, schoolOptions.value))
+  const columns = computed(() => tableCols(t, schoolOptions.value))
 
-  const detailConfig = computed(() => attendanceWechatOpenidDetailForm(t, schoolOptions.value))
+  const detailConfig = computed(() => detailForm(t, schoolOptions.value))
 
   const detailVisible = ref(false)
   const activeRow = ref<AttendanceWechatOpenidRecord | null>(null)
@@ -90,7 +90,7 @@ export const useList = () => {
       ...(f as Record<string, unknown>)
     }
     const raw = await attendanceWechatOpenidApi.openidPage.get(params)
-    const { list, total } = normalizeApiPagedBody<Loose>(raw)
+    const { list, total } = normalizePaged<Loose>(raw)
     return {
       data: list.map(decorateRow),
       total

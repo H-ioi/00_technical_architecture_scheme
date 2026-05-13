@@ -4,15 +4,15 @@ import { toUniOptions, useUniI18n, useUniListState } from 'uni-ui-lib'
 import { computed, ref } from 'vue'
 
 import {
-  attendanceDailyColumns,
-  attendanceDailySearchForm,
   dailyStatusOpts,
   dataFromOpts,
+  searchForm,
+  tableCols,
   ynOpts
 } from './list.config'
 
 import { attendanceDailyApi } from '@/api'
-import { normalizeApiArrayBody, normalizeApiPagedBody } from '@/utils/api-response-normalize'
+import { normalizeArray, normalizePaged } from '@/utils/api-response-normalize'
 import type { Translate } from '@/types/i18n'
 import type { AttendanceDailyListParams, AttendanceDailyRecord } from '@/types/modules/attendance-daily'
 
@@ -111,7 +111,7 @@ export const useList = () => {
   const statusSearchOptions = computed(() => dailyStatusOpts(t))
 
   const searchCfg = computed(() =>
-    attendanceDailySearchForm(
+    searchForm(
       t,
       schoolOptions.value,
       ynSearchOptions.value,
@@ -120,7 +120,7 @@ export const useList = () => {
     )
   )
 
-  const columns = computed(() => attendanceDailyColumns(t))
+  const columns = computed(() => tableCols(t))
 
   const decorateRow = (raw: Loose): AttendanceDailyRecord => {
     const row: AttendanceDailyRecord = { ...(raw as AttendanceDailyRecord) }
@@ -151,7 +151,7 @@ export const useList = () => {
     }
 
     const raw = await attendanceDailyApi.dailyPage.get(params)
-    const { list, total } = normalizeApiPagedBody<Loose>(raw)
+    const { list, total } = normalizePaged<Loose>(raw)
     return {
       data: list.map(decorateRow),
       total
@@ -160,7 +160,7 @@ export const useList = () => {
 
   const loadSchools = async () => {
     const payload = await attendanceDailyApi.commonSchoolList.get()
-    schoolRecords.value = (normalizeApiArrayBody(payload) as Loose[]).filter(
+    schoolRecords.value = (normalizeArray(payload) as Loose[]).filter(
       (s) => s.enName != null && s.enName !== ''
     )
   }

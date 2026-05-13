@@ -6,8 +6,8 @@ import { computed, ref } from 'vue'
 import { bulkEmailApi } from '@/api'
 import type { Translate } from '@/types/i18n'
 
-import { normalizeApiEnvelope, normalizeApiPagedBody } from '@/utils/api-response-normalize'
-import { emailOutboxDraftColumns, emailOutboxSearchForm } from './list.config'
+import { normalizeEnvelope, normalizePaged } from '@/utils/api-response-normalize'
+import { draftTableCols, searchForm } from './list.config'
 
 type Loose = Record<string, unknown>
 
@@ -23,8 +23,8 @@ export const useOutboxDraft = () => {
     initialFilters: { keyword: '', dateRange: null as string[] | null }
   })
 
-  const searchCfg = computed(() => emailOutboxSearchForm(tr))
-  const columns = computed(() => emailOutboxDraftColumns(tr))
+  const searchCfg = computed(() => searchForm(tr))
+  const columns = computed(() => draftTableCols(tr))
 
   const mailSenderOptions = ref<Loose[]>([])
   const mailGroupOptions = ref<Loose[]>([])
@@ -35,8 +35,8 @@ export const useOutboxDraft = () => {
         bulkEmailApi.userMailinfoPage.get({ current: 1, size: 500, status: 1 }),
         bulkEmailApi.groupPage.get({ current: 1, size: 9999, status: 1 })
       ])
-      mailSenderOptions.value = normalizeApiPagedBody(u).list
-      mailGroupOptions.value = normalizeApiPagedBody(g).list
+      mailSenderOptions.value = normalizePaged(u).list
+      mailGroupOptions.value = normalizePaged(g).list
     } catch {
       mailSenderOptions.value = []
       mailGroupOptions.value = []
@@ -59,7 +59,7 @@ export const useOutboxDraft = () => {
       beginCreateDate: Array.isArray(dr) && dr.length === 2 ? dr[0] : undefined,
       endCreateDate: Array.isArray(dr) && dr.length === 2 ? dr[1] : undefined
     })
-    const { list, total } = normalizeApiPagedBody(raw)
+    const { list, total } = normalizePaged(raw)
     return { data: list, total }
   }
 
@@ -80,7 +80,7 @@ export const useOutboxDraft = () => {
   const sendDraft = async (row: Loose) => {
     try {
       const raw = await bulkEmailApi.sendRecordDetail.get({ id: row.id as string | number })
-      const data = normalizeApiEnvelope(raw)
+      const data = normalizeEnvelope(raw)
       const payload: Loose = {
         toGroups:
           (data.toGroups as { id: string | number }[] | undefined)?.map((item) => item.id) ?? [],
@@ -130,7 +130,7 @@ export const useOutboxDraft = () => {
     await loadMailOptions()
     dialogMode.value = 'edit'
     const raw = await bulkEmailApi.sendRecordDetail.get({ id: row.id as string | number })
-    const data = normalizeApiEnvelope(raw)
+    const data = normalizeEnvelope(raw)
     formModel.value = {
       id: data.id ?? row.id,
       mailInfoId: data.userMailinfoId ?? '',

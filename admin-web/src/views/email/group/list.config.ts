@@ -3,17 +3,17 @@ import type { UniFormConfig, UniOption, UniTableColumn } from 'uni-ui-lib'
 
 import { formatMailGroupScopeDisplay } from '../mail-page-utils'
 
-export const emailGroupYnOpts = (t: Translate): UniOption[] => [
+export const yesNoOpts = (t: Translate): UniOption[] => [
   { label: t('email.yes'), value: '1' },
   { label: t('email.no'), value: '0' }
 ]
 
-export const emailGroupStatusOpts = (t: Translate): UniOption[] => [
+export const statusOpts = (t: Translate): UniOption[] => [
   { label: t('email.statusActive'), value: '1' },
   { label: t('email.statusArchived'), value: '0' }
 ]
 
-export const emailGroupSearchForm = (t: Translate, yn: UniOption[], st: UniOption[]): UniFormConfig => ({
+export const searchForm = (t: Translate, yn: UniOption[], st: UniOption[]): UniFormConfig => ({
   rowProps: { gutter: 16 },
   schema: [
     {
@@ -50,7 +50,7 @@ export const emailGroupSearchForm = (t: Translate, yn: UniOption[], st: UniOptio
   ]
 })
 
-export const emailGroupColumns = (t: Translate): UniTableColumn[] => [
+export const tableCols = (t: Translate): UniTableColumn[] => [
   { prop: 'id', label: 'ID', type: 'text', width: 72 },
   { prop: 'name', label: t('email.group.colName'), type: 'text', minWidth: 140, showOverflowTooltip: true },
   {

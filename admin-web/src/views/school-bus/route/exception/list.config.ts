@@ -14,7 +14,7 @@ export const yesNoMeta = (t: Translate): UniOption[] => [
   { label: t('schoolBus.routeException.options.no'), value: '0' }
 ]
 
-export const createExceptionColumns = (
+export const tableCols = (
   t: Translate,
   schoolOptions: UniOption[]
 ): UniTableColumn[] => [

@@ -6,13 +6,13 @@ import { computed, ref } from 'vue'
 import { bulkEmailApi } from '@/api'
 import type { Translate } from '@/types/i18n'
 
-import { normalizeApiPagedBody } from '@/utils/api-response-normalize'
+import { normalizePaged } from '@/utils/api-response-normalize'
 import { formatMailGroupScopeDisplay } from '../mail-page-utils'
 import {
-  emailGroupColumns,
-  emailGroupSearchForm,
-  emailGroupStatusOpts,
-  emailGroupYnOpts
+  searchForm,
+  statusOpts as statusOptsFn,
+  tableCols,
+  yesNoOpts as yesNoOptsFn
 } from './list.config'
 
 type Loose = Record<string, unknown>
@@ -28,10 +28,10 @@ export const useList = (options: UseGroupListOptions = {}) => {
   const { queryModel, filters, tableRef, handleLoadSuccess, reset, search } = useUniListState({
     initialFilters: { keyword: '', status: '', includeParentMails: '', includeStudentMails: '' }
   })
-  const ynOpts = computed(() => emailGroupYnOpts(tr))
-  const stOpts = computed(() => emailGroupStatusOpts(tr))
-  const searchCfg = computed(() => emailGroupSearchForm(tr, ynOpts.value, stOpts.value))
-  const columns = computed(() => emailGroupColumns(tr))
+  const ynOpts = computed(() => yesNoOptsFn(tr))
+  const stOpts = computed(() => statusOptsFn(tr))
+  const searchCfg = computed(() => searchForm(tr, ynOpts.value, stOpts.value))
+  const columns = computed(() => tableCols(tr))
 
   const selection = ref<Loose[]>([])
   const batchDisabled = computed(() => selection.value.length === 0)
@@ -59,7 +59,7 @@ export const useList = (options: UseGroupListOptions = {}) => {
           ? undefined
           : String(fl.includeStudentMails)
     })
-    const { list, total } = normalizeApiPagedBody(raw)
+    const { list, total } = normalizePaged(raw)
     return { data: list, total }
   }
 

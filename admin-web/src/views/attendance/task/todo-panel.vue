@@ -70,7 +70,7 @@ import { ElMessage } from 'element-plus'
 import { computed, reactive, ref } from 'vue'
 
 import { attendanceHolidayApi } from '@/api'
-import { normalizeApiEnvelope, normalizeApiPagedBody } from '@/utils/api-response-normalize'
+import { normalizeEnvelope, normalizePaged } from '@/utils/api-response-normalize'
 
 type Loose = Record<string, unknown>
 
@@ -106,7 +106,7 @@ const columns = computed<UniTableColumn[]>(() => [
 
 const loadData: UniTableRequest = async ({ pageNo, pageSize }) => {
   const raw = await attendanceHolidayApi.flowMyTodo.get({ page: pageNo, limit: pageSize })
-  const { list, total } = normalizeApiPagedBody<Loose>(raw)
+  const { list, total } = normalizePaged<Loose>(raw)
   return { data: list, total }
 }
 
@@ -115,7 +115,7 @@ const openApprove = async (row: Loose) => {
   taskId.value = String(row.taskId ?? '')
   taskName.value = String(row.taskName ?? '')
   const raw = await attendanceHolidayApi.flowFormByProcess.get({ processId: procInsId.value })
-  const data = normalizeApiEnvelope(raw)
+  const data = normalizeEnvelope(raw)
   Object.keys(formData).forEach((k) => delete (formData as Loose)[k])
   Object.assign(formData, data)
   formData.remark = ''

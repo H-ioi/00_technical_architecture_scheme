@@ -8,7 +8,7 @@ export const wechatNoticeSendStatusOpts = (t: Translate): UniOption[] => [
   { label: t('attendance.wechatNotice.options.sendFail'), value: 1, type: 'danger' }
 ]
 
-export const attendanceWechatNoticeSearchForm = (
+export const searchForm = (
   t: Translate,
   schoolOptions: UniOption[],
   sendStatusOptions: UniOption[]
@@ -96,7 +96,7 @@ export const attendanceWechatNoticeSearchForm = (
   colProps: { span: 6 }
 })
 
-export const attendanceWechatNoticeColumns = (
+export const tableCols = (
   t: Translate,
   schoolOptions: UniOption[]
 ): UniTableColumn[] => [
@@ -165,7 +165,7 @@ export const attendanceWechatNoticeColumns = (
   }
 ]
 
-export const attendanceWechatNoticeDetailForm = (
+export const detailForm = (
   t: Translate,
   schoolOptions: UniOption[]
 ): UniFormConfig => ({

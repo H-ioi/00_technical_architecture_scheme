@@ -3,16 +3,16 @@ import { toUniOptions, useUniI18n, useUniListState } from 'uni-ui-lib'
 import { computed, type Ref, ref } from 'vue'
 
 import {
-  attendanceHolidayDetailForm,
-  attendanceHolidayReturnColumns,
-  attendanceHolidayReturnSearchForm,
+  detailForm,
   formatHolidayDetailView,
+  returnSearchForm,
+  returnTableCols,
   type AttendanceHolidayDetailViewModel
 } from './list.config'
 import { formatMaybeDateTime, normalizeHolidayReturnRow } from './holiday-utils'
 
 import { useDialogDetailLoading } from '@/composables/use-dialog-detail-loading'
-import { normalizeApiEnvelope, normalizeApiPagedBody } from '@/utils/api-response-normalize'
+import { normalizeEnvelope, normalizePaged } from '@/utils/api-response-normalize'
 import { attendanceHolidayApi } from '@/api'
 import type {
   AttendanceHolidayRecord,
@@ -53,9 +53,9 @@ export const useHolidayReturn = (schoolRecords: Ref<SchoolOptionRecord[]>) => {
     })
   )
 
-  const searchCfg = computed(() => attendanceHolidayReturnSearchForm(t, schoolOptions.value))
-  const columns = computed(() => attendanceHolidayReturnColumns(t))
-  const detailConfig = computed(() => attendanceHolidayDetailForm(t))
+  const searchCfg = computed(() => returnSearchForm(t, schoolOptions.value))
+  const columns = computed(() => returnTableCols(t))
+  const detailConfig = computed(() => detailForm(t))
 
   const detailVisible = ref(false)
   const detailModel = ref<AttendanceHolidayDetailViewModel | null>(null)
@@ -77,7 +77,7 @@ export const useHolidayReturn = (schoolRecords: Ref<SchoolOptionRecord[]>) => {
           : undefined
     }
     const raw = await attendanceHolidayApi.holidayReturnPage.get(params)
-    const { list, total } = normalizeApiPagedBody(raw)
+    const { list, total } = normalizePaged(raw)
     return {
       data: list.map((row) => decorateRow(normalizeHolidayReturnRow(row))),
       total
@@ -93,7 +93,7 @@ export const useHolidayReturn = (schoolRecords: Ref<SchoolOptionRecord[]>) => {
     detailModel.value = null
     await runWithDetailLoading(async () => {
       const raw = await attendanceHolidayApi.holidayDetail.get(detailId)
-      const body = normalizeApiEnvelope(raw)
+      const body = normalizeEnvelope(raw)
       detailModel.value = formatHolidayDetailView(body, t)
     })
   }

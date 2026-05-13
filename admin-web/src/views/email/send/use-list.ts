@@ -6,8 +6,8 @@ import { computed, ref } from 'vue'
 import { bulkEmailApi } from '@/api'
 import type { Translate } from '@/types/i18n'
 
-import { normalizeApiPagedBody } from '@/utils/api-response-normalize'
-import { emailSendColumns, emailSendSearchForm, emailSendStatusOpts } from './list.config'
+import { normalizePaged } from '@/utils/api-response-normalize'
+import { searchForm, statusOpts as statusOptsFn, tableCols } from './list.config'
 
 type Loose = Record<string, unknown>
 
@@ -22,9 +22,9 @@ export const useList = () => {
   const { queryModel, filters, tableRef, handleLoadSuccess, reset, search } = useUniListState({
     initialFilters: { keyword: '', status: '' }
   })
-  const statusOpts = computed(() => emailSendStatusOpts(tr))
-  const searchCfg = computed(() => emailSendSearchForm(tr, statusOpts.value))
-  const columns = computed(() => emailSendColumns(tr))
+  const statusOpts = computed(() => statusOptsFn(tr))
+  const searchCfg = computed(() => searchForm(tr, statusOpts.value))
+  const columns = computed(() => tableCols(tr))
 
   const dialogVisible = ref(false)
   const viewVisible = ref(false)
@@ -58,7 +58,7 @@ export const useList = () => {
       keyword: String((f as Loose).keyword ?? ''),
       status: (f as Loose).status === '' || (f as Loose).status == null ? undefined : String((f as Loose).status)
     })
-    const { list, total } = normalizeApiPagedBody(raw)
+    const { list, total } = normalizePaged(raw)
     return { data: list, total }
   }
 

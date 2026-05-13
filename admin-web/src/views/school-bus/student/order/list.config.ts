@@ -2,7 +2,7 @@ import type { UniFormConfig, UniOption, UniTableColumn } from 'uni-ui-lib'
 
 import type { Translate } from '@/types/i18n'
 
-export const orderSearchForm = (
+export const searchForm = (
   t: Translate,
   schoolOptions: UniOption[],
   sectionOptions: UniOption[],
@@ -96,7 +96,7 @@ export const orderSearchForm = (
   colProps: { span: 6 }
 })
 
-export const orderTableColumns = (t: Translate, pickupOptions: UniOption[]): UniTableColumn[] => [
+export const tableCols = (t: Translate, pickupOptions: UniOption[]): UniTableColumn[] => [
   {
     prop: 'id',
     label: t('schoolBus.studentOrder.columns.id'),

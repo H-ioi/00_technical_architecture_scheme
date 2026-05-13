@@ -100,7 +100,7 @@ import { buildFlowEditFormConfig } from './edit.config'
 import { holidayFlowDefaultXml } from './xml-str'
 
 import { attendanceHolidayApi, membershipApi } from '@/api'
-import { normalizeApiEnvelope } from '@/utils/api-response-normalize'
+import { normalizeEnvelope } from '@/utils/api-response-normalize'
 import type { SchoolOptionRecord } from '@/types/modules/membership'
 
 type FlowEditFormModel = {
@@ -201,7 +201,7 @@ const initDiagram = async () => {
 
 const loadDetail = async (id: string) => {
   const raw = await attendanceHolidayApi.flowDefGet.get(id)
-  const res = normalizeApiEnvelope(raw)
+  const res = normalizeEnvelope(raw)
   if (!res || Object.keys(res).length === 0) {
     return
   }

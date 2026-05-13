@@ -30,7 +30,7 @@ export const HOLIDAY_CONFIG_GRADE_OPTS: UniOption[] = [
 ].map((v) => ({ label: v, value: v }))
 
 /** `UniSearchForm` 需要 `UniFormConfig.schema`（与请假 Tab 检索一致），禁止传入裸数组。 */
-export const holidayConfigSearchForm = (t: Translate, schoolOptions: UniOption[]): UniFormConfig => ({
+export const searchForm = (t: Translate, schoolOptions: UniOption[]): UniFormConfig => ({
   schema: [
     {
       field: 'school',
@@ -48,7 +48,7 @@ export const holidayConfigSearchForm = (t: Translate, schoolOptions: UniOption[]
 })
 
 /** 列必须使用 `prop` / `label` / `formatter`，与 `list.config` 请假表一致；勿用 `field` / `labelKey` / `format'。 */
-export const holidayConfigColumns = (t: Translate): UniTableColumn[] => [
+export const tableCols = (t: Translate): UniTableColumn[] => [
   {
     prop: 'school',
     label: t('attendance.holidayConfig.columns.school'),

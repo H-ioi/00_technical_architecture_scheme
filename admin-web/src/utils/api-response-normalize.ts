@@ -2,7 +2,7 @@
  * 仅封装「当前后端仍混用」的几种分页 / 信封形态；新接口应在网关或封装层统一成一种结构，页面侧尽量不再追加分支。
  *
  * 仍兼容的常见形状：`records|list|data[]`、`total|totalCount|totalElements`；嵌套 `data: { records|list|data }`；单层 `{ data: 对象 }`；
- * 会员检索 `{ data: { data } }`；校车详情 `success + data`（见 `normalizeSchoolBusDetailBody`）。
+ * 会员检索 `{ data: { data } }`；校车详情 `success + data`（见 `normalizeSchoolBusDetail`）。
  */
 
 type Loose = Record<string, unknown>
@@ -51,7 +51,7 @@ function extractListFromNested(obj: Loose): unknown[] | null {
 /**
  * 分页列表：统一得到 `{ list, total }`，供 UniDataTable 等使用。
  */
-export function normalizeApiPagedBody<T = unknown>(raw: unknown): { list: T[]; total: number } {
+export function normalizePaged<T = unknown>(raw: unknown): { list: T[]; total: number } {
   const empty: { list: T[]; total: number } = { list: [], total: 0 }
 
   if (!raw || typeof raw !== 'object') {
@@ -85,7 +85,7 @@ export function normalizeApiPagedBody<T = unknown>(raw: unknown): { list: T[]; t
 /**
  * 单层信封：`{ data: 对象 }` → 内层对象；否则返回顶层（群发详情、请假详情等多接口共用）。
  */
-export function normalizeApiEnvelope(raw: unknown): Loose {
+export function normalizeEnvelope(raw: unknown): Loose {
   if (!raw || typeof raw !== 'object') {
     return {}
   }
@@ -100,7 +100,7 @@ export function normalizeApiEnvelope(raw: unknown): Loose {
 /**
  * 会员 / 检索类接口：可能单层 `{ data }`，也可能双层 `{ data: { data } }`；原始值非对象时原样返回。
  */
-export function normalizeApiPayload(raw: unknown): unknown {
+export function normalizePayload(raw: unknown): unknown {
   if (!raw || typeof raw !== 'object') {
     return raw
   }
@@ -125,8 +125,8 @@ export function normalizeApiPayload(raw: unknown): unknown {
 /**
  * 仅抽取数组主体（下拉选项、配置行、`data` 直出数组等）。
  */
-export function normalizeApiArrayBody(raw: unknown): unknown[] {
-  const u = normalizeApiPayload(raw)
+export function normalizeArray(raw: unknown): unknown[] {
+  const u = normalizePayload(raw)
   if (Array.isArray(u)) {
     return u
   }
@@ -151,7 +151,7 @@ export function normalizeApiArrayBody(raw: unknown): unknown[] {
  * 校车详情接口：常见 `{ data: { success, data: 实体 } }`，或直接 `{ data: 实体 }`；
  * 与路线弹窗内 `unwrapLineDetail` / 站点学时弹窗逻辑一致。
  */
-export function normalizeSchoolBusDetailBody(res: unknown): Loose | null {
+export function normalizeSchoolBusDetail(res: unknown): Loose | null {
   if (res == null || typeof res !== 'object') {
     return null
   }

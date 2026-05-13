@@ -178,7 +178,7 @@ import type { PropType } from 'vue'
 
 import { schoolBusCommonApi, schoolBusLineApi } from '@/api'
 import type { SchoolOptionRecord } from '@/types/modules/membership'
-import { normalizeApiArrayBody, normalizeSchoolBusDetailBody } from '@/utils/api-response-normalize'
+import { normalizeArray, normalizeSchoolBusDetail } from '@/utils/api-response-normalize'
 
 import {
   BIND_STATION_TABLE_COLS,
@@ -194,15 +194,15 @@ function deepClone<T>(value: T): T {
 }
 
 async function fetchSectionList(params: Record<string, unknown>) {
-  return normalizeApiArrayBody(await schoolBusCommonApi.sectionList.get(params)) as Loose[]
+  return normalizeArray(await schoolBusCommonApi.sectionList.get(params)) as Loose[]
 }
 
 async function fetchStationList(params: Record<string, unknown>) {
-  return normalizeApiArrayBody(await schoolBusCommonApi.stationList.get(params)) as Loose[]
+  return normalizeArray(await schoolBusCommonApi.stationList.get(params)) as Loose[]
 }
 
 async function fetchCarinfoList(params: Record<string, unknown>) {
-  return normalizeApiArrayBody(await schoolBusCommonApi.carinfoList.get(params)) as Loose[]
+  return normalizeArray(await schoolBusCommonApi.carinfoList.get(params)) as Loose[]
 }
 
 export default {
@@ -403,7 +403,7 @@ export default {
 
     async getDetail(id: string | number) {
       const raw = await schoolBusLineApi.detail.get(id)
-      const body = normalizeSchoolBusDetailBody(raw)
+      const body = normalizeSchoolBusDetail(raw)
 
       if (!body) {
         return

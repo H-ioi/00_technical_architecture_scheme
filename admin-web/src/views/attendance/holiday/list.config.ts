@@ -84,7 +84,7 @@ export const formatDateLimitCell = (row: Loose) => {
   return '--'
 }
 
-export const attendanceHolidaySearchForm = (
+export const searchForm = (
   t: Translate,
   schoolOptions: UniOption[]
 ): UniFormConfig => ({
@@ -163,7 +163,7 @@ export const attendanceHolidaySearchForm = (
 })
 
 /** 销假 Tab 检索（对齐旧页）：仅「学校」「学号/姓名」。 */
-export const attendanceHolidayReturnSearchForm = (
+export const returnSearchForm = (
   t: Translate,
   schoolOptions: UniOption[]
 ): UniFormConfig => ({
@@ -195,7 +195,7 @@ export const attendanceHolidayReturnSearchForm = (
   colProps: { span: 6 }
 })
 
-export const attendanceHolidayColumns = (t: Translate): UniTableColumn[] => [
+export const tableCols = (t: Translate): UniTableColumn[] => [
   {
     prop: 'admissonNo',
     label: t('attendance.holiday.columns.admissionNo'),
@@ -300,7 +300,7 @@ export const attendanceHolidayColumns = (t: Translate): UniTableColumn[] => [
 ]
 
 /** 销假 Tab 专用列（对齐旧页「销假管理」：学号～班级 + 返校时间 + 创建时间）。 */
-export const attendanceHolidayReturnColumns = (t: Translate): UniTableColumn[] => [
+export const returnTableCols = (t: Translate): UniTableColumn[] => [
   {
     prop: 'admissonNo',
     label: t('attendance.holiday.columns.admissionNo'),
@@ -370,7 +370,7 @@ export interface AttendanceHolidayDetailViewModel {
   parentResponsibleLabel?: unknown
 }
 
-export const attendanceHolidayDetailForm = (t: Translate): UniFormConfig => ({
+export const detailForm = (t: Translate): UniFormConfig => ({
   mode: 'view',
   formProps: { labelWidth: '80px' },
   rowProps: { gutter: 16 },

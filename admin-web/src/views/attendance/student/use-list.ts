@@ -5,14 +5,14 @@ import { computed, ref } from 'vue'
 
 import {
   attendanceSchoolStatusOpts,
-  attendanceStudentColumns,
-  attendanceStudentDetailForm,
-  attendanceStudentSearchForm,
+  detailForm,
+  searchForm,
+  tableCols,
   ynOpts
 } from './list.config'
 
 import { attendanceStudentApi, membershipApi } from '@/api'
-import { normalizeApiPagedBody } from '@/utils/api-response-normalize'
+import { normalizePaged } from '@/utils/api-response-normalize'
 import type {
   AttendanceStudentListParams,
   AttendanceStudentRecord
@@ -74,7 +74,7 @@ export const useList = () => {
   const statusSearchOptions = computed(() => attendanceSchoolStatusOpts(t))
 
   const searchCfg = computed(() =>
-    attendanceStudentSearchForm(
+    searchForm(
       t,
       schoolOptions.value,
       gradeOptions.value,
@@ -83,9 +83,9 @@ export const useList = () => {
     )
   )
 
-  const columns = computed(() => attendanceStudentColumns(t, schoolOptions.value))
+  const columns = computed(() => tableCols(t, schoolOptions.value))
 
-  const detailConfig = computed(() => attendanceStudentDetailForm(t, schoolOptions.value))
+  const detailConfig = computed(() => detailForm(t, schoolOptions.value))
 
   const detailVisible = ref(false)
   const activeRow = ref<AttendanceStudentRecord | null>(null)
@@ -128,7 +128,7 @@ export const useList = () => {
       ...(f as Record<string, unknown>)
     }
     const raw = await attendanceStudentApi.studentPage.get(params)
-    const { list, total } = normalizeApiPagedBody<Loose>(raw)
+    const { list, total } = normalizePaged<Loose>(raw)
     return {
       data: list.map(decorateRow),
       total

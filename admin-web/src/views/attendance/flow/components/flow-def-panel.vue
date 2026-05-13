@@ -32,7 +32,7 @@ import { computed } from 'vue'
 import { useRouter } from 'vue-router'
 
 import { attendanceHolidayApi } from '@/api'
-import { normalizeApiPagedBody } from '@/utils/api-response-normalize'
+import { normalizePaged } from '@/utils/api-response-normalize'
 
 type Loose = Record<string, unknown>
 
@@ -126,7 +126,7 @@ const loadData: UniTableRequest = async ({ pageNo, pageSize, filters: f }) => {
     limit: pageSize,
     key: String((f as Loose).key ?? '')
   })
-  const { list, total } = normalizeApiPagedBody<Loose>(raw)
+  const { list, total } = normalizePaged<Loose>(raw)
   return { data: list, total }
 }
 

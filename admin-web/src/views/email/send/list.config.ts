@@ -1,12 +1,12 @@
 import type { Translate } from '@/types/i18n'
 import type { UniFormConfig, UniOption, UniTableColumn } from 'uni-ui-lib'
 
-export const emailSendStatusOpts = (t: Translate): UniOption[] => [
+export const statusOpts = (t: Translate): UniOption[] => [
   { label: t('email.statusActive'), value: '1' },
   { label: t('email.statusArchived'), value: '0' }
 ]
 
-export const emailSendSearchForm = (_t: Translate, statusOpts: UniOption[]): UniFormConfig => ({
+export const searchForm = (_t: Translate, statusOptsList: UniOption[]): UniFormConfig => ({
   rowProps: { gutter: 16 },
   schema: [
     {
@@ -23,7 +23,7 @@ export const emailSendSearchForm = (_t: Translate, statusOpts: UniOption[]): Uni
       field: 'status',
       label: '',
       component: 'ElSelect',
-      options: statusOpts,
+      options: statusOptsList,
       componentProps: {
         clearable: true,
         placeholder: _t('email.status')
@@ -33,7 +33,7 @@ export const emailSendSearchForm = (_t: Translate, statusOpts: UniOption[]): Uni
   ]
 })
 
-export const emailSendColumns = (t: Translate): UniTableColumn[] => [
+export const tableCols = (t: Translate): UniTableColumn[] => [
   { prop: 'id', label: 'ID', type: 'text', width: 72 },
   { prop: 'email', label: t('email.send.colEmail365'), type: 'text', minWidth: 200, showOverflowTooltip: true },
   { prop: 'usernames', label: t('email.send.colUsers'), type: 'text', minWidth: 160, showOverflowTooltip: true },

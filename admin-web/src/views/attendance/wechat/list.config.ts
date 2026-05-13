@@ -8,7 +8,7 @@ export const wechatOpenidStatusOpts = (t: Translate): UniOption[] => [
   { label: t('attendance.wechatOpenid.options.archived'), value: '1', type: 'info' }
 ]
 
-export const attendanceWechatOpenidSearchForm = (
+export const searchForm = (
   t: Translate,
   schoolOptions: UniOption[],
   statusOptions: UniOption[]
@@ -96,7 +96,7 @@ export const attendanceWechatOpenidSearchForm = (
   colProps: { span: 6 }
 })
 
-export const attendanceWechatOpenidColumns = (
+export const tableCols = (
   t: Translate,
   schoolOptions: UniOption[]
 ): UniTableColumn[] => [
@@ -153,7 +153,7 @@ export const attendanceWechatOpenidColumns = (
   }
 ]
 
-export const attendanceWechatOpenidDetailForm = (
+export const detailForm = (
   t: Translate,
   schoolOptions: UniOption[]
 ): UniFormConfig => ({

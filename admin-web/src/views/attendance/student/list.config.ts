@@ -17,7 +17,7 @@ export const attendanceSchoolStatusOpts = (t: Translate): UniOption[] => [
   { label: t('attendance.student.options.statusAbsent'), value: '4', type: 'danger' }
 ]
 
-export const attendanceStudentSearchForm = (
+export const searchForm = (
   t: Translate,
   schoolOptions: UniOption[],
   gradeOptions: UniOption[],
@@ -121,7 +121,7 @@ export const attendanceStudentSearchForm = (
   colProps: { span: 6 }
 })
 
-export const attendanceStudentColumns = (
+export const tableCols = (
   t: Translate,
   schoolOptions: UniOption[]
 ): UniTableColumn[] => [
@@ -204,7 +204,7 @@ export const attendanceStudentColumns = (
   }
 ]
 
-export const attendanceStudentDetailForm = (
+export const detailForm = (
   t: Translate,
   schoolOptions: UniOption[]
 ): UniFormConfig => ({

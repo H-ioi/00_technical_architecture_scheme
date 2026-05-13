@@ -2,7 +2,7 @@ import type { UniFormConfig, UniOption, UniTableColumn } from 'uni-ui-lib'
 
 import type { Translate } from '@/types/i18n'
 
-export const applySearchForm = (
+export const searchForm = (
   t: Translate,
   schoolOptions: UniOption[],
   approvalOptions: UniOption[],
@@ -108,7 +108,7 @@ export const applySearchForm = (
   colProps: { span: 6 }
 })
 
-export const applyTableColumns = (
+export const tableCols = (
   t: Translate,
   approvalOptions: UniOption[],
   paymentOptions: UniOption[],

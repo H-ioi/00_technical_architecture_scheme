@@ -179,7 +179,7 @@ import { ElMessage } from 'element-plus'
 import { computed, reactive, ref, watch } from 'vue'
 
 import { attendanceHolidayApi, membershipApi, protocolApi } from '@/api'
-import { normalizeApiArrayBody, normalizeApiPayload } from '@/utils/api-response-normalize'
+import { normalizeArray, normalizePayload } from '@/utils/api-response-normalize'
 import { useUniI18n } from 'uni-ui-lib'
 
 type Loose = Record<string, unknown>
@@ -249,7 +249,7 @@ const queryStudents = (
   membershipApi.searchStudent
     .get(q)
     .then((res) => {
-      const list = normalizeApiArrayBody(res) as Loose[]
+      const list = normalizeArray(res) as Loose[]
       cb(
         list.map((item) => ({
           value: `${item.showName ?? item.name ?? ''}(${item.admissonNo ?? item.admissionNo ?? ''})`,
@@ -264,7 +264,7 @@ const onStudentSelect = (item: { admissonNo: string }) => {
   form.admissonNo = item.admissonNo
   displayStudent.value = item.admissonNo ? item.value : ''
   membershipApi.studentInfo.get(item.admissonNo).then((res) => {
-    const data = normalizeApiPayload(res) as Loose
+    const data = normalizePayload(res) as Loose
     studentInfo.value = data && typeof data === 'object' ? data : {}
   })
 }

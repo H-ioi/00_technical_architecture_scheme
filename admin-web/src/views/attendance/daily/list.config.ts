@@ -23,7 +23,7 @@ export const dailyStatusOpts = (t: Translate): UniOption[] => [
   { label: t('attendance.daily.options.statusExit'), value: 'Exit' }
 ]
 
-export const attendanceDailySearchForm = (
+export const searchForm = (
   t: Translate,
   schoolOptions: UniOption[],
   ynOptions: UniOption[],
@@ -126,7 +126,7 @@ export const attendanceDailySearchForm = (
   colProps: { span: 6 }
 })
 
-export const attendanceDailyColumns = (t: Translate): UniTableColumn[] => [
+export const tableCols = (t: Translate): UniTableColumn[] => [
   {
     prop: 'schoolName',
     label: t('attendance.daily.columns.schoolName'),

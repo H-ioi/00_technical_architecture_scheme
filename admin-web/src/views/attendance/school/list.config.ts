@@ -10,7 +10,7 @@ export const attendanceOpenTypeOpts = (t: Translate): UniOption[] => [
   { label: t('attendance.school.options.openIllegalFace'), value: '62' }
 ]
 
-export const attendanceSchoolSearchForm = (
+export const searchForm = (
   t: Translate,
   schoolOptions: UniOption[],
   deptOptions: UniOption[],
@@ -131,7 +131,7 @@ export const attendanceSchoolSearchForm = (
   colProps: { span: 6 }
 })
 
-export const attendanceSchoolColumns = (
+export const tableCols = (
   t: Translate,
   schoolOptions: UniOption[]
 ): UniTableColumn[] => [
@@ -233,7 +233,7 @@ export const attendanceSchoolColumns = (
   }
 ]
 
-export const attendanceSchoolDetailForm = (
+export const detailForm = (
   t: Translate,
   schoolOptions: UniOption[]
 ): UniFormConfig => ({

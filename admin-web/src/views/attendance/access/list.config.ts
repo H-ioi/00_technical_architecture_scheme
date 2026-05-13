@@ -16,7 +16,7 @@ export const accessOpenResultOpts = (t: Translate): UniOption[] => [
   { label: t('attendance.access.options.resultSuccess'), value: '1' }
 ]
 
-export const attendanceAccessSearchForm = (
+export const searchForm = (
   t: Translate,
   schoolOptions: UniOption[],
   deptOptions: UniOption[]
@@ -115,7 +115,7 @@ export const attendanceAccessSearchForm = (
   colProps: { span: 6 }
 })
 
-export const attendanceAccessColumns = (
+export const tableCols = (
   t: Translate,
   schoolOptions: UniOption[]
 ): UniTableColumn[] => [
@@ -200,7 +200,7 @@ export const attendanceAccessColumns = (
   }
 ]
 
-export const attendanceAccessDetailForm = (
+export const detailForm = (
   t: Translate,
   schoolOptions: UniOption[]
 ): UniFormConfig => ({

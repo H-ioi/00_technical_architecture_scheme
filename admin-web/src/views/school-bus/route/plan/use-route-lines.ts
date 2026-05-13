@@ -8,7 +8,7 @@ import { computed, onMounted, ref, watch } from 'vue'
 import RouteFormModal from './components/route-form-modal.vue'
 
 import { schoolBusCommonApi, schoolBusLineApi } from '@/api'
-import { normalizeApiPagedBody } from '@/utils/api-response-normalize'
+import { normalizePaged } from '@/utils/api-response-normalize'
 import type { SchoolOptionRecord } from '@/types/modules/membership'
 import type { LineListParams } from '@/types/modules/school-bus-line'
 
@@ -324,7 +324,7 @@ export const useRouteLines = (
 
     const params = stripEmptyParams(base)
     const result = await schoolBusLineApi.page.get(params)
-    const { list, total } = normalizeApiPagedBody<Loose>(result)
+    const { list, total } = normalizePaged<Loose>(result)
 
     return {
       data: list.map((r) => fmtRowRoute({ ...r })),

@@ -3,7 +3,7 @@ import { toUniOptions, useUniI18n, useUniListState } from 'uni-ui-lib'
 import { computed, nextTick, onMounted, ref, watch } from 'vue'
 
 import { membershipApi, schoolBusDriverApi } from '@/api'
-import { normalizeApiPagedBody } from '@/utils/api-response-normalize'
+import { normalizePaged } from '@/utils/api-response-normalize'
 import type { SchoolOptionRecord } from '@/types/modules/membership'
 import type { DriverRecord as Row } from '@/types/modules/school-bus-driver'
 
@@ -62,7 +62,7 @@ export const useList = () => {
 
   const loadData: UniTableRequest = async ({ pageNo: current, pageSize: size, filters: f }) => {
     const result = await schoolBusDriverApi.page.get({ current, size, ...f })
-    const { list, total: pageTotal } = normalizeApiPagedBody<Row>(result)
+    const { list, total: pageTotal } = normalizePaged<Row>(result)
 
     return {
       data: list,

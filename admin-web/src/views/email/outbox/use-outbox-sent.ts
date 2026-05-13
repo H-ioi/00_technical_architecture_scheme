@@ -7,8 +7,8 @@ import { bulkEmailApi } from '@/api'
 import type { Translate } from '@/types/i18n'
 import { downloadBlob } from '@/utils/download'
 
-import { normalizeApiEnvelope, normalizeApiPagedBody } from '@/utils/api-response-normalize'
-import { emailOutboxSearchForm, emailOutboxSentColumns } from './list.config'
+import { normalizeEnvelope, normalizePaged } from '@/utils/api-response-normalize'
+import { searchForm, tableCols } from './list.config'
 
 type Loose = Record<string, unknown>
 
@@ -22,8 +22,8 @@ export const useOutboxSent = () => {
     initialFilters: { keyword: '', dateRange: null as string[] | null }
   })
 
-  const searchCfg = computed(() => emailOutboxSearchForm(tr))
-  const columns = computed(() => emailOutboxSentColumns(tr))
+  const searchCfg = computed(() => searchForm(tr))
+  const columns = computed(() => tableCols(tr))
 
   const loadData: UniTableRequest = async ({ pageNo, pageSize, filters: f }) => {
     const fl = f as Loose
@@ -36,7 +36,7 @@ export const useOutboxSent = () => {
       beginCreateDate: Array.isArray(dr) && dr.length === 2 ? dr[0] : undefined,
       endCreateDate: Array.isArray(dr) && dr.length === 2 ? dr[1] : undefined
     })
-    const { list, total } = normalizeApiPagedBody(raw)
+    const { list, total } = normalizePaged(raw)
     return { data: list, total }
   }
 
@@ -45,7 +45,7 @@ export const useOutboxSent = () => {
 
   const openView = async (row: Loose) => {
     const raw = await bulkEmailApi.sendRecordDetail.get({ id: row.id as string | number })
-    viewModel.value = normalizeApiEnvelope(raw)
+    viewModel.value = normalizeEnvelope(raw)
     viewVisible.value = true
   }
 

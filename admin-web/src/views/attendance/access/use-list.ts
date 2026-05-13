@@ -4,17 +4,17 @@ import { toUniOptions, useUniI18n, useUniListState } from 'uni-ui-lib'
 import { computed, ref } from 'vue'
 
 import {
-  attendanceAccessColumns,
-  attendanceAccessDetailForm,
-  attendanceAccessSearchForm,
   accessEnterExitOpts,
-  accessOpenResultOpts
+  accessOpenResultOpts,
+  detailForm,
+  searchForm,
+  tableCols
 } from './list.config'
 
 import { attendanceOpenTypeOpts } from '../school/list.config'
 
 import { attendanceAccessApi, attendanceSchoolApi, membershipApi } from '@/api'
-import { normalizeApiPagedBody } from '@/utils/api-response-normalize'
+import { normalizePaged } from '@/utils/api-response-normalize'
 import type {
   AttendanceAccessListParams,
   AttendanceAccessRecord
@@ -73,12 +73,12 @@ export const useList = () => {
   )
 
   const searchCfg = computed(() =>
-    attendanceAccessSearchForm(t, schoolOptions.value, deptOptions.value)
+    searchForm(t, schoolOptions.value, deptOptions.value)
   )
 
-  const columns = computed(() => attendanceAccessColumns(t, schoolOptions.value))
+  const columns = computed(() => tableCols(t, schoolOptions.value))
 
-  const detailConfig = computed(() => attendanceAccessDetailForm(t, schoolOptions.value))
+  const detailConfig = computed(() => detailForm(t, schoolOptions.value))
 
   const detailVisible = ref(false)
   const activeRow = ref<AttendanceAccessRecord | null>(null)
@@ -122,7 +122,7 @@ export const useList = () => {
       ...(f as Record<string, unknown>)
     }
     const raw = await attendanceAccessApi.unionPage.get(params)
-    const { list, total } = normalizeApiPagedBody<Loose>(raw)
+    const { list, total } = normalizePaged<Loose>(raw)
     return {
       data: list.map(decorateRow),
       total

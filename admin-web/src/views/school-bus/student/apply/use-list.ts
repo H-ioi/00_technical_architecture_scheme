@@ -5,10 +5,10 @@ import { computed, nextTick, onMounted, ref, watch } from 'vue'
 
 import { useBusOrderFormDialog } from '../components/use-bus-order-form-dialog'
 
-import { applySearchForm, applyTableColumns } from './list.config'
+import { searchForm, tableCols } from './list.config'
 
 import { schoolBusOrderApi } from '@/api'
-import { normalizeApiPagedBody } from '@/utils/api-response-normalize'
+import { normalizePaged } from '@/utils/api-response-normalize'
 import type { SchoolOptionRecord } from '@/types/modules/membership'
 import type { BusOrderListParams, BusOrderRecord } from '@/types/modules/school-bus-order'
 import { membershipSchoolLabel } from '@/utils/membership-school'
@@ -73,7 +73,7 @@ export const useApplyList = () => {
   const pickupOpts = computed(() => pickupMethodOptions(t))
 
   const searchCfg = computed(() =>
-    applySearchForm(
+    searchForm(
       t,
       schoolOptions.value,
       approvalOpts.value,
@@ -86,7 +86,7 @@ export const useApplyList = () => {
   )
 
   const columns = computed(() =>
-    applyTableColumns(t, approvalOpts.value, paymentOpts.value, pickupOpts.value)
+    tableCols(t, approvalOpts.value, paymentOpts.value, pickupOpts.value)
   )
 
   const loadData: UniTableRequest = async ({ pageNo: _p, pageSize: _s, filters: f }) => {
@@ -97,7 +97,7 @@ export const useApplyList = () => {
       raw.schoolIds = defaultSingleSchoolId.value
     }
     const result = await schoolBusOrderApi.intentionPage.get(raw)
-    const { list, total } = normalizeApiPagedBody<BusOrderRecord>(result)
+    const { list, total } = normalizePaged<BusOrderRecord>(result)
     const loc = locale()
     return {
       data: list.map((row) => decorateRow(row, loc, schoolRecords.value)),

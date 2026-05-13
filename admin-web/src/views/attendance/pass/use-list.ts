@@ -3,8 +3,8 @@ import { toUniOptions, useUniI18n, useUniListState, useUniPermission } from 'uni
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { computed, ref } from 'vue'
 
-import { leavePassColumns, leavePassSearchForm } from './list.config'
-import { normalizeApiPagedBody } from '@/utils/api-response-normalize'
+import { searchForm, tableCols } from './list.config'
+import { normalizePaged } from '@/utils/api-response-normalize'
 
 import { attendanceHolidayApi, membershipApi } from '@/api'
 import type { AttendanceLeavePassRecord } from '@/types/modules/attendance-holiday'
@@ -29,8 +29,8 @@ export const useList = () => {
     })
   )
 
-  const searchCfg = computed(() => leavePassSearchForm(t, schoolOptions.value))
-  const columns = computed(() => leavePassColumns(t))
+  const searchCfg = computed(() => searchForm(t, schoolOptions.value))
+  const columns = computed(() => tableCols(t))
 
   const dialogVisible = ref(false)
   const dialogEdit = ref<AttendanceLeavePassRecord | null>(null)
@@ -43,7 +43,7 @@ export const useList = () => {
       size: pageSize,
       ...(f as Loose)
     })
-    const { list, total } = normalizeApiPagedBody(raw)
+    const { list, total } = normalizePaged(raw)
     return { data: list as AttendanceLeavePassRecord[], total }
   }
 
