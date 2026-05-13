@@ -1,10 +1,9 @@
 <template>
   <el-dialog
-    :model-value="visible"
+    v-model="visible"
     destroy-on-close
     width="640px"
-    :title="t('permission.actions.assignMenu')"
-    @update:model-value="emit('update:visible', $event)">
+    :title="t('permission.actions.assignMenu')">
     <div
       v-loading="loading"
       class="permission-assign-tree"
@@ -22,7 +21,7 @@
         :default-checked-keys="checkedKeys" />
     </div>
     <template #footer>
-      <el-button @click="emit('update:visible', false)">{{
+      <el-button @click="visible = false">{{
         t('permission.actions.cancel')
       }}</el-button>
       <el-button type="primary" :loading="saving" @click="submit">{{
@@ -40,8 +39,10 @@ import { useUniI18n } from 'uni-ui-lib'
 import { permissionMenuApi, permissionRoleApi } from '@/api'
 import type { PermissionMenuNode } from '@/types/modules/permission-menu'
 
-const props = defineProps<{ visible: boolean; roleId?: string | number }>()
-const emit = defineEmits<{ (e: 'update:visible', v: boolean): void; (e: 'saved'): void }>()
+const visible = defineModel<boolean>('visible', { required: true })
+
+const props = defineProps<{ roleId?: string | number }>()
+const emit = defineEmits<{ (e: 'saved'): void }>()
 
 const { t } = useUniI18n()
 
@@ -61,7 +62,7 @@ const normalizeChecked = (raw: unknown): (string | number)[] => {
 }
 
 watch(
-  () => [props.visible, props.roleId] as const,
+  () => [visible.value, props.roleId] as const,
   async ([open, rid]) => {
     if (!open || rid === undefined || rid === null) {
       ready.value = false
@@ -98,7 +99,7 @@ const submit = async () => {
       menuIds
     })
     ElMessage.success(t('permission.messages.assignMenuSaved'))
-    emit('update:visible', false)
+    visible.value = false
     emit('saved')
   } finally {
     saving.value = false

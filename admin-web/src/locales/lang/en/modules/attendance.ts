@@ -266,5 +266,80 @@ export default {
       sendOk: 'Success',
       sendFail: 'Fail'
     }
+  },
+  holiday: {
+    page: {
+      title: 'Leave requests',
+      description:
+        'Two tabs — leave list (`GET /attendance/holiday/page`) and return/cancel list (`GET /attendance/holiday-return/return-page`, legacy `listHolidayEnd`). Layout follows the school-bus route planning tab page.'
+    },
+    tabs: {
+      leave: 'Leave',
+      return: 'Return'
+    },
+    actions: {
+      add: 'Create',
+      withdraw: 'Withdraw',
+      detail: 'View'
+    },
+    messages: {
+      withdrawPrompt: 'Notice',
+      withdrawConfirm: 'Withdraw this leave workflow? (procId={procId}, id={id})',
+      withdrawSuccess: 'Withdrawn',
+      addPending:
+        'Creating/editing leave (student lookup, fixed-week schedule, attachments, parent acknowledgement) depends on public upload APIs (`/publik/file/upload`, etc.) and will mirror legacy `dialog/add.vue`. Use View / Withdraw for now.'
+    },
+    placeholders: {
+      leaveType: 'Leave type',
+      school: 'Campus',
+      scope: 'Scope',
+      beginTime: 'Start date',
+      endTime: 'End date',
+      keyword: 'Admission No. / name'
+    },
+    columns: {
+      id: 'ID',
+      admissionNo: 'Admission No.',
+      studentName: 'Name',
+      school: 'Campus',
+      grade: 'Grade',
+      className: 'Class',
+      leaveType: 'Leave type',
+      scope: 'Scope',
+      reason: 'Reason',
+      dateRange: 'Leave window',
+      timeSlot: 'Time slot',
+      infectious: 'Infectious disease',
+      fixed: 'Fixed pattern',
+      weekDays: 'Weekdays',
+      status: 'Status',
+      createdAt: 'Created at'
+    },
+    return: {
+      columns: {
+        returnSchoolTime: 'Return to school time'
+      }
+    },
+    detail: {
+      beginTime: 'Starts',
+      endTime: 'Ends',
+      procId: 'Process id',
+      parentResponsible: 'Parent acknowledgement'
+    },
+    options: {
+      leavePersonal: 'Personal leave',
+      leaveSick: 'Sick leave',
+      scopeCourse: 'Classes',
+      scopeDorm: 'Boarding',
+      scopeBus: 'School bus',
+      yes: 'Yes',
+      no: 'No',
+      statusPending: 'Pending approval',
+      statusRejected: 'Rejected',
+      statusWithdrawn: 'Withdrawn',
+      statusOnLeave: 'On leave',
+      statusFinished: 'Finished',
+      statusLeaveSoon: 'Awaiting leave'
+    }
   }
 }

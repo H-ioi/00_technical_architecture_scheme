@@ -1,0 +1,160 @@
+<template>
+  <section class="uni-list-page">
+    <div class="uni-list-page__header">
+      <div>
+        <h1>{{ $t('attendance.holiday.page.title') }}</h1>
+        <p>{{ $t('attendance.holiday.page.description') }}</p>
+      </div>
+      <div v-if="activeTab === 'leave'">
+        <el-button type="primary" @click="onAddPending">{{ $t('attendance.holiday.actions.add') }}</el-button>
+      </div>
+    </div>
+
+    <el-tabs v-model="activeTab" class="attendance-holiday-tab__tabs">
+      <el-tab-pane :label="$t('attendance.holiday.tabs.leave')" name="leave">
+        <UniSearchForm
+          v-model="leaveQueryModel"
+          :config="leaveSearchConfig"
+          :collapsed="true"
+          :collapsed-rows="1"
+          :action-min-span="0"
+          :submit-text="$t('member.actions.search')"
+          :reset-text="$t('member.actions.reset')"
+          @search="searchLeave"
+          @reset="resetLeaveSearch"
+        />
+        <UniDataTable
+          ref="leaveTableRef"
+          row-key="id"
+          :columns="leaveColumns"
+          :request="loadLeaveData"
+          :filters="leaveFilters"
+          :pagination="{ pageSize: 10, pageSizes: [10, 20, 50, 100] }"
+          :toolbar="{ refresh: true, density: true, columnSetting: true }"
+          :actions="leaveActions"
+          :action-column="{ width: 140, fixed: 'right' }"
+          @load-success="handleLeaveLoadSuccess"
+        />
+      </el-tab-pane>
+
+      <el-tab-pane :label="$t('attendance.holiday.tabs.return')" name="return">
+        <UniSearchForm
+          v-model="returnQueryModel"
+          :config="returnSearchConfig"
+          :collapsed="true"
+          :collapsed-rows="1"
+          :action-min-span="0"
+          :submit-text="$t('member.actions.search')"
+          :reset-text="$t('member.actions.reset')"
+          @search="searchReturn"
+          @reset="resetReturnSearch"
+        />
+        <UniDataTable
+          ref="returnTableRef"
+          row-key="id"
+          :columns="returnColumns"
+          :request="loadReturnData"
+          :filters="returnFilters"
+          :pagination="{ pageSize: 10, pageSizes: [10, 20, 50, 100] }"
+          :toolbar="{ refresh: true, density: true, columnSetting: true }"
+          :actions="returnActions"
+          :action-column="{ width: 88, fixed: 'right' }"
+          @load-success="handleReturnLoadSuccess"
+        />
+      </el-tab-pane>
+    </el-tabs>
+
+    <DetailDrawer
+      v-model:visible="leaveDetailVisible"
+      :source="leaveDetailModel"
+      :config="leaveDetailConfig"
+      :loading="leaveDetailLoading"
+    />
+
+    <DetailDrawer
+      v-model:visible="returnDetailVisible"
+      :source="returnDetailModel"
+      :config="returnDetailConfig"
+      :loading="returnDetailLoading"
+    />
+  </section>
+</template>
+
+<script setup lang="ts">
+import { ElMessage } from 'element-plus'
+import { UniDataTable, UniSearchForm, useUniI18n } from 'uni-ui-lib'
+import { nextTick, onMounted, ref, watch } from 'vue'
+
+import DetailDrawer from './components/detail-drawer.vue'
+import { useHolidayLeave } from './use-holiday-leave'
+import { useHolidayReturn } from './use-holiday-return'
+
+import { membershipApi } from '@/api'
+import type { SchoolOptionRecord } from '@/types/modules/membership'
+
+const { t } = useUniI18n()
+
+const activeTab = ref<'leave' | 'return'>('leave')
+const schoolRecords = ref<SchoolOptionRecord[]>([])
+
+const {
+  actions: leaveActions,
+  columns: leaveColumns,
+  detailConfig: leaveDetailConfig,
+  detailLoading: leaveDetailLoading,
+  detailModel: leaveDetailModel,
+  detailVisible: leaveDetailVisible,
+  filters: leaveFilters,
+  handleLoadSuccess: handleLeaveLoadSuccess,
+  loadData: loadLeaveData,
+  queryModel: leaveQueryModel,
+  reset: resetLeaveSearch,
+  search: searchLeave,
+  searchConfig: leaveSearchConfig,
+  tableRef: leaveTableRef
+} = useHolidayLeave(schoolRecords)
+
+const {
+  actions: returnActions,
+  columns: returnColumns,
+  detailConfig: returnDetailConfig,
+  detailLoading: returnDetailLoading,
+  detailModel: returnDetailModel,
+  detailVisible: returnDetailVisible,
+  filters: returnFilters,
+  handleLoadSuccess: handleReturnLoadSuccess,
+  loadData: loadReturnData,
+  queryModel: returnQueryModel,
+  reset: resetReturnSearch,
+  search: searchReturn,
+  searchConfig: returnSearchConfig,
+  tableRef: returnTableRef
+} = useHolidayReturn(schoolRecords)
+
+const onAddPending = () => {
+  ElMessage.info(t('attendance.holiday.messages.addPending'))
+}
+
+onMounted(async () => {
+  schoolRecords.value = await membershipApi.school.get()
+})
+
+watch(
+  () => schoolRecords.value.length,
+  (n) => {
+    if (n === 0) {
+      return
+    }
+    nextTick(() => {
+      leaveTableRef.value?.refresh()
+      returnTableRef.value?.refresh()
+    })
+  }
+)
+</script>
+
+<style scoped lang="scss">
+.attendance-holiday-tab__tabs {
+  margin-top: 8px;
+}
+</style>

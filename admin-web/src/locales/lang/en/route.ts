@@ -27,6 +27,7 @@ export default {
   attendance: 'Attendance',
   attendanceStudent: 'Student attendance',
   attendanceDaily: 'Daily attendance',
+  attendanceHoliday: 'Leave requests',
   attendanceSchool: 'Campus attendance',
   attendanceAccess: 'Access records',
   attendanceWechat: 'WeChat OpenID',

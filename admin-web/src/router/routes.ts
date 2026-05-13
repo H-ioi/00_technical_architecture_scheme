@@ -277,6 +277,15 @@ export const routes: AppRouteRecord[] = [
             }
           },
           {
+            path: 'holiday',
+            name: 'AttendanceHoliday',
+            component: () => import('@/views/attendance/holiday/tab.vue'),
+            meta: {
+              title: '请假管理',
+              titleKey: 'route.attendanceHoliday'
+            }
+          },
+          {
             path: 'school',
             name: 'AttendanceSchool',
             component: () => import('@/views/attendance/school/list.vue'),

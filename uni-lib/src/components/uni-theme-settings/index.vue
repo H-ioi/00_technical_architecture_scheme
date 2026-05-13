@@ -91,7 +91,7 @@
 
 <script setup lang="ts">
 import { Delete, Plus } from '@element-plus/icons-vue'
-import { computed, reactive, ref, watch } from 'vue'
+import { reactive, ref, watch } from 'vue'
 
 import { applyUniTheme, getStoredUniTheme, saveUniTheme } from './runtime'
 import type { UniThemeOptions } from '@/types/uni-theme'
@@ -107,9 +107,10 @@ const MANAGED_VARIABLE_KEYS = new Set([
   '--el-component-size-small'
 ])
 
+const visible = defineModel<boolean>({ required: true })
+
 const props = withDefaults(
   defineProps<{
-    modelValue: boolean
     defaultTheme?: UniThemeOptions
     storageKey?: string
     title?: string
@@ -130,7 +131,6 @@ const props = withDefaults(
 )
 
 const emit = defineEmits<{
-  'update:modelValue': [visible: boolean]
   applied: [theme: UniThemeOptions]
 }>()
 
@@ -148,11 +148,6 @@ const form = reactive({
 })
 
 const extraVariables = ref<Array<{ key: string; value: string }>>([])
-
-const visible = computed({
-  get: () => props.modelValue,
-  set: (value) => emit('update:modelValue', value)
-})
 
 const syncExtraFromVariables = (vars: Record<string, string> | undefined) => {
   if (!vars) {
@@ -239,14 +234,11 @@ const removeExtraVariable = (index: number) => {
   extraVariables.value.splice(index, 1)
 }
 
-watch(
-  () => props.modelValue,
-  (nextVisible) => {
-    if (nextVisible) {
-      syncForm(getStoredUniTheme(props.storageKey) ?? props.defaultTheme)
-    }
+watch(visible, (nextVisible) => {
+  if (nextVisible) {
+    syncForm(getStoredUniTheme(props.storageKey) ?? props.defaultTheme)
   }
-)
+})
 </script>
 
 <style scoped lang="scss">

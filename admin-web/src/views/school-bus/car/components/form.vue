@@ -1,10 +1,9 @@
 <template>
   <el-dialog
-    :model-value="visible"
+    v-model="visible"
     :title="title"
     width="720px"
-    destroy-on-close
-    @update:model-value="emit('update:visible', $event)">
+    destroy-on-close>
     <div
       v-loading="detailLoading"
       class="school-bus-car-form__body"
@@ -45,8 +44,9 @@ import { protocolApi, schoolBusCarApi, schoolBusCommonApi } from '@/api'
 import { useDialogDetailLoading } from '@/composables/use-dialog-detail-loading'
 import type { CarRecord } from '@/types/modules/school-bus-car'
 
+const visible = defineModel<boolean>('visible', { required: true })
+
 const props = defineProps<{
-  visible: boolean
   mode: 'add' | 'edit' | 'look'
   source: CarRecord | null
   defaultSchoolId: string | number | null
@@ -56,7 +56,6 @@ const props = defineProps<{
 }>()
 
 const emit = defineEmits<{
-  'update:visible': [boolean]
   saved: []
 }>()
 
@@ -156,34 +155,31 @@ const fillForm = async (record: CarRecord) => {
   }
 }
 
-watch(
-  () => props.visible,
-  async (vis) => {
-    if (!vis) {
-      return
-    }
-    if (props.mode === 'add') {
-      resetForm()
-      if (formModel.value.schoolIds?.length) {
-        await pickDriversTeachers(formModel.value.schoolIds)
-      }
-    } else if (props.source) {
-      await runWithDetailLoading(async () => {
-        const raw = await schoolBusCarApi.detail.get(props.source!.id)
-        const data =
-          raw && typeof raw === 'object' && 'data' in raw
-            ? (raw as { data: CarRecord }).data
-            : (raw as CarRecord)
-        await fillForm(data)
-      })
-    }
+watch(visible, async (isOpen) => {
+  if (!isOpen) {
+    return
   }
-)
+  if (props.mode === 'add') {
+    resetForm()
+    if (formModel.value.schoolIds?.length) {
+      await pickDriversTeachers(formModel.value.schoolIds)
+    }
+  } else if (props.source) {
+    await runWithDetailLoading(async () => {
+      const raw = await schoolBusCarApi.detail.get(props.source!.id)
+      const data =
+        raw && typeof raw === 'object' && 'data' in raw
+          ? (raw as { data: CarRecord }).data
+          : (raw as CarRecord)
+      await fillForm(data)
+    })
+  }
+})
 
 watch(
   () => formModel.value.schoolIds,
   async (ids) => {
-    if (!props.visible || isLook.value) {
+    if (!visible.value || isLook.value) {
       return
     }
     if (ids?.length) {
@@ -206,7 +202,7 @@ const beforeUpload = async (file: File) => {
 }
 
 const close = () => {
-  emit('update:visible', false)
+  visible.value = false
 }
 
 const submit = async () => {

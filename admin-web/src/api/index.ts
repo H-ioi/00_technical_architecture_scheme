@@ -1,5 +1,6 @@
 import attendanceAccessApi from './modules/attendance-access'
 import attendanceDailyApi from './modules/attendance-daily'
+import attendanceHolidayApi from './modules/attendance-holiday'
 import attendanceSchoolApi from './modules/attendance-school'
 import attendanceStudentApi from './modules/attendance-student'
 import attendanceWechatNoticeApi from './modules/attendance-wechat-notice'
@@ -30,6 +31,7 @@ import schoolBusStationApi from './modules/school-bus-station'
 export {
   attendanceAccessApi,
   attendanceDailyApi,
+  attendanceHolidayApi,
   attendanceSchoolApi,
   attendanceStudentApi,
   attendanceWechatNoticeApi,

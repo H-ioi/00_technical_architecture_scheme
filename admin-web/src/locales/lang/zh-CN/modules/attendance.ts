@@ -267,5 +267,81 @@ export default {
       sendOk: '成功',
       sendFail: '失败'
     }
+  },
+  holiday: {
+    page: {
+      title: '请假管理',
+      description:
+        '分为「请假」「销假」两个 Tab：请假列表对齐 `GET /attendance/holiday/page`，销假列表对齐 `GET /attendance/holiday-return/return-page`（旧 `listHolidayEnd`）；页面结构参考校车「路线规划」聚合 Tab。'
+    },
+    tabs: {
+      leave: '请假',
+      return: '销假'
+    },
+    actions: {
+      add: '新增',
+      withdraw: '撤回',
+      detail: '查看'
+    },
+    messages: {
+      withdrawPrompt: '提示',
+      withdrawConfirm: '确定撤回该请假流程吗？（procId={procId}，id={id}）',
+      withdrawSuccess: '撤回成功',
+      addPending:
+        '新建请假表单（学生检索、固定假、附件上传及家长确认）依赖公共文件接口，将在对齐 `/publik/file/upload` 等能力与旧 `dialog/add.vue` 后补充；当前请使用查看与撤回。'
+    },
+    placeholders: {
+      leaveType: '请假类型',
+      school: '学校',
+      scope: '请假范围',
+      beginTime: '开始日期',
+      endTime: '结束日期',
+      keyword: '学号/姓名'
+    },
+    columns: {
+      id: 'ID',
+      admissionNo: '学号',
+      studentName: '姓名',
+      school: '学校',
+      grade: '年级',
+      className: '班级',
+      leaveType: '请假类型',
+      scope: '请假范围',
+      reason: '请假原因',
+      dateRange: '请假时间',
+      timeSlot: '时段',
+      infectious: '传染病',
+      fixed: '固定假',
+      weekDays: '星期',
+      status: '状态',
+      createdAt: '创建时间'
+    },
+    return: {
+      columns: {
+        /** 旧「销假管理」表头：返校时间 */
+        returnSchoolTime: '返校时间'
+      }
+    },
+    detail: {
+      beginTime: '开始时间',
+      endTime: '结束时间',
+      procId: '流程实例',
+      parentResponsible: '家长确认安全'
+    },
+    options: {
+      leavePersonal: '事假',
+      leaveSick: '病假',
+      scopeCourse: '课程',
+      scopeDorm: '宿舍',
+      scopeBus: '校巴',
+      yes: '是',
+      no: '否',
+      statusPending: '待审批',
+      statusRejected: '已拒绝',
+      statusWithdrawn: '已撤回',
+      statusOnLeave: '休假中',
+      statusFinished: '已结束',
+      statusLeaveSoon: '待休假'
+    }
   }
 }

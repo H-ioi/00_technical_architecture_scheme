@@ -1,17 +1,16 @@
 <template>
   <el-dialog
-    :model-value="visible"
+    v-model="visible"
     destroy-on-close
     width="520px"
-    :title="t('permission.menu.editTitle')"
-    @update:model-value="$emit('update:visible', $event)">
+    :title="t('permission.menu.editTitle')">
     <UniForm ref="uniFormRef" v-model="draft" mode="edit" :config="dialogFormConfig">
       <template #field-icon="{ model }">
         <IconPicker v-model="model.icon" :placeholder="t('permission.menu.icon')" />
       </template>
     </UniForm>
     <template #footer>
-      <el-button @click="$emit('update:visible', false)">{{
+      <el-button @click="visible = false">{{
         t('permission.actions.cancel')
       }}</el-button>
       <el-button type="primary" :loading="submitting" @click="onSaveClick">{{
@@ -33,8 +32,9 @@ import { menuEditDialogFormConfig, type MenuParentOption } from '../list.config'
 
 type MenuDraft = PermissionMenuNode & { menuId?: string | number }
 
+const visible = defineModel<boolean>('visible', { required: true })
+
 const props = defineProps<{
-  visible: boolean
   /** 打开弹窗时用于填充草稿的快照（与 useList.form 同源） */
   snapshot: MenuDraft
   parentOptions: MenuParentOption[]
@@ -42,7 +42,6 @@ const props = defineProps<{
 }>()
 
 const emit = defineEmits<{
-  (e: 'update:visible', v: boolean): void
   (e: 'save', draft: MenuDraft): void
 }>()
 
@@ -68,20 +67,16 @@ const dialogFormConfig = computed<UniFormConfig>(() =>
   menuEditDialogFormConfig(t, props.parentOptions)
 )
 
-watch(
-  () => props.visible,
-  (opened) => {
-    if (!opened) {
-      return
-    }
-    const { children: _drop, ...rest } = props.snapshot
-    draft.value = { ...emptyDraft(), ...rest }
-    void nextTick(() => {
-      uniFormRef.value?.clearValidate()
-    })
-  },
-  { flush: 'sync' }
-)
+watch(visible, (opened) => {
+  if (!opened) {
+    return
+  }
+  const { children: _drop, ...rest } = props.snapshot
+  draft.value = { ...emptyDraft(), ...rest }
+  void nextTick(() => {
+    uniFormRef.value?.clearValidate()
+  })
+}, { flush: 'sync' })
 
 const onSaveClick = async () => {
   try {

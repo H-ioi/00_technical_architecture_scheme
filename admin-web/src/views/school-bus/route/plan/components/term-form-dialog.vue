@@ -1,6 +1,6 @@
 <template>
   <el-dialog
-    v-model="innerVisible"
+    v-model="modelValue"
     width="520px"
     destroy-on-close
     :close-on-click-modal="false"
@@ -13,7 +13,7 @@
     </div>
 
     <template #footer>
-      <el-button @click="innerVisible = false">
+      <el-button @click="modelValue = false">
         {{ $t('schoolBus.driver.actions.cancel') }}
       </el-button>
       <el-button type="primary" @click="submit">
@@ -45,8 +45,9 @@ type TermFormModel = {
   serviceDate: string[]
 }
 
+const modelValue = defineModel<boolean>({ required: true })
+
 const props = defineProps<{
-  modelValue: boolean
   schoolRecords: SchoolOptionRecord[]
   defaultSchoolId: string | number | null
   multiSchool: boolean
@@ -55,17 +56,11 @@ const props = defineProps<{
 }>()
 
 const emit = defineEmits<{
-  'update:modelValue': [boolean]
   saved: []
 }>()
 
 const { locale, t } = useUniI18n()
 const { detailLoading, runWithDetailLoading } = useDialogDetailLoading()
-
-const innerVisible = computed({
-  get: () => props.modelValue,
-  set: (v) => emit('update:modelValue', v)
-})
 
 const uniFormRef = ref<InstanceType<typeof UniForm> | null>(null)
 const formModel = ref<TermFormModel>({
@@ -183,7 +178,7 @@ const loadDetail = async () => {
 }
 
 watch(
-  () => [props.modelValue, props.editingId] as const,
+  () => [modelValue.value, props.editingId] as const,
   async ([open]) => {
     if (!open) {
       return
@@ -247,7 +242,7 @@ const submit = async () => {
   }
 
   ElMessage.success(t('schoolBus.driver.messages.saveSuccess'))
-  innerVisible.value = false
+  modelValue.value = false
   emit('saved')
 }
 </script>

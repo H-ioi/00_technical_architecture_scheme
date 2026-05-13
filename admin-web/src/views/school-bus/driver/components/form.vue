@@ -1,10 +1,9 @@
 <template>
   <el-dialog
-    :model-value="visible"
+    v-model="visible"
     :title="title"
     width="640px"
-    destroy-on-close
-    @update:model-value="emit('update:visible', $event)">
+    destroy-on-close>
     <div
       v-loading="detailLoading"
       class="school-bus-driver-form__body"
@@ -41,6 +40,8 @@ import type { DriverFormModel, DriverRecord } from '@/types/modules/school-bus-d
 import { driverDialogFormConfig } from '../list.config'
 
 import { useDialogDetailLoading } from '@/composables/use-dialog-detail-loading'
+
+const visible = defineModel<boolean>('visible', { required: true })
 
 const props = defineProps<SchoolBusDriverFormProps>()
 
@@ -113,7 +114,7 @@ const fillForm = (record: DriverRecord) => {
 }
 
 const close = () => {
-  emit('update:visible', false)
+  visible.value = false
 }
 
 const submit = async () => {
@@ -146,20 +147,17 @@ const submit = async () => {
   }
 }
 
-watch(
-  () => props.visible,
-  async (visible) => {
-    if (!visible) {
-      return
-    }
-
-    resetForm()
-
-    if ((props.mode === 'edit' || props.mode === 'look') && props.source?.id) {
-      await runWithDetailLoading(async () => {
-        fillForm(await schoolBusDriverApi.detail.get(props.source!.id))
-      })
-    }
+watch(visible, async (isOpen) => {
+  if (!isOpen) {
+    return
   }
-)
+
+  resetForm()
+
+  if ((props.mode === 'edit' || props.mode === 'look') && props.source?.id) {
+    await runWithDetailLoading(async () => {
+      fillForm(await schoolBusDriverApi.detail.get(props.source!.id))
+    })
+  }
+})
 </script>

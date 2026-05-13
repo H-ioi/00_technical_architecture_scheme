@@ -1,12 +1,11 @@
 <template>
   <el-dialog
-    :model-value="visible"
+    v-model="visible"
     width="390px"
     class="security-verify"
     :show-close="false"
     destroy-on-close
-    append-to-body
-    @update:model-value="emit('update:visible', $event)">
+    append-to-body>
     <template #header>
       <div class="security-verify__header">
         <div>
@@ -67,13 +66,13 @@ import { Close, RefreshRight, Right } from '@element-plus/icons-vue'
 import { useUniI18n } from '@/locales/use-uni-i18n'
 import type { UniCaptchaClient, UniCaptchaImageData } from '@/types/uni-login'
 
+const visible = defineModel<boolean>('visible', { required: true })
+
 const props = defineProps<{
-  visible: boolean
   captchaClient: UniCaptchaClient
 }>()
 
 const emit = defineEmits<{
-  'update:visible': [visible: boolean]
   success: [captchaVerification: string]
 }>()
 
@@ -123,7 +122,7 @@ const refresh = async () => {
 }
 
 const close = () => {
-  emit('update:visible', false)
+  visible.value = false
 }
 
 const resolvePointX = () => (dragLeft.value * 310) / imageWidth
@@ -209,18 +208,15 @@ function handleTouchMove(event: TouchEvent) {
   moveTo(event.touches[0]?.clientX ?? startX.value)
 }
 
-watch(
-  () => props.visible,
-  async (visible) => {
-    if (!visible) {
-      resetDrag()
-      return
-    }
-
-    await nextTick()
-    await refresh()
+watch(visible, async (isOpen) => {
+  if (!isOpen) {
+    resetDrag()
+    return
   }
-)
+
+  await nextTick()
+  await refresh()
+})
 </script>
 
 <style scoped lang="scss">

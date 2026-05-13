@@ -1,10 +1,9 @@
 <template>
   <el-dialog
-    :model-value="visible"
+    v-model="visible"
     :title="title"
     width="640px"
-    destroy-on-close
-    @update:model-value="emit('update:visible', $event)">
+    destroy-on-close>
     <div
       v-loading="detailLoading"
       class="school-bus-follow-teacher-form__body"
@@ -39,8 +38,9 @@ import type {
   FollowTeacherRecord
 } from '@/types/modules/school-bus-follow-teacher'
 
+const visible = defineModel<boolean>('visible', { required: true })
+
 const props = defineProps<{
-  visible: boolean
   mode: 'add' | 'edit' | 'look'
   source: FollowTeacherRecord | null
   defaultSchoolId: string | number | null
@@ -50,7 +50,6 @@ const props = defineProps<{
 }>()
 
 const emit = defineEmits<{
-  'update:visible': [boolean]
   saved: []
 }>()
 
@@ -104,29 +103,28 @@ const fillForm = (data: FollowTeacherFormModel) => {
   nextTick(() => uniFormRef.value?.clearValidate())
 }
 
-watch(
-  () => props.visible,
-  async (vis) => {
-    if (!vis) {
-      return
-    }
-    if (props.mode === 'add') {
-      resetForm()
-    } else if (props.source) {
-      await runWithDetailLoading(async () => {
-        resetForm()
-        const raw = await schoolBusFollowTeacherApi.detail.get(props.source!.id)
-        const data =
-          raw && typeof raw === 'object' && 'data' in raw
-            ? (raw as { data: FollowTeacherFormModel }).data
-            : (raw as FollowTeacherFormModel)
-        fillForm(data)
-      })
-    }
+watch(visible, async (isOpen) => {
+  if (!isOpen) {
+    return
   }
-)
+  if (props.mode === 'add') {
+    resetForm()
+  } else if (props.source) {
+    await runWithDetailLoading(async () => {
+      resetForm()
+      const raw = await schoolBusFollowTeacherApi.detail.get(props.source!.id)
+      const data =
+        raw && typeof raw === 'object' && 'data' in raw
+          ? (raw as { data: FollowTeacherFormModel }).data
+          : (raw as FollowTeacherFormModel)
+      fillForm(data)
+    })
+  }
+})
 
-const close = () => emit('update:visible', false)
+const close = () => {
+  visible.value = false
+}
 
 const submit = async () => {
   await uniFormRef.value?.validate()

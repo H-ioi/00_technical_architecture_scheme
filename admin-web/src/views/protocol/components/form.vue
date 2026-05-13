@@ -1,10 +1,9 @@
 <template>
   <el-dialog
-    :model-value="visible"
+    v-model="visible"
     :title="title"
     width="920px"
-    destroy-on-close
-    @update:model-value="emit('update:visible', $event)">
+    destroy-on-close>
     <div
       v-loading="detailLoading"
       class="protocol-form__body"
@@ -52,6 +51,8 @@ import type { ProtocolFormEmits, ProtocolFormProps } from '@/types/components/pr
 import type { ProtocolFormModel, ProtocolRecord } from '@/types/modules/protocol'
 
 import { protocolDialogFormConfig } from '../list.config'
+
+const visible = defineModel<boolean>('visible', { required: true })
 
 const props = defineProps<ProtocolFormProps>()
 
@@ -130,7 +131,7 @@ const fillForm = (record: ProtocolRecord) => {
 }
 
 const close = () => {
-  emit('update:visible', false)
+  visible.value = false
 }
 
 const uploadReq = async (options: UploadRequestOptions) => {
@@ -181,22 +182,19 @@ const submit = async () => {
   }
 }
 
-watch(
-  () => props.visible,
-  async (visible) => {
-    if (!visible) {
-      return
-    }
-
-    resetForm()
-
-    if (props.mode === 'edit' && props.source?.id) {
-      await runWithDetailLoading(async () => {
-        fillForm(await protocolApi.info.get(props.source!.id))
-      })
-    }
+watch(visible, async (isOpen) => {
+  if (!isOpen) {
+    return
   }
-)
+
+  resetForm()
+
+  if (props.mode === 'edit' && props.source?.id) {
+    await runWithDetailLoading(async () => {
+      fillForm(await protocolApi.info.get(props.source!.id))
+    })
+  }
+})
 </script>
 
 <style scoped lang="scss">

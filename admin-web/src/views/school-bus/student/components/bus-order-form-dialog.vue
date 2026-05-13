@@ -1,6 +1,6 @@
 <template>
   <el-dialog
-    v-model="open"
+    v-model="visible"
     width="1000px"
     destroy-on-close
     :title="dialogTitle"
@@ -427,8 +427,9 @@ type OrderStationRow = {
 type RouteRow = Loose
 type PersonRow = { pickupRelationships?: string; pickupPhone?: string; pickupImageUrl?: string }
 
+const visible = defineModel<boolean>('visible', { required: true })
+
 const props = defineProps<{
-  visible: boolean
   mode: 'add' | 'edit'
   orderId: string | number | null
   formType: 'apply' | 'order'
@@ -438,17 +439,11 @@ const props = defineProps<{
 }>()
 
 const emit = defineEmits<{
-  'update:visible': [boolean]
   saved: []
 }>()
 
 const { locale, t } = useUniI18n()
 const { hasPermission } = useUniPermission()
-
-const open = computed({
-  get: () => props.visible,
-  set: (v: boolean) => emit('update:visible', v)
-})
 
 const innerVisible = ref(false)
 const mainUniFormRef = ref<InstanceType<typeof UniForm> | null>(null)
@@ -821,7 +816,7 @@ const loadDetail = async (id: string | number) => {
 }
 
 watch(
-  () => props.visible,
+  visible,
   async (vis) => {
     if (!vis) {
       innerVisible.value = false
@@ -892,11 +887,11 @@ watch(
 
 const onClosed = () => {
   resetAll()
-  emit('update:visible', false)
+  visible.value = false
 }
 
 const close = () => {
-  open.value = false
+  visible.value = false
 }
 
 const onSchoolChange = async (sid: string | number | undefined) => {

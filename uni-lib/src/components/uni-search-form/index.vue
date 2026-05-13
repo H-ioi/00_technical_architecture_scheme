@@ -3,7 +3,7 @@
     <div class="uni-search-form__body">
       <div class="uni-search-form__fields">
         <UniForm
-          v-model="formModel"
+          v-model="model"
           :config="searchFormConfig"
           @field-change="(payload) => emit('field-change', payload)" />
       </div>
@@ -65,9 +65,10 @@ import { formatEmpty, isEmptyValue, omitBlankValues, toArray } from '@/utils/for
 const GRID_COLUMNS = 24
 const DEFAULT_ACTION_MIN_SPAN = 6
 
+const model = defineModel<Recordable>({ required: true })
+
 const props = withDefaults(
   defineProps<{
-    modelValue: Recordable
     config: UniFormConfig
     collapsed?: boolean
     collapsedRows?: number
@@ -83,7 +84,6 @@ const props = withDefaults(
 )
 
 const emit = defineEmits<{
-  'update:modelValue': [value: Recordable]
   search: [value: Recordable]
   reset: [value: Recordable]
   'update:collapsed': [value: boolean]
@@ -91,19 +91,15 @@ const emit = defineEmits<{
 }>()
 
 const innerCollapsed = ref(props.collapsed ?? false)
-const initialModel = ref<Recordable>({ ...props.modelValue })
+const initialModel = ref<Recordable>({ ...model.value })
 const { t } = useUniI18n()
-const formModel = computed({
-  get: () => props.modelValue,
-  set: (value) => emit('update:modelValue', value)
-})
 const searchText = computed(() => props.submitText ?? t('searchForm.search'))
 const clearText = computed(() => props.resetText ?? t('searchForm.reset'))
 const selectedTags = computed(
   () =>
     props.config.schema
       .map((field) => {
-        const value = formModel.value[field.field]
+        const value = model.value[field.field]
 
         if (isEmptyValue(value) || (Array.isArray(value) && value.length === 0)) {
           return undefined
@@ -170,7 +166,7 @@ const searchFormConfig = computed<UniFormConfig>(() => ({
 }))
 
 const handleSearch = () => {
-  emit('search', omitBlankValues(formModel.value))
+  emit('search', omitBlankValues(model.value))
 }
 
 const toggleCollapsed = () => {
@@ -192,14 +188,14 @@ const handleReset = () => {
     }
   })
 
-  formModel.value = resetModel
+  model.value = resetModel
   emit('reset', omitBlankValues(resetModel))
 }
 
 const removeSelectedTag = (field: string) => {
-  const nextModel = { ...formModel.value }
+  const nextModel = { ...model.value }
   delete nextModel[field]
-  formModel.value = nextModel
+  model.value = nextModel
 }
 
 watch(

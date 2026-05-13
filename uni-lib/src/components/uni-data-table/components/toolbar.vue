@@ -14,7 +14,7 @@
       :icon="FullScreen"
       :aria-label="fullscreen ? $t('dataTable.exitFullscreen') : $t('dataTable.fullscreen')"
       :title="fullscreen ? $t('dataTable.exitFullscreen') : $t('dataTable.fullscreen')"
-      @click="emit('update:fullscreen', !fullscreen)" />
+      @click="fullscreen = !fullscreen" />
     <el-popover
       v-if="config.columnSetting"
       placement="bottom-end"
@@ -41,15 +41,11 @@
           </div>
           <div class="uni-table-toolbar__option">
             <span>{{ $t('dataTable.stripe') }}</span>
-            <el-switch
-              :model-value="stripe"
-              @update:model-value="(value: boolean) => emit('update:stripe', value)" />
+            <el-switch v-model="stripe" />
           </div>
           <div class="uni-table-toolbar__option">
             <span>{{ $t('dataTable.border') }}</span>
-            <el-switch
-              :model-value="border"
-              @update:model-value="(value: boolean) => emit('update:border', value)" />
+            <el-switch v-model="border" />
           </div>
         </div>
       </div>
@@ -64,21 +60,19 @@ import type { UniTableToolbarConfig } from '@/types/uni-table'
 import type { UniTableColumnState } from '@/types/uni-data-table'
 import UniTableColumnSettings from './column-settings.vue'
 
+const fullscreen = defineModel<boolean>('fullscreen', { required: true })
+const stripe = defineModel<boolean>('stripe', { required: true })
+const border = defineModel<boolean>('border', { required: true })
+
 defineProps<{
   columnStates: UniTableColumnState[]
   config: Required<UniTableToolbarConfig>
-  fullscreen: boolean
   loading: boolean
-  border: boolean
-  stripe: boolean
 }>()
 
 const emit = defineEmits<{
   'column-drag-start': [prop: string]
   'column-drop': [prop: string]
-  'update:border': [value: boolean]
-  'update:fullscreen': [value: boolean]
-  'update:stripe': [value: boolean]
   refresh: []
 }>()
 </script>

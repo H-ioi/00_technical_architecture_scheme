@@ -1,12 +1,13 @@
 <template>
   <div class="icon-picker">
     <el-input
-      :model-value="modelValue || ''"
+      v-model="model"
       readonly
       clearable
       class="icon-picker__input"
       :placeholder="placeholder"
-      @clear="onClear">
+      @clear="onClear"
+    >
       <template #prefix>
         <el-icon v-if="currentComp" class="icon-picker__prefix-ico">
           <component :is="currentComp" />
@@ -26,12 +27,14 @@
       append-to-body
       destroy-on-close
       class="icon-picker__dialog"
-      @closed="filterKeyword = ''">
+      @closed="filterKeyword = ''"
+    >
       <el-input
         v-model="filterKeyword"
         clearable
         class="icon-picker__search"
-        :placeholder="t('common.iconSearch')" />
+        :placeholder="t('common.iconSearch')"
+      />
       <div class="icon-picker__grid-wrap">
         <div class="icon-picker__grid">
           <button
@@ -39,9 +42,10 @@
             :key="name"
             type="button"
             class="icon-picker__cell"
-            :class="{ 'is-active': name === modelValue }"
+            :class="{ 'is-active': name === model }"
             :title="name"
-            @click="pick(name)">
+            @click="pick(name)"
+          >
             <el-icon class="icon-picker__cell-ico">
               <component :is="iconMap[name]" />
             </el-icon>
@@ -59,13 +63,10 @@ import { useUniI18n } from 'uni-ui-lib'
 
 import { sidebarIconMap, sidebarIconNames } from './registry'
 
-const props = defineProps<{
-  modelValue?: string
-  placeholder?: string
-}>()
+const model = defineModel<string>({ default: '' })
 
-const emit = defineEmits<{
-  (e: 'update:modelValue', v: string): void
+defineProps<{
+  placeholder?: string
 }>()
 
 const { t } = useUniI18n()
@@ -85,7 +86,7 @@ const filteredNames = computed(() => {
 })
 
 const currentComp = computed<Component | undefined>(() => {
-  const v = props.modelValue
+  const v = model.value
   if (!v) {
     return undefined
   }
@@ -93,12 +94,12 @@ const currentComp = computed<Component | undefined>(() => {
 })
 
 const pick = (name: string) => {
-  emit('update:modelValue', name)
+  model.value = name
   pickerOpen.value = false
 }
 
 const onClear = () => {
-  emit('update:modelValue', '')
+  model.value = ''
 }
 </script>
 

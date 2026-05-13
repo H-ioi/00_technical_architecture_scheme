@@ -40,9 +40,10 @@ defineOptions({
   name: 'UniLayoutChangePasswordDialog'
 })
 
+const visible = defineModel<boolean>({ required: true })
+
 const props = withDefaults(
   defineProps<{
-    modelValue: boolean
     /** 未配置 <code>runtime.changePassword</code> 时生效，由父级控制提交与 loading */
     loading?: boolean
     width?: string
@@ -56,7 +57,6 @@ const props = withDefaults(
 )
 
 const emit = defineEmits<{
-  'update:modelValue': [value: boolean]
   submit: [payload: UniLayoutChangePasswordPayload]
   cancel: []
 }>()
@@ -81,14 +81,11 @@ const resetForm = () => {
   formRef.value?.clearValidate()
 }
 
-watch(
-  () => props.modelValue,
-  (open) => {
-    if (open) {
-      resetForm()
-    }
+watch(visible, (open) => {
+  if (open) {
+    resetForm()
   }
-)
+})
 
 const rules = computed<FormRules<typeof form>>(() => ({
   password: [
@@ -126,11 +123,6 @@ const rules = computed<FormRules<typeof form>>(() => ({
     }
   ]
 }))
-
-const visible = computed({
-  get: () => props.modelValue,
-  set: (value: boolean) => emit('update:modelValue', value)
-})
 
 const handleCancel = () => {
   emit('cancel')

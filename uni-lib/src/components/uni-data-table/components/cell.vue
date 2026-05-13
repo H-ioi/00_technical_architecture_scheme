@@ -34,15 +34,14 @@
 
     <template v-else-if="columnType === 'switch'">
       <el-switch
-        :model-value="value"
+        v-model="switchModel"
         :active-value="column.switch?.activeValue ?? true"
         :inactive-value="column.switch?.inactiveValue ?? false"
         :disabled="
           typeof column.switch?.disabled === 'function'
             ? column.switch.disabled(row)
             : column.switch?.disabled
-        "
-        @change="handleSwitchChange" />
+        " />
     </template>
 
     <template v-else-if="columnType === 'link' || columnType === 'links'">
@@ -99,7 +98,7 @@
  */
 import { DocumentCopy } from '@element-plus/icons-vue'
 import { ElMessage } from 'element-plus'
-import { computed } from 'vue'
+import { computed, type WritableComputedRef } from 'vue'
 
 import { useUniI18n } from '@/locales/use-uni-i18n'
 import type { Recordable } from '@/types/shared'
@@ -166,7 +165,7 @@ const getLinkHref = (value: unknown) => {
   return props.column.link?.href ?? String(value ?? '')
 }
 
-const handleSwitchChange = async (nextValue: unknown) => {
+async function handleSwitchChange(nextValue: unknown) {
   const canChange = await props.column.switch?.beforeChange?.(props.row, nextValue)
 
   if (canChange === false) {
@@ -175,6 +174,14 @@ const handleSwitchChange = async (nextValue: unknown) => {
 
   emit('switchChange', props.row, props.column, nextValue)
 }
+
+/** 受控开关：v-model 与 Element Plus 一致，更新逻辑仍在 handleSwitchChange */
+const switchModel = computed({
+  get: () => props.value,
+  set: (v: unknown) => {
+    void handleSwitchChange(v)
+  }
+}) as WritableComputedRef<unknown>
 </script>
 
 <style scoped lang="scss">

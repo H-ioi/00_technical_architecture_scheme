@@ -1,10 +1,9 @@
 <template>
   <el-dialog
-    :model-value="visible"
+    v-model="visible"
     :title="$t('protocol.detail.title')"
     width="1080px"
-    destroy-on-close
-    @update:model-value="emit('update:visible', $event)">
+    destroy-on-close>
     <div
       v-loading="detailLoading"
       class="protocol-detail-loading-wrap"
@@ -41,7 +40,7 @@
     </div>
 
     <template #footer>
-      <el-button @click="emit('update:visible', false)">{{
+      <el-button @click="visible = false">{{
         $t('protocol.actions.close')
       }}</el-button>
     </template>
@@ -55,14 +54,14 @@ import { useUniI18n } from 'uni-ui-lib'
 
 import { protocolApi } from '@/api'
 import { useDialogDetailLoading } from '@/composables/use-dialog-detail-loading'
-import type { ProtocolPanelEmits, ProtocolPanelProps } from '@/types/components/protocol-panel'
+import type { ProtocolPanelProps } from '@/types/components/protocol-panel'
 import type { ProtocolRecord } from '@/types/modules/protocol'
 
 import { signCols } from '../list.config'
 
-const props = defineProps<ProtocolPanelProps>()
+const visible = defineModel<boolean>('visible', { required: true })
 
-const emit = defineEmits<ProtocolPanelEmits>()
+const props = defineProps<ProtocolPanelProps>()
 
 const { locale, t } = useUniI18n()
 const { detailLoading, runWithDetailLoading } = useDialogDetailLoading()
@@ -122,9 +121,9 @@ const loadSignData: UniTableRequest = ({ pageNo: current, pageSize: size }) => {
 }
 
 watch(
-  () => props.visible,
-  async (visible) => {
-    if (!visible || !props.source?.id) {
+  visible,
+  async (isOpen) => {
+    if (!isOpen || !props.source?.id) {
       return
     }
 

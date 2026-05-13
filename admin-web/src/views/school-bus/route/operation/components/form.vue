@@ -1,10 +1,9 @@
 <template>
   <el-dialog
-    :model-value="visible"
+    v-model="visible"
     :title="title"
     width="1000px"
-    destroy-on-close
-    @update:model-value="emit('update:visible', $event)">
+    destroy-on-close>
     <div
       v-loading="detailLoading"
       class="school-bus-operation-form__wrap"
@@ -66,8 +65,9 @@ type LineCar = {
   driverInfo?: { name?: string }
 }
 
+const visible = defineModel<boolean>('visible', { required: true })
+
 const props = defineProps<{
-  visible: boolean
   mode: 'add' | 'edit' | 'look'
   source: OperationRecord | null
   defaultSchoolId: string | number | null
@@ -77,7 +77,6 @@ const props = defineProps<{
 }>()
 
 const emit = defineEmits<{
-  'update:visible': [boolean]
   saved: []
 }>()
 
@@ -319,7 +318,7 @@ const dialogFormConfig = computed<UniFormConfig>(() => ({
 }))
 
 const close = () => {
-  emit('update:visible', false)
+  visible.value = false
 }
 
 const unwrapDetail = (payload: unknown): Record<string, unknown> => {
@@ -513,36 +512,33 @@ const loadDetail = async (id: string | number) => {
   }
 }
 
-watch(
-  () => props.visible,
-  async (visible) => {
-    if (!visible) {
-      return
-    }
-
-    resetForm()
-
-    await nextTick()
-    uniFormRef.value?.clearValidate()
-
-    if (props.mode === 'add') {
-      if (multiSchool.value) {
-        formModel.value = {}
-      } else if (props.defaultSchoolId != null) {
-        formModel.value.school = [props.defaultSchoolId]
-        await onSchoolChange([props.defaultSchoolId])
-      }
-
-      return
-    }
-
-    if ((props.mode === 'edit' || props.mode === 'look') && props.source?.id) {
-      await runWithDetailLoading(async () => {
-        await loadDetail(props.source!.id)
-      })
-    }
+watch(visible, async (isOpen) => {
+  if (!isOpen) {
+    return
   }
-)
+
+  resetForm()
+
+  await nextTick()
+  uniFormRef.value?.clearValidate()
+
+  if (props.mode === 'add') {
+    if (multiSchool.value) {
+      formModel.value = {}
+    } else if (props.defaultSchoolId != null) {
+      formModel.value.school = [props.defaultSchoolId]
+      await onSchoolChange([props.defaultSchoolId])
+    }
+
+    return
+  }
+
+  if ((props.mode === 'edit' || props.mode === 'look') && props.source?.id) {
+    await runWithDetailLoading(async () => {
+      await loadDetail(props.source!.id)
+    })
+  }
+})
 
 const submit = async () => {
   const valid = await uniFormRef.value?.validate().catch(() => false)

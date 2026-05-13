@@ -1,13 +1,12 @@
 <template>
   <el-dialog
-    :model-value="visible"
+    v-model="visible"
     destroy-on-close
     width="520px"
-    :title="mode === 'add' ? t('permission.user.formAdd') : t('permission.user.formEdit')"
-    @update:model-value="$emit('update:visible', $event)">
+    :title="mode === 'add' ? t('permission.user.formAdd') : t('permission.user.formEdit')">
     <UniForm ref="uniFormRef" v-model="formModel" mode="edit" :config="dialogFormConfig" />
     <template #footer>
-      <el-button @click="$emit('update:visible', false)">{{
+      <el-button @click="visible = false">{{
         t('permission.actions.cancel')
       }}</el-button>
       <el-button type="primary" :loading="saving" @click="submit">{{
@@ -28,14 +27,15 @@ import { permissionUserDialogForm } from '../list.config'
 import { permissionUserApi } from '@/api'
 import type { PermissionUserFormModel, PermissionUserRecord } from '@/types/modules/permission-user'
 
+const visible = defineModel<boolean>('visible', { required: true })
+
 const props = defineProps<{
-  visible: boolean
   mode: 'add' | 'edit'
   record: PermissionUserRecord | null
   deptOptions: UniOption[]
   roleOptions: UniOption[]
 }>()
-const emit = defineEmits<{ (e: 'update:visible', v: boolean): void; (e: 'saved'): void }>()
+const emit = defineEmits<{ (e: 'saved'): void }>()
 const { t } = useUniI18n()
 
 const uniFormRef = ref<InstanceType<typeof UniForm> | null>(null)
@@ -85,7 +85,7 @@ const hydrateFromRecord = (r: PermissionUserRecord) => {
 }
 
 watch(
-  () => [props.visible, props.mode, props.record] as const,
+  () => [visible.value, props.mode, props.record] as const,
   ([open]) => {
     if (!open) {
       return
@@ -120,7 +120,7 @@ const submit = async () => {
       await permissionUserApi.add.post(body)
     }
     ElMessage.success(t('permission.messages.saveOk'))
-    emit('update:visible', false)
+    visible.value = false
     emit('saved')
   } finally {
     saving.value = false

@@ -2,7 +2,7 @@
   <el-form
     ref="formRef"
     class="uni-form"
-    :model="formModel"
+    :model="model"
     :rules="config.rules"
     v-bind="config.formProps">
     <template v-for="section in groupedSections" :key="section.title || 'default'">
@@ -25,7 +25,7 @@
               v-if="$slots[`field-${field.field}`]"
               :name="`field-${field.field}`"
               :field="field"
-              :model="formModel" />
+              :model="model" />
 
             <UniFormViewValueText
               v-else-if="formMode === 'view'"
@@ -43,18 +43,16 @@
                 field.component === 'ElCascader' ||
                 field.component === 'ElTreeSelect'
               "
-              :model-value="formModel[field.field]"
+              v-model="fieldVm(field)"
               :disabled="isFieldDisabled(field)"
               :readonly="isFieldReadonly(field)"
-              v-bind="field.componentProps"
-              @update:model-value="(value: unknown) => handleFieldChange(field, value)" />
+              v-bind="field.componentProps" />
 
             <el-select
               v-else-if="field.component === 'ElSelect'"
-              :model-value="formModel[field.field]"
+              v-model="fieldVm(field)"
               :disabled="isFieldDisabled(field)"
-              v-bind="field.componentProps"
-              @update:model-value="(value: unknown) => handleFieldChange(field, value)">
+              v-bind="field.componentProps">
               <el-option
                 v-for="option in getFieldOptions(field)"
                 :key="String(option.value)"
@@ -64,10 +62,9 @@
 
             <el-radio-group
               v-else-if="field.component === 'ElRadioGroup'"
-              :model-value="formModel[field.field]"
+              v-model="fieldVm(field)"
               :disabled="isFieldDisabled(field)"
-              v-bind="field.componentProps"
-              @update:model-value="(value: unknown) => handleFieldChange(field, value)">
+              v-bind="field.componentProps">
               <el-radio
                 v-for="option in getFieldOptions(field)"
                 :key="String(option.value)"
@@ -78,10 +75,9 @@
 
             <el-checkbox-group
               v-else-if="field.component === 'ElCheckboxGroup'"
-              :model-value="formModel[field.field]"
+              v-model="fieldVm(field)"
               :disabled="isFieldDisabled(field)"
-              v-bind="field.componentProps"
-              @update:model-value="(value: unknown) => handleFieldChange(field, value)">
+              v-bind="field.componentProps">
               <el-checkbox
                 v-for="option in getFieldOptions(field)"
                 :key="String(option.value)"
@@ -92,7 +88,7 @@
 
             <UniUpload
               v-else-if="field.component === 'UniUpload'"
-              :file-list="formModel[field.field] as never"
+              :file-list="model[field.field] as never"
               v-bind="field.componentProps"
               @update:file-list="(value) => handleFieldChange(field, value)" />
           </el-form-item>
@@ -112,7 +108,7 @@
  * `rules` 校验、联动显隐、异步选项、`edit`/`view` 模式及 `#field-xxx` / `#actions` 插槽。
  */
 import type { FormInstance, RowProps } from 'element-plus'
-import { computed, reactive, ref, watch } from 'vue'
+import { computed, reactive, ref, watch, type WritableComputedRef } from 'vue'
 
 import UniFormViewValueText from './components/view-value-text.vue'
 import UniUpload from '@/components/uni-upload/index.vue'
@@ -126,19 +122,17 @@ import type {
 } from '@/types/uni-form'
 import { formatDate, formatEmpty, resolveOption } from '@/utils/format'
 
+const model = defineModel<Recordable>({ default: () => ({}) })
+
 const props = withDefaults(
   defineProps<{
-    modelValue: Recordable
     config: UniFormConfig
     mode?: UniFormMode
   }>(),
-  {
-    modelValue: () => ({})
-  }
+  {}
 )
 
 const emit = defineEmits<{
-  'update:modelValue': [value: Recordable]
   change: [value: Recordable]
   'field-change': [payload: { field: string; value: unknown; model: Recordable }]
   'linkage-change': [payload: { field: string; model: Recordable }]
@@ -148,7 +142,6 @@ const emit = defineEmits<{
 }>()
 
 const formRef = ref<FormInstance>()
-const localModel = ref<Recordable>({})
 const dynamicState = reactive<
   Record<string, { visible?: boolean; disabled?: boolean; options?: UniOption[] }>
 >({})
@@ -181,22 +174,15 @@ function normalizeRowProps(rowProps?: Partial<RowProps>): Partial<RowProps> {
 }
 
 const mergedRowProps = computed(() => normalizeRowProps(props.config.rowProps))
-const formModel = computed({
-  get: () => localModel.value,
-  set: (value) => {
-    localModel.value = value
-    emit('update:modelValue', value)
-  }
-})
 
 const actions: UniFormActions = {
   setValue(field, value) {
-    formModel.value = { ...formModel.value, [field]: value }
+    model.value = { ...model.value, [field]: value }
   },
   clearValue(field) {
-    const nextModel = { ...formModel.value }
+    const nextModel = { ...model.value }
     delete nextModel[field]
-    formModel.value = nextModel
+    model.value = nextModel
   },
   resetField(field) {
     const formField = props.config.schema.find((item) => item.field === field)
@@ -217,9 +203,9 @@ const actions: UniFormActions = {
 }
 
 const createContext = (field: UniFormField) => ({
-  model: formModel.value,
+  model: model.value,
   field,
-  value: formModel.value[field.field],
+  value: model.value[field.field],
   actions
 })
 
@@ -278,8 +264,8 @@ const groupedSections = computed(() => {
 })
 
 const handleFieldChange = async (field: UniFormField, value: unknown) => {
-  const nextModel = { ...formModel.value, [field.field]: value }
-  formModel.value = nextModel
+  const nextModel = { ...model.value, [field.field]: value }
+  model.value = nextModel
   emit('change', nextModel)
   await field.onChange?.(createContext(field))
 
@@ -289,10 +275,29 @@ const handleFieldChange = async (field: UniFormField, value: unknown) => {
       if (!isFieldVisible(item)) {
         item.onHidden?.(createContext(item))
       }
-      emit('linkage-change', { field: item.field, model: formModel.value })
+      emit('linkage-change', { field: item.field, model: model.value })
     })
 
-  emit('field-change', { field: field.field, value, model: formModel.value })
+  emit('field-change', { field: field.field, value, model: model.value })
+}
+
+/** 与 EP 子组件 `v-model` 对齐：写入仍统一走 `handleFieldChange`（联动/事件不丢） */
+const fieldVmCache = new Map<string, WritableComputedRef<unknown>>()
+
+function fieldVm<T = unknown>(field: UniFormField): WritableComputedRef<T> {
+  const key = field.field
+  let entry = fieldVmCache.get(key) as WritableComputedRef<T> | undefined
+  if (!entry) {
+    entry = computed({
+      get: () => model.value[key] as T,
+      set: (v: unknown) => {
+        const f = props.config.schema.find((item) => item.field === key)
+        if (f) void handleFieldChange(f, v)
+      }
+    }) as WritableComputedRef<T>
+    fieldVmCache.set(key, entry as WritableComputedRef<unknown>)
+  }
+  return entry
 }
 
 const normalizeViewDisplay = (raw: unknown): string => {
@@ -351,7 +356,7 @@ const handleSubmit = async () => {
   emit('validate', Boolean(valid))
 
   if (valid) {
-    emit('submit', formModel.value)
+    emit('submit', model.value)
   }
 }
 
@@ -361,20 +366,13 @@ const handleReset = () => {
 }
 
 watch(
-  () => props.modelValue,
-  (value) => {
-    localModel.value = value
-  },
-  { immediate: true, deep: true }
-)
-
-watch(
   () => props.config.schema,
   async (schema) => {
+    fieldVmCache.clear()
     await Promise.allSettled(
       schema.map(async (field) => {
         if (field.loadOptions) {
-          actions.setOptions(field.field, await field.loadOptions(formModel.value))
+          actions.setOptions(field.field, await field.loadOptions(model.value))
         }
       })
     )

@@ -10,7 +10,7 @@
 
     <el-card shadow="never">
       <div v-if="detail" class="proto-view__body">
-        <UniForm :model-value="viewModel" :config="detailCfg" mode="view" />
+        <UniForm v-model="viewModel" :config="detailCfg" mode="view" />
 
         <section class="proto-view__sign">
           <h2>{{ $t('protocol.detail.signRecords') }}</h2>
@@ -20,7 +20,8 @@
             :request="loadSign"
             :pagination="{ pageSize: 10, pageSizes: [10, 20, 50] }"
             :toolbar="{ refresh: true, fullscreen: true, columnSetting: true }"
-            :action-column="{ fixed: false }" />
+            :action-column="{ fixed: false }"
+          />
         </section>
       </div>
     </el-card>
@@ -111,21 +112,24 @@ const schoolName = computed(
 )
 
 const detailCfg = computed(() => detailForm(t))
-const viewModel = computed(() => {
-  const record = detail.value
+const viewModel = computed({
+  get() {
+    const record = detail.value
 
-  if (!record) {
-    return {}
-  }
+    if (!record) {
+      return {}
+    }
 
-  return {
-    ...record,
-    schoolName: schoolName.value,
-    protocolTypeName: enumLabel('protocolType', record.protocolType),
-    moduleName: enumLabel('module', record.module),
-    needSignName: enumLabel('needSign', record.needSign),
-    statusName: enumLabel('status', record.status)
-  }
+    return {
+      ...record,
+      schoolName: schoolName.value,
+      protocolTypeName: enumLabel('protocolType', record.protocolType),
+      moduleName: enumLabel('module', record.module),
+      needSignName: enumLabel('needSign', record.needSign),
+      statusName: enumLabel('status', record.status)
+    }
+  },
+  set: () => {}
 })
 
 const loadSign: UniTableRequest = ({ pageNo: current, pageSize: size }) =>

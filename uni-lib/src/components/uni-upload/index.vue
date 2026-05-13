@@ -58,9 +58,10 @@ import { useUniI18n } from '@/locales/use-uni-i18n'
 
 const { t } = useUniI18n()
 
+const fileList = defineModel<UploadUserFile[]>('fileList', { default: () => [] })
+
 const props = withDefaults(
   defineProps<{
-    fileList?: UploadUserFile[]
     action?: string
     request?: (options: UploadRequestOptions) => Promise<unknown> | void
     accept?: string
@@ -79,14 +80,12 @@ const props = withDefaults(
     listType?: 'text' | 'picture' | 'picture-card'
   }>(),
   {
-    fileList: () => [],
     action: '',
     listType: 'text'
   }
 )
 
 const emit = defineEmits<{
-  'update:fileList': [fileList: UploadUserFile[]]
   success: [response: unknown, file: UploadFile, files: UploadFiles]
   error: [error: Error, file: UploadFile, files: UploadFiles]
   remove: [file: UploadFile, files: UploadFiles]
@@ -97,7 +96,7 @@ const emit = defineEmits<{
   change: [file: UploadFile, files: UploadFiles]
 }>()
 
-const fileListSize = () => props.fileList.reduce((total, file) => total + (file.size ?? 0), 0)
+const fileListSize = () => fileList.value.reduce((total, file) => total + (file.size ?? 0), 0)
 
 const isAcceptedFile = (file: File) => {
   if (!props.accept) {
@@ -142,7 +141,9 @@ const beforeUpload: UploadProps['beforeUpload'] = (file) => {
   return true
 }
 
-const handleUpdateFileList = (files: UploadUserFile[]) => emit('update:fileList', files)
+const handleUpdateFileList = (files: UploadUserFile[]) => {
+  fileList.value = files
+}
 const handleSuccess: UploadProps['onSuccess'] = (response, file, files) =>
   emit('success', response, file, files)
 const handleError: UploadProps['onError'] = (error, file, files) =>
