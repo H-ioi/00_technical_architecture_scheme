@@ -235,9 +235,11 @@ export const attendanceHolidayColumns = (t: Translate): UniTableColumn[] => [
   {
     prop: 'scope',
     label: t('attendance.holiday.columns.scope'),
-    type: 'text',
-    minWidth: 140,
-    formatter: (row) => formatScopeCell(row as Loose, t)
+    type: 'array',
+    minWidth: 180,
+    options: holidayScopeSearchOpts(t),
+    lookup: { splitValues: true },
+    array: { renderMode: 'tag', separator: '、' }
   },
   {
     prop: 'reason',
@@ -370,7 +372,7 @@ export interface AttendanceHolidayDetailViewModel {
 
 export const attendanceHolidayDetailForm = (t: Translate): UniFormConfig => ({
   mode: 'view',
-  formProps: { labelWidth: '120px' },
+  formProps: { labelWidth: '80px' },
   rowProps: { gutter: 16 },
   colProps: { span: 12 },
   view: { emptyText: '-' },

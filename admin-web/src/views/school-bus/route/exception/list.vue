@@ -5,7 +5,7 @@
         <h1>{{ $t('schoolBus.routeException.page.title') }}</h1>
         <p>{{ $t('schoolBus.routeException.page.description') }}</p>
       </div>
-      <div class="school-bus-route-exception__header-actions">
+      <div class="uni-list-page__header-actions">
         <el-button v-uni-permission="'busexception_export'" @click="exportData">
           {{ $t('schoolBus.driver.actions.export') }}
         </el-button>
@@ -235,12 +235,6 @@ const del = async () => {
 </script>
 
 <style scoped lang="scss">
-.school-bus-route-exception__header-actions {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-}
-
 .school-bus-route-exception__file {
   position: absolute;
   width: 0;

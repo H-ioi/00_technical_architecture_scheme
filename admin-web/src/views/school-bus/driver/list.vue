@@ -5,7 +5,7 @@
         <h1>{{ $t('schoolBus.driver.page.title') }}</h1>
         <p>{{ $t('schoolBus.driver.page.description') }}</p>
       </div>
-      <div class="school-bus-driver-page__header-actions">
+      <div class="uni-list-page__header-actions">
         <el-button v-uni-permission="'busdriver_download'" @click="downloadImportTemplate">
           {{ $t('schoolBus.driver.actions.downloadTemplate') }}
         </el-button>
@@ -183,12 +183,6 @@ const del = async () => {
 </script>
 
 <style scoped lang="scss">
-.school-bus-driver-page__header-actions {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-}
-
 .school-bus-driver-page__file {
   position: absolute;
   width: 0;

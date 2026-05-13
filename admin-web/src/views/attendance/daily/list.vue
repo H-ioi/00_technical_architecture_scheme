@@ -5,7 +5,9 @@
         <h1>{{ $t('attendance.daily.page.title') }}</h1>
         <p>{{ $t('attendance.daily.page.description') }}</p>
       </div>
-      <el-button type="primary" @click="exportData">{{ $t('attendance.daily.actions.export') }}</el-button>
+      <div class="uni-list-page__header-actions">
+        <el-button type="primary" @click="exportData">{{ $t('attendance.daily.actions.export') }}</el-button>
+      </div>
     </div>
 
     <UniSearchForm

@@ -286,6 +286,90 @@ export const routes: AppRouteRecord[] = [
             }
           },
           {
+            path: 'flow/design/create',
+            name: 'AttendanceHolidayFlowDesignCreate',
+            component: () => import('@/views/attendance/flow/edit.vue'),
+            meta: {
+              title: '新增流程',
+              titleKey: 'route.attendanceHolidayFlowDesign',
+              hidden: true,
+              activeMenu: '/attendance/flow'
+            }
+          },
+          {
+            path: 'flow/design/:id',
+            name: 'AttendanceHolidayFlowDesignEdit',
+            component: () => import('@/views/attendance/flow/edit.vue'),
+            meta: {
+              title: '编辑流程',
+              titleKey: 'route.attendanceHolidayFlowDesign',
+              hidden: true,
+              activeMenu: '/attendance/flow',
+              tagDetailParam: 'id'
+            }
+          },
+          {
+            path: 'flow',
+            name: 'AttendanceHolidayFlow',
+            component: () => import('@/views/attendance/flow/list.vue'),
+            meta: {
+              title: '流程设计',
+              titleKey: 'route.attendanceHolidayFlow'
+            }
+          },
+          {
+            path: 'task',
+            name: 'AttendanceHolidayTask',
+            component: () => import('@/views/attendance/task/tab.vue'),
+            meta: {
+              title: '任务处理',
+              titleKey: 'route.attendanceHolidayTask'
+            }
+          },
+          {
+            path: 'config',
+            name: 'AttendanceHolidayConfig',
+            component: () => import('@/views/attendance/config/list.vue'),
+            meta: {
+              title: '配置管理',
+              titleKey: 'route.attendanceHolidayConfig'
+            }
+          },
+          {
+            path: 'pass',
+            name: 'AttendanceHolidayPass',
+            component: () => import('@/views/attendance/pass/list.vue'),
+            meta: {
+              title: '放行条管理',
+              titleKey: 'route.attendanceHolidayPass'
+            }
+          },
+          /** 旧书签 / 后端仍下发 `/attendance/holiday/*` 时的兼容跳转 */
+          {
+            path: 'holiday/flow/design/create',
+            redirect: '/attendance/flow/design/create'
+          },
+          {
+            path: 'holiday/flow/design/:id',
+            redirect: (to) => ({ path: `/attendance/flow/design/${encodeURIComponent(String(to.params.id))}` })
+          },
+          {
+            path: 'holiday/flow',
+            redirect: '/attendance/flow'
+          },
+          {
+            path: 'holiday/task',
+            redirect: '/attendance/task'
+          },
+          {
+            path: 'holiday/config',
+            redirect: '/attendance/config'
+          },
+          {
+            path: 'holiday/pass',
+            redirect: '/attendance/pass'
+          },
+          {
             path: 'school',
             name: 'AttendanceSchool',
             component: () => import('@/views/attendance/school/list.vue'),

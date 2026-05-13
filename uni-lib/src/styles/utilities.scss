@@ -66,4 +66,12 @@
       font-size: 13px;
     }
   }
+
+  // 标题区右侧多按钮并排：只占位布局，具体外观交给 Element Plus
+  &__header-actions {
+    display: inline-flex;
+    flex-wrap: wrap;
+    align-items: center;
+    row-gap: 8px;
+  }
 }

@@ -5,7 +5,7 @@
         <h1>{{ $t('schoolBus.studentApply.page.title') }}</h1>
         <p>{{ $t('schoolBus.studentApply.page.description') }}</p>
       </div>
-      <div class="school-bus-student-apply__actions">
+      <div class="uni-list-page__header-actions">
         <el-button
           v-uni-permission="'busorder_import_intention_order'"
           @click="downloadIntentionTemplate">
@@ -342,11 +342,6 @@ const del = async () => {
 </script>
 
 <style scoped lang="scss">
-.school-bus-student-apply__actions {
-  display: flex;
-  flex-wrap: wrap;
-}
-
 .school-bus-student-apply__file {
   position: absolute;
   width: 0;

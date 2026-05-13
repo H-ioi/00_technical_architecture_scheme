@@ -279,15 +279,50 @@ export default {
     },
     actions: {
       add: 'Create',
-      withdraw: 'Withdraw',
-      detail: 'View'
+      withdraw: 'Revoke',
+      detail: 'View',
+      delete: 'Delete'
     },
     messages: {
       withdrawPrompt: 'Notice',
-      withdrawConfirm: 'Withdraw this leave workflow? (procId={procId}, id={id})',
-      withdrawSuccess: 'Withdrawn',
-      addPending:
-        'Creating/editing leave (student lookup, fixed-week schedule, attachments, parent acknowledgement) depends on public upload APIs (`/publik/file/upload`, etc.) and will mirror legacy `dialog/add.vue`. Use View / Withdraw for now.'
+      withdrawConfirm: 'Revoke this leave workflow? (procId={procId}, id={id})',
+      withdrawSuccess: 'Revoked',
+      withdrawMissingId: 'Cannot revoke: leave id is missing.',
+      withdrawFail: 'Revoke failed. Retry later or inspect the network response.',
+      deletePrompt: 'Notice',
+      deleteConfirm: 'Delete this leave record? (id={id})',
+      deleteSuccess: 'Deleted'
+    },
+    form: {
+      title: 'Leave request',
+      pickStudent: 'Student',
+      pickStudentPh: 'Search by admission No. or name',
+      selectType: 'Select leave type',
+      reasonPh: 'Describe the reason',
+      attachments: 'Attachments',
+      needPass: 'Release pass required',
+      parentAck: 'Parents are responsible for student safety during leave',
+      submit: 'Submit',
+      timeStart: 'Start time',
+      timeEnd: 'End time',
+      ruleStudent: 'Select a student',
+      ruleType: 'Select leave type',
+      ruleScope: 'Select scope',
+      ruleReason: 'Enter reason',
+      ruleDate: 'Select dates',
+      ruleSlot: 'Select time slot',
+      ruleWeek: 'Select weekday(s)',
+      ruleSickAttach: 'Sick leave requires an attachment',
+      ruleParent: 'Confirm parent safety acknowledgement',
+      fileTooLarge: 'File must be under 20MB',
+      uploadFail: 'Upload failed',
+      saveOk: 'Submitted',
+      saveFail: 'Submit failed',
+      weekMon: 'Mon',
+      weekTue: 'Tue',
+      weekWed: 'Wed',
+      weekThu: 'Thu',
+      weekFri: 'Fri'
     },
     placeholders: {
       leaveType: 'Leave type',
@@ -341,5 +376,203 @@ export default {
       statusFinished: 'Finished',
       statusLeaveSoon: 'Awaiting leave'
     }
+  },
+  holidayConfig: {
+    page: {
+      title: 'Leave module config',
+      description: 'School, department, grades and notification emails; `GET/POST /attendance/sys/config/*` (legacy `config.vue`).'
+    },
+    placeholders: {
+      school: 'Campus'
+    },
+    columns: {
+      school: 'School',
+      grades: 'Grades',
+      department: 'Department',
+      email: 'Email'
+    },
+    form: {
+      school: 'School',
+      department: 'Department',
+      grades: 'Grades',
+      email: 'Email',
+      emailInvalid: 'Invalid email'
+    },
+    department: {
+      all: 'All',
+      course: 'Academic',
+      dorm: 'Boarding',
+      bus: 'Bus',
+      doctor: 'Clinic'
+    },
+    rules: {
+      school: 'Select a school',
+      department: 'Select a department',
+      email: 'Enter an email'
+    },
+    actions: {
+      add: 'Add',
+      edit: 'Edit',
+      delete: 'Delete'
+    },
+    messages: {
+      deleteConfirm: 'Delete this config?',
+      deleteTitle: 'Notice',
+      addOk: 'Created',
+      saveOk: 'Saved'
+    }
+  },
+  holidayPass: {
+    page: {
+      title: 'Gate pass',
+      description: 'Legacy `pass.vue`; `GET /attendance/leave/pass/page`; permissions `pass-add`, etc.'
+    },
+    placeholders: {
+      school: 'Campus',
+      dorm: 'Boarding',
+      keyword: 'Admission No. / name'
+    },
+    columns: {
+      studentNo: 'Admission No.',
+      studentName: 'Name',
+      school: 'Campus',
+      grade: 'Grade',
+      className: 'Class',
+      dorm: 'Boarding',
+      releasedBy: 'Released by',
+      way: 'Mode',
+      leaveRange: 'Leave window',
+      passTime: 'Pass date',
+      isLeave: 'Leave campus',
+      slot: 'Time slot'
+    },
+    options: {
+      wayParents: 'Parent pickup',
+      waySelf: 'Leave alone'
+    },
+    status: {
+      active: 'Active',
+      voided: 'Voided',
+      pendingGenerate: 'Pending generate',
+      expired: 'Expired'
+    },
+    actions: {
+      add: 'Add',
+      batchGenerate: 'Batch generate',
+      void: 'Void',
+      generate: 'Generate'
+    },
+    form: {
+      way: 'Release mode'
+    },
+    rules: {
+      way: 'Select mode',
+      passTime: 'Select date',
+      slot: 'Select time slot'
+    },
+    dialog: {
+      addTitle: 'Gate pass',
+      editTitle: 'Gate pass',
+      batchTitle: 'Batch gate pass'
+    },
+    messages: {
+      needSelection: 'Select rows first',
+      batchOnlyPending: 'Only “pending generate” rows',
+      cannotDeleteActive: 'Active rows cannot be deleted',
+      batchDeleteConfirm: 'Delete selected rows?',
+      actionConfirm: 'Confirm this action?'
+    }
+  },
+  holidayFlow: {
+    page: {
+      title: 'Workflow',
+      description: 'Definitions and deployments; legacy `flow.vue` / `flowdef.vue` / `procdef.vue`.'
+    },
+    tabs: {
+      model: 'Definitions',
+      deployed: 'Deployments'
+    },
+    flowDef: {
+      add: 'New',
+      searchKey: 'Keyword',
+      colId: 'ID',
+      colName: 'Name',
+      colKey: 'Key',
+      colLeaveType: 'Leave type',
+      needApproval: 'Approval required',
+      creator: 'Created by',
+      deploy: 'Deploy',
+      deployHint: 'After deploy, avoid changing leave type; redeploy if needed.',
+      deployConfirm: 'Deploy definition id={id}?',
+      deployOk: 'Deployed',
+      deleteConfirm: 'Delete definition id={id}?'
+    },
+    procDef: {
+      colDefId: 'Definition id',
+      colType: 'Type',
+      colLeaveLabel: 'Leave label',
+      colDeploymentId: 'Deployment id',
+      colDeployedAt: 'Deployed at',
+      colVersion: 'Version',
+      viewImg: 'Diagram',
+      setAssignee: 'Assignees',
+      deleteConfirm: 'Delete this deployment?',
+      assignOk: 'Saved'
+    },
+    design: {
+      tabForm: 'Metadata',
+      tabBpmn: 'Designer',
+      pageTitleCreate: 'New definition',
+      pageTitleEdit: 'Edit definition (ID: {id})',
+      pageDescription: 'Configure process metadata and the BPMN diagram; saving returns you to Flow design.',
+      flowType: 'Type',
+      typeLeave: 'Leave',
+      typeReturn: 'Return',
+      save: 'Save',
+      back: 'Back',
+      viewXml: 'View XML',
+      importXml: 'Import XML',
+      copyXml: 'Copy',
+      copyOk: 'Copied',
+      importPh: 'Paste BPMN XML',
+      importEmpty: 'XML required',
+      saveOk: 'Saved',
+      ruleType: 'Select type',
+      ruleName: 'Enter name',
+      ruleSchool: 'Select school(s)',
+      ruleLeaveType: 'Select leave type',
+      ruleScope: 'Select scope'
+    }
+  },
+  holidayTask: {
+    page: {
+      title: 'Tasks',
+      description: 'Todo / done / started; legacy `task.vue` and `flow/instance/*`.'
+    },
+    tabs: {
+      todo: 'My todo',
+      done: 'My done',
+      instance: 'My instances'
+    },
+    colTaskId: 'Task id',
+    colTaskName: 'Task',
+    colProcName: 'Process',
+    colStarter: 'Starter',
+    colStartTime: 'Started',
+    colEndTime: 'Ended',
+    colAssignee: 'Assignee',
+    colFlowDefId: 'Definition id',
+    colInstanceId: 'Instance id',
+    approve: 'Approve',
+    trace: 'Progress',
+    approveTitle: 'Approval',
+    reject: 'Reject',
+    approveOk: 'Approved',
+    rejectOk: 'Rejected',
+    to: 'to',
+    extendTime: 'Extended until',
+    flowChart: 'Diagram',
+    defaultApproveRemark: 'Approved',
+    remarkPh: 'Remark'
   }
 }

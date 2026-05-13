@@ -2,7 +2,32 @@ import dayjs from 'dayjs'
 
 type Loose = Record<string, unknown>
 
-/** Spring `records`/`total` 分页unwrap（请假页与销假页共用）。 */
+/** 请假分页行：后端可能仅返回 snake_case，操作列依赖 `procId` / `id`。 */
+export const normalizeHolidayListRow = (raw: Loose): Loose => {
+  const out: Loose = { ...raw }
+  const proc =
+    out.procId ??
+    out.proc_id ??
+    out.processId ??
+    out.process_id ??
+    out.procInstId ??
+    out.proc_inst_id
+  if ((out.procId == null || out.procId === '') && proc != null && proc !== '') {
+    out.procId = proc
+  }
+  if ((out.id == null || out.id === '') && out.holiday_id != null && out.holiday_id !== '') {
+    out.id = out.holiday_id
+  }
+  if ((out.id == null || out.id === '') && out.holidayId != null && out.holidayId !== '') {
+    out.id = out.holidayId
+  }
+  if (out.dataFrom == null && out.data_from != null && out.data_from !== '') {
+    out.dataFrom = out.data_from
+  }
+  return out
+}
+
+/** Spring `records`/`total` 分页 unwrap（请假页与销假页共用）。 */
 export const unwrapHolidayPage = (payload: unknown): { list: Loose[]; total: number } => {
   if (!payload || typeof payload !== 'object') {
     return { list: [], total: 0 }

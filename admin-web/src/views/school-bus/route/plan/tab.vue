@@ -5,7 +5,7 @@
         <h1>{{ $t('schoolBus.routePlan.page.title') }}</h1>
         <p>{{ $t('schoolBus.routePlan.page.description') }}</p>
       </div>
-      <div v-if="activeTab === 'routes'" class="school-bus-route-plan__actions">
+      <div v-if="activeTab === 'routes'" class="uni-list-page__header-actions">
         <el-button v-uni-permission="'busline_import'" @click="downloadRouteTemplate">
           {{ $t('schoolBus.routePlan.actions.downloadRouteTemplate') }}
         </el-button>
@@ -16,12 +16,12 @@
           {{ $t('schoolBus.routePlan.actions.addRoute') }}
         </el-button>
       </div>
-      <div v-else-if="activeTab === 'term'" class="school-bus-route-plan__actions">
+      <div v-else-if="activeTab === 'term'" class="uni-list-page__header-actions">
         <el-button v-uni-permission="'bussection_add'" type="primary" @click="openTermAdd">
           {{ $t('schoolBus.routePlan.actions.addTerm') }}
         </el-button>
       </div>
-      <div v-else-if="activeTab === 'station'" class="school-bus-route-plan__actions">
+      <div v-else-if="activeTab === 'station'" class="uni-list-page__header-actions">
         <el-button v-uni-permission="'busstation_import'" @click="downloadStationTemplate">
           {{ $t('schoolBus.routePlan.actions.downloadStationTemplate') }}
         </el-button>
@@ -491,12 +491,6 @@ const onStationImportFile = async (e: Event) => {
 <style scoped lang="scss">
 .school-bus-route-plan__tabs {
   margin-top: 8px;
-}
-
-.school-bus-route-plan__actions {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
 }
 
 .school-bus-route-plan__file {

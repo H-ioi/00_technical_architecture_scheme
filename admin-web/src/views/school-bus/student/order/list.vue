@@ -5,7 +5,7 @@
         <h1>{{ $t('schoolBus.studentOrder.page.title') }}</h1>
         <p>{{ $t('schoolBus.studentOrder.page.description') }}</p>
       </div>
-      <div class="school-bus-student-order__actions">
+      <div class="uni-list-page__header-actions">
         <el-button v-uni-permission="'busorder_export_order'" @click="exportData">
           {{ $t('schoolBus.driver.actions.export') }}
         </el-button>
@@ -203,11 +203,6 @@ const del = async () => {
 </script>
 
 <style scoped lang="scss">
-.school-bus-student-order__actions {
-  display: flex;
-  flex-wrap: wrap;
-}
-
 .school-bus-student-order__file {
   position: absolute;
   width: 0;

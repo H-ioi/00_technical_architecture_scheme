@@ -5,20 +5,19 @@
         <h1>{{ t('permission.dept.title') }}</h1>
         <p>{{ t('permission.dept.description') }}</p>
       </div>
-    </div>
-
-    <div class="permission-dept__toolbar">
-      <el-button-group>
-        <el-button v-uni-permission="'sys_dept_add'" type="primary" @click="handlerAdd">
-          {{ t('permission.actions.addDept') }}
-        </el-button>
-        <el-button v-uni-permission="'sys_dept_edit'" type="primary" @click="handlerEdit">
-          {{ t('permission.actions.updateDept') }}
-        </el-button>
-        <el-button v-uni-permission="'sys_dept_del'" type="primary" @click="handleDelete">
-          {{ t('permission.actions.deptDelete') }}
-        </el-button>
-      </el-button-group>
+      <div class="uni-list-page__header-actions">
+        <el-button-group>
+          <el-button v-uni-permission="'sys_dept_add'" type="primary" @click="handlerAdd">
+            {{ t('permission.actions.addDept') }}
+          </el-button>
+          <el-button v-uni-permission="'sys_dept_edit'" type="primary" @click="handlerEdit">
+            {{ t('permission.actions.updateDept') }}
+          </el-button>
+          <el-button v-uni-permission="'sys_dept_del'" type="primary" @click="handleDelete">
+            {{ t('permission.actions.deptDelete') }}
+          </el-button>
+        </el-button-group>
+      </div>
     </div>
 
     <el-row :gutter="16" class="permission-dept__body">
@@ -202,9 +201,6 @@ onMounted(() => {
 </script>
 
 <style scoped lang="scss">
-.permission-dept__toolbar {
-  margin-bottom: 12px;
-}
 .permission-dept__tree {
   border: 1px solid var(--el-border-color-lighter);
   border-radius: 4px;

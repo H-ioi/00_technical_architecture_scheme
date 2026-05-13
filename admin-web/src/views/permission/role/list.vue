@@ -5,9 +5,11 @@
         <h1>{{ t('permission.role.title') }}</h1>
         <p>{{ t('permission.role.description') }}</p>
       </div>
-      <el-button v-uni-permission="'sys_role_add'" type="primary" @click="openForm('add')">
-        {{ t('permission.actions.add') }}
-      </el-button>
+      <div class="uni-list-page__header-actions">
+        <el-button v-uni-permission="'sys_role_add'" type="primary" @click="openForm('add')">
+          {{ t('permission.actions.add') }}
+        </el-button>
+      </div>
     </div>
 
     <UniSearchForm

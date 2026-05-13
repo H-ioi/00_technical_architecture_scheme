@@ -5,9 +5,11 @@
         <h1>{{ t('permission.user.title') }}</h1>
         <p>{{ t('permission.user.description') }}</p>
       </div>
-      <el-button v-uni-permission="'sys_user_add'" type="primary" @click="openAdd">
-        {{ t('permission.actions.add') }}
-      </el-button>
+      <div class="uni-list-page__header-actions">
+        <el-button v-uni-permission="'sys_user_add'" type="primary" @click="openAdd">
+          {{ t('permission.actions.add') }}
+        </el-button>
+      </div>
     </div>
 
     <el-row :gutter="16" class="permission-user__row">

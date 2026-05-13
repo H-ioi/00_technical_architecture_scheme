@@ -42,7 +42,71 @@ export interface AttendanceHolidayRecord {
   weekDays?: unknown
   status?: string
   createdAt?: string
-  /** 是否流程已结束（旧撤回按钮条件 `!scope.row.isEnd`） */
+  /** 是否流程已结束（单独拆页 `holiday/index` 撤回条件 `!isEnd`；聚合 Tab 内请假列表以 `leaveManage` 为准） */
   isEnd?: boolean
+  /** 数据来源：旧 `leaveManage.vue` 撤销按钮排除 `MB` */
+  dataFrom?: string
   [key: string]: unknown
+}
+
+/** 请假模块-邮箱/年级配置（旧 `GET /attendance/sys/config/list`）。 */
+export interface AttendanceHolidaySysConfigRecord {
+  id?: string | number
+  school?: string
+  grades?: string[]
+  department?: string
+  email?: string
+  [key: string]: unknown
+}
+
+/** 放行条分页查询（旧 `GET /attendance/leave/pass/page`，`size`/`current`）。 */
+export interface AttendanceLeavePassListParams extends PageQuery {
+  keyword?: string
+  studentSchool?: string
+  isDormitory?: string | number
+}
+
+/** 放行条行。 */
+export interface AttendanceLeavePassRecord {
+  id?: string | number
+  studentNo?: string
+  studentName?: string
+  studentSchool?: string
+  studentGrade?: string
+  studentClass?: string
+  studentDormitoryStatus?: number
+  way?: string
+  beginTime?: string
+  endTime?: string
+  passTime?: string
+  isLeave?: number
+  dateLimit?: string[] | string
+  status?: number
+  memo?: string
+  createdAt?: string
+  createdBy?: string
+  [key: string]: unknown
+}
+
+/** 流程定义分页（旧 `flow/flwdemodel/list`，`page`/`limit`/`key`）。 */
+export interface AttendanceFlowDefListParams extends PageQuery {
+  key?: string
+}
+
+export interface AttendanceFlowDefRecord {
+  id?: string | number
+  name?: string
+  modelKey?: string
+  leaveType?: string
+  school?: string
+  needApproval?: string
+  createdBy?: string
+  created?: string
+  [key: string]: unknown
+}
+
+/** 流程部署列表（旧 `flow/deploy/listProcDef`，`page`/`limit`）。 */
+export interface AttendanceProcDefListParams extends PageQuery {
+  page?: number
+  limit?: number
 }

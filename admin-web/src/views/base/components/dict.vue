@@ -5,7 +5,9 @@
         <h1>{{ mt('page.title') }}</h1>
         <p>{{ mt('page.description') }}</p>
       </div>
-      <el-button type="primary" @click="openAdd">{{ mt('actions.add') }}</el-button>
+      <div class="uni-list-page__header-actions">
+        <el-button type="primary" @click="openAdd">{{ mt('actions.add') }}</el-button>
+      </div>
     </div>
 
     <UniSearchForm

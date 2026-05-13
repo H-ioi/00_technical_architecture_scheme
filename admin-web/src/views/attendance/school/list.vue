@@ -5,9 +5,11 @@
         <h1>{{ $t('attendance.school.page.title') }}</h1>
         <p>{{ $t('attendance.school.page.description') }}</p>
       </div>
-      <el-button v-uni-permission="'school_attendance_export'" @click="exportData">
-        {{ $t('attendance.school.actions.export') }}
-      </el-button>
+      <div class="uni-list-page__header-actions">
+        <el-button v-uni-permission="'school_attendance_export'" @click="exportData">
+          {{ $t('attendance.school.actions.export') }}
+        </el-button>
+      </div>
     </div>
 
     <UniSearchForm

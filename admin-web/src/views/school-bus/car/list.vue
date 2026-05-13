@@ -5,7 +5,7 @@
         <h1>{{ $t('schoolBus.car.page.title') }}</h1>
         <p>{{ $t('schoolBus.car.page.description') }}</p>
       </div>
-      <div class="school-bus-car-page__actions">
+      <div class="uni-list-page__header-actions">
         <el-button v-uni-permission="'buscarinfo_download'" @click="downloadTemplate">
           {{ $t('schoolBus.driver.actions.downloadTemplate') }}
         </el-button>
@@ -183,12 +183,6 @@ const del = async () => {
 </script>
 
 <style scoped lang="scss">
-.school-bus-car-page__actions {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-}
-
 .school-bus-car-page__file {
   position: absolute;
   width: 0;

@@ -1104,6 +1104,8 @@ sidebar.vue
 10. 配置管理。
 11. 放行条管理。
 
+**请假管理（`/attendance/holiday`）对齐说明**：旧菜单路径对应 **`test/old-test/src/views/isacommunity/attendance/holiday/index.vue`**，该页为 Tab 容器，**「请假」Tab 内嵌 `leaveManage.vue`**。列表「撤销」按钮显示条件为 **`(status 为待审批 1100 或待休假 1103) 且 `dataFrom !== 'MB'`**（见该文件模板）；接口 **`cancelFlow(procId, id)`** 即 `GET .../holiday/back/:procId/:id`。请勿与仓库内其他目录下同名 `holiday/index.vue`（仅含 `procId`、`!isEnd`、`status !== '102'` 的旧实现）混为一套规则。
+
 流程设计、任务处理和请假审批不在前期抽象，先项目内稳定实现。
 
 **详情容器**：参见 **§2.5.1**；请假列表的**查看 / 新增 / 编辑**均使用 **`el-drawer`**（附件预览等二级浮层仍可用 `el-dialog`）。

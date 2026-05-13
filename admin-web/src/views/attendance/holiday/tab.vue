@@ -5,8 +5,10 @@
         <h1>{{ $t('attendance.holiday.page.title') }}</h1>
         <p>{{ $t('attendance.holiday.page.description') }}</p>
       </div>
-      <div v-if="activeTab === 'leave'">
-        <el-button type="primary" @click="onAddPending">{{ $t('attendance.holiday.actions.add') }}</el-button>
+      <div v-if="activeTab === 'leave'" class="uni-list-page__header-actions">
+        <el-button type="primary" @click="leaveAddVisible = true">{{
+          $t('attendance.holiday.actions.add')
+        }}</el-button>
       </div>
     </div>
 
@@ -21,8 +23,7 @@
           :submit-text="$t('member.actions.search')"
           :reset-text="$t('member.actions.reset')"
           @search="searchLeave"
-          @reset="resetLeaveSearch"
-        />
+          @reset="resetLeaveSearch" />
         <UniDataTable
           ref="leaveTableRef"
           row-key="id"
@@ -32,9 +33,8 @@
           :pagination="{ pageSize: 10, pageSizes: [10, 20, 50, 100] }"
           :toolbar="{ refresh: true, density: true, columnSetting: true }"
           :actions="leaveActions"
-          :action-column="{ width: 140, fixed: 'right' }"
-          @load-success="handleLeaveLoadSuccess"
-        />
+          :action-column="{ width: 168, fixed: 'right' }"
+          @load-success="handleLeaveLoadSuccess" />
       </el-tab-pane>
 
       <el-tab-pane :label="$t('attendance.holiday.tabs.return')" name="return">
@@ -47,8 +47,7 @@
           :submit-text="$t('member.actions.search')"
           :reset-text="$t('member.actions.reset')"
           @search="searchReturn"
-          @reset="resetReturnSearch"
-        />
+          @reset="resetReturnSearch" />
         <UniDataTable
           ref="returnTableRef"
           row-key="id"
@@ -59,43 +58,41 @@
           :toolbar="{ refresh: true, density: true, columnSetting: true }"
           :actions="returnActions"
           :action-column="{ width: 88, fixed: 'right' }"
-          @load-success="handleReturnLoadSuccess"
-        />
+          @load-success="handleReturnLoadSuccess" />
       </el-tab-pane>
     </el-tabs>
+
+    <HolidayFormDrawer v-model:visible="leaveAddVisible" @success="onLeaveFormSuccess" />
 
     <DetailDrawer
       v-model:visible="leaveDetailVisible"
       :source="leaveDetailModel"
       :config="leaveDetailConfig"
-      :loading="leaveDetailLoading"
-    />
+      :loading="leaveDetailLoading" />
 
     <DetailDrawer
       v-model:visible="returnDetailVisible"
       :source="returnDetailModel"
       :config="returnDetailConfig"
-      :loading="returnDetailLoading"
-    />
+      :loading="returnDetailLoading" />
   </section>
 </template>
 
 <script setup lang="ts">
-import { ElMessage } from 'element-plus'
-import { UniDataTable, UniSearchForm, useUniI18n } from 'uni-ui-lib'
+import { UniDataTable, UniSearchForm } from 'uni-ui-lib'
 import { nextTick, onMounted, ref, watch } from 'vue'
 
 import DetailDrawer from './components/detail-drawer.vue'
+import HolidayFormDrawer from './components/holiday-form-drawer.vue'
 import { useHolidayLeave } from './use-holiday-leave'
 import { useHolidayReturn } from './use-holiday-return'
 
 import { membershipApi } from '@/api'
 import type { SchoolOptionRecord } from '@/types/modules/membership'
 
-const { t } = useUniI18n()
-
 const activeTab = ref<'leave' | 'return'>('leave')
 const schoolRecords = ref<SchoolOptionRecord[]>([])
+const leaveAddVisible = ref(false)
 
 const {
   actions: leaveActions,
@@ -131,8 +128,8 @@ const {
   tableRef: returnTableRef
 } = useHolidayReturn(schoolRecords)
 
-const onAddPending = () => {
-  ElMessage.info(t('attendance.holiday.messages.addPending'))
+const onLeaveFormSuccess = () => {
+  leaveTableRef.value?.refresh()
 }
 
 onMounted(async () => {

@@ -5,9 +5,11 @@
         <h1>{{ $t('protocol.page.title') }}</h1>
         <p>{{ $t('protocol.page.description') }}</p>
       </div>
-      <el-button v-uni-permission="'protocol_add'" type="primary" @click="openForm('add')">
-        {{ $t('protocol.actions.add') }}
-      </el-button>
+      <div class="uni-list-page__header-actions">
+        <el-button v-uni-permission="'protocol_add'" type="primary" @click="openForm('add')">
+          {{ $t('protocol.actions.add') }}
+        </el-button>
+      </div>
     </div>
 
     <!-- UniSearchForm 统一承载查询条件、重置和空值清理，页面只接收过滤后的查询参数。 -->
