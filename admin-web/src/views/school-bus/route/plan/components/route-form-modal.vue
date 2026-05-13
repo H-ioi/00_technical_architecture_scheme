@@ -178,6 +178,7 @@ import type { PropType } from 'vue'
 
 import { schoolBusCommonApi, schoolBusLineApi } from '@/api'
 import type { SchoolOptionRecord } from '@/types/modules/membership'
+import { normalizeApiArrayBody, normalizeSchoolBusDetailBody } from '@/utils/api-response-normalize'
 
 import {
   BIND_STATION_TABLE_COLS,
@@ -188,71 +189,20 @@ import {
 
 type Loose = Record<string, unknown>
 
-function unwrapArray<T>(payload: unknown): T[] {
-  if (Array.isArray(payload)) {
-    return payload as T[]
-  }
-
-  if (payload && typeof payload === 'object') {
-    const p = payload as Loose
-
-    if (Array.isArray(p.data)) {
-      return p.data as T[]
-    }
-
-    if (p.data && typeof p.data === 'object' && !Array.isArray(p.data)) {
-      const inner = p.data as Loose
-
-      if (Array.isArray(inner.data)) {
-        return inner.data as T[]
-      }
-    }
-  }
-
-  return []
-}
-
-function unwrapLineDetail(res: unknown): Loose | null {
-  if (res == null || typeof res !== 'object') {
-    return null
-  }
-
-  const r = res as Loose
-  const d = r.data
-
-  if (d && typeof d === 'object' && !Array.isArray(d)) {
-    const inner = d as Loose
-
-    if (inner.success === true && inner.data != null && typeof inner.data === 'object') {
-      return inner.data as Loose
-    }
-
-    if ('schoolIds' in inner || 'weekDays' in inner || 'cnName' in inner) {
-      return inner as Loose
-    }
-  }
-
-  if ('schoolIds' in r || 'weekDays' in r) {
-    return r as Loose
-  }
-
-  return null
-}
-
 function deepClone<T>(value: T): T {
   return JSON.parse(JSON.stringify(value)) as T
 }
 
 async function fetchSectionList(params: Record<string, unknown>) {
-  return unwrapArray<Loose>(await schoolBusCommonApi.sectionList.get(params))
+  return normalizeApiArrayBody(await schoolBusCommonApi.sectionList.get(params)) as Loose[]
 }
 
 async function fetchStationList(params: Record<string, unknown>) {
-  return unwrapArray<Loose>(await schoolBusCommonApi.stationList.get(params))
+  return normalizeApiArrayBody(await schoolBusCommonApi.stationList.get(params)) as Loose[]
 }
 
 async function fetchCarinfoList(params: Record<string, unknown>) {
-  return unwrapArray<Loose>(await schoolBusCommonApi.carinfoList.get(params))
+  return normalizeApiArrayBody(await schoolBusCommonApi.carinfoList.get(params)) as Loose[]
 }
 
 export default {
@@ -453,7 +403,7 @@ export default {
 
     async getDetail(id: string | number) {
       const raw = await schoolBusLineApi.detail.get(id)
-      const body = unwrapLineDetail(raw)
+      const body = normalizeSchoolBusDetailBody(raw)
 
       if (!body) {
         return

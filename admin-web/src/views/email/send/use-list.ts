@@ -6,7 +6,7 @@ import { computed, ref } from 'vue'
 import { bulkEmailApi } from '@/api'
 import type { Translate } from '@/types/i18n'
 
-import { unwrapMailPage } from '../mail-page-utils'
+import { normalizeApiPagedBody } from '@/utils/api-response-normalize'
 import { emailSendColumns, emailSendSearchForm, emailSendStatusOpts } from './list.config'
 
 type Loose = Record<string, unknown>
@@ -58,7 +58,7 @@ export const useList = () => {
       keyword: String((f as Loose).keyword ?? ''),
       status: (f as Loose).status === '' || (f as Loose).status == null ? undefined : String((f as Loose).status)
     })
-    const { list, total } = unwrapMailPage(raw)
+    const { list, total } = normalizeApiPagedBody(raw)
     return { data: list, total }
   }
 

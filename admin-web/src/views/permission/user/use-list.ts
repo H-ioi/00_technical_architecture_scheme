@@ -4,37 +4,12 @@ import { useUniI18n, useUniListState } from 'uni-ui-lib'
 import { computed } from 'vue'
 
 import { permissionUserApi } from '@/api'
+import { normalizeApiPagedBody } from '@/utils/api-response-normalize'
 import type { PermissionUserRecord } from '@/types/modules/permission-user'
 
 import { lockOpts, searchForm, tableCols } from './list.config'
 
-type Loose = Record<string, unknown>
-
 export type PermissionUserTableRow = PermissionUserRecord & { rolesLabel?: string }
-
-const unwrapUserPage = (payload: unknown): { list: PermissionUserRecord[]; total: number } => {
-  if (!payload || typeof payload !== 'object') {
-    return { list: [], total: 0 }
-  }
-  const r = payload as Loose
-  const num = (value: unknown) => (typeof value === 'number' && Number.isFinite(value) ? value : 0)
-  if (Array.isArray(r.data)) {
-    return { list: r.data as PermissionUserRecord[], total: num(r.total) }
-  }
-  if (Array.isArray(r.records)) {
-    return { list: r.records as PermissionUserRecord[], total: num(r.total) }
-  }
-  const inner = r.data
-  if (inner && typeof inner === 'object' && !Array.isArray(inner)) {
-    const obj = inner as Loose
-    let list: PermissionUserRecord[] = []
-    if (Array.isArray(obj.records)) {
-      list = obj.records as PermissionUserRecord[]
-    }
-    return { list, total: num(r.total) || num(obj.total) }
-  }
-  return { list: [], total: 0 }
-}
 
 const rolesLabel = (row: PermissionUserRecord) => {
   if (!Array.isArray(row.roleList)) {
@@ -75,7 +50,7 @@ export const useList = (
         ? { deptId: deptIdRef.value }
         : {})
     })
-    const { list, total } = unwrapUserPage(raw)
+    const { list, total } = normalizeApiPagedBody<PermissionUserRecord>(raw)
     const data: PermissionUserTableRow[] = list.map((r) => ({
       ...r,
       rolesLabel: rolesLabel(r)

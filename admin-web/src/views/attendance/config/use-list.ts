@@ -11,28 +11,11 @@ import {
 } from './list.config'
 
 import { attendanceHolidayApi, membershipApi } from '@/api'
+import { normalizeApiArrayBody } from '@/utils/api-response-normalize'
 import type { AttendanceHolidaySysConfigRecord } from '@/types/modules/attendance-holiday'
 import type { SchoolOptionRecord } from '@/types/modules/membership'
 
 type Loose = Record<string, unknown>
-
-const unwrapConfigRows = (payload: unknown): Loose[] => {
-  if (Array.isArray(payload)) {
-    return payload as Loose[]
-  }
-  if (!payload || typeof payload !== 'object') {
-    return []
-  }
-  const r = payload as Loose
-  if (Array.isArray(r.data)) {
-    return r.data as Loose[]
-  }
-  const inner = r.data
-  if (inner && typeof inner === 'object' && Array.isArray((inner as Loose).records)) {
-    return (inner as Loose).records as Loose[]
-  }
-  return []
-}
 
 export const useList = () => {
   const { locale, t } = useUniI18n()
@@ -68,7 +51,7 @@ export const useList = () => {
     const raw = await attendanceHolidayApi.sysConfigList.get({
       school: String((f as Loose).school ?? '')
     })
-    const list = unwrapConfigRows(raw)
+    const list = normalizeApiArrayBody(raw) as Loose[]
     return { data: list, total: list.length }
   }
 

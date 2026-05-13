@@ -32,6 +32,7 @@ import { computed, ref, watch } from 'vue'
 import { schoolBusStationApi } from '@/api'
 import { useDialogDetailLoading } from '@/composables/use-dialog-detail-loading'
 import type { SchoolOptionRecord } from '@/types/modules/membership'
+import { normalizeSchoolBusDetailBody } from '@/utils/api-response-normalize'
 
 import { stationDialogFormConfig } from '../tab.config'
 
@@ -93,33 +94,6 @@ const reset = () => {
   uniFormRef.value?.clearValidate()
 }
 
-function unwrapStationDetail(res: unknown): Loose | null {
-  if (res == null || typeof res !== 'object') {
-    return null
-  }
-
-  const r = res as Loose
-  const d = r.data
-
-  if (d && typeof d === 'object' && !Array.isArray(d)) {
-    const inner = d as Loose
-
-    if (inner.success === true && inner.data != null && typeof inner.data === 'object') {
-      return inner.data as Loose
-    }
-
-    if ('schoolIds' in inner || 'cnName' in inner) {
-      return inner as Loose
-    }
-  }
-
-  if ('schoolIds' in r || 'cnName' in r) {
-    return r as Loose
-  }
-
-  return null
-}
-
 const normalizeSchoolIdsFromBody = (raw: unknown): Array<string | number> => {
   if (Array.isArray(raw)) {
     return raw.filter((x) => x !== '' && x != null) as Array<string | number>
@@ -147,7 +121,7 @@ const loadDetail = async () => {
   }
 
   const raw = await schoolBusStationApi.detail.get(id)
-  const body = unwrapStationDetail(raw)
+  const body = normalizeSchoolBusDetailBody(raw)
 
   if (!body) {
     return

@@ -6,40 +6,12 @@ import type { Ref } from 'vue'
 import { computed, ref, watch } from 'vue'
 
 import { schoolBusSectionApi } from '@/api'
+import { normalizeApiPagedBody } from '@/utils/api-response-normalize'
 import type { SchoolOptionRecord } from '@/types/modules/membership'
 import type { SectionListParams } from '@/types/modules/school-bus-section'
 
 type Loose = Record<string, unknown>
 type SchoolRecordsRef = Ref<SchoolOptionRecord[]>
-
-const unwrapSectionPage = (payload: unknown): { list: Loose[]; total: number } => {
-  if (!payload || typeof payload !== 'object') {
-    return { list: [], total: 0 }
-  }
-
-  const r = payload as Loose
-  const num = (v: unknown) => (typeof v === 'number' && Number.isFinite(v) ? v : 0)
-
-  if (Array.isArray(r.data)) {
-    return { list: r.data as Loose[], total: num(r.total) }
-  }
-
-  const inner = r.data
-
-  if (inner && typeof inner === 'object' && !Array.isArray(inner)) {
-    const o = inner as Loose
-    const list = (
-      Array.isArray(o.records) ? o.records : Array.isArray(o.data) ? o.data : []
-    ) as Loose[]
-
-    return {
-      list,
-      total: num(r.total) || num(o.total) || num(o.totalElements)
-    }
-  }
-
-  return { list: [], total: num(r.total) }
-}
 
 const normalizeSchoolIdsField = (row: Loose): void => {
   if (row.schoolIds == null && row.schoolId != null) {
@@ -225,7 +197,7 @@ export const useTermSection = (schoolRecords: SchoolRecordsRef) => {
 
     const params = stripEmptyParams(base)
     const result = await schoolBusSectionApi.page.get(params)
-    const { list, total } = unwrapSectionPage(result)
+    const { list, total } = normalizeApiPagedBody<Loose>(result)
 
     return {
       data: list.map((r) => fmtRowTerm({ ...r })),

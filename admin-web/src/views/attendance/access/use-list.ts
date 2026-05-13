@@ -14,6 +14,7 @@ import {
 import { attendanceOpenTypeOpts } from '../school/list.config'
 
 import { attendanceAccessApi, attendanceSchoolApi, membershipApi } from '@/api'
+import { normalizeApiPagedBody } from '@/utils/api-response-normalize'
 import type {
   AttendanceAccessListParams,
   AttendanceAccessRecord
@@ -21,24 +22,6 @@ import type {
 import type { SchoolOptionRecord } from '@/types/modules/membership'
 
 type Loose = Record<string, unknown>
-
-const unwrapAccessPage = (payload: unknown): { list: Loose[]; total: number } => {
-  if (!payload || typeof payload !== 'object') {
-    return { list: [], total: 0 }
-  }
-  const r = payload as Loose
-  const num = (value: unknown) => (typeof value === 'number' && Number.isFinite(value) ? value : 0)
-  if (Array.isArray(r.data)) {
-    return { list: r.data as Loose[], total: num(r.total) }
-  }
-  const inner = r.data
-  if (inner && typeof inner === 'object' && !Array.isArray(inner)) {
-    const obj = inner as Loose
-    const list = Array.isArray(obj.data) ? (obj.data as Loose[]) : []
-    return { list, total: num(r.total) || num(obj.total) }
-  }
-  return { list: [], total: num(r.total) }
-}
 
 const formatMaybeDateTime = (value: unknown) => {
   if (value == null || value === '') {
@@ -139,7 +122,7 @@ export const useList = () => {
       ...(f as Record<string, unknown>)
     }
     const raw = await attendanceAccessApi.unionPage.get(params)
-    const { list, total } = unwrapAccessPage(raw)
+    const { list, total } = normalizeApiPagedBody<Loose>(raw)
     return {
       data: list.map(decorateRow),
       total

@@ -228,7 +228,8 @@ import { computed, reactive, ref, watch } from 'vue'
 import { attendanceStudentApi, bulkEmailApi } from '@/api'
 import { useUniI18n } from 'uni-ui-lib'
 
-import { formatMailGroupScopeDisplay, unwrapMailEnvelope } from '../../mail-page-utils'
+import { normalizeApiEnvelope } from '@/utils/api-response-normalize'
+import { formatMailGroupScopeDisplay } from '../../mail-page-utils'
 
 type Loose = Record<string, unknown>
 type SchoolRow = { enName?: string; name?: string }
@@ -300,7 +301,7 @@ const form = reactive({
 
 const loadSchools = async () => {
   const raw = await bulkEmailApi.commonOldSchoolList.get()
-  const env = unwrapMailEnvelope(raw)
+  const env = normalizeApiEnvelope(raw)
   const list = Array.isArray(env)
     ? env
     : Array.isArray((env as Loose).data)
@@ -311,7 +312,7 @@ const loadSchools = async () => {
 
 const loadGrades = async () => {
   const raw = await attendanceStudentApi.gradeList.get()
-  const env = unwrapMailEnvelope(raw)
+  const env = normalizeApiEnvelope(raw)
   const list = Array.isArray(env)
     ? env
     : Array.isArray((env as Loose).data)
@@ -379,7 +380,7 @@ const searchStudent = async () => {
       schoolName: form.schoolName || undefined,
       admissionNo: form.admissionNo
     })
-    const env = unwrapMailEnvelope(raw)
+    const env = normalizeApiEnvelope(raw)
     const list = Array.isArray(env)
       ? env
       : Array.isArray((env as Loose).data)
@@ -416,14 +417,14 @@ const handleSchoolChange = async (schoolName: string) => {
     bulkEmailApi.commonBoardingHouseList.post({ schoolName }),
     bulkEmailApi.commonDivisionNameList.post({ schoolName })
   ])
-  const bhEnv = unwrapMailEnvelope(bh)
+  const bhEnv = normalizeApiEnvelope(bh)
   const bhData = Array.isArray(bhEnv)
     ? bhEnv
     : Array.isArray((bhEnv as Loose).data)
       ? ((bhEnv as Loose).data as string[])
       : []
   boardingHouseList.value = bhData as string[]
-  const divEnv = unwrapMailEnvelope(div)
+  const divEnv = normalizeApiEnvelope(div)
   const divRaw = Array.isArray(divEnv)
     ? divEnv
     : Array.isArray((divEnv as Loose).data)

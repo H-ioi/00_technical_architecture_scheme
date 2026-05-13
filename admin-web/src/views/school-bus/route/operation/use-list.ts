@@ -6,51 +6,11 @@ import { computed, nextTick, onMounted, ref, watch } from 'vue'
 import { createOperationColumns, operationStatusMeta } from './list.config'
 
 import { membershipApi, schoolBusCommonApi, schoolBusOperationApi } from '@/api'
+import { normalizeApiPagedBody } from '@/utils/api-response-normalize'
 import type { SchoolOptionRecord } from '@/types/modules/membership'
 import type { OperationListParams, OperationRecord } from '@/types/modules/school-bus-operation'
 
 type Loose = Record<string, unknown>
-
-/** 分页体兼容多种信封。 */
-const unwrapPage = (payload: unknown): { list: OperationRecord[]; total: number } => {
-  if (!payload || typeof payload !== 'object') {
-    return { list: [], total: 0 }
-  }
-
-  const r = payload as Loose
-  const num = (value: unknown) => (typeof value === 'number' && Number.isFinite(value) ? value : 0)
-
-  if (Array.isArray(r.data)) {
-    return { list: r.data as OperationRecord[], total: num(r.total) }
-  }
-
-  if (Array.isArray(r.records)) {
-    return { list: r.records as OperationRecord[], total: num(r.total) }
-  }
-
-  const inner = r.data
-
-  if (inner && typeof inner === 'object' && !Array.isArray(inner)) {
-    const obj = inner as Loose
-    let list: OperationRecord[] = []
-
-    if (Array.isArray(obj.records)) {
-      list = obj.records as OperationRecord[]
-    } else if (Array.isArray(obj.data)) {
-      list = obj.data as OperationRecord[]
-    }
-
-    return {
-      list,
-      total: num(r.total) || num(obj.total) || num(obj.totalElements) || num(r.totalElements)
-    }
-  }
-
-  return {
-    list: [],
-    total: num(r.total) ?? num(r.totalRow) ?? num(r.totalElements)
-  }
-}
 
 const pickSchoolRecords = (payload: unknown): SchoolOptionRecord[] => {
   if (Array.isArray(payload)) {
@@ -344,7 +304,7 @@ export const useList = () => {
     }
 
     const result = await schoolBusOperationApi.page.get(params)
-    const { list, total } = unwrapPage(result)
+    const { list, total } = normalizeApiPagedBody<OperationRecord>(result)
     const opts = operationStatusMeta(t).map((x) => ({ value: String(x.value), label: x.label }))
 
     return {

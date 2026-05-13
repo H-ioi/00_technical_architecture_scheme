@@ -1,42 +1,4 @@
-/** 群发邮件列表接口解包（兼容 `{ data, total }` / 嵌套 `data.records`）。 */
-
-type Loose = Record<string, unknown>
-
-export const unwrapMailPage = (raw: unknown): { list: Loose[]; total: number } => {
-  if (!raw || typeof raw !== 'object') {
-    return { list: [], total: 0 }
-  }
-  const r = raw as Loose
-  const totalTop = Number(r.total ?? r.totalCount ?? 0)
-  const inner = r.data
-  if (Array.isArray(inner)) {
-    return { list: inner as Loose[], total: totalTop }
-  }
-  if (inner && typeof inner === 'object') {
-    const d = inner as Loose
-    if (Array.isArray(d.data)) {
-      return { list: d.data as Loose[], total: Number(d.total ?? d.totalCount ?? r.total ?? 0) }
-    }
-    if (Array.isArray(d.records)) {
-      return { list: d.records as Loose[], total: Number(d.total ?? d.totalCount ?? totalTop) }
-    }
-  }
-  if (Array.isArray(r.records)) {
-    return { list: r.records as Loose[], total: Number(r.total ?? 0) }
-  }
-  return { list: [], total: 0 }
-}
-
-export const unwrapMailEnvelope = (raw: unknown): Loose => {
-  if (!raw || typeof raw !== 'object') {
-    return {}
-  }
-  const r = raw as Loose
-  if (r.data && typeof r.data === 'object' && !Array.isArray(r.data)) {
-    return r.data as Loose
-  }
-  return r
-}
+/** 群发邮件群组等业务展示（与接口信封无关）。 */
 
 /** 群组 `scopes` 单行编码转可读文案（对齐旧 `group.vue` `convertGroup`）。 */
 export const formatMailGroupScopeDisplay = (str: string): string => {

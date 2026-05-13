@@ -179,6 +179,7 @@ import { ElMessage } from 'element-plus'
 import { computed, reactive, ref, watch } from 'vue'
 
 import { attendanceHolidayApi, membershipApi, protocolApi } from '@/api'
+import { normalizeApiArrayBody, normalizeApiPayload } from '@/utils/api-response-normalize'
 import { useUniI18n } from 'uni-ui-lib'
 
 type Loose = Record<string, unknown>
@@ -236,33 +237,6 @@ const rules = computed<FormRules>(() => ({
   weekDays: [{ required: true, message: t('attendance.holiday.form.ruleWeek'), trigger: 'change' }]
 }))
 
-/** 兼容多种响应包裹结构。 */
-const unwrapData = (raw: unknown): unknown => {
-  if (!raw || typeof raw !== 'object') {
-    return raw
-  }
-  const r = raw as Loose
-  const d = r.data
-  if (d && typeof d === 'object' && !Array.isArray(d) && 'data' in (d as Loose)) {
-    return (d as Loose).data
-  }
-  return d ?? r
-}
-
-const unwrapStudentList = (raw: unknown): Loose[] => {
-  const body = unwrapData(raw)
-  if (Array.isArray(body)) {
-    return body as Loose[]
-  }
-  if (body && typeof body === 'object') {
-    const o = body as Loose
-    if (Array.isArray(o.records)) {
-      return o.records as Loose[]
-    }
-  }
-  return []
-}
-
 const queryStudents = (
   query: string,
   cb: (rows: { value: string; admissonNo: string }[]) => void
@@ -275,7 +249,7 @@ const queryStudents = (
   membershipApi.searchStudent
     .get(q)
     .then((res) => {
-      const list = unwrapStudentList(res)
+      const list = normalizeApiArrayBody(res) as Loose[]
       cb(
         list.map((item) => ({
           value: `${item.showName ?? item.name ?? ''}(${item.admissonNo ?? item.admissionNo ?? ''})`,
@@ -290,7 +264,7 @@ const onStudentSelect = (item: { admissonNo: string }) => {
   form.admissonNo = item.admissonNo
   displayStudent.value = item.admissonNo ? item.value : ''
   membershipApi.studentInfo.get(item.admissonNo).then((res) => {
-    const data = unwrapData(res) as Loose
+    const data = normalizeApiPayload(res) as Loose
     studentInfo.value = data && typeof data === 'object' ? data : {}
   })
 }

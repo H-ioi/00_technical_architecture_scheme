@@ -395,6 +395,7 @@ import {
 } from '../use-student-order-filters'
 
 import { protocolApi, schoolBusCommonApi, schoolBusOrderApi } from '@/api'
+import { normalizeApiDetailBody } from '@/utils/api-response-normalize'
 import type { BusOrderFormModel } from '@/types/modules/school-bus-order'
 
 type Loose = Record<string, unknown>
@@ -653,17 +654,6 @@ const pickArray = (payload: unknown): Record<string, unknown>[] => {
   return []
 }
 
-const unwrapDetail = (payload: unknown): Loose | null => {
-  if (!payload || typeof payload !== 'object') {
-    return null
-  }
-  const d = (payload as Loose).data
-  if (d && typeof d === 'object') {
-    return d as Loose
-  }
-  return payload as Loose
-}
-
 const syncRouteLineTypeName = () => {
   const v = String(routeForm.value.studentLineType ?? '')
   const hit = lineTypeOpts.value.find((o) => String(o.value) === v)
@@ -716,7 +706,7 @@ const applyDefaultStatusForAdd = () => {
 const loadDetail = async (id: string | number) => {
   canComputedPrice.value = false
   const raw = await schoolBusOrderApi.detail.get(id)
-  const data = unwrapDetail(raw)
+  const data = normalizeApiDetailBody(raw)
   if (!data) {
     return
   }

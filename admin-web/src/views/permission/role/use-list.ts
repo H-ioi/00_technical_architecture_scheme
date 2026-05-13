@@ -3,35 +3,10 @@ import { useUniI18n, useUniListState } from 'uni-ui-lib'
 import { computed } from 'vue'
 
 import { permissionRoleApi } from '@/api'
+import { normalizeApiPagedBody } from '@/utils/api-response-normalize'
 import type { PermissionRoleRecord as Row } from '@/types/modules/permission-role'
 
 import { dpTypeOptions, searchForm, tableCols } from './list.config'
-
-type Loose = Record<string, unknown>
-
-const unwrapRolePage = (payload: unknown): { list: Row[]; total: number } => {
-  if (!payload || typeof payload !== 'object') {
-    return { list: [], total: 0 }
-  }
-  const r = payload as Loose
-  const num = (value: unknown) => (typeof value === 'number' && Number.isFinite(value) ? value : 0)
-  if (Array.isArray(r.data)) {
-    return { list: r.data as Row[], total: num(r.total) }
-  }
-  if (Array.isArray(r.records)) {
-    return { list: r.records as Row[], total: num(r.total) }
-  }
-  const inner = r.data
-  if (inner && typeof inner === 'object' && !Array.isArray(inner)) {
-    const obj = inner as Loose
-    let list: Row[] = []
-    if (Array.isArray(obj.records)) {
-      list = obj.records as Row[]
-    }
-    return { list, total: num(r.total) || num(obj.total) }
-  }
-  return { list: [], total: 0 }
-}
 
 export interface RoleListCallbacks {
   onEdit: (mode: 'add' | 'edit', row?: Row) => void
@@ -56,7 +31,7 @@ export const useList = (callbacks: RoleListCallbacks) => {
       size: pageSize,
       ...f
     })
-    const { list, total } = unwrapRolePage(raw)
+    const { list, total } = normalizeApiPagedBody<Row>(raw)
     return { data: list, total }
   }
 

@@ -85,6 +85,7 @@ import { computed, nextTick, reactive, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 
 import { attendanceHolidayApi, membershipApi } from '@/api'
+import { normalizeApiArrayBody, normalizeApiPayload } from '@/utils/api-response-normalize'
 import type { AttendanceLeavePassRecord } from '@/types/modules/attendance-holiday'
 
 type Loose = Record<string, unknown>
@@ -142,32 +143,6 @@ const form = reactive<{
   way: '',
   dateLimit: ['08:00', '09:00']
 })
-
-const unwrapData = (raw: unknown): unknown => {
-  if (!raw || typeof raw !== 'object') {
-    return raw
-  }
-  const r = raw as Loose
-  const inner = r.data
-  if (inner !== undefined && inner !== null && typeof inner === 'object' && !Array.isArray(inner)) {
-    return inner
-  }
-  return raw
-}
-
-const unwrapStudentList = (raw: unknown): Loose[] => {
-  const body = unwrapData(raw)
-  if (Array.isArray(body)) {
-    return body as Loose[]
-  }
-  if (body && typeof body === 'object') {
-    const b = body as Loose
-    if (Array.isArray(b.data)) {
-      return b.data as Loose[]
-    }
-  }
-  return []
-}
 
 const studentLine = computed(() => {
   const s = studentInfo.value
@@ -267,7 +242,7 @@ watch(
     displayStudent.value = no
     if (no) {
       membershipApi.studentInfo.get(no).then((res) => {
-        const data = unwrapData(res) as Loose
+        const data = normalizeApiPayload(res) as Loose
         studentInfo.value = data && typeof data === 'object' ? data : {}
       })
     } else {
@@ -289,7 +264,7 @@ const queryStudents = (query: string, cb: (rows: { value: string; studentNo: str
   membershipApi.searchStudent
     .get(q)
     .then((res) => {
-      const list = unwrapStudentList(res)
+      const list = normalizeApiArrayBody(res) as Loose[]
       cb(
         list.map((item) => ({
           value: `${item.showName ?? item.name ?? ''}(${item.admissonNo ?? item.admissionNo ?? ''})`,
@@ -304,7 +279,7 @@ const onStudentSelect = (item: { studentNo: string }) => {
   form.studentNo = item.studentNo
   displayStudent.value = item.value
   membershipApi.studentInfo.get(item.studentNo).then((res) => {
-    const data = unwrapData(res) as Loose
+    const data = normalizeApiPayload(res) as Loose
     studentInfo.value = data && typeof data === 'object' ? data : {}
   })
 }

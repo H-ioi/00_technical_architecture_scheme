@@ -27,38 +27,6 @@ export const normalizeHolidayListRow = (raw: Loose): Loose => {
   return out
 }
 
-/** Spring `records`/`total` 分页 unwrap（请假页与销假页共用）。 */
-export const unwrapHolidayPage = (payload: unknown): { list: Loose[]; total: number } => {
-  if (!payload || typeof payload !== 'object') {
-    return { list: [], total: 0 }
-  }
-  const r = payload as Loose
-  const num = (value: unknown) => (typeof value === 'number' && Number.isFinite(value) ? value : 0)
-  if (Array.isArray(r.records)) {
-    return { list: r.records as Loose[], total: num(r.total) }
-  }
-  const inner = r.data
-  if (inner && typeof inner === 'object' && !Array.isArray(inner)) {
-    const obj = inner as Loose
-    if (Array.isArray(obj.records)) {
-      return { list: obj.records as Loose[], total: num(r.total) || num(obj.total) }
-    }
-  }
-  return { list: [], total: num(r.total) }
-}
-
-export const unwrapDetailPayload = (payload: unknown): Loose => {
-  if (!payload || typeof payload !== 'object') {
-    return {}
-  }
-  const r = payload as Loose
-  const inner = r.data
-  if (inner && typeof inner === 'object' && !Array.isArray(inner)) {
-    return inner as Loose
-  }
-  return r
-}
-
 export const formatMaybeDateTime = (value: unknown) => {
   if (value == null || value === '') {
     return ''

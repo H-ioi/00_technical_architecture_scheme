@@ -70,32 +70,9 @@ import { ElMessage } from 'element-plus'
 import { computed, reactive, ref } from 'vue'
 
 import { attendanceHolidayApi } from '@/api'
+import { normalizeApiEnvelope, normalizeApiPagedBody } from '@/utils/api-response-normalize'
 
 type Loose = Record<string, unknown>
-
-const unwrapTaskPage = (payload: unknown): { list: Loose[]; total: number } => {
-  if (!payload || typeof payload !== 'object') {
-    return { list: [], total: 0 }
-  }
-  const r = payload as Loose
-  if (Array.isArray(r.list)) {
-    return { list: r.list as Loose[], total: Number(r.totalCount) || 0 }
-  }
-  const inner = r.data as Loose
-  if (inner && typeof inner === 'object' && Array.isArray(inner.list)) {
-    return { list: inner.list as Loose[], total: Number(inner.totalCount ?? r.totalCount) || 0 }
-  }
-  return { list: [], total: 0 }
-}
-
-const unwrapForm = (raw: unknown): Loose => {
-  if (!raw || typeof raw !== 'object') {
-    return {}
-  }
-  const r = raw as Loose
-  const inner = r.data
-  return inner && typeof inner === 'object' && !Array.isArray(inner) ? (inner as Loose) : r
-}
 
 const { t } = useUniI18n()
 
@@ -129,7 +106,7 @@ const columns = computed<UniTableColumn[]>(() => [
 
 const loadData: UniTableRequest = async ({ pageNo, pageSize }) => {
   const raw = await attendanceHolidayApi.flowMyTodo.get({ page: pageNo, limit: pageSize })
-  const { list, total } = unwrapTaskPage(raw)
+  const { list, total } = normalizeApiPagedBody<Loose>(raw)
   return { data: list, total }
 }
 
@@ -138,7 +115,7 @@ const openApprove = async (row: Loose) => {
   taskId.value = String(row.taskId ?? '')
   taskName.value = String(row.taskName ?? '')
   const raw = await attendanceHolidayApi.flowFormByProcess.get({ processId: procInsId.value })
-  const data = unwrapForm(raw)
+  const data = normalizeApiEnvelope(raw)
   Object.keys(formData).forEach((k) => delete (formData as Loose)[k])
   Object.assign(formData, data)
   formData.remark = ''

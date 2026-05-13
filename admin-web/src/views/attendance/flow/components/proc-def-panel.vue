@@ -64,37 +64,11 @@ import { ElMessage, ElMessageBox } from 'element-plus'
 import { computed, ref } from 'vue'
 
 import { attendanceHolidayApi } from '@/api'
+import { normalizeApiEnvelope, normalizeApiPagedBody } from '@/utils/api-response-normalize'
 
 type Loose = Record<string, unknown>
 
 type AssignField = { name: string; key: string; type: string; value: unknown }
-
-const unwrapProcPage = (payload: unknown): { list: Loose[]; total: number } => {
-  if (!payload || typeof payload !== 'object') {
-    return { list: [], total: 0 }
-  }
-  const r = payload as Loose
-  const inner = r.data as Loose
-  if (inner && typeof inner === 'object' && Array.isArray(inner.list)) {
-    return { list: inner.list as Loose[], total: Number(inner.totalCount) || 0 }
-  }
-  if (Array.isArray(r.list)) {
-    return { list: r.list as Loose[], total: Number(r.totalCount) || 0 }
-  }
-  return { list: [], total: 0 }
-}
-
-const unwrapEnvelope = (raw: unknown): Loose => {
-  if (!raw || typeof raw !== 'object') {
-    return {}
-  }
-  const r = raw as Loose
-  const inner = r.data
-  if (inner && typeof inner === 'object' && !Array.isArray(inner)) {
-    return inner as Loose
-  }
-  return r
-}
 
 const { t } = useUniI18n()
 
@@ -170,7 +144,7 @@ const loadData: UniTableRequest = async ({ pageNo, pageSize }) => {
     page: pageNo,
     limit: pageSize
   })
-  const { list, total } = unwrapProcPage(raw)
+  const { list, total } = normalizeApiPagedBody<Loose>(raw)
   return { data: list, total }
 }
 
@@ -184,7 +158,7 @@ const openAssign = async (id: string | number, tenantId: string) => {
   currentFlowId.value = id
   currentTenantId.value = tenantId
   const raw = await attendanceHolidayApi.flowDeployDefGet.get(id)
-  const body = unwrapEnvelope(raw)
+  const body = normalizeApiEnvelope(raw)
   const fields = (body.data ?? body.form ?? []) as AssignField[]
   assignFields.value = Array.isArray(fields)
     ? fields.map((f) => ({ ...f, value: f.value ?? (f.type === 'group' ? [] : '') }))

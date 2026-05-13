@@ -6,7 +6,7 @@ import { computed, ref } from 'vue'
 import { bulkEmailApi } from '@/api'
 import type { Translate } from '@/types/i18n'
 
-import { unwrapMailEnvelope, unwrapMailPage } from '../mail-page-utils'
+import { normalizeApiEnvelope, normalizeApiPagedBody } from '@/utils/api-response-normalize'
 import { emailOutboxDraftColumns, emailOutboxSearchForm } from './list.config'
 
 type Loose = Record<string, unknown>
@@ -35,8 +35,8 @@ export const useOutboxDraft = () => {
         bulkEmailApi.userMailinfoPage.get({ current: 1, size: 500, status: 1 }),
         bulkEmailApi.groupPage.get({ current: 1, size: 9999, status: 1 })
       ])
-      mailSenderOptions.value = unwrapMailPage(u).list
-      mailGroupOptions.value = unwrapMailPage(g).list
+      mailSenderOptions.value = normalizeApiPagedBody(u).list
+      mailGroupOptions.value = normalizeApiPagedBody(g).list
     } catch {
       mailSenderOptions.value = []
       mailGroupOptions.value = []
@@ -59,7 +59,7 @@ export const useOutboxDraft = () => {
       beginCreateDate: Array.isArray(dr) && dr.length === 2 ? dr[0] : undefined,
       endCreateDate: Array.isArray(dr) && dr.length === 2 ? dr[1] : undefined
     })
-    const { list, total } = unwrapMailPage(raw)
+    const { list, total } = normalizeApiPagedBody(raw)
     return { data: list, total }
   }
 
@@ -80,7 +80,7 @@ export const useOutboxDraft = () => {
   const sendDraft = async (row: Loose) => {
     try {
       const raw = await bulkEmailApi.sendRecordDetail.get({ id: row.id as string | number })
-      const data = unwrapMailEnvelope(raw)
+      const data = normalizeApiEnvelope(raw)
       const payload: Loose = {
         toGroups:
           (data.toGroups as { id: string | number }[] | undefined)?.map((item) => item.id) ?? [],
@@ -130,7 +130,7 @@ export const useOutboxDraft = () => {
     await loadMailOptions()
     dialogMode.value = 'edit'
     const raw = await bulkEmailApi.sendRecordDetail.get({ id: row.id as string | number })
-    const data = unwrapMailEnvelope(raw)
+    const data = normalizeApiEnvelope(raw)
     formModel.value = {
       id: data.id ?? row.id,
       mailInfoId: data.userMailinfoId ?? '',

@@ -3,61 +3,13 @@ import { toUniOptions, useUniI18n, useUniListState } from 'uni-ui-lib'
 import { computed, nextTick, onMounted, ref, watch } from 'vue'
 
 import { membershipApi, schoolBusDriverApi } from '@/api'
+import { normalizeApiPagedBody } from '@/utils/api-response-normalize'
 import type { SchoolOptionRecord } from '@/types/modules/membership'
 import type { DriverRecord as Row } from '@/types/modules/school-bus-driver'
 
 import { searchForm, statusOpts, tableCols } from './list.config'
 
 type Loose = Record<string, unknown>
-
-/** 分页体兼容 `{ data:[] }` / `{ records:[] }` / `data: { list:[] }` */
-const unwrapDriverPage = (payload: unknown): { list: Row[]; total: number } => {
-  if (!payload || typeof payload !== 'object') {
-    return { list: [], total: 0 }
-  }
-
-  const r = payload as Loose
-  const num = (value: unknown) => (typeof value === 'number' && Number.isFinite(value) ? value : 0)
-
-  if (Array.isArray(r.data)) {
-    return { list: r.data as Row[], total: num(r.total) }
-  }
-
-  if (Array.isArray(r.records)) {
-    return { list: r.records as Row[], total: num(r.total) }
-  }
-
-  if (Array.isArray(r.list)) {
-    return { list: r.list as Row[], total: num(r.total) }
-  }
-
-  const inner = r.data
-
-  if (inner && typeof inner === 'object' && !Array.isArray(inner)) {
-    const obj = inner as Loose
-    let list: Row[] = []
-
-    if (Array.isArray(obj.records)) {
-      list = obj.records as Row[]
-    } else if (Array.isArray(obj.list)) {
-      list = obj.list as Row[]
-    } else if (Array.isArray(obj.data)) {
-      list = obj.data as Row[]
-    } else if (Array.isArray(obj.content)) {
-      list = obj.content as Row[]
-    }
-
-    return {
-      list,
-      total: num(r.total) || num(obj.total) || num(obj.totalElements) || num(r.totalElements)
-    }
-  }
-
-  return {
-    list: [],
-    total: num(r.total) ?? num(r.totalRow) ?? num(r.totalElements)
-  }
-}
 
 const pickSchoolRecords = (payload: unknown): SchoolOptionRecord[] => {
   if (Array.isArray(payload)) {
@@ -110,7 +62,7 @@ export const useList = () => {
 
   const loadData: UniTableRequest = async ({ pageNo: current, pageSize: size, filters: f }) => {
     const result = await schoolBusDriverApi.page.get({ current, size, ...f })
-    const { list, total: pageTotal } = unwrapDriverPage(result)
+    const { list, total: pageTotal } = normalizeApiPagedBody<Row>(result)
 
     return {
       data: list,

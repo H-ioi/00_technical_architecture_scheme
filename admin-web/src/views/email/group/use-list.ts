@@ -6,8 +6,8 @@ import { computed, ref } from 'vue'
 import { bulkEmailApi } from '@/api'
 import type { Translate } from '@/types/i18n'
 
+import { normalizeApiPagedBody } from '@/utils/api-response-normalize'
 import { formatMailGroupScopeDisplay } from '../mail-page-utils'
-import { unwrapMailPage } from '../mail-page-utils'
 import {
   emailGroupColumns,
   emailGroupSearchForm,
@@ -59,7 +59,7 @@ export const useList = (options: UseGroupListOptions = {}) => {
           ? undefined
           : String(fl.includeStudentMails)
     })
-    const { list, total } = unwrapMailPage(raw)
+    const { list, total } = normalizeApiPagedBody(raw)
     return { data: list, total }
   }
 

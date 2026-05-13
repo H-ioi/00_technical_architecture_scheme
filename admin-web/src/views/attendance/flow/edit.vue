@@ -100,11 +100,9 @@ import { buildFlowEditFormConfig } from './edit.config'
 import { holidayFlowDefaultXml } from './xml-str'
 
 import { attendanceHolidayApi, membershipApi } from '@/api'
+import { normalizeApiEnvelope } from '@/utils/api-response-normalize'
 import type { SchoolOptionRecord } from '@/types/modules/membership'
 
-type Loose = Record<string, unknown>
-
-/** 与保存接口一致的可编辑字段（含流程元数据，仅部分在表单中展示） */
 type FlowEditFormModel = {
   id: string
   name: string
@@ -182,18 +180,6 @@ const showDesignHeaderTools = computed(
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 let bpmnModeler: any = null
 
-const unwrapDetail = (raw: unknown): Loose => {
-  if (!raw || typeof raw !== 'object') {
-    return {}
-  }
-  const r = raw as Loose
-  const inner = r.data
-  if (inner && typeof inner === 'object' && !Array.isArray(inner)) {
-    return inner as Loose
-  }
-  return r
-}
-
 const initDiagram = async () => {
   await nextTick()
   const canvas = canvasRef.value
@@ -215,7 +201,7 @@ const initDiagram = async () => {
 
 const loadDetail = async (id: string) => {
   const raw = await attendanceHolidayApi.flowDefGet.get(id)
-  const res = unwrapDetail(raw)
+  const res = normalizeApiEnvelope(raw)
   if (!res || Object.keys(res).length === 0) {
     return
   }

@@ -4,7 +4,7 @@ import { ElMessage, ElMessageBox } from 'element-plus'
 import { computed, ref } from 'vue'
 
 import { leavePassColumns, leavePassSearchForm } from './list.config'
-import { unwrapHolidayPage } from '@/views/attendance/holiday/holiday-utils'
+import { normalizeApiPagedBody } from '@/utils/api-response-normalize'
 
 import { attendanceHolidayApi, membershipApi } from '@/api'
 import type { AttendanceLeavePassRecord } from '@/types/modules/attendance-holiday'
@@ -43,7 +43,7 @@ export const useList = () => {
       size: pageSize,
       ...(f as Loose)
     })
-    const { list, total } = unwrapHolidayPage(raw)
+    const { list, total } = normalizeApiPagedBody(raw)
     return { data: list as AttendanceLeavePassRecord[], total }
   }
 

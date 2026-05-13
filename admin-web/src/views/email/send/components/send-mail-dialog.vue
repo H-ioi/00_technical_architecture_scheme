@@ -53,7 +53,7 @@ import { computed, ref, watch } from 'vue'
 import { bulkEmailApi } from '@/api'
 import { useUniI18n } from 'uni-ui-lib'
 
-import { unwrapMailEnvelope, unwrapMailPage } from '../../mail-page-utils'
+import { normalizeApiEnvelope, normalizeApiPagedBody } from '@/utils/api-response-normalize'
 
 type Loose = Record<string, unknown>
 
@@ -96,7 +96,7 @@ const loadOptions = async () => {
     bulkEmailApi.userMailinfoAllUsers.get(),
     bulkEmailApi.groupPage.get({ current: 1, size: 9999, status: 1 })
   ])
-  const uEnv = unwrapMailEnvelope(usersRaw)
+  const uEnv = normalizeApiEnvelope(usersRaw)
   const arr = Array.isArray(uEnv)
     ? uEnv
     : Array.isArray((uEnv as Loose).data)
@@ -106,7 +106,7 @@ const loadOptions = async () => {
     userId: x.userId as string | number,
     username: String(x.username ?? '')
   }))
-  const { list } = unwrapMailPage(groupsRaw)
+  const { list } = normalizeApiPagedBody(groupsRaw)
   groupOptions.value = list.map((r) => ({
     id: r.id as string | number,
     name: String(r.name ?? '')

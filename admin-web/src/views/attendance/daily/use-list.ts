@@ -12,35 +12,11 @@ import {
 } from './list.config'
 
 import { attendanceDailyApi } from '@/api'
+import { normalizeApiArrayBody, normalizeApiPagedBody } from '@/utils/api-response-normalize'
 import type { Translate } from '@/types/i18n'
 import type { AttendanceDailyListParams, AttendanceDailyRecord } from '@/types/modules/attendance-daily'
 
 type Loose = Record<string, unknown>
-
-const unwrapDailyPage = (payload: unknown): { list: Loose[]; total: number } => {
-  if (!payload || typeof payload !== 'object') {
-    return { list: [], total: 0 }
-  }
-  const r = payload as Loose
-  const num = (value: unknown) => (typeof value === 'number' && Number.isFinite(value) ? value : 0)
-  if (Array.isArray(r.records)) {
-    return { list: r.records as Loose[], total: num(r.total) }
-  }
-  if (Array.isArray(r.data)) {
-    return { list: r.data as Loose[], total: num(r.total) }
-  }
-  return { list: [], total: num(r.total) }
-}
-
-const unwrapSchoolPayload = (payload: unknown): Loose[] => {
-  if (Array.isArray(payload)) {
-    return payload as Loose[]
-  }
-  if (payload && typeof payload === 'object' && Array.isArray((payload as Loose).data)) {
-    return (payload as Loose).data as Loose[]
-  }
-  return []
-}
 
 const formatMaybeDateTime = (value: unknown) => {
   if (value == null || value === '') {
@@ -175,7 +151,7 @@ export const useList = () => {
     }
 
     const raw = await attendanceDailyApi.dailyPage.get(params)
-    const { list, total } = unwrapDailyPage(raw)
+    const { list, total } = normalizeApiPagedBody<Loose>(raw)
     return {
       data: list.map(decorateRow),
       total
@@ -184,7 +160,9 @@ export const useList = () => {
 
   const loadSchools = async () => {
     const payload = await attendanceDailyApi.commonSchoolList.get()
-    schoolRecords.value = unwrapSchoolPayload(payload).filter((s) => s.enName != null && s.enName !== '')
+    schoolRecords.value = (normalizeApiArrayBody(payload) as Loose[]).filter(
+      (s) => s.enName != null && s.enName !== ''
+    )
   }
 
   loadSchools()

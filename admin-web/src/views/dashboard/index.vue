@@ -5,10 +5,10 @@
       <p>{{ $t('dashboard.description') }}</p>
     </el-card>
 
-    <div class="dash__metrics">
+    <div v-loading="statsLoading" class="dash__metrics">
       <el-card v-for="item in metrics" :key="item.label" shadow="never" class="dash__metric">
         <span>{{ item.label }}</span>
-        <strong>{{ item.value }}</strong>
+        <strong>{{ item.display }}</strong>
       </el-card>
     </div>
 
@@ -32,8 +32,8 @@
     </el-card>
 
     <el-card shadow="never" class="dash__phase">
-      <strong>{{ $t('dashboard.firstPhase') }}</strong>
-      <span>{{ $t('dashboard.firstPhaseDescription') }}</span>
+      <strong>{{ $t('dashboard.statsHintTitle') }}</strong>
+      <span>{{ $t('dashboard.statsHintBody') }}</span>
     </el-card>
   </section>
 </template>
@@ -43,17 +43,40 @@ import { computed } from 'vue'
 import { useUniI18n } from 'uni-ui-lib'
 import { useRouter } from 'vue-router'
 
+import { useDashboardStats } from '@/composables/use-dashboard-stats'
 import type { DashboardShortcut } from '@/types/modules/dashboard'
 
 const { t } = useUniI18n()
 const router = useRouter()
 
-const metrics = computed(() => [
-  { label: t('dashboard.memberTotal'), value: '-' },
-  { label: t('dashboard.todayActivityTotal'), value: '-' },
-  { label: t('dashboard.pendingTaskTotal'), value: '-' },
-  { label: t('dashboard.alertTotal'), value: '-' }
-])
+const { loading: statsLoading, stats } = useDashboardStats()
+
+const formatStat = (n: number) =>
+  new Intl.NumberFormat(undefined, { maximumFractionDigits: 0 }).format(n)
+
+const metrics = computed(() => {
+  const s = stats.value
+  const pending = statsLoading.value
+  return [
+    {
+      label: t('dashboard.memberTotal'),
+      display: pending ? '—' : formatStat(s.memberTotal)
+    },
+    {
+      label: t('dashboard.todayActivityTotal'),
+      display: pending ? '—' : formatStat(s.todayAttendanceTotal)
+    },
+    {
+      label: t('dashboard.pendingTaskTotal'),
+      display: pending ? '—' : formatStat(s.pendingTasks)
+    },
+    {
+      label: t('dashboard.alertTotal'),
+      display: pending ? '—' : formatStat(s.pendingBusIntentions)
+    }
+  ]
+})
+
 const shortcuts = computed<DashboardShortcut[]>(() => [
   {
     label: t('route.memberStudent'),
@@ -64,6 +87,26 @@ const shortcuts = computed<DashboardShortcut[]>(() => [
     label: t('route.memberTeacher'),
     description: t('dashboard.teacherShortcutDescription'),
     path: '/member/teacher'
+  },
+  {
+    label: t('route.attendanceHolidayTask'),
+    description: t('dashboard.taskShortcutDescription'),
+    path: '/attendance/task'
+  },
+  {
+    label: t('route.schoolBusStudentApply'),
+    description: t('dashboard.busApplyShortcutDescription'),
+    path: '/school-bus/student/apply'
+  },
+  {
+    label: t('route.attendanceDaily'),
+    description: t('dashboard.dailyShortcutDescription'),
+    path: '/attendance/daily'
+  },
+  {
+    label: t('route.emailGroup'),
+    description: t('dashboard.emailGroupShortcutDescription'),
+    path: '/email/group'
   }
 ])
 

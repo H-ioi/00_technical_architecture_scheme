@@ -31,23 +31,9 @@ import { UniDataTable, useUniI18n, useUniListState } from 'uni-ui-lib'
 import { computed, ref } from 'vue'
 
 import { attendanceHolidayApi } from '@/api'
+import { normalizeApiPagedBody } from '@/utils/api-response-normalize'
 
 type Loose = Record<string, unknown>
-
-const unwrapTaskPage = (payload: unknown): { list: Loose[]; total: number } => {
-  if (!payload || typeof payload !== 'object') {
-    return { list: [], total: 0 }
-  }
-  const r = payload as Loose
-  if (Array.isArray(r.list)) {
-    return { list: r.list as Loose[], total: Number(r.totalCount) || 0 }
-  }
-  const inner = r.data as Loose
-  if (inner && typeof inner === 'object' && Array.isArray(inner.list)) {
-    return { list: inner.list as Loose[], total: Number(inner.totalCount ?? r.totalCount) || 0 }
-  }
-  return { list: [], total: 0 }
-}
 
 const props = defineProps<{
   variant: 'done' | 'instance'
@@ -85,7 +71,7 @@ const loadData: UniTableRequest = async ({ pageNo, pageSize }) => {
       ? attendanceHolidayApi.flowMyComplete
       : attendanceHolidayApi.flowMyStart
   const raw = await api.get({ page: pageNo, limit: pageSize })
-  const { list, total } = unwrapTaskPage(raw)
+  const { list, total } = normalizeApiPagedBody<Loose>(raw)
   return { data: list, total }
 }
 

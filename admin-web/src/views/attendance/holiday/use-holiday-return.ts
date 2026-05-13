@@ -9,9 +9,10 @@ import {
   formatHolidayDetailView,
   type AttendanceHolidayDetailViewModel
 } from './list.config'
-import { formatMaybeDateTime, normalizeHolidayReturnRow, unwrapDetailPayload, unwrapHolidayPage } from './holiday-utils'
+import { formatMaybeDateTime, normalizeHolidayReturnRow } from './holiday-utils'
 
 import { useDialogDetailLoading } from '@/composables/use-dialog-detail-loading'
+import { normalizeApiEnvelope, normalizeApiPagedBody } from '@/utils/api-response-normalize'
 import { attendanceHolidayApi } from '@/api'
 import type {
   AttendanceHolidayRecord,
@@ -76,7 +77,7 @@ export const useHolidayReturn = (schoolRecords: Ref<SchoolOptionRecord[]>) => {
           : undefined
     }
     const raw = await attendanceHolidayApi.holidayReturnPage.get(params)
-    const { list, total } = unwrapHolidayPage(raw)
+    const { list, total } = normalizeApiPagedBody(raw)
     return {
       data: list.map((row) => decorateRow(normalizeHolidayReturnRow(row))),
       total
@@ -92,7 +93,7 @@ export const useHolidayReturn = (schoolRecords: Ref<SchoolOptionRecord[]>) => {
     detailModel.value = null
     await runWithDetailLoading(async () => {
       const raw = await attendanceHolidayApi.holidayDetail.get(detailId)
-      const body = unwrapDetailPayload(raw)
+      const body = normalizeApiEnvelope(raw)
       detailModel.value = formatHolidayDetailView(body, t)
     })
   }

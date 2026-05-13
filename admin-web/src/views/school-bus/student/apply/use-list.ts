@@ -8,6 +8,7 @@ import { useBusOrderFormDialog } from '../components/use-bus-order-form-dialog'
 import { applySearchForm, applyTableColumns } from './list.config'
 
 import { schoolBusOrderApi } from '@/api'
+import { normalizeApiPagedBody } from '@/utils/api-response-normalize'
 import type { SchoolOptionRecord } from '@/types/modules/membership'
 import type { BusOrderListParams, BusOrderRecord } from '@/types/modules/school-bus-order'
 import { membershipSchoolLabel } from '@/utils/membership-school'
@@ -18,26 +19,6 @@ import {
   pickupMethodOptions,
   useStudentOrderFilters
 } from '../use-student-order-filters'
-
-type Loose = Record<string, unknown>
-
-const unwrapIntentionPage = (payload: unknown): { list: BusOrderRecord[]; total: number } => {
-  if (!payload || typeof payload !== 'object') {
-    return { list: [], total: 0 }
-  }
-  const r = payload as Loose
-  const num = (value: unknown) => (typeof value === 'number' && Number.isFinite(value) ? value : 0)
-  if (Array.isArray(r.data)) {
-    return { list: r.data as BusOrderRecord[], total: num(r.total) }
-  }
-  const inner = r.data
-  if (inner && typeof inner === 'object' && !Array.isArray(inner)) {
-    const obj = inner as Loose
-    const list = Array.isArray(obj.data) ? (obj.data as BusOrderRecord[]) : []
-    return { list, total: num(r.total) || num(obj.total) }
-  }
-  return { list: [], total: num(r.total) }
-}
 
 const decorateRow = (
   row: BusOrderRecord,
@@ -116,7 +97,7 @@ export const useApplyList = () => {
       raw.schoolIds = defaultSingleSchoolId.value
     }
     const result = await schoolBusOrderApi.intentionPage.get(raw)
-    const { list, total } = unwrapIntentionPage(result)
+    const { list, total } = normalizeApiPagedBody<BusOrderRecord>(result)
     const loc = locale()
     return {
       data: list.map((row) => decorateRow(row, loc, schoolRecords.value)),

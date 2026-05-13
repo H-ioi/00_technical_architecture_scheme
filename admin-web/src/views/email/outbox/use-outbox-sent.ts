@@ -7,7 +7,7 @@ import { bulkEmailApi } from '@/api'
 import type { Translate } from '@/types/i18n'
 import { downloadBlob } from '@/utils/download'
 
-import { unwrapMailEnvelope, unwrapMailPage } from '../mail-page-utils'
+import { normalizeApiEnvelope, normalizeApiPagedBody } from '@/utils/api-response-normalize'
 import { emailOutboxSearchForm, emailOutboxSentColumns } from './list.config'
 
 type Loose = Record<string, unknown>
@@ -36,7 +36,7 @@ export const useOutboxSent = () => {
       beginCreateDate: Array.isArray(dr) && dr.length === 2 ? dr[0] : undefined,
       endCreateDate: Array.isArray(dr) && dr.length === 2 ? dr[1] : undefined
     })
-    const { list, total } = unwrapMailPage(raw)
+    const { list, total } = normalizeApiPagedBody(raw)
     return { data: list, total }
   }
 
@@ -45,7 +45,7 @@ export const useOutboxSent = () => {
 
   const openView = async (row: Loose) => {
     const raw = await bulkEmailApi.sendRecordDetail.get({ id: row.id as string | number })
-    viewModel.value = unwrapMailEnvelope(raw)
+    viewModel.value = normalizeApiEnvelope(raw)
     viewVisible.value = true
   }
 

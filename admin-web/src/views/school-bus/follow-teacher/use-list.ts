@@ -6,6 +6,7 @@ import { computed, nextTick, onMounted, ref, watch } from 'vue'
 import { searchForm, statusOpts, tableCols } from './list.config'
 
 import { membershipApi, schoolBusFollowTeacherApi } from '@/api'
+import { normalizeApiPagedBody } from '@/utils/api-response-normalize'
 import type { SchoolOptionRecord } from '@/types/modules/membership'
 import type {
   FollowTeacherListParams,
@@ -14,21 +15,6 @@ import type {
 import { membershipSchoolLabel, membershipSchoolToOptions } from '@/utils/membership-school'
 
 type Loose = Record<string, unknown>
-
-const unwrapTeacherPage = (payload: unknown): { list: FollowTeacherRecord[]; total: number } => {
-  if (!payload || typeof payload !== 'object') {
-    return { list: [], total: 0 }
-  }
-  const r = payload as Loose
-  const num = (value: unknown) => (typeof value === 'number' && Number.isFinite(value) ? value : 0)
-  if (Array.isArray(r.records)) {
-    return { list: r.records as FollowTeacherRecord[], total: num(r.total) }
-  }
-  if (Array.isArray(r.data)) {
-    return { list: r.data as FollowTeacherRecord[], total: num(r.total) }
-  }
-  return { list: [], total: num(r.total) }
-}
 
 const pickSchoolRecords = (payload: unknown): SchoolOptionRecord[] => {
   if (Array.isArray(payload)) {
@@ -84,7 +70,7 @@ export const useList = () => {
       raw.schoolIds = defaultSchoolId.value
     }
     const result = await schoolBusFollowTeacherApi.page.get(raw)
-    const { list, total } = unwrapTeacherPage(result)
+    const { list, total } = normalizeApiPagedBody<FollowTeacherRecord>(result)
     return { data: list.map(decorate), total }
   }
 

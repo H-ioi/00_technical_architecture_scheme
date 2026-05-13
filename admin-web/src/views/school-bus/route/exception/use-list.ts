@@ -6,50 +6,11 @@ import { computed, nextTick, onMounted, ref, watch } from 'vue'
 import { createExceptionColumns, exceptionTypeMeta, yesNoMeta } from './list.config'
 
 import { membershipApi, schoolBusCommonApi, schoolBusExceptionApi } from '@/api'
+import { normalizeApiPagedBody } from '@/utils/api-response-normalize'
 import type { SchoolOptionRecord } from '@/types/modules/membership'
 import type { ExceptionListParams, ExceptionRecord } from '@/types/modules/school-bus-exception'
 
 type Loose = Record<string, unknown>
-
-const unwrapPage = (payload: unknown): { list: ExceptionRecord[]; total: number } => {
-  if (!payload || typeof payload !== 'object') {
-    return { list: [], total: 0 }
-  }
-
-  const r = payload as Loose
-  const num = (value: unknown) => (typeof value === 'number' && Number.isFinite(value) ? value : 0)
-
-  if (Array.isArray(r.data)) {
-    return { list: r.data as ExceptionRecord[], total: num(r.total) }
-  }
-
-  if (Array.isArray(r.records)) {
-    return { list: r.records as ExceptionRecord[], total: num(r.total) }
-  }
-
-  const inner = r.data
-
-  if (inner && typeof inner === 'object' && !Array.isArray(inner)) {
-    const obj = inner as Loose
-    let list: ExceptionRecord[] = []
-
-    if (Array.isArray(obj.records)) {
-      list = obj.records as ExceptionRecord[]
-    } else if (Array.isArray(obj.data)) {
-      list = obj.data as ExceptionRecord[]
-    }
-
-    return {
-      list,
-      total: num(r.total) || num(obj.total) || num(obj.totalElements) || num(r.totalElements)
-    }
-  }
-
-  return {
-    list: [],
-    total: num(r.total) ?? num(r.totalRow) ?? num(r.totalElements)
-  }
-}
 
 const pickSchoolRecords = (payload: unknown): SchoolOptionRecord[] => {
   if (Array.isArray(payload)) {
@@ -378,7 +339,7 @@ export const useList = () => {
     }
 
     const result = await schoolBusExceptionApi.page.get(params)
-    const { list, total } = unwrapPage(result)
+    const { list, total } = normalizeApiPagedBody<ExceptionRecord>(result)
     const exOpts = exceptionTypeMeta(t).map((x) => ({ value: String(x.value), label: x.label }))
     const ynOpts = yesNoMeta(t).map((x) => ({ value: String(x.value), label: x.label }))
 
