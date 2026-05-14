@@ -21,7 +21,7 @@
                 border-style="solid"
                 class="route-form-modal__split">
                 <span class="route-form-modal__split-title">{{
-                  $t('schoolBus.routePlan.form.routeScheduleSection')
+                  $t('schoolBus.routePlan.formRouteScheduleSection')
                 }}</span>
               </el-divider>
               <div class="route-form-modal__schedule">
@@ -37,7 +37,7 @@
                       <template #title>
                         <div class="route-form-modal__collapse-title">
                           <span class="route-form-modal__collapse-title-text">{{
-                            $t('schoolBus.routePlan.form.scheduleBlockTitle', { n: index + 1 })
+                            $t('schoolBus.routePlan.formScheduleBlockTitle', { n: index + 1 })
                           }}</span>
                           <el-button
                             v-if="weekDays.length > 1"
@@ -46,7 +46,7 @@
                             size="small"
                             class="route-form-modal__remove-group-btn"
                             @click.stop="delWeekDays(index)">
-                            {{ $t('schoolBus.routePlan.form.removeWeekRow') }}
+                            {{ $t('schoolBus.routePlan.formRemoveWeekRow') }}
                           </el-button>
                         </div>
                       </template>
@@ -54,7 +54,7 @@
                         <div class="route-form-modal__toolbar-row">
                           <label
                             class="route-form-modal__field-label route-form-modal__field-label--inline"
-                            >{{ $t('schoolBus.routePlan.form.routeWeekdays') }}</label
+                            >{{ $t('schoolBus.routePlan.formRouteWeekdays') }}</label
                           >
                           <el-select
                             v-model="item.weekDays"
@@ -62,7 +62,7 @@
                             multiple
                             collapse-tags
                             collapse-tags-tooltip
-                            :placeholder="$t('schoolBus.routeOperation.pleaseSelect')">
+                            :placeholder="$t('schoolBus.pleaseSelect')">
                             <el-option
                               v-for="(d, k) in consts.WeeklyDays"
                               :key="k"
@@ -74,7 +74,7 @@
                             type="primary"
                             class="route-form-modal__add-stop-btn"
                             @click="addStation(index)">
-                            {{ $t('schoolBus.routePlan.form.bindAddStop') }}
+                            {{ $t('schoolBus.routePlan.formBindAddStop') }}
                           </el-button>
                         </div>
 
@@ -85,7 +85,7 @@
                           stripe
                           size="small"
                           :header-cell-style="stationTableHeaderStyle"
-                          :empty-text="$t('schoolBus.routePlan.form.stationTableEmpty')">
+                          :empty-text="$t('schoolBus.routePlan.formStationTableEmpty')">
                           <el-table-column
                             v-for="col in bindStationCols"
                             :key="col.prop"
@@ -97,7 +97,7 @@
                           <el-table-column
                             fixed="right"
                             class-name="route-form-modal__col-actions"
-                            :label="$t('schoolBus.routePlan.form.actionsColumn')"
+                            :label="$t('schoolBus.routePlan.formActionsColumn')"
                             width="132"
                             align="center">
                             <template #default="scope">
@@ -129,7 +129,7 @@
                   plain
                   :disabled="!canAdd"
                   @click="addWeekDays">
-                  {{ $t('schoolBus.routePlan.form.addScheduleGroup') }}
+                  {{ $t('schoolBus.routePlan.formAddScheduleGroup') }}
                 </el-button>
               </div>
             </div>
@@ -260,14 +260,14 @@ export default {
 
     routeDialogTitle(): string {
       return this.modalType === 'add'
-        ? this.$t('schoolBus.routePlan.actions.addRoute')
-        : this.$t('schoolBus.routePlan.actions.editRoute')
+        ? this.$t('schoolBus.routePlan.addRoute')
+        : this.$t('schoolBus.routePlan.editRoute')
     },
 
     stationDialogTitle(): string {
       return this.stationModalType === 'edit'
-        ? this.$t('schoolBus.routePlan.form.modalEdit')
-        : this.$t('schoolBus.routePlan.form.modalAdd')
+        ? this.$t('schoolBus.routePlan.formModalEdit')
+        : this.$t('schoolBus.routePlan.formModalAdd')
     },
 
     stationTableHeaderStyle(): Record<string, string | number> {
@@ -503,7 +503,7 @@ export default {
       }
 
       if (this.isAllWeekDaysEmpty()) {
-        ElMessage.error(this.$t('schoolBus.routePlan.messages.needWeekdaysAndStops'))
+        ElMessage.error(this.$t('schoolBus.routePlan.msgNeedWeekdaysAndStops'))
 
         return
       }
@@ -660,7 +660,7 @@ export default {
     async delCurrentStation(stationIndex: number, weekDayIndex: number) {
       try {
         await ElMessageBox.confirm(
-          this.$t('schoolBus.routePlan.form.confirmDeleteStop'),
+          this.$t('schoolBus.routePlan.formConfirmDeleteStop'),
           this.$t('schoolBus.delete'),
           {
             type: 'warning',
@@ -713,7 +713,7 @@ export default {
 
       if (!this.addStationForm.goTime && !this.addStationForm.backTime) {
         pass = false
-        ElMessage.warning(this.$t('schoolBus.routePlan.form.pickGoOrBackTime'))
+        ElMessage.warning(this.$t('schoolBus.routePlan.formPickGoOrBackTime'))
       }
 
       if (!pass) {

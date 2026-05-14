@@ -6,12 +6,12 @@ import type { Translate } from '@/types/i18n'
 /** 路线弹窗：路线类型 / 可见性 / 周一至周五（与旧版 consts 对齐） */
 export const ROUTE_FORM_CONSTS = {
   routeType: [
-    { labelKey: 'schoolBus.routePlan.routeType.daily', value: '1' },
-    { labelKey: 'schoolBus.routePlan.routeType.weekly', value: '2' }
+    { labelKey: 'schoolBus.routePlan.routeTypeDaily', value: '1' },
+    { labelKey: 'schoolBus.routePlan.routeTypeWeekly', value: '2' }
   ],
   visibleType: [
-    { labelKey: 'schoolBus.routePlan.visible.no', value: false },
-    { labelKey: 'schoolBus.routePlan.visible.yes', value: true }
+    { labelKey: 'schoolBus.routePlan.visibleNo', value: false },
+    { labelKey: 'schoolBus.routePlan.visibleYes', value: true }
   ],
   WeeklyDays: [
     { label: 'Mondays', value: 'Mon' },
@@ -31,11 +31,11 @@ export type BindStationCol = {
 }
 
 export const BIND_STATION_TABLE_COLS: BindStationCol[] = [
-  { prop: 'stationName', labelKey: 'schoolBus.routePlan.form.stationCol.name', minWidth: 120 },
-  { prop: 'showGoTime', labelKey: 'schoolBus.routePlan.form.stationCol.goTime', width: 120 },
-  { prop: 'showBackTime', labelKey: 'schoolBus.routePlan.form.stationCol.backTime', width: 120 },
-  { prop: 'price', labelKey: 'schoolBus.routePlan.form.stationCol.price', width: 100 },
-  { prop: 'weekPrice', labelKey: 'schoolBus.routePlan.form.stationCol.weekPrice', width: 100 }
+  { prop: 'stationName', labelKey: 'schoolBus.routePlan.fieldStationName', minWidth: 120 },
+  { prop: 'showGoTime', labelKey: 'schoolBus.routePlan.stationColGoTime', width: 120 },
+  { prop: 'showBackTime', labelKey: 'schoolBus.routePlan.stationColBackTime', width: 120 },
+  { prop: 'price', labelKey: 'schoolBus.routePlan.stationColPrice', width: 100 },
+  { prop: 'weekPrice', labelKey: 'schoolBus.routePlan.stationColWeekPrice', width: 100 }
 ]
 
 /** 学期新增弹窗 */
@@ -51,7 +51,7 @@ export const termDialogFormConfig = (
   schema: [
     {
       field: 'schoolIds',
-      label: t('schoolBus.routeOperation.form.school'),
+      label: t('schoolBus.routeOperation.formSchool'),
       component: 'ElSelect',
       options: schoolOptions,
       hidden: !multiSchool,
@@ -60,7 +60,7 @@ export const termDialogFormConfig = (
         collapseTags: true,
         clearable: true,
         filterable: true,
-        placeholder: t('schoolBus.routeOperation.pleaseSelect'),
+        placeholder: t('schoolBus.pleaseSelect'),
         style: { width: '100%' }
       },
       viewRender: ({ value }) => {
@@ -78,46 +78,46 @@ export const termDialogFormConfig = (
     },
     {
       field: 'cnName',
-      label: t('schoolBus.routePlan.form.cnName'),
+      label: t('schoolBus.routePlan.formCnName'),
       component: 'ElInput',
       componentProps: {
         maxlength: 50,
         clearable: true,
-        placeholder: t('schoolBus.routeOperation.pleaseSelect')
+        placeholder: t('schoolBus.pleaseSelect')
       }
     },
     {
       field: 'enName',
-      label: t('schoolBus.routePlan.form.enName'),
+      label: t('schoolBus.routePlan.formEnName'),
       component: 'ElInput',
       componentProps: {
         maxlength: 50,
         clearable: true,
-        placeholder: t('schoolBus.routeOperation.pleaseSelect')
+        placeholder: t('schoolBus.pleaseSelect')
       }
     },
     {
       field: 'intentDate',
-      label: t('schoolBus.routePlan.form.intentRange'),
+      label: t('schoolBus.routePlan.formIntentRange'),
       component: 'ElDatePicker',
       componentProps: {
         type: 'daterange',
         valueFormat: 'YYYY-MM-DD',
         style: { width: '100%' },
-        startPlaceholder: t('schoolBus.routeOperation.placeholders.rideDateStart'),
-        endPlaceholder: t('schoolBus.routeOperation.placeholders.rideDateEnd')
+        startPlaceholder: t('schoolBus.routeOperation.phRideDateStart'),
+        endPlaceholder: t('schoolBus.routeOperation.phRideDateEnd')
       }
     },
     {
       field: 'serviceDate',
-      label: t('schoolBus.routePlan.form.serviceRange'),
+      label: t('schoolBus.routePlan.formServiceRange'),
       component: 'ElDatePicker',
       componentProps: {
         type: 'daterange',
         valueFormat: 'YYYY-MM-DD',
         style: { width: '100%' },
-        startPlaceholder: t('schoolBus.routeOperation.placeholders.rideDateStart'),
-        endPlaceholder: t('schoolBus.routeOperation.placeholders.rideDateEnd')
+        startPlaceholder: t('schoolBus.routeOperation.phRideDateStart'),
+        endPlaceholder: t('schoolBus.routeOperation.phRideDateEnd')
       }
     }
   ]
@@ -127,21 +127,21 @@ export const termDialogRules = (t: Translate, multiSchool: boolean): FormRules =
   ...(multiSchool
     ? {
         schoolIds: [
-          { required: true, message: t('schoolBus.routeOperation.pleaseSelect'), trigger: 'change' }
+          { required: true, message: t('schoolBus.pleaseSelect'), trigger: 'change' }
         ]
       }
     : {}),
   cnName: [
-    { required: true, message: t('schoolBus.routeOperation.pleaseSelect'), trigger: 'blur' }
+    { required: true, message: t('schoolBus.pleaseSelect'), trigger: 'blur' }
   ],
   enName: [
-    { required: true, message: t('schoolBus.routeOperation.pleaseSelect'), trigger: 'blur' }
+    { required: true, message: t('schoolBus.pleaseSelect'), trigger: 'blur' }
   ],
   intentDate: [
-    { required: true, message: t('schoolBus.routeOperation.pleaseSelect'), trigger: 'change' }
+    { required: true, message: t('schoolBus.pleaseSelect'), trigger: 'change' }
   ],
   serviceDate: [
-    { required: true, message: t('schoolBus.routeOperation.pleaseSelect'), trigger: 'change' }
+    { required: true, message: t('schoolBus.pleaseSelect'), trigger: 'change' }
   ]
 })
 
@@ -158,7 +158,7 @@ export const stationDialogFormConfig = (
   schema: [
     {
       field: 'schoolIds',
-      label: t('schoolBus.routeOperation.form.school'),
+      label: t('schoolBus.routeOperation.formSchool'),
       component: 'ElSelect',
       options: schoolOptions,
       hidden: !multiSchool,
@@ -167,7 +167,7 @@ export const stationDialogFormConfig = (
         collapseTags: true,
         clearable: true,
         filterable: true,
-        placeholder: t('schoolBus.routeOperation.pleaseSelect'),
+        placeholder: t('schoolBus.pleaseSelect'),
         style: { width: '100%' }
       },
       viewRender: ({ value }) => {
@@ -185,22 +185,22 @@ export const stationDialogFormConfig = (
     },
     {
       field: 'cnName',
-      label: t('schoolBus.routePlan.form.cnName'),
+      label: t('schoolBus.routePlan.formCnName'),
       component: 'ElInput',
       componentProps: {
         maxlength: 50,
         clearable: true,
-        placeholder: t('schoolBus.routeOperation.pleaseSelect')
+        placeholder: t('schoolBus.pleaseSelect')
       }
     },
     {
       field: 'enName',
-      label: t('schoolBus.routePlan.form.enName'),
+      label: t('schoolBus.routePlan.formEnName'),
       component: 'ElInput',
       componentProps: {
         maxlength: 50,
         clearable: true,
-        placeholder: t('schoolBus.routeOperation.pleaseSelect')
+        placeholder: t('schoolBus.pleaseSelect')
       }
     }
   ]
@@ -210,14 +210,14 @@ export const stationDialogRules = (t: Translate, multiSchool: boolean): FormRule
   ...(multiSchool
     ? {
         schoolIds: [
-          { required: true, message: t('schoolBus.routeOperation.pleaseSelect'), trigger: 'change' }
+          { required: true, message: t('schoolBus.pleaseSelect'), trigger: 'change' }
         ]
       }
     : {}),
   cnName: [
-    { required: true, message: t('schoolBus.routeOperation.pleaseSelect'), trigger: 'blur' }
+    { required: true, message: t('schoolBus.pleaseSelect'), trigger: 'blur' }
   ],
-  enName: [{ required: true, message: t('schoolBus.routeOperation.pleaseSelect'), trigger: 'blur' }]
+  enName: [{ required: true, message: t('schoolBus.pleaseSelect'), trigger: 'blur' }]
 })
 
 /** 路线主表（周几/站点矩阵通过 `#field-routeStopsEditor` 插槽渲染） */
@@ -254,25 +254,25 @@ export const routePlanMainFormConfig = (
 
 export const routePlanMainRules = (t: Translate): FormRules => ({
   schoolIds: [
-    { required: true, message: t('schoolBus.routeOperation.pleaseSelect'), trigger: 'change' }
+    { required: true, message: t('schoolBus.pleaseSelect'), trigger: 'change' }
   ],
   sectionId: [
-    { required: true, message: t('schoolBus.routeOperation.pleaseSelect'), trigger: 'change' }
+    { required: true, message: t('schoolBus.pleaseSelect'), trigger: 'change' }
   ],
   cnName: [
-    { required: true, message: t('schoolBus.routeOperation.pleaseSelect'), trigger: 'blur' }
+    { required: true, message: t('schoolBus.pleaseSelect'), trigger: 'blur' }
   ],
   enName: [
-    { required: true, message: t('schoolBus.routeOperation.pleaseSelect'), trigger: 'blur' }
+    { required: true, message: t('schoolBus.pleaseSelect'), trigger: 'blur' }
   ],
   lineType: [
-    { required: true, message: t('schoolBus.routeOperation.pleaseSelect'), trigger: 'change' }
+    { required: true, message: t('schoolBus.pleaseSelect'), trigger: 'change' }
   ],
   carIdList: [
-    { required: true, message: t('schoolBus.routeOperation.pleaseSelect'), trigger: 'change' }
+    { required: true, message: t('schoolBus.pleaseSelect'), trigger: 'change' }
   ],
   visible: [
-    { required: true, message: t('schoolBus.routeOperation.pleaseSelect'), trigger: 'change' }
+    { required: true, message: t('schoolBus.pleaseSelect'), trigger: 'change' }
   ]
 })
 
@@ -280,7 +280,7 @@ function routePlanMainFormSchema(t: Translate, deps: RoutePlanMainFormDeps): Uni
   return [
     {
       field: 'schoolIds',
-      label: t('schoolBus.routeOperation.form.school'),
+      label: t('schoolBus.routeOperation.formSchool'),
       component: 'ElSelect',
       options: deps.schoolOptions,
       hidden: !deps.showSchoolSelect,
@@ -292,60 +292,60 @@ function routePlanMainFormSchema(t: Translate, deps: RoutePlanMainFormDeps): Uni
         collapseTags: true,
         clearable: true,
         filterable: true,
-        placeholder: t('schoolBus.routeOperation.pleaseSelect'),
+        placeholder: t('schoolBus.pleaseSelect'),
         style: { width: '100%' }
       },
       colProps: { span: 8 }
     },
     {
       field: 'sectionId',
-      label: t('schoolBus.routeOperation.form.section'),
+      label: t('schoolBus.routeOperation.formSection'),
       component: 'ElSelect',
       options: deps.sectionOptions,
       componentProps: {
         filterable: true,
         clearable: true,
-        placeholder: t('schoolBus.routeOperation.pleaseSelect'),
+        placeholder: t('schoolBus.pleaseSelect'),
         style: { width: '100%' }
       },
       colProps: { span: 8 }
     },
     {
       field: 'cnName',
-      label: t('schoolBus.routePlan.form.cnName'),
+      label: t('schoolBus.routePlan.formCnName'),
       component: 'ElInput',
       componentProps: {
         maxlength: 50,
         clearable: true,
-        placeholder: t('schoolBus.routeOperation.pleaseSelect')
+        placeholder: t('schoolBus.pleaseSelect')
       },
       colProps: { span: 8 }
     },
     {
       field: 'enName',
-      label: t('schoolBus.routePlan.form.enName'),
+      label: t('schoolBus.routePlan.formEnName'),
       component: 'ElInput',
       componentProps: {
         maxlength: 50,
         clearable: true,
-        placeholder: t('schoolBus.routeOperation.pleaseSelect')
+        placeholder: t('schoolBus.pleaseSelect')
       },
       colProps: { span: 8 }
     },
     {
       field: 'lineType',
-      label: t('schoolBus.routePlan.form.lineType'),
+      label: t('schoolBus.routePlan.formLineType'),
       component: 'ElSelect',
       options: deps.routeTypeOptions,
       componentProps: {
-        placeholder: t('schoolBus.routeOperation.pleaseSelect'),
+        placeholder: t('schoolBus.pleaseSelect'),
         style: { width: '100%' }
       },
       colProps: { span: 8 }
     },
     {
       field: 'carIdList',
-      label: t('schoolBus.routePlan.form.plateList'),
+      label: t('schoolBus.routePlan.formPlateList'),
       component: 'ElSelect',
       options: deps.carOptions,
       componentProps: {
@@ -353,14 +353,14 @@ function routePlanMainFormSchema(t: Translate, deps: RoutePlanMainFormDeps): Uni
         collapseTags: true,
         filterable: true,
         clearable: true,
-        placeholder: t('schoolBus.routeOperation.pleaseSelect'),
+        placeholder: t('schoolBus.pleaseSelect'),
         style: { width: '100%' }
       },
       colProps: { span: 8 }
     },
     {
       field: 'visible',
-      label: t('schoolBus.routePlan.form.status'),
+      label: t('schoolBus.routePlan.formStatus'),
       component: 'ElRadioGroup',
       options: deps.visibleOptions,
       componentProps: {
@@ -387,41 +387,41 @@ export const routePlanNestedStationFormConfig = (t: Translate): UniFormConfig =>
   schema: [
     {
       field: 'stationId',
-      label: t('schoolBus.routePlan.form.stop'),
+      label: t('schoolBus.routePlan.fieldStationName'),
       component: 'ElSelect',
       options: [],
       componentProps: {
         filterable: true,
         clearable: true,
-        placeholder: t('schoolBus.routeOperation.pleaseSelect'),
+        placeholder: t('schoolBus.pleaseSelect'),
         style: { width: '100%' }
       }
     },
     {
       field: 'goTime',
-      label: t('schoolBus.routePlan.form.stationCol.goTime'),
+      label: t('schoolBus.routePlan.stationColGoTime'),
       component: 'ElTimePicker',
       componentProps: {
         format: 'HH:mm',
         valueFormat: 'HH:mm:ss',
-        placeholder: t('schoolBus.routeOperation.pleaseSelect'),
+        placeholder: t('schoolBus.pleaseSelect'),
         style: { width: '100%' }
       }
     },
     {
       field: 'backTime',
-      label: t('schoolBus.routePlan.form.afternoonLeave'),
+      label: t('schoolBus.routePlan.formAfternoonLeave'),
       component: 'ElTimePicker',
       componentProps: {
         format: 'HH:mm',
         valueFormat: 'HH:mm:ss',
-        placeholder: t('schoolBus.routeOperation.pleaseSelect'),
+        placeholder: t('schoolBus.pleaseSelect'),
         style: { width: '100%' }
       }
     },
     {
       field: 'price',
-      label: t('schoolBus.routePlan.form.dayPrice'),
+      label: t('schoolBus.routePlan.formDayPrice'),
       component: 'ElInputNumber',
       componentProps: {
         precision: 2,
@@ -432,7 +432,7 @@ export const routePlanNestedStationFormConfig = (t: Translate): UniFormConfig =>
     },
     {
       field: 'weekPrice',
-      label: t('schoolBus.routePlan.form.weekPriceLabel'),
+      label: t('schoolBus.routePlan.formWeekPriceLabel'),
       component: 'ElInputNumber',
       componentProps: {
         precision: 2,
@@ -446,12 +446,12 @@ export const routePlanNestedStationFormConfig = (t: Translate): UniFormConfig =>
 
 export const routePlanNestedStationRules = (t: Translate): FormRules => ({
   stationId: [
-    { required: true, message: t('schoolBus.routeOperation.pleaseSelect'), trigger: 'change' }
+    { required: true, message: t('schoolBus.pleaseSelect'), trigger: 'change' }
   ],
   price: [
-    { required: true, message: t('schoolBus.routeOperation.pleaseSelect'), trigger: 'change' }
+    { required: true, message: t('schoolBus.pleaseSelect'), trigger: 'change' }
   ],
   weekPrice: [
-    { required: true, message: t('schoolBus.routeOperation.pleaseSelect'), trigger: 'change' }
+    { required: true, message: t('schoolBus.pleaseSelect'), trigger: 'change' }
   ]
 })

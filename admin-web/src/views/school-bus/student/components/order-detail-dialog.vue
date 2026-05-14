@@ -3,80 +3,80 @@
     v-model="open"
     width="85%"
     destroy-on-close
-    :title="$t('schoolBus.studentApply.detail.title')"
+    :title="$t('schoolBus.studentApply.detailTitle')"
     @closed="emit('close')">
     <div v-if="loading" class="order-detail__loading">
-      {{ $t('schoolBus.studentApply.detail.loading') }}
+      {{ $t('schoolBus.studentApply.detailLoading') }}
     </div>
     <template v-else-if="baseInfo">
       <el-descriptions :column="4" border class="order-detail__desc">
-        <el-descriptions-item :label="$t('schoolBus.studentApply.columns.id')">
+        <el-descriptions-item :label="$t('schoolBus.studentApply.colId')">
           {{ baseInfo.id ?? '--' }}
         </el-descriptions-item>
-        <el-descriptions-item :label="$t('schoolBus.studentApply.columns.applyTime')">
+        <el-descriptions-item :label="$t('schoolBus.studentApply.colApplyTime')">
           {{ baseInfo.createTime ?? '--' }}
         </el-descriptions-item>
-        <el-descriptions-item :label="$t('schoolBus.studentApply.columns.approvalStatus')">
+        <el-descriptions-item :label="$t('schoolBus.studentApply.colApprovalStatus')">
           {{ baseInfo.approvalStatusLabel ?? '--' }}
         </el-descriptions-item>
-        <el-descriptions-item :label="$t('schoolBus.studentApply.columns.paymentStatus')">
+        <el-descriptions-item :label="$t('schoolBus.studentApply.colPaymentStatus')">
           {{ baseInfo.paymentStatusLabel ?? '--' }}
         </el-descriptions-item>
-        <el-descriptions-item :label="$t('schoolBus.studentApply.detail.amountDue')">
+        <el-descriptions-item :label="$t('schoolBus.studentApply.detailAmountDue')">
           {{ baseInfo.amountDue ?? '--' }}
         </el-descriptions-item>
-        <el-descriptions-item :label="$t('schoolBus.studentApply.columns.school')">
+        <el-descriptions-item :label="$t('schoolBus.studentApply.colSchool')">
           {{ baseInfo.schoolEnName ?? '--' }}
         </el-descriptions-item>
-        <el-descriptions-item :label="$t('schoolBus.studentApply.columns.section')">
+        <el-descriptions-item :label="$t('schoolBus.studentApply.colSection')">
           {{ baseInfo.showSectionName ?? '--' }}
         </el-descriptions-item>
-        <el-descriptions-item :label="$t('schoolBus.studentApply.columns.admissionNo')">
+        <el-descriptions-item :label="$t('schoolBus.studentApply.colAdmissionNo')">
           {{ baseInfo.admissionNo ?? '--' }}
         </el-descriptions-item>
-        <el-descriptions-item :label="$t('schoolBus.studentApply.columns.studentName')">
+        <el-descriptions-item :label="$t('schoolBus.studentApply.colStudentName')">
           {{ baseInfo.studentName ?? '--' }}
         </el-descriptions-item>
-        <el-descriptions-item :label="$t('schoolBus.studentApply.columns.grade')">
+        <el-descriptions-item :label="$t('schoolBus.studentApply.colGrade')">
           {{ baseInfo.studentGrade ?? '--' }}
         </el-descriptions-item>
-        <el-descriptions-item :label="$t('schoolBus.studentApply.columns.pickup')">
+        <el-descriptions-item :label="$t('schoolBus.studentApply.colPickup')">
           {{ baseInfo.pickupMethodLabel ?? '--' }}
         </el-descriptions-item>
         <el-descriptions-item
           v-if="String(baseInfo.approvalStatus ?? '') === '2'"
-          :label="$t('schoolBus.studentApply.detail.denyReason')"
+          :label="$t('schoolBus.studentApply.detailDenyReason')"
           :span="4">
           {{ baseInfo.denyReason ?? '--' }}
         </el-descriptions-item>
       </el-descriptions>
 
       <div v-if="canShowPayInfo" class="order-detail__pay">
-        <h4>{{ $t('schoolBus.studentApply.detail.payTitle') }}</h4>
+        <h4>{{ $t('schoolBus.studentApply.detailPayTitle') }}</h4>
         <el-descriptions :column="4" border>
-          <el-descriptions-item :label="$t('schoolBus.studentApply.detail.paymentAmount')">
+          <el-descriptions-item :label="$t('schoolBus.studentApply.detailPaymentAmount')">
             {{ baseInfo.paymentAmount ?? '--' }}
           </el-descriptions-item>
-          <el-descriptions-item :label="$t('schoolBus.studentApply.detail.paymentMethod')">
+          <el-descriptions-item :label="$t('schoolBus.studentApply.detailPaymentMethod')">
             {{ baseInfo.paymentMethodLabel ?? '--' }}
           </el-descriptions-item>
-          <el-descriptions-item :label="$t('schoolBus.studentApply.detail.paymentDate')">
+          <el-descriptions-item :label="$t('schoolBus.studentApply.detailPaymentDate')">
             {{ baseInfo.paymentDate ?? '--' }}
           </el-descriptions-item>
-          <el-descriptions-item :label="$t('schoolBus.studentApply.detail.paymentAccount')">
+          <el-descriptions-item :label="$t('schoolBus.studentApply.detailPaymentAccount')">
             {{ baseInfo.paymentAccount ?? '--' }}
           </el-descriptions-item>
-          <el-descriptions-item :label="$t('schoolBus.studentApply.detail.paymentOrderNo')">
+          <el-descriptions-item :label="$t('schoolBus.studentApply.detailPaymentOrderNo')">
             {{ baseInfo.paymentOrderNo ?? '--' }}
           </el-descriptions-item>
-          <el-descriptions-item :label="$t('schoolBus.studentApply.detail.receivingAccount')">
+          <el-descriptions-item :label="$t('schoolBus.studentApply.detailReceivingAccount')">
             {{ baseInfo.receivingAccount ?? '--' }}
           </el-descriptions-item>
         </el-descriptions>
       </div>
 
       <div class="order-detail__sign">
-        <span>{{ $t('schoolBus.studentApply.detail.sign') }}</span>
+        <span>{{ $t('schoolBus.studentApply.detailSign') }}</span>
         <el-image
           v-if="signImageUrl"
           :src="signImageUrl"
@@ -85,54 +85,54 @@
         <span v-else>--</span>
       </div>
 
-      <h4 class="order-detail__sub-title">{{ $t('schoolBus.studentApply.detail.routeTitle') }}</h4>
+      <h4 class="order-detail__sub-title">{{ $t('schoolBus.studentApply.detailRouteTitle') }}</h4>
       <el-table :data="routeTableData" border size="small">
         <el-table-column
           prop="lineName"
-          :label="$t('schoolBus.studentApply.detail.routeLine')"
+          :label="$t('schoolBus.studentApply.detailRouteLine')"
           min-width="120"
           show-overflow-tooltip />
         <el-table-column
           prop="stationName"
-          :label="$t('schoolBus.studentApply.detail.routeStation')"
+          :label="$t('schoolBus.studentApply.detailRouteStation')"
           min-width="120"
           show-overflow-tooltip />
         <el-table-column
           prop="lineTypeName"
-          :label="$t('schoolBus.studentApply.detail.lineType')"
+          :label="$t('schoolBus.studentApply.detailLineType')"
           width="120" />
         <el-table-column
           prop="ridingWeekDay"
-          :label="$t('schoolBus.studentApply.detail.ridingWeekDay')"
+          :label="$t('schoolBus.studentApply.detailRidingWeekDay')"
           width="120" />
         <el-table-column
           prop="carNumber"
-          :label="$t('schoolBus.studentOrder.columns.car')"
+          :label="$t('schoolBus.studentOrder.colPlate')"
           width="120" />
         <el-table-column
           prop="ridingStartDay"
-          :label="$t('schoolBus.studentApply.detail.startDay')"
+          :label="$t('schoolBus.studentApply.detailStartDay')"
           width="120" />
         <el-table-column
           prop="ridingEndDay"
-          :label="$t('schoolBus.studentApply.detail.endDay')"
+          :label="$t('schoolBus.studentApply.detailEndDay')"
           width="120" />
       </el-table>
 
       <template v-if="String(baseInfo.pickupMethod ?? '') === '2'">
         <h4 class="order-detail__sub-title">
-          {{ $t('schoolBus.studentApply.detail.personTitle') }}
+          {{ $t('schoolBus.studentApply.detailPersonTitle') }}
         </h4>
         <el-table :data="personTableData" border size="small">
           <el-table-column
             prop="pickupRelationships"
-            :label="$t('schoolBus.studentApply.detail.relation')"
+            :label="$t('schoolBus.studentApply.detailRelation')"
             min-width="100" />
           <el-table-column
             prop="pickupPhone"
-            :label="$t('schoolBus.studentApply.detail.phone')"
+            :label="$t('schoolBus.studentApply.detailPhone')"
             width="140" />
-          <el-table-column :label="$t('schoolBus.studentApply.detail.photo')" min-width="120">
+          <el-table-column :label="$t('schoolBus.studentApply.detailPhoto')" min-width="120">
             <template #default="{ row }">
               <el-image
                 v-if="row.pickupImageUrl"

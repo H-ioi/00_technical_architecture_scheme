@@ -2,8 +2,8 @@
   <section class="uni-list-page">
     <div class="uni-list-page__header">
       <div>
-        <h1>{{ $t('schoolBus.driver.page.title') }}</h1>
-        <p>{{ $t('schoolBus.driver.page.description') }}</p>
+        <h1>{{ $t('schoolBus.driver.pageTitle') }}</h1>
+        <p>{{ $t('schoolBus.driver.pageDesc') }}</p>
       </div>
       <div class="uni-list-page__header-actions">
         <el-button v-uni-permission="'busdriver_download'" @click="downloadImportTemplate">
@@ -163,7 +163,7 @@ const del = async () => {
 
   try {
     await ElMessageBox.confirm(
-      t('schoolBus.confirmDelete'),
+      t('schoolBus.confirmDeleteDriver'),
       t('schoolBus.delete'),
       {
         confirmButtonText: t('schoolBus.submit'),

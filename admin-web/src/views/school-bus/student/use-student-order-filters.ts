@@ -23,31 +23,31 @@ const pickArray = (payload: unknown): Record<string, unknown>[] => {
 
 /** 旧 `const/isacommunity/consts.js` 中与乘车订单列表相关的枚举（value 与旧接口一致）。 */
 export const approvalStatusOptions = (t: (k: string) => string): UniOption[] => [
-  { label: t('schoolBus.studentOrder.enums.approval.pending'), value: '0', type: 'info' },
-  { label: t('schoolBus.studentOrder.enums.approval.agree'), value: '1', type: 'success' },
-  { label: t('schoolBus.studentOrder.enums.approval.reject'), value: '2', type: 'danger' }
+  { label: t('schoolBus.studentOrder.enumApprovalPending'), value: '0', type: 'info' },
+  { label: t('schoolBus.studentOrder.enumApprovalAgree'), value: '1', type: 'success' },
+  { label: t('schoolBus.studentOrder.enumApprovalReject'), value: '2', type: 'danger' }
 ]
 
 export const paymentStatusOptions = (t: (k: string) => string): UniOption[] => [
-  { label: t('schoolBus.studentOrder.enums.payment.unpaid'), value: 1, type: 'warning' },
-  { label: t('schoolBus.studentOrder.enums.payment.paid'), value: 2, type: 'success' }
+  { label: t('schoolBus.studentOrder.enumPaymentUnpaid'), value: 1, type: 'warning' },
+  { label: t('schoolBus.studentOrder.enumPaymentPaid'), value: 2, type: 'success' }
 ]
 
 export const pickupMethodOptions = (t: (k: string) => string): UniOption[] => [
-  { label: t('schoolBus.studentOrder.enums.pickup.self'), value: '1' },
-  { label: t('schoolBus.studentOrder.enums.pickup.guardian'), value: '2' }
+  { label: t('schoolBus.studentOrder.enumPickupSelf'), value: '1' },
+  { label: t('schoolBus.studentOrder.enumPickupGuardian'), value: '2' }
 ]
 
 export const studentLineTypeOptions = (t: (k: string) => string): UniOption[] => [
-  { label: t('schoolBus.studentOrder.enums.lineType.daily'), value: '0' },
-  { label: t('schoolBus.studentOrder.enums.lineType.weekly'), value: '1' }
+  { label: t('schoolBus.studentOrder.enumLineTypeDaily'), value: '0' },
+  { label: t('schoolBus.studentOrder.enumLineTypeWeekly'), value: '1' }
 ]
 
 export const paymentMethodOptions = (t: (k: string) => string): UniOption[] => [
-  { label: t('schoolBus.studentOrder.enums.payMethod.alipay'), value: 1 },
-  { label: t('schoolBus.studentOrder.enums.payMethod.wechat'), value: 2 },
-  { label: t('schoolBus.studentOrder.enums.payMethod.cash'), value: 3 },
-  { label: t('schoolBus.studentOrder.enums.payMethod.union'), value: 4 }
+  { label: t('schoolBus.studentOrder.enumPayAlipay'), value: 1 },
+  { label: t('schoolBus.studentOrder.enumPayWechat'), value: 2 },
+  { label: t('schoolBus.studentOrder.enumPayCash'), value: 3 },
+  { label: t('schoolBus.studentOrder.enumPayUnion'), value: 4 }
 ]
 
 const matchesSchoolFilter = (

@@ -2,8 +2,8 @@
   <section class="uni-list-page">
     <div class="uni-list-page__header">
       <div>
-        <h1>{{ $t('schoolBus.studentApply.page.title') }}</h1>
-        <p>{{ $t('schoolBus.studentApply.page.description') }}</p>
+        <h1>{{ $t('schoolBus.studentApply.pageTitle') }}</h1>
+        <p>{{ $t('schoolBus.studentApply.pageDesc') }}</p>
       </div>
       <div class="uni-list-page__header-actions">
         <el-button
@@ -56,19 +56,19 @@
           v-uni-permission="'busorder_batch_approve'"
           :disabled="selection.length === 0"
           @click="batchApprove">
-          {{ $t('schoolBus.studentApply.actions.batchApprove') }}
+          {{ $t('schoolBus.studentApply.batchApprove') }}
         </el-button>
         <el-button
           v-uni-permission="'busorder_batch_deny'"
           :disabled="selection.length === 0"
           @click="openReject">
-          {{ $t('schoolBus.studentApply.actions.batchReject') }}
+          {{ $t('schoolBus.studentApply.batchReject') }}
         </el-button>
         <el-button
           v-uni-permission="'busorder_batch_update_payment_status'"
           :disabled="selection.length === 0"
           @click="batchPayment">
-          {{ $t('schoolBus.studentApply.actions.batchPayment') }}
+          {{ $t('schoolBus.studentApply.batchPayment') }}
         </el-button>
         <el-button
           v-uni-permission="'busintentionorder_del'"
@@ -95,7 +95,7 @@
     <el-dialog
       v-model="rejectVisible"
       width="520px"
-      :title="$t('schoolBus.studentApply.actions.batchReject')"
+      :title="$t('schoolBus.studentApply.batchReject')"
       destroy-on-close>
       <UniForm ref="rejectUniFormRef" v-model="rejectForm" mode="edit" :config="rejectFormConfig" />
       <template #footer>
@@ -162,7 +162,7 @@ const rejectFormConfig = computed<UniFormConfig>(() => ({
     denyReason: [
       {
         required: true,
-        message: t('schoolBus.studentApply.reject.reasonRequired'),
+        message: t('schoolBus.studentApply.rejectReasonRequired'),
         trigger: 'blur'
       }
     ]
@@ -170,7 +170,7 @@ const rejectFormConfig = computed<UniFormConfig>(() => ({
   schema: [
     {
       field: 'denyReason',
-      label: t('schoolBus.studentApply.reject.reason'),
+      label: t('schoolBus.studentApply.rejectReason'),
       component: 'ElInput',
       componentProps: { type: 'textarea', rows: 5 }
     }
@@ -234,13 +234,13 @@ const batchApprove = async () => {
     return
   }
   if (!validateAllPending(selection.value)) {
-    ElMessage.warning(t('schoolBus.studentApply.messages.onlyPending'))
+    ElMessage.warning(t('schoolBus.studentApply.msgOnlyPending'))
     return
   }
   try {
     await ElMessageBox.confirm(
-      t('schoolBus.studentApply.messages.confirmApprove'),
-      t('schoolBus.studentApply.actions.batchApprove'),
+      t('schoolBus.studentApply.msgConfirmApprove'),
+      t('schoolBus.studentApply.batchApprove'),
       { type: 'warning' }
     )
   } catch {
@@ -248,7 +248,7 @@ const batchApprove = async () => {
   }
   try {
     await schoolBusOrderApi.batchApprove.get({ ids: selectionIds.value })
-    ElMessage.success(t('schoolBus.studentApply.messages.success'))
+    ElMessage.success(t('schoolBus.operationSuccess'))
     selection.value = []
     reload()
   } catch {
@@ -261,7 +261,7 @@ const openReject = () => {
     return
   }
   if (!validateAllPending(selection.value)) {
-    ElMessage.warning(t('schoolBus.studentApply.messages.onlyPending'))
+    ElMessage.warning(t('schoolBus.studentApply.msgOnlyPending'))
     return
   }
   rejectForm.value.denyReason = ''
@@ -278,7 +278,7 @@ const confirmReject = async () => {
       ids: selectionIds.value,
       denyReason: rejectForm.value.denyReason
     })
-    ElMessage.success(t('schoolBus.studentApply.messages.success'))
+    ElMessage.success(t('schoolBus.operationSuccess'))
     rejectVisible.value = false
     selection.value = []
     reload()
@@ -295,13 +295,13 @@ const batchPayment = async () => {
     (r) => String(r.approvalStatus) !== '1' || String(r.paymentStatus) !== '1'
   )
   if (invalid.length) {
-    ElMessage.warning(t('schoolBus.studentApply.messages.paymentRule'))
+    ElMessage.warning(t('schoolBus.studentApply.msgPaymentRule'))
     return
   }
   try {
     await ElMessageBox.confirm(
-      t('schoolBus.studentApply.messages.confirmPayment'),
-      t('schoolBus.studentApply.actions.batchPayment'),
+      t('schoolBus.studentApply.msgConfirmPayment'),
+      t('schoolBus.studentApply.batchPayment'),
       { type: 'warning' }
     )
   } catch {
@@ -309,7 +309,7 @@ const batchPayment = async () => {
   }
   try {
     await schoolBusOrderApi.batchUpdatePaymentStatus.get({ ids: selectionIds.value })
-    ElMessage.success(t('schoolBus.studentApply.messages.success'))
+    ElMessage.success(t('schoolBus.operationSuccess'))
     selection.value = []
     reload()
   } catch {
@@ -323,7 +323,7 @@ const del = async () => {
   }
   try {
     await ElMessageBox.confirm(
-      t('schoolBus.studentApply.messages.confirmDelete'),
+      t('schoolBus.confirmDeleteRows'),
       t('schoolBus.delete'),
       { type: 'warning' }
     )
@@ -332,7 +332,7 @@ const del = async () => {
   }
   try {
     await schoolBusOrderApi.delIntentionOrder.delete(selectionIds.value)
-    ElMessage.success(t('schoolBus.studentApply.messages.success'))
+    ElMessage.success(t('schoolBus.operationSuccess'))
     selection.value = []
     reload()
   } catch {

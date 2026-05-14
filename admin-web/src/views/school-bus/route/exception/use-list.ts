@@ -219,7 +219,7 @@ export const useList = () => {
             component: 'ElSelect' as const,
             options: schoolOptions.value,
             componentProps: {
-              placeholder: t('schoolBus.routeException.placeholders.school'),
+              placeholder: t('schoolBus.routeException.phSchool'),
               clearable: true,
               filterable: true,
               multiple: true,
@@ -240,7 +240,7 @@ export const useList = () => {
           component: 'ElSelect',
           options: sectionOptions.value,
           componentProps: {
-            placeholder: t('schoolBus.routeException.placeholders.section'),
+            placeholder: t('schoolBus.routeException.phSection'),
             clearable: true,
             filterable: true
           },
@@ -252,7 +252,7 @@ export const useList = () => {
           component: 'ElSelect',
           options: lineOptions.value,
           componentProps: {
-            placeholder: t('schoolBus.routeException.placeholders.line'),
+            placeholder: t('schoolBus.routeException.phLine'),
             clearable: true,
             filterable: true,
             multiple: true,
@@ -267,7 +267,7 @@ export const useList = () => {
           component: 'ElSelect',
           options: carOptions.value,
           componentProps: {
-            placeholder: t('schoolBus.routeException.placeholders.car'),
+            placeholder: t('schoolBus.routeException.phCar'),
             clearable: true,
             filterable: true
           },
@@ -279,7 +279,7 @@ export const useList = () => {
           component: 'ElSelect',
           options: exceptionTypeOptions.value,
           componentProps: {
-            placeholder: t('schoolBus.routeException.placeholders.exceptionType'),
+            placeholder: t('schoolBus.routeException.phExceptionType'),
             clearable: true
           },
           colProps: { span: 6 }
@@ -290,7 +290,7 @@ export const useList = () => {
           component: 'ElSelect',
           options: yesNoOptions.value,
           componentProps: {
-            placeholder: t('schoolBus.routeException.placeholders.needDispatch'),
+            placeholder: t('schoolBus.routeException.phNeedDispatch'),
             clearable: true
           },
           colProps: { span: 6 }
@@ -301,7 +301,7 @@ export const useList = () => {
           component: 'ElDatePicker',
           componentProps: {
             type: 'date',
-            placeholder: t('schoolBus.routeException.placeholders.exceptionDateStart'),
+            placeholder: t('schoolBus.routeException.phExceptionDateStart'),
             valueFormat: 'YYYY-MM-DD',
             clearable: true
           },
@@ -313,7 +313,7 @@ export const useList = () => {
           component: 'ElDatePicker',
           componentProps: {
             type: 'date',
-            placeholder: t('schoolBus.routeException.placeholders.exceptionDateEnd'),
+            placeholder: t('schoolBus.routeException.phExceptionDateEnd'),
             valueFormat: 'YYYY-MM-DD',
             clearable: true
           },

@@ -207,7 +207,7 @@ export const useList = () => {
             component: 'ElSelect' as const,
             options: schoolOptions.value,
             componentProps: {
-              placeholder: t('schoolBus.routeOperation.placeholders.school'),
+              placeholder: t('schoolBus.routeOperation.phSchool'),
               clearable: true,
               filterable: true,
               multiple: true,
@@ -228,7 +228,7 @@ export const useList = () => {
           component: 'ElSelect',
           options: lineOptions.value,
           componentProps: {
-            placeholder: t('schoolBus.routeOperation.placeholders.line'),
+            placeholder: t('schoolBus.routeOperation.phLine'),
             clearable: true,
             filterable: true,
             multiple: true,
@@ -243,7 +243,7 @@ export const useList = () => {
           component: 'ElSelect',
           options: stationOptions.value,
           componentProps: {
-            placeholder: t('schoolBus.routeOperation.placeholders.station'),
+            placeholder: t('schoolBus.routeOperation.phStation'),
             clearable: true,
             filterable: true
           },
@@ -255,7 +255,7 @@ export const useList = () => {
           component: 'ElSelect',
           options: statusOptions.value,
           componentProps: {
-            placeholder: t('schoolBus.routeOperation.placeholders.status'),
+            placeholder: t('schoolBus.routeOperation.phStatus'),
             clearable: true
           },
           colProps: { span: 6 }
@@ -266,7 +266,7 @@ export const useList = () => {
           component: 'ElDatePicker',
           componentProps: {
             type: 'date',
-            placeholder: t('schoolBus.routeOperation.placeholders.rideDateStart'),
+            placeholder: t('schoolBus.routeOperation.phRideDateStart'),
             valueFormat: 'YYYY-MM-DD',
             clearable: true
           },
@@ -278,7 +278,7 @@ export const useList = () => {
           component: 'ElDatePicker',
           componentProps: {
             type: 'date',
-            placeholder: t('schoolBus.routeOperation.placeholders.rideDateEnd'),
+            placeholder: t('schoolBus.routeOperation.phRideDateEnd'),
             valueFormat: 'YYYY-MM-DD',
             clearable: true
           },

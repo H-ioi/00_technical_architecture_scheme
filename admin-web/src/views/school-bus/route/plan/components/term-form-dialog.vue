@@ -85,8 +85,8 @@ const formConfig = computed<UniFormConfig>(() =>
 
 const termDialogTitle = computed(() =>
   props.editingId != null && props.editingId !== ''
-    ? t('schoolBus.routePlan.actions.editTerm')
-    : t('schoolBus.routePlan.actions.addTerm')
+    ? t('schoolBus.routePlan.editTerm')
+    : t('schoolBus.routePlan.addTerm')
 )
 
 const reset = () => {
@@ -182,7 +182,7 @@ const submit = async () => {
   const schoolIds = normalizeSchoolIds()
 
   if (schoolIds.length === 0) {
-    ElMessage.warning(t('schoolBus.routeOperation.pleaseSelect'))
+    ElMessage.warning(t('schoolBus.pleaseSelect'))
 
     return
   }
@@ -191,7 +191,7 @@ const submit = async () => {
   const service = formModel.value.serviceDate
 
   if (!intent?.[0] || !intent[1] || !service?.[0] || !service[1]) {
-    ElMessage.warning(t('schoolBus.routeOperation.pleaseSelect'))
+    ElMessage.warning(t('schoolBus.pleaseSelect'))
 
     return
   }

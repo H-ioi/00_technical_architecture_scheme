@@ -5,8 +5,8 @@ import type { Translate } from '@/types/i18n'
 import type { DriverFormModel } from '@/types/modules/school-bus-driver'
 
 export const statusOpts = (t: Translate): UniOption[] => [
-  { label: t('schoolBus.driver.options.enabled'), value: 1, type: 'success' },
-  { label: t('schoolBus.driver.options.disabled'), value: 0, type: 'info' }
+  { label: t('schoolBus.driver.optEnabled'), value: 1, type: 'success' },
+  { label: t('schoolBus.driver.optDisabled'), value: 0, type: 'info' }
 ]
 
 export const searchForm = (
@@ -24,7 +24,7 @@ export const searchForm = (
       options: schoolOptions,
       ...(defaultSchoolId != null ? { defaultValue: defaultSchoolId } : {}),
       componentProps: {
-        placeholder: t('schoolBus.driver.placeholders.school'),
+        placeholder: t('schoolBus.driver.phSchool'),
         clearable: true,
         filterable: true
       },
@@ -35,7 +35,7 @@ export const searchForm = (
       label: '',
       component: 'ElInput',
       componentProps: {
-        placeholder: t('schoolBus.driver.placeholders.keyword'),
+        placeholder: t('schoolBus.driver.phKeyword'),
         clearable: true
       },
       colProps: { span: 6 }
@@ -46,7 +46,7 @@ export const searchForm = (
       component: 'ElSelect',
       options: statusOptions,
       componentProps: {
-        placeholder: t('schoolBus.driver.placeholders.status'),
+        placeholder: t('schoolBus.driver.fieldStatus'),
         clearable: true
       },
       colProps: { span: 6 }
@@ -64,7 +64,7 @@ export const tableCols = (
   { prop: 'id', label: 'ID', type: 'text', width: 88, fixed: 'left' },
   {
     prop: 'schoolIds',
-    label: t('schoolBus.driver.fields.school'),
+    label: t('schoolBus.driver.fieldSchool'),
     type: 'array',
     options: schoolOptions,
     lookup: { splitValues: true },
@@ -73,36 +73,36 @@ export const tableCols = (
   },
   {
     prop: 'name',
-    label: t('schoolBus.driver.fields.name'),
+    label: t('schoolBus.driver.fieldName'),
     type: 'text',
     minWidth: 120,
     showOverflowTooltip: true
   },
   {
     prop: 'employeeNo',
-    label: t('schoolBus.driver.fields.employeeNo'),
+    label: t('schoolBus.driver.fieldEmployeeNo'),
     type: 'text',
     width: 120,
     showOverflowTooltip: true
   },
   {
     prop: 'contact',
-    label: t('schoolBus.driver.fields.contact'),
+    label: t('schoolBus.driver.fieldContact'),
     type: 'text',
     width: 130,
     showOverflowTooltip: true
   },
-  { prop: 'age', label: t('schoolBus.driver.fields.age'), type: 'text', width: 72 },
+  { prop: 'age', label: t('schoolBus.driver.fieldAge'), type: 'text', width: 72 },
   {
     prop: 'licenseType',
-    label: t('schoolBus.driver.fields.licenseType'),
+    label: t('schoolBus.driver.fieldLicenseType'),
     type: 'text',
     width: 110,
     showOverflowTooltip: true
   },
   {
     prop: 'status',
-    label: t('schoolBus.driver.fields.status'),
+    label: t('schoolBus.driver.fieldStatus'),
     type: 'tag',
     options: statusOptions,
     width: 96
@@ -111,27 +111,27 @@ export const tableCols = (
 
 export const formRules = (t: Translate): FormRules<DriverFormModel> => ({
   schoolIds: [
-    { required: true, message: t('schoolBus.driver.rules.schoolIds'), trigger: 'change' }
+    { required: true, message: t('schoolBus.driver.ruleSchoolIds'), trigger: 'change' }
   ],
-  name: [{ required: true, message: t('schoolBus.driver.rules.name'), trigger: 'blur' }],
+  name: [{ required: true, message: t('schoolBus.driver.phName'), trigger: 'blur' }],
   employeeNo: [
-    { required: true, message: t('schoolBus.driver.rules.employeeNo'), trigger: 'blur' }
+    { required: true, message: t('schoolBus.driver.phEmployeeNo'), trigger: 'blur' }
   ],
-  contact: [{ required: true, message: t('schoolBus.driver.rules.contact'), trigger: 'blur' }],
+  contact: [{ required: true, message: t('schoolBus.driver.phContact'), trigger: 'blur' }],
   age: [
-    { required: true, message: t('schoolBus.driver.rules.age'), trigger: 'change' },
+    { required: true, message: t('schoolBus.driver.ruleAge'), trigger: 'change' },
     {
       type: 'number',
       min: 18,
       max: 80,
-      message: t('schoolBus.driver.rules.ageRange'),
+      message: t('schoolBus.driver.ruleAgeRange'),
       trigger: 'change'
     }
   ],
   licenseType: [
-    { required: true, message: t('schoolBus.driver.rules.licenseType'), trigger: 'blur' }
+    { required: true, message: t('schoolBus.driver.ruleLicenseType'), trigger: 'blur' }
   ],
-  status: [{ required: true, message: t('schoolBus.driver.rules.status'), trigger: 'change' }]
+  status: [{ required: true, message: t('schoolBus.driver.ruleStatus'), trigger: 'change' }]
 })
 
 /** 司机新增/编辑/查看弹窗（与 `base/components/dict.vue` 一致使用 `UniForm`） */
@@ -147,7 +147,7 @@ export const driverDialogFormConfig = (
   schema: [
     {
       field: 'schoolIds',
-      label: t('schoolBus.driver.fields.school'),
+      label: t('schoolBus.driver.fieldSchool'),
       component: 'ElSelect',
       options: schoolOptions,
       colProps: { span: 24 },
@@ -156,7 +156,7 @@ export const driverDialogFormConfig = (
         collapseTags: true,
         filterable: true,
         clearable: true,
-        placeholder: t('schoolBus.driver.placeholders.school')
+        placeholder: t('schoolBus.driver.phSchool')
       },
       viewRender: ({ value }) => {
         const ids = Array.isArray(value) ? value : []
@@ -173,37 +173,37 @@ export const driverDialogFormConfig = (
     },
     {
       field: 'name',
-      label: t('schoolBus.driver.fields.name'),
+      label: t('schoolBus.driver.fieldName'),
       component: 'ElInput',
       componentProps: {
         maxlength: 64,
         clearable: true,
-        placeholder: t('schoolBus.driver.placeholders.name')
+        placeholder: t('schoolBus.driver.phName')
       }
     },
     {
       field: 'employeeNo',
-      label: t('schoolBus.driver.fields.employeeNo'),
+      label: t('schoolBus.driver.fieldEmployeeNo'),
       component: 'ElInput',
       componentProps: {
         maxlength: 64,
         clearable: true,
-        placeholder: t('schoolBus.driver.placeholders.employeeNo')
+        placeholder: t('schoolBus.driver.phEmployeeNo')
       }
     },
     {
       field: 'contact',
-      label: t('schoolBus.driver.fields.contact'),
+      label: t('schoolBus.driver.fieldContact'),
       component: 'ElInput',
       componentProps: {
         maxlength: 32,
         clearable: true,
-        placeholder: t('schoolBus.driver.placeholders.contact')
+        placeholder: t('schoolBus.driver.phContact')
       }
     },
     {
       field: 'age',
-      label: t('schoolBus.driver.fields.age'),
+      label: t('schoolBus.driver.fieldAge'),
       component: 'ElInputNumber',
       componentProps: {
         min: 18,
@@ -216,22 +216,22 @@ export const driverDialogFormConfig = (
     },
     {
       field: 'licenseType',
-      label: t('schoolBus.driver.fields.licenseType'),
+      label: t('schoolBus.driver.fieldLicenseType'),
       component: 'ElInput',
       componentProps: {
         maxlength: 32,
         clearable: true,
-        placeholder: t('schoolBus.driver.placeholders.licenseType')
+        placeholder: t('schoolBus.driver.phLicenseType')
       }
     },
     {
       field: 'status',
-      label: t('schoolBus.driver.fields.status'),
+      label: t('schoolBus.driver.fieldStatus'),
       component: 'ElSelect',
       options: statusOptions,
       viewType: 'enum',
       componentProps: {
-        placeholder: t('schoolBus.driver.placeholders.status')
+        placeholder: t('schoolBus.driver.fieldStatus')
       }
     }
   ]

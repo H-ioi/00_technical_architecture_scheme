@@ -6,21 +6,21 @@ import type { Translate } from '@/types/i18n'
 import type { FollowTeacherFormModel } from '@/types/modules/school-bus-follow-teacher'
 
 export const statusOpts = (t: Translate): UniOption[] => [
-  { label: t('schoolBus.driver.options.enabled'), value: 1, type: 'success' },
-  { label: t('schoolBus.driver.options.disabled'), value: 0, type: 'info' }
+  { label: t('schoolBus.driver.optEnabled'), value: 1, type: 'success' },
+  { label: t('schoolBus.driver.optDisabled'), value: 0, type: 'info' }
 ]
 
 /** 模块选项 id 与旧版 `form.vue` 中 `moduleOptions` 一致 */
 export const teacherModuleOptions = (t: Translate): UniOption[] => [
-  { label: t('schoolBus.followTeacher.moduleOptions.schoolBus'), value: 1 },
-  { label: t('schoolBus.followTeacher.moduleOptions.activity'), value: 2 }
+  { label: t('schoolBus.followTeacher.modSchoolBus'), value: 1 },
+  { label: t('schoolBus.followTeacher.modActivity'), value: 2 }
 ]
 
 /** 角色选项 id 与旧版 `form.vue` 中 `roleOptions` 一致 */
 export const teacherRoleOptions = (t: Translate): UniOption[] => [
-  { label: t('schoolBus.followTeacher.roleOptions.busOperation'), value: 1 },
-  { label: t('schoolBus.followTeacher.roleOptions.carTeacher'), value: 2 },
-  { label: t('schoolBus.followTeacher.roleOptions.activityCheckIn'), value: 3 }
+  { label: t('schoolBus.followTeacher.roleBusOperation'), value: 1 },
+  { label: t('schoolBus.followTeacher.roleCarTeacher'), value: 2 },
+  { label: t('schoolBus.followTeacher.roleActivityCheckIn'), value: 3 }
 ]
 
 export const searchForm = (
@@ -34,7 +34,7 @@ export const searchForm = (
       label: '',
       component: 'ElInput',
       componentProps: {
-        placeholder: t('schoolBus.followTeacher.placeholders.keyword'),
+        placeholder: t('schoolBus.followTeacher.phKeyword'),
         clearable: true
       },
       colProps: { span: 8 }
@@ -47,7 +47,7 @@ export const searchForm = (
             component: 'ElSelect' as const,
             options: schoolOptions,
             componentProps: {
-              placeholder: t('schoolBus.followTeacher.placeholders.school'),
+              placeholder: t('schoolBus.followTeacher.phSchool'),
               clearable: true,
               filterable: true,
               multiple: true,
@@ -65,41 +65,41 @@ export const searchForm = (
 export const tableCols = (t: Translate, statusOptions: UniOption[]): UniTableColumn[] => [
   {
     prop: 'id',
-    label: t('schoolBus.followTeacher.columns.id'),
+    label: t('schoolBus.followTeacher.colId'),
     width: 88,
     fixed: 'left',
     type: 'text'
   },
   {
     prop: 'nickname',
-    label: t('schoolBus.followTeacher.columns.nickname'),
+    label: t('schoolBus.followTeacher.colNickname'),
     type: 'text',
     minWidth: 120
   },
   {
     prop: 'schoolLabel',
-    label: t('schoolBus.followTeacher.columns.school'),
+    label: t('schoolBus.followTeacher.colSchool'),
     type: 'text',
     minWidth: 120
   },
   {
     prop: 'department',
-    label: t('schoolBus.followTeacher.columns.department'),
+    label: t('schoolBus.followTeacher.colDepartment'),
     type: 'text',
     minWidth: 100
   },
-  { prop: 'email', label: t('schoolBus.followTeacher.columns.email'), type: 'text', minWidth: 160 },
-  { prop: 'phone', label: t('schoolBus.followTeacher.columns.phone'), type: 'text', width: 130 },
+  { prop: 'email', label: t('schoolBus.followTeacher.colEmail'), type: 'text', minWidth: 160 },
+  { prop: 'phone', label: t('schoolBus.followTeacher.colPhone'), type: 'text', width: 130 },
   {
     prop: 'status',
-    label: t('schoolBus.followTeacher.columns.status'),
+    label: t('schoolBus.followTeacher.colStatus'),
     type: 'tag',
     options: statusOptions,
     width: 96
   },
   {
     prop: 'lastLoginTime',
-    label: t('schoolBus.followTeacher.columns.lastLogin'),
+    label: t('schoolBus.followTeacher.colLastLogin'),
     type: 'text',
     minWidth: 160
   }
@@ -113,28 +113,28 @@ export const teacherFormRules = (
   ...(multiSchool
     ? {
         school: [
-          { required: true, message: t('schoolBus.followTeacher.rules.school'), trigger: 'change' }
+          { required: true, message: t('schoolBus.followTeacher.ruleSchool'), trigger: 'change' }
         ]
       }
     : {}),
   nickname: [
-    { required: true, message: t('schoolBus.followTeacher.rules.nickname'), trigger: 'blur' }
+    { required: true, message: t('schoolBus.followTeacher.ruleNickname'), trigger: 'blur' }
   ],
   department: [
-    { required: true, message: t('schoolBus.followTeacher.rules.department'), trigger: 'blur' }
+    { required: true, message: t('schoolBus.followTeacher.ruleDepartment'), trigger: 'blur' }
   ],
   email: [
-    { required: true, message: t('schoolBus.followTeacher.rules.email'), trigger: 'blur' },
-    { type: 'email', message: t('schoolBus.followTeacher.rules.emailFormat'), trigger: 'blur' }
+    { required: true, message: t('schoolBus.followTeacher.ruleEmail'), trigger: 'blur' },
+    { type: 'email', message: t('schoolBus.followTeacher.ruleEmailFormat'), trigger: 'blur' }
   ],
-  phone: [{ required: true, message: t('schoolBus.followTeacher.rules.phone'), trigger: 'blur' }],
+  phone: [{ required: true, message: t('schoolBus.followTeacher.rulePhone'), trigger: 'blur' }],
   modules: [
     {
       validator: (_rule, value, callback) => {
         if (Array.isArray(value) && value.length > 0) {
           callback()
         } else {
-          callback(new Error(t('schoolBus.followTeacher.rules.modules')))
+          callback(new Error(t('schoolBus.followTeacher.ruleModules')))
         }
       },
       trigger: 'change'
@@ -146,20 +146,20 @@ export const teacherFormRules = (
         if (Array.isArray(value) && value.length > 0) {
           callback()
         } else {
-          callback(new Error(t('schoolBus.followTeacher.rules.roles')))
+          callback(new Error(t('schoolBus.followTeacher.ruleRoles')))
         }
       },
       trigger: 'change'
     }
   ],
   status: [
-    { required: true, message: t('schoolBus.followTeacher.rules.status'), trigger: 'change' }
+    { required: true, message: t('schoolBus.followTeacher.ruleStatus'), trigger: 'change' }
   ]
 })
 
 export const teacherAddPasswordRule = (t: Translate): FormRules<FollowTeacherFormModel> => ({
   password: [
-    { required: true, message: t('schoolBus.followTeacher.rules.password'), trigger: 'blur' }
+    { required: true, message: t('schoolBus.followTeacher.rulePassword'), trigger: 'blur' }
   ]
 })
 
@@ -183,7 +183,7 @@ export const teacherDialogForm = (
       ? [
           {
             field: 'school',
-            label: t('schoolBus.followTeacher.fields.school'),
+            label: t('schoolBus.followTeacher.fieldSchool'),
             component: 'ElSelect' as const,
             options: schoolOptions,
             componentProps: { filterable: true, clearable: true }
@@ -192,31 +192,31 @@ export const teacherDialogForm = (
       : []),
     {
       field: 'nickname',
-      label: t('schoolBus.followTeacher.fields.nickname'),
+      label: t('schoolBus.followTeacher.fieldNickname'),
       component: 'ElInput',
       componentProps: { maxlength: 50, clearable: true }
     },
     {
       field: 'department',
-      label: t('schoolBus.followTeacher.fields.department'),
+      label: t('schoolBus.followTeacher.fieldDepartment'),
       component: 'ElInput',
       componentProps: { maxlength: 50, clearable: true }
     },
     {
       field: 'email',
-      label: t('schoolBus.followTeacher.fields.email'),
+      label: t('schoolBus.followTeacher.fieldEmail'),
       component: 'ElInput',
       componentProps: { maxlength: 50, clearable: true }
     },
     {
       field: 'phone',
-      label: t('schoolBus.followTeacher.fields.phone'),
+      label: t('schoolBus.followTeacher.fieldPhone'),
       component: 'ElInput',
       componentProps: { maxlength: 50, clearable: true }
     },
     {
       field: 'modules',
-      label: t('schoolBus.followTeacher.fields.modules'),
+      label: t('schoolBus.followTeacher.fieldModules'),
       component: 'ElSelect' as const,
       options: teacherModuleOptions(t),
       componentProps: {
@@ -224,12 +224,12 @@ export const teacherDialogForm = (
         collapseTags: true,
         collapseTagsTooltip: true,
         filterable: true,
-        placeholder: t('schoolBus.followTeacher.placeholders.select')
+        placeholder: t('schoolBus.followTeacher.phSelect')
       }
     },
     {
       field: 'roles',
-      label: t('schoolBus.followTeacher.fields.roles'),
+      label: t('schoolBus.followTeacher.fieldRoles'),
       component: 'ElSelect' as const,
       options: teacherRoleOptions(t),
       componentProps: {
@@ -237,14 +237,14 @@ export const teacherDialogForm = (
         collapseTags: true,
         collapseTagsTooltip: true,
         filterable: true,
-        placeholder: t('schoolBus.followTeacher.placeholders.select')
+        placeholder: t('schoolBus.followTeacher.phSelect')
       }
     },
     ...(mode === 'add'
       ? [
           {
             field: 'password',
-            label: t('schoolBus.followTeacher.fields.password'),
+            label: t('schoolBus.followTeacher.fieldPassword'),
             component: 'ElInput' as const,
             componentProps: { type: 'password', maxlength: 50, showPassword: true, clearable: true }
           }
@@ -252,10 +252,10 @@ export const teacherDialogForm = (
       : []),
     {
       field: 'status',
-      label: t('schoolBus.followTeacher.fields.status'),
+      label: t('schoolBus.followTeacher.fieldStatus'),
       component: 'ElSelect',
       options: statusOptions,
-      componentProps: { placeholder: t('schoolBus.followTeacher.placeholders.status') }
+      componentProps: { placeholder: t('schoolBus.followTeacher.phStatus') }
     }
   ]
 })

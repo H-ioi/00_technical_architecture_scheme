@@ -2,8 +2,8 @@
   <section class="uni-list-page">
     <div class="uni-list-page__header">
       <div>
-        <h1>{{ $t('schoolBus.routeException.page.title') }}</h1>
-        <p>{{ $t('schoolBus.routeException.page.description') }}</p>
+        <h1>{{ $t('schoolBus.routeException.pageTitle') }}</h1>
+        <p>{{ $t('schoolBus.routeException.pageDesc') }}</p>
       </div>
       <div class="uni-list-page__header-actions">
         <el-button v-uni-permission="'busexception_export'" @click="exportData">
@@ -202,7 +202,7 @@ const exportData = async () => {
     link.download = 'exception-export.xlsx'
     link.click()
     URL.revokeObjectURL(url)
-    ElMessage.success(t('schoolBus.routeException.messages.exportSuccess'))
+    ElMessage.success(t('schoolBus.exportSuccess'))
   } catch {
     /* request 层已提示 */
   }
@@ -215,7 +215,7 @@ const del = async () => {
 
   try {
     await ElMessageBox.confirm(
-      t('schoolBus.routeException.messages.confirmDelete'),
+      t('schoolBus.routeException.msgConfirmDelete'),
       t('schoolBus.delete'),
       {
         confirmButtonText: t('schoolBus.submit'),

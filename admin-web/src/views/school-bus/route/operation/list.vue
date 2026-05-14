@@ -2,8 +2,8 @@
   <section class="uni-list-page">
     <div class="uni-list-page__header">
       <div>
-        <h1>{{ $t('schoolBus.routeOperation.page.title') }}</h1>
-        <p>{{ $t('schoolBus.routeOperation.page.description') }}</p>
+        <h1>{{ $t('schoolBus.routeOperation.pageTitle') }}</h1>
+        <p>{{ $t('schoolBus.routeOperation.pageDesc') }}</p>
       </div>
       <div class="uni-list-page__header-actions">
         <el-button v-uni-permission="'busoperation_export'" @click="exportData">
@@ -206,7 +206,7 @@ const exportData = async () => {
     link.download = 'operation-export.xlsx'
     link.click()
     URL.revokeObjectURL(url)
-    ElMessage.success(t('schoolBus.routeOperation.messages.exportSuccess'))
+    ElMessage.success(t('schoolBus.exportSuccess'))
   } catch {
     /* request 层已提示 */
   }
@@ -219,7 +219,7 @@ const del = async () => {
 
   try {
     await ElMessageBox.confirm(
-      t('schoolBus.routeOperation.messages.confirmDelete'),
+      t('schoolBus.routeOperation.msgConfirmDelete'),
       t('schoolBus.delete'),
       {
         confirmButtonText: t('schoolBus.submit'),

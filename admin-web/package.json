@@ -15,6 +15,7 @@
     "format": "prettier --write \"src/**/*.{ts,vue,scss,md,json}\" \"*.{json,ts,mjs,cjs,md}\"",
     "format:check": "prettier --check \"src/**/*.{ts,vue,scss,md,json}\" \"*.{json,ts,mjs,cjs,md}\"",
     "type-check": "vue-tsc --noEmit",
+    "locale:dup-scan": "node scripts/scan-locale-duplicate-values.mjs --all",
     "uni-lib:build": "npm run build --prefix ../uni-lib",
     "extract:legacy-isacommunity-base": "node scripts/extract-isacommunity-base-api.mjs",
     "prepare": "husky"

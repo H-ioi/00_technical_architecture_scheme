@@ -80,8 +80,8 @@ const formConfig = computed<UniFormConfig>(() =>
 
 const stationDialogTitle = computed(() =>
   props.editingId != null && props.editingId !== ''
-    ? t('schoolBus.routePlan.actions.editStation')
-    : t('schoolBus.routePlan.actions.addStation')
+    ? t('schoolBus.routePlan.editStation')
+    : t('schoolBus.routePlan.addStation')
 )
 
 const reset = () => {
@@ -165,7 +165,7 @@ const submit = async () => {
   const schoolIds = normalizeSchoolIds()
 
   if (schoolIds.length === 0) {
-    ElMessage.warning(t('schoolBus.routeOperation.pleaseSelect'))
+    ElMessage.warning(t('schoolBus.pleaseSelect'))
 
     return
   }

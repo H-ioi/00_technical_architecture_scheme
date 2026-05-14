@@ -2,8 +2,8 @@
   <section class="uni-list-page">
     <div class="uni-list-page__header">
       <div>
-        <h1>{{ $t('schoolBus.followTeacher.page.title') }}</h1>
-        <p>{{ $t('schoolBus.followTeacher.page.description') }}</p>
+        <h1>{{ $t('schoolBus.followTeacher.pageTitle') }}</h1>
+        <p>{{ $t('schoolBus.followTeacher.pageDesc') }}</p>
       </div>
       <div class="uni-list-page__header-actions">
         <el-button v-uni-permission="'teacheruser_export'" @click="exportData">
@@ -58,13 +58,13 @@
           v-uni-permission="'teacheruser_enble'"
           :disabled="ids.length === 0"
           @click="batchEnable">
-          {{ $t('schoolBus.followTeacher.actions.enable') }}
+          {{ $t('schoolBus.followTeacher.enable') }}
         </el-button>
         <el-button
           v-uni-permission="'teacheruser_disable'"
           :disabled="ids.length === 0"
           @click="batchDisable">
-          {{ $t('schoolBus.followTeacher.actions.disable') }}
+          {{ $t('schoolBus.followTeacher.disable') }}
         </el-button>
         <el-button
           v-uni-permission="'teacheruser_del'"
@@ -180,7 +180,7 @@ const exportData = async () => {
   try {
     const blob = await schoolBusFollowTeacherApi.export.get(raw)
     downloadBlob(blob, 'follow-teacher-export.xlsx')
-    ElMessage.success(t('schoolBus.studentOrder.messages.exportSuccess'))
+    ElMessage.success(t('schoolBus.exportSuccess'))
   } catch {
     /* request 层已提示 */
   }
@@ -192,8 +192,8 @@ const batchEnable = async () => {
   }
   try {
     await ElMessageBox.confirm(
-      t('schoolBus.followTeacher.messages.confirmEnable'),
-      t('schoolBus.followTeacher.actions.enable'),
+      t('schoolBus.followTeacher.msgConfirmEnable'),
+      t('schoolBus.followTeacher.enable'),
       { type: 'warning' }
     )
   } catch {
@@ -201,7 +201,7 @@ const batchEnable = async () => {
   }
   try {
     await schoolBusFollowTeacherApi.enable.post(ids.value)
-    ElMessage.success(t('schoolBus.studentApply.messages.success'))
+    ElMessage.success(t('schoolBus.operationSuccess'))
     selection.value = []
     reload()
   } catch {
@@ -215,8 +215,8 @@ const batchDisable = async () => {
   }
   try {
     await ElMessageBox.confirm(
-      t('schoolBus.followTeacher.messages.confirmDisable'),
-      t('schoolBus.followTeacher.actions.disable'),
+      t('schoolBus.followTeacher.msgConfirmDisable'),
+      t('schoolBus.followTeacher.disable'),
       { type: 'warning' }
     )
   } catch {
@@ -224,7 +224,7 @@ const batchDisable = async () => {
   }
   try {
     await schoolBusFollowTeacherApi.disable.post(ids.value)
-    ElMessage.success(t('schoolBus.studentApply.messages.success'))
+    ElMessage.success(t('schoolBus.operationSuccess'))
     selection.value = []
     reload()
   } catch {
@@ -238,7 +238,7 @@ const del = async () => {
   }
   try {
     await ElMessageBox.confirm(
-      t('schoolBus.followTeacher.messages.confirmDelete'),
+      t('schoolBus.confirmDeleteRows'),
       t('schoolBus.delete'),
       { type: 'warning' }
     )

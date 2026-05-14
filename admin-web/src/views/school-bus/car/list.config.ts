@@ -4,9 +4,9 @@ import type { UniFormConfig, UniOption, UniTableColumn } from 'uni-ui-lib'
 import type { Translate } from '@/types/i18n'
 
 export const carStatusOpts = (t: Translate): UniOption[] => [
-  { label: t('schoolBus.car.options.free'), value: 0, type: 'info' },
-  { label: t('schoolBus.car.options.used'), value: 1, type: 'success' },
-  { label: t('schoolBus.car.options.repair'), value: 2, type: 'warning' }
+  { label: t('schoolBus.car.optFree'), value: 0, type: 'info' },
+  { label: t('schoolBus.car.optUsed'), value: 1, type: 'success' },
+  { label: t('schoolBus.car.optRepair'), value: 2, type: 'warning' }
 ]
 
 export const searchForm = (
@@ -24,7 +24,7 @@ export const searchForm = (
             component: 'ElSelect' as const,
             options: schoolOptions,
             componentProps: {
-              placeholder: t('schoolBus.car.placeholders.school'),
+              placeholder: t('schoolBus.car.phSchool'),
               clearable: true,
               filterable: true
             },
@@ -37,7 +37,7 @@ export const searchForm = (
       label: '',
       component: 'ElInput',
       componentProps: {
-        placeholder: t('schoolBus.car.placeholders.carNumber'),
+        placeholder: t('schoolBus.car.phCarNumber'),
         clearable: true
       },
       colProps: { span: 6 }
@@ -47,7 +47,7 @@ export const searchForm = (
       label: '',
       component: 'ElInput',
       componentProps: {
-        placeholder: t('schoolBus.car.placeholders.driver'),
+        placeholder: t('schoolBus.car.phDriver'),
         clearable: true
       },
       colProps: { span: 6 }
@@ -57,7 +57,7 @@ export const searchForm = (
       label: '',
       component: 'ElInput',
       componentProps: {
-        placeholder: t('schoolBus.car.placeholders.carTeacher'),
+        placeholder: t('schoolBus.car.phCarTeacher'),
         clearable: true
       },
       colProps: { span: 6 }
@@ -68,7 +68,7 @@ export const searchForm = (
       component: 'ElSelect',
       options: statusOptions,
       componentProps: {
-        placeholder: t('schoolBus.car.placeholders.status'),
+        placeholder: t('schoolBus.car.phStatus'),
         clearable: true
       },
       colProps: { span: 6 }
@@ -79,49 +79,49 @@ export const searchForm = (
 })
 
 export const tableCols = (t: Translate, statusOptions: UniOption[]): UniTableColumn[] => [
-  { prop: 'id', label: t('schoolBus.car.columns.id'), width: 88, fixed: 'left', type: 'text' },
+  { prop: 'id', label: t('schoolBus.car.colId'), width: 88, fixed: 'left', type: 'text' },
   {
     prop: 'showSchoolNames',
-    label: t('schoolBus.car.columns.school'),
+    label: t('schoolBus.car.colSchool'),
     type: 'text',
     minWidth: 120,
     showOverflowTooltip: true
   },
   {
     prop: 'carNumber',
-    label: t('schoolBus.car.columns.carNumber'),
+    label: t('schoolBus.car.colCarNumber'),
     type: 'text',
     minWidth: 120
   },
   {
     prop: 'carTeacher',
-    label: t('schoolBus.car.columns.carTeacher'),
+    label: t('schoolBus.car.colCarTeacher'),
     type: 'text',
     minWidth: 100
   },
   {
     prop: 'driverName',
-    label: t('schoolBus.car.columns.driverName'),
+    label: t('schoolBus.car.colDriverName'),
     type: 'text',
     minWidth: 100
   },
-  { prop: 'seatNumber', label: t('schoolBus.car.columns.seatNumber'), type: 'text', width: 88 },
+  { prop: 'seatNumber', label: t('schoolBus.car.colSeatNumber'), type: 'text', width: 88 },
   {
     prop: 'status',
-    label: t('schoolBus.car.columns.status'),
+    label: t('schoolBus.car.colStatus'),
     type: 'tag',
     options: statusOptions,
     width: 96
   },
   {
     prop: 'createTime',
-    label: t('schoolBus.car.columns.createTime'),
+    label: t('schoolBus.car.colCreateTime'),
     type: 'text',
     minWidth: 160
   },
   {
     prop: 'updateTime',
-    label: t('schoolBus.car.columns.updateTime'),
+    label: t('schoolBus.car.colUpdateTime'),
     type: 'text',
     minWidth: 160
   }
@@ -142,17 +142,17 @@ export const carFormRules = (t: Translate, multiSchool: boolean): FormRules<CarF
   ...(multiSchool
     ? {
         schoolIds: [
-          { required: true, message: t('schoolBus.car.rules.schoolIds'), trigger: 'change' }
+          { required: true, message: t('schoolBus.car.ruleSchoolIds'), trigger: 'change' }
         ]
       }
     : {}),
-  carNumber: [{ required: true, message: t('schoolBus.car.rules.carNumber'), trigger: 'blur' }],
+  carNumber: [{ required: true, message: t('schoolBus.car.ruleCarNumber'), trigger: 'blur' }],
   carTeacherId: [
-    { required: true, message: t('schoolBus.car.rules.carTeacherId'), trigger: 'change' }
+    { required: true, message: t('schoolBus.car.ruleCarTeacherId'), trigger: 'change' }
   ],
-  seatNumber: [{ required: true, message: t('schoolBus.car.rules.seatNumber'), trigger: 'change' }],
-  driverId: [{ required: true, message: t('schoolBus.car.rules.driverId'), trigger: 'change' }],
-  status: [{ required: true, message: t('schoolBus.car.rules.status'), trigger: 'change' }]
+  seatNumber: [{ required: true, message: t('schoolBus.car.ruleSeatNumber'), trigger: 'change' }],
+  driverId: [{ required: true, message: t('schoolBus.car.ruleDriverId'), trigger: 'change' }],
+  status: [{ required: true, message: t('schoolBus.car.ruleStatus'), trigger: 'change' }]
 })
 
 export const carDialogFormConfig = (
@@ -172,7 +172,7 @@ export const carDialogFormConfig = (
       ? [
           {
             field: 'schoolIds',
-            label: t('schoolBus.car.fields.school'),
+            label: t('schoolBus.car.fieldSchool'),
             component: 'ElSelect' as const,
             options: schoolOptions,
             colProps: { span: 24 },
@@ -181,31 +181,31 @@ export const carDialogFormConfig = (
               collapseTags: true,
               filterable: true,
               clearable: true,
-              placeholder: t('schoolBus.car.placeholders.school')
+              placeholder: t('schoolBus.car.phSchool')
             }
           }
         ]
       : []),
     {
       field: 'carNumber',
-      label: t('schoolBus.car.fields.carNumber'),
+      label: t('schoolBus.car.fieldCarNumber'),
       component: 'ElInput',
       componentProps: { maxlength: 50, clearable: true }
     },
     {
       field: 'carTeacherId',
-      label: t('schoolBus.car.fields.carTeacher'),
+      label: t('schoolBus.car.fieldCarTeacher'),
       component: 'ElSelect',
       options: teacherOptions,
       componentProps: {
         filterable: true,
         clearable: true,
-        placeholder: t('schoolBus.car.placeholders.carTeacher')
+        placeholder: t('schoolBus.car.phCarTeacher')
       }
     },
     {
       field: 'seatNumber',
-      label: t('schoolBus.car.fields.seatNumber'),
+      label: t('schoolBus.car.fieldSeatNumber'),
       component: 'ElInputNumber',
       componentProps: {
         min: 1,
@@ -218,31 +218,31 @@ export const carDialogFormConfig = (
     },
     {
       field: 'driverId',
-      label: t('schoolBus.car.fields.driver'),
+      label: t('schoolBus.car.fieldDriver'),
       component: 'ElSelect',
       options: driverOptions,
       componentProps: {
         filterable: true,
         clearable: true,
-        placeholder: t('schoolBus.car.placeholders.driver')
+        placeholder: t('schoolBus.car.phDriver')
       }
     },
     {
       field: 'status',
-      label: t('schoolBus.car.fields.status'),
+      label: t('schoolBus.car.fieldStatus'),
       component: 'ElSelect',
       options: statusOptions,
-      componentProps: { placeholder: t('schoolBus.car.placeholders.status') }
+      componentProps: { placeholder: t('schoolBus.car.phStatus') }
     },
     {
       field: 'carImageUrl',
-      label: t('schoolBus.car.fields.carImage'),
+      label: t('schoolBus.car.fieldCarImage'),
       component: 'ElInput',
       colProps: { span: 24 },
       componentProps: {
         type: 'textarea',
         rows: 2,
-        placeholder: t('schoolBus.car.placeholders.imageUrl')
+        placeholder: t('schoolBus.car.phImageUrl')
       }
     }
   ]

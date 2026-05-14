@@ -138,50 +138,50 @@ const dispatchCarUniOptions = computed(() =>
 )
 
 const exceptionTypeUniOptions = computed(() => [
-  { label: t('schoolBus.routeException.exceptionType.behavior'), value: '0' },
-  { label: t('schoolBus.routeException.exceptionType.vehicle'), value: '1' }
+  { label: t('schoolBus.routeException.excTypeBehavior'), value: '0' },
+  { label: t('schoolBus.routeException.excTypeVehicle'), value: '1' }
 ])
 
 const needDispatchUniOptions = computed(() => [
-  { label: t('schoolBus.routeException.options.yes'), value: 1 },
-  { label: t('schoolBus.routeException.options.no'), value: 0 }
+  { label: t('schoolBus.routeException.optYes'), value: 1 },
+  { label: t('schoolBus.routeException.optNo'), value: 0 }
 ])
 
 const dialogRules = computed<FormRules<ExceptionFormModel>>(() => {
   const r: FormRules<ExceptionFormModel> = {
     sectionId: [
-      { required: true, message: t('schoolBus.routeException.pleaseSelect'), trigger: 'change' }
+      { required: true, message: t('schoolBus.pleaseSelect'), trigger: 'change' }
     ],
     lineId: [
-      { required: true, message: t('schoolBus.routeException.pleaseSelect'), trigger: 'change' }
+      { required: true, message: t('schoolBus.pleaseSelect'), trigger: 'change' }
     ],
     carId: [
-      { required: true, message: t('schoolBus.routeException.pleaseSelect'), trigger: 'change' }
+      { required: true, message: t('schoolBus.pleaseSelect'), trigger: 'change' }
     ],
     exceptionDate: [
-      { required: true, message: t('schoolBus.routeException.pleaseSelect'), trigger: 'change' }
+      { required: true, message: t('schoolBus.pleaseSelect'), trigger: 'change' }
     ],
     exceptionType: [
-      { required: true, message: t('schoolBus.routeException.pleaseSelect'), trigger: 'change' }
+      { required: true, message: t('schoolBus.pleaseSelect'), trigger: 'change' }
     ],
     details: [
-      { required: true, message: t('schoolBus.routeException.pleaseSelect'), trigger: 'blur' }
+      { required: true, message: t('schoolBus.pleaseSelect'), trigger: 'blur' }
     ]
   }
 
   if (multiSchool.value) {
     r.school = [
-      { required: true, message: t('schoolBus.driver.rules.schoolIds'), trigger: 'change' }
+      { required: true, message: t('schoolBus.driver.ruleSchoolIds'), trigger: 'change' }
     ]
   }
 
   if (formModel.value.exceptionType === '1') {
     r.needDispatch = [
-      { required: true, message: t('schoolBus.routeException.pleaseSelect'), trigger: 'change' }
+      { required: true, message: t('schoolBus.pleaseSelect'), trigger: 'change' }
     ]
     if (formModel.value.needDispatch === 1) {
       r.dispatchCarId = [
-        { required: true, message: t('schoolBus.routeException.pleaseSelect'), trigger: 'change' }
+        { required: true, message: t('schoolBus.pleaseSelect'), trigger: 'change' }
       ]
     }
   }
@@ -201,7 +201,7 @@ const dialogFormConfig = computed<UniFormConfig>(() => {
     schema: [
       {
         field: 'school',
-        label: t('schoolBus.routeException.form.school'),
+        label: t('schoolBus.routeException.formSchool'),
         component: 'ElSelect',
         options: schoolUniOptions.value,
         hidden: !multiSchool.value,
@@ -213,13 +213,13 @@ const dialogFormConfig = computed<UniFormConfig>(() => {
           collapseTags: true,
           collapseTagsTooltip: true,
           filterable: true,
-          placeholder: t('schoolBus.routeException.pleaseSelect'),
+          placeholder: t('schoolBus.pleaseSelect'),
           style: { width: '100%' }
         }
       },
       {
         field: 'sectionId',
-        label: t('schoolBus.routeException.form.section'),
+        label: t('schoolBus.routeException.formSection'),
         component: 'ElSelect',
         options: sectionUniOptions.value,
         onChange: async (ctx) => {
@@ -227,13 +227,13 @@ const dialogFormConfig = computed<UniFormConfig>(() => {
         },
         componentProps: {
           filterable: true,
-          placeholder: t('schoolBus.routeException.pleaseSelect'),
+          placeholder: t('schoolBus.pleaseSelect'),
           style: { width: '100%' }
         }
       },
       {
         field: 'lineId',
-        label: t('schoolBus.routeException.form.line'),
+        label: t('schoolBus.routeException.formLine'),
         component: 'ElSelect',
         options: lineUniOptions.value,
         onChange: (ctx) => {
@@ -241,13 +241,13 @@ const dialogFormConfig = computed<UniFormConfig>(() => {
         },
         componentProps: {
           filterable: true,
-          placeholder: t('schoolBus.routeException.pleaseSelect'),
+          placeholder: t('schoolBus.pleaseSelect'),
           style: { width: '100%' }
         }
       },
       {
         field: 'carId',
-        label: t('schoolBus.routeException.form.car'),
+        label: t('schoolBus.routeException.formCar'),
         component: 'ElSelect',
         options: carUniOptions.value,
         onChange: (ctx) => {
@@ -255,25 +255,25 @@ const dialogFormConfig = computed<UniFormConfig>(() => {
         },
         componentProps: {
           filterable: true,
-          placeholder: t('schoolBus.routeException.pleaseSelect'),
+          placeholder: t('schoolBus.pleaseSelect'),
           style: { width: '100%' }
         }
       },
       {
         field: 'carTeacher',
-        label: t('schoolBus.routeException.form.teacher'),
+        label: t('schoolBus.routeException.formTeacher'),
         component: 'ElInput',
         componentProps: { disabled: true }
       },
       {
         field: 'driver',
-        label: t('schoolBus.routeException.form.driver'),
+        label: t('schoolBus.routeException.formDriver'),
         component: 'ElInput',
         componentProps: { disabled: true }
       },
       {
         field: 'exceptionDate',
-        label: t('schoolBus.routeException.form.exceptionDate'),
+        label: t('schoolBus.routeException.formExceptionDate'),
         component: 'ElDatePicker',
         componentProps: {
           type: 'datetime',
@@ -284,20 +284,20 @@ const dialogFormConfig = computed<UniFormConfig>(() => {
       },
       {
         field: 'exceptionType',
-        label: t('schoolBus.routeException.form.exceptionType'),
+        label: t('schoolBus.routeException.formExceptionType'),
         component: 'ElSelect',
         options: exceptionTypeUniOptions.value,
         onChange: (ctx) => {
           onExceptionTypeChange(String(ctx.model.exceptionType ?? ''))
         },
         componentProps: {
-          placeholder: t('schoolBus.routeException.pleaseSelect'),
+          placeholder: t('schoolBus.pleaseSelect'),
           style: { width: '100%' }
         }
       },
       {
         field: 'needDispatch',
-        label: t('schoolBus.routeException.form.needDispatch'),
+        label: t('schoolBus.routeException.formNeedDispatch'),
         component: 'ElSelect',
         options: needDispatchUniOptions.value,
         hidden: hideNeedDispatch,
@@ -305,13 +305,13 @@ const dialogFormConfig = computed<UniFormConfig>(() => {
           onNeedDispatchChange(ctx.model.needDispatch as number | undefined)
         },
         componentProps: {
-          placeholder: t('schoolBus.routeException.pleaseSelect'),
+          placeholder: t('schoolBus.pleaseSelect'),
           style: { width: '100%' }
         }
       },
       {
         field: 'dispatchCarId',
-        label: t('schoolBus.routeException.form.dispatchCar'),
+        label: t('schoolBus.routeException.formDispatchCar'),
         component: 'ElSelect',
         options: dispatchCarUniOptions.value,
         hidden: hideDispatch,
@@ -320,20 +320,20 @@ const dialogFormConfig = computed<UniFormConfig>(() => {
         },
         componentProps: {
           filterable: true,
-          placeholder: t('schoolBus.routeException.pleaseSelect'),
+          placeholder: t('schoolBus.pleaseSelect'),
           style: { width: '100%' }
         }
       },
       {
         field: 'dispatchDriver',
-        label: t('schoolBus.routeException.form.dispatchDriver'),
+        label: t('schoolBus.routeException.formDispatchDriver'),
         component: 'ElInput',
         hidden: hideDispatch,
         componentProps: { disabled: true }
       },
       {
         field: 'details',
-        label: t('schoolBus.routeException.form.details'),
+        label: t('schoolBus.routeException.colDetails'),
         component: 'ElInput',
         colProps: { span: 24 },
         formItemProps: { class: 'school-bus-exception-form__full' },

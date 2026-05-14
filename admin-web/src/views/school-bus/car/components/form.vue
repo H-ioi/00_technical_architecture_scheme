@@ -15,9 +15,9 @@
         :config="dialogFormConfig" />
 
       <div v-if="!isLook" class="car-form__upload">
-        <div class="car-form__upload-label">{{ $t('schoolBus.car.fields.carImage') }}</div>
+        <div class="car-form__upload-label">{{ $t('schoolBus.car.fieldCarImage') }}</div>
         <el-upload :show-file-list="false" accept="image/*" :before-upload="beforeUpload">
-          <el-button type="primary">{{ $t('schoolBus.car.actions.pickImage') }}</el-button>
+          <el-button type="primary">{{ $t('schoolBus.car.pickImage') }}</el-button>
         </el-upload>
         <span v-if="formModel.carImageUrl" class="car-form__url">{{ formModel.carImageUrl }}</span>
       </div>
@@ -196,7 +196,7 @@ const beforeUpload = async (file: File) => {
     const url = await protocolApi.upload.post(file)
     formModel.value.carImageUrl = url
   } catch {
-    ElMessage.error(t('schoolBus.car.messages.uploadFail'))
+    ElMessage.error(t('schoolBus.car.msgUploadFail'))
   }
   return false
 }

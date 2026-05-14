@@ -2,34 +2,34 @@
   <section class="uni-list-page">
     <div class="uni-list-page__header">
       <div>
-        <h1>{{ $t('schoolBus.routePlan.page.title') }}</h1>
-        <p>{{ $t('schoolBus.routePlan.page.description') }}</p>
+        <h1>{{ $t('schoolBus.routePlan.pageTitle') }}</h1>
+        <p>{{ $t('schoolBus.routePlan.pageDesc') }}</p>
       </div>
       <div v-if="activeTab === 'routes'" class="uni-list-page__header-actions">
         <el-button v-uni-permission="'busline_import'" @click="downloadRouteTemplate">
-          {{ $t('schoolBus.routePlan.actions.downloadRouteTemplate') }}
+          {{ $t('schoolBus.routePlan.downloadRouteTemplate') }}
         </el-button>
         <el-button v-uni-permission="'busline_import'" @click="pickRouteImport">
-          {{ $t('schoolBus.routePlan.actions.importRoute') }}
+          {{ $t('schoolBus.routePlan.importRoute') }}
         </el-button>
         <el-button v-uni-permission="'busline_add'" type="primary" @click="openRouteForm">
-          {{ $t('schoolBus.routePlan.actions.addRoute') }}
+          {{ $t('schoolBus.routePlan.addRoute') }}
         </el-button>
       </div>
       <div v-else-if="activeTab === 'term'" class="uni-list-page__header-actions">
         <el-button v-uni-permission="'bussection_add'" type="primary" @click="openTermAdd">
-          {{ $t('schoolBus.routePlan.actions.addTerm') }}
+          {{ $t('schoolBus.routePlan.addTerm') }}
         </el-button>
       </div>
       <div v-else-if="activeTab === 'station'" class="uni-list-page__header-actions">
         <el-button v-uni-permission="'busstation_import'" @click="downloadStationTemplate">
-          {{ $t('schoolBus.routePlan.actions.downloadStationTemplate') }}
+          {{ $t('schoolBus.routePlan.downloadStationTemplate') }}
         </el-button>
         <el-button v-uni-permission="'busstation_import'" @click="pickStationImport">
-          {{ $t('schoolBus.routePlan.actions.importStation') }}
+          {{ $t('schoolBus.routePlan.importStation') }}
         </el-button>
         <el-button v-uni-permission="'busstation_add'" type="primary" @click="openStationAdd">
-          {{ $t('schoolBus.routePlan.actions.addStation') }}
+          {{ $t('schoolBus.routePlan.addStation') }}
         </el-button>
       </div>
     </div>
@@ -48,7 +48,7 @@
       @change="onStationImportFile" />
 
     <el-tabs v-model="activeTab" class="school-bus-route-plan__tabs">
-      <el-tab-pane :label="$t('schoolBus.routePlan.tabs.routes')" name="routes">
+      <el-tab-pane :label="$t('schoolBus.routePlan.tabRoutes')" name="routes">
         <UniSearchForm
           v-model="routeQueryModel"
           :config="routeSearchConfig"
@@ -77,7 +77,7 @@
               v-uni-permission="ROUTE_LINE_COPY_PERMISSIONS"
               :disabled="routeSelectedIds.length === 0"
               @click="copySelected">
-              {{ $t('schoolBus.routePlan.actions.copyRoute') }}
+              {{ $t('schoolBus.routePlan.copyRoute') }}
             </el-button>
             <el-button
               v-uni-permission="'busline_del'"
@@ -89,7 +89,7 @@
           </template>
         </UniDataTable>
       </el-tab-pane>
-      <el-tab-pane :label="$t('schoolBus.routePlan.tabs.term')" name="term">
+      <el-tab-pane :label="$t('schoolBus.routePlan.tabTerm')" name="term">
         <UniSearchForm
           v-model="termQueryModel"
           :config="termSearchConfig"
@@ -124,7 +124,7 @@
           </template>
         </UniDataTable>
       </el-tab-pane>
-      <el-tab-pane :label="$t('schoolBus.routePlan.tabs.station')" name="station">
+      <el-tab-pane :label="$t('schoolBus.routePlan.tabStation')" name="station">
         <UniSearchForm
           v-model="stationQueryModel"
           :config="stationSearchConfig"

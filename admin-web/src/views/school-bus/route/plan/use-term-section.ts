@@ -106,7 +106,7 @@ export const useTermSection = (schoolRecords: SchoolRecordsRef) => {
             component: 'ElSelect' as const,
             options: schoolOptions.value,
             componentProps: {
-              placeholder: t('schoolBus.routeOperation.placeholders.school'),
+              placeholder: t('schoolBus.routeOperation.phSchool'),
               clearable: true,
               filterable: true,
               multiple: true,
@@ -126,7 +126,7 @@ export const useTermSection = (schoolRecords: SchoolRecordsRef) => {
           label: '',
           component: 'ElInput',
           componentProps: {
-            placeholder: t('schoolBus.routePlan.placeholders.termKeyword'),
+            placeholder: t('schoolBus.routePlan.phTermKeyword'),
             clearable: true
           },
           colProps: { span: 6 }
@@ -164,7 +164,7 @@ export const useTermSection = (schoolRecords: SchoolRecordsRef) => {
     { prop: 'id', label: 'ID', width: 88, fixed: 'left' },
     {
       prop: 'schoolIds',
-      label: t('schoolBus.driver.fields.school'),
+      label: t('schoolBus.driver.fieldSchool'),
       type: 'array',
       options: schoolOptions.value,
       lookup: { splitValues: true },
@@ -173,14 +173,14 @@ export const useTermSection = (schoolRecords: SchoolRecordsRef) => {
     },
     {
       prop: 'showTermName',
-      label: t('schoolBus.routeOperation.columns.sectionName'),
+      label: t('schoolBus.routeOperation.colSectionName'),
       minWidth: 140
     },
-    { prop: 'intentStartDate', label: t('schoolBus.routePlan.term.intentStart'), width: 140 },
-    { prop: 'intentEndDate', label: t('schoolBus.routePlan.term.intentEnd'), width: 140 },
-    { prop: 'serviceStartDate', label: t('schoolBus.routePlan.term.serviceStart'), width: 140 },
-    { prop: 'serviceEndDate', label: t('schoolBus.routePlan.term.serviceEnd'), width: 140 },
-    { prop: 'createTime', label: t('schoolBus.routeOperation.columns.createTime'), width: 160 }
+    { prop: 'intentStartDate', label: t('schoolBus.routePlan.termIntentStart'), width: 140 },
+    { prop: 'intentEndDate', label: t('schoolBus.routePlan.termIntentEnd'), width: 140 },
+    { prop: 'serviceStartDate', label: t('schoolBus.routePlan.termServiceStart'), width: 140 },
+    { prop: 'serviceEndDate', label: t('schoolBus.routePlan.termServiceEnd'), width: 140 },
+    { prop: 'createTime', label: t('schoolBus.routeOperation.colCreateTime'), width: 160 }
   ])
 
   const loadTerms: UniTableRequest = async ({ pageNo, pageSize, filters: f }) => {
@@ -240,13 +240,13 @@ export const useTermSection = (schoolRecords: SchoolRecordsRef) => {
     const ids = selectedIds.value
 
     if (ids.length === 0) {
-      ElMessage.warning(t('schoolBus.routePlan.messages.selectTermsFirst'))
+      ElMessage.warning(t('schoolBus.routePlan.msgSelectTermsFirst'))
       return
     }
 
     try {
       await ElMessageBox.confirm(
-        t('schoolBus.routePlan.messages.confirmDeleteTerms'),
+        t('schoolBus.routePlan.msgConfirmDeleteTerms'),
         t('schoolBus.delete'),
         { type: 'warning' }
       )

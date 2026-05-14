@@ -2,8 +2,8 @@
   <section class="uni-list-page">
     <div class="uni-list-page__header">
       <div>
-        <h1>{{ $t('schoolBus.studentOrder.page.title') }}</h1>
-        <p>{{ $t('schoolBus.studentOrder.page.description') }}</p>
+        <h1>{{ $t('schoolBus.studentOrder.pageTitle') }}</h1>
+        <p>{{ $t('schoolBus.studentOrder.pageDesc') }}</p>
       </div>
       <div class="uni-list-page__header-actions">
         <el-button v-uni-permission="'busorder_export_order'" @click="exportData">
@@ -172,7 +172,7 @@ const exportData = async () => {
   try {
     const blob = await schoolBusOrderApi.exportOrder.get(raw)
     downloadBlob(blob, 'bus-order-export.xlsx')
-    ElMessage.success(t('schoolBus.studentOrder.messages.exportSuccess'))
+    ElMessage.success(t('schoolBus.exportSuccess'))
   } catch {
     /* request 层已提示 */
   }
@@ -184,7 +184,7 @@ const del = async () => {
   }
   try {
     await ElMessageBox.confirm(
-      t('schoolBus.studentOrder.messages.confirmDelete'),
+      t('schoolBus.confirmDeleteRows'),
       t('schoolBus.delete'),
       { type: 'warning' }
     )
@@ -193,7 +193,7 @@ const del = async () => {
   }
   try {
     await schoolBusOrderApi.delOrder.delete(selectionIds.value)
-    ElMessage.success(t('schoolBus.studentApply.messages.success'))
+    ElMessage.success(t('schoolBus.operationSuccess'))
     selection.value = []
     reload()
   } catch {

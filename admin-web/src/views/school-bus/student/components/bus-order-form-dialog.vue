@@ -26,7 +26,7 @@
               :debounce="300"
               clearable
               value-key="value"
-              :placeholder="$t('schoolBus.studentApply.placeholders.keyword')"
+              :placeholder="$t('schoolBus.studentApply.phKeyword')"
               :disabled="mainDisabled"
               @select="onStudentPick">
               <template #default="{ item }">
@@ -37,46 +37,46 @@
           <template #field-routeTableSlot>
             <div class="bus-order-form__block">
               <div class="bus-order-form__block-head">
-                <span>{{ $t('schoolBus.studentOrder.form.routes') }}</span>
+                <span>{{ $t('schoolBus.studentOrder.formRoutes') }}</span>
                 <el-button
                   v-if="!mainDisabled && routeTableData.length < 2"
                   type="primary"
                   link
                   @click="openRouteAdd">
-                  {{ $t('schoolBus.studentOrder.form.addRoute') }}
+                  {{ $t('schoolBus.studentOrder.formAddRoute') }}
                 </el-button>
               </div>
               <el-table :data="routeTableData" border size="small">
                 <el-table-column
                   prop="lineName"
-                  :label="$t('schoolBus.studentApply.detail.routeLine')"
+                  :label="$t('schoolBus.studentApply.detailRouteLine')"
                   min-width="100" />
                 <el-table-column
                   prop="stationName"
-                  :label="$t('schoolBus.studentApply.detail.routeStation')"
+                  :label="$t('schoolBus.studentApply.detailRouteStation')"
                   min-width="100" />
                 <el-table-column
                   prop="lineTypeName"
-                  :label="$t('schoolBus.studentApply.detail.lineType')"
+                  :label="$t('schoolBus.studentApply.detailLineType')"
                   width="120" />
                 <el-table-column
                   prop="weekDaysLabel"
-                  :label="$t('schoolBus.studentOrder.form.dateOption')"
+                  :label="$t('schoolBus.studentOrder.formDateOption')"
                   width="100" />
                 <el-table-column
                   prop="ridingWeekDay"
-                  :label="$t('schoolBus.studentApply.detail.ridingWeekDay')"
+                  :label="$t('schoolBus.studentApply.detailRidingWeekDay')"
                   min-width="100" />
                 <el-table-column
                   prop="ridingRange"
-                  :label="$t('schoolBus.studentOrder.form.rideRange')"
+                  :label="$t('schoolBus.studentOrder.formRideRange')"
                   width="200" />
                 <el-table-column
                   prop="carNumber"
-                  :label="$t('schoolBus.studentOrder.form.plate')"
+                  :label="$t('schoolBus.studentOrder.formPlate')"
                   width="100" />
                 <el-table-column
-                  :label="$t('schoolBus.studentOrder.form.ops')"
+                  :label="$t('schoolBus.studentOrder.formOps')"
                   width="140"
                   fixed="right">
                   <template #default="{ row, $index }">
@@ -95,20 +95,20 @@
           <template #field-personTableSlot>
             <div class="bus-order-form__block">
               <div class="bus-order-form__block-head">
-                <span>{{ $t('schoolBus.studentApply.detail.personTitle') }}</span>
+                <span>{{ $t('schoolBus.studentApply.detailPersonTitle') }}</span>
                 <el-button type="primary" link @click="openPersonAdd">
-                  {{ $t('schoolBus.studentOrder.form.addPerson') }}
+                  {{ $t('schoolBus.studentOrder.formAddPerson') }}
                 </el-button>
               </div>
               <el-table :data="personTableData" border size="small">
                 <el-table-column
                   prop="pickupRelationships"
-                  :label="$t('schoolBus.studentApply.detail.relation')" />
+                  :label="$t('schoolBus.studentApply.detailRelation')" />
                 <el-table-column
                   prop="pickupPhone"
-                  :label="$t('schoolBus.studentApply.detail.phone')"
+                  :label="$t('schoolBus.studentApply.detailPhone')"
                   width="140" />
-                <el-table-column :label="$t('schoolBus.studentApply.detail.photo')" min-width="120">
+                <el-table-column :label="$t('schoolBus.studentApply.detailPhoto')" min-width="120">
                   <template #default="{ row }">
                     <el-image
                       v-if="row.pickupImageUrl"
@@ -118,7 +118,7 @@
                   </template>
                 </el-table-column>
                 <el-table-column
-                  :label="$t('schoolBus.studentOrder.form.ops')"
+                  :label="$t('schoolBus.studentOrder.formOps')"
                   width="140"
                   fixed="right">
                   <template #default="{ row, $index }">
@@ -198,7 +198,7 @@
             <div class="bus-order-form__sign-block">
               <div class="bus-order-form__upload-row">
                 <el-button :disabled="mainDisabled" @click="triggerSignPick">
-                  {{ $t('schoolBus.car.actions.pickImage') }}
+                  {{ $t('schoolBus.car.pickImage') }}
                 </el-button>
               </div>
               <el-image
@@ -222,7 +222,7 @@
               <el-col :span="8">
                 <div class="bus-order-form__nested-field">
                   <div class="bus-order-form__nested-label">
-                    {{ $t('schoolBus.studentApply.detail.paymentMethod') }}
+                    {{ $t('schoolBus.studentApply.detailPaymentMethod') }}
                   </div>
                   <el-select
                     v-model="ruleForm.paymentMethod"
@@ -239,7 +239,7 @@
               <el-col :span="8">
                 <div class="bus-order-form__nested-field">
                   <div class="bus-order-form__nested-label">
-                    {{ $t('schoolBus.studentApply.detail.paymentDate') }}
+                    {{ $t('schoolBus.studentApply.detailPaymentDate') }}
                   </div>
                   <el-date-picker
                     v-model="ruleForm.paymentDate"
@@ -253,7 +253,7 @@
               <el-col :span="8">
                 <div class="bus-order-form__nested-field">
                   <div class="bus-order-form__nested-label">
-                    {{ $t('schoolBus.studentApply.detail.paymentAccount') }}
+                    {{ $t('schoolBus.studentApply.detailPaymentAccount') }}
                   </div>
                   <el-input
                     v-model="ruleForm.paymentAccount"
@@ -265,7 +265,7 @@
               <el-col :span="8">
                 <div class="bus-order-form__nested-field">
                   <div class="bus-order-form__nested-label">
-                    {{ $t('schoolBus.studentApply.detail.paymentOrderNo') }}
+                    {{ $t('schoolBus.studentApply.detailPaymentOrderNo') }}
                   </div>
                   <el-input
                     v-model="ruleForm.paymentOrderNo"
@@ -275,7 +275,7 @@
               <el-col :span="8">
                 <div class="bus-order-form__nested-field">
                   <div class="bus-order-form__nested-label">
-                    {{ $t('schoolBus.studentApply.detail.receivingAccount') }}
+                    {{ $t('schoolBus.studentApply.detailReceivingAccount') }}
                   </div>
                   <el-input
                     v-model="ruleForm.receivingAccount"
@@ -353,7 +353,7 @@
         <template #field-pickupImageUrl>
           <div class="bus-order-form__upload-row">
             <el-button @click="triggerPersonPick">
-              {{ $t('schoolBus.car.actions.pickImage') }}
+              {{ $t('schoolBus.car.pickImage') }}
             </el-button>
             <span v-if="personForm.pickupImageUrl" class="bus-order-form__url">{{
               personForm.pickupImageUrl
@@ -536,42 +536,42 @@ const paymentRulesRequired = ref(false)
 
 const mainRules = computed<FormRules>(() => ({
   schoolId: [
-    { required: true, message: t('schoolBus.studentOrder.form.ruleSelect'), trigger: 'change' }
+    { required: true, message: t('schoolBus.studentOrder.formRuleSelect'), trigger: 'change' }
   ],
   sectionId: [
-    { required: true, message: t('schoolBus.studentOrder.form.ruleSelect'), trigger: 'change' }
+    { required: true, message: t('schoolBus.studentOrder.formRuleSelect'), trigger: 'change' }
   ],
   admissionNo: [
-    { required: true, message: t('schoolBus.studentOrder.form.ruleInput'), trigger: 'blur' }
+    { required: true, message: t('schoolBus.studentOrder.formRuleInput'), trigger: 'blur' }
   ],
   pickupMethod: [
-    { required: true, message: t('schoolBus.studentOrder.form.ruleSelect'), trigger: 'change' }
+    { required: true, message: t('schoolBus.studentOrder.formRuleSelect'), trigger: 'change' }
   ],
   denyReason: [
     {
       required: String(ruleForm.value.approvalStatus ?? '') === '2',
-      message: t('schoolBus.studentOrder.form.ruleInput'),
+      message: t('schoolBus.studentOrder.formRuleInput'),
       trigger: 'blur'
     }
   ],
   paymentMethod: [
     {
       required: paymentRulesRequired.value,
-      message: t('schoolBus.studentOrder.form.ruleSelect'),
+      message: t('schoolBus.studentOrder.formRuleSelect'),
       trigger: 'change'
     }
   ],
   paymentDate: [
     {
       required: paymentRulesRequired.value,
-      message: t('schoolBus.studentOrder.form.ruleSelect'),
+      message: t('schoolBus.studentOrder.formRuleSelect'),
       trigger: 'change'
     }
   ],
   paymentAmount: [
     {
       required: paymentRulesRequired.value,
-      message: t('schoolBus.studentOrder.form.ruleInput'),
+      message: t('schoolBus.studentOrder.formRuleInput'),
       trigger: 'blur'
     }
   ]
@@ -579,13 +579,13 @@ const mainRules = computed<FormRules>(() => ({
 
 const routeRules = computed<FormRules>(() => ({
   lineId: [
-    { required: true, message: t('schoolBus.studentOrder.form.ruleSelect'), trigger: 'change' }
+    { required: true, message: t('schoolBus.studentOrder.formRuleSelect'), trigger: 'change' }
   ],
   studentLineType: [
-    { required: true, message: t('schoolBus.studentOrder.form.ruleSelect'), trigger: 'change' }
+    { required: true, message: t('schoolBus.studentOrder.formRuleSelect'), trigger: 'change' }
   ],
   weekDaysId: [
-    { required: true, message: t('schoolBus.studentOrder.form.ruleSelect'), trigger: 'change' }
+    { required: true, message: t('schoolBus.studentOrder.formRuleSelect'), trigger: 'change' }
   ],
   ridingWeekDay: [
     {
@@ -595,29 +595,29 @@ const routeRules = computed<FormRules>(() => ({
         if (ok) {
           cb()
         } else {
-          cb(new Error(t('schoolBus.studentOrder.form.ruleSelect')))
+          cb(new Error(t('schoolBus.studentOrder.formRuleSelect')))
         }
       },
       trigger: 'change'
     }
   ],
   stationPriceId: [
-    { required: true, message: t('schoolBus.studentOrder.form.ruleSelect'), trigger: 'change' }
+    { required: true, message: t('schoolBus.studentOrder.formRuleSelect'), trigger: 'change' }
   ],
   ridingDay: [
-    { required: true, message: t('schoolBus.studentOrder.form.ruleSelect'), trigger: 'change' }
+    { required: true, message: t('schoolBus.studentOrder.formRuleSelect'), trigger: 'change' }
   ]
 }))
 
 const personRules = computed<FormRules>(() => ({
   pickupRelationships: [
-    { required: true, message: t('schoolBus.studentOrder.form.ruleInput'), trigger: 'blur' }
+    { required: true, message: t('schoolBus.studentOrder.formRuleInput'), trigger: 'blur' }
   ],
   pickupPhone: [
-    { required: true, message: t('schoolBus.studentOrder.form.ruleInput'), trigger: 'blur' }
+    { required: true, message: t('schoolBus.studentOrder.formRuleInput'), trigger: 'blur' }
   ],
   pickupImageUrl: [
-    { required: true, message: t('schoolBus.studentOrder.form.ruleUpload'), trigger: 'change' }
+    { required: true, message: t('schoolBus.studentOrder.formRuleUpload'), trigger: 'change' }
   ]
 }))
 
@@ -1019,7 +1019,7 @@ const openRouteEdit = async (row: RouteRow, index: number) => {
 const removeRoute = async (index: number) => {
   try {
     await ElMessageBox.confirm(
-      t('schoolBus.studentOrder.messages.confirmDelete'),
+      t('schoolBus.confirmDeleteRows'),
       t('schoolBus.delete'),
       { type: 'warning' }
     )
@@ -1141,7 +1141,7 @@ const routeDialogFormConfig = computed<UniFormConfig>(() => ({
   schema: [
     {
       field: 'lineId',
-      label: t('schoolBus.studentApply.detail.routeLine'),
+      label: t('schoolBus.studentApply.detailRouteLine'),
       component: 'ElSelect',
       options: lineSelectOptions.value,
       onChange: async (ctx) => {
@@ -1151,7 +1151,7 @@ const routeDialogFormConfig = computed<UniFormConfig>(() => ({
     },
     {
       field: 'studentLineType',
-      label: t('schoolBus.studentApply.detail.lineType'),
+      label: t('schoolBus.studentApply.detailLineType'),
       component: 'ElSelect',
       options: lineTypeOpts.value,
       onChange: () => {
@@ -1161,7 +1161,7 @@ const routeDialogFormConfig = computed<UniFormConfig>(() => ({
     },
     {
       field: 'carinfoId',
-      label: t('schoolBus.studentOrder.form.plate'),
+      label: t('schoolBus.studentOrder.formPlate'),
       component: 'ElSelect',
       options: routeCarSelectOptions.value,
       onChange: (ctx) => {
@@ -1171,7 +1171,7 @@ const routeDialogFormConfig = computed<UniFormConfig>(() => ({
     },
     {
       field: 'weekDaysId',
-      label: t('schoolBus.studentOrder.form.dateOption'),
+      label: t('schoolBus.studentOrder.formDateOption'),
       component: 'ElSelect',
       options: weekSelectOptions.value,
       onChange: (ctx) => {
@@ -1181,19 +1181,19 @@ const routeDialogFormConfig = computed<UniFormConfig>(() => ({
     },
     {
       field: 'ridingWeekDay',
-      label: t('schoolBus.studentApply.detail.ridingWeekDay'),
+      label: t('schoolBus.studentApply.detailRidingWeekDay'),
       component: 'ElInput',
       formItemProps: { class: 'bus-order-form__route-slot' }
     },
     {
       field: 'ridingDay',
-      label: t('schoolBus.studentOrder.form.rideRange'),
+      label: t('schoolBus.studentOrder.formRideRange'),
       component: 'ElInput',
       formItemProps: { class: 'bus-order-form__route-slot' }
     },
     {
       field: 'stationPriceId',
-      label: t('schoolBus.studentApply.detail.routeStation'),
+      label: t('schoolBus.studentApply.detailRouteStation'),
       component: 'ElSelect',
       options: stationPriceSelectOptions.value,
       onChange: (ctx) => {
@@ -1212,19 +1212,19 @@ const personDialogFormConfig = computed<UniFormConfig>(() => ({
   schema: [
     {
       field: 'pickupRelationships',
-      label: t('schoolBus.studentApply.detail.relation'),
+      label: t('schoolBus.studentApply.detailRelation'),
       component: 'ElInput',
       componentProps: { maxlength: 50 }
     },
     {
       field: 'pickupPhone',
-      label: t('schoolBus.studentApply.detail.phone'),
+      label: t('schoolBus.studentApply.detailPhone'),
       component: 'ElInput',
       componentProps: { maxlength: 50 }
     },
     {
       field: 'pickupImageUrl',
-      label: t('schoolBus.studentApply.detail.photo'),
+      label: t('schoolBus.studentApply.detailPhoto'),
       component: 'ElInput',
       formItemProps: { class: 'bus-order-form__route-slot' }
     }
@@ -1283,7 +1283,7 @@ const openPersonEdit = (row: PersonRow, index: number) => {
 const removePerson = async (index: number) => {
   try {
     await ElMessageBox.confirm(
-      t('schoolBus.studentOrder.messages.confirmDelete'),
+      t('schoolBus.confirmDeleteRows'),
       t('schoolBus.delete'),
       { type: 'warning' }
     )
@@ -1325,7 +1325,7 @@ const onSignFile = async (e: Event) => {
   try {
     ruleForm.value.signImageUrl = await protocolApi.upload.post(file)
   } catch {
-    ElMessage.error(t('schoolBus.car.messages.uploadFail'))
+    ElMessage.error(t('schoolBus.car.msgUploadFail'))
   }
 }
 
@@ -1346,7 +1346,7 @@ const onPersonFile = async (e: Event) => {
       void exposed?.validateField?.('pickupImageUrl')?.catch(() => undefined)
     })
   } catch {
-    ElMessage.error(t('schoolBus.car.messages.uploadFail'))
+    ElMessage.error(t('schoolBus.car.msgUploadFail'))
   }
 }
 
@@ -1383,7 +1383,7 @@ const mainFormConfig = computed<UniFormConfig>(() => {
     schema: [
       {
         field: 'schoolId',
-        label: t('schoolBus.studentOrder.form.school'),
+        label: t('schoolBus.studentOrder.formSchool'),
         component: 'ElSelect',
         options: props.schoolOptions,
         onChange: async (ctx) => {
@@ -1392,13 +1392,13 @@ const mainFormConfig = computed<UniFormConfig>(() => {
         componentProps: {
           filterable: true,
           clearable: true,
-          placeholder: t('schoolBus.studentApply.placeholders.school'),
+          placeholder: t('schoolBus.studentApply.phSchool'),
           style: { width: '100%' }
         }
       },
       {
         field: 'sectionId',
-        label: t('schoolBus.studentOrder.form.section'),
+        label: t('schoolBus.studentOrder.formSection'),
         component: 'ElSelect',
         options: sectionUniOptions.value,
         onChange: async (ctx) => {
@@ -1407,31 +1407,31 @@ const mainFormConfig = computed<UniFormConfig>(() => {
         componentProps: {
           filterable: true,
           clearable: true,
-          placeholder: t('schoolBus.studentApply.placeholders.section'),
+          placeholder: t('schoolBus.studentApply.phSection'),
           style: { width: '100%' }
         }
       },
       {
         field: 'admissionNo',
-        label: t('schoolBus.studentOrder.form.admissionNo'),
+        label: t('schoolBus.studentOrder.formAdmissionNo'),
         component: 'ElInput',
         formItemProps: { class: 'bus-order-form__main-field-slot' }
       },
       {
         field: 'studentName',
-        label: t('schoolBus.studentOrder.form.studentName'),
+        label: t('schoolBus.studentOrder.formStudentName'),
         component: 'ElInput',
         componentProps: { disabled: true }
       },
       {
         field: 'studentGrade',
-        label: t('schoolBus.studentOrder.form.grade'),
+        label: t('schoolBus.studentOrder.formGrade'),
         component: 'ElInput',
         componentProps: { disabled: true }
       },
       {
         field: 'amountDue',
-        label: t('schoolBus.studentOrder.form.amountDue'),
+        label: t('schoolBus.studentOrder.formAmountDue'),
         component: 'ElInputNumber',
         componentProps: {
           min: 0,
@@ -1442,11 +1442,11 @@ const mainFormConfig = computed<UniFormConfig>(() => {
       },
       {
         field: 'pickupMethod',
-        label: t('schoolBus.studentOrder.form.pickupMethod'),
+        label: t('schoolBus.studentOrder.formPickupMethod'),
         component: 'ElSelect',
         options: pickupOpts.value,
         componentProps: {
-          placeholder: t('schoolBus.studentOrder.form.selectPlaceholder'),
+          placeholder: t('schoolBus.studentOrder.formSelectPlaceholder'),
           style: { width: '100%' }
         }
       },
@@ -1471,14 +1471,14 @@ const mainFormConfig = computed<UniFormConfig>(() => {
       },
       {
         field: 'approvalStatusSlot',
-        label: t('schoolBus.studentOrder.form.approvalStatus'),
+        label: t('schoolBus.studentOrder.formApprovalStatus'),
         component: 'ElInput',
         colProps: { span: 24 },
         formItemProps: { class: 'bus-order-form__main-field-slot' }
       },
       {
         field: 'denyReason',
-        label: t('schoolBus.studentApply.detail.denyReason'),
+        label: t('schoolBus.studentApply.detailDenyReason'),
         component: 'ElInput',
         hidden: hideDeny,
         colProps: { span: 24 },
@@ -1491,7 +1491,7 @@ const mainFormConfig = computed<UniFormConfig>(() => {
       },
       {
         field: 'paymentStatusSlot',
-        label: t('schoolBus.studentOrder.form.paymentStatus'),
+        label: t('schoolBus.studentOrder.formPaymentStatus'),
         component: 'ElInput',
         hidden: !showPaymentRadios,
         colProps: { span: 24 },
@@ -1499,7 +1499,7 @@ const mainFormConfig = computed<UniFormConfig>(() => {
       },
       {
         field: 'signImageUrl',
-        label: t('schoolBus.studentOrder.form.signImage'),
+        label: t('schoolBus.studentOrder.formSignImage'),
         component: 'ElInput',
         colProps: { span: 24 },
         formItemProps: { class: 'bus-order-form__main-field-slot' }
@@ -1569,11 +1569,11 @@ const submit = async () => {
     return
   }
   if (routeTableData.value.length === 0) {
-    ElMessage.error(t('schoolBus.studentOrder.form.routeRequired'))
+    ElMessage.error(t('schoolBus.studentOrder.formRouteRequired'))
     return
   }
   if (String(ruleForm.value.pickupMethod) === '2' && personTableData.value.length === 0) {
-    ElMessage.error(t('schoolBus.studentOrder.form.personRequired'))
+    ElMessage.error(t('schoolBus.studentOrder.formPersonRequired'))
     return
   }
   const data = buildPayload()
@@ -1584,7 +1584,7 @@ const submit = async () => {
     } else {
       await schoolBusOrderApi.edit.post(data)
     }
-    ElMessage.success(t('schoolBus.studentApply.messages.success'))
+    ElMessage.success(t('schoolBus.operationSuccess'))
     emit('saved')
     close()
   } catch {

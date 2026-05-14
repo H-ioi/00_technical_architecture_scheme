@@ -175,8 +175,8 @@ export const useRouteLines = (
   )
 
   const visibleFilterOptions = computed(() => [
-    { value: true, label: t('schoolBus.routePlan.visible.yes') },
-    { value: false, label: t('schoolBus.routePlan.visible.no') }
+    { value: true, label: t('schoolBus.routePlan.visibleYes') },
+    { value: false, label: t('schoolBus.routePlan.visibleNo') }
   ])
 
   const searchCfg = computed<UniFormConfig>(() => {
@@ -188,7 +188,7 @@ export const useRouteLines = (
             component: 'ElSelect' as const,
             options: schoolOptions.value,
             componentProps: {
-              placeholder: t('schoolBus.routeOperation.placeholders.school'),
+              placeholder: t('schoolBus.routeOperation.phSchool'),
               clearable: true,
               filterable: true,
               multiple: true,
@@ -209,7 +209,7 @@ export const useRouteLines = (
           component: 'ElSelect',
           options: sectionOptions.value,
           componentProps: {
-            placeholder: t('schoolBus.routePlan.placeholders.section'),
+            placeholder: t('schoolBus.routePlan.phSection'),
             clearable: true,
             filterable: true
           },
@@ -221,7 +221,7 @@ export const useRouteLines = (
           component: 'ElSelect',
           options: stationOptions.value,
           componentProps: {
-            placeholder: t('schoolBus.routePlan.placeholders.station'),
+            placeholder: t('schoolBus.routePlan.phStation'),
             clearable: true,
             filterable: true
           },
@@ -233,7 +233,7 @@ export const useRouteLines = (
           component: 'ElSelect',
           options: visibleFilterOptions.value,
           componentProps: {
-            placeholder: t('schoolBus.routeOperation.placeholders.status'),
+            placeholder: t('schoolBus.routeOperation.phStatus'),
             clearable: true
           },
           colProps: { span: 6 }
@@ -243,7 +243,7 @@ export const useRouteLines = (
           label: '',
           component: 'ElInput',
           componentProps: {
-            placeholder: t('schoolBus.routePlan.placeholders.lineName'),
+            placeholder: t('schoolBus.routePlan.phLineName'),
             clearable: true
           },
           colProps: { span: 6 }
@@ -253,7 +253,7 @@ export const useRouteLines = (
           label: '',
           component: 'ElInput',
           componentProps: {
-            placeholder: t('schoolBus.routePlan.placeholders.carNumber'),
+            placeholder: t('schoolBus.routePlan.phCarNumber'),
             clearable: true
           },
           colProps: { span: 6 }
@@ -271,12 +271,12 @@ export const useRouteLines = (
     row.showSectionName = loc === 'en' ? row.sectionEnName : row.sectionCnName
     row.lineTypeName =
       String(row.lineType) === '1'
-        ? t('schoolBus.routePlan.routeType.daily')
-        : t('schoolBus.routePlan.routeType.weekly')
+        ? t('schoolBus.routePlan.routeTypeDaily')
+        : t('schoolBus.routePlan.routeTypeWeekly')
     row.visibleLabel =
       row.visible === true || row.visible === 'true' || row.visible === 1
-        ? t('schoolBus.routePlan.visible.yes')
-        : t('schoolBus.routePlan.visible.no')
+        ? t('schoolBus.routePlan.visibleYes')
+        : t('schoolBus.routePlan.visibleNo')
     row.createTime = row.createTime
       ? dayjs(String(row.createTime)).format('YYYY-MM-DD HH:mm')
       : '--'
@@ -291,23 +291,23 @@ export const useRouteLines = (
     { prop: 'id', label: 'ID', width: 88, fixed: 'left' },
     {
       prop: 'schoolIds',
-      label: t('schoolBus.driver.fields.school'),
+      label: t('schoolBus.driver.fieldSchool'),
       type: 'array',
       options: schoolOptions.value,
       lookup: { splitValues: true },
       minWidth: 200,
       showOverflowTooltip: true
     },
-    { prop: 'showLineName', label: t('schoolBus.routeOperation.columns.lineName'), minWidth: 120 },
-    { prop: 'lineTypeName', label: t('schoolBus.routeOperation.form.timeType'), width: 120 },
+    { prop: 'showLineName', label: t('schoolBus.routeOperation.colLineName'), minWidth: 120 },
+    { prop: 'lineTypeName', label: t('schoolBus.routeOperation.formTimeType'), width: 120 },
     {
       prop: 'showSectionName',
-      label: t('schoolBus.routeOperation.columns.sectionName'),
+      label: t('schoolBus.routeOperation.colSectionName'),
       minWidth: 100
     },
-    { prop: 'visibleLabel', label: t('schoolBus.routeOperation.columns.status'), width: 96 },
-    { prop: 'createTime', label: t('schoolBus.routeOperation.columns.createTime'), width: 160 },
-    { prop: 'updateTime', label: t('schoolBus.routeOperation.columns.updateTime'), width: 160 }
+    { prop: 'visibleLabel', label: t('schoolBus.routeOperation.colStatus'), width: 96 },
+    { prop: 'createTime', label: t('schoolBus.routeOperation.colCreateTime'), width: 160 },
+    { prop: 'updateTime', label: t('schoolBus.routeOperation.colUpdateTime'), width: 160 }
   ])
 
   const loadRoutes: UniTableRequest = async ({ pageNo, pageSize, filters: f }) => {
@@ -361,13 +361,13 @@ export const useRouteLines = (
     const ids = selectedIds.value
 
     if (ids.length === 0) {
-      ElMessage.warning(t('schoolBus.routePlan.messages.selectRowsFirst'))
+      ElMessage.warning(t('schoolBus.routePlan.msgSelectRowsFirst'))
       return
     }
 
     try {
       await schoolBusLineApi.batchCopy.get({ ids } as Record<string, unknown>)
-      ElMessage.success(t('schoolBus.routePlan.messages.copySuccess'))
+      ElMessage.success(t('schoolBus.routePlan.msgCopySuccess'))
       tableRef.value?.refresh()
       selection.value = []
     } catch {
@@ -379,13 +379,13 @@ export const useRouteLines = (
     const ids = selectedIds.value
 
     if (ids.length === 0) {
-      ElMessage.warning(t('schoolBus.routePlan.messages.selectRowsFirst'))
+      ElMessage.warning(t('schoolBus.routePlan.msgSelectRowsFirst'))
       return
     }
 
     try {
       await ElMessageBox.confirm(
-        t('schoolBus.routePlan.messages.confirmDeleteLines'),
+        t('schoolBus.routePlan.msgConfirmDeleteLines'),
         t('schoolBus.delete'),
         { type: 'warning' }
       )

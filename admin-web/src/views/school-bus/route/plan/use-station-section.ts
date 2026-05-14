@@ -106,7 +106,7 @@ export const useStationSection = (schoolRecords: SchoolRecordsRef) => {
             component: 'ElSelect' as const,
             options: schoolOptions.value,
             componentProps: {
-              placeholder: t('schoolBus.routeOperation.placeholders.school'),
+              placeholder: t('schoolBus.routeOperation.phSchool'),
               clearable: true,
               filterable: true,
               multiple: true,
@@ -126,7 +126,7 @@ export const useStationSection = (schoolRecords: SchoolRecordsRef) => {
           label: '',
           component: 'ElInput',
           componentProps: {
-            placeholder: t('schoolBus.routePlan.placeholders.stationNameKeyword'),
+            placeholder: t('schoolBus.routePlan.phStationNameKeyword'),
             clearable: true
           },
           colProps: { span: 6 }
@@ -152,7 +152,7 @@ export const useStationSection = (schoolRecords: SchoolRecordsRef) => {
     { prop: 'id', label: 'ID', width: 88, fixed: 'left' },
     {
       prop: 'schoolIds',
-      label: t('schoolBus.driver.fields.school'),
+      label: t('schoolBus.driver.fieldSchool'),
       type: 'array',
       options: schoolOptions.value,
       lookup: { splitValues: true },
@@ -161,10 +161,10 @@ export const useStationSection = (schoolRecords: SchoolRecordsRef) => {
     },
     {
       prop: 'showStationName',
-      label: t('schoolBus.routePlan.fields.stationName'),
+      label: t('schoolBus.routePlan.fieldStationName'),
       minWidth: 160
     },
-    { prop: 'createTime', label: t('schoolBus.routeOperation.columns.createTime'), width: 160 }
+    { prop: 'createTime', label: t('schoolBus.routeOperation.colCreateTime'), width: 160 }
   ])
 
   const loadStations: UniTableRequest = async ({ pageNo, pageSize, filters: f }) => {
@@ -224,13 +224,13 @@ export const useStationSection = (schoolRecords: SchoolRecordsRef) => {
     const ids = selectedIds.value
 
     if (ids.length === 0) {
-      ElMessage.warning(t('schoolBus.routePlan.messages.selectStationsFirst'))
+      ElMessage.warning(t('schoolBus.routePlan.msgSelectStationsFirst'))
       return
     }
 
     try {
       await ElMessageBox.confirm(
-        t('schoolBus.routePlan.messages.confirmDeleteStations'),
+        t('schoolBus.routePlan.msgConfirmDeleteStations'),
         t('schoolBus.delete'),
         { type: 'warning' }
       )

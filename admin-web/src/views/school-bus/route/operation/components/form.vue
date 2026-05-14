@@ -107,8 +107,8 @@ const title = computed(() =>
 )
 
 const timeTypes = computed(() => [
-  { value: '1', label: t('schoolBus.routeOperation.form.schoolTrip') },
-  { value: '2', label: t('schoolBus.routeOperation.form.homeTrip') }
+  { value: '1', label: t('schoolBus.routeOperation.formSchoolTrip') },
+  { value: '2', label: t('schoolBus.routeOperation.formHomeTrip') }
 ])
 
 const schoolUniOptions = computed(() =>
@@ -149,31 +149,31 @@ const carUniOptions = computed(() =>
 const dialogRules = computed<FormRules<OperationFormModel>>(() => {
   const r: FormRules<OperationFormModel> = {
     sectionId: [
-      { required: true, message: t('schoolBus.routeOperation.pleaseSelect'), trigger: 'change' }
+      { required: true, message: t('schoolBus.pleaseSelect'), trigger: 'change' }
     ],
     lineId: [
-      { required: true, message: t('schoolBus.routeOperation.pleaseSelect'), trigger: 'change' }
+      { required: true, message: t('schoolBus.pleaseSelect'), trigger: 'change' }
     ],
     stationId: [
-      { required: true, message: t('schoolBus.routeOperation.pleaseSelect'), trigger: 'change' }
+      { required: true, message: t('schoolBus.pleaseSelect'), trigger: 'change' }
     ],
     schoolTimeType: [
-      { required: true, message: t('schoolBus.routeOperation.pleaseSelect'), trigger: 'change' }
+      { required: true, message: t('schoolBus.pleaseSelect'), trigger: 'change' }
     ],
     carId: [
-      { required: true, message: t('schoolBus.routeOperation.pleaseSelect'), trigger: 'change' }
+      { required: true, message: t('schoolBus.pleaseSelect'), trigger: 'change' }
     ],
     rideDate: [
-      { required: true, message: t('schoolBus.routeOperation.pleaseSelect'), trigger: 'change' }
+      { required: true, message: t('schoolBus.pleaseSelect'), trigger: 'change' }
     ],
     arrivalTime: [
-      { required: true, message: t('schoolBus.routeOperation.pleaseSelect'), trigger: 'change' }
+      { required: true, message: t('schoolBus.pleaseSelect'), trigger: 'change' }
     ]
   }
 
   if (multiSchool.value) {
     r.school = [
-      { required: true, message: t('schoolBus.driver.rules.schoolIds'), trigger: 'change' }
+      { required: true, message: t('schoolBus.driver.ruleSchoolIds'), trigger: 'change' }
     ]
   }
 
@@ -188,7 +188,7 @@ const dialogFormConfig = computed<UniFormConfig>(() => ({
   schema: [
     {
       field: 'school',
-      label: t('schoolBus.routeOperation.form.school'),
+      label: t('schoolBus.routeOperation.formSchool'),
       component: 'ElSelect',
       options: schoolUniOptions.value,
       hidden: !multiSchool.value,
@@ -200,13 +200,13 @@ const dialogFormConfig = computed<UniFormConfig>(() => ({
         collapseTags: true,
         collapseTagsTooltip: true,
         filterable: true,
-        placeholder: t('schoolBus.routeOperation.pleaseSelect'),
+        placeholder: t('schoolBus.pleaseSelect'),
         style: { width: '100%' }
       }
     },
     {
       field: 'sectionId',
-      label: t('schoolBus.routeOperation.form.section'),
+      label: t('schoolBus.routeOperation.formSection'),
       component: 'ElSelect',
       options: sectionUniOptions.value,
       onChange: async (ctx) => {
@@ -214,13 +214,13 @@ const dialogFormConfig = computed<UniFormConfig>(() => ({
       },
       componentProps: {
         filterable: true,
-        placeholder: t('schoolBus.routeOperation.pleaseSelect'),
+        placeholder: t('schoolBus.pleaseSelect'),
         style: { width: '100%' }
       }
     },
     {
       field: 'lineId',
-      label: t('schoolBus.routeOperation.form.line'),
+      label: t('schoolBus.routeOperation.formLine'),
       component: 'ElSelect',
       options: lineUniOptions.value,
       onChange: async (ctx) => {
@@ -228,34 +228,34 @@ const dialogFormConfig = computed<UniFormConfig>(() => ({
       },
       componentProps: {
         filterable: true,
-        placeholder: t('schoolBus.routeOperation.pleaseSelect'),
+        placeholder: t('schoolBus.pleaseSelect'),
         style: { width: '100%' }
       }
     },
     {
       field: 'stationId',
-      label: t('schoolBus.routeOperation.form.station'),
+      label: t('schoolBus.routeOperation.formStation'),
       component: 'ElSelect',
       options: stationUniOptions.value,
       componentProps: {
         filterable: true,
-        placeholder: t('schoolBus.routeOperation.pleaseSelect'),
+        placeholder: t('schoolBus.pleaseSelect'),
         style: { width: '100%' }
       }
     },
     {
       field: 'schoolTimeType',
-      label: t('schoolBus.routeOperation.form.timeType'),
+      label: t('schoolBus.routeOperation.formTimeType'),
       component: 'ElSelect',
       options: timeTypes.value,
       componentProps: {
-        placeholder: t('schoolBus.routeOperation.pleaseSelect'),
+        placeholder: t('schoolBus.pleaseSelect'),
         style: { width: '100%' }
       }
     },
     {
       field: 'carId',
-      label: t('schoolBus.routeOperation.form.car'),
+      label: t('schoolBus.routeOperation.formCar'),
       component: 'ElSelect',
       options: carUniOptions.value,
       onChange: (ctx) => {
@@ -263,31 +263,31 @@ const dialogFormConfig = computed<UniFormConfig>(() => ({
       },
       componentProps: {
         filterable: true,
-        placeholder: t('schoolBus.routeOperation.pleaseSelect'),
+        placeholder: t('schoolBus.pleaseSelect'),
         style: { width: '100%' }
       }
     },
     {
       field: 'carTeacher',
-      label: t('schoolBus.routeOperation.form.teacher'),
+      label: t('schoolBus.routeOperation.formTeacher'),
       component: 'ElInput',
       componentProps: { disabled: true }
     },
     {
       field: 'driver',
-      label: t('schoolBus.routeOperation.form.driver'),
+      label: t('schoolBus.routeOperation.formDriver'),
       component: 'ElInput',
       componentProps: { disabled: true }
     },
     {
       field: 'seatNumber',
-      label: t('schoolBus.routeOperation.form.seats'),
+      label: t('schoolBus.routeOperation.formSeats'),
       component: 'ElInput',
       componentProps: { disabled: true }
     },
     {
       field: 'rideDate',
-      label: t('schoolBus.routeOperation.form.rideDate'),
+      label: t('schoolBus.routeOperation.formRideDate'),
       component: 'ElDatePicker',
       componentProps: {
         type: 'datetime',
@@ -298,7 +298,7 @@ const dialogFormConfig = computed<UniFormConfig>(() => ({
     },
     {
       field: 'arrivalTime',
-      label: t('schoolBus.routeOperation.form.arrivalTime'),
+      label: t('schoolBus.routeOperation.formArrivalTime'),
       component: 'ElDatePicker',
       componentProps: {
         type: 'datetime',
@@ -309,7 +309,7 @@ const dialogFormConfig = computed<UniFormConfig>(() => ({
     },
     {
       field: 'remark',
-      label: t('schoolBus.routeOperation.columns.remark'),
+      label: t('schoolBus.routeOperation.colRemark'),
       component: 'ElInput',
       colProps: { span: 24 },
       formItemProps: { class: 'school-bus-operation-form__full' },

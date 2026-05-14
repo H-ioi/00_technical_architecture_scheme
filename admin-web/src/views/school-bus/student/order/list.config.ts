@@ -20,7 +20,7 @@ export const searchForm = (
             component: 'ElSelect' as const,
             options: schoolOptions,
             componentProps: {
-              placeholder: t('schoolBus.studentOrder.placeholders.school'),
+              placeholder: t('schoolBus.studentOrder.phSchool'),
               clearable: true,
               filterable: true,
               multiple: true,
@@ -36,7 +36,7 @@ export const searchForm = (
       component: 'ElSelect',
       options: sectionOptions,
       componentProps: {
-        placeholder: t('schoolBus.studentOrder.placeholders.section'),
+        placeholder: t('schoolBus.studentOrder.phSection'),
         clearable: true,
         filterable: true
       },
@@ -48,7 +48,7 @@ export const searchForm = (
       component: 'ElSelect',
       options: lineOptions,
       componentProps: {
-        placeholder: t('schoolBus.studentOrder.placeholders.line'),
+        placeholder: t('schoolBus.studentOrder.phLine'),
         clearable: true,
         filterable: true,
         multiple: true,
@@ -62,7 +62,7 @@ export const searchForm = (
       component: 'ElSelect',
       options: stationOptions,
       componentProps: {
-        placeholder: t('schoolBus.studentOrder.placeholders.station'),
+        placeholder: t('schoolBus.studentOrder.phStation'),
         clearable: true,
         filterable: true,
         multiple: true,
@@ -75,7 +75,7 @@ export const searchForm = (
       label: '',
       component: 'ElInput',
       componentProps: {
-        placeholder: t('schoolBus.studentOrder.placeholders.keyword'),
+        placeholder: t('schoolBus.studentOrder.phKeyword'),
         clearable: true
       },
       colProps: { span: 6 }
@@ -86,7 +86,7 @@ export const searchForm = (
       component: 'ElSelect',
       options: carOptions,
       componentProps: {
-        placeholder: t('schoolBus.studentOrder.placeholders.car'),
+        placeholder: t('schoolBus.studentOrder.phCar'),
         clearable: true
       },
       colProps: { span: 6 }
@@ -99,67 +99,67 @@ export const searchForm = (
 export const tableCols = (t: Translate, pickupOptions: UniOption[]): UniTableColumn[] => [
   {
     prop: 'id',
-    label: t('schoolBus.studentOrder.columns.id'),
+    label: t('schoolBus.studentOrder.colId'),
     type: 'text',
     width: 88,
     fixed: 'left'
   },
   {
     prop: 'showSchoolName',
-    label: t('schoolBus.studentOrder.columns.school'),
+    label: t('schoolBus.studentOrder.colSchool'),
     type: 'text',
     minWidth: 120,
     showOverflowTooltip: true
   },
   {
     prop: 'showSectionName',
-    label: t('schoolBus.studentOrder.columns.section'),
+    label: t('schoolBus.studentOrder.colSection'),
     type: 'text',
     minWidth: 120,
     showOverflowTooltip: true
   },
   {
     prop: 'admissionNo',
-    label: t('schoolBus.studentOrder.columns.admissionNo'),
+    label: t('schoolBus.studentOrder.colAdmissionNo'),
     type: 'text',
     width: 120
   },
   {
     prop: 'studentName',
-    label: t('schoolBus.studentOrder.columns.studentName'),
+    label: t('schoolBus.studentOrder.colStudentName'),
     type: 'text',
     minWidth: 100
   },
   {
     prop: 'studentGrade',
-    label: t('schoolBus.studentOrder.columns.grade'),
+    label: t('schoolBus.studentOrder.colGrade'),
     type: 'text',
     width: 88
   },
   {
     prop: 'showLineName',
-    label: t('schoolBus.studentOrder.columns.line'),
+    label: t('schoolBus.studentOrder.colLine'),
     type: 'text',
     minWidth: 120,
     showOverflowTooltip: true
   },
   {
     prop: 'showStationName',
-    label: t('schoolBus.studentOrder.columns.station'),
+    label: t('schoolBus.studentOrder.colStation'),
     type: 'text',
     minWidth: 120,
     showOverflowTooltip: true
   },
   {
     prop: 'pickupMethod',
-    label: t('schoolBus.studentOrder.columns.pickup'),
+    label: t('schoolBus.studentOrder.colPickup'),
     type: 'tag',
     options: pickupOptions,
     width: 120
   },
   {
     prop: 'createTime',
-    label: t('schoolBus.studentOrder.columns.createTime'),
+    label: t('schoolBus.studentOrder.colCreateTime'),
     type: 'text',
     minWidth: 160
   }

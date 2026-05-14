@@ -21,7 +21,7 @@ export const searchForm = (
             component: 'ElSelect' as const,
             options: schoolOptions,
             componentProps: {
-              placeholder: t('schoolBus.studentApply.placeholders.school'),
+              placeholder: t('schoolBus.studentApply.phSchool'),
               clearable: true,
               filterable: true,
               multiple: true,
@@ -37,7 +37,7 @@ export const searchForm = (
       component: 'ElSelect',
       options: approvalOptions,
       componentProps: {
-        placeholder: t('schoolBus.studentApply.placeholders.approvalStatus'),
+        placeholder: t('schoolBus.studentApply.phApprovalStatus'),
         clearable: true
       },
       colProps: { span: 6 }
@@ -48,7 +48,7 @@ export const searchForm = (
       component: 'ElSelect',
       options: sectionOptions,
       componentProps: {
-        placeholder: t('schoolBus.studentApply.placeholders.section'),
+        placeholder: t('schoolBus.studentApply.phSection'),
         clearable: true,
         filterable: true
       },
@@ -60,7 +60,7 @@ export const searchForm = (
       component: 'ElSelect',
       options: lineOptions,
       componentProps: {
-        placeholder: t('schoolBus.studentApply.placeholders.line'),
+        placeholder: t('schoolBus.studentApply.phLine'),
         clearable: true,
         filterable: true,
         multiple: true,
@@ -74,7 +74,7 @@ export const searchForm = (
       component: 'ElSelect',
       options: stationOptions,
       componentProps: {
-        placeholder: t('schoolBus.studentApply.placeholders.station'),
+        placeholder: t('schoolBus.studentApply.phStation'),
         clearable: true,
         filterable: true,
         multiple: true,
@@ -87,7 +87,7 @@ export const searchForm = (
       label: '',
       component: 'ElInput',
       componentProps: {
-        placeholder: t('schoolBus.studentApply.placeholders.keyword'),
+        placeholder: t('schoolBus.studentApply.phKeyword'),
         clearable: true
       },
       colProps: { span: 6 }
@@ -98,7 +98,7 @@ export const searchForm = (
       component: 'ElSelect',
       options: carOptions,
       componentProps: {
-        placeholder: t('schoolBus.studentApply.placeholders.car'),
+        placeholder: t('schoolBus.studentApply.phCar'),
         clearable: true
       },
       colProps: { span: 6 }
@@ -116,80 +116,80 @@ export const tableCols = (
 ): UniTableColumn[] => [
   {
     prop: 'id',
-    label: t('schoolBus.studentApply.columns.id'),
+    label: t('schoolBus.studentApply.colId'),
     type: 'text',
     width: 88,
     fixed: 'left'
   },
   {
     prop: 'createTime',
-    label: t('schoolBus.studentApply.columns.applyTime'),
+    label: t('schoolBus.studentApply.colApplyTime'),
     type: 'text',
     minWidth: 160
   },
   {
     prop: 'approvalStatus',
-    label: t('schoolBus.studentApply.columns.approvalStatus'),
+    label: t('schoolBus.studentApply.colApprovalStatus'),
     type: 'tag',
     options: approvalOptions,
     width: 100
   },
   {
     prop: 'paymentStatus',
-    label: t('schoolBus.studentApply.columns.paymentStatus'),
+    label: t('schoolBus.studentApply.colPaymentStatus'),
     type: 'tag',
     options: paymentOptions,
     width: 100
   },
   {
     prop: 'showSchoolName',
-    label: t('schoolBus.studentApply.columns.school'),
+    label: t('schoolBus.studentApply.colSchool'),
     type: 'text',
     minWidth: 120,
     showOverflowTooltip: true
   },
   {
     prop: 'showSectionName',
-    label: t('schoolBus.studentApply.columns.section'),
+    label: t('schoolBus.studentApply.colSection'),
     type: 'text',
     minWidth: 120,
     showOverflowTooltip: true
   },
   {
     prop: 'admissionNo',
-    label: t('schoolBus.studentApply.columns.admissionNo'),
+    label: t('schoolBus.studentApply.colAdmissionNo'),
     type: 'text',
     width: 120
   },
   {
     prop: 'studentName',
-    label: t('schoolBus.studentApply.columns.studentName'),
+    label: t('schoolBus.studentApply.colStudentName'),
     type: 'text',
     minWidth: 100
   },
   {
     prop: 'studentGrade',
-    label: t('schoolBus.studentApply.columns.grade'),
+    label: t('schoolBus.studentApply.colGrade'),
     type: 'text',
     width: 88
   },
   {
     prop: 'showLineName',
-    label: t('schoolBus.studentApply.columns.line'),
+    label: t('schoolBus.studentApply.colLine'),
     type: 'text',
     minWidth: 120,
     showOverflowTooltip: true
   },
   {
     prop: 'showStationName',
-    label: t('schoolBus.studentApply.columns.station'),
+    label: t('schoolBus.studentApply.colStation'),
     type: 'text',
     minWidth: 120,
     showOverflowTooltip: true
   },
   {
     prop: 'pickupMethod',
-    label: t('schoolBus.studentApply.columns.pickup'),
+    label: t('schoolBus.studentApply.colPickup'),
     type: 'tag',
     options: pickupOptions,
     width: 120
