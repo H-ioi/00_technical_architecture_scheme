@@ -193,10 +193,8 @@ export default {
         if (item["children"] && item["children"].length > 0) {
           this.openMenuIds.push(item.id);
         } else {
-          if (!this.activeMenuIds.includes(item.id)) {
-            this.activeMenuIds = this.getActiveMenuIds(this.menu, item["path"]);
-            this.open(item);
-          }
+          this.activeMenuIds = this.getActiveMenuIds(this.menu, item["path"]);
+          this.open(item);
         }
       } else {
         this.openMenuIds = this.openMenuIds.filter((ele) => ele !== item.id);
@@ -226,15 +224,17 @@ export default {
     open(item) {
       //   if (this.screen <= 1) this.$store.commit("SET_COLLAPSE");
       this.$router.$avueRouter.group = item.group;
-      this.$router
-        .push({
-          path: this.$router.$avueRouter.getPath({
-            name: item[this.labelKey],
-            src: item[this.pathKey],
-          }),
-          query: item.query,
-        })
-        .catch(() => {});
+      const path = this.$router.$avueRouter.getPath({
+        name: item[this.labelKey],
+        src: item[this.pathKey],
+      });
+      const raw =
+        item.query && typeof item.query === "object" ? item.query : {};
+      const query = { ...raw };
+      if (this.$route.path === path) {
+        query._menuTap = Date.now();
+      }
+      this.$router.push({ path, query }).catch(() => {});
     },
     showMenuIcon(path) {
       // 提取 /ems/ 之后的部分

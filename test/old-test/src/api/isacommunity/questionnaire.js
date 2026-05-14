@@ -28,6 +28,15 @@ export function exportQuestionnaire (id) {
 		responseType: "blob"
 	});
 }
+
+/** 活动维度导出问卷答案 GET …/exportByActivity/{activityId} */
+export function exportQuestionnaireByActivity (activityId) {
+	return request({
+		url: `${path}/exportByActivity/${activityId}`,
+		method: "get",
+		responseType: "blob",
+	});
+}
 export function addQuestionnaire (data) {
 	return request({
 		url: `${path}/add`,

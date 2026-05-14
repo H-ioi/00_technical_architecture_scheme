@@ -31,6 +31,6 @@ export default {
     return str == "" ? "--" : str;
   },
   $checkNull(str) {
-    return str == null || str == undefined || str == "" ? "--" : str;
+    return str === null || str === undefined || str === "" ? "--" : str;
   },
 };

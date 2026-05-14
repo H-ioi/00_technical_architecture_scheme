@@ -24,11 +24,6 @@ export const menuTableTree: UniDataTableTree = {
   props: { children: 'children' }
 }
 
-export const menuActionColumn: UniTableActionColumnConfig = {
-  width: 100,
-  fixed: 'right'
-}
-
 export const tableCols = (t: Translate): UniTableColumn[] => [
   {
     prop: 'name',

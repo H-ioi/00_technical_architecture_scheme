@@ -97,7 +97,7 @@
 
 <script>
 import { mapGetters } from "vuex";
-import { getVoteProgramPage, delVoteprogram } from "@/api/isacommunity/voteprogram.js";
+import { getVoteProgramPage, delVoteProgram } from "@/api/isacommunity/voteprogram.js";
 import tabletitle from "@/const/isacommunity/tabletitle.js";
 import consts from "@/const/isacommunity/consts.js";
 import Table from "@/components/communitycommon/Table.vue";
@@ -197,7 +197,7 @@ export default {
         this.$alert(this.$t("isagroup.确定要删除吗？"), this.$t("isagroup.删除"), {
           confirmButtonText: this.$t("isagroup.确定"),
         }).then(() => {
-          delVoteprogram({ ids: selectionId }).then((res) => {
+          delVoteProgram({ ids: selectionId }).then((res) => {
             if (res.data.success) {
               this.$message.success(this.$t("isagroup.成功"));
               this.getList();

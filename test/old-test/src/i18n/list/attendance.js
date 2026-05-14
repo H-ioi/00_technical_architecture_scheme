@@ -894,6 +894,11 @@ const attendance = [
 		"已生效的数据不能删除",
 		"已生效的数据不能删除",
 		"Effective data cannot be deleted"
+	],
+	[
+		"确定删除操作?",
+		"确定删除操作?",
+		"Confirm Delete Operation?"
 	]
 
 ]

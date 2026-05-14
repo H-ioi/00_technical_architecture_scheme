@@ -1,7 +1,7 @@
 <template>
   <div class="community_page">
     <div class="community_top">
-      <div class="community_top_title">{{ $t("isagroup.跟车老师") }}</div>
+      <div class="community_top_title">{{ $t("isagroup.H5管理用户表") }}</div>
       <div class="community_top_btn">
         <el-button
           v-if="permissions['teacheruser_add']"

@@ -22,9 +22,13 @@
               <el-button type="default" size="medium" round @click="reset">{{
                 $t("consult.重置")
               }}</el-button>
-              <el-button type="default" size="medium" round @click="previewForm">{{
-                $t("consult.预览")
-              }}</el-button>
+              <el-button
+                type="default"
+                size="medium"
+                round
+                @click="previewForm"
+                >{{ $t("consult.预览") }}</el-button
+              >
               <el-button
                 type="primary"
                 size="medium"
@@ -56,7 +60,9 @@
     >
       <div style="border: 1px solid #2a3f54">
         <div class="questionnaire" style="width: 100%; height: 700px">
-          <div class="questionnaire-nav">{{ collectionData["collectionName"] }}</div>
+          <div class="questionnaire-nav">
+            {{ collectionData["collectionName"] }}
+          </div>
           <el-scrollbar class="questionnaire-content">
             <div class="questionnaire-content-scroll">
               <FormRight
@@ -327,7 +333,7 @@ export default {
         });
       } else {
         if (this.templateType == "add") {
-          this.isSubmitting = true; // 设置提交状态
+          // 由父级表单校验通过后再设置 isSubmitting，避免校验未通过时按钮一直 loading
           this.$emit("submitForm");
         } else {
           this.isSubmitting = true; // 设置提交状态
@@ -357,7 +363,8 @@ export default {
                   id: option.id,
                   isHide: option.isHide ? option.isHide : 0,
                   //   value: option.label,
-                  value: item["mark"] == "applyschool" ? option.value : option.label,
+                  value:
+                    item["mark"] == "applyschool" ? option.value : option.label,
                 });
               });
             }
@@ -482,7 +489,10 @@ export default {
     },
     // 设置模板默认值
     setFormArrValus(data) {
-      if (data.properties.option_default != undefined && data.type != "datetimepicker") {
+      if (
+        data.properties.option_default != undefined &&
+        data.type != "datetimepicker"
+      ) {
         this.formArrValue[data.fontId] = data.properties.option_default;
         this.formArrValue = JSON.parse(JSON.stringify(this.formArrValue));
       }
@@ -566,7 +576,9 @@ export default {
             data.properties.option_default.map((item) => {
               if (!optionFontId.includes(item)) {
                 isCheck = false;
-                this.$message.warning(`${data.label}中的默认项需在可选项中选取`);
+                this.$message.warning(
+                  `${data.label}中的默认项需在可选项中选取`
+                );
               }
             });
           }
@@ -579,7 +591,9 @@ export default {
           if (data.required) {
             if (data.properties.option_min === 0) {
               isCheck = false;
-              this.$message.warning(`${data.label}为必填状态时最小复选数应不能为0`);
+              this.$message.warning(
+                `${data.label}为必填状态时最小复选数应不能为0`
+              );
             }
           }
 
@@ -591,7 +605,9 @@ export default {
               data.properties.option_default.map((item) => {
                 if (!optionFontId.includes(item)) {
                   isCheck = false;
-                  this.$message.warning(`${data.label}中的默认项需在可选项中选取`);
+                  this.$message.warning(
+                    `${data.label}中的默认项需在可选项中选取`
+                  );
                 }
               });
             } else {
@@ -599,7 +615,9 @@ export default {
                 optionFontId = this.geoptionFontId(data.properties.option);
                 if (!optionFontId.includes(data.properties.option_default)) {
                   isCheck = false;
-                  this.$message.warning(`${data.label}中的默认项需在可选项中选取`);
+                  this.$message.warning(
+                    `${data.label}中的默认项需在可选项中选取`
+                  );
                 }
               }
             }
@@ -607,13 +625,21 @@ export default {
           break;
 
         case "upload":
-          if (data.properties.upload_size_min > data.properties.upload_size_max) {
+          if (
+            data.properties.upload_size_min > data.properties.upload_size_max
+          ) {
             isCheck = false;
-            this.$message.warning(`${data.label}中的单个最小体积应小于单个最大体积`);
+            this.$message.warning(
+              `${data.label}中的单个最小体积应小于单个最大体积`
+            );
           }
-          if (data.properties.upload_size_max > data.properties.upload_size_total) {
+          if (
+            data.properties.upload_size_max > data.properties.upload_size_total
+          ) {
             isCheck = false;
-            this.$message.warning(`${data.label}中的单个最大体积应小于单次最大体积`);
+            this.$message.warning(
+              `${data.label}中的单个最大体积应小于单次最大体积`
+            );
           }
           break;
       }

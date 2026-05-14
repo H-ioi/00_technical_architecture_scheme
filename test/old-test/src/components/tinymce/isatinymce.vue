@@ -5,15 +5,23 @@
 </template>
 
 <script>
-import tinymce from "tinymce";
+import myRequest from "@/router/axiosother.js";
 import Editor from "@tinymce/tinymce-vue";
-import "tinymce/themes/silver/theme";
-import "tinymce/plugins/image";
-import "tinymce/plugins/link";
+import tinymce from "tinymce";
+import "tinymce/icons/default";
 import "tinymce/plugins/code";
 import "tinymce/plugins/fullscreen";
-import "tinymce/icons/default";
-import myRequest from "@/router/axiosother.js";
+import "tinymce/plugins/image";
+import "tinymce/plugins/link";
+import "tinymce/plugins/lists";
+import "tinymce/plugins/preview";
+import "tinymce/plugins/textcolor";
+import "tinymce/themes/silver/theme";
+
+if (typeof window !== "undefined") {
+  window.tinymce = tinymce;
+}
+
 export default {
   name: "isatinymce",
   components: { Editor },
@@ -35,10 +43,6 @@ export default {
       value: "",
       init: {
         selector: `#${this.editorId}`,
-        language_url:
-          this.language === "en"
-            ? "/skins/langs/en.js"
-            : "/skins/langs/zh-CN.js",
         language: this.language === "en" ? "en" : "zh_CN",
         skin_url: "/skins/ui/oxide",
         height: 600,
@@ -49,9 +53,9 @@ export default {
         paste_data_images: true,
         menubar: false,
         branding: false,
-        plugins: "image code fullscreen",
+        plugins: "lists link image code fullscreen preview textcolor",
         toolbar:
-          "fontselect fontsizeselect lineheight forecolor backcolor bold italic underline strikethrough | alignleft aligncenter alignright alignjustify | image quicklink blockquote numlist bullist preview fullscreen",
+          "fontselect fontsizeselect | forecolor backcolor bold italic underline strikethrough | alignleft aligncenter alignright alignjustify | image link numlist bullist preview fullscreen",
         fontsize_formats: "12px 14px 16px 18px 24px 36px 48px",
         font_formats:
           "微软雅黑=Microsoft YaHei,Helvetica Neue,PingFang SC,sans-serif;苹果苹方=PingFang SC,Microsoft YaHei,sans-serif;宋体=simsun,serif;仿宋体=FangSong,serif;黑体=SimHei,sans-serif;Arial=arial,helvetica,sans-serif;Arial Black=arial black,avant garde;Book Antiqua=book antiqua,palatino;",

@@ -37,3 +37,14 @@ export function delBlessing (params) {
 		params,
 	});
 }
+
+/** 按活动项目查询祝福语（可选 parentId 过滤） */
+export function getBlessingListByProgram (params) {
+	return request({
+		url: `${path}/listByProgram`,
+		method: "get",
+		params: {
+			...params,
+		},
+	});
+}

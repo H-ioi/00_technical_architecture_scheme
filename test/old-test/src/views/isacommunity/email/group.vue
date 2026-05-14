@@ -967,7 +967,15 @@ export default {
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
+::v-deep .el-table {
+  .el-table__fixed-right {
+    z-index: 99 !important;
+    background-color: #ffffff;
+   
+  }
+ 
+}
 .mail-group-page {
     .mail-group-dialog {
         .el-dialog__body {

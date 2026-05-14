@@ -46,6 +46,17 @@
               ></el-input>
             </el-form-item>
             <el-form-item
+              :label="$t('consult.其他姓名')"
+              prop="otherName"
+              style="width: 50%"
+            >
+              <el-input
+                v-model="ruleForm.otherName"
+                :placeholder="$t('consult.请输入')"
+                maxlength="50"
+              ></el-input>
+            </el-form-item>
+            <el-form-item
               :label="$t('consult.性别')"
               prop="sex"
               style="width: 50%"
@@ -82,6 +93,17 @@
             >
               <el-input
                 v-model="ruleForm.wechat"
+                :placeholder="$t('consult.请输入')"
+                maxlength="50"
+              ></el-input>
+            </el-form-item>
+            <el-form-item
+              :label="$t('consult.身份证/护照号')"
+              prop="idNumber"
+              style="width: 50%"
+            >
+              <el-input
+                v-model="ruleForm.idNumber"
                 :placeholder="$t('consult.请输入')"
                 maxlength="50"
               ></el-input>
@@ -133,7 +155,101 @@
                 maxlength="50"
               ></el-input>
             </el-form-item>
+            <el-form-item
+              :label="$t('consult.第二语言')"
+              prop="secondLanguage"
+              style="width: 50%"
+            >
+              <el-input
+                v-model.trim="ruleForm.secondLanguage"
+                :placeholder="$t('consult.请输入')"
+                maxlength="50"
+              ></el-input>
+            </el-form-item>
+            <el-form-item
+              :label="$t('consult.工作单位')"
+              prop="employer"
+              style="width: 50%"
+            >
+              <el-input
+                v-model.trim="ruleForm.employer"
+                :placeholder="$t('consult.请输入')"
+                maxlength="50"
+              ></el-input>
+            </el-form-item>
+            <el-form-item
+              :label="$t('consult.职位')"
+              prop="jobTitle"
+              style="width: 50%"
+            >
+              <el-input
+                v-model.trim="ruleForm.jobTitle"
+                :placeholder="$t('consult.请输入')"
+                maxlength="50"
+              ></el-input>
+            </el-form-item>
+            <el-form-item
+              :label="$t('consult.地址第一行')"
+              prop="address"
+              style="width: 50%"
+            >
+              <el-input
+                v-model.trim="ruleForm.address"
+                :placeholder="$t('consult.请输入')"
+                maxlength="50"
+              ></el-input>
+            </el-form-item>
+            <el-form-item
+              :label="$t('consult.地址第二行')"
+              prop="addressIi"
+              style="width: 50%"
+            >
+              <el-input
+                v-model.trim="ruleForm.addressIi"
+                :placeholder="$t('consult.请输入')"
+                maxlength="50"
+              ></el-input>
+            </el-form-item>
 
+            <el-form-item
+              :label="$t('consult.省')"
+              prop="state"
+              style="width: 50%"
+            >
+              <el-select
+                filterable
+                style="width: 100%"
+                v-model="ruleForm.state"
+                :placeholder="$t('consult.请选择')"
+                @change="changeState"
+              >
+                <el-option
+                  v-for="i in chinaAreaOptions"
+                  :key="i.label"
+                  :label="i.label"
+                  :value="i.value"
+                ></el-option>
+              </el-select>
+            </el-form-item>
+            <el-form-item
+              :label="$t('consult.市')"
+              prop="city"
+              style="width: 50%"
+            >
+              <el-select
+                filterable
+                style="width: 100%"
+                v-model="ruleForm.city"
+                :placeholder="$t('consult.请选择')"
+              >
+                <el-option
+                  v-for="i in cityList"
+                  :key="i.label"
+                  :label="i.label"
+                  :value="i.value"
+                ></el-option>
+              </el-select>
+            </el-form-item>
             <el-form-item
               :label="$t('consult.首次探校时间')"
               prop="schoolTour"
@@ -228,6 +344,7 @@ import {
 import { getTemplateInfoByType } from "@/api/consult/template.js";
 import { getOuterFile, uploadOuterFile } from "@/api/upload/index.js";
 import countryList from "country-list";
+import { getLanguageList, formatChinaArea } from "@/util/jsondata.js";
 import FromItem from "@/components/thepoolcommon/dynamicform/fromitem.vue";
 export default {
   name: "guardians",
@@ -254,6 +371,14 @@ export default {
         email: "",
         schoolTour: "",
         wechat: "",
+        idNumber: "",
+        secondLanguage: "",
+        employer: "",
+        jobTitle: "",
+        address: "",
+        addressIi: "",
+        state: "",
+        city: "",
       },
       rules: {
         firstName: [
@@ -319,6 +444,14 @@ export default {
         type: "0",
         photoUrl: "",
       },
+      // 语言
+      languageList: getLanguageList(),
+      // 中国省市区
+      chinaAreaOptions: formatChinaArea(),
+      // 省
+      stateList: [],
+      // 市
+      cityList: [],
     };
   },
   created() {
@@ -507,6 +640,14 @@ export default {
         email: "",
         schoolTour: "",
         wechat: "",
+        idNumber: "",
+        secondLanguage: "",
+        employer: "",
+        jobTitle: "",
+        address: "",
+        addressIi: "",
+        state: "",
+        city: "",
       };
       this.guardianPhotos = {
         photoId: "",
@@ -546,6 +687,19 @@ export default {
           }
         });
       }
+    },
+    // 省改变时，更新市
+    changeState(e) {
+      this.ruleForm.city = "";
+      this.chinaAreaOptions.forEach((item) => {
+        if (item.value === e) {
+          if (item.children.length == 1) {
+            this.cityList = item.children[0].children;
+          } else {
+            this.cityList = item.children;
+          }
+        }
+      });
     },
   },
 };

@@ -1,50 +1,24 @@
 <template>
   <div class="community_page">
-    <el-dialog
-      :title="$t('isagroup')[typeObj[modalType]]"
-      :visible.sync="showModal"
-      width="1000px"
-      :before-close="closeModal"
-      :close-on-click-modal="false"
-    >
+    <el-dialog :title="$t('isagroup')[typeObj[modalType]]" :visible.sync="showModal" width="1000px"
+      :before-close="closeModal" :close-on-click-modal="false">
       <div class="moadlFromBox" v-if="showModal">
-        <el-form
-          :label-position="'top'"
-          :inline="true"
-          :model="ruleForm"
-          :rules="rules"
-          ref="ruleForm"
-        >
+        <el-form :label-position="'top'" :inline="true" :model="ruleForm" :rules="rules" ref="ruleForm">
           <div class="df_center_wrap" style="max-height: 600px; overflow-y: auto">
             <el-form-item :label="$t('isagroup.中文名')" prop="cnName" style="width: 50%">
-              <el-input
-                style="width: 100%"
-                v-model="ruleForm.cnName"
-                :placeholder="$t('consult.请输入')"
-                maxlength="100"
-              ></el-input>
+              <el-input style="width: 100%" v-model="ruleForm.cnName" :placeholder="$t('consult.请输入')"
+                maxlength="100" :disabled="programPrizeCountOnlyLock"></el-input>
             </el-form-item>
             <el-form-item :label="$t('isagroup.英文名')" prop="enName" style="width: 50%">
-              <el-input
-                style="width: 100%"
-                v-model="ruleForm.enName"
-                :placeholder="$t('consult.请输入')"
-                maxlength="100"
-              ></el-input>
+              <el-input style="width: 100%" v-model="ruleForm.enName" :placeholder="$t('consult.请输入')"
+                maxlength="100" :disabled="programPrizeCountOnlyLock"></el-input>
             </el-form-item>
-            <el-form-item
-              :label="$t('isagroup.活动')"
-              prop="activityId"
-              style="width: 50%"
-            >
-              <el-select
-                clearable
-                style="width: 100%"
-                v-model="ruleForm['activityId']"
-                :placeholder="$t('isagroup.请选择')"
-              >
+            <el-form-item :label="$t('isagroup.活动')" prop="activityId" style="width: 50%">
+              <el-select clearable style="width: 100%" v-model="ruleForm['activityId']"
+                :placeholder="$t('isagroup.请选择')" :disabled="programPrizeCountOnlyLock">
                 <el-option
-                  v-for="(i, k) in activityList"
+                  v-for="i in activityList"
+                  :key="i.id"
                   :label="i18nlocel == 'en' ? i.activityEnName : i.activityCnName"
                   :value="i.id"
                 ></el-option>
@@ -69,323 +43,143 @@
                 ></el-option>
               </el-select>
             </el-form-item> -->
-            <el-form-item
-              :label="$t('isagroup.背景图')"
-              prop="backgroundImage"
-              style="width: 100%"
-            >
-              <el-upload
-                class="avatar-uploader"
-                action=""
-                :show-file-list="false"
-                :before-upload="beforeUpload"
-              >
-                <img
-                  v-if="ruleForm['backgroundImage']"
-                  :src="ruleForm['backgroundImage']"
-                  class="avatar"
-                />
+            <el-form-item :label="$t('isagroup.背景图')" prop="backgroundImage" style="width: 100%">
+              <el-upload class="avatar-uploader" action="" :show-file-list="false"
+                :disabled="programPrizeCountOnlyLock"
+                :before-upload="beforeUpload">
+                <img v-if="ruleForm['backgroundImage']" :src="ruleForm['backgroundImage']" class="avatar" />
                 <i v-else class="el-icon-plus avatar-uploader-icon"></i>
               </el-upload>
             </el-form-item>
-            <el-form-item
-              :label="$t('isagroup.项目类型')"
-              prop="programName"
-              style="width: 100%"
-            >
+            <el-form-item :label="$t('isagroup.项目类型')" prop="programName" style="width: 100%">
+              <!-- 编辑时禁止改类型，避免与已有奖品/投票等子数据不匹配 -->
               <el-radio-group
+                :disabled="modalType === 'edit' || programPrizeCountOnlyLock"
                 @change="changeProgram"
                 style="width: 100%"
                 v-model="ruleForm['programType']"
               >
-                <el-radio
-                  :key="k"
-                  v-for="(i, k) in consts['programType']"
-                  :label="i.id"
-                  style="color: 999999"
-                  >{{ i18nlocel == "en" ? i.enLabel : i.label }}</el-radio
-                >
+                <el-radio :key="k" v-for="(i, k) in consts['programType']" :label="i.id" style="color: 999999">{{
+                  i18nlocel == "en" ? i.enLabel : i.label }}</el-radio>
               </el-radio-group>
             </el-form-item>
-            <div
-              class="df_center_wrap"
-              style="width: 100%"
-              v-if="ruleForm['programType'] == '1'"
-            >
-              <el-form-item
-                :label="$t('isagroup.是否需要支付')"
-                prop="needPayment"
-                style="width: 50%"
-              >
-                <el-radio-group style="width: 100%" v-model="ruleForm['needPayment']">
-                  <el-radio
-                    :key="k"
-                    v-for="(i, k) in consts['yesOrno']"
-                    :label="i.id"
-                    style="color: 999999"
-                    >{{ i18nlocel == "en" ? i.enLabel : i.label }}</el-radio
-                  >
+            <el-form-item :label="$t('isagroup.项目顺序')" prop="sortOrder" style="width: 50%">
+              <el-input-number style="width: 100%" v-model="ruleForm.sortOrder" :precision="0" :step="1" :min="0"
+                controls-position="right" :placeholder="$t('consult.请输入')"
+                :disabled="programPrizeCountOnlyLock"></el-input-number>
+            </el-form-item>
+            <div class="df_center_wrap" style="width: 100%" v-if="ruleForm['programType'] == '1'">
+              <el-form-item :label="$t('isagroup.是否需要支付')" prop="needPayment" style="width: 50%">
+                <el-radio-group style="width: 100%" v-model="ruleForm['needPayment']"
+                  :disabled="programPrizeCountOnlyLock">
+                  <el-radio :key="k" v-for="(i, k) in consts['yesOrno']" :label="i.id" style="color: 999999">{{
+                    i18nlocel == "en" ? i.enLabel : i.label }}</el-radio>
                 </el-radio-group>
               </el-form-item>
-              <el-form-item
-                :label="$t('isagroup.是否需要签到')"
-                prop="needCheckin"
-                style="width: 50%"
-              >
-                <el-radio-group style="width: 100%" v-model="ruleForm['needCheckin']">
-                  <el-radio
-                    :key="k"
-                    v-for="(i, k) in consts['yesOrno']"
-                    :label="i.id"
-                    style="color: 999999"
-                    >{{ i18nlocel == "en" ? i.enLabel : i.label }}</el-radio
-                  >
+              <el-form-item :label="$t('isagroup.是否需要签到')" prop="needCheckin" style="width: 50%">
+                <el-radio-group style="width: 100%" v-model="ruleForm['needCheckin']"
+                  :disabled="programPrizeCountOnlyLock">
+                  <el-radio :key="k" v-for="(i, k) in consts['yesOrno']" :label="i.id" style="color: 999999">{{
+                    i18nlocel == "en" ? i.enLabel : i.label }}</el-radio>
                 </el-radio-group>
               </el-form-item>
-              <el-form-item
-                :label="$t('isagroup.签到开始偏移分钟')"
-                prop="checkinStartOffsetMinutes"
-                style="width: 50%"
-              >
-                <el-input-number
-                  style="width: 100%"
-                  v-model="ruleForm.checkinStartOffsetMinutes"
-                  :precision="0"
-                  :step="1"
-                  :min="0"
+              <el-form-item :label="$t('isagroup.签到开始偏移分钟')" prop="checkinStartOffsetMinutes" style="width: 50%">
+                <el-input-number style="width: 100%" v-model="ruleForm.checkinStartOffsetMinutes" :precision="0"
+                  :step="1" :min="0" :placeholder="$t('consult.请输入')"
+                  :disabled="programPrizeCountOnlyLock"></el-input-number>
+              </el-form-item>
+              <el-form-item :label="$t('isagroup.签到结束偏移分钟')" prop="checkinEndOffsetMinutes" style="width: 50%">
+                <el-input-number style="width: 100%" v-model="ruleForm.checkinEndOffsetMinutes" :precision="0" :step="1"
+                  :min="0" :placeholder="$t('consult.请输入')"
+                  :disabled="programPrizeCountOnlyLock"></el-input-number>
+              </el-form-item>
+              <el-form-item :label="$t('isagroup.是否创建获奖池')" prop="createLotteryPool" style="width: 50%">
+                <el-radio-group style="width: 100%" v-model="ruleForm['createLotteryPool']"
+                  :disabled="programPrizeCountOnlyLock">
+                  <el-radio :key="k" v-for="(i, k) in consts['yesOrno']" :label="i.id" style="color: 999999">{{
+                    i18nlocel == "en" ? i.enLabel : i.label }}</el-radio>
+                </el-radio-group>
+              </el-form-item>
+              <el-form-item :label="$t('isagroup.抽奖识别码')" prop="lotteryIdentifierType" style="width: 50%">
+                <el-radio-group style="width: 100%" v-model="ruleForm['lotteryIdentifierType']"
+                  :disabled="programPrizeCountOnlyLock">
+                  <el-radio :key="k" v-for="(i, k) in consts['lotteryIdentifierType']" :label="i.id"
+                    style="color: 999999">{{ i18nlocel == "en" ? i.enLabel : i.label }}</el-radio>
+                </el-radio-group>
+              </el-form-item>
+              <el-form-item :label="$t('isagroup.参与抽奖人员范围')" prop="lotteryParticipantScope" style="width: 50%">
+                <el-radio-group style="width: 100%" v-model="ruleForm['lotteryParticipantScope']"
+                  :disabled="programPrizeCountOnlyLock">
+                  <el-radio :key="k" v-for="(i, k) in consts['lotteryParticipantScope']" :label="i.id"
+                    style="color: 999999">{{ i18nlocel == "en" ? i.enLabel : i.label }}</el-radio>
+                </el-radio-group>
+              </el-form-item>
+              <el-form-item :label="$t('isagroup.项目轮次总数')" prop="totalRounds" style="width: 100%">
+                <el-input-number style="width: 50%" v-model="ruleForm.totalRounds" :precision="0" :step="1" :min="0"
                   :placeholder="$t('consult.请输入')"
-                ></el-input-number>
+                  :disabled="programPrizeCountOnlyLock"></el-input-number>
               </el-form-item>
-              <el-form-item
-                :label="$t('isagroup.签到结束偏移分钟')"
-                prop="checkinEndOffsetMinutes"
-                style="width: 50%"
-              >
-                <el-input-number
-                  style="width: 100%"
-                  v-model="ruleForm.checkinEndOffsetMinutes"
-                  :precision="0"
-                  :step="1"
-                  :min="0"
-                  :placeholder="$t('consult.请输入')"
-                ></el-input-number>
+              <el-form-item :label="$t('isagroup.奖品数量')" prop="prizeCount" style="width: 100%">
+                <el-input-number style="width: 50%" v-model="ruleForm.prizeCount" :precision="0" :step="1" :min="0"
+                  :placeholder="$t('consult.请输入')"></el-input-number>
               </el-form-item>
-              <el-form-item
-                :label="$t('isagroup.是否创建获奖池')"
-                prop="createLotteryPool"
-                style="width: 50%"
-              >
-                <el-radio-group
-                  style="width: 100%"
-                  v-model="ruleForm['createLotteryPool']"
-                >
-                  <el-radio
-                    :key="k"
-                    v-for="(i, k) in consts['yesOrno']"
-                    :label="i.id"
-                    style="color: 999999"
-                    >{{ i18nlocel == "en" ? i.enLabel : i.label }}</el-radio
-                  >
-                </el-radio-group>
-              </el-form-item>
-              <el-form-item
-                :label="$t('isagroup.抽奖识别码')"
-                prop="lotteryIdentifierType"
-                style="width: 50%"
-              >
-                <el-radio-group
-                  style="width: 100%"
-                  v-model="ruleForm['lotteryIdentifierType']"
-                >
-                  <el-radio
-                    :key="k"
-                    v-for="(i, k) in consts['lotteryIdentifierType']"
-                    :label="i.id"
-                    style="color: 999999"
-                    >{{ i18nlocel == "en" ? i.enLabel : i.label }}</el-radio
-                  >
-                </el-radio-group>
-              </el-form-item>
-              <el-form-item
-                :label="$t('isagroup.参与抽奖人员范围')"
-                prop="lotteryParticipantScope"
-                style="width: 50%"
-              >
-                <el-radio-group
-                  style="width: 100%"
-                  v-model="ruleForm['lotteryParticipantScope']"
-                >
-                  <el-radio
-                    :key="k"
-                    v-for="(i, k) in consts['lotteryParticipantScope']"
-                    :label="i.id"
-                    style="color: 999999"
-                    >{{ i18nlocel == "en" ? i.enLabel : i.label }}</el-radio
-                  >
-                </el-radio-group>
-              </el-form-item>
-              <el-form-item
-                :label="$t('isagroup.项目轮次总数')"
-                prop="totalRounds"
-                style="width: 100%"
-              >
-                <el-input-number
-                  style="width: 50%"
-                  v-model="ruleForm.totalRounds"
-                  :precision="0"
-                  :step="1"
-                  :min="0"
-                  :placeholder="$t('consult.请输入')"
-                ></el-input-number>
-              </el-form-item>
-              <el-form-item
-                :label="$t('isagroup.奖品数量')"
-                prop="prizeCount"
-                style="width: 100%"
-              >
-                <el-input-number
-                  style="width: 50%"
-                  v-model="ruleForm.prizeCount"
-                  :precision="0"
-                  :step="1"
-                  :min="0"
-                  :placeholder="$t('consult.请输入')"
-                ></el-input-number>
-              </el-form-item>
-              <el-form-item
-                :label="$t('isagroup.每轮配额')"
-                prop="quotas"
-                style="width: 100%"
-              >
+              <el-form-item :label="$t('isagroup.每轮配额')" prop="quotas" style="width: 100%">
                 <div style="width: 100%">
-                  <div
-                    v-for="(item, index) in quotasList"
-                    :key="index"
-                    style="margin-bottom: 10px"
-                  >
+                  <div v-for="(item, index) in quotasList" :key="index" style="margin-bottom: 10px">
                     <span style="margin-right: 10px">{{ item.roundNo }}:</span>
-                    <el-input-number
-                      style="width: 50%"
-                      v-model="item.quotaCount"
-                      :precision="0"
-                      :step="1"
-                      :min="1"
+                    <el-input-number style="width: 50%" v-model="item.quotaCount" :precision="0" :step="1" :min="1"
                       :placeholder="$t('consult.请输入')"
-                    ></el-input-number>
+                      :disabled="programPrizeCountOnlyLock"></el-input-number>
                   </div>
-                  <div
-                    v-if="quotasList.length > 0"
-                    style="color: #f56c6c; margin-top: 5px"
-                  >
+                  <div v-if="quotasList.length > 0" style="color: #f56c6c; margin-top: 5px">
                     {{ quotaErrorMsg }}
                   </div>
                 </div>
               </el-form-item>
             </div>
-            <div
-              class="df_center_wrap"
-              style="width: 100%"
-              v-if="ruleForm['programType'] == '2'"
-            >
-              <el-form-item
-                :label="$t('isagroup.是否需要投票')"
-                prop="needVote"
-                style="width: 50%"
-              >
-                <el-select
-                  clearable
-                  style="width: 100%"
-                  v-model="ruleForm['needVote']"
+            <div class="df_center_wrap" style="width: 100%" v-if="ruleForm['programType'] == '2'">
+              <el-form-item :label="$t('isagroup.是否需要投票')" prop="needVote" style="width: 50%">
+                <el-select clearable style="width: 100%" v-model="ruleForm['needVote']"
                   :placeholder="$t('isagroup.请选择')"
-                >
+                  :disabled="programPrizeCountOnlyLock">
                   <el-option
-                    v-for="(i, k) in consts['yesOrno']"
+                    v-for="i in consts['yesOrno']"
+                    :key="i.id"
                     :label="i18nlocel == 'en' ? i.enLabel : i.label"
                     :value="i.id"
                   ></el-option>
                 </el-select>
               </el-form-item>
-              <el-form-item
-                :label="$t('isagroup.单次可投票数量')"
-                prop="votePerAttemptCount"
-                style="width: 50%"
-              >
-                <el-input-number
-                  style="width: 100%"
-                  v-model="ruleForm.votePerAttemptCount"
-                  :precision="0"
-                  :step="1"
-                  :min="0"
-                  :placeholder="$t('consult.请输入')"
-                ></el-input-number>
+              <el-form-item :label="$t('isagroup.单次可投票数量')" prop="votePerAttemptCount" style="width: 50%">
+                <el-input-number style="width: 100%" v-model="ruleForm.votePerAttemptCount" :precision="0" :step="1"
+                  :min="0" :placeholder="$t('consult.请输入')"
+                  :disabled="programPrizeCountOnlyLock"></el-input-number>
               </el-form-item>
 
-              <el-form-item
-                :label="$t('isagroup.开始时间')"
-                prop="voteStartTime"
-                style="width: 50%"
-              >
-                <el-date-picker
-                  style="width: 100%"
-                  v-model="ruleForm.voteStartTime"
-                  type="datetime"
-                  :placeholder="$t('consult.请选择')"
-                  value-format="yyyy-MM-dd HH:mm:ss"
-                  format="yyyy-MM-dd HH:mm:ss"
-                >
+              <el-form-item :label="$t('isagroup.开始时间')" prop="voteStartTime" style="width: 50%">
+                <el-date-picker style="width: 100%" v-model="ruleForm.voteStartTime" type="datetime"
+                  :placeholder="$t('consult.请选择')" value-format="yyyy-MM-dd HH:mm:ss" format="yyyy-MM-dd HH:mm:ss"
+                  :disabled="programPrizeCountOnlyLock">
                 </el-date-picker>
               </el-form-item>
-              <el-form-item
-                :label="$t('isagroup.结束时间')"
-                prop="voteEndTime"
-                style="width: 50%"
-              >
-                <el-date-picker
-                  style="width: 100%"
-                  v-model="ruleForm.voteEndTime"
-                  type="datetime"
-                  :placeholder="$t('consult.请选择')"
-                  value-format="yyyy-MM-dd HH:mm:ss"
-                  format="yyyy-MM-dd HH:mm:ss"
-                >
+              <el-form-item :label="$t('isagroup.结束时间')" prop="voteEndTime" style="width: 50%">
+                <el-date-picker style="width: 100%" v-model="ruleForm.voteEndTime" type="datetime"
+                  :placeholder="$t('consult.请选择')" value-format="yyyy-MM-dd HH:mm:ss" format="yyyy-MM-dd HH:mm:ss"
+                  :disabled="programPrizeCountOnlyLock">
                 </el-date-picker>
               </el-form-item>
-              <el-form-item
-                :label="$t('isagroup.获奖名额')"
-                prop="prizeCount"
-                style="width: 50%"
-              >
-                <el-input-number
-                  style="width: 100%"
-                  v-model="ruleForm.prizeCount"
-                  :precision="0"
-                  :step="1"
-                  :min="0"
+              <el-form-item :label="$t('isagroup.获奖名额')" prop="prizeCount" style="width: 50%">
+                <el-input-number style="width: 100%" v-model="ruleForm.prizeCount" :precision="0" :step="1" :min="0"
                   :placeholder="$t('consult.请输入')"
-                ></el-input-number>
+                  :disabled="programPrizeCountOnlyLock"></el-input-number>
               </el-form-item>
             </div>
-            <div
-              class="df_center_wrap"
-              style="width: 100%"
-              v-if="ruleForm['programType'] == '3'"
-            >
-              <el-form-item
-                :label="$t('isagroup.祝福语展示规则')"
-                prop="blessingDisplayRule"
-                style="width: 100%"
-              >
-                <el-radio-group
-                  style="width: 100%"
-                  v-model="ruleForm['blessingDisplayRule']"
-                >
-                  <el-radio
-                    :key="k"
-                    v-for="(i, k) in consts['blessingDisplayRule']"
-                    :label="i.id"
-                    style="color: 999999"
-                    >{{ i18nlocel == "en" ? i.enLabel : i.label }}</el-radio
-                  >
+            <div class="df_center_wrap" style="width: 100%" v-if="ruleForm['programType'] == '3'">
+              <el-form-item :label="$t('isagroup.祝福语展示规则')" prop="blessingDisplayRule" style="width: 100%">
+                <el-radio-group style="width: 100%" v-model="ruleForm['blessingDisplayRule']"
+                  :disabled="programPrizeCountOnlyLock">
+                  <el-radio :key="k" v-for="(i, k) in consts['blessingDisplayRule']" :label="i.id"
+                    style="color: 999999">{{ i18nlocel == "en" ? i.enLabel : i.label }}</el-radio>
                 </el-radio-group>
               </el-form-item>
             </div>
@@ -431,15 +225,23 @@ export default {
       quotasList: [],
       quotaErrorMsg: "",
       isSubmitting: false,
+      /** 编辑限制：进行中且单轮抽奖时仅改奖品数量（program/index 传入 prizeCountOnly） */
+      editRestriction: null,
     };
   },
   created() {
     this.rules = this.initRules();
     this.initData();
   },
-  mounted() {},
+  mounted() { },
   computed: {
     ...mapGetters(["permissions", "dictionary", "i18nlocel"]),
+    programPrizeCountOnlyLock() {
+      return (
+        this.modalType === "edit" &&
+        this.editRestriction === "prizeCountOnly"
+      );
+    },
   },
   watch: {
     i18nlocel: {
@@ -504,7 +306,7 @@ export default {
         ],
 
         backgroundImage: [
-          { required: true, message: that.$t("isagroup.请上传"), trigger: "blur" },
+          { required: false, message: that.$t("isagroup.请上传"), trigger: "blur" },
         ],
         // 抽奖类规则
         createLotteryPool: [
@@ -534,6 +336,15 @@ export default {
         totalRounds: [
           { required: false, message: that.$t("isagroup.请选择"), trigger: "blur" },
         ],
+        sortOrder: [
+          { required: false, message: that.$t("isagroup.请输入"), trigger: "blur" },
+          {
+            type: "number",
+            min: 0,
+            message: that.$t("isagroup.请输入"),
+            trigger: "blur",
+          },
+        ],
         quotas: [
           { required: false, message: that.$t("isagroup.请选择"), trigger: "blur" },
         ],
@@ -560,7 +371,12 @@ export default {
       this.activityList = await getActivityList();
     },
     // 打开
-    async showForm(type = "add", item = {}) {
+    async showForm(type = "add", item = {}, opts = {}) {
+      this.editRestriction =
+        opts &&
+        opts.restriction === "prizeCountOnly"
+          ? "prizeCountOnly"
+          : null;
       this.modalType = type;
       this.showModal = true;
       if (type != "add") {
@@ -597,9 +413,19 @@ export default {
             backgroundImage,
             programType,
             totalRounds,
+            sortOrder: sortOrderFromApi,
             rule,
             quotas = [], // 获取配额数据
           } = res.data.data;
+
+          const soFromRule = rule && rule["sortOrder"];
+          let soRaw = 0;
+          if (sortOrderFromApi != null && sortOrderFromApi !== "") {
+            soRaw = Number(sortOrderFromApi);
+          } else if (soFromRule != null && soFromRule !== "") {
+            soRaw = Number(soFromRule);
+          }
+          const sortOrderVal = Number.isFinite(soRaw) ? soRaw : 0;
 
           this.$nextTick(() => {
             this.ruleForm = {
@@ -611,9 +437,10 @@ export default {
               backgroundImage,
               programType: String(programType),
               totalRounds: String(totalRounds),
+              sortOrder: sortOrderVal,
             };
             switch (String(programType)) {
-              case "1":
+              case "1": {
                 this.ruleForm = {
                   ...this.ruleForm,
                   createLotteryPool: String(rule["createLotteryPool"]),
@@ -644,6 +471,7 @@ export default {
                 }
                 this.setLotterydrawRule("1");
                 break;
+              }
               case "2":
                 this.ruleForm = {
                   ...this.ruleForm,
@@ -759,6 +587,10 @@ export default {
         programType: this.ruleForm["programType"],
         rule: {},
       };
+      data["sortOrder"] =
+        this.ruleForm["sortOrder"] != null && this.ruleForm["sortOrder"] !== ""
+          ? Number(this.ruleForm["sortOrder"])
+          : 0;
       switch (this.ruleForm["programType"]) {
         case "1":
           data["totalRounds"] = this.ruleForm["totalRounds"];
@@ -804,6 +636,9 @@ export default {
       }
     },
     async beforeUpload(file) {
+      if (this.programPrizeCountOnlyLock) {
+        return false;
+      }
       const isJPG = file.type === "image/jpeg" || file.type === "image/png";
       const isLt20M = file.size / 1024 / 1024 < 20;
 
@@ -833,6 +668,10 @@ export default {
           case "1":
             this.ruleForm = {
               ...this.ruleForm,
+              sortOrder:
+                this.ruleForm.sortOrder != null && this.ruleForm.sortOrder !== ""
+                  ? Number(this.ruleForm.sortOrder)
+                  : 0,
               createLotteryPool: "0",
               lotteryIdentifierType: "0",
               lotteryParticipantScope: "0",
@@ -901,6 +740,7 @@ export default {
       this.showModal = false;
       this.ruleForm = {};
       this.isSubmitting = false;
+      this.editRestriction = null;
     },
   },
 };

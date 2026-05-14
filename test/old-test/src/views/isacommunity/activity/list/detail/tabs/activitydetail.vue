@@ -1,15 +1,5 @@
 <template>
-  <div>
-    <div class="community_top_btn" style="text-align: right; margin-bottom: 20px">
-      <el-button
-        v-if="detailData['activityStatus'] == '1' || detailData['activityStatus'] == '0'"
-        style="margin-right: 10px"
-        type="primary"
-        size="large"
-        @click="editActivity"
-        >{{ $t("btn.编辑") }}</el-button
-      >
-    </div>
+  <div v-loading="detailLoading">
     <div class="orderDetail">
       <div>
         <div class="orderDetail_item">
@@ -19,7 +9,9 @@
               class="orderDetail_baseinfo_item"
             >
               <span>{{ $t("isagroup.ID") }}</span>
-              <span :title="$checkNull(activityId)">{{ $checkNull(activityId) }}</span>
+              <span :title="$checkNull(activityId)">{{
+                $checkNull(activityId)
+              }}</span>
             </div>
             <div
               style="width: 25%; margin-bottom: 15px"
@@ -37,15 +29,6 @@
               <span>{{ $t("isagroup.创建人") }}</span>
               <span :title="$checkNull(detailData['publisher'])">{{
                 $checkNull(detailData["publisher"])
-              }}</span>
-            </div>
-            <div
-              style="width: 25%; margin-bottom: 15px"
-              class="orderDetail_baseinfo_item"
-            >
-              <span>{{ $t("isagroup.创建时间") }}</span>
-              <span :title="$checkNull(detailData['createTime'])">{{
-                $checkNull(detailData["createTime"])
               }}</span>
             </div>
             <div
@@ -178,6 +161,34 @@
               style="width: 25%; margin-bottom: 15px"
               class="orderDetail_baseinfo_item"
             >
+              <span>{{ $t("isagroup.报名人数限制") }}</span>
+              <span :title="$checkNull(detailData['registrationLimitLabel'])">{{
+                $checkNull(detailData["registrationLimitLabel"])
+              }}</span>
+            </div>
+            <div
+              style="width: 25%; margin-bottom: 15px"
+              class="orderDetail_baseinfo_item"
+            >
+              <span>{{ $t("isagroup.可见范围") }}</span>
+              <span :title="$checkNull(detailData['visibleScopeLabel'])">{{
+                $checkNull(detailData["visibleScopeLabel"])
+              }}</span>
+            </div>
+            <div
+              v-if="Number(detailData.visibleScope) === 1"
+              style="width: 100%; margin-bottom: 15px"
+              class="orderDetail_baseinfo_item"
+            >
+              <span>{{ $t("isagroup.可见范围名单") }}</span>
+              <span :title="$checkNull(detailData['visibleScopeFileLabel'])">{{
+                $checkNull(detailData["visibleScopeFileLabel"])
+              }}</span>
+            </div>
+            <div
+              style="width: 25%; margin-bottom: 15px"
+              class="orderDetail_baseinfo_item"
+            >
               <span>{{ $t("isagroup.是否推荐") }}</span>
               <span :title="$checkNull(detailData['recommended'])">{{
                 $checkNull(detailData["recommended"])
@@ -215,8 +226,18 @@
               class="orderDetail_baseinfo_item"
             >
               <span>{{ $t("isagroup.推送校区") }}</span>
-              <span :title="$checkNull(detailData['wechatPushSchoolIdsLabel'])">{{
-                $checkNull(detailData["wechatPushSchoolIdsLabel"])
+              <span
+                :title="$checkNull(detailData['wechatPushSchoolIdsLabel'])"
+                >{{ $checkNull(detailData["wechatPushSchoolIdsLabel"]) }}</span
+              >
+            </div>
+            <div
+              style="width: 100%; margin-bottom: 15px"
+              class="orderDetail_baseinfo_item"
+            >
+              <span>{{ $t("isagroup.推送邮箱") }}</span>
+              <span :title="$checkNull(detailData['emailConfigIdsLabel'])">{{
+                $checkNull(detailData["emailConfigIdsLabel"])
               }}</span>
             </div>
             <div
@@ -261,142 +282,289 @@
         </div>
       </div>
     </div>
-    <!-- 新增编辑弹窗 -->
-    <Form ref="Form" @getList="getDetail" />
   </div>
 </template>
 
 <script>
-import { mapGetters } from "vuex";
 import { getActivityDetail } from "@/api/isacommunity/activity.js";
-import tabletitle from "@/const/isacommunity/tabletitle.js";
+import {
+  getSchoolEmailConfigDetail,
+  getSchoolEmailConfigList,
+} from "@/api/isacommunity/schoolEmailConfig.js";
 import consts from "@/const/isacommunity/consts.js";
-import Form from "@/views/isacommunity/activity/list/modal/form.vue";
-import dayjs from "dayjs";
+import schoolListBuscommonMixin from "@/mixins/schoolListBuscommon.js";
+import { mapGetters } from "vuex";
 export default {
   name: "detail",
-  components: { Form },
+  mixins: [schoolListBuscommonMixin],
   props: {
     activityId: String,
   },
   data() {
     return {
-      tablestyle: consts["tablestyle"],
-      tabletitle: tabletitle,
-      showDialog: false,
       detailData: {},
-      driverList: [],
+      detailLoading: false,
+      /** 并发请求序号，仅最后一次响应可更新界面与结束 loading */
+      _getDetailReqId: 0,
     };
   },
-  created() {},
-  mounted() {
-    // this.getDetail();
+  watch: {
+    activityId: {
+      handler(newVal) {
+        if (!newVal) {
+          this.detailData = {};
+          this.detailLoading = false;
+          return;
+        }
+        this.getDetail();
+      },
+      immediate: true,
+    },
   },
   computed: {
-    ...mapGetters(["i18nlocel", "dictionary", "permissions"]),
+    ...mapGetters(["i18nlocel"]),
   },
   methods: {
-    editActivity() {
-      this.$refs.Form.showForm("edit", this.detailData);
+    /** 接口校区 id 多为字符串，字典 option 的 id 多为数字 */
+    schoolIdIncluded(rawIds, schoolId) {
+      const sid = schoolId != null ? String(schoolId) : "";
+      if (!sid) return false;
+      const arr = Array.isArray(rawIds) ? rawIds : [];
+      return arr.some((x) => String(x) === sid);
     },
-    getDetail() {
-      getActivityDetail(this.activityId).then(async (res) => {
-        if (res.data.success) {
-          this.$nextTick(() => {
-            let {
-              activityCnName,
-              activityEnName,
-              introCn,
-              introEn,
-              addressCn,
-              addressEn,
-              tipsCn,
-              tipsEn,
-              schoolIds,
-              checkinMethod,
-              ticketPrice,
-              recommended,
-              banner,
-              needFeedback,
-              wechatNotify,
-              wechatPushSchoolIds,
-              wechatPushContent,
-              wechatPushRemark,
-              activityStatus,
-              detailCn,
-              detailEn,
-              registrationTime,
-              activityStartTime,
-              activityEndTime,
-              publisher,
-              createTime,
-              imageUrl,
-              registrationStartTime,
-              registrationEndTime,
-            } = res.data.data;
-            let activitySchoolIds = schoolIds || [];
-            let wechatSchoolIds = wechatPushSchoolIds || [];
-            console.log("activitySchoolIds", schoolIds, activitySchoolIds);
-            console.log("wechatSchoolIds", wechatPushSchoolIds, wechatSchoolIds);
-
-            this.$nextTick(() => {
-              this.detailData = {
-                ...this.detailData,
-                id: this.activityId,
-                activityCnName,
-                activityEnName,
-                introCn,
-                introEn,
-                addressCn,
-                addressEn,
-                tipsCn,
-                tipsEn,
-                publisher,
-                createTime,
-                checkinMethodLabel: this.$getListLabel(
-                  consts["activityCheckinMethod"],
-                  String(checkinMethod)
-                ),
-                ticketPrice,
-                recommended: this.$getListLabel(consts["yesOrno"], String(recommended)),
-                banner: this.$getListLabel(consts["yesOrno"], String(banner)),
-                needFeedback: this.$getListLabel(consts["yesOrno"], String(needFeedback)),
-                wechatNotify: this.$getListLabel(consts["yesOrno"], String(wechatNotify)),
-                wechatPushContent,
-                wechatPushRemark,
-                activityStatus: String(activityStatus),
-                activityStatusLabel: this.$getListLabel(
-                  consts["activityStatus"],
-                  String(activityStatus)
-                ),
-                registrationTime: registrationStartTime + " - " + registrationEndTime,
-                activityTime: activityStartTime + " - " + activityEndTime,
-                detailCn,
-                detailEn,
-                imageUrl,
-              };
-              let schoolIdsLabel = [];
-              this.dictionary["school"].map((school) => {
-                if (activitySchoolIds.includes(school.id)) {
-                  schoolIdsLabel.push(school.enName);
+    normalizeEmailConfigIdList(raw) {
+      if (raw == null || raw === "") {
+        return [];
+      }
+      const arr = Array.isArray(raw) ? raw : [raw];
+      return arr
+        .map((item) => {
+          const id =
+            item != null &&
+            typeof item === "object" &&
+            !Array.isArray(item) &&
+            "id" in item
+              ? item.id
+              : item;
+          if (id == null || id === "") {
+            return null;
+          }
+          return id;
+        })
+        .filter((id) => id != null && id !== "");
+    },
+    resolveEmailConfigLabels(
+      emailConfigIds,
+      activitySchoolIds,
+      emailConfigEmails
+    ) {
+      const ids = this.normalizeEmailConfigIdList(emailConfigIds);
+      if (!ids.length) {
+        this.$set(this.detailData, "emailConfigIdsLabel", "--");
+        return;
+      }
+      const emails = Array.isArray(emailConfigEmails) ? emailConfigEmails : [];
+      if (emails.length) {
+        const parts = ids
+          .map((id, i) => {
+            const e = emails[i];
+            return e != null && String(e).trim() !== "" ? String(e).trim() : "";
+          })
+          .filter(Boolean);
+        if (parts.length) {
+          this.$set(this.detailData, "emailConfigIdsLabel", parts.join(", "));
+          return;
+        }
+      }
+      const params = { appModule: "1" };
+      if (activitySchoolIds && activitySchoolIds.length) {
+        params.schoolIds = activitySchoolIds;
+      }
+      getSchoolEmailConfigList(params)
+        .then(async (res) => {
+          if (
+            !(res.data && res.data.success !== false && res.data.data != null)
+          ) {
+            this.$set(this.detailData, "emailConfigIdsLabel", "--");
+            return;
+          }
+          const list = Array.isArray(res.data.data) ? res.data.data : [];
+          const parts = [];
+          for (const id of ids) {
+            let o = list.find(
+              (x) =>
+                x &&
+                x.id != null &&
+                String(x.id).trim() !== "" &&
+                String(x.id) === String(id)
+            );
+            if (!o) {
+              try {
+                const dr = await getSchoolEmailConfigDetail(id);
+                if (dr.data && dr.data.success && dr.data.data) {
+                  o = dr.data.data;
                 }
-              });
+              } catch (e) {
+                o = null;
+              }
+            }
+            if (!o) {
+              continue;
+            }
+            const email = o.email || "";
+            const school = this.schoolSelectList.find(
+              (s) => s.id === o.schoolId || String(s.id) === String(o.schoolId)
+            );
+            const sn = school
+              ? this.schoolDropdownLabel(school)
+              : o.schoolId != null
+              ? String(o.schoolId)
+              : "";
+            parts.push(sn ? `${email}（${sn}）` : email);
+          }
+          const line = parts
+            .filter((p) => p != null && String(p).trim() !== "")
+            .join(", ");
+          this.$set(this.detailData, "emailConfigIdsLabel", line || "--");
+        })
+        .catch(() => {
+          this.$set(this.detailData, "emailConfigIdsLabel", "--");
+        });
+    },
+    /** 接口 layer → 详情展示字段（不含异步邮箱解析） */
+    buildActivityDetailViewModel(row) {
+      const visibleScope =
+        row.visibleScope !== undefined && row.visibleScope !== null
+          ? Number(row.visibleScope)
+          : 0;
+      const vf = row.visibleScopeFile;
+      const activitySchoolIds = row.schoolIds || [];
+      const wechatSchoolIds = row.wechatPushSchoolIds || [];
+      const yn = (v) =>
+        this.$getListLabel(
+          consts["yesOrno"],
+          String(v == null || v === "" ? "0" : v)
+        );
 
-              let wechatPushSchoolIdsLabel = [];
-              this.dictionary["school"].map((school) => {
-                if (wechatSchoolIds.includes(school.id)) {
-                  wechatPushSchoolIdsLabel.push(school.enName);
-                }
-              });
-
-              this.detailData["schoolIdsLabel"] = String(schoolIdsLabel);
-              this.detailData["wechatPushSchoolIdsLabel"] = String(
-                wechatPushSchoolIdsLabel
-              );
-            });
-          });
+      const schoolIdsLabel = [];
+      const wechatPushSchoolIdsLabel = [];
+      this.schoolSelectList.forEach((school) => {
+        if (this.schoolIdIncluded(activitySchoolIds, school.id)) {
+          schoolIdsLabel.push(this.schoolDropdownLabel(school));
+        }
+        if (this.schoolIdIncluded(wechatSchoolIds, school.id)) {
+          wechatPushSchoolIdsLabel.push(this.schoolDropdownLabel(school));
         }
       });
+
+      const ticketPrice = row.ticketPrice;
+      const ticketNotifyEmailEnabled = row.ticketNotifyEmailEnabled;
+      const ticketNotifyEmails = row.ticketNotifyEmails;
+
+      return {
+        ...this.detailData,
+        id: this.activityId,
+        activityCnName: row.activityCnName,
+        activityEnName: row.activityEnName,
+        introCn: row.introCn,
+        introEn: row.introEn,
+        addressCn: row.addressCn,
+        addressEn: row.addressEn,
+        tipsCn: row.tipsCn,
+        tipsEn: row.tipsEn,
+        publisher: row.publisher,
+        createTime: row.createTime,
+        checkinMethodLabel: this.$getListLabel(
+          consts["activityCheckinMethod"],
+          String(row.checkinMethod)
+        ),
+        ticketPrice,
+        recommended: yn(row.recommended),
+        banner: yn(row.banner),
+        needFeedback: yn(row.needFeedback),
+        wechatNotify: yn(row.wechatNotify),
+        wechatPushContent: row.wechatPushContent,
+        wechatPushRemark: row.wechatPushRemark,
+        activityStatus: String(row.activityStatus),
+        activityStatusLabel: this.$getListLabel(
+          consts["activityStatus"],
+          String(row.activityStatus)
+        ),
+        registrationTime: `${row.registrationStartTime || ""} - ${
+          row.registrationEndTime || ""
+        }`,
+        activityTime: `${row.activityStartTime || ""} - ${
+          row.activityEndTime || ""
+        }`,
+        detailCn: row.detailCn,
+        detailEn: row.detailEn,
+        imageUrl: row.imageUrl,
+        visibleScope,
+        visibleScopeLabel:
+          visibleScope === 1
+            ? this.i18nlocel == "en"
+              ? "Designated"
+              : "指定"
+            : this.i18nlocel == "en"
+            ? "Public"
+            : "公开",
+        visibleScopeFileLabel:
+          visibleScope === 1 && vf && vf.fileName ? vf.fileName : "--",
+        registrationLimitLabel:
+          row.registrationLimit != null && row.registrationLimit !== ""
+            ? String(row.registrationLimit)
+            : "--",
+        ticketNotifyEmailsLabel:
+          Number(ticketPrice) > 0 && String(ticketNotifyEmailEnabled) === "1"
+            ? Array.isArray(ticketNotifyEmails)
+              ? String(ticketNotifyEmails)
+              : ticketNotifyEmails
+            : this.i18nlocel == "en"
+            ? "Disabled"
+            : "关闭",
+        schoolIdsLabel: String(schoolIdsLabel),
+        wechatPushSchoolIdsLabel: String(wechatPushSchoolIdsLabel),
+      };
+    },
+    async applyActivityDetailResponse(res) {
+      const body = res && res.data;
+      const row = body && body.data;
+      if (
+        !row ||
+        typeof row !== "object" ||
+        body.success === false ||
+        body.code === 1
+      ) {
+        return;
+      }
+      await this.fetchSchoolListBuscommon();
+
+      const activitySchoolIds = row.schoolIds || [];
+      this.$nextTick(() => {
+        this.detailData = this.buildActivityDetailViewModel(row);
+        this.resolveEmailConfigLabels(
+          row.emailConfigIds,
+          activitySchoolIds,
+          row.emailConfigEmails
+        );
+      });
+    },
+    async getDetail() {
+      if (!this.activityId) {
+        this.detailData = {};
+        this.detailLoading = false;
+        return;
+      }
+      this.detailLoading = true;
+      try {
+        const res = await getActivityDetail(this.activityId);
+        await this.applyActivityDetailResponse(res);
+      } catch {
+        // 接口取消或网络异常：已由 loading finally 收尾
+        this.detailLoading = false;
+      } finally {
+        this.detailLoading = false;
+      }
     },
   },
 };

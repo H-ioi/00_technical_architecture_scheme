@@ -769,7 +769,6 @@ export default {
   display: flex;
   flex-wrap: wrap;
   justify-content: flex-end;
-  gap: 12px;
   margin-top: 20px;
   padding-top: 16px;
   border-top: 1px solid var(--el-border-color-lighter);
@@ -778,7 +777,6 @@ export default {
 .route-form-modal__nested-footer {
   display: flex;
   justify-content: flex-end;
-  gap: 8px;
   margin-top: 16px;
 }
 
@@ -973,7 +971,6 @@ export default {
   flex-wrap: nowrap;
   align-items: center;
   justify-content: center;
-  gap: 4px;
   white-space: nowrap;
 }
 

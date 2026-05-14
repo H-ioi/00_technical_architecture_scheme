@@ -37,8 +37,8 @@
             >
               <el-option
                 :key="k"
-                v-for="(i, k) in dictionary['school']"
-                :label="i.enName"
+                v-for="(i, k) in schoolSelectList"
+                :label="schoolDropdownLabel(i)"
                 :value="i.id"
               ></el-option>
             </el-select>
@@ -175,8 +175,10 @@ import CopyForm from "./modal/copy.vue";
 import FrozenForm from "./modal/frozen.vue";
 import StatusForm from "./modal/status.vue";
 import dayjs from "dayjs";
+import schoolListBuscommonMixin from "@/mixins/schoolListBuscommon.js";
 export default {
   name: "teacher",
+  mixins: [schoolListBuscommonMixin],
   components: { Table, Pagination, CopyForm, FrozenForm, StatusForm },
   data() {
     return {
@@ -244,10 +246,11 @@ export default {
     this.getList();
   },
   computed: {
-    ...mapGetters(["permissions", "i18nlocel", "dictionary"]),
+    ...mapGetters(["permissions", "i18nlocel"]),
   },
   methods: {
     async initData() {
+      await this.fetchSchoolListBuscommon();
       this.activityList = await getActivityList();
       this.getList();
     },
@@ -268,9 +271,9 @@ export default {
     formatData() {
       this.tableData.map((item) => {
         let schoolIdsLabel = [];
-        this.dictionary["school"].map((school) => {
+        this.schoolSelectList.forEach((school) => {
           if (item["schoolIds"].includes(school.id)) {
-            schoolIdsLabel.push(school.enName);
+            schoolIdsLabel.push(this.schoolDropdownLabel(school));
           }
         });
         item["schoolIdsLabel"] = String(schoolIdsLabel);

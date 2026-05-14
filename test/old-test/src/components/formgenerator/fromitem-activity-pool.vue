@@ -222,7 +222,10 @@
               <img style="width: 100%; height: 100%" :src="banner.url" alt="" />
             </el-carousel-item>
           </el-carousel>
-          <div class="protocol-container" v-if="item.type == 'protocol'">
+          <div
+            class="protocol-container"
+            v-if="item.type == 'protocol' && templateType == 'default'"
+          >
             <el-checkbox
               v-model="formArrValue[item.id]"
               true-label="1"
@@ -242,6 +245,24 @@
                 >《{{ protocol.label }}》</span
               >
             </p>
+          </div>
+          <div
+            class="protocol-content"
+            v-if="item.type == 'protocol' && templateType == 'templateout'"
+          >
+            <div class="protocol-content-box">
+              <div
+                class="protocol-content-text"
+                v-html="item.properties.placeholder"
+              ></div>
+            </div>
+            <el-checkbox
+              v-model="formArrValue[item.id]"
+              true-label="1"
+              false-label="0"
+              @change="handleChangeProtocol($event, item)"
+              >I agree/我同意</el-checkbox
+            >
           </div>
           <div v-if="item.type == 'autoFill'">
             <el-input
@@ -421,7 +442,12 @@ import { getLanguageList, formatChinaArea } from "@/util/jsondata.js";
 import { createCode } from "@/util/util.js";
 import FromitemChild from "./fromitem-child.vue";
 export default {
-  props: {},
+  props: {
+    templateType: {
+      type: String,
+      default: "default",
+    },
+  },
   components: {
     SignatureH5,
     FromitemChild,
@@ -651,6 +677,49 @@ export default {
               resolve(data);
             } else {
               resolve({});
+            }
+          }
+        });
+      });
+    },
+    // 保存提交数据
+    getFormArrValue() {
+      return new Promise((resolve, reject) => {
+        this.$refs["form"].validate(async (valid) => {
+          if (valid) {
+            if (this.checkData()) {
+              const fields = [];
+              const formDataClone = deepClone(this.formArrValue);
+              Object.keys(formDataClone).forEach(async (fieldId) => {
+                const objValue = { templateFieldId: fieldId };
+                const formItem = this.formArr.find(
+                  (item) => item.id === fieldId
+                );
+
+                if (!formItem) return;
+                const value = this.transformValue(
+                  formItem,
+                  formDataClone[fieldId]
+                );
+                objValue.submitValue = value === null ? "" : value;
+                fields.push(objValue);
+              });
+
+              const data = {
+                fieldData: fields,
+                templateId: this.templateFormId,
+              };
+              console.log("saveFormArrValue", data);
+
+              resolve({
+                status: true,
+                data,
+              });
+            } else {
+              resolve({
+                status: false,
+                data: {},
+              });
             }
           }
         });

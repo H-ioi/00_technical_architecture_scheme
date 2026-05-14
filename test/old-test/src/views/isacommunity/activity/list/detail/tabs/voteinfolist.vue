@@ -25,9 +25,9 @@
             }}</el-button>
           </el-form-item>
         </el-form>
-        <div v-if="!readOnly" class="activity-search-toolbar__actions">
+        <div v-if="!readOnly || showExportEnded" class="activity-search-toolbar__actions">
           <el-button
-            v-if="permissions['busdriver_edit']"
+            v-if="!readOnly && permissions['busdriver_edit']"
             type="primary"
             size="medium"
             :disabled="!activityId"
@@ -36,7 +36,8 @@
           >
           <el-button
             v-if="
-              permissions['busdriver_del'] || permissions['activity_ticket_del']
+              !readOnly &&
+              (permissions['busdriver_del'] || permissions['activity_ticket_del'])
             "
             type="danger"
             size="medium"
@@ -44,6 +45,15 @@
             :disabled="tableSelectionCount === 0"
             @click="batchDel"
             >{{ $t("btn.删除") }}</el-button
+          >
+          <el-button
+            v-if="showExportEnded && permissions['busdriver_edit']"
+            type="primary"
+            size="medium"
+            plain
+            :disabled="!activityId || voteExportLoading"
+            @click="exportVoteCsv"
+            >{{ $t("btn.导出") }}</el-button
           >
         </div>
       </div>
@@ -161,6 +171,7 @@ import Table from "@/components/communitycommon/Table.vue";
 import tabletitle from "@/const/isacommunity/tabletitle.js";
 import dayjs from "dayjs";
 import { mapGetters } from "vuex";
+import { downloadUtf8Csv } from "@/util/download";
 
 export default {
   name: "ActivityVoteInfoList",
@@ -171,6 +182,10 @@ export default {
       default: "",
     },
     readOnly: {
+      type: Boolean,
+      default: false,
+    },
+    showExportEnded: {
       type: Boolean,
       default: false,
     },
@@ -192,6 +207,7 @@ export default {
       tableHeight: "calc(100vh - 420px)",
       tableBtn: [],
       dialogVisible: false,
+      voteExportLoading: false,
       dialogForm: {
         checkinId: null,
         voteId: null,
@@ -221,10 +237,10 @@ export default {
         { required: true, message: msg, trigger: "blur" },
       ];
       return {
-        checkinId: req(this.$t("isagroup.请选择签到记录")),
+        // checkinId: req(this.$t("isagroup.请选择签到记录")),
         voteId: req(this.$t("isagroup.请选择投票节目")),
-        voter: reqBlur(this.$t("isagroup.请输入")),
-        phone: reqBlur(this.$t("isagroup.请输入")),
+        // voter: reqBlur(this.$t("isagroup.请输入")),
+        // phone: reqBlur(this.$t("isagroup.请输入")),
       };
     },
   },
@@ -256,12 +272,10 @@ export default {
     },
     checkinOptionLabel(row) {
       const id = row.id != null ? row.id : "";
-      const name =
-        row.name != null && row.name !== "" ? String(row.name) : "";
+      const name = row.name != null && row.name !== "" ? String(row.name) : "";
       const phone =
         row.phone != null && row.phone !== "" ? String(row.phone) : "";
-      const code =
-        row.code != null && row.code !== "" ? String(row.code) : "";
+      const code = row.code != null && row.code !== "" ? String(row.code) : "";
       const parts = [name, phone, code].filter(Boolean);
       return parts.length ? `#${id} · ${parts.join(" · ")}` : `#${id}`;
     },
@@ -343,6 +357,74 @@ export default {
       }
       return [];
     },
+    buildVoteRecordParams(cur, sz) {
+      return {
+        activityId: this.activityId,
+        current: cur,
+        size: sz,
+        pageNum: cur,
+        pageSize: sz,
+        keyword: this.searchFrom.keyword || undefined,
+      };
+    },
+    async exportVoteCsv() {
+      if (!this.activityId || this.voteExportLoading) {
+        return;
+      }
+      this.voteExportLoading = true;
+      const pageSize = 200;
+      let current = 1;
+      let allRaw = [];
+      let totalKnown = null;
+      try {
+        while (current < 600) {
+          const params = this.buildVoteRecordParams(current, pageSize);
+          const res = await getVoteRecordPage(params);
+          if (!res.data.success) {
+            break;
+          }
+          const payload = res.data.data || {};
+          const list = this.extractPageList(payload);
+          const total =
+            payload.total !== undefined && payload.total !== null
+              ? payload.total
+              : payload.totalElements != null
+              ? payload.totalElements
+              : null;
+          if (typeof total === "number") {
+            totalKnown = total;
+          }
+          allRaw = allRaw.concat(list);
+          if (!list.length) {
+            break;
+          }
+          if (typeof totalKnown === "number" && allRaw.length >= totalKnown) {
+            break;
+          }
+          if (list.length < pageSize) {
+            break;
+          }
+          current += 1;
+        }
+        const cols = this.tabletitle.activityVoteRecordTable.map((c) => ({
+          header: c.label,
+          key: c.prop,
+        }));
+        const rows = allRaw.map((item, i) =>
+          this.formatRow(item, i, 1, 1)
+        );
+        downloadUtf8Csv(
+          `activity-vote-records-${this.activityId}.csv`,
+          rows,
+          cols
+        );
+        this.$message.success(this.$t("isagroup.成功"));
+      } catch (e) {
+        this.$message.error(this.$t("isagroup.失败"));
+      } finally {
+        this.voteExportLoading = false;
+      }
+    },
     formatRow(item, index, current, size) {
       const createRaw =
         item.createTime != null ? item.createTime : item.create_time;
@@ -375,14 +457,7 @@ export default {
       }
       const cur = this.pagination.current;
       const sz = this.pagination.size;
-      const params = {
-        activityId: this.activityId,
-        current: cur,
-        size: sz,
-        pageNum: cur,
-        pageSize: sz,
-        keyword: this.searchFrom.keyword || undefined,
-      };
+      const params = this.buildVoteRecordParams(cur, sz);
       this.listLoading = true;
       getVoteRecordPage(params)
         .then((res) => {
@@ -453,9 +528,9 @@ export default {
         const aid = this.activityId;
         const cid = this.dialogForm.checkinId;
         const vid = this.dialogForm.voteId;
-        if (cid == null || cid === "" || vid == null || vid === "") {
-          return;
-        }
+        // if (cid == null || cid === "" || vid == null || vid === "") {
+        //   return;
+        // }
         const payload = {
           activityId:
             typeof aid === "string" && /^\d+$/.test(aid) && aid.length <= 16

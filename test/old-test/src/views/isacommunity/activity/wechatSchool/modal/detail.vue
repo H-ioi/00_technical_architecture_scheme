@@ -3,7 +3,7 @@
     <el-dialog
       :title="title"
       :visible="showDialog"
-      width="85%"
+      width="720px"
       :before-close="closeModal"
       :close-on-click-modal="false"
     >
@@ -12,15 +12,13 @@
           <div class="orderDetail_item">
             <div class="orderDetail_baseinfo">
               <div
-                style="width: 25%; margin-bottom: 15px"
+                style="width: 50%; margin-bottom: 15px"
                 class="orderDetail_baseinfo_item"
-                v-for="(item, index) in tabletitle['voteProgramTable']"
+                v-for="(row, index) in displayRows"
                 :key="index"
               >
-                <span>{{ $t("isagroup")[item.label] }}</span>
-                <span :title="$checkNull(detailData[item.prop])">{{
-                  $checkNull(detailData[item.prop])
-                }}</span>
+                <span>{{ $t("isagroup")[row.label] }}</span>
+                <span :title="$checkNull(row.value)">{{ $checkNull(row.value) }}</span>
               </div>
             </div>
           </div>
@@ -32,61 +30,64 @@
 
 <script>
 import { mapGetters } from "vuex";
-import { getVoteProgramDetail } from "@/api/isacommunity/voteprogram.js";
-import tabletitle from "@/const/isacommunity/tabletitle.js";
+import { getWechatSchoolDetail } from "@/api/isacommunity/wechatSchoolInfo.js";
 import consts from "@/const/isacommunity/consts.js";
 import dayjs from "dayjs";
 export default {
-  name: "detail",
+  name: "wechatSchoolDetail",
   components: {},
   props: {
     title: String,
   },
   data() {
     return {
-      tablestyle: consts["tablestyle"],
-      tabletitle: tabletitle,
       showDialog: false,
       detailData: {},
+      displayRows: [],
     };
   },
-  created() {},
-  mounted() {},
   computed: {
-    ...mapGetters(["i18nlocel"]),
+    ...mapGetters(["i18nlocel", "dictionary"]),
   },
   methods: {
     showModal(item) {
       this.showDialog = true;
-      this.getDetail(item.id);
+      const id = item.id;
+      if (id) this.getDetail(id);
     },
     closeModal() {
       this.showDialog = false;
     },
-    // 获取详情
+    schoolLabel(schoolId) {
+      if (schoolId == null || schoolId === "") return "--";
+      const list = this.dictionary["school"] || [];
+      const row = list.find((s) => String(s.id) === String(schoolId));
+      if (!row) return String(schoolId);
+      return this.i18nlocel === "en" ? row.enName || row.cnName : row.cnName || row.enName;
+    },
     getDetail(id) {
-      getVoteProgramDetail(id).then(async (res) => {
+      getWechatSchoolDetail(id).then((res) => {
         if (res.data.success) {
-          this.$nextTick(() => {
-            let {
-              cnName,
-              enName,
-              contentCn,
-              contentEn,
-              programName,
-              programId,
-            } = res.data.data;
-            this.detailData = {
-              ...this.ruleForm,
-              id,
-              cnName,
-              enName,
-              contentCn,
-              contentEn,
-              programId,
-              programName,
-            };
-          });
+          const d = res.data.data || {};
+          const activeLabel = this.$getListLabel(consts["yesOrno"], String(d.active));
+          this.detailData = { ...d };
+          this.displayRows = [
+            { label: "ID", value: d.id },
+            { label: "校区", value: this.schoolLabel(d.schoolId) },
+            { label: "微信AppID", value: d.wechatAppid },
+            { label: "微信Secret", value: d.wechatSecret },
+            { label: "推送模板", value: d.msgTemplateId },
+            { label: "Token值", value: d.verifyToken },
+            { label: "激活状态", value: activeLabel },
+            {
+              label: "创建时间",
+              value: d.createdAt ? dayjs(d.createdAt).format("YYYY-MM-DD HH:mm:ss") : "--",
+            },
+            {
+              label: "更新时间",
+              value: d.updatedAt ? dayjs(d.updatedAt).format("YYYY-MM-DD HH:mm:ss") : "--",
+            },
+          ];
         }
       });
     },

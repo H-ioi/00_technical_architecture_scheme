@@ -34,6 +34,20 @@
               :maxlength="32"
             ></el-input>
           </el-form-item>
+          <el-form-item
+            style="margin-left: 30px"
+            v-if="this.formData['scene'] == '1'"
+            :label="$t('consult.是否对外显示')"
+            prop="isShowOutside"
+          >
+            <el-radio-group
+              style="line-height: 40px"
+              v-model="templateFrom.isShowOutside"
+            >
+              <el-radio :label="1">{{ $t("consult.是") }}</el-radio>
+              <el-radio :label="0">{{ $t("consult.否") }}</el-radio>
+            </el-radio-group>
+          </el-form-item>
           <!-- <el-form-item label="备注" prop="mark" style="margin: 0; width: 100%">
             <el-input
               type="textarea"
@@ -54,7 +68,7 @@
           <div class="formgenerator_template">
             <div class="formgenerator_form df_fa" style="margin-left: 0">
               <!-- 左侧点击添加表单组件 -->
-              <FormLeft @addform="addform" />
+              <FormLeft @addform="addform" :formData="formData" />
               <!-- 表单预览 -->
               <FormRight
                 :formArr="formArr"
@@ -120,6 +134,7 @@ import FormLeft from "./formgeneratorItem_pool/form_left.vue";
 import FormRight from "./formgeneratorItem_pool/form_right.vue";
 import formgeneratorRight from "./formgeneratorItem_pool/formgenerator_right.vue";
 import { formrules } from "@/util/form.js";
+import { getOuterFile, getOuterFileName } from "@/api/upload/index.js";
 
 export default {
   components: {
@@ -244,90 +259,118 @@ export default {
     getTemplateDetail(id) {
       if (id == null) return;
 
-      getTemplateInfo({ templateId: id }).then((res) => {
+      getTemplateInfo({ templateId: id }).then(async (res) => {
         if (res.data.success) {
           this.templateData.templateFormId = id;
           this.setform = {};
           this.formArr = [];
-          let { templateName, templateNameEn } = res.data.data;
+          let { templateName, templateNameEn, isShowOutside } = res.data.data;
           this.templateFrom = {
             ...this.templateFrom,
             label: templateName || "模板表单",
             enlabel: templateNameEn || "Template Form",
+            isShowOutside: isShowOutside || 0,
           };
           let data = res.data.data.templateFields;
           let sortData = data.sort((a, b) => {
             return a.sort - b.sort;
           });
-          sortData.map((item) => {
+          for (let item of sortData) {
             let properties = {};
             let option = [];
             let option_default = [];
-            item["label"] = item.fieldName;
-            item["type"] = item.fieldType;
-            item["fieldId"] = item.fieldId;
-            item["fieldNameEn"] = item.fieldNameEn;
-            item["fieldCode"] = item.fieldCode;
-            item["readonly"] = item.readonly ? true : false;
-            item["disabled"] = item.disabled ? true : false;
-            item["fieldMappings"] = item["fieldMappings"] || [];
-            item.properties = item.properties || [];
-            item.properties.map((res) => {
-              if (res.key == "option") {
-                option.push({
-                  label: res.label,
-                  value: res.value,
-                  id: res.id,
-                  fontId: createCode(),
-                });
-              } else {
-                properties[res.key] = res.value;
-                if (res.key == "ciphertext") {
-                  properties[res.key] = res.value == "true";
-                }
-                if (res.key == "option_default") {
-                  option_default.push(res.value);
-                }
-                if (res.key == "datetime_type") {
-                  let date = dateTimeType.filter((d) => {
-                    return res.value == d.datetime_type;
-                  });
-                  item[res.key] = date[0].type;
-                  properties["datetime_pattern"] = date[0].format;
-                }
-                if (res.key == "upload_file_type") {
-                  properties[res.key] = res.value;
-                }
-                if (res.key == "upload_size_min") {
-                  properties[res.key] = res.value / 1024;
-                }
-                if (res.key == "upload_size_max") {
-                  properties[res.key] = res.value / 1024 / 1024;
-                }
-              }
-            });
 
-            properties["option"] = option;
-            if (item.type == "checkbox") {
-              properties["option_default"] = option_default;
+            item.label = item.fieldName;
+            item.type = item.fieldType;
+            item.fieldId = item.fieldId;
+            item.readonly = item.readonly ? true : false;
+            item.disabled = item.disabled ? true : false;
+            item.isHidden = item.isHidden ? 1 : 0;
+            item.properties = item.properties ? item.properties : [];
+
+            // 提取创建option数组的逻辑到单独函数
+            option = await this.createOptionArray(item);
+
+            for (let res of item.properties) {
+              properties[res.key] = res.value;
+              if (res.key === "ciphertext") {
+                properties[res.key] = res.value === "true";
+              }
+              if (res.key === "option_default") {
+                option_default.push(res.value);
+              }
+              if (res.key === "datetime_type") {
+                let date = dateTimeType.filter(
+                  (d) => res.value === d.datetime_type
+                );
+                item[res.key] = date[0].type;
+                properties["datetime_pattern"] = date[0].format;
+              }
+              if (res.key === "upload_file_type") {
+                properties[res.key] = res.value;
+              }
+              if (res.key === "upload_size_min") {
+                properties[res.key] = res.value / 1024;
+              }
+              if (res.key === "upload_size_max") {
+                properties[res.key] = res.value / 1024 / 1024;
+              }
             }
-            if (item.type == "radio") {
-              properties["option_default"] = String(option_default);
+
+            properties.option = option;
+            if (item.type === "checkbox") {
+              properties.option_default = option_default;
             }
-            if (item.type == "select") {
-              properties.option_multi = properties.option_multi == "true";
-              properties.searchable = properties.searchable == "true";
-              properties["option_default"] = !properties.option_multi
+            if (item.type === "radio") {
+              properties.option_default = String(option_default);
+            }
+            if (item.type === "select") {
+              properties.option_multi = properties.option_multi === "true";
+              properties.searchable = properties.searchable === "true";
+              properties.option_default = !properties.option_multi
                 ? String(option_default)
                 : option_default;
             }
-            item["properties"] = properties;
+            item.properties = properties;
             this.addform(item, false);
-          });
+          }
         }
       });
     },
+    async createOptionArray(item) {
+      let option = [];
 
+      for (let res of item.properties) {
+        if (res.key === "option") {
+          if (item.type === "banner" || item.type === "protocol") {
+            const file = await getOuterFile(res.label);
+            const fileName = await getOuterFileName({
+              ids: [res.label],
+              tenantId: 2,
+            });
+            const localUrl = URL.createObjectURL(file);
+            option.push({
+              label: res.label,
+              value: res.value,
+              id: res.id,
+              isHide: res.isHide || 0,
+              fontId: createCode(),
+              url: localUrl,
+              name: fileName,
+            });
+          } else {
+            option.push({
+              label: res.label,
+              value: res.value,
+              id: res.id,
+              isHide: res.isHide || 0,
+              fontId: createCode(),
+            });
+          }
+        }
+      }
+      return option;
+    },
     // 保存模板
     saveTemplate() {
       if (this.formArr.length == 0) {
@@ -422,6 +465,7 @@ export default {
           labelVisible: item.labelVisible,
           readonly: item.readonly ? 1 : 0,
           required: item.required ? 1 : 0,
+          isHidden: item.isHidden ? 1 : 0,
           sort: index,
           properties: properties,
           fieldMappings: item["fieldMappings"] || [],
@@ -441,6 +485,7 @@ export default {
           : "Template Form",
         templateFields: templateArr,
         structure: "top",
+        isShowOutside: this.templateFrom.isShowOutside || 0,
       };
       if (this.templateType == "add") {
         this.addTemplateDynamic(data);

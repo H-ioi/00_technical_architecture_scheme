@@ -488,10 +488,10 @@ export let setformrules = {
       message: "请输入",
       trigger: "blur",
     },
-    {
-      validator: rule.validatorNameCn,
-      trigger: "blur",
-    },
+    // {
+    //   validator: rule.validatorNameCn,
+    //   trigger: "blur",
+    // },
   ],
   //显示行数
   text_num_line: [

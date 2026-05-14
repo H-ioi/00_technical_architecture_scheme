@@ -20,7 +20,7 @@
               :label="$t('isagroup.校区')"
               prop="schoolIds"
               style="width: 100%"
-              v-if="dictionary['school'].length > 1"
+              v-if="schoolSelectList.length > 1"
             >
               <el-select
                 clearable
@@ -32,8 +32,8 @@
               >
                 <el-option
                   :key="k"
-                  v-for="(i, k) in dictionary['school']"
-                  :label="i.enName"
+                  v-for="(i, k) in schoolSelectList"
+                  :label="schoolDropdownLabel(i)"
                   :value="i.id"
                 ></el-option>
               </el-select>
@@ -118,8 +118,10 @@
 <script>
 import { mapGetters } from "vuex";
 import { getTermDetail, addTerm, editTerm } from "@/api/isacommunity/term.js";
+import schoolListBuscommonMixin from "@/mixins/schoolListBuscommon.js";
 export default {
   name: "operation",
+  mixins: [schoolListBuscommonMixin],
   components: {},
   props: {},
   data() {
@@ -152,11 +154,12 @@ export default {
   created() {},
   mounted() {},
   computed: {
-    ...mapGetters(["permissions", "dictionary", "i18nlocel"]),
+    ...mapGetters(["permissions", "i18nlocel"]),
   },
   methods: {
     // 打开
-    showForm(type = "add", item = {}) {
+    async showForm(type = "add", item = {}) {
+      await this.fetchSchoolListBuscommon();
       this.modalType = type;
       this.showModal = true;
       if (type != "add") {
@@ -172,8 +175,8 @@ export default {
           console.log(" this.ruleForm", this.ruleForm);
         });
       } else {
-        if (this.dictionary["school"].length == 1) {
-          let schoolId = this.dictionary["school"][0].id;
+        if (this.schoolSelectList.length === 1) {
+          let schoolId = this.schoolSelectList[0].id;
           this.ruleForm = {
             ...this.ruleForm,
             schoolIds: schoolId,

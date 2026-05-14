@@ -251,6 +251,12 @@
                     checkNull(studentData[item.prop])
                   }}</span>
                 </div>
+                <div class="orderDetail_baseinfo_item">
+                  <span>{{ $t("consult.住宿类型") }}</span>
+                  <span :title="checkNull(studentData['boardingLabel'])">{{
+                    checkNull(studentData["boardingLabel"])
+                  }}</span>
+                </div>
                 <div
                   style="width: 100% !important"
                   class="orderDetail_baseinfo_item"
@@ -283,6 +289,10 @@
                 <FromItemDetail
                   :ref="`FromItemDetailStudent${item.templateId}`"
                 />
+              </div>
+              <div v-for="(item, index) in fillDynamicList" :key="index">
+                <!-- 学生动态表单 -->
+                <FromItemDetail :ref="`fillDynamic${item.templateId}`" />
               </div>
             </div>
             <el-empty v-else description="No Data~"></el-empty>
@@ -487,6 +497,10 @@
 
 <script>
 import { mapGetters } from "vuex";
+import {
+  getPoolStudentTemplate,
+  getStudentfillInfo,
+} from "@/api/consult/collection.js";
 import { getClueDetail } from "@/api/consult/index.js";
 import { getTemplateInfoByType } from "@/api/consult/template.js";
 import { getOuterFile, uploadOuterFile } from "@/api/upload/index.js";
@@ -578,6 +592,7 @@ export default {
       dynamicInfos: [],
       studentExtendInfo: consult["studentExtendTitle"],
       studentExtendData: {},
+      fillDynamicList: [],
     };
   },
 
@@ -776,6 +791,32 @@ export default {
         });
       }
     },
+    async getFillDynamic(applySchool, studentId) {
+      let templateList = await getPoolStudentTemplate({
+        applySchool: applySchool,
+      });
+      let studentFillList = await getStudentfillInfo({
+        studentId: studentId,
+      });
+      this.fillDynamicList = templateList || [];
+      let dynamicInfos = studentFillList["dynamicInfos"] || [];
+      console.log("this.fillDynamicList ", this.fillDynamicList);
+      console.log("dynamicInfos ", dynamicInfos);
+
+      if (this.fillDynamicList && this.fillDynamicList.length > 0) {
+        this.$nextTick(() => {
+          this.fillDynamicList.map((item) => {
+            let dynamicInfoItem = dynamicInfos.find(
+              (dynamicItem) => dynamicItem.templateId == item.templateId
+            );
+            this.$refs[`fillDynamic${item.templateId}`][0].getTemplateDetail(
+              item,
+              dynamicInfoItem
+            );
+          });
+        });
+      }
+    },
     // 获取线索关联的家长
     getGuardianClue() {
       if (this.guardianList.length > 0) {
@@ -948,6 +989,10 @@ export default {
               this.dictionary["enquiry_pay_subject"],
               item["baseInfo"].paySubject
             ),
+        boardingLabel: this.$getListLabel(
+          this.dictionary["enquiry_boarding"],
+          item.boarding
+        ),
       };
       this.$nextTick(async () => {
         if (item["photos"] && item["photos"].length > 0) {
@@ -972,6 +1017,11 @@ export default {
             item["baseInfo"].applySchool,
             item["dynamicInfos"] || []
           );
+          if (item["baseInfo"].applySchool == 5) {
+            this.getFillDynamic(item["baseInfo"].applySchool, item["id"]);
+          } else {
+            this.fillDynamicList = [];
+          }
         } else {
           this.studentTemplateList = [];
         }

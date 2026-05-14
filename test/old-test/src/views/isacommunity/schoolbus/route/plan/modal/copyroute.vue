@@ -31,8 +31,8 @@
               >
                 <el-option
                   :key="k"
-                  v-for="(i, k) in dictionary['school']"
-                  :label="i.enName"
+                  v-for="(i, k) in schoolSelectList"
+                  :label="schoolDropdownLabel(i)"
                   :value="i.id"
                 ></el-option>
               </el-select>
@@ -69,8 +69,10 @@
 <script>
 import { mapGetters } from "vuex";
 import { batchCopy } from "@/api/isacommunity/route.js";
+import schoolListBuscommonMixin from "@/mixins/schoolListBuscommon.js";
 export default {
   name: "operation",
+  mixins: [schoolListBuscommonMixin],
   components: {},
   props: {
     sectionList: {
@@ -100,11 +102,12 @@ export default {
   created() {},
   mounted() {},
   computed: {
-    ...mapGetters(["permissions", "dictionary", "i18nlocel"]),
+    ...mapGetters(["permissions", "i18nlocel"]),
   },
   methods: {
     // 打开
-    show(selectionId) {
+    async show(selectionId) {
+      await this.fetchSchoolListBuscommon();
       this.selectionId = selectionId;
       this.showModal = true;
     },

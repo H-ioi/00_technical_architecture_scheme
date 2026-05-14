@@ -217,7 +217,14 @@
           @click="addStudent"
           >{{ $t("consult.新增") }}</el-button
         >
-
+        <el-button
+          v-if="hasSchool(5)"
+          type="primary"
+          size="small"
+          round
+          @click="showQrcodeModal = true"
+          >{{ $t("consult.申请表二维码") }}</el-button
+        >
         <el-button
           v-if="
             currentstatus == '2' && permissions['enquiry_student_upgrade_enter']
@@ -391,6 +398,22 @@
       ref="SaveRequestParam"
       @saveRequestParam="addRequestParam"
     />
+    <el-dialog
+      :title="$t('consult.二维码')"
+      :visible.sync="showQrcodeModal"
+      width="400px"
+      :before-close="() => (showQrcodeModal = false)"
+      :close-on-click-modal="false"
+    >
+      <div class="moadlFromBox">
+        <QRCode
+          v-if="showQrcodeModal"
+          ref="QRCode"
+          :path="path"
+          :showBtn="true"
+        />
+      </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -425,6 +448,7 @@ import ErrorTable from "@/page/thepool/modal/errorinfo.vue";
 import UpgradeTable from "@/page/thepool/modal/upgradeTable.vue";
 import SaveRequestParam from "@/page/thepool/modal/saveRequestParam.vue";
 import SelectTabletMenu from "@/components/common/pooldictselect/selecttabletmenu.vue";
+import QRCode from "@/components/common/QRcode.vue";
 export default {
   name: "TestUniWel",
   components: {
@@ -443,6 +467,7 @@ export default {
     UpgradeTable,
     SaveRequestParam,
     SelectTabletMenu,
+    QRCode,
   },
   data() {
     return {
@@ -481,6 +506,8 @@ export default {
       batchStuentList: [],
       submitting: false,
       routeChange: null,
+      showQrcodeModal: false,
+      path: `${process.env.VUE_APP_BASE_POOL}/#/thepool/templateout/student`,
     };
   },
   computed: {
@@ -1103,6 +1130,9 @@ export default {
         };
         this.getList();
       });
+    },
+    hasSchool(value) {
+      return this.pooldictpermissions.some((item) => item.value == value);
     },
   },
 };

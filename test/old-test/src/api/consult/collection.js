@@ -221,6 +221,82 @@ export async function getChildDynamicInfo(data) {
     throw error;
   }
 }
+// 新增对外收集学生表接口
+// 获取学生表模板
+export async function getStudentTemplate(data) {
+  try {
+    const res = await requestouter({
+      url: "/enquiry/form/out/student/getTemplate",
+      method: "post",
+      data: data,
+      headers: {
+        "form-token": "2675bfd7-6fe8-4f89-8d60-8143b9fa4226",
+      },
+    });
+    console.log("getStudentTemplate", res);
+    return res.data.data;
+  } catch (error) {
+    throw error;
+  }
+}
+// 填写学生表模板
+export async function fillStudentTemplate(data) {
+  try {
+    const res = await requestouter({
+      url: "/enquiry/form/student/fill_in",
+      method: "post",
+      data: data,
+      headers: {
+        "form-token": "2675bfd7-6fe8-4f89-8d60-8143b9fa4226",
+      },
+    });
+    console.log("getStudentTemplate", res);
+    return res;
+  } catch (error) {
+    throw error;
+  }
+}
+export async function getPoolStudentTemplate(data) {
+  try {
+    const res = await request({
+      url: "/enquiry/form/student/getTemplate",
+      method: "post",
+      data: data,
+    });
+    console.log("getStudentTemplate", res);
+    return res.data.data;
+  } catch (error) {
+    throw error;
+  }
+}
+export async function getStudentfillInfo(data) {
+  try {
+    const res = await request({
+      url: "/enquiry/form/student/get",
+      method: "post",
+      data: data,
+    });
+    console.log("getStudentTemplate", res);
+    return res.data.data;
+  } catch (error) {
+    throw error;
+  }
+}
+export async function getOutDictItem(id) {
+  try {
+    const res = await requestouter({
+      url: "/enquiry/form/out/getDictItem?school=" + id,
+      method: "get",
+      headers: {
+        "form-token": "2675bfd7-6fe8-4f89-8d60-8143b9fa4226",
+      },
+    });
+    console.log("getOutDictItem", res);
+    return res.data.data;
+  } catch (error) {
+    throw error;
+  }
+}
 /**
  * 获取动态表单模板
  */

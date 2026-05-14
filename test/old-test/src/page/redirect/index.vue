@@ -48,6 +48,32 @@ export default {
           },
         });
         break;
+      case "pre":
+        removeStore({
+          name: "tenantId",
+          type: "session",
+        });
+        loginPath = redirectPath();
+        next({
+          path: loginPath,
+          query: {
+            redirect: 1,
+          },
+        });
+        break;
+      case "online":
+        removeStore({
+          name: "tenantId",
+          type: "session",
+        });
+        loginPath = redirectPath();
+        next({
+          path: loginPath,
+          query: {
+            redirect: 1,
+          },
+        });
+        break;
     }
   },
   data() {

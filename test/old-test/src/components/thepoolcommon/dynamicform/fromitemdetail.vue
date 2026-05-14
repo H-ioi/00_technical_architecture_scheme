@@ -29,8 +29,9 @@
         }`"
         class="formItem"
       >
+        <div class="protocol-content-text" v-html="getplaceholder(item)"></div>
         <span
-          v-if="item.fieldType != 'upload'"
+          v-if="item.fieldType != 'upload' && item.fieldType != 'sign'"
           :class="item.fieldType != 'textarea' ? 'tips' : 'breakAll'"
           style="color: #0d0d0d; line-height: 18px"
           :title="formArrValue[item.fieldId]"
@@ -95,6 +96,7 @@ export default {
       let { fields } = dynamicInfoItem;
       let newFields = fields || [];
       if (newFields.length == 0) return;
+
       // 创建fieldId映射表，避免重复过滤
       const fieldIdMap = this.formArr.reduce((map, item) => {
         map[item.fieldId] = item;
@@ -194,33 +196,52 @@ export default {
                         fileListRef.getFile(file.id, obj);
                       });
                     }
-                    // getFiles({ ids: fileIds }).then((res) => {
-                    //   if (res.data.success) {
-                    //     const refId = `filelist${item.fieldId}`;
-                    //     const fileListRef = this.$refs[refId][0];
-                    //     if (fileListRef) {
-                    //       fileListRef.filelistobj = [];
-                    //       fileListRef.filelist = fileIds;
-
-                    //       res.data.data.forEach((file) => {
-                    //         const obj = {
-                    //           id: file.id,
-                    //           type: file.contentType,
-                    //           file: "",
-                    //           name: file.originalName,
-                    //         };
-                    //         fileListRef.getFile(file.id, obj);
-                    //       });
-                    //     }
-                    //   }
-                    // });
                   });
                 }
               } catch {
                 this.formArrValue[item.fieldId] = [];
               }
               break;
+            case "sign":
+              try {
+                const fileValue = JSON.parse(item.value) || [];
+                const fileIds = [fileValue[0].id];
+                this.formArrValue[item.fieldId] = fileIds;
 
+                if (fileIds.length > 0) {
+                  this.$nextTick(async () => {
+                    const fileInfos = await getOuterFileInfos({
+                      ids: fileIds,
+                      tenantId: 2,
+                    });
+                    console.log("fileInfos", fileInfos);
+
+                    const refId = `filelist${item.fieldId}`;
+                    const fileListRef = this.$refs[refId][0];
+                    if (fileListRef) {
+                      fileListRef.filelistobj = [];
+                      fileListRef.filelist = fileIds;
+
+                      fileInfos.forEach((file) => {
+                        const obj = {
+                          id: file.id,
+                          type: file.contentType,
+                          file: "",
+                          name: file.originalName,
+                        };
+                        fileListRef.getFile(file.id, obj);
+                      });
+                    }
+                  });
+                }
+              } catch {
+                this.formArrValue[item.fieldId] = [];
+              }
+              break;
+            case "protocol":
+              this.formArrValue[item.fieldId] =
+                item.value == "1" ? "已同意/Agreed" : "--";
+              break;
             default:
               this.formArrValue[item.fieldId] = item.value;
           }
@@ -242,6 +263,9 @@ export default {
       this.formArr = data.sort((a, b) => {
         return a.sort - b.sort;
       });
+      // this.formArr = this.formArr.filter((item) => {
+      //   return item.fieldType !== "sign" && item.fieldType !== "protocol";
+      // });
       this.getDynamicDetail(dynamicInfoItem);
     },
     // 下载文件
@@ -249,6 +273,16 @@ export default {
       downloadFile(file.id).then((res) => {
         download(res.data, res.headers["content-disposition"]);
       });
+    },
+    getplaceholder(item) {
+      let placeholder = "";
+      let properties = item.properties || [];
+      properties.forEach((property) => {
+        if (property.key == "placeholder") {
+          placeholder = property.value;
+        }
+      });
+      return placeholder;
     },
   },
 };
@@ -293,5 +327,17 @@ export default {
     font-size: 16px;
     line-height: 32px;
   }
+}
+.protocol-content-text {
+  padding: 5px 0 10px;
+  max-height: 400px;
+  overflow-y: auto;
+  font-weight: 400;
+  font-size: 12px;
+  cursor: default;
+  line-height: 18px;
+  color: #999999;
+  white-space: pre-wrap;
+  word-break: break-all;
 }
 </style>

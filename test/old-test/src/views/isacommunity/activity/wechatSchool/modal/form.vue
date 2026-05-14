@@ -1,81 +1,38 @@
 <template>
   <div class="community_page">
-    <el-dialog
-      :title="$t('isagroup')[typeObj[modalType]]"
-      :visible.sync="showModal"
-      width="1000px"
-      :before-close="closeModal"
-      :close-on-click-modal="false"
-    >
+    <el-dialog :title="$t('isagroup')[typeObj[modalType]]" :visible.sync="showModal" width="720px"
+      :before-close="closeModal" :close-on-click-modal="false">
       <div class="moadlFromBox" v-if="showModal">
-        <el-form
-          :label-position="'top'"
-          :inline="true"
-          :model="ruleForm"
-          :rules="rules"
-          ref="ruleForm"
-        >
+        <el-form :label-position="'top'" :inline="true" :model="ruleForm" :rules="rules" ref="ruleForm">
           <div class="df_center_wrap">
-            <el-form-item :label="$t('isagroup.中文名')" prop="cnName" style="width: 50%">
-              <el-input
-                style="width: 100%"
-                v-model="ruleForm.cnName"
-                :placeholder="$t('consult.请输入')"
-                maxlength="100"
-              ></el-input>
-            </el-form-item>
-            <el-form-item :label="$t('isagroup.英文名')" prop="enName" style="width: 50%">
-              <el-input
-                style="width: 100%"
-                v-model="ruleForm.enName"
-                :placeholder="$t('consult.请输入')"
-                maxlength="100"
-              ></el-input>
-            </el-form-item>
-            <el-form-item
-              :label="$t('isagroup.活动项目')"
-              prop="programId"
-              style="width: 50%"
-            >
-              <el-select
-                clearable
-                style="width: 100%"
-                v-model="ruleForm['programId']"
-                :placeholder="$t('isagroup.请选择')"
-              >
-                <el-option
-                  v-for="(i, k) in programlist"
-                  :key="k"
-                  :label="i.programName"
-                  :value="i.id"
-                ></el-option>
+            <el-form-item :label="$t('isagroup.校区')" prop="schoolId" style="width: 100%">
+              <el-select clearable filterable style="width: 100%" v-model="ruleForm['schoolId']"
+                :placeholder="$t('isagroup.请选择')">
+                <el-option v-for="(i, k) in dictionary['school']" :key="k"
+                  :label="i18nlocel == 'en' ? i.enName : i.cnName || i.enName" :value="i.id"></el-option>
               </el-select>
             </el-form-item>
-            <el-form-item
-              :label="$t('isagroup.中文内容')"
-              prop="contentCn"
-              style="width: 100%"
-            >
-              <el-input
-                style="width: 100%"
-                v-model="ruleForm.contentCn"
-                :placeholder="$t('consult.请输入')"
-                type="textarea"
-                rows="4"
-              ></el-input>
+            <el-form-item :label="$t('isagroup.微信AppID')" prop="wechatAppid" style="width: 100%">
+              <el-input style="width: 100%" v-model="ruleForm.wechatAppid" :placeholder="$t('consult.请输入')"
+                maxlength="200"></el-input>
             </el-form-item>
-            <el-form-item
-              :label="$t('isagroup.英文内容')"
-              prop="contentEn"
-              style="width: 100%"
-            >
-              <el-input
-                style="width: 100%"
-                v-model="ruleForm.contentEn"
-                :placeholder="$t('consult.请输入')"
-                type="textarea"
-                rows="4"
-              ></el-input>
+            <el-form-item :label="$t('isagroup.微信Secret')" prop="wechatSecret" style="width: 100%">
+              <el-input style="width: 100%" v-model="ruleForm.wechatSecret" type="password" show-password
+                :placeholder="$t('consult.请输入')" maxlength="500"></el-input>
+            </el-form-item>
+            <el-form-item :label="$t('isagroup.推送模板')" prop="msgTemplateId" style="width: 100%">
+              <el-input style="width: 100%" v-model="ruleForm.msgTemplateId" :placeholder="$t('consult.请输入')"
+                maxlength="200"></el-input>
+            </el-form-item>
+            <el-form-item :label="$t('isagroup')['Token值']" prop="verifyToken" style="width: 100%">
+              <el-input style="width: 100%" v-model="ruleForm.verifyToken" :placeholder="$t('consult.请输入')"
+                maxlength="500"></el-input>
+            </el-form-item>
+            <el-form-item :label="$t('isagroup.激活状态')" prop="active" style="width: 100%">
+              <el-radio-group v-model="ruleForm.active">
+                <el-radio v-for="(i, k) in consts['yesOrno']" :key="k" :label="i.id">{{ i18nlocel == "en" ? i.enLabel :
+                  i.label }}</el-radio>
+              </el-radio-group>
             </el-form-item>
           </div>
           <el-form-item class="modalFromBtn">
@@ -94,16 +51,14 @@
 
 <script>
 import { mapGetters } from "vuex";
-import { getActivityProgramlist } from "@/api/isacommunity/activityprogram.js";
 import {
-  addVoteProgram,
-  editVoteProgram,
-  getVoteProgramDetail,
-  getVoteProgram,
-} from "@/api/isacommunity/voteprogram.js";
+  addWechatSchoolInfo,
+  editWechatSchoolInfo,
+  getWechatSchoolDetail,
+} from "@/api/isacommunity/wechatSchoolInfo.js";
 import consts from "@/const/isacommunity/consts.js";
 export default {
-  name: "operation",
+  name: "wechatSchoolForm",
   components: {},
   props: {},
   data() {
@@ -114,44 +69,55 @@ export default {
       modalType: "add",
       showModal: false,
       ruleForm: {},
-      rules: {
-        cnName: [
-          { required: true, message: that.$t("isagroup.请输入"), trigger: "blur" },
-        ],
-        enName: [
-          { required: true, message: that.$t("isagroup.请输入"), trigger: "blur" },
-        ],
-        contentCn: [
-          { required: true, message: that.$t("isagroup.请输入"), trigger: "blur" },
-        ],
-        contentEn: [
-          { required: true, message: that.$t("isagroup.请输入"), trigger: "blur" },
-        ],
-      },
-      programlist: [],
+      rules: {},
     };
   },
   created() {
-    this.initData();
+    this.rules = this.initRules();
   },
-  mounted() {},
   computed: {
-    ...mapGetters(["permissions", "dictionary", "i18nlocel"]),
+    ...mapGetters(["dictionary", "i18nlocel"]),
+  },
+  watch: {
+    i18nlocel() {
+      this.rules = this.initRules();
+    },
   },
   methods: {
-    async initData() {
-      this.programlist = await getActivityProgramlist();
+    initRules() {
+      let that = this;
+      return {
+        schoolId: [
+          { required: true, message: that.$t("isagroup.请选择"), trigger: "change" },
+        ],
+        wechatAppid: [
+          { required: true, message: that.$t("isagroup.请输入"), trigger: "blur" },
+        ],
+        wechatSecret: [
+          { required: true, message: that.$t("isagroup.请输入"), trigger: "blur" },
+        ],
+        msgTemplateId: [
+          { required: false, message: that.$t("isagroup.请输入"), trigger: "blur" },
+        ],
+        verifyToken: [
+          { required: false, message: that.$t("isagroup.请输入"), trigger: "blur" },
+        ],
+        active: [{ required: true, message: that.$t("isagroup.请选择"), trigger: "change" }],
+      };
     },
     async showForm(type = "add", item = {}) {
       this.modalType = type;
       this.showModal = true;
-      if (type != "add") {
-        this.getDetail(item["id"]);
+      if (type === "add") {
+        this.ruleForm = {
+          active: "1",
+        };
+      } else if (item.id) {
+        this.getDetail(item.id);
       }
     },
-    // 新增
     addData(data) {
-      addVoteProgram(data).then((res) => {
+      addWechatSchoolInfo(data).then((res) => {
         if (res.data.success) {
           this.$message.success(this.$t("isagroup.成功"));
           this.$emit("getList");
@@ -159,9 +125,8 @@ export default {
         }
       });
     },
-    // 编辑
     editData(data) {
-      editVoteProgram(data).then((res) => {
+      editWechatSchoolInfo(data).then((res) => {
         if (res.data.success) {
           this.$message.success(this.$t("isagroup.成功"));
           this.$emit("getList");
@@ -170,39 +135,58 @@ export default {
       });
     },
     getDetail(id) {
-      getVoteProgramDetail(id).then(async (res) => {
+      getWechatSchoolDetail(id).then((res) => {
         if (res.data.success) {
+          const d = res.data.data || {};
           this.$nextTick(() => {
-            let { cnName, enName, contentCn, contentEn, programId } = res.data.data;
             this.ruleForm = {
-              ...this.ruleForm,
-              id,
-              cnName,
-              enName,
-              contentCn,
-              contentEn,
-              programId,
+              id: d.id,
+              schoolId: d.schoolId,
+              wechatAppid: d.wechatAppid,
+              wechatSecret: d.wechatSecret,
+              msgTemplateId: d.msgTemplateId,
+              verifyToken: d.verifyToken,
+              active: String(d.active != null ? d.active : "1"),
             };
           });
         }
       });
     },
-    // 提交表单
+    buildPayload() {
+      const activeNum =
+        this.ruleForm.active !== undefined && this.ruleForm.active !== ""
+          ? Number(this.ruleForm.active)
+          : 1;
+      const payload = {
+        schoolId: this.ruleForm.schoolId,
+        wechatAppid: this.ruleForm.wechatAppid,
+        wechatSecret: this.ruleForm.wechatSecret,
+        msgTemplateId: this.ruleForm.msgTemplateId,
+        verifyToken: this.ruleForm.verifyToken,
+        active: Number.isFinite(activeNum) ? activeNum : 1,
+      };
+      if (this.modalType !== "add" && this.ruleForm.id != null) {
+        payload.id = this.ruleForm.id;
+      }
+      return payload;
+    },
     submitForm() {
       this.$refs["ruleForm"].validate((valid) => {
         if (valid) {
-          if (this.modalType == "add") {
-            this.addData(this.ruleForm);
+          const payload = this.buildPayload();
+          if (this.modalType === "add") {
+            this.addData(payload);
           } else {
-            this.editData(this.ruleForm);
+            this.editData(payload);
           }
         }
       });
     },
-    // 关闭
     closeModal() {
       this.ruleForm = {};
-      this.$refs.ruleForm.resetFields();
+      if (this.$refs.ruleForm) {
+        this.$refs.ruleForm.resetFields();
+      }
       this.showModal = false;
     },
   },

@@ -154,7 +154,57 @@ const props = defineProps<{
 
 const { t } = useUniI18n()
 
-const mt = (key: string) => t(`base.${props.localeScope}.${key}`)
+/** 与 `locales/.../modules/base.ts` 结构对齐：共用文案在 `base.<camelKey>`，仅 `pageTitle`/`pageDesc` 在 `base.school|grade`。 */
+const BASE_DICT_I18N: Record<string, string | { scope: 'pageTitle' | 'pageDesc' }> = {
+  'page.title': { scope: 'pageTitle' },
+  'page.description': { scope: 'pageDesc' },
+  'search.keywordPlaceholder': 'phKeyword',
+  'fields.label': 'label',
+  'fields.sort': 'sort',
+  'fields.status': 'status',
+  'fields.attrName': 'attrName',
+  'fields.attrKey': 'attrKey',
+  'fields.attrValue': 'attrValue',
+  'actions.operations': 'operations',
+  'actions.search': 'search',
+  'actions.reset': 'reset',
+  'actions.add': 'add',
+  'actions.edit': 'edit',
+  'actions.extraAttrs': 'extraAttrs',
+  'actions.delete': 'delete',
+  'actions.save': 'save',
+  'actions.cancel': 'cancel',
+  'actions.confirm': 'confirm',
+  'actions.attrEdit': 'attrEdit',
+  'actions.attrSave': 'attrSave',
+  'dialog.formAdd': 'dlgFormAdd',
+  'dialog.formEdit': 'dlgFormEdit',
+  'dialog.deleteTitle': 'dlgDeleteTitle',
+  'dialog.deleteConfirm': 'dlgDeleteConfirm',
+  'dialog.attrsTitle': 'dlgAttrsTitle',
+  'form.name': 'formName',
+  'form.sort': 'formSort',
+  'placeholder.attrValue': 'phAttrValue',
+  'messages.addOk': 'msgAddOk',
+  'messages.updateOk': 'msgUpdateOk',
+  'messages.deleteOk': 'msgDeleteOk',
+  'messages.enabledOk': 'msgEnabledOk',
+  'messages.disabledOk': 'msgDisabledOk',
+  'messages.fieldOk': 'msgFieldOk',
+  'messages.loadFail': 'msgLoadFail',
+  'messages.saveFail': 'msgSaveFail'
+}
+
+const mt = (key: string) => {
+  const mapped = BASE_DICT_I18N[key]
+  if (mapped && typeof mapped === 'object') {
+    return t(`base.${props.localeScope}.${mapped.scope}`)
+  }
+  if (typeof mapped === 'string') {
+    return t(`base.${mapped}`)
+  }
+  return key
+}
 
 const { queryModel, filters, tableRef, search, reset, handleLoadSuccess } = useUniListState({
   initialFilters: { keyword: '' }

@@ -10,68 +10,33 @@
     </div>
     <div class="community_centent">
       <div class="community_searchFrom">
-        <el-form
-          class="df_align_center"
-          :label-position="'top'"
-          :inline="true"
-          :model="searchFrom"
-        >
+        <el-form class="df_align_center" :label-position="'top'" :inline="true" :model="searchFrom">
           <el-form-item style="width: 180px">
-            <el-input
-              clearable
-              style="width: 100%"
-              v-model="searchFrom['activityKeyword']"
-              :placeholder="$t('isagroup.活动名')"
-            ></el-input>
+            <el-input clearable style="width: 100%" v-model="searchFrom['activityKeyword']"
+              :placeholder="$t('isagroup.活动名')"></el-input>
           </el-form-item>
           <el-form-item style="width: 180px">
-            <el-input
-              clearable
-              style="width: 100%"
-              v-model="searchFrom['programKeyword']"
-              :placeholder="$t('isagroup.项目名')"
-            ></el-input>
+            <el-input clearable style="width: 100%" v-model="searchFrom['programKeyword']"
+              :placeholder="$t('isagroup.项目名')"></el-input>
           </el-form-item>
 
           <el-form-item style="width: 180px">
-            <el-select
-              clearable
-              style="width: 100%"
-              v-model="searchFrom['programStatus']"
-              :placeholder="$t('isagroup.状态')"
-            >
-              <el-option
-                :key="k"
-                v-for="(i, k) in consts['programStatus']"
-                :label="i18nlocel == 'en' ? i.enLabel : i.label"
-                :value="i.id"
-              ></el-option>
+            <el-select clearable style="width: 100%" v-model="searchFrom['programStatus']"
+              :placeholder="$t('isagroup.状态')">
+              <el-option :key="k" v-for="(i, k) in consts['programStatus']"
+                :label="i18nlocel == 'en' ? i.enLabel : i.label" :value="i.id"></el-option>
             </el-select>
           </el-form-item>
           <el-form-item style="width: 180px">
-            <el-select
-              clearable
-              style="width: 100%"
-              v-model="searchFrom['programType']"
-              :placeholder="$t('isagroup.项目类型')"
-            >
-              <el-option
-                :key="k"
-                v-for="(i, k) in consts['programType']"
-                :label="i18nlocel == 'en' ? i.enLabel : i.label"
-                :value="i.id"
-              ></el-option>
+            <el-select clearable style="width: 100%" v-model="searchFrom['programType']"
+              :placeholder="$t('isagroup.项目类型')">
+              <el-option :key="k" v-for="(i, k) in consts['programType']"
+                :label="i18nlocel == 'en' ? i.enLabel : i.label" :value="i.id"></el-option>
             </el-select>
           </el-form-item>
           <el-form-item style="width: auto; margin-right: 0">
-            <el-button
-              class="button_text"
-              size="medium"
-              type="text"
-              icon="el-icon-refresh-right"
-              @click="clear"
-              >{{ $t("btn.重置") }}</el-button
-            >
+            <el-button class="button_text" size="medium" type="text" icon="el-icon-refresh-right" @click="clear">{{
+              $t("btn.重置") }}</el-button>
             <el-button size="medium" type="primary" @click="getList">{{
               $t("btn.查询")
             }}</el-button>
@@ -80,15 +45,9 @@
       </div>
 
       <div class="isa_table">
-        <Table
-          ref="Table"
-          :showSelection="true"
-          :tableTitle="tabletitle['activityProgramTable']"
-          :tableData="tableData"
-          :tableBtn="tableBtn"
-          @playTab="playTab"
-          @rowClick="rowClick"
-        />
+        <Table ref="Table" :showSelection="true" tableType="activityProgram"
+          :tableTitle="tabletitle['activityProgramTable']" :tableData="tableData"
+          :tableBtn="tableBtn" @playTab="playTab" @rowClick="rowClick" />
         <div class="df_sb isa_table_footer">
           <div>
             <el-button size="small" type="defult" plain @click="batchCopy">{{
@@ -98,11 +57,7 @@
               $t("btn.删除")
             }}</el-button>
           </div>
-          <Pagination
-            :total="paginationTotal"
-            :pagination="pagination"
-            @handleCurrentChange="handleCurrentChange"
-          />
+          <Pagination :total="paginationTotal" :pagination="pagination" @handleCurrentChange="handleCurrentChange" />
         </div>
       </div>
     </div>
@@ -164,7 +119,7 @@ export default {
     this.getBtn();
     this.initData();
   },
-  mounted() {},
+  mounted() { },
   activated() {
     this.getList();
   },
@@ -222,9 +177,54 @@ export default {
           this.rowClick(item);
           break;
         case "edit":
+          if (!this.canEditProgramRow(item)) {
+            this.$message.warning(
+              this.$t(
+                "isagroup.进行中仅单轮抽奖可改奖品数量，其他情况不可编辑"
+              )
+            );
+            return;
+          }
           this.showForm("edit", item);
           break;
       }
+    },
+    /** 列表行是否单轮抽奖（totalRounds===1）；缺字段或非 1 视为不可限量编辑 */
+    isLotterySingleRoundRow(item) {
+      const raw =
+        item.totalRounds != null
+          ? item.totalRounds
+          : item.total_rounds != null
+          ? item.total_rounds
+          : null;
+      if (raw === "" || raw === undefined || raw === null) {
+        return false;
+      }
+      const n = Number(raw);
+      return Number.isFinite(n) && n === 1;
+    },
+    /** 待开始可全量编辑；进行中仅「单轮」抽奖可有限编辑；多轮抽奖/非抽奖/已结束不可编辑 */
+    canEditProgramRow(item) {
+      const ps = String(item.programStatus != null ? item.programStatus : "");
+      const pt = String(item.programType != null ? item.programType : "");
+      if (ps === "2") {
+        return false;
+      }
+      if (ps === "1" && pt !== "1") {
+        return false;
+      }
+      if (ps === "1" && pt === "1" && !this.isLotterySingleRoundRow(item)) {
+        return false;
+      }
+      return true;
+    },
+    /** 进行中 + 抽奖 + 单轮：表单仅允许改奖品数量 */
+    isPrizeCountOnlyEdit(item) {
+      return (
+        String(item.programStatus != null ? item.programStatus : "") === "1" &&
+        String(item.programType != null ? item.programType : "") === "1" &&
+        this.isLotterySingleRoundRow(item)
+      );
     },
     delData() {
       let selectionId = this.$refs.Table.selectionId;
@@ -268,7 +268,11 @@ export default {
       });
     },
     showForm(type, item = {}) {
-      this.$refs.Form.showForm(type, item);
+      const opts =
+        type === "edit" && this.isPrizeCountOnlyEdit(item)
+          ? { restriction: "prizeCountOnly" }
+          : {};
+      this.$refs.Form.showForm(type, item, opts);
     },
     batchUpdload() {
       this.$refs.BatchUpdload.showUpload = true;

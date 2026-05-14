@@ -46,7 +46,7 @@
       :pagination="{ pageSize: 10, pageSizes: [10, 20, 50, 100] }"
       :toolbar="{ refresh: true, density: true, columnSetting: true }"
       :actions="actions"
-      :action-column="{ width: 140, fixed: 'right' }"
+      :action-column="{ width: 110, fixed: 'right' }"
       @selection-change="onSelectionChange"
       @load-success="onTableLoadSuccess"
       @request-error="tableEmpty.onRequestError">
@@ -82,12 +82,12 @@ import type { UniTableRequestResult } from 'uni-ui-lib'
 import { useUniI18n } from 'uni-ui-lib'
 import { computed, ref } from 'vue'
 
+import { schoolBusCarApi } from '@/api'
 import ListTableEmpty from '@/components/list-table-empty.vue'
 import { useListTableEmpty } from '@/composables/use-list-table-empty'
-import { schoolBusCarApi } from '@/api'
+import type { CarRecord } from '@/types/modules/school-bus-car'
 import CarForm from './components/form.vue'
 import { useList } from './use-list'
-import type { CarRecord } from '@/types/modules/school-bus-car'
 
 const { t } = useUniI18n()
 const fileRef = ref<HTMLInputElement | null>(null)
@@ -179,13 +179,9 @@ const del = async () => {
     return
   }
   try {
-    await ElMessageBox.confirm(
-      t('schoolBus.car.msgConfirmDelete'),
-      t('schoolBus.delete'),
-      {
-        type: 'warning'
-      }
-    )
+    await ElMessageBox.confirm(t('schoolBus.car.msgConfirmDelete'), t('schoolBus.delete'), {
+      type: 'warning'
+    })
   } catch {
     return
   }

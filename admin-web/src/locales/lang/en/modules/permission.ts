@@ -40,11 +40,18 @@ export default {
 
   dept: {
     title: 'Departments',
-    description: 'Department tree and form (legacy `/admin/dept`).',
+    description: 'Department tree table with in-page dialog CRUD (legacy `/admin/dept`).',
     parent: 'Parent id',
     code: 'Dept id',
     name: 'Name',
-    sort: 'Sort'
+    sort: 'Sort',
+    colName: 'Department',
+    colId: 'ID',
+    colParentId: 'Parent',
+    colSort: 'Sort',
+    formAdd: 'Add department',
+    formEdit: 'Edit department',
+    addChild: 'Add child'
   },
 
   role: {
@@ -99,7 +106,7 @@ export default {
     saveOk: 'Saved',
     deleteDeptConfirm: 'Delete this department permanently?',
     deptLoadErr: 'Failed to load departments',
-    pickDeptErr: 'Select a department in the tree first',
+    pickDeptErr: 'Select a table row first (highlight the current department), then try again.',
     customDeptWarn: 'Pick departments when using custom data scope.',
     deptScopeHint: 'When data scope is custom, select accessible departments here.'
   }

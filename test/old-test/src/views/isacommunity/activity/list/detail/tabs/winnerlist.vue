@@ -28,7 +28,7 @@
               v-model="searchFrom.keyword"
               clearable
               class="activity-search-input--w360"
-              :placeholder="$t('isagroup.获奖名单搜索提示')"
+              :placeholder="winnerSearchPlaceholder"
               @keyup.enter.native="getList"
             />
           </el-form-item>
@@ -40,9 +40,9 @@
             }}</el-button>
           </el-form-item>
         </el-form>
-        <div v-if="!readOnly" class="activity-search-toolbar__actions">
+        <div v-if="!readOnly || showExportEnded" class="activity-search-toolbar__actions">
           <el-button
-            v-if="permissions['busdriver_edit']"
+            v-if="!readOnly && permissions['busdriver_edit']"
             type="primary"
             size="medium"
             :disabled="!activityId"
@@ -50,7 +50,7 @@
             >{{ $t("btn.新增") }}</el-button
           >
           <el-button
-            v-if="permissions['busdriver_edit']"
+            v-if="(!readOnly || showExportEnded) && permissions['busdriver_edit']"
             type="primary"
             size="medium"
             plain
@@ -60,7 +60,8 @@
           >
           <el-button
             v-if="
-              permissions['busdriver_del'] || permissions['activity_ticket_del']
+              !readOnly &&
+              (permissions['busdriver_del'] || permissions['activity_ticket_del'])
             "
             type="danger"
             size="medium"
@@ -234,6 +235,10 @@ export default {
       type: Boolean,
       default: false,
     },
+    showExportEnded: {
+      type: Boolean,
+      default: false,
+    },
   },
   data() {
     return {
@@ -298,6 +303,11 @@ export default {
       return this.dialogMode === "add"
         ? this.$t("isagroup.新增获奖记录")
         : this.$t("isagroup.编辑获奖记录");
+    },
+    winnerSearchPlaceholder() {
+      return this.winnerKind === "competition"
+        ? this.$t("isagroup.获奖名单搜索提示比赛")
+        : this.$t("isagroup.获奖名单搜索提示");
     },
     dialogRules() {
       const req = (msg) => [{ required: true, message: msg, trigger: "blur" }];
@@ -510,8 +520,6 @@ export default {
       return dayjs(raw).format("YYYY-MM-DD HH:mm");
     },
     formatRow(item, index, current, size) {
-      const createRaw =
-        item.createTime != null ? item.createTime : item.create_time;
       const seq = (current - 1) * size + index + 1;
       const idPart = item.id != null ? String(item.id) : `noid-${index}`;
       const base = {
@@ -526,13 +534,34 @@ export default {
         name: item.name != null && item.name !== "" ? item.name : "--",
         phone:
           item.phone != null && item.phone !== "" ? String(item.phone) : "--",
-        createTimeLabel: this.formatTime(createRaw),
+        createTimeLabel:
+          this.winnerKind === "lottery"
+            ? this.formatTime(
+                item.createTime != null ? item.createTime : item.create_time
+              )
+            : undefined,
       };
       if (this.winnerKind === "competition") {
         base.awardRank =
           item.awardRank != null && item.awardRank !== ""
             ? String(item.awardRank)
             : "--";
+        // 节目名称：仅 voteName（参赛节目）；无则与项目名区分显示「--」
+        const vn =
+          item.voteName != null && String(item.voteName).trim() !== ""
+            ? String(item.voteName)
+            : "";
+        base.voteName = vn || "--";
+        // 表演者：performer 优先；接口常把人员记在 name（姓名）上
+        const pf =
+          item.performer != null && String(item.performer).trim() !== ""
+            ? String(item.performer)
+            : "";
+        const nm =
+          item.name != null && String(item.name).trim() !== ""
+            ? String(item.name)
+            : "";
+        base.performer = pf || nm || "--";
       }
       return base;
     },

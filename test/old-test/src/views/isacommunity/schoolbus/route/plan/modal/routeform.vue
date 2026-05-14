@@ -20,7 +20,7 @@
               :label="$t('isagroup.校区')"
               prop="schoolIds"
               style="width: 33%"
-              v-if="dictionary['school'].length > 1"
+              v-if="schoolSelectList.length > 1"
             >
               <el-select
                 multiple
@@ -32,8 +32,8 @@
               >
                 <el-option
                   :key="k"
-                  v-for="(i, k) in dictionary['school']"
-                  :label="i.enName"
+                  v-for="(i, k) in schoolSelectList"
+                  :label="schoolDropdownLabel(i)"
                   :value="i.id"
                 ></el-option>
               </el-select>
@@ -345,8 +345,10 @@ import _ from "lodash";
 // 引入 dayjs
 import dayjs from "dayjs";
 import moment from "moment";
+import schoolListBuscommonMixin from "@/mixins/schoolListBuscommon.js";
 export default {
   name: "operation",
+  mixins: [schoolListBuscommonMixin],
   components: {
     uploadFile,
   },
@@ -426,7 +428,7 @@ export default {
   created() {},
   mounted() {},
   computed: {
-    ...mapGetters(["permissions", "dictionary", "i18nlocel"]),
+    ...mapGetters(["permissions", "i18nlocel"]),
   },
   watch: {
     weekDays: {
@@ -439,13 +441,14 @@ export default {
   methods: {
     // 打开
     async showForm(type = "add", item = {}) {
+      await this.fetchSchoolListBuscommon();
       this.modalType = type;
       this.showModal = true;
       if (this.modalType != "add") {
         this.getDetail(item.id);
       } else {
-        if (this.dictionary["school"].length == 1) {
-          let schoolId = this.dictionary["school"][0].id;
+        if (this.schoolSelectList.length === 1) {
+          let schoolId = this.schoolSelectList[0].id;
           this.ruleForm = {
             ...this.ruleForm,
             schoolIds: [schoolId],

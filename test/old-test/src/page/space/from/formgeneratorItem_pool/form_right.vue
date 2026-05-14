@@ -208,6 +208,22 @@
                     {{ getuploadwarntext(item) }}
                   </div>
                 </el-upload>
+                <!-- 签名组件 -->
+                <div class="signform" v-if="item.type == 'sign'">
+                  <div class="signform-img"></div>
+                  <div class="signform-text">
+                    {{ item.properties.placeholder }}
+                  </div>
+                </div>
+                <div class="protocol-content" v-if="item.type == 'protocol'">
+                  <div class="protocol-content-box">
+                    <div
+                      class="protocol-content-text"
+                      v-html="item.properties.placeholder"
+                    ></div>
+                  </div>
+                  <el-checkbox v-model="checked">I agree/我同意</el-checkbox>
+                </div>
               </el-form-item>
             </div>
           </transition-group>
@@ -455,6 +471,41 @@ export default {
   .el-button--danger {
     color: #f56c6c;
     border-color: #f56c6c;
+  }
+}
+.signform {
+  .signform-img {
+    width: 100%;
+    height: 120px;
+    background-color: #fff;
+    border: 1px dashed #d4d4d4;
+  }
+  .signform-text {
+    margin-top: 5px;
+    font-size: 14px;
+    color: #ba8e62;
+    -webkit-background-clip: text;
+    line-height: 16px;
+  }
+}
+.protocol-content {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  .protocol-content-box {
+    padding: 10px;
+    box-sizing: border-box;
+    max-height: 400px;
+    overflow-y: auto;
+    .protocol-content-text {
+      font-weight: 400;
+      font-size: 14px;
+      cursor: default;
+      line-height: 16px;
+      color: #999999;
+      white-space: pre-wrap;
+      word-break: break-all;
+    }
   }
 }
 </style>

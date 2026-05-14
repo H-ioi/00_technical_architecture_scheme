@@ -1,11 +1,7 @@
 <template>
   <div class="statusBox df_start_center">
-    <div
-      :class="['statusItem', { currentStatusItem: currentstatus == i.type }]"
-      v-for="(i, k) in statusList"
-      :key="k"
-      @click="changeStasus(i, k)"
-    >
+    <div :class="['statusItem', { currentStatusItem: currentstatus == i.type }]" v-for="(i, k) in statusList" :key="k"
+      @click="changeStasus(i, k)">
       {{
         $route.path.indexOf("thepool") == -1 ? i.name : $t("consult")[i.name]
       }}
@@ -24,7 +20,7 @@ export default {
     return {};
   },
 
-  mounted() {},
+  mounted() { },
 
   methods: {
     changeStasus(i, k) {
@@ -34,5 +30,4 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
-</style>
+<style lang="scss" scoped></style>

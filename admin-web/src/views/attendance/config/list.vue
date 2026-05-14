@@ -30,7 +30,7 @@
       :pagination="false"
       :toolbar="{ refresh: true, density: true, columnSetting: true }"
       :actions="actions"
-      :action-column="{ width: 140, fixed: 'right' }"
+      :action-column="{ width: 110, fixed: 'right' }"
       @load-success="onTableLoadSuccess"
       @request-error="tableEmpty.onRequestError">
       <template #empty>

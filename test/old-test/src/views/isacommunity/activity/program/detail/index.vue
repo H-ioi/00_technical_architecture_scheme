@@ -2,14 +2,21 @@
   <div class="community_page">
     <div class="community_top">
       <div class="community_top_title">{{ $t("isagroup.活动项目详情") }}</div>
-      <el-button type="primary" size="large" @click="editProgram">{{
-        $t("btn.编辑")
-      }}</el-button>
+      <el-button
+        v-if="showProgramEditButton"
+        type="primary"
+        size="large"
+        @click="editProgram"
+        >{{ $t("btn.编辑") }}</el-button
+      >
     </div>
     <div class="community_centent">
       <div class="orderDetail">
         <div class="orderDetail_item">
-          <div class="orderDetail_baseinfo" style="padding-bottom: 0 !important">
+          <div
+            class="orderDetail_baseinfo"
+            style="padding-bottom: 0 !important"
+          >
             <div style="margin-bottom: 15px" class="orderDetail_baseinfo_item">
               <span>{{ $t("isagroup.中文名") }}</span>
               <span :title="$checkNull(programData.cnName)">{{
@@ -34,6 +41,14 @@
                 $checkNull(programData.programTypeLabel)
               }}</span>
             </div>
+            <div style="margin-bottom: 15px" class="orderDetail_baseinfo_item">
+              <span>{{ $t("isagroup.项目顺序") }}</span>
+              <span :title="$checkNull(programData.sortOrder)">{{
+                programData.sortOrder != null && programData.sortOrder !== ""
+                  ? programData.sortOrder
+                  : "--"
+              }}</span>
+            </div>
             <div
               style="margin-bottom: 15px; width: 100%"
               class="orderDetail_baseinfo_item"
@@ -49,7 +64,11 @@
             >
               <span>{{ $t("isagroup.背景图") }}</span>
               <span>
-                <img :src="programData.backgroundImage" alt="" style="width: 200px" />
+                <img
+                  :src="programData.backgroundImage"
+                  alt=""
+                  style="width: 200px"
+                />
               </span>
             </div>
           </div>
@@ -72,9 +91,10 @@
             </div>
             <div style="margin-bottom: 15px" class="orderDetail_baseinfo_item">
               <span>{{ $t("isagroup.签到开始偏移分钟") }}</span>
-              <span :title="$checkNull(programData.checkinStartOffsetMinutes)">{{
-                $checkNull(programData.checkinStartOffsetMinutes)
-              }}</span>
+              <span
+                :title="$checkNull(programData.checkinStartOffsetMinutes)"
+                >{{ $checkNull(programData.checkinStartOffsetMinutes) }}</span
+              >
             </div>
             <div style="margin-bottom: 15px" class="orderDetail_baseinfo_item">
               <span>{{ $t("isagroup.签到结束偏移分钟") }}</span>
@@ -115,7 +135,10 @@
             <div style="margin-bottom: 15px" class="orderDetail_baseinfo_item">
               <span>{{ $t("isagroup.每轮配额") }}</span>
               <span v-if="programData.quotas.length > 0">
-                <div style="display: inline-block" v-for="(i, k) in programData.quotas">
+                <div
+                  style="display: inline-block"
+                  v-for="(i, k) in programData.quotas"
+                >
                   {{ i.quotaCount }}/{{ i.roundNo
                   }}{{ k + 1 == programData.quotas.length ? "" : "," }}
                 </div>
@@ -178,7 +201,8 @@
             <div>
               {{ $t("isagroup.奖品配置") }}
             </div>
-            <div>
+            <!-- 一个项目仅能配置一条奖品，已有记录时隐藏新增 -->
+            <div v-if="prizeList.length === 0">
               <el-button type="primary" size="small" round @click="addPrize">{{
                 $t("isagroup.新增")
               }}</el-button>
@@ -199,16 +223,23 @@
         </div>
         <div
           class="orderDetail_item"
-          v-if="programData.programType == 1 && programData.createLotteryPool == '1'"
+          v-if="
+            programData.programType == 1 && programData.createLotteryPool == '1'
+          "
         >
           <div class="orderDetail_item_title df_sb">
             <div>
               {{ $t("isagroup.奖池") }}
             </div>
-            <div class="df_align_center">
-              <el-button type="primary" size="small" round @click="downloadPoolFile">{{
-                $t("isagroup.下载模板")
-              }}</el-button>
+            <!-- 已有奖池文件记录时不允许再通过模板导入，隐藏下载模板与导入 -->
+            <div v-if="!poolFilesList.length" class="df_align_center">
+              <el-button
+                type="primary"
+                size="small"
+                round
+                @click="downloadPoolFile"
+                >{{ $t("isagroup.下载模板") }}</el-button
+              >
               <el-upload
                 style="height: 32px; line-height: 32px; margin-left: 10px"
                 class="upload-demo"
@@ -278,28 +309,94 @@
       :isBind="true"
       :bindProgramId="programId"
     />
+    <el-drawer
+      :title="$t('isagroup.奖池名单')"
+      :visible.sync="poolMemberDrawerVisible"
+      size="720px"
+      append-to-body
+      @closed="onPoolMemberDrawerClosed"
+    >
+      <div class="pool-member-drawer">
+        <el-table
+          v-loading="poolMemberLoading"
+          :data="poolMemberTableData"
+          border
+          style="width: 100%"
+        >
+          <el-table-column
+            type="index"
+            width="56"
+            align="center"
+            :label="$t('isagroup.序号')"
+          />
+          <el-table-column
+            prop="name"
+            :label="$t('isagroup.姓名')"
+            min-width="100"
+            show-overflow-tooltip
+          />
+          <el-table-column
+            prop="phone"
+            :label="$t('isagroup.手机号')"
+            min-width="120"
+            show-overflow-tooltip
+          />
+          <el-table-column
+            prop="ticketEmail"
+            :label="$t('isagroup.邮箱')"
+            min-width="160"
+            show-overflow-tooltip
+          />
+          <el-table-column
+            prop="createTime"
+            :label="$t('isagroup.创建时间')"
+            min-width="170"
+            show-overflow-tooltip
+          >
+            <template slot-scope="scope">
+              {{ formatPoolMemberTime(scope.row.createTime) }}
+            </template>
+          </el-table-column>
+        </el-table>
+        <div class="pool-member-drawer__footer">
+          <el-pagination
+            background
+            layout="total, prev, pager, next"
+            :current-page="poolMemberPagination.current"
+            :page-size="poolMemberPagination.size"
+            :total="poolMemberPagination.total"
+            @current-change="handlePoolMemberPageChange"
+          />
+        </div>
+      </div>
+    </el-drawer>
   </div>
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+import { getActivityDetail } from "@/api/isacommunity/activity.js";
 import { getActivityProgramDetail } from "@/api/isacommunity/activityprogram.js";
-import { getVoteProgram, delVoteProgram } from "@/api/isacommunity/voteprogram.js";
-import { getProgramPrizeList, delPrize } from "@/api/isacommunity/prize.js";
 import {
+  delLotteryPoolFiles,
+  downloadPoolFiles,
+  getLotteryPoolMemberPage,
   getPoolFiles,
   importLotteryPoolFiles,
-  downloadPoolFiles,
-  delLotteryPoolFiles,
 } from "@/api/isacommunity/lotteryPoolFile.js";
-import { download } from "@/util/download.js";
-import tabletitle from "@/const/isacommunity/tabletitle.js";
-import consts from "@/const/isacommunity/consts.js";
+import { delPrize, getProgramPrizeList } from "@/api/isacommunity/prize.js";
+import {
+  delVoteProgram,
+  getVoteProgramListByprogram,
+} from "@/api/isacommunity/voteprogram.js";
 import Table from "@/components/communitycommon/Table.vue";
-import ProgramForm from "@/views/isacommunity/activity/program/modal/form.vue";
+import consts from "@/const/isacommunity/consts.js";
+import tabletitle from "@/const/isacommunity/tabletitle.js";
+import { download } from "@/util/download.js";
 import PrizForm from "@/views/isacommunity/activity/prize/modal/form.vue";
+import ProgramForm from "@/views/isacommunity/activity/program/modal/form.vue";
 import VoteProgramForm from "@/views/isacommunity/activity/voteprogram/modal/form.vue";
 import dayjs from "dayjs";
+import { mapGetters } from "vuex";
 export default {
   name: "activityprogramdetail",
   components: { ProgramForm, PrizForm, VoteProgramForm, Table },
@@ -342,12 +439,29 @@ export default {
       poolFilesList: [],
       poolFilesBtn: [
         {
+          name: "查看名单",
+          type: "viewList",
+          icon: "",
+          permissions: "",
+        },
+        {
           name: "删除",
           type: "del",
           icon: "",
           permissions: "",
         },
       ],
+      poolMemberDrawerVisible: false,
+      poolMemberLoading: false,
+      poolMemberTableData: [],
+      poolMemberPoolId: null,
+      poolMemberPagination: {
+        current: 1,
+        size: 10,
+        total: 0,
+      },
+      /** null=加载中；与列表活动 activityStatus 一致 */
+      activityActivityStatus: null,
     };
   },
   created() {
@@ -357,6 +471,56 @@ export default {
 
   computed: {
     ...mapGetters(["permissions", "i18nlocel", "dictionary"]),
+    showProgramEditButton() {
+      return this.canEditProgram;
+    },
+    canEditProgram() {
+      if (this.activityActivityStatus === null) {
+        return false;
+      }
+      const a = String(this.activityActivityStatus || "");
+      if (a === "3") {
+        return false;
+      }
+      if (a !== "2") {
+        return true;
+      }
+      const ps = String(
+        this.programData.programStatus == null
+          ? ""
+          : this.programData.programStatus
+      );
+      if (ps === "0") {
+        return true;
+      }
+      if (
+        ps === "1" &&
+        String(this.programData.programType) === "1" &&
+        Number(this.programData.totalRounds) === 1
+      ) {
+        return true;
+      }
+      return false;
+    },
+    programEditRestriction() {
+      const a = String(this.activityActivityStatus || "");
+      if (a !== "2") {
+        return null;
+      }
+      const ps = String(
+        this.programData.programStatus == null
+          ? ""
+          : this.programData.programStatus
+      );
+      if (
+        ps === "1" &&
+        String(this.programData.programType) === "1" &&
+        Number(this.programData.totalRounds) === 1
+      ) {
+        return "prizeCountOnly";
+      }
+      return null;
+    },
   },
   methods: {
     initData() {},
@@ -372,9 +536,29 @@ export default {
             programStatus,
             programType,
             totalRounds,
+            sortOrder,
             rule,
             quotas, // 获取配额数据
           } = res.data.data;
+
+          this.activityActivityStatus = null;
+          if (activityId != null && activityId !== "") {
+            getActivityDetail(activityId)
+              .then((ar) => {
+                if (ar.data.success && ar.data.data) {
+                  const s = ar.data.data.activityStatus;
+                  this.activityActivityStatus =
+                    s !== undefined && s !== null ? String(s) : "";
+                } else {
+                  this.activityActivityStatus = "";
+                }
+              })
+              .catch(() => {
+                this.activityActivityStatus = "";
+              });
+          } else {
+            this.activityActivityStatus = "";
+          }
 
           this.$nextTick(() => {
             this.programData = {
@@ -387,6 +571,7 @@ export default {
               backgroundImage,
               programStatus,
               programType,
+              sortOrder,
               programTypeLabel: this.$getListLabel(
                 consts["programType"],
                 String(programType)
@@ -424,8 +609,12 @@ export default {
                     String(rule["needPayment"])
                   ),
                   prizeCount: String(rule["prizeCount"]),
-                  checkinEndOffsetMinutes: String(rule["checkinEndOffsetMinutes"]),
-                  checkinStartOffsetMinutes: String(rule["checkinStartOffsetMinutes"]),
+                  checkinEndOffsetMinutes: String(
+                    rule["checkinEndOffsetMinutes"]
+                  ),
+                  checkinStartOffsetMinutes: String(
+                    rule["checkinStartOffsetMinutes"]
+                  ),
                 };
                 this.getProgramPrizeList();
                 this.getPoolFiles();
@@ -461,7 +650,16 @@ export default {
     },
     // 投票配置操作
     async getVoteProgram() {
-      this.voteList = await getVoteProgram({ programId: this.programId });
+      const raw = await getVoteProgramListByprogram({
+        programId: this.programId,
+      });
+      this.voteList = Array.isArray(raw)
+        ? raw
+        : raw && Array.isArray(raw.records)
+        ? raw.records
+        : raw && Array.isArray(raw.list)
+        ? raw.list
+        : [];
     },
     playVoteTab(name, item) {
       switch (name) {
@@ -509,6 +707,12 @@ export default {
     },
     playPoolFilesTab(name, item) {
       switch (name) {
+        case "viewList":
+          this.poolMemberPoolId = item.id;
+          this.poolMemberDrawerVisible = true;
+          this.poolMemberPagination.current = 1;
+          this.fetchPoolMemberList();
+          break;
         case "del":
           let formData = new FormData();
           formData.append("id", item.id);
@@ -520,6 +724,47 @@ export default {
           });
           break;
       }
+    },
+    fetchPoolMemberList() {
+      if (this.poolMemberPoolId == null || this.poolMemberPoolId === "") {
+        this.poolMemberTableData = [];
+        this.poolMemberPagination.total = 0;
+        return;
+      }
+      this.poolMemberLoading = true;
+      getLotteryPoolMemberPage({
+        poolId: this.poolMemberPoolId,
+        current: this.poolMemberPagination.current,
+        size: this.poolMemberPagination.size,
+      })
+        .then((res) => {
+          if (res.data.success) {
+            const page = res.data.data || {};
+            this.poolMemberTableData = Array.isArray(page.data)
+              ? page.data
+              : [];
+            this.poolMemberPagination.total = Number(page.total) || 0;
+          }
+        })
+        .finally(() => {
+          this.poolMemberLoading = false;
+        });
+    },
+    handlePoolMemberPageChange(page) {
+      this.poolMemberPagination.current = page;
+      this.fetchPoolMemberList();
+    },
+    formatPoolMemberTime(t) {
+      if (t == null || t === "") {
+        return "--";
+      }
+      const d = dayjs(t);
+      return d.isValid() ? d.format("YYYY-MM-DD HH:mm:ss") : String(t);
+    },
+    onPoolMemberDrawerClosed() {
+      this.poolMemberPoolId = null;
+      this.poolMemberTableData = [];
+      this.poolMemberPagination.total = 0;
     },
     downloadPoolFile() {
       downloadPoolFiles().then((res) => {
@@ -540,10 +785,26 @@ export default {
     },
     // 编辑活动项目
     editProgram() {
-      this.$refs.ProgramForm.showForm("edit", this.programData);
+      if (!this.canEditProgram) {
+        return;
+      }
+      const r = this.programEditRestriction;
+      this.$refs.ProgramForm.showForm(
+        "edit",
+        this.programData,
+        r ? { restriction: r } : {}
+      );
     },
   },
 };
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.pool-member-drawer {
+  padding: 0 20px;
+  &__footer {
+    margin-top: 16px;
+    text-align: right;
+  }
+}
+</style>

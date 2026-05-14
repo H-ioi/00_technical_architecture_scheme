@@ -32,7 +32,7 @@
       :pagination="{ pageSize: 20, pageSizes: [10, 20, 50] }"
       :toolbar="{ refresh: true, density: true, columnSetting: true }"
       :actions="actions"
-      :action-column="{ width: 220, fixed: 'right' }"
+      :action-column="{ width: 180, fixed: 'right' }"
       @load-success="onTableLoadSuccess"
       @request-error="tableEmpty.onRequestError">
       <template #empty>
@@ -102,12 +102,11 @@
 </template>
 
 <script setup lang="ts">
-import type { FormInstance, FormRules } from 'element-plus'
-import type { ElTree } from 'element-plus'
+import type { ElTree, FormInstance, FormRules } from 'element-plus'
 import { ElMessage, ElMessageBox } from 'element-plus'
-import { computed, nextTick, reactive, ref } from 'vue'
 import type { UniTableRequestResult } from 'uni-ui-lib'
 import { UniDataTable, UniSearchForm, useUniI18n } from 'uni-ui-lib'
+import { computed, nextTick, reactive, ref } from 'vue'
 
 import ListTableEmpty from '@/components/list-table-empty.vue'
 import { useListTableEmpty } from '@/composables/use-list-table-empty'

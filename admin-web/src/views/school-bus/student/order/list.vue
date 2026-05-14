@@ -36,7 +36,9 @@
       show-icon>
       <template #default>
         <span>{{ $t('schoolBus.cascadeOptionsLoadFail') }}</span>
-        <el-button type="primary" link @click="reloadCommonData">{{ $t('common.retry') }}</el-button>
+        <el-button type="primary" link @click="reloadCommonData">{{
+          $t('common.retry')
+        }}</el-button>
       </template>
     </el-alert>
 
@@ -61,7 +63,7 @@
       :pagination="{ pageSize: 10, pageSizes: [10, 20, 50, 100] }"
       :toolbar="{ refresh: true, density: true, columnSetting: true }"
       :actions="actions"
-      :action-column="{ width: 150, fixed: 'right' }"
+      :action-column="{ width: 110, fixed: 'right' }"
       @selection-change="onSelectionChange"
       @load-success="onTableLoadSuccess"
       @request-error="tableEmpty.onRequestError">
@@ -99,9 +101,9 @@ import type { UniTableRequestResult } from 'uni-ui-lib'
 import { useUniI18n } from 'uni-ui-lib'
 import { computed, ref } from 'vue'
 
+import { schoolBusOrderApi } from '@/api'
 import ListTableEmpty from '@/components/list-table-empty.vue'
 import { useListTableEmpty } from '@/composables/use-list-table-empty'
-import { schoolBusOrderApi } from '@/api'
 import type { BusOrderRecord } from '@/types/modules/school-bus-order'
 import { downloadBlob } from '@/utils/download'
 import BusOrderFormDialog from '../components/bus-order-form-dialog.vue'
@@ -215,11 +217,9 @@ const del = async () => {
     return
   }
   try {
-    await ElMessageBox.confirm(
-      t('schoolBus.confirmDeleteRows'),
-      t('schoolBus.delete'),
-      { type: 'warning' }
-    )
+    await ElMessageBox.confirm(t('schoolBus.confirmDeleteRows'), t('schoolBus.delete'), {
+      type: 'warning'
+    })
   } catch {
     return
   }

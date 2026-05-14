@@ -34,7 +34,11 @@
             }}</el-button>
           </el-form-item>
         </el-form>
-        <div v-if="!readOnly" class="activity-search-toolbar__actions">
+        <div
+          v-if="!readOnly || showExportEnded"
+          class="activity-search-toolbar__actions"
+        >
+          <template v-if="!readOnly">
           <!-- 活动反馈：新增功能暂时关闭
           <el-button
             v-if="permissions['busdriver_edit']"
@@ -74,8 +78,11 @@
             @click="batchSetVisible(0)"
             >{{ $t("isagroup.不可见") }}</el-button
           >
+          </template>
           <el-button
-            v-if="permissions['busdriver_edit']"
+            v-if="
+              (!readOnly || showExportEnded) && permissions['busdriver_edit']
+            "
             type="primary"
             size="medium"
             plain
@@ -147,7 +154,6 @@
       </div>
     </el-dialog>
 
-    <!-- 活动反馈：新增/编辑弹窗暂时关闭
     <el-dialog
       :title="editDialogTitle"
       :visible.sync="editDialogVisible"
@@ -210,7 +216,6 @@
         }}</el-button>
       </div>
     </el-dialog>
-    -->
   </div>
 </template>
 
@@ -241,6 +246,10 @@ export default {
       type: Boolean,
       default: false,
     },
+    showExportEnded: {
+      type: Boolean,
+      default: false,
+    },
   },
   data() {
     return {
@@ -261,7 +270,7 @@ export default {
       tableBtn: [],
       permissionsBtn: [
         { name: "查看", type: "view", permissions: "busdriver_edit" },
-        // { name: "编辑", type: "edit", permissions: "busdriver_edit" }, // 编辑已暂时关闭
+        { name: "编辑", type: "edit", permissions: "busdriver_edit" },
       ],
       viewDialogVisible: false,
       viewDetail: {
@@ -292,31 +301,29 @@ export default {
           this.permissions["activity_ticket_del"])
       );
     },
-    // editDialogTitle() {
-    //   return this.editMode === "add"
-    //     ? this.$t("isagroup.新增反馈")
-    //     : this.$t("isagroup.编辑反馈");
-    // },
-    // editRules() {
-    //   const req = (msg) => [{ required: true, message: msg, trigger: "blur" }];
-    //   return {
-    //     content: req(this.$t("isagroup.请输入")),
-    //     satisfactionRate: [
-    //       {
-    //         required: true,
-    //         message: this.$t("isagroup.请选择"),
-    //         trigger: "change",
-    //       },
-    //     ],
-    //     visible: [
-    //       {
-    //         required: true,
-    //         message: this.$t("isagroup.请选择"),
-    //         trigger: "change",
-    //       },
-    //     ],
-    //   };
-    // },
+    editDialogTitle() {
+      return this.$t("isagroup.编辑反馈");
+    },
+    editRules() {
+      const req = (msg) => [{ required: true, message: msg, trigger: "blur" }];
+      return {
+        content: req(this.$t("isagroup.请输入")),
+        satisfactionRate: [
+          {
+            required: true,
+            message: this.$t("isagroup.请选择"),
+            trigger: "change",
+          },
+        ],
+        visible: [
+          {
+            required: true,
+            message: this.$t("isagroup.请选择"),
+            trigger: "change",
+          },
+        ],
+      };
+    },
   },
   watch: {
     activityId(id, oldId) {
@@ -488,10 +495,9 @@ export default {
     playTab(type, row) {
       if (type === "view") {
         this.openView(row);
+      } else if (type === "edit") {
+        this.openEdit(row);
       }
-      // else if (type === "edit") {
-      //   this.openEdit(row);
-      // }
     },
     openView(row) {
       getFeedbackDetail(row.id).then((res) => {
@@ -512,113 +518,75 @@ export default {
         this.viewDialogVisible = true;
       });
     },
-    // openAdd() {
-    //   if (!this.activityId) {
-    //     return;
-    //   }
-    //   this.editMode = "add";
-    //   this.editForm = {
-    //     id: null,
-    //     content: "",
-    //     satisfactionRate: 3,
-    //     phone: "",
-    //     visible: 1,
-    //     parentId: "",
-    //   };
-    //   this.editDialogVisible = true;
-    //   this.$nextTick(() => {
-    //     if (this.$refs.editFormRef) {
-    //       this.$refs.editFormRef.clearValidate();
-    //     }
-    //   });
-    // },
-    // openEdit(row) {
-    //   getFeedbackDetail(row.id).then((res) => {
-    //     if (!res.data.success || !res.data.data) {
-    //       return;
-    //     }
-    //     const d = res.data.data;
-    //     this.editMode = "edit";
-    //     const pid = d.parentId != null ? d.parentId : "";
-    //     this.editForm = {
-    //       id: d.id,
-    //       content: d.content || "",
-    //       satisfactionRate:
-    //         [1, 2, 3].indexOf(Number(d.satisfactionRate)) >= 0
-    //           ? Number(d.satisfactionRate)
-    //           : 3,
-    //       phone: d.phone != null ? String(d.phone) : "",
-    //       visible: d.visible === 0 || d.visible === "0" ? 0 : 1,
-    //       parentId: pid !== "" ? String(pid) : "",
-    //     };
-    //     this.editDialogVisible = true;
-    //     this.$nextTick(() => {
-    //       if (this.$refs.editFormRef) {
-    //         this.$refs.editFormRef.clearValidate();
-    //       }
-    //     });
-    //   });
-    // },
-    // resetEditForm() {
-    //   if (this.$refs.editFormRef) {
-    //     this.$refs.editFormRef.resetFields();
-    //   }
-    // },
-    // normalizeParentId(raw) {
-    //   const s = String(raw == null ? "" : raw).trim();
-    //   if (s === "") {
-    //     return undefined;
-    //   }
-    //   if (!/^\d+$/.test(s)) {
-    //     return undefined;
-    //   }
-    //   return s.length <= 16 ? Number(s) : s;
-    // },
-    // submitEdit() {
-    //   this.$refs.editFormRef.validate((valid) => {
-    //     if (!valid) {
-    //       return;
-    //     }
-    //     const aid = this.activityId;
-    //     const activityIdPayload =
-    //       typeof aid === "string" && /^\d+$/.test(aid) && aid.length <= 16
-    //         ? Number(aid)
-    //         : aid;
-    //     const parentNorm = this.normalizeParentId(this.editForm.parentId);
-    //     const base = {
-    //       content: this.editForm.content,
-    //       satisfactionRate: this.editForm.satisfactionRate,
-    //       phone: this.editForm.phone || undefined,
-    //       visible: this.editForm.visible,
-    //     };
-    //     if (parentNorm !== undefined) {
-    //       base.parentId = parentNorm;
-    //     }
-    //     if (this.editMode === "add") {
-    //       addFeedback({
-    //         activityId: activityIdPayload,
-    //         ...base,
-    //       }).then((res) => {
-    //         if (res.data.success) {
-    //           this.$message.success(this.$t("isagroup.成功"));
-    //           this.editDialogVisible = false;
-    //           this.getList();
-    //         }
-    //       });
-    //     } else {
-    //       editFeedback({
-    //         id: this.editForm.id,
-    //         ...base,
-    //       }).then((res) => {
-    //         if (res.data.success) {
-    //           this.$message.success(this.$t("isagroup.成功"));
-    //           this.editDialogVisible = false;
-    //           this.getList();
-    //         }
-    //       });
-    //     }
-    //   });
-    // },
+    openEdit(row) {
+      getFeedbackDetail(row.id).then((res) => {
+        if (!res.data.success || !res.data.data) {
+          return;
+        }
+        const d = res.data.data;
+        this.editMode = "edit";
+        const pid = d.parentId != null ? d.parentId : "";
+        this.editForm = {
+          id: d.id,
+          content: d.content || "",
+          satisfactionRate:
+            [1, 2, 3].indexOf(Number(d.satisfactionRate)) >= 0
+              ? Number(d.satisfactionRate)
+              : 3,
+          phone: d.phone != null ? String(d.phone) : "",
+          visible: d.visible === 0 || d.visible === "0" ? 0 : 1,
+          parentId: pid !== "" ? String(pid) : "",
+        };
+        this.editDialogVisible = true;
+        this.$nextTick(() => {
+          if (this.$refs.editFormRef) {
+            this.$refs.editFormRef.clearValidate();
+          }
+        });
+      });
+    },
+    resetEditForm() {
+      if (this.$refs.editFormRef) {
+        this.$refs.editFormRef.resetFields();
+      }
+    },
+    normalizeParentId(raw) {
+      const s = String(raw == null ? "" : raw).trim();
+      if (s === "") {
+        return undefined;
+      }
+      if (!/^\d+$/.test(s)) {
+        return undefined;
+      }
+      return s.length <= 16 ? Number(s) : s;
+    },
+    submitEdit() {
+      this.$refs.editFormRef.validate((valid) => {
+        if (!valid) {
+          return;
+        }
+        const parentNorm = this.normalizeParentId(this.editForm.parentId);
+        const base = {
+          content: this.editForm.content,
+          satisfactionRate: this.editForm.satisfactionRate,
+          phone: this.editForm.phone || undefined,
+          visible: this.editForm.visible,
+        };
+        if (parentNorm !== undefined) {
+          base.parentId = parentNorm;
+        }
+        editFeedback({
+          id: this.editForm.id,
+          ...base,
+        }).then((res) => {
+          if (res.data.success) {
+            this.$message.success(this.$t("isagroup.成功"));
+            this.editDialogVisible = false;
+            this.getList();
+          }
+        });
+      });
+    },
     batchDel() {
       const selectionId = this.$refs.feedbackTable.selectionId;
       if (!selectionId || selectionId.length === 0) {

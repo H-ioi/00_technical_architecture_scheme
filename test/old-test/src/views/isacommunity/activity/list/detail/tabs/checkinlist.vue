@@ -1,12 +1,13 @@
 <template>
   <div class="activity-checkin-tab" v-loading="listLoading">
     <div class="community_searchFrom registration-search-wrap">
-      <el-form
-        :inline="true"
-        class="registration-search-form activity-search-form--inline"
-        :model="searchFrom"
-        @submit.native.prevent
-      >
+      <div class="activity-search-toolbar">
+        <el-form
+          :inline="true"
+          class="registration-search-form activity-search-form--inline"
+          :model="searchFrom"
+          @submit.native.prevent
+        >
         <el-form-item class="activity-search-field">
           <el-input
             v-model="searchFrom.keyword"
@@ -52,7 +53,7 @@
         </el-form-item>
         <el-form-item class="activity-search-field">
           <el-select
-            v-model="searchFrom.lotteryValidate"
+            v-model="searchFrom.lottery_validate"
             clearable
             class="activity-search-select--w168"
             :placeholder="$t('isagroup.是否在抽奖池内')"
@@ -63,7 +64,7 @@
         </el-form-item>
         <el-form-item class="activity-search-field">
           <el-select
-            v-model="searchFrom.checkedIn"
+            v-model="searchFrom.checkin"
             clearable
             class="activity-search-select--w140"
             :placeholder="$t('isagroup.是否签到')"
@@ -72,12 +73,29 @@
             <el-option :label="$t('isagroup.否')" :value="0" />
           </el-select>
         </el-form-item>
-        <el-form-item class="activity-search-field activity-search-field--search">
+        <el-form-item
+          class="activity-search-field activity-search-field--search"
+        >
           <el-button type="primary" size="medium" @click="getList">{{
             $t("isagroup.搜索")
           }}</el-button>
         </el-form-item>
       </el-form>
+      <div
+        v-if="showExportEnded"
+        class="activity-search-toolbar__actions"
+      >
+        <el-button
+          v-if="permissions['busdriver_edit']"
+          type="primary"
+          size="medium"
+          plain
+          :disabled="!activityId || exportLoading"
+          @click="exportCheckinCsv"
+          >{{ $t("btn.导出") }}</el-button
+        >
+      </div>
+    </div>
     </div>
 
     <div class="isa_table">
@@ -119,7 +137,7 @@
         class="checkin-dialog-form"
       >
         <el-form-item :label="$t('isagroup.是否签到')">
-          <el-select v-model="dialogForm.checkedIn" style="width: 100%">
+          <el-select v-model="dialogForm.checkin" style="width: 100%">
             <el-option :label="$t('isagroup.是')" :value="1" />
             <el-option :label="$t('isagroup.否')" :value="0" />
           </el-select>
@@ -134,13 +152,13 @@
           </el-select>
         </el-form-item>
         <el-form-item :label="$t('isagroup.是否在抽奖池内')">
-          <el-select v-model="dialogForm.lotteryValidate" style="width: 100%">
+          <el-select v-model="dialogForm.lottery_validate" style="width: 100%">
             <el-option :label="$t('isagroup.是')" :value="1" />
             <el-option :label="$t('isagroup.否')" :value="0" />
           </el-select>
         </el-form-item>
         <el-form-item :label="$t('isagroup.允许抽奖')">
-          <el-select v-model="dialogForm.allowLottery" style="width: 100%">
+          <el-select v-model="dialogForm.allow_lottery" style="width: 100%">
             <el-option :label="$t('isagroup.是')" :value="1" />
             <el-option :label="$t('isagroup.否')" :value="0" />
           </el-select>
@@ -168,6 +186,7 @@ import Table from "@/components/communitycommon/Table.vue";
 import tabletitle from "@/const/isacommunity/tabletitle.js";
 import dayjs from "dayjs";
 import { mapGetters } from "vuex";
+import { downloadUtf8Csv } from "@/util/download";
 
 export default {
   name: "ActivityCheckinList",
@@ -178,6 +197,10 @@ export default {
       default: "",
     },
     readOnly: {
+      type: Boolean,
+      default: false,
+    },
+    showExportEnded: {
       type: Boolean,
       default: false,
     },
@@ -195,11 +218,12 @@ export default {
         keyword: "",
         paid: undefined,
         participateLottery: undefined,
-        lotteryValidate: undefined,
-        checkedIn: undefined,
+        lottery_validate: undefined,
+        checkin: undefined,
       },
       checkinTimeRange: null,
       listLoading: false,
+      exportLoading: false,
       tableHeight: "calc(100vh - 450px)",
       tableBtn: [],
       permissionsBtn: [
@@ -214,10 +238,10 @@ export default {
       dialogSnapshot: {},
       dialogForm: {
         id: null,
-        checkedIn: 0,
+        checkin: 0,
         participateLottery: 0,
-        lotteryValidate: 0,
-        allowLottery: 0,
+        lottery_validate: 0,
+        allow_lottery: 0,
       },
     };
   },
@@ -267,6 +291,19 @@ export default {
       }
       return this.ynLabel(val);
     },
+    /** API checkin 为 boolean，列表也可能返回 true/false */
+    ynCheckinDisplay(val) {
+      if (val === undefined || val === null || val === "") {
+        return "--";
+      }
+      if (val === true || val === 1 || val === "1") {
+        return this.$t("isagroup.是");
+      }
+      if (val === false || val === 0 || val === "0") {
+        return this.$t("isagroup.否");
+      }
+      return this.ynLabel(val);
+    },
     extractPageList(payload) {
       if (!payload || typeof payload !== "object") {
         return [];
@@ -295,14 +332,7 @@ export default {
       }
       return [];
     },
-    getList() {
-      if (!this.activityId) {
-        this.tableData = [];
-        this.paginationTotal = 0;
-        return;
-      }
-      const cur = this.pagination.current;
-      const sz = this.pagination.size;
+    buildCheckinListParams(cur, sz) {
       const params = {
         activityId: this.activityId,
         current: cur,
@@ -321,18 +351,87 @@ export default {
         params.participateLottery = this.searchFrom.participateLottery;
       }
       if (
-        this.searchFrom.lotteryValidate === 0 ||
-        this.searchFrom.lotteryValidate === 1
+        this.searchFrom.lottery_validate === 0 ||
+        this.searchFrom.lottery_validate === 1
       ) {
-        params.lotteryValidate = this.searchFrom.lotteryValidate;
+        params.lottery_validate = this.searchFrom.lottery_validate;
       }
-      if (this.searchFrom.checkedIn === 0 || this.searchFrom.checkedIn === 1) {
-        params.checkedIn = this.searchFrom.checkedIn;
+      if (this.searchFrom.checkin === 0 || this.searchFrom.checkin === 1) {
+        params.checkin = this.searchFrom.checkin;
       }
       if (this.checkinTimeRange && this.checkinTimeRange.length === 2) {
         params.checkinTimeStart = this.checkinTimeRange[0];
         params.checkinTimeEnd = this.checkinTimeRange[1];
       }
+      return params;
+    },
+    async exportCheckinCsv() {
+      if (!this.activityId || this.exportLoading) {
+        return;
+      }
+      this.exportLoading = true;
+      const pageSize = 200;
+      let current = 1;
+      let allRaw = [];
+      let totalKnown = null;
+      try {
+        while (current < 600) {
+          const params = this.buildCheckinListParams(current, pageSize);
+          const res = await getActivityCheckinPage(params);
+          if (!res.data.success) {
+            break;
+          }
+          const payload = res.data.data || {};
+          const list = this.extractPageList(payload);
+          const total =
+            payload.total !== undefined && payload.total !== null
+              ? payload.total
+              : payload.totalElements != null
+              ? payload.totalElements
+              : null;
+          if (typeof total === "number") {
+            totalKnown = total;
+          }
+          allRaw = allRaw.concat(list);
+          if (!list.length) {
+            break;
+          }
+          if (typeof totalKnown === "number" && allRaw.length >= totalKnown) {
+            break;
+          }
+          if (list.length < pageSize) {
+            break;
+          }
+          current += 1;
+        }
+        const cols = this.tabletitle.activityCheckinTable.map((c) => ({
+          header: c.label,
+          key: c.prop,
+        }));
+        const rows = allRaw.map((item, i) =>
+          this.formatRow(item, i, 1, 1)
+        );
+        downloadUtf8Csv(
+          `activity-checkin-${this.activityId}.csv`,
+          rows,
+          cols
+        );
+        this.$message.success(this.$t("isagroup.成功"));
+      } catch (e) {
+        this.$message.error(this.$t("isagroup.失败"));
+      } finally {
+        this.exportLoading = false;
+      }
+    },
+    getList() {
+      if (!this.activityId) {
+        this.tableData = [];
+        this.paginationTotal = 0;
+        return;
+      }
+      const cur = this.pagination.current;
+      const sz = this.pagination.size;
+      const params = this.buildCheckinListParams(cur, sz);
       this.listLoading = true;
       getActivityCheckinPage(params)
         .then((res) => {
@@ -376,14 +475,10 @@ export default {
         item.participateLottery != null
           ? item.participateLottery
           : item.participate_lottery;
-      const lotteryValRaw =
-        item.lottery_validate != null
-          ? item.lottery_validate
-          : item.lotteryValidate;
+      const lotteryValRaw = item.lottery_validate;
       const allowLotRaw =
         item.allow_lottery != null ? item.allow_lottery : item.allowLottery;
-      const checkedRaw =
-        item.checkedIn != null ? item.checkedIn : item.checked_in;
+      const checkedRaw = item.checkin != null ? item.checkin : item.checked_in;
 
       const seq = (current - 1) * size + index + 1;
       const idPart = item.id != null ? String(item.id) : `noid-${index}`;
@@ -404,7 +499,7 @@ export default {
             : "--",
         participateLotteryLabel: this.ynOrDash(participateRaw),
         lotteryValidateLabel: this.ynOrDash(lotteryValRaw),
-        checkedInLabel: this.ynOrDash(checkedRaw),
+        checkedInLabel: this.ynCheckinDisplay(checkedRaw),
         checkinTimeLabel: checkinTimeRaw
           ? dayjs(checkinTimeRaw).format("YYYY-MM-DD HH:mm")
           : "--",
@@ -413,8 +508,8 @@ export default {
           : "--",
         _allowLottery: allowLotRaw,
         _participateLottery: participateRaw,
-        _lotteryValidate: lotteryValRaw,
-        _checkedIn: checkedRaw,
+        _lottery_validate: lotteryValRaw,
+        _checkin: checkedRaw,
       };
     },
     handleCurrentChange(page) {
@@ -432,25 +527,29 @@ export default {
       }
     },
     openEdit(row) {
-      const checkedIn = row.checkedIn != null ? row.checkedIn : row.checked_in;
+      const checkin = row.checkin != null ? row.checkin : row.checked_in;
       const participateLottery =
         row.participateLottery != null
           ? row.participateLottery
           : row.participate_lottery;
-      const lotteryValidate =
-        row.lottery_validate != null
-          ? row.lottery_validate
-          : row.lotteryValidate;
+      const lottery_validate = row.lottery_validate;
       const allowLottery =
         row.allow_lottery != null ? row.allow_lottery : row.allowLottery;
       const ticketId =
-        row.ticketId != null ? row.ticketId : row.ticket_id != null ? row.ticket_id : null;
+        row.ticketId != null
+          ? row.ticketId
+          : row.ticket_id != null
+          ? row.ticket_id
+          : null;
       const checkinTime =
         row.checkin_time != null ? row.checkin_time : row.checkinTime;
-      const createdAt =
-        row.created_at != null ? row.created_at : row.createdAt;
+      const createdAt = row.created_at != null ? row.created_at : row.createdAt;
       const winItem =
-        row.win_item != null ? row.win_item : row.winItem != null ? row.winItem : null;
+        row.win_item != null
+          ? row.win_item
+          : row.winItem != null
+          ? row.winItem
+          : null;
 
       this.dialogSnapshot = {
         id: row.id,
@@ -458,21 +557,27 @@ export default {
         email: row.email,
         name: row.name,
         phone: row.phone,
-        paid: row.paid !== undefined && row.paid !== null ? Number(row.paid) : null,
+        paid:
+          row.paid !== undefined && row.paid !== null ? Number(row.paid) : null,
         ticketId,
         checkin_time: checkinTime,
         created_at: createdAt,
         win_item: winItem,
       };
 
+      const checkinNorm =
+        checkin === true ? 1 : checkin === false ? 0 : checkin;
       this.dialogForm = {
         id: row.id,
-        checkedIn: checkedIn === 1 || checkedIn === "1" ? 1 : 0,
+        checkin:
+          checkinNorm === 1 || checkinNorm === "1"
+            ? 1
+            : 0,
         participateLottery:
           participateLottery === 1 || participateLottery === "1" ? 1 : 0,
-        lotteryValidate:
-          lotteryValidate === 1 || lotteryValidate === "1" ? 1 : 0,
-        allowLottery: allowLottery === 1 || allowLottery === "1" ? 1 : 0,
+        lottery_validate:
+          lottery_validate === 1 || lottery_validate === "1" ? 1 : 0,
+        allow_lottery: allowLottery === 1 || allowLottery === "1" ? 1 : 0,
       };
       this.dialogVisible = true;
       this.$nextTick(() => {
@@ -491,10 +596,10 @@ export default {
       const f = this.dialogForm;
       const payload = {
         id: s.id,
-        checkedIn: f.checkedIn,
+        checkin: f.checkin === 1,
         participateLottery: f.participateLottery,
-        lottery_validate: f.lotteryValidate,
-        allow_lottery: f.allowLottery,
+        lottery_validate: f.lottery_validate,
+        allow_lottery: f.allow_lottery,
         code: s.code != null && s.code !== "" ? String(s.code) : undefined,
         email: s.email != null && s.email !== "" ? String(s.email) : undefined,
         name: s.name != null && s.name !== "" ? String(s.name) : undefined,
@@ -533,6 +638,23 @@ export default {
 
 .registration-search-wrap {
   margin-bottom: 8px;
+}
+
+.activity-search-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 12px 16px;
+  width: 100%;
+}
+
+.activity-search-toolbar__actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+  margin-left: auto;
 }
 
 .registration-search-form {

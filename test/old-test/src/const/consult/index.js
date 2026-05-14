@@ -195,6 +195,11 @@ export const consult = {
       width: "100px",
     },
     {
+      label: "其他姓名",
+      prop: "otherName",
+      width: "100px",
+    },
+    {
       label: "性别",
       prop: "sexlabel",
       width: "100px",
@@ -215,6 +220,11 @@ export const consult = {
       width: "200px",
     },
     {
+      label: "身份证/护照号",
+      prop: "idNumber",
+      width: "200px",
+    },
+    {
       label: "邮箱",
       prop: "email",
       width: "200px",
@@ -227,6 +237,41 @@ export const consult = {
     {
       label: "语言",
       prop: "language",
+      width: "200px",
+    },
+    {
+      label: "第二语言",
+      prop: "secondLanguage",
+      width: "200px",
+    },
+    {
+      label: "工作单位",
+      prop: "employer",
+      width: "200px",
+    },
+    {
+      label: "职位",
+      prop: "jobTitle",
+      width: "200px",
+    },
+    {
+      label: "地址第一行",
+      prop: "address",
+      width: "200px",
+    },
+    {
+      label: "地址第二行",
+      prop: "addressIi",
+      width: "200px",
+    },
+    {
+      label: "省",
+      prop: "state",
+      width: "200px",
+    },
+    {
+      label: "市",
+      prop: "city",
       width: "200px",
     },
     {

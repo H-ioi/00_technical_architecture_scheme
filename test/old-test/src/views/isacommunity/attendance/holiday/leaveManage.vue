@@ -146,16 +146,17 @@
           width="200px">
         </el-table-column>
 
-        <el-table-column fixed="right" header-align="center" align="center" width="150" :label="$t('attendance.操作')">
+        <el-table-column fixed="right" header-align="center" align="center" width="200" :label="$t('attendance.操作')">
           <template slot-scope="scope">
 
-            <!--<el-button type="text" size="small" @click="deleteHandle(scope.row.id)">{{ $t("btn.删除") }}</el-button>-->
+           
             <a type="text" size="small" @click="backHandle(scope.row.procId,scope.row.id)"
               v-if="(scope.row.status == '1100'  ||  scope.row.status == '1103' ) && scope.row.dataFrom != 'MB'" class="text-btn">{{
                 $t("attendance.撤销") }}</a>
             <a v-if="scope.row.status == '1101' && scope.row.dataFrom != 'MB'"  type="text" size="small" @click="cancelHandle(scope.row)"
               class="text-btn">{{ $t("attendance.销假") }} </a>
             <a type="text" size="small" @click="editForm(scope.row)" class="text-btn">{{ $t("btn.查看") }} </a>
+             <a class="text-btn" @click="deleteHandle(scope.row.id)" v-if="permissions['holiday-delete']">{{ $t("btn.删除") }}</a>
           </template>
         </el-table-column>
       </el-table>
@@ -180,7 +181,8 @@
 </template>
 
 <script>
-import { listHoliday, cancelFlow ,getSchoolList} from '@/api/isacommunity/holiday'
+import { mapGetters } from "vuex";
+import { listHoliday, cancelFlow ,getSchoolList,deleteHoliday} from '@/api/isacommunity/holiday'
 import Pagination from "@/components/communitycommon/Pagination.vue";
 import add from './dialog/add.vue'
 import cancel from './dialog/cancel.vue'
@@ -219,6 +221,10 @@ export default {
       schoolList: []
     }
   },
+     computed: {
+    ...mapGetters(["dictionary", "permissions", "i18nlocel"]),
+  },
+
   mounted() {
     this.getDataList();
     this.loadSchoolList();
@@ -239,6 +245,45 @@ export default {
       this.cancelDialogVisible = false
       this.getDataList()
     },
+
+
+deleteHandle(id) {
+  this.$confirm(this.$t('attendance.确定删除操作?'), this.$t('attendance.提示'), {
+    confirmButtonText: this.$t('attendance.确定'),
+    cancelButtonText: this.$t('attendance.取消'),
+    type: 'warning'
+  }).then(() => {
+    deleteHoliday(id).then((res) => {
+      console.log(res, 'resaaaaa')
+
+      this.$message({
+        message: this.$t('attendance.操作成功'),
+        type: 'success',
+        duration: 2000
+      })
+      this.getDataList()
+    }).catch(err => {
+      console.error(err);
+      this.$message({
+        message: this.$t('attendance.操作失败'),
+        type: 'error',
+        duration: 2000
+      })
+    })
+  }).catch(() => {
+    this.$message({
+      message: this.$t('attendance.已取消删除'),
+      type: 'info',
+      duration: 2000
+    })
+  })
+},
+
+
+
+
+
+    
     getDataList() {
       this.dataListLoading = true
       const params = {
@@ -394,9 +439,21 @@ export default {
 }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
+/* 修复固定列穿透和层级问题 */
+::v-deep .el-table {
+  .el-table__fixed-right {
+    z-index: 99 !important;
+    background-color: #ffffff;
+   
+  }
+ 
+}
+
+
+
 /* 防止学校列内容换行 */
-.el-table .el-table__cell[data-column-key="studentSchool"] {
+::v-deep .el-table .el-table__cell[data-column-key="studentSchool"] {
   white-space: nowrap;
   text-overflow: ellipsis;
   overflow: hidden;

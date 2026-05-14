@@ -438,9 +438,13 @@ export default {
 
       // 获取字段数据并深拷贝，避免修改原始数据
       const fields = [...(template.templateFields || template.fields || [])];
-
+      const newFields = fields.filter((item) => {
+        return item.fieldType !== "sign" && item.fieldType !== "protocol";
+      });
       // 按sort字段排序
-      const sortedFields = fields.sort((a, b) => (a.sort || 0) - (b.sort || 0));
+      const sortedFields = newFields.sort(
+        (a, b) => (a.sort || 0) - (b.sort || 0)
+      );
 
       // 创建日期类型映射表，避免多次遍历
       const dateTimeTypeMap = new Map();

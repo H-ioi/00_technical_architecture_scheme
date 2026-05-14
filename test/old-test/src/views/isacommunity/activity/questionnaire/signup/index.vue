@@ -1,90 +1,45 @@
 <template>
   <div>
-    <div
-      class="questionnaire"
-      v-if="collectionData['status'] && !collectionData['isDeleted']"
-    >
+    <div class="questionnaire" v-if="collectionData['status'] && !collectionData['isDeleted']">
       <div class="questionnaire-nav">
         <div class="questionnaire-nav_text">{{ collectionData["name"] }}</div>
       </div>
       <el-scrollbar class="questionnaire-content">
         <div class="questionnaire-content-scroll">
           <div class="form-questionnaire" v-if="collectionData['needStudentInfo']">
-            <el-form
-              :label-position="'top'"
-              :inline="true"
-              :model="studentForm"
-              :rules="studentRules"
-              ref="studentForm"
-            >
+            <el-form :label-position="'top'" :inline="true" :model="studentForm" :rules="studentRules"
+              ref="studentForm">
               <el-form-item label="姓名Name" prop="name" style="width: 100%">
-                <el-input
-                  style="width: 100%"
-                  v-model="studentForm.name"
-                  placeholder="请输入"
-                  maxlength="100"
-                ></el-input>
+                <el-input style="width: 100%" v-model="studentForm.name" placeholder="请输入" maxlength="100"></el-input>
               </el-form-item>
               <el-form-item label="学校School" prop="school" style="width: 100%">
-                <el-input
-                  style="width: 100%"
-                  v-model="studentForm.school"
-                  placeholder="请输入"
-                  maxlength="100"
-                ></el-input>
+                <el-input style="width: 100%" v-model="studentForm.school" placeholder="请输入" maxlength="100"></el-input>
               </el-form-item>
-              <el-form-item
-                label="出生日期BirthDate"
-                prop="birthDate"
-                style="width: 100%"
-              >
-                <el-date-picker
-                  v-model="studentForm.birthDate"
-                  type="date"
-                  placeholder="请选择"
-                  value-format="yyyy-MM-dd"
-                  style="width: 100%"
-                >
+              <el-form-item label="出生日期BirthDate" prop="birthDate" style="width: 100%">
+                <el-date-picker v-model="studentForm.birthDate" type="date" placeholder="请选择" value-format="yyyy-MM-dd"
+                  style="width: 100%">
                 </el-date-picker>
               </el-form-item>
               <el-form-item label="性别Gender" prop="gender" style="width: 100%">
-                <el-select
-                  style="width: 100%"
-                  v-model="studentForm.gender"
-                  placeholder="请选择"
-                >
+                <el-select style="width: 100%" v-model="studentForm.gender" placeholder="请选择">
                   <el-option label="男" value="1"></el-option>
                   <el-option label="女" value="0"></el-option>
                 </el-select>
               </el-form-item>
             </el-form>
           </div>
-          <FromitemActivity
-            ref="FromitemActivity"
-            type="questionnaire"
-            @signUpCollection="signUpCollection"
-          />
+          <FromitemActivity ref="FromitemActivity" type="questionnaire" @signUpCollection="signUpCollection" />
         </div>
       </el-scrollbar>
       <div class="questionnaire-footter">
         <!-- <div class="questionnaire-cancel" @click="cancelData">取消</div> -->
-        <div
-          class="questionnaire-confirm"
-          @click="submit"
-          :class="{ disabled: isSubmitting }"
-          :style="{ cursor: isSubmitting ? 'not-allowed' : 'pointer' }"
-        >
+        <div class="questionnaire-confirm" @click="submit" :class="{ disabled: isSubmitting }"
+          :style="{ cursor: isSubmitting ? 'not-allowed' : 'pointer' }">
           {{ isSubmitting ? "提交中..." : "确认提交" }}
         </div>
       </div>
-      <el-dialog
-        class="questionnaire-dialog"
-        :show-close="false"
-        :visible.sync="showModal"
-        width="260px"
-        :before-close="closeModal"
-        :close-on-click-modal="false"
-      >
+      <el-dialog class="questionnaire-dialog" :show-close="false" :visible.sync="showModal" width="260px"
+        :before-close="closeModal" :close-on-click-modal="false">
         <div class="questionnaire-tips">
           <div class="questionnaire-tips-title">填报须知</div>
           <div class="questionnaire-tips-text">
@@ -131,12 +86,12 @@ export default {
       isSubmitting: false, // 添加防重提交状态
     };
   },
-  created() {},
+  created() { },
   mounted() {
     document.title = "问卷报名";
     this.initData();
   },
-  activated() {},
+  activated() { },
   computed: {
     ...mapGetters(["permissions", "dictpermissions"]),
   },

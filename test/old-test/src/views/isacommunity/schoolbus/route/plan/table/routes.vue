@@ -1,97 +1,44 @@
 <template>
   <div>
     <div class="community_searchFrom">
-      <el-form
-        class="df_align_center"
-        :label-position="'top'"
-        :inline="true"
-        :model="searchFrom"
-      >
-        <el-form-item style="width: 180px" v-if="dictionary['school'].length > 1">
-          <el-select
-            style="width: 100%"
-            v-model="searchFrom['schoolIds']"
-            :placeholder="$t('isagroup.请选择学校')"
-            multiple
-            @change="changeSchool"
-          >
-            <el-option
-              :key="k"
-              v-for="(i, k) in dictionary['school']"
-              :label="i.enName"
-              :value="i.id"
-            ></el-option>
+      <el-form class="df_align_center" :label-position="'top'" :inline="true" :model="searchFrom">
+        <el-form-item style="width: 180px" v-if="schoolSelectList.length > 1">
+          <el-select style="width: 100%" v-model="searchFrom['schoolIds']" :placeholder="$t('isagroup.请选择学校')" multiple
+            @change="changeSchool">
+            <el-option :key="k" v-for="(i, k) in schoolSelectList" :label="schoolDropdownLabel(i)"
+              :value="i.id"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item style="width: 180px">
-          <el-select
-            style="width: 100%"
-            v-model="searchFrom['sectionId']"
-            :placeholder="$t('isagroup.请选择学期')"
-          >
-            <el-option
-              :key="k"
-              v-for="(i, k) in selectSectionList"
-              :label="i18nlocel == 'en' ? i.enName : i.cnName"
-              :value="i.id"
-            ></el-option>
+          <el-select style="width: 100%" v-model="searchFrom['sectionId']" :placeholder="$t('isagroup.请选择学期')">
+            <el-option :key="k" v-for="(i, k) in selectSectionList" :label="i18nlocel == 'en' ? i.enName : i.cnName"
+              :value="i.id"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item style="width: 180px">
-          <el-select
-            style="width: 100%"
-            v-model="searchFrom['stationIds']"
-            :placeholder="$t('isagroup.请选择站点')"
-          >
-            <el-option
-              :key="k"
-              v-for="(i, k) in selectStationList"
-              :label="i18nlocel == 'en' ? i.enName : i.cnName"
-              :value="i.id"
-            ></el-option>
+          <el-select style="width: 100%" v-model="searchFrom['stationIds']" :placeholder="$t('isagroup.请选择站点')">
+            <el-option :key="k" v-for="(i, k) in selectStationList" :label="i18nlocel == 'en' ? i.enName : i.cnName"
+              :value="i.id"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item style="width: 180px">
-          <el-select
-            style="width: 100%"
-            v-model="searchFrom['visible']"
-            :placeholder="$t('isagroup.状态')"
-          >
-            <el-option
-              :key="k"
-              v-for="(i, k) in consts['visibleType']"
-              :label="i18nlocel == 'en' ? i.enLabel : i.label"
-              :value="i.value"
-            ></el-option>
+          <el-select style="width: 100%" v-model="searchFrom['visible']" :placeholder="$t('isagroup.状态')">
+            <el-option :key="k" v-for="(i, k) in consts['visibleType']" :label="i18nlocel == 'en' ? i.enLabel : i.label"
+              :value="i.value"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item style="width: 180px">
-          <el-input
-            clearable
-            style="width: 100%"
-            v-model="searchFrom['lineName']"
-            :placeholder="$t('isagroup.输入路线名称')"
-          ></el-input>
+          <el-input clearable style="width: 100%" v-model="searchFrom['lineName']"
+            :placeholder="$t('isagroup.输入路线名称')"></el-input>
         </el-form-item>
         <el-form-item style="width: 180px">
-          <el-input
-            clearable
-            style="width: 100%"
-            v-model="searchFrom['carNumber']"
-            :placeholder="$t('isagroup.输入车牌号')"
-          ></el-input>
+          <el-input clearable style="width: 100%" v-model="searchFrom['carNumber']"
+            :placeholder="$t('isagroup.输入车牌号')"></el-input>
         </el-form-item>
 
         <el-form-item style="width: auto; margin-right: 0">
-          <el-button
-            style="color: #2a3f54 !important"
-            class="button_text"
-            size="medium"
-            type="text"
-            icon="el-icon-refresh-right"
-            @click="clear"
-            >{{ $t("btn.重置") }}</el-button
-          >
+          <el-button style="color: #2a3f54 !important" class="button_text" size="medium" type="text"
+            icon="el-icon-refresh-right" @click="clear">{{ $t("btn.重置") }}</el-button>
           <el-button size="medium" type="primary" @click="getList">{{
             $t("btn.查询")
           }}</el-button>
@@ -100,47 +47,20 @@
     </div>
 
     <div class="isa_table">
-      <Table
-        ref="Table"
-        :showSelection="true"
-        :tableTitle="tabletitle['routeTable']"
-        :tableData="tableData"
-        :tableBtn="tableBtn"
-        @playTab="playTab"
-        @rowClick="rowClick"
-      />
+      <Table ref="Table" :showSelection="true" :tableTitle="tabletitle['routeTable']" :tableData="tableData"
+        :tableBtn="tableBtn" @playTab="playTab" @rowClick="rowClick" />
       <div class="df_sb isa_table_footer">
         <div>
-          <el-button
-            v-if="permissions['busline_batch_copy']"
-            size="small"
-            type="defult"
-            plain
-            @click="batchCopy"
-            >{{ $t("isagroup.复制路线") }}</el-button
-          >
-          <el-button
-            v-if="permissions['busline_del']"
-            size="small"
-            type="danger"
-            plain
-            @click="delData"
-            >{{ $t("btn.删除") }}</el-button
-          >
+          <el-button v-if="permissions['busline_batch_copy']" size="small" type="defult" plain @click="batchCopy">{{
+            $t("isagroup.复制路线") }}</el-button>
+          <el-button v-if="permissions['busline_del']" size="small" type="danger" plain @click="delData">{{ $t("btn.删除")
+            }}</el-button>
         </div>
-        <Pagination
-          :total="paginationTotal"
-          :pagination="pagination"
-          @handleCurrentChange="handleCurrentChange"
-        />
+        <Pagination :total="paginationTotal" :pagination="pagination" @handleCurrentChange="handleCurrentChange" />
       </div>
     </div>
     <RouteForm ref="RouteForm" @getList="getList" />
-    <Detail
-      ref="Detail"
-      :title="$t('isagroup.详情')"
-      :detailInfo="tabletitle['routeTable']"
-    />
+    <Detail ref="Detail" :title="$t('isagroup.详情')" :detailInfo="tabletitle['routeTable']" />
     <!-- 批量导入弹窗 -->
     <BatchRoute ref="BatchRoute" @getList="getList" />
     <!-- 复制路线弹窗 -->
@@ -162,8 +82,10 @@ import BatchRoute from "../modal/batchroute.vue";
 import CopyRoute from "../modal/copyroute.vue";
 // 引入 dayjs
 import dayjs from "dayjs";
+import schoolListBuscommonMixin from "@/mixins/schoolListBuscommon.js";
 export default {
   name: "teacher",
+  mixins: [schoolListBuscommonMixin],
   components: { Table, Pagination, Detail, RouteForm, BatchRoute, CopyRoute },
   data() {
     return {
@@ -200,14 +122,13 @@ export default {
   },
   created() {
     this.getBtn();
-    this.initData();
   },
-  mounted() {},
+  mounted() { },
   activated() {
     this.initData();
   },
   computed: {
-    ...mapGetters(["dictionary", "permissions", "i18nlocel"]),
+    ...mapGetters(["permissions", "i18nlocel"]),
   },
   watch: {
     i18nlocel() {
@@ -215,9 +136,10 @@ export default {
     },
   },
   methods: {
-    initData() {
-      if (this.dictionary["school"].length == 1) {
-        this.schoolId = this.dictionary["school"][0].id;
+    async initData() {
+      await this.fetchSchoolListBuscommon();
+      if (this.schoolSelectList.length === 1) {
+        this.schoolId = this.schoolSelectList[0].id;
         this.pagination["schoolIds"] = this.schoolId;
       }
       this.getList();
@@ -226,7 +148,7 @@ export default {
     async getSelectList() {
       this.sectionList = await getSectionList();
       this.stationList = await getStationList();
-      if (this.dictionary["school"].length == 1) {
+      if (this.schoolSelectList.length === 1) {
         this.changeSchool([this.schoolId]);
       }
     },

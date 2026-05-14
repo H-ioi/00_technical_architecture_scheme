@@ -40,50 +40,69 @@
               format="yyyy-MM-dd HH:mm"
             />
           </el-form-item>
-          <el-form-item class="activity-search-field activity-search-field--search">
+          <el-form-item
+            class="activity-search-field activity-search-field--search"
+          >
             <el-button type="primary" size="medium" @click="getList">{{
               $t("isagroup.搜索")
             }}</el-button>
           </el-form-item>
         </el-form>
-        <div v-if="!readOnly" class="activity-search-toolbar__actions">
-          <el-button
-            v-if="permissions['busdriver_edit']"
-            type="primary"
-            size="medium"
-            @click="openAdd"
-            >{{ $t("btn.新增") }}</el-button
-          >
-          <el-upload
-            v-if="permissions['busdriver_edit']"
-            class="registration-upload"
-            :action="ticketImportAction"
-            :show-file-list="false"
-            accept=".xlsx,.xls"
-            :http-request="handleImport"
-          >
-            <el-button type="primary" size="medium">{{
-              $t("btn.导入")
-            }}</el-button>
-          </el-upload>
-          <el-button
-            v-if="permissions['busdriver_edit']"
-            type="primary"
-            size="medium"
-            :disabled="!activityId"
-            @click="handleDownloadTemplate"
-            >{{ $t("isagroup.下载Excel模板") }}</el-button
-          >
+        <div
+          v-if="!readOnly || showExportEnded"
+          class="activity-search-toolbar__actions"
+        >
+          <template v-if="!readOnly">
+            <el-button
+              v-if="permissions['busdriver_edit']"
+              type="primary"
+              size="medium"
+              @click="openAdd"
+              >{{ $t("btn.新增") }}</el-button
+            >
+            <el-upload
+              v-if="permissions['busdriver_edit']"
+              class="registration-upload"
+              :action="ticketImportAction"
+              :show-file-list="false"
+              accept=".xlsx,.xls"
+              :http-request="handleImport"
+            >
+              <el-button type="primary" size="medium">{{
+                $t("btn.导入")
+              }}</el-button>
+            </el-upload>
+            <el-button
+              v-if="permissions['busdriver_edit']"
+              type="primary"
+              size="medium"
+              :disabled="!activityId"
+              @click="handleDownloadTemplate"
+              >{{ $t("isagroup.下载Excel模板") }}</el-button
+            >
+            <el-button
+              v-if="
+                permissions['activity_ticket_del'] || permissions['busdriver_del']
+              "
+              type="danger"
+              size="medium"
+              plain
+              :disabled="tableSelectionCount === 0"
+              @click="batchDel"
+              >{{ $t("btn.删除") }}</el-button
+            >
+          </template>
           <el-button
             v-if="
-              permissions['activity_ticket_del'] || permissions['busdriver_del']
+              showExportEnded &&
+              permissions['busdriver_edit']
             "
-            type="danger"
+            type="primary"
             size="medium"
             plain
-            :disabled="tableSelectionCount === 0"
-            @click="batchDel"
-            >{{ $t("btn.删除") }}</el-button
+            :disabled="!activityId || exportLoading"
+            @click="exportRegistrationCsv"
+            >{{ $t("btn.导出") }}</el-button
           >
         </div>
       </div>
@@ -240,6 +259,7 @@ import Table from "@/components/communitycommon/Table.vue";
 import tabletitle from "@/const/isacommunity/tabletitle.js";
 import dayjs from "dayjs";
 import { mapGetters } from "vuex";
+import { downloadUtf8Csv } from "@/util/download";
 
 export default {
   name: "ActivityRegistrationList",
@@ -249,8 +269,12 @@ export default {
       type: [String, Number],
       default: "",
     },
-    /** 活动详情为查看模式时隐藏新增/导入/删除等 */
+    /** 进行中之外为只读；已结束时父级传 show-export-ended 仍可导出 */
     readOnly: {
+      type: Boolean,
+      default: false,
+    },
+    showExportEnded: {
       type: Boolean,
       default: false,
     },
@@ -283,6 +307,7 @@ export default {
       dialogMode: "add",
       tableSelectionCount: 0,
       listLoading: false,
+      exportLoading: false,
       dialogForm: {
         id: null,
         activityId: null,
@@ -432,14 +457,7 @@ export default {
       }
       return [];
     },
-    getList() {
-      if (!this.activityId) {
-        this.tableData = [];
-        this.paginationTotal = 0;
-        return;
-      }
-      const cur = this.pagination.current;
-      const sz = this.pagination.size;
+    buildTicketListParams(cur, sz) {
       const params = {
         activityId: this.activityId,
         current: cur,
@@ -452,9 +470,78 @@ export default {
         params.paid = this.searchFrom.paid;
       }
       if (this.registerTimeRange && this.registerTimeRange.length === 2) {
-        params.registerTimeStart = this.registerTimeRange[0];
-        params.registerTimeEnd = this.registerTimeRange[1];
+        params.registerStartTime = this.registerTimeRange[0];
+        params.registerEndTime = this.registerTimeRange[1];
       }
+      return params;
+    },
+    async exportRegistrationCsv() {
+      if (!this.activityId || this.exportLoading) {
+        return;
+      }
+      this.exportLoading = true;
+      const pageSize = 200;
+      let current = 1;
+      let allRaw = [];
+      let totalKnown = null;
+      try {
+        while (current < 600) {
+          const params = this.buildTicketListParams(current, pageSize);
+          const res = await getActivityTicketPage(params);
+          if (!res.data.success) {
+            break;
+          }
+          const payload = res.data.data || {};
+          const list = this.extractPageList(payload);
+          const total =
+            payload.total !== undefined && payload.total !== null
+              ? payload.total
+              : payload.totalElements != null
+              ? payload.totalElements
+              : null;
+          if (typeof total === "number") {
+            totalKnown = total;
+          }
+          allRaw = allRaw.concat(list);
+          if (!list.length) {
+            break;
+          }
+          if (typeof totalKnown === "number" && allRaw.length >= totalKnown) {
+            break;
+          }
+          if (list.length < pageSize) {
+            break;
+          }
+          current += 1;
+        }
+        const cols = this.tabletitle.activityTicketTable.map((c) => ({
+          header: c.label,
+          key: c.prop,
+        }));
+        const rows = allRaw.map((item, i) =>
+          this.formatRow(item, i, 1, 1)
+        );
+        downloadUtf8Csv(
+          `activity-tickets-${this.activityId}.csv`,
+          rows,
+          cols
+        );
+        this.$message.success(this.$t("isagroup.成功"));
+      } catch (e) {
+        this.$message.error(this.$t("isagroup.失败"));
+      } finally {
+        this.exportLoading = false;
+      }
+    },
+    getList() {
+      if (!this.activityId) {
+        this.tableData = [];
+        this.paginationTotal = 0;
+        return;
+      }
+      const cur = this.pagination.current;
+      const sz = this.pagination.size;
+      const params = this.buildTicketListParams(cur, sz);
       this.listLoading = true;
       getActivityTicketPage(params)
         .then((res) => {

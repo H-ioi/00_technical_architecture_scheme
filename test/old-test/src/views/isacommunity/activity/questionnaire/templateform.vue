@@ -10,7 +10,9 @@
 
         <div class="formgenerator_template">
           <div class="formgenerator_item">
-            <div class="formgenerator_itemname">{{ $t("isagroup.基本属性") }}</div>
+            <div class="formgenerator_itemname">
+              {{ $t("isagroup.基本属性") }}
+            </div>
 
             <el-form
               :label-position="'top'"
@@ -45,8 +47,8 @@
                 >
                   <el-option
                     :key="k"
-                    v-for="(i, k) in dictionary['school']"
-                    :label="i.enName"
+                    v-for="(i, k) in schoolSelectList"
+                    :label="schoolDropdownLabel(i)"
                     :value="i.id"
                   ></el-option>
                 </el-select>
@@ -62,8 +64,11 @@
                   style="width: 100%"
                 >
                   <el-option
-                    v-for="(i, k) in selectActivityList"
-                    :label="i18nlocel == 'en' ? i.activityEnName : i.activityCnName"
+                    v-for="i in selectActivityList"
+                    :key="i.id"
+                    :label="
+                      i18nlocel == 'en' ? i.activityEnName : i.activityCnName
+                    "
                     :value="i.id"
                   ></el-option>
                 </el-select>
@@ -78,8 +83,10 @@
                   :placeholder="$t('isagroup.请选择')"
                   style="width: 100%"
                 >
-                  <el-option :label="$t('isagroup.有效')" :value="1"> </el-option>
-                  <el-option :label="$t('isagroup.无效')" :value="0"> </el-option>
+                  <el-option :label="$t('isagroup.有效')" :value="1">
+                  </el-option>
+                  <el-option :label="$t('isagroup.无效')" :value="0">
+                  </el-option>
                 </el-select>
               </el-form-item>
               <el-form-item
@@ -136,18 +143,23 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
 import { getActivityList } from "@/api/isacommunity/activity.js";
 import {
   addQuestionnaire,
   editQuestionnaire,
   getQuestionnaireDetail,
 } from "@/api/isacommunity/questionnaire.js";
-import { getTemplateOuterId, bindTemplateOuterId } from "@/api/space/templatedynamic.js";
-import consts from "@/const/isacommunity/consts.js";
+import {
+  bindTemplateOuterId,
+  getTemplateOuterId,
+} from "@/api/space/templatedynamic.js";
 import FormgeneratorActivity from "@/components/isagroupcommon/formgenerator/formgenerator_activity.vue";
+import consts from "@/const/isacommunity/consts.js";
+import schoolListBuscommonMixin from "@/mixins/schoolListBuscommon.js";
+import { mapGetters } from "vuex";
 
 export default {
+  mixins: [schoolListBuscommonMixin],
   components: {
     FormgeneratorActivity,
   },
@@ -166,21 +178,40 @@ export default {
         instructions: "",
       },
       templateRule: {
-        name: [{ required: true, message: that.$t("isagroup.请输入"), trigger: "blur" }],
-        schoolIds: [
-          { required: true, message: that.$t("isagroup.请选择"), trigger: "blur" },
+        name: [
+          {
+            required: true,
+            message: that.$t("isagroup.请输入"),
+            trigger: "blur",
+          },
         ],
-        activityId: [
-          { required: true, message: that.$t("isagroup.请选择"), trigger: "blur" },
+        schoolIds: [
+          {
+            required: true,
+            message: that.$t("isagroup.请选择"),
+            trigger: "blur",
+          },
         ],
         status: [
-          { required: true, message: that.$t("isagroup.请选择"), trigger: "blur" },
+          {
+            required: true,
+            message: that.$t("isagroup.请选择"),
+            trigger: "blur",
+          },
         ],
         needStudentInfo: [
-          { required: true, message: that.$t("isagroup.请选择"), trigger: "blur" },
+          {
+            required: true,
+            message: that.$t("isagroup.请选择"),
+            trigger: "blur",
+          },
         ],
         instructions: [
-          { required: false, message: that.$t("isagroup.请输入"), trigger: "blur" },
+          {
+            required: false,
+            message: that.$t("isagroup.请输入"),
+            trigger: "blur",
+          },
         ],
       },
       templateType: "add",
@@ -195,19 +226,22 @@ export default {
     this.initData();
   },
   computed: {
-    ...mapGetters(["permissions", "pooldictpermissions", "dictionary", "i18nlocel"]),
+    ...mapGetters(["permissions", "pooldictpermissions", "i18nlocel"]),
   },
   methods: {
     // 初始化数据
-    initData() {
-      this.getActivityList();
+    async initData() {
+      await this.fetchSchoolListBuscommon();
+      await this.getActivityList();
       this.templateType = this.$route.query.type || "add";
       if (this.$route.query.id) {
         this.collectionId = this.$route.query.id;
         this.$nextTick(() => {
-          this.$refs.FormgeneratorActivity.collectionId = this.collectionId;
+          if (this.$refs.FormgeneratorActivity) {
+            this.$refs.FormgeneratorActivity.collectionId = this.collectionId;
+          }
         });
-        this.getDetail();
+        await this.getDetail();
       }
     },
     add(data, templateId) {
@@ -218,7 +252,9 @@ export default {
             this.collectionId = res.data.data;
             //   this.bindTemplate(templateId, res.data.data);
             //   this.$message.success(this.$t("isagroup.成功"));
-            this.$refs.FormgeneratorActivity.setFormgeneratorData(res.data.data);
+            this.$refs.FormgeneratorActivity.setFormgeneratorData(
+              res.data.data
+            );
           } else {
             this.$refs.FormgeneratorActivity.isSubmitting = false;
             this.$message.error(this.$t("isagroup.失败"));
@@ -264,31 +300,39 @@ export default {
         }
       });
     },
-    getDetail() {
-      getQuestionnaireDetail(this.collectionId).then((res) => {
-        if (res.data.success) {
-          let data = res.data.data;
-          let { activities } = data;
-          this.getTemplateOuterId(this.collectionId);
-          this.selectActivityList = this.activityList.filter((activity) =>
-            this.hasCommonElement(activity.schoolIds, data.schoolIds)
-          );
-          this.$nextTick(() => {
-            this.templateFrom = {
-              name: data.name,
-              schoolIds: data.schoolIds,
-              activityId: data.activityId,
-              status: data.status,
-              needStudentInfo: String(data.needStudentInfo),
-              instructions: data.instructions,
-            };
-          });
-        }
-      });
+    async getDetail() {
+      const res = await getQuestionnaireDetail(this.collectionId);
+      if (!res.data.success) {
+        return;
+      }
+      const data = res.data.data;
+      this.getTemplateOuterId(this.collectionId);
+      this.selectActivityList = this.activityList.filter((activity) =>
+        this.hasCommonElement(activity.schoolIds || [], data.schoolIds || [])
+      );
+      const activityMatch =
+        data.activityId != null && data.activityId !== ""
+          ? this.selectActivityList.find(
+              (a) => String(a.id) === String(data.activityId)
+            )
+          : null;
+      const activityIdVal = activityMatch ? activityMatch.id : data.activityId;
+      await this.$nextTick();
+      this.templateFrom = {
+        name: data.name,
+        schoolIds: Array.isArray(data.schoolIds) ? data.schoolIds : [],
+        activityId: activityIdVal,
+        status: data.status,
+        needStudentInfo: String(data.needStudentInfo),
+        instructions: data.instructions || "",
+      };
     },
     submitForm(templateFormId = null) {
       this.$refs["templateFrom"].validate((valid) => {
         if (valid) {
+          if (this.$refs.FormgeneratorActivity) {
+            this.$refs.FormgeneratorActivity.isSubmitting = true;
+          }
           let data = {
             ...this.templateFrom,
           };
@@ -305,7 +349,14 @@ export default {
     },
 
     async getActivityList() {
-      this.activityList = await getActivityList();
+      const questionnaireId = this.$route.query.id || "";
+      const params = {
+        questionnaireFlag: 1,
+      };
+      if (questionnaireId) {
+        params.questionnaireId = questionnaireId;
+      }
+      this.activityList = await getActivityList(params);
     },
     closePage() {
       this.$store.commit("CLOSE_TAG_CURRENT", this.$route.fullPath);
@@ -343,10 +394,13 @@ export default {
         this.hasCommonElement(activity.schoolIds, selectedSchoolIds)
       );
     },
-    // 数组对比函数，存在一个相同元素即返回true
+    // 数组对比函数，存在一个相同元素即返回true（统一按字符串比对，避免 number / string 不一致）
     hasCommonElement(arr1, arr2) {
-      const set = new Set(arr1);
-      return arr2.some((item) => set.has(item));
+      if (!arr1 || !arr2 || !arr1.length || !arr2.length) {
+        return false;
+      }
+      const set = new Set(arr1.map((x) => String(x)));
+      return arr2.some((item) => set.has(String(item)));
     },
   },
 };

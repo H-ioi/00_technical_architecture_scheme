@@ -427,6 +427,7 @@ export const routePlanNestedStationFormConfig = (t: Translate): UniFormConfig =>
         precision: 2,
         step: 0.1,
         min: 0,
+        controlsPosition: 'right',
         style: { width: '100%' }
       }
     },
@@ -438,6 +439,7 @@ export const routePlanNestedStationFormConfig = (t: Translate): UniFormConfig =>
         precision: 2,
         step: 0.1,
         min: 0,
+        controlsPosition: 'right',
         style: { width: '100%' }
       }
     }

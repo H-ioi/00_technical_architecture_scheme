@@ -34,7 +34,7 @@
           :inline="true"
           :model="searchFrom"
         >
-          <el-form-item style="width: 120px" v-if="dictionary['school'].length > 1">
+          <el-form-item style="width: 120px" v-if="schoolSelectList.length > 1">
             <el-select
               style="width: 100%"
               v-model="searchFrom['schoolIds']"
@@ -44,8 +44,8 @@
             >
               <el-option
                 :key="i.id"
-                v-for="(i, k) in dictionary['school']"
-                :label="i.enName"
+                v-for="(i, k) in schoolSelectList"
+                :label="schoolDropdownLabel(i)"
                 :value="i.id"
               ></el-option>
             </el-select>
@@ -220,8 +220,10 @@ import Detail from "./modal/detail.vue";
 import BatchUpdload from "./modal/batchupdload.vue";
 // 引入 dayjs
 import dayjs from "dayjs";
+import schoolListBuscommonMixin from "@/mixins/schoolListBuscommon.js";
 export default {
   name: "teacher",
+  mixins: [schoolListBuscommonMixin],
   components: { Table, Pagination, Detail, Form, BatchUpdload },
   data() {
     return {
@@ -267,7 +269,7 @@ export default {
     this.initData();
   },
   computed: {
-    ...mapGetters(["dictionary", "permissions", "i18nlocel"]),
+    ...mapGetters(["permissions", "i18nlocel"]),
   },
   watch: {
     i18nlocel() {
@@ -275,10 +277,11 @@ export default {
     },
   },
   methods: {
-    initData() {
+    async initData() {
       this.getBtn();
-      if (this.dictionary["school"].length == 1) {
-        this.pagination["schoolIds"] = this.dictionary["school"][0].id;
+      await this.fetchSchoolListBuscommon();
+      if (this.schoolSelectList.length === 1) {
+        this.pagination["schoolIds"] = this.schoolSelectList[0].id;
       }
       this.getSeclectList();
       this.getList();
@@ -287,7 +290,7 @@ export default {
       this.sectionList = await getSectionList();
       this.lineList = await getLineList();
       this.carinfoList = await getCarinfoList();
-      if (this.dictionary["school"].length == 1) {
+      if (this.schoolSelectList.length === 1) {
         this.changeSchool(this.pagination["schoolIds"]);
       }
     },

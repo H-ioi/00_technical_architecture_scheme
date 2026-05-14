@@ -36,43 +36,54 @@
             }}</el-button>
           </el-form-item>
         </el-form>
-        <div v-if="!readOnly" class="activity-search-toolbar__actions">
+        <div v-if="!readOnly || showExportEnded" class="activity-search-toolbar__actions">
+          <template v-if="!readOnly">
+            <el-button
+              v-if="permissions['busdriver_edit']"
+              type="primary"
+              size="medium"
+              :disabled="!activityId"
+              @click="openAdd"
+              >{{ $t("btn.新增") }}</el-button
+            >
+            <el-button
+              v-if="
+                permissions['busdriver_del'] || permissions['activity_ticket_del']
+              "
+              type="danger"
+              size="medium"
+              plain
+              :disabled="tableSelectionCount === 0"
+              @click="batchDel"
+              >{{ $t("btn.删除") }}</el-button
+            >
+            <el-button
+              v-if="permissions['busdriver_edit']"
+              type="primary"
+              size="medium"
+              plain
+              :disabled="!activityId || tableSelectionCount === 0"
+              @click="batchSetVisible(1)"
+              >{{ $t("isagroup.可见") }}</el-button
+            >
+            <el-button
+              v-if="permissions['busdriver_edit']"
+              type="primary"
+              size="medium"
+              plain
+              :disabled="!activityId || tableSelectionCount === 0"
+              @click="batchSetVisible(0)"
+              >{{ $t("isagroup.不可见") }}</el-button
+            >
+          </template>
           <el-button
-            v-if="permissions['busdriver_edit']"
+            v-if="showExportEnded && permissions['busdriver_edit']"
             type="primary"
             size="medium"
-            :disabled="!activityId"
-            @click="openAdd"
-            >{{ $t("btn.新增") }}</el-button
-          >
-          <el-button
-            v-if="
-              permissions['busdriver_del'] || permissions['activity_ticket_del']
-            "
-            type="danger"
-            size="medium"
             plain
-            :disabled="tableSelectionCount === 0"
-            @click="batchDel"
-            >{{ $t("btn.删除") }}</el-button
-          >
-          <el-button
-            v-if="permissions['busdriver_edit']"
-            type="primary"
-            size="medium"
-            plain
-            :disabled="!activityId || tableSelectionCount === 0"
-            @click="batchSetVisible(1)"
-            >{{ $t("isagroup.可见") }}</el-button
-          >
-          <el-button
-            v-if="permissions['busdriver_edit']"
-            type="primary"
-            size="medium"
-            plain
-            :disabled="!activityId || tableSelectionCount === 0"
-            @click="batchSetVisible(0)"
-            >{{ $t("isagroup.不可见") }}</el-button
+            :disabled="!activityId || blessingExportLoading"
+            @click="exportBlessingCsv"
+            >{{ $t("btn.导出") }}</el-button
           >
         </div>
       </div>
@@ -241,6 +252,7 @@ import Table from "@/components/communitycommon/Table.vue";
 import tabletitle from "@/const/isacommunity/tabletitle.js";
 import dayjs from "dayjs";
 import { mapGetters } from "vuex";
+import { downloadUtf8Csv } from "@/util/download";
 
 export default {
   name: "ActivityBlessingList",
@@ -251,6 +263,10 @@ export default {
       default: "",
     },
     readOnly: {
+      type: Boolean,
+      default: false,
+    },
+    showExportEnded: {
       type: Boolean,
       default: false,
     },
@@ -271,6 +287,7 @@ export default {
         visible: undefined,
       },
       tableHeight: "calc(100vh - 480px)",
+      blessingExportLoading: false,
       tableBtn: [],
       permissionsBtn: [
         { name: "查看", type: "view", permissions: "busdriver_edit" },
@@ -468,6 +485,78 @@ export default {
       }
       return [];
     },
+    buildBlessingParams(cur, sz) {
+      const params = {
+        activityId: this.activityId,
+        current: cur,
+        size: sz,
+        pageNum: cur,
+        pageSize: sz,
+        keyword: this.searchFrom.keyword || undefined,
+      };
+      if (this.searchFrom.visible === 0 || this.searchFrom.visible === 1) {
+        params.visible = this.searchFrom.visible;
+      }
+      return params;
+    },
+    async exportBlessingCsv() {
+      if (!this.activityId || this.blessingExportLoading) {
+        return;
+      }
+      this.blessingExportLoading = true;
+      const pageSize = 200;
+      let current = 1;
+      let allRaw = [];
+      let totalKnown = null;
+      try {
+        while (current < 600) {
+          const params = this.buildBlessingParams(current, pageSize);
+          const res = await getBlessingPage(params);
+          if (!res.data.success) {
+            break;
+          }
+          const payload = res.data.data || {};
+          const list = this.extractPageList(payload);
+          const total =
+            payload.total !== undefined && payload.total !== null
+              ? payload.total
+              : payload.totalElements != null
+              ? payload.totalElements
+              : null;
+          if (typeof total === "number") {
+            totalKnown = total;
+          }
+          allRaw = allRaw.concat(list);
+          if (!list.length) {
+            break;
+          }
+          if (typeof totalKnown === "number" && allRaw.length >= totalKnown) {
+            break;
+          }
+          if (list.length < pageSize) {
+            break;
+          }
+          current += 1;
+        }
+        const cols = this.tabletitle.activityBlessingTable.map((c) => ({
+          header: c.label,
+          key: c.prop,
+        }));
+        const rows = allRaw.map((item, i) =>
+          this.formatRow(item, i, 1, 1)
+        );
+        downloadUtf8Csv(
+          `activity-blessing-${this.activityId}.csv`,
+          rows,
+          cols
+        );
+        this.$message.success(this.$t("isagroup.成功"));
+      } catch (e) {
+        this.$message.error(this.$t("isagroup.失败"));
+      } finally {
+        this.blessingExportLoading = false;
+      }
+    },
     ynLabel(val) {
       if (val === 1 || val === "1") {
         return this.$t("isagroup.是");
@@ -511,17 +600,7 @@ export default {
       }
       const cur = this.pagination.current;
       const sz = this.pagination.size;
-      const params = {
-        activityId: this.activityId,
-        current: cur,
-        size: sz,
-        pageNum: cur,
-        pageSize: sz,
-        keyword: this.searchFrom.keyword || undefined,
-      };
-      if (this.searchFrom.visible === 0 || this.searchFrom.visible === 1) {
-        params.visible = this.searchFrom.visible;
-      }
+      const params = this.buildBlessingParams(cur, sz);
       this.listLoading = true;
       getBlessingPage(params)
         .then((res) => {

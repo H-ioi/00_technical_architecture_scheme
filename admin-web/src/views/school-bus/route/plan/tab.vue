@@ -69,7 +69,7 @@
           :pagination="{ pageSize: 10, pageSizes: [10, 20, 50, 100] }"
           :toolbar="{ refresh: true, density: true, columnSetting: true }"
           :actions="routeActions"
-          :action-column="{ width: 120, fixed: 'right' }"
+          :action-column="{ width: 110, fixed: 'right' }"
           @selection-change="onRouteSelectionChange"
           @load-success="onRouteTableLoadSuccess"
           @request-error="routeTableEmpty.onRequestError">
@@ -117,7 +117,7 @@
           :pagination="{ pageSize: 10, pageSizes: [10, 20, 50, 100] }"
           :toolbar="{ refresh: true, density: true, columnSetting: true }"
           :actions="termActions"
-          :action-column="{ width: 120, fixed: 'right' }"
+          :action-column="{ width: 110, fixed: 'right' }"
           @selection-change="onTermSelectionChange"
           @load-success="onTermTableLoadSuccess"
           @request-error="termTableEmpty.onRequestError">
@@ -159,7 +159,7 @@
           :pagination="{ pageSize: 10, pageSizes: [10, 20, 50, 100] }"
           :toolbar="{ refresh: true, density: true, columnSetting: true }"
           :actions="stationActions"
-          :action-column="{ width: 120, fixed: 'right' }"
+          :action-column="{ width: 110, fixed: 'right' }"
           @selection-change="onStationSelectionChange"
           @load-success="onStationTableLoadSuccess"
           @request-error="stationTableEmpty.onRequestError">
@@ -215,10 +215,7 @@
       </el-descriptions>
     </el-dialog>
 
-    <el-dialog
-      v-model="termDetailVisible"
-      width="900px"
-      :title="$t('schoolBus.look')">
+    <el-dialog v-model="termDetailVisible" width="900px" :title="$t('schoolBus.look')">
       <el-descriptions v-if="termDetailRecord" :column="2" border>
         <el-descriptions-item v-for="col in termColumns" :key="String(col.prop)" :label="col.label">
           {{ termDetailRowText(col.prop) }}
@@ -226,10 +223,7 @@
       </el-descriptions>
     </el-dialog>
 
-    <el-dialog
-      v-model="stationDetailVisible"
-      width="900px"
-      :title="$t('schoolBus.look')">
+    <el-dialog v-model="stationDetailVisible" width="900px" :title="$t('schoolBus.look')">
       <el-descriptions v-if="stationDetailRecord" :column="2" border>
         <el-descriptions-item
           v-for="col in stationColumns"
@@ -248,10 +242,10 @@ import type { UniTableColumn, UniTableRequestResult } from 'uni-ui-lib'
 import { UniDataTable, UniSearchForm, useUniI18n } from 'uni-ui-lib'
 import { computed, nextTick, onMounted, ref, watch } from 'vue'
 
+import { membershipApi, schoolBusLineApi, schoolBusStationApi } from '@/api'
 import ListTableEmpty from '@/components/list-table-empty.vue'
 import { useListTableEmpty } from '@/composables/use-list-table-empty'
 import { useTabQuerySync } from '@/composables/use-tab-query-sync'
-import { membershipApi, schoolBusLineApi, schoolBusStationApi } from '@/api'
 import type { SchoolOptionRecord } from '@/types/modules/membership'
 
 import RouteFormModal from './components/route-form-modal.vue'
@@ -493,8 +487,7 @@ const summarizeImportRows = (
     return { previewText: null, downloadBody: null }
   }
   const r = raw as Loose
-  const data =
-    r.data != null && typeof r.data === 'object' ? (r.data as Loose) : r
+  const data = r.data != null && typeof r.data === 'object' ? (r.data as Loose) : r
   const msg = data.msg ?? data.message ?? data.errorMsg
   if (typeof msg === 'string' && msg.trim()) {
     return { previewText: msg.trim(), downloadBody: null }
@@ -521,9 +514,10 @@ const downloadTextFile = (text: string, filename: string) => {
   URL.revokeObjectURL(url)
 }
 
-const showImportFeedback = async (
-  summary: { previewText: string | null; downloadBody: string | null }
-) => {
+const showImportFeedback = async (summary: {
+  previewText: string | null
+  downloadBody: string | null
+}) => {
   if (!summary.previewText) {
     return
   }
@@ -537,10 +531,7 @@ const showImportFeedback = async (
       })
     } catch (action) {
       if (action === 'cancel') {
-        downloadTextFile(
-          summary.downloadBody,
-          `school-bus-import-errors-${Date.now()}.txt`
-        )
+        downloadTextFile(summary.downloadBody, `school-bus-import-errors-${Date.now()}.txt`)
       }
     }
     return

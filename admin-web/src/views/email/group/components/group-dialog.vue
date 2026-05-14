@@ -748,7 +748,6 @@ const gradeOption = (g: unknown) => {
   display: flex;
   flex-wrap: wrap;
   justify-content: flex-end;
-  gap: 10px;
   margin-top: 16px;
 }
 
@@ -795,7 +794,6 @@ const gradeOption = (g: unknown) => {
   display: flex;
   justify-content: flex-end;
   flex-wrap: wrap;
-  gap: 10px;
   width: 100%;
 }
 </style>

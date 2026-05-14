@@ -7,7 +7,7 @@
         :inline="true"
         :model="searchFrom"
       >
-        <el-form-item style="width: 240px" v-if="dictionary['school'].length > 1">
+        <el-form-item style="width: 240px" v-if="schoolSelectList.length > 1">
           <el-select
             style="width: 100%"
             v-model="searchFrom['schoolIds']"
@@ -16,8 +16,8 @@
           >
             <el-option
               :key="k"
-              v-for="(i, k) in dictionary['school']"
-              :label="i.enName"
+              v-for="(i, k) in schoolSelectList"
+              :label="schoolDropdownLabel(i)"
               :value="i.id"
             ></el-option>
           </el-select>
@@ -100,8 +100,10 @@ import Detail from "@/page/isacommunity/modal/detail.vue";
 import BatchStation from "../modal/batchstation.vue";
 // 引入 dayjs
 import dayjs from "dayjs";
+import schoolListBuscommonMixin from "@/mixins/schoolListBuscommon.js";
 export default {
   name: "teacher",
+  mixins: [schoolListBuscommonMixin],
   components: { Table, Pagination, Detail, StationForm, BatchStation },
   data() {
     return {
@@ -135,14 +137,13 @@ export default {
   },
   created() {
     this.getBtn();
-    this.initData();
   },
   mounted() {},
   activated() {
     this.initData();
   },
   computed: {
-    ...mapGetters(["dictionary", "permissions", "i18nlocel"]),
+    ...mapGetters(["permissions", "i18nlocel"]),
   },
   watch: {
     i18nlocel() {
@@ -150,9 +151,10 @@ export default {
     },
   },
   methods: {
-    initData() {
-      if (this.dictionary["school"].length == 1) {
-        this.schoolId = this.dictionary["school"][0].id;
+    async initData() {
+      await this.fetchSchoolListBuscommon();
+      if (this.schoolSelectList.length === 1) {
+        this.schoolId = this.schoolSelectList[0].id;
         this.pagination["schoolIds"] = this.schoolId;
       }
       this.getList();

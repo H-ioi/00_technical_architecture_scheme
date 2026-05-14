@@ -61,7 +61,7 @@
           <el-form-item
             v-if="setform.type != 'title'"
             :label="$t('consult.是否隐藏')"
-            prop="requireHidden"
+            prop="isHidden"
           >
             <el-switch
               :active-value="1"

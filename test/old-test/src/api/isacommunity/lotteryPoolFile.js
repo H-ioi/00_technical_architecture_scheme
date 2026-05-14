@@ -50,3 +50,17 @@ export function delLotteryPoolFiles (data) {
 		data
 	});
 }
+const listPath = "/isacommunity/activity/lotteryPoolList";
+/** 按获奖池分页查询名单（Swagger: GET /activity/lotteryPoolList/listByPool，参数 poolId、current、size） */
+export function getLotteryPoolMemberPage (params) {
+	const { poolId, current, size } = params || {};
+	return request({
+		url: `${listPath}/listByPool`,
+		method: "get",
+		params: {
+			poolId,
+			current,
+			size,
+		},
+	});
+}

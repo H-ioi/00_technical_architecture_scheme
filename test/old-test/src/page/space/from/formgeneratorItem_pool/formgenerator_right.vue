@@ -18,28 +18,26 @@
             <el-input
               v-model="setform.label"
               :placeholder="$t('consult.请输入')"
-              :maxlength="30"
             ></el-input
           ></el-form-item>
           <el-form-item :label="$t('consult.英文名')" prop="fieldNameEn">
             <el-input
               v-model="setform.fieldNameEn"
               :placeholder="$t('consult.请输入')"
-              :maxlength="30"
             ></el-input
           ></el-form-item>
           <el-form-item :label="$t('consult.字段编码')" prop="fieldCode">
             <el-input
               v-model="setform.fieldCode"
               :placeholder="$t('consult.请输入')"
-              :maxlength="30"
             ></el-input
           ></el-form-item>
           <el-form-item
             v-if="
               setform.type == 'input' ||
               setform.type == 'textarea' ||
-              setform.type == 'select'
+              setform.type == 'select' ||
+              setform.type == 'sign'
             "
             :label="$t('consult.占位文本')"
             prop="placeholder"
@@ -49,10 +47,30 @@
               :placeholder="$t('consult.请输入')"
             ></el-input
           ></el-form-item>
-          <!-- <el-form-item label="是否必填" prop="require">
+          <el-form-item
+            v-if="setform.type == 'protocol'"
+            :label="$t('consult.协议内容')"
+            prop="placeholder"
+          >
+            <el-input
+              v-model="setform.properties.placeholder"
+              :placeholder="$t('consult.请输入')"
+              type="textarea"
+              rows="20"
+            ></el-input
+          ></el-form-item>
+          <el-form-item label="是否必填" prop="require">
             <el-switch v-model="setform.required" @change="changeRequired">
             </el-switch
-          ></el-form-item> -->
+          ></el-form-item>
+          <el-form-item :label="$t('consult.是否隐藏')" prop="isHidden">
+            <el-switch
+              :active-value="1"
+              :inactive-value="0"
+              v-model="setform.isHidden"
+            >
+            </el-switch
+          ></el-form-item>
           <!-- <el-form-item
             label="是否只读"
             prop="readonly"
@@ -139,7 +157,6 @@
               :key="k"
               v-model="setform.properties.option[k].label"
               :placeholder="$t('consult.请输入')"
-              maxlength="20"
             >
               <i
                 slot="suffix"
@@ -275,7 +292,14 @@
             </el-select>
           </el-form-item>
         </div>
-        <div v-if="setform.type != 'upload' && queryInfo['scene'] == '1'">
+        <div
+          v-if="
+            setform.type != 'upload' &&
+            queryInfo['scene'] == '1' &&
+            setform.type != 'protocol' &&
+            setform.type != 'sign'
+          "
+        >
           <el-form-item label="映射属性" prop="fieldMapping">
             <el-select
               style="width: 100%"
@@ -317,6 +341,21 @@
             ></el-cascader>
           </el-form-item>
         </div>
+        <div v-if="setform.type == 'banner'">
+          <el-upload
+            class="upload-demo"
+            action=""
+            :before-upload="beforeUpload"
+            :on-remove="handleRemove"
+            :limit="10"
+            :file-list="setform.properties.option"
+          >
+            <el-button size="small" type="primary">点击上传</el-button>
+            <div slot="tip" class="el-upload__tip">
+              只能上传jpg/png文件，且不超过20M
+            </div>
+          </el-upload>
+        </div>
       </el-form>
     </el-scrollbar>
   </div>
@@ -327,6 +366,7 @@ import { regeList } from "@/const/space/regex.js";
 import { createCode, deepClone } from "@/util/util.js";
 import { formlist, dateTimeType, uploadAccept, setformrules } from "./form.js";
 import { getMappingFieldInfo } from "@/api/consult/template.js";
+import { upOuterFile } from "@/api/upload/index.js";
 export default {
   props: {
     setform: Object,
@@ -539,6 +579,42 @@ export default {
       console.log("changeCascader", fieldMappings, checkedNodes);
     },
     clearCascader() {},
+    // 上传文件
+    async beforeUpload(file) {
+      console.log("beforeUpload", file);
+
+      let isJPGOrPNG = file.type == "image/jpeg" || file.type == "image/png";
+      if (!isJPGOrPNG) {
+        this.$message.error("只能上传jpg/png文件");
+        return false;
+      }
+      if (file.size > 20 * 1024 * 1024) {
+        this.$message.error("上传文件大小不能超过20MB");
+        return false;
+      }
+      let formData = new FormData();
+      formData.append("tenantId", "2");
+      formData.append("file", file);
+      const res = await upOuterFile(formData);
+      if (res.data.success) {
+        const localUrl = URL.createObjectURL(file);
+        console.log("uploadFile", res, localUrl);
+        let obj = {
+          label: res.data.data,
+          name: file.name,
+          id: null,
+          url: localUrl,
+        };
+        this.setform.properties.option.push(obj);
+      }
+    },
+    handleRemove(file, fileList) {
+      console.log(file, fileList);
+      this.setform.properties.option = fileList;
+    },
+    handlePreview(file) {
+      window.open(file.url, "_blank");
+    },
   },
 };
 </script>

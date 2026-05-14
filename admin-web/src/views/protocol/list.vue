@@ -35,7 +35,7 @@
       :pagination="{ pageSize: 10, pageSizes: [10, 20, 50, 100] }"
       :toolbar="{ refresh: true, fullscreen: true, columnSetting: true }"
       :actions="actions"
-      :action-column="{ width: 130, fixed: 'right' }"
+      :action-column="{ width: 110, fixed: 'right' }"
       @selection-change="selection = $event as ProtocolRecord[]"
       @load-success="onTableLoadSuccess"
       @request-error="tableEmpty.onRequestError">
@@ -72,12 +72,12 @@
 <script setup lang="ts">
 import { ElMessage, ElMessageBox } from 'element-plus'
 import type { UniTableRequestResult } from 'uni-ui-lib'
-import { computed, ref } from 'vue'
 import { useUniI18n } from 'uni-ui-lib'
+import { computed, ref } from 'vue'
 
+import { protocolApi } from '@/api'
 import ListTableEmpty from '@/components/list-table-empty.vue'
 import { useListTableEmpty } from '@/composables/use-list-table-empty'
-import { protocolApi } from '@/api'
 import type { ProtocolRecord } from '@/types/modules/protocol'
 import PForm from './components/form.vue'
 import { useList } from './use-list'

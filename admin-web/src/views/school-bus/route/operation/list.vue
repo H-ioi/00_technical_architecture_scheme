@@ -49,7 +49,7 @@
       :pagination="{ pageSize: 10, pageSizes: [10, 20, 50, 100] }"
       :toolbar="{ refresh: true, density: true, columnSetting: true }"
       :actions="actions"
-      :action-column="{ width: 160, fixed: 'right' }"
+      :action-column="{ width: 110, fixed: 'right' }"
       @selection-change="onSelectionChange"
       @load-success="onTableLoadSuccess"
       @request-error="tableEmpty.onRequestError">
@@ -93,9 +93,9 @@ import type { UniTableColumn, UniTableRequestResult } from 'uni-ui-lib'
 import { UniDataTable, UniSearchForm, useUniI18n } from 'uni-ui-lib'
 import { computed, ref } from 'vue'
 
+import { schoolBusOperationApi } from '@/api'
 import ListTableEmpty from '@/components/list-table-empty.vue'
 import { useListTableEmpty } from '@/composables/use-list-table-empty'
-import { schoolBusOperationApi } from '@/api'
 import type { OperationRecord } from '@/types/modules/school-bus-operation'
 import OperationForm from './components/form.vue'
 import { useList } from './use-list'

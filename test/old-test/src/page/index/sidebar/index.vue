@@ -13,7 +13,9 @@
     <el-scrollbar
       :style="`height:100%;background:${tenantId == 2 ? '#2a3f54' : '#ffffff'}`"
     >
-      <div v-if="validatenull(menuitem)" class="avue-sidebar--tip">没有发现菜单</div>
+      <div v-if="validatenull(menuitem)" class="avue-sidebar--tip">
+        没有发现菜单
+      </div>
       <el-menu
         :default-active="nowTagValue"
         :show-timeout="200"
@@ -122,17 +124,26 @@ export default {
   },
   mounted() {},
   computed: {
-    ...mapGetters(["website", "menu", "tag", "keyCollapse", "screen", "tenantId"]),
+    ...mapGetters([
+      "website",
+      "menu",
+      "tag",
+      "keyCollapse",
+      "screen",
+      "tenantId",
+    ]),
     nowTagValue: function () {
       return this.$router.$avueRouter.getValue(this.$route);
     },
   },
   methods: {
     async openMenu(item = {}) {
-      this.$store.dispatch("GetMenu", { type: true, id: item.id }).then((data) => {
-        this.menuitem = data;
-        this.Index.openMenu(data);
-      });
+      this.$store
+        .dispatch("GetMenu", { type: true, id: item.id })
+        .then((data) => {
+          this.menuitem = data;
+          this.Index.openMenu(data);
+        });
       //   console.log("this.tenantId", this.tenantId, this.tenantId != 3);
     },
     handleBeforeUnload(event) {
@@ -164,6 +175,7 @@ export default {
             "enquiry_enroll_level", //年级
             "enquiry_follow_tags", //跟进标签
             "enquiry_pay_subject", //缴费主体
+            "enquiry_boarding", //住宿情况
           ];
           dictionary.map((item) => {
             this.$store.dispatch("GetDictionary", { type: item });

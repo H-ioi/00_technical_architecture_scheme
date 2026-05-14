@@ -1,136 +1,52 @@
 <template>
   <div>
-    <StatusItem
-      :statusList="orderStatus"
-      :currentstatus="currentstatus"
-      @changeStasus="changeStasus"
-    />
+    <StatusItem :statusList="orderStatus" :currentstatus="currentstatus" @changeStasus="changeStasus" />
     <div class="searchFromBox">
-      <el-form
-        class="df_align_center"
-        :label-position="'top'"
-        :inline="true"
-        :model="searchFrom"
-      >
+      <el-form class="df_align_center" :label-position="'top'" :inline="true" :model="searchFrom">
         <el-form-item label="工单类型" style="width: 20%">
           <el-select v-model="searchFrom.type" clearable placeholder="请选择">
-            <el-option
-              :key="k"
-              v-for="(i, k) in orderType"
-              :label="i.label"
-              :value="i.value"
-            ></el-option>
+            <el-option :key="k" v-for="(i, k) in orderType" :label="i.label" :value="i.value"></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item
-          label="紧急程度"
-          v-if="currentstatus != '1'"
-          style="width: 20%"
-        >
-          <el-select
-            v-model="searchFrom.urgency"
-            clearable
-            placeholder="请选择"
-          >
-            <el-option
-              :key="k"
-              v-for="(i, k) in dictionary['order_urgency']"
-              :label="i.label"
-              :value="i.value"
-            ></el-option>
+        <el-form-item label="紧急程度" v-if="currentstatus != '1'" style="width: 20%">
+          <el-select v-model="searchFrom.urgency" clearable placeholder="请选择">
+            <el-option :key="k" v-for="(i, k) in dictionary['order_urgency']" :label="i.label"
+              :value="i.value"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item style="width: 20%">
-          <el-input
-            prefix-icon="el-icon-search"
-            v-model="searchFrom.keywords"
-            placeholder="请输入关键字"
-          ></el-input>
+          <el-input prefix-icon="el-icon-search" v-model="searchFrom.keywords" placeholder="请输入关键字"></el-input>
         </el-form-item>
         <el-form-item style="width: auto; margin-right: 0">
-          <el-button
-            class="el-button-icon"
-            type="primary"
-            size="large"
-            icon="el-icon-search"
-            @click="search"
-          ></el-button>
-          <el-button
-            class="el-button-icon"
-            type="defult"
-            size="large"
-            icon="el-icon-delete"
-            @click="clear"
-          ></el-button>
+          <el-button class="el-button-icon" type="primary" size="large" icon="el-icon-search"
+            @click="search"></el-button>
+          <el-button class="el-button-icon" type="defult" size="large" icon="el-icon-delete" @click="clear"></el-button>
         </el-form-item>
       </el-form>
     </div>
     <div class="df_sb palyTableBox">
       <div>
-        <el-button
-          v-if="
-            permissions['order_carry_add'] || permissions['order_demand_add']
-          "
-          type="primary"
-          size="medium"
-          @click="showAdd = true"
-          >新增</el-button
-        >
-        <el-button type="primary" size="medium" @click="exportOrder"
-          >导出</el-button
-        >
+        <el-button v-if="
+          permissions['order_carry_add'] || permissions['order_demand_add']
+        " type="primary" size="medium" @click="showAdd = true">新增</el-button>
+        <el-button type="primary" size="medium" @click="exportOrder">导出</el-button>
       </div>
       <PaginationInfo :paginationTotal="paginationTotal" />
     </div>
     <div class="tableBox">
-      <Table
-        ref="Table"
-        :tableTitle="tableTitle"
-        :tableData="tableData"
-        :tableBtn="tableBtn"
-        :showSelection="false"
-        @playTab="playTab"
-        @rowClick="rowClick"
-      />
-      <Pagination
-        :total="paginationTotal"
-        :pagination="pagination"
-        @handleCurrentChange="handleCurrentChange"
-      />
+      <Table ref="Table" :tableTitle="tableTitle" :tableData="tableData" :tableBtn="tableBtn" :showSelection="false"
+        @playTab="playTab" @rowClick="rowClick" />
+      <Pagination :total="paginationTotal" :pagination="pagination" @handleCurrentChange="handleCurrentChange" />
     </div>
-    <AddOrder
-      v-if="showAdd"
-      :showAdd="showAdd"
-      :isMy="true"
-      @changeModal="changeModal"
-    />
-    <Distribute
-      v-if="showDistribute"
-      :currentOrderId="currentOrderId"
-      :showAdd="showDistribute"
-      @changeModal="changeModal"
-      @refreshData="refreshData"
-    />
-    <Cancel
-      v-if="showCancel"
-      :currentOrderId="currentOrderId"
-      :showCancel="showCancel"
-      @changeModal="changeModal"
-      @refreshData="refreshData"
-    />
-    <Supply
-      :currentOrderId="currentOrderId"
-      :showSupply="showSupply"
-      :title="modalType"
-      @changeModal="changeModal"
-      @refreshData="refreshData"
-    />
-    <Appraise
-      :currentOrderId="currentOrderId"
-      :showAppraise="showAppraise"
-      @changeModal="changeModal"
-      @refreshData="refreshData"
-    />
+    <AddOrder v-if="showAdd" :showAdd="showAdd" :isMy="true" @changeModal="changeModal" />
+    <Distribute v-if="showDistribute" :currentOrderId="currentOrderId" :showAdd="showDistribute"
+      @changeModal="changeModal" @refreshData="refreshData" />
+    <Cancel v-if="showCancel" :currentOrderId="currentOrderId" :showCancel="showCancel" @changeModal="changeModal"
+      @refreshData="refreshData" />
+    <Supply :currentOrderId="currentOrderId" :showSupply="showSupply" :title="modalType" @changeModal="changeModal"
+      @refreshData="refreshData" />
+    <Appraise :currentOrderId="currentOrderId" :showAppraise="showAppraise" @changeModal="changeModal"
+      @refreshData="refreshData" />
   </div>
 </template>
 
@@ -203,7 +119,7 @@ export default {
     this.getOrderList();
   },
 
-  mounted() {},
+  mounted() { },
   activated() {
     this.getOrderList();
   },

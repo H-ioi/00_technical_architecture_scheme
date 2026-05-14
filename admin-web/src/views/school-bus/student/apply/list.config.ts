@@ -176,7 +176,8 @@ export const tableCols = (
     prop: 'studentName',
     label: t('schoolBus.studentApply.colStudentName'),
     type: 'text',
-    minWidth: 180
+    minWidth: 220,
+    showOverflowTooltip: true
   },
   {
     prop: 'studentGrade',

@@ -46,7 +46,7 @@
       :pagination="{ pageSize: 10, pageSizes: [10, 20, 50, 100] }"
       :toolbar="{ refresh: true, density: true, columnSetting: true }"
       :actions="actions"
-      :action-column="{ width: 160, fixed: 'right' }"
+      :action-column="{ width: 110, fixed: 'right' }"
       @selection-change="onSelectionChange"
       @load-success="onTableLoadSuccess"
       @request-error="tableEmpty.onRequestError">
@@ -81,9 +81,9 @@ import type { UniTableRequestResult } from 'uni-ui-lib'
 import { useUniI18n } from 'uni-ui-lib'
 import { computed, ref } from 'vue'
 
+import { schoolBusDriverApi } from '@/api'
 import ListTableEmpty from '@/components/list-table-empty.vue'
 import { useListTableEmpty } from '@/composables/use-list-table-empty'
-import { schoolBusDriverApi } from '@/api'
 import type { DriverRecord as DriverRow } from '@/types/modules/school-bus-driver'
 import DriverForm from './components/form.vue'
 import { useList } from './use-list'
@@ -180,15 +180,11 @@ const del = async () => {
   }
 
   try {
-    await ElMessageBox.confirm(
-      t('schoolBus.confirmDeleteDriver'),
-      t('schoolBus.delete'),
-      {
-        confirmButtonText: t('schoolBus.submit'),
-        cancelButtonText: t('schoolBus.cancel'),
-        type: 'warning'
-      }
-    )
+    await ElMessageBox.confirm(t('schoolBus.confirmDeleteDriver'), t('schoolBus.delete'), {
+      confirmButtonText: t('schoolBus.submit'),
+      cancelButtonText: t('schoolBus.cancel'),
+      type: 'warning'
+    })
   } catch {
     return
   }

@@ -87,6 +87,9 @@
                   @click="handleBtns('batchApply')"
                   >{{ $t("consult.申请") }}</el-button
                 >
+                <el-button @click="printPdf" type="primary" size="small" round
+                  >打印</el-button
+                >
               </div>
             </div>
             <div class="orderDetail_baseinfo">
@@ -110,6 +113,12 @@
                 <span>{{ $t("consult")[item.label] }}</span>
                 <span :title="$checkNull(studentData[item.prop])">{{
                   $checkNull(studentData[item.prop])
+                }}</span>
+              </div>
+              <div class="orderDetail_baseinfo_item">
+                <span>{{ $t("consult.住宿类型") }}</span>
+                <span :title="$checkNull(studentData['boardingLabel'])">{{
+                  $checkNull(studentData["boardingLabel"])
                 }}</span>
               </div>
               <div style="width: 100%" class="orderDetail_baseinfo_item">
@@ -141,6 +150,10 @@
               <FromItemDetail
                 :ref="`FromItemDetailStudent${item.templateId}`"
               />
+            </div>
+            <div v-for="(item, index) in fillDynamicList" :key="index">
+              <!-- 学生动态表单 -->
+              <FromItemDetail :ref="`fillDynamic${item.templateId}`" />
             </div>
           </div>
           <div class="orderDetail_item">
@@ -269,6 +282,10 @@
 <script>
 import { mapGetters } from "vuex";
 import {
+  getPoolStudentTemplate,
+  getStudentfillInfo,
+} from "@/api/consult/collection.js";
+import {
   getStudentDetail,
   getGuardianStudent,
   getStudentClue,
@@ -290,6 +307,7 @@ import changeStatus from "@/page/thepool/consult/modal/changestatus.vue";
 import LogList from "@/page/thepool/consult/modal/loglist.vue";
 import changeSchool from "@/page/thepool/modal/changeschool.vue";
 import FromItemDetail from "@/components/thepoolcommon/dynamicform/fromitemdetail.vue";
+
 export default {
   name: "PCOrderDetail",
   components: {
@@ -328,6 +346,7 @@ export default {
       },
       studentTemplateList: [],
       guardianTemplateList: [],
+      fillDynamicList: [],
     };
   },
 
@@ -428,6 +447,10 @@ export default {
                   this.dictionary["enquiry_pay_subject"],
                   data.paySubject
                 ),
+            boardingLabel: this.$getListLabel(
+              this.dictionary["enquiry_boarding"],
+              data.boarding
+            ),
           };
           if (this.studentData["schools"].length > 0) {
             let arr = [];
@@ -459,6 +482,11 @@ export default {
 
               this.$nextTick(async () => {
                 this.getStudentDynamic(dynamicInfos, data["applySchool"]);
+                if (data["applySchool"] == 5) {
+                  this.getFillDynamic(data["applySchool"], this.studentId);
+                } else {
+                  this.fillDynamicList = [];
+                }
               });
             } else {
               this.studentTemplateList = [];
@@ -481,6 +509,32 @@ export default {
             this.$refs[
               `FromItemDetailStudent${item.templateId}`
             ][0].getTemplateDetail(item, dynamicInfoItem);
+          });
+        });
+      }
+    },
+    async getFillDynamic(applySchool) {
+      let templateList = await getPoolStudentTemplate({
+        applySchool: applySchool,
+      });
+      let studentFillList = await getStudentfillInfo({
+        studentId: this.studentId,
+      });
+      this.fillDynamicList = templateList || [];
+      let dynamicInfos = studentFillList["dynamicInfos"] || [];
+      console.log("this.fillDynamicList ", this.fillDynamicList);
+      console.log("dynamicInfos ", dynamicInfos);
+
+      if (this.fillDynamicList && this.fillDynamicList.length > 0) {
+        this.$nextTick(() => {
+          this.fillDynamicList.map((item) => {
+            let dynamicInfoItem = dynamicInfos.find(
+              (dynamicItem) => dynamicItem.templateId == item.templateId
+            );
+            this.$refs[`fillDynamic${item.templateId}`][0].getTemplateDetail(
+              item,
+              dynamicInfoItem
+            );
           });
         });
       }
@@ -621,6 +675,15 @@ export default {
         }
       });
       return str;
+    },
+    printPdf() {
+      this.$router.push({
+        path: "/thepool/student/studentpdf",
+        query: {
+          id: this.$route.query.id,
+          schoolId: this.studentData.applySchool,
+        },
+      });
     },
   },
 };

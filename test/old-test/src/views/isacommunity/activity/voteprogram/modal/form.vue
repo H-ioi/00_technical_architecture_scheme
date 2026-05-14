@@ -114,7 +114,6 @@ import {
   addVoteProgram,
   editVoteProgram,
   getVoteProgramDetail,
-  getVoteProgram,
 } from "@/api/isacommunity/voteprogram.js";
 import consts from "@/const/isacommunity/consts.js";
 export default {
@@ -172,12 +171,6 @@ export default {
         performer: [
           { required: true, message: that.$t("isagroup.请输入"), trigger: "blur" },
         ],
-        // contentCn: [
-        //   { required: true, message: that.$t("isagroup.请输入"), trigger: "blur" },
-        // ],
-        // contentEn: [
-        //   { required: true, message: that.$t("isagroup.请输入"), trigger: "blur" },
-        // ],
         programId: [
           { required: true, message: that.$t("isagroup.请选择"), trigger: "blur" },
         ],
@@ -197,26 +190,6 @@ export default {
       if (type != "add") {
         this.getDetail(item["id"]);
       }
-    },
-    // 新增
-    addData(data) {
-      addVoteProgram(data).then((res) => {
-        if (res.data.success) {
-          this.closeModal();
-          this.$message.success(this.$t("isagroup.成功"));
-          this.$emit("getList");
-        }
-      });
-    },
-    // 编辑
-    editData(data) {
-      editVoteProgram(data).then((res) => {
-        if (res.data.success) {
-          this.closeModal();
-          this.$message.success(this.$t("isagroup.成功"));
-          this.$emit("getList");
-        }
-      });
     },
     getDetail(id) {
       getVoteProgramDetail(id).then(async (res) => {
@@ -242,7 +215,6 @@ export default {
 
       this.$refs["ruleForm"].validate((valid) => {
         if (valid) {
-          // 设置提交状态为true
           this.isSubmitting = true;
 
           try {
@@ -252,7 +224,6 @@ export default {
               this.editData(this.ruleForm);
             }
           } catch (error) {
-            // 捕获异常并重置提交状态
             this.isSubmitting = false;
           }
         }
@@ -262,7 +233,6 @@ export default {
     addData(data) {
       addVoteProgram(data)
         .then((res) => {
-          // 无论成功失败，都重置提交状态
           this.isSubmitting = false;
 
           if (res.data.success) {
@@ -272,7 +242,6 @@ export default {
           }
         })
         .catch((error) => {
-          // 捕获Promise错误并重置提交状态
           this.isSubmitting = false;
           console.error("添加数据出错:", error);
         });
@@ -281,7 +250,6 @@ export default {
     editData(data) {
       editVoteProgram(data)
         .then((res) => {
-          // 无论成功失败，都重置提交状态
           this.isSubmitting = false;
 
           if (res.data.success) {
@@ -289,12 +257,10 @@ export default {
             this.$emit("getList");
             this.closeModal();
           } else {
-            // 添加失败处理
             this.$message.error(res.data.message || this.$t("isagroup.编辑失败"));
           }
         })
         .catch((error) => {
-          // 捕获Promise错误并重置提交状态
           this.isSubmitting = false;
         });
     },

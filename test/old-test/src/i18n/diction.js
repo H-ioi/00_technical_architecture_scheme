@@ -1,6 +1,7 @@
 import common from './list/common'
 import btn from './list/btn'
 import attendance from './list/attendance'	
+import dorm from './list/dorm'	
 import form from './list/form'
 import table from './list/table'
 import route from './list/route'
@@ -35,6 +36,7 @@ let data = {
 		community,
 		// 考勤管理
 		attendance,
+		dorm,
 		// 邮件管理
 		mail
 

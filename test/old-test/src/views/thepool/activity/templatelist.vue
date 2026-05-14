@@ -133,12 +133,12 @@
     <el-dialog
       :title="$t('consult.二维码')"
       :visible.sync="showModal"
-      width="200px"
+      width="400px"
       :before-close="closeModal"
       :close-on-click-modal="false"
     >
       <div class="moadlFromBox">
-        <QRCode v-if="showModal" ref="QRCode" :codeId="codeId" />
+        <QRCode v-if="showModal" ref="QRCode" :path="path" :showBtn="true" />
       </div>
     </el-dialog>
   </div>
@@ -222,6 +222,7 @@ export default {
       },
       codeId: "",
       showModal: false,
+      path: "",
     };
   },
   computed: {
@@ -375,6 +376,7 @@ export default {
           break;
         case "code":
           this.codeId = item.id;
+          this.path = `${process.env.VUE_APP_BASE_POOL}/#/thepool/activity/questionnaire?id=${item.id}`;
           this.showModal = true;
           //   this.$nextTick(() => {
           //     this.$refs.QRCode.creatQrCode();

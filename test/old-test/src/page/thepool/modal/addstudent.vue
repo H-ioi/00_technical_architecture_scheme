@@ -408,6 +408,25 @@
               </el-select>
             </el-form-item>
             <el-form-item
+              :label="$t('consult.住宿情况')"
+              prop="boarding"
+              style="width: 50%"
+            >
+              <el-select
+                v-model="ruleForm.boarding"
+                :placeholder="$t('consult.请选择')"
+                style="width: 100%"
+              >
+                <el-option
+                  v-for="item in dictionary['enquiry_boarding']"
+                  :key="item.value"
+                  :label="i18nlocel == 'en' ? item.enLabel : item.label"
+                  :value="item.value"
+                >
+                </el-option>
+              </el-select>
+            </el-form-item>
+            <el-form-item
               :label="$t('consult.头像')"
               prop="photos"
               style="width: 80%"
@@ -534,6 +553,7 @@ export default {
         otherName: "", //其他名字
         secondLanguage: "", //第二语言
         thirdLanguage: "", //第三语言
+        boarding: "", //住宿情况
       },
       rules: {
         lastName: [
@@ -894,6 +914,7 @@ export default {
         otherName: "", //其他名字
         secondLanguage: "", //第二语言
         thirdLanguage: "", //第三语言
+        boarding: "", //住宿情况
       };
       this.studentPhotos = {
         photoId: "",

@@ -209,6 +209,15 @@ export default [
             /* webpackChunkName: "views" */ "@/views/thepool/activity/guardianchild"
           ),
       },
+      {
+        path: "/thepool/student/studentpdf",
+        name: "学生打印",
+        meta: {},
+        component: () =>
+          import(
+            /* webpackChunkName: "views" */ "@/page/thepool/student/studentpdf"
+          ),
+      },
     ],
   },
 ];

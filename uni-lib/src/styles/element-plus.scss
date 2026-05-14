@@ -43,6 +43,11 @@
   line-height: 0.8;
 }
 
+/** 并列 `el-button` 间距由相邻选择器负责，父级 flex 不必再写 `gap`（与 Element Plus 习惯一致）。 */
+.el-button + .el-button {
+  margin-left: 12px;
+}
+
 .el-date-editor.el-input,
 .el-date-editor.el-input__wrapper {
   width: 100%;

@@ -9,7 +9,7 @@
     >
     <div class="df_sb palyTableBox" v-if="!isBindActive">
       <div style="width: 100%; text-align: right">
-        <QRCode :codeId="$route.query.id" />
+        <QRCode :path="path" />
         <div>
           {{ $t("consult.关联活动") }}：{{ templateFrom["activitieNames"] }}
         </div>
@@ -390,6 +390,7 @@ export default {
       showGuardian: false,
       guardianChildTitle: [],
       guardianChildData: [],
+      path: "",
     };
   },
   computed: {
@@ -409,6 +410,7 @@ export default {
     },
   },
   created() {
+    this.path = `${process.env.VUE_APP_BASE_POOL}/#/thepool/activity/questionnaire?id=${this.$route.query.id}`;
     this.initData();
     this.getTemplateList();
   },

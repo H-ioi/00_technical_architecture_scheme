@@ -33,21 +33,45 @@
         i['hasEn'] ? $t('isagroup')[i['label']] || i['label'] : i['label']
       "
       show-overflow-tooltip
-      :width="`${i['width']}`"
+      :width="i.width || undefined"
+      :min-width="i.minWidth || undefined"
       :fixed="i['fixed']"
       :sortable="i['sortable']"
     >
       <template slot-scope="scope">
-        <span v-if="!i.isUrl" :title="resetData(scope.row[i.prop])">
-          {{ resetData(scope.row[i.prop]) }}</span
+        <span
+          v-if="i.hasCopy"
+          class="table-cell-copy df_align_center"
+          @click.stop
         >
-        <a
-          v-if="i.isUrl"
-          style="color: #ba8e62"
-          :href="resetData(scope.row[i.prop])"
-          target="_blank"
-          >{{ resetData(scope.row[i.prop]) }}</a
-        >
+          <span
+            class="table-cell-copy__text"
+            :title="resetData(scope.row[i.prop])"
+            >{{ resetData(scope.row[i.prop]) }}</span
+          >
+          <i
+            v-if="
+              scope.row[i.prop] !== null &&
+              scope.row[i.prop] !== undefined &&
+              scope.row[i.prop] !== ''
+            "
+            class="el-icon-copy-document table-cell-copy__icon"
+            title="复制"
+            @click.stop="handleCopyCell(scope.row[i.prop])"
+          />
+        </span>
+        <template v-else>
+          <span v-if="!i.isUrl" :title="resetData(scope.row[i.prop])">
+            {{ resetData(scope.row[i.prop]) }}</span
+          >
+          <a
+            v-if="i.isUrl"
+            style="color: #ba8e62"
+            :href="resetData(scope.row[i.prop])"
+            target="_blank"
+            >{{ resetData(scope.row[i.prop]) }}</a
+          >
+        </template>
       </template>
     </el-table-column>
 
@@ -223,6 +247,7 @@ export default {
       arr.map((i) => {
         this.selectionId.push(i.id);
       });
+      this.$emit("selection-change", arr);
     },
     checkSelectable(e) {
       return true;
@@ -278,12 +303,41 @@ export default {
       }
     },
     getRowKeys(row) {
+      // 自定义行主键（分页/大整数 id 场景避免 key 冲突或表格不刷新）
+      if (row._rowKey !== undefined && row._rowKey !== null && row._rowKey !== "") {
+        return row._rowKey;
+      }
       return row.id;
     },
     resetData(item) {
       return item === null || item === "" || item === undefined
         ? "--"
         : String(item);
+    },
+    handleCopyCell(value) {
+      const text =
+        value === null || value === undefined ? "" : String(value).trim();
+      if (!text) {
+        return;
+      }
+      if (typeof this.$copyText === "function") {
+        this.$copyText(text)
+          .then(() => {
+            this.$message.success(this.$t("isagroup.成功"));
+          })
+          .catch(() => {
+            this.$message.error("复制失败");
+          });
+      } else if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(
+          () => {
+            this.$message.success(this.$t("isagroup.成功"));
+          },
+          () => {
+            this.$message.error("复制失败");
+          }
+        );
+      }
     },
     setColor(value, type) {
       let color = "#ffffff";
@@ -338,6 +392,28 @@ export default {
           isDisabled = true;
         }
       }
+      /** 活动项目列表：已结束、进行中非抽奖、进行中多轮抽奖禁编辑；进行中单轮抽奖可有限编辑 */
+      if (this.tableType == "activityProgram" && name === "edit") {
+        const ps = String(item.programStatus != null ? item.programStatus : "");
+        const pt = String(item.programType != null ? item.programType : "");
+        if (ps === "2") {
+          isDisabled = true;
+        } else if (ps === "1" && pt !== "1") {
+          isDisabled = true;
+        } else if (ps === "1" && pt === "1") {
+          const raw =
+            item.totalRounds != null
+              ? item.totalRounds
+              : item.total_rounds != null
+              ? item.total_rounds
+              : null;
+          const n = Number(raw);
+          const single = Number.isFinite(n) && n === 1;
+          if (!single) {
+            isDisabled = true;
+          }
+        }
+      }
       return isDisabled;
     },
   },
@@ -373,6 +449,28 @@ export default {
 /deep/.el-table th > .cell {
   color: #333333 !important;
   font-size: 14px;
+}
+
+.table-cell-copy {
+  display: inline-flex;
+  align-items: center;
+  max-width: 100%;
+  gap: 6px;
+}
+
+.table-cell-copy__text {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.table-cell-copy__icon {
+  flex-shrink: 0;
+  cursor: pointer;
+  font-size: 16px;
+  color: #ba8e62;
 }
 // .table_fixed {
 //   /deep/.el-table__body-wrapper {

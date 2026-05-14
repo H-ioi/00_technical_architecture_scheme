@@ -3836,9 +3836,9 @@ undici-types@~7.19.0:
   integrity sha512-qYVnV5OEm2AW8cJMCpdV20CDyaN3g0AjDlOGf1OW4iaDEx8MwdtChUp4zu4H0VP3nDRF/8RKWH+IPp9uW0YGZg==
 
 uni-ui-lib@latest:
-  version "0.1.19"
-  resolved "https://registry.npmmirror.com/uni-ui-lib/-/uni-ui-lib-0.1.19.tgz#af2c39d7fc66e2e9abf756cfbc0544a3aad126de"
-  integrity sha512-KYZfUrerzk0LMYv8PLWCQ83DKYmPueN2QBWA9qv2TEGWgrNeQZ3U5w2TUozm+upvJeZkC3o8HnX/W6fxbBnu9w==
+  version "0.1.21"
+  resolved "https://registry.npmmirror.com/uni-ui-lib/-/uni-ui-lib-0.1.21.tgz#bcd08f524f24921336539ad2bf2affcc75b6d386"
+  integrity sha512-iINNN7LaTYZ0dsVA7gsgGvJ8FrXzvD5ArLttsmKd9lZLYpPxZ20oNFR4j2SPptcKQlGj0Q6NMeZrMh1TqVrqaQ==
 
 unicorn-magic@^0.4.0:
   version "0.4.0"

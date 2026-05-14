@@ -144,7 +144,7 @@ export const formlist = [
       label: "上传",
       type: "upload",
       disabled: false, //是否禁用
-      require: false, //是否必填
+      required: false, //是否必填
       readonly: false, //是否只读
       properties: {
         placeholder: "请上传",
@@ -154,6 +154,47 @@ export const formlist = [
         upload_size_max: 10,
         // upload_size_total: 1024,
         upload_file_type: "image/*",
+      },
+    },
+  },
+  {
+    name: "签名",
+    type: "sign",
+    icon: "el-icon-upload2",
+    outerType: "base",
+    attribute: {
+      outerType: "base",
+      label: "签名",
+      type: "sign",
+      disabled: false, //是否禁用
+      required: true, //是否必填
+      readonly: false, //是否只读
+      properties: {
+        placeholder: "请签名",
+        // upload_url: "",
+        upload_num: 1,
+        upload_size_min: 1,
+        upload_size_max: 10,
+        // upload_size_total: 1024,
+        upload_file_type: "image/*",
+      },
+    },
+  },
+  {
+    name: "协议",
+    type: "protocol",
+    icon: "el-icon-circle-check",
+    outerType: "base",
+    attribute: {
+      outerType: "base",
+      label: "协议",
+      type: "protocol",
+      disabled: false, //是否禁用
+      required: true, //是否必填
+      readonly: false, //是否只读
+      properties: {
+        option_default: "", //默认选项
+        option: [], //字典配置
       },
     },
   },
@@ -267,10 +308,10 @@ export let setformrules = {
       message: "请输入",
       trigger: "blur",
     },
-    {
-      validator: rule.validatorNameCn,
-      trigger: "blur",
-    },
+    // {
+    //   validator: rule.validatorNameCn,
+    //   trigger: "blur",
+    // },
   ],
   //显示行数
   text_num_line: [

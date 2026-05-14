@@ -1049,3 +1049,161 @@
     width: 100% !important;
   }
 }
+// 学生模板对外
+.student-templateout {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  /* 导航栏 */
+  .student-templateout-nav {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 40px;
+    line-height: 40px;
+    padding: 0 20px;
+    background-color: #ffffff;
+    box-sizing: border-box;
+    position: relative;
+    .student-templateout-nav_text {
+      font-size: 16px;
+      font-weight: bold;
+      text-align: center;
+      color: #2a3f54;
+    }
+    .language {
+      position: absolute;
+      top: 0;
+      right: 20px;
+      font-size: 14px;
+      font-weight: 500;
+      transform: translateY(50%);
+      color: #2a3f54;
+      cursor: pointer;
+      border: 1px solid #2a3f54;
+      border-radius: 2px;
+      width: 20px;
+      height: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+  }
+  .student-templateout-content {
+    height: calc(100% - 120px);
+    padding: 20px 10px;
+    background-color: #f5f7fa;
+    .student-templateout-form {
+      max-width: 800px;
+      margin: 0 auto;
+      height: 100%;
+      width: 100%;
+      background-color: #ffffff;
+      border-radius: 10px;
+      overflow-y: auto;
+      padding: 0 20px 0;
+      box-sizing: border-box;
+      .el-tabs__item {
+        font-weight: 400;
+        margin: 0 !important;
+        padding: 0 20px !important;
+        color: #999999;
+      }
+      .el-tabs__item::before {
+        right: 0 !important;
+      }
+      .el-tabs__item.is-active,
+      .el-tabs__item:hover {
+        font-weight: 500;
+        color: #2a3f54;
+      }
+      .el-tabs__active-bar {
+        background-color: #ba8e62 !important;
+      }
+    }
+    .student-templateout-form_item {
+      height: 580px;
+      overflow-y: auto;
+      padding: 10px 0;
+      box-sizing: border-box;
+    }
+  }
+  .student-templateout-footer {
+    width: 100%;
+    height: 60px;
+    line-height: 60px;
+
+    background-color: #ffffff;
+    .student-templateout-footer_item {
+      margin: 0 auto;
+      max-width: 800px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 20px;
+      box-sizing: border-box;
+      .student-templateout-footer_tips {
+        font-size: 14px;
+        font-weight: 400;
+        color: #475467;
+      }
+    }
+    .el-button--primary {
+      background-color: #ba8e62 !important;
+      border-color: #ba8e62 !important;
+      color: #fff !important;
+    }
+  }
+}
+// 媒体查询
+.student-templateout-dialog {
+  width: 100%;
+  .el-dialog {
+    width: 50%;
+    .el-dialog__header {
+      .el-dialog__title {
+        color: #2a3f54;
+        font-size: 16px;
+      }
+    }
+    .el-dialog__body {
+      padding: 10px 20px 10px;
+      .student-templateout-dialog_item {
+        display: flex;
+        align-items: center;
+      }
+    }
+    .student-templateout-dialog_footer {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .el-button--primary {
+      background-color: #2a3f54 !important;
+      border-color: #2a3f54 !important;
+    }
+    .el-button--default {
+      background-color: #fff !important;
+      border-color: #2a3f54 !important;
+      color: #2a3f54 !important;
+    }
+  }
+}
+@media screen and (max-width: 768px) {
+  .student-templateout-dialog {
+    .el-dialog {
+      width: 90%;
+      .el-dialog__header {
+        padding: 10px 10px;
+        .el-dialog__title {
+          color: #2a3f54;
+          font-size: 14px;
+        }
+      }
+    }
+    .el-dialog__body {
+      padding: 10px 10px 10px;
+    }
+  }
+}

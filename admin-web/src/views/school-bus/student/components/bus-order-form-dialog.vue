@@ -51,46 +51,48 @@
               </div>
               <div class="bus-order-form__table-wrap">
                 <el-table :data="routeTableData" border size="small">
-                <el-table-column
-                  prop="lineName"
-                  :label="$t('schoolBus.studentApply.detailRouteLine')"
-                  min-width="100" />
-                <el-table-column
-                  prop="stationName"
-                  :label="$t('schoolBus.studentApply.detailRouteStation')"
-                  min-width="100" />
-                <el-table-column
-                  prop="lineTypeName"
-                  :label="$t('schoolBus.studentApply.detailLineType')"
-                  width="120" />
-                <el-table-column
-                  prop="weekDaysLabel"
-                  :label="$t('schoolBus.studentOrder.formDateOption')"
-                  width="100" />
-                <el-table-column
-                  prop="ridingWeekDay"
-                  :label="$t('schoolBus.studentApply.detailRidingWeekDay')"
-                  min-width="100" />
-                <el-table-column
-                  prop="ridingRange"
-                  :label="$t('schoolBus.studentOrder.formRideRange')"
-                  width="200" />
-                <el-table-column
-                  prop="carNumber"
-                  :label="$t('schoolBus.studentOrder.formPlate')"
-                  width="100" />
-                <el-table-column
-                  :label="$t('schoolBus.studentOrder.formOps')"
-                  width="140">
-                  <template #default="{ row, $index }">
-                    <el-button type="primary" link @click="openRouteEdit(row, $index)">
-                      {{ $t('schoolBus.edit') }}
-                    </el-button>
-                    <el-button v-if="!mainDisabled" type="danger" link @click="removeRoute($index)">
-                      {{ $t('schoolBus.delete') }}
-                    </el-button>
-                  </template>
-                </el-table-column>
+                  <el-table-column
+                    prop="lineName"
+                    :label="$t('schoolBus.studentApply.detailRouteLine')"
+                    min-width="100" />
+                  <el-table-column
+                    prop="stationName"
+                    :label="$t('schoolBus.studentApply.detailRouteStation')"
+                    min-width="100" />
+                  <el-table-column
+                    prop="lineTypeName"
+                    :label="$t('schoolBus.studentApply.detailLineType')"
+                    width="120" />
+                  <el-table-column
+                    prop="weekDaysLabel"
+                    :label="$t('schoolBus.studentOrder.formDateOption')"
+                    width="100" />
+                  <el-table-column
+                    prop="ridingWeekDay"
+                    :label="$t('schoolBus.studentApply.detailRidingWeekDay')"
+                    min-width="100" />
+                  <el-table-column
+                    prop="ridingRange"
+                    :label="$t('schoolBus.studentOrder.formRideRange')"
+                    width="200" />
+                  <el-table-column
+                    prop="carNumber"
+                    :label="$t('schoolBus.studentOrder.formPlate')"
+                    width="100" />
+                  <el-table-column :label="$t('schoolBus.studentOrder.formOps')" width="140">
+                    <template #default="{ row, $index }">
+                      <el-button type="primary" link @click="openRouteEdit(row, $index)">
+                        {{ $t('schoolBus.edit') }}
+                      </el-button>
+                      <el-button
+                        v-if="!mainDisabled"
+                        type="danger"
+                        link
+                        @click="removeRoute($index)">
+                        {{ $t('schoolBus.delete') }}
+                      </el-button>
+                    </template>
+                  </el-table-column>
                 </el-table>
               </div>
             </div>
@@ -106,34 +108,34 @@
               </div>
               <div class="bus-order-form__table-wrap">
                 <el-table :data="personTableData" border size="small">
-                <el-table-column
-                  prop="pickupRelationships"
-                  :label="$t('schoolBus.studentApply.detailRelation')" />
-                <el-table-column
-                  prop="pickupPhone"
-                  :label="$t('schoolBus.studentApply.detailPhone')"
-                  width="140" />
-                <el-table-column :label="$t('schoolBus.studentApply.detailPhoto')" min-width="120">
-                  <template #default="{ row }">
-                    <el-image
-                      v-if="row.pickupImageUrl"
-                      :src="String(row.pickupImageUrl)"
-                      class="bus-order-form__thumb" />
-                    <span v-else>--</span>
-                  </template>
-                </el-table-column>
-                <el-table-column
-                  :label="$t('schoolBus.studentOrder.formOps')"
-                  width="140">
-                  <template #default="{ row, $index }">
-                    <el-button type="primary" link @click="openPersonEdit(row, $index)">
-                      {{ $t('schoolBus.edit') }}
-                    </el-button>
-                    <el-button type="danger" link @click="removePerson($index)">
-                      {{ $t('schoolBus.delete') }}
-                    </el-button>
-                  </template>
-                </el-table-column>
+                  <el-table-column
+                    prop="pickupRelationships"
+                    :label="$t('schoolBus.studentApply.detailRelation')" />
+                  <el-table-column
+                    prop="pickupPhone"
+                    :label="$t('schoolBus.studentApply.detailPhone')"
+                    width="140" />
+                  <el-table-column
+                    :label="$t('schoolBus.studentApply.detailPhoto')"
+                    min-width="120">
+                    <template #default="{ row }">
+                      <el-image
+                        v-if="row.pickupImageUrl"
+                        :src="String(row.pickupImageUrl)"
+                        class="bus-order-form__thumb" />
+                      <span v-else>--</span>
+                    </template>
+                  </el-table-column>
+                  <el-table-column :label="$t('schoolBus.studentOrder.formOps')" width="140">
+                    <template #default="{ row, $index }">
+                      <el-button type="primary" link @click="openPersonEdit(row, $index)">
+                        {{ $t('schoolBus.edit') }}
+                      </el-button>
+                      <el-button type="danger" link @click="removePerson($index)">
+                        {{ $t('schoolBus.delete') }}
+                      </el-button>
+                    </template>
+                  </el-table-column>
                 </el-table>
               </div>
             </div>
@@ -153,7 +155,10 @@
                     v-model="ruleForm.approvalStatus"
                     :disabled="mainDisabled || String(ruleForm.approvalStatus ?? '') === '2'"
                     @change="onApprovalChange">
-                    <el-radio v-for="a in approvalOpts" :key="String(a.value)" :label="String(a.value)">
+                    <el-radio
+                      v-for="a in approvalOpts"
+                      :key="String(a.value)"
+                      :label="String(a.value)">
                       {{ a.label }}
                     </el-radio>
                   </el-radio-group>
@@ -162,7 +167,9 @@
                     v-model="ruleForm.approvalStatus"
                     :disabled="mainDisabled"
                     @change="onApprovalChange">
-                    <el-radio label="1">{{ approvalOpts.find((x) => x.value === '1')?.label }}</el-radio>
+                    <el-radio label="1">{{
+                      approvalOpts.find((x) => x.value === '1')?.label
+                    }}</el-radio>
                   </el-radio-group>
                 </div>
               </div>
@@ -176,7 +183,10 @@
                     v-model="ruleForm.paymentStatus"
                     :disabled="mainDisabled"
                     @change="onPaymentChange">
-                    <el-radio v-for="p in paymentOpts" :key="String(p.value)" :label="String(p.value)">
+                    <el-radio
+                      v-for="p in paymentOpts"
+                      :key="String(p.value)"
+                      :label="String(p.value)">
                       <span>{{ p.label }}</span>
                       <el-input-number
                         v-if="
@@ -396,7 +406,7 @@
         </el-button>
       </template>
     </el-dialog>
-    </el-drawer>
+  </el-drawer>
 </template>
 
 <script setup lang="ts">
@@ -415,8 +425,8 @@ import {
 } from '../use-student-order-filters'
 
 import { protocolApi, schoolBusCommonApi, schoolBusOrderApi } from '@/api'
-import { normalizeEnvelope } from '@/utils/api-response-normalize'
 import type { BusOrderFormModel } from '@/types/modules/school-bus-order'
+import { normalizeEnvelope } from '@/utils/api-response-normalize'
 
 type Loose = Record<string, unknown>
 
@@ -534,15 +544,11 @@ const dialogTitle = computed(() =>
 )
 
 const routeDialogTitle = computed(() =>
-  routeModalMode.value === 'add'
-    ? t('schoolBus.add')
-    : t('schoolBus.edit')
+  routeModalMode.value === 'add' ? t('schoolBus.add') : t('schoolBus.edit')
 )
 
 const personDialogTitle = computed(() =>
-  personModalMode.value === 'add'
-    ? t('schoolBus.add')
-    : t('schoolBus.edit')
+  personModalMode.value === 'add' ? t('schoolBus.add') : t('schoolBus.edit')
 )
 
 const mainDisabled = computed(() => {
@@ -862,50 +868,43 @@ const handleMainDialogBeforeClose = (done: () => void) => {
     done()
     return
   }
-  ElMessageBox.confirm(
-    t('schoolBus.studentOrder.unsavedCloseConfirm'),
-    t('common.tip'),
-    {
-      type: 'warning',
-      confirmButtonText: t('common.submit'),
-      cancelButtonText: t('common.cancel')
-    }
-  )
+  ElMessageBox.confirm(t('schoolBus.studentOrder.unsavedCloseConfirm'), t('common.tip'), {
+    type: 'warning',
+    confirmButtonText: t('common.submit'),
+    cancelButtonText: t('common.cancel')
+  })
     .then(() => done())
     .catch(() => {})
 }
 
-watch(
-  visible,
-  async (vis) => {
-    if (!vis) {
-      innerVisible.value = false
-      return
+watch(visible, async (vis) => {
+  if (!vis) {
+    innerVisible.value = false
+    return
+  }
+  innerVisible.value = true
+  resetAll()
+  if (props.mode === 'add') {
+    ruleForm.value.schoolId = props.multiSchool ? undefined : (props.defaultSchoolId ?? undefined)
+    if (ruleForm.value.schoolId != null) {
+      selectSectionList.value = pickArray(
+        await schoolBusCommonApi.sectionList.get({ schoolIds: ruleForm.value.schoolId })
+      ) as SectionRow[]
     }
-    innerVisible.value = true
-    resetAll()
-    if (props.mode === 'add') {
-      ruleForm.value.schoolId = props.multiSchool ? undefined : (props.defaultSchoolId ?? undefined)
-      if (ruleForm.value.schoolId != null) {
-        selectSectionList.value = pickArray(
-          await schoolBusCommonApi.sectionList.get({ schoolIds: ruleForm.value.schoolId })
-        ) as SectionRow[]
-      }
-      canComputedPrice.value = true
-      applyDefaultStatusForAdd()
-      captureBaseline()
-      return
-    }
-    if (props.orderId != null) {
-      formDetailLoading.value = true
-      try {
-        await loadDetail(props.orderId)
-      } finally {
-        formDetailLoading.value = false
-      }
+    canComputedPrice.value = true
+    applyDefaultStatusForAdd()
+    captureBaseline()
+    return
+  }
+  if (props.orderId != null) {
+    formDetailLoading.value = true
+    try {
+      await loadDetail(props.orderId)
+    } finally {
+      formDetailLoading.value = false
     }
   }
-)
+})
 
 watch(
   () => routeTableData.value,
@@ -1089,11 +1088,9 @@ const openRouteEdit = async (row: RouteRow, index: number) => {
 
 const removeRoute = async (index: number) => {
   try {
-    await ElMessageBox.confirm(
-      t('schoolBus.confirmDeleteRows'),
-      t('schoolBus.delete'),
-      { type: 'warning' }
-    )
+    await ElMessageBox.confirm(t('schoolBus.confirmDeleteRows'), t('schoolBus.delete'), {
+      type: 'warning'
+    })
   } catch {
     return
   }
@@ -1353,11 +1350,9 @@ const openPersonEdit = (row: PersonRow, index: number) => {
 
 const removePerson = async (index: number) => {
   try {
-    await ElMessageBox.confirm(
-      t('schoolBus.confirmDeleteRows'),
-      t('schoolBus.delete'),
-      { type: 'warning' }
-    )
+    await ElMessageBox.confirm(t('schoolBus.confirmDeleteRows'), t('schoolBus.delete'), {
+      type: 'warning'
+    })
   } catch {
     return
   }
@@ -1506,9 +1501,10 @@ const mainFormConfig = computed<UniFormConfig>(() => {
         label: t('schoolBus.studentOrder.formAmountDue'),
         component: 'ElInputNumber',
         componentProps: {
-          min: 0,
-          step: 0.1,
           precision: 2,
+          step: 0.1,
+          min: 0,
+          controlsPosition: 'right',
           style: { width: '100%' }
         }
       },
@@ -1635,7 +1631,9 @@ const submit = async () => {
   } catch (raw: unknown) {
     const fields = raw as Record<string, unknown> | undefined
     const firstKey =
-      fields && typeof fields === 'object' ? Object.keys(fields as Record<string, unknown>)[0] : undefined
+      fields && typeof fields === 'object'
+        ? Object.keys(fields as Record<string, unknown>)[0]
+        : undefined
     if (firstKey) {
       mainUniFormRef.value?.scrollToField(firstKey)
     }

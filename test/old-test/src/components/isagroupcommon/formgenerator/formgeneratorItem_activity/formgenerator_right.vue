@@ -1,6 +1,8 @@
 <template>
   <div class="formgenerator_right">
-    <div class="formgenerator_right_title">{{ $t("consult.字段内容编辑") }}</div>
+    <div class="formgenerator_right_title">
+      {{ $t("consult.字段内容编辑") }}
+    </div>
 
     <el-scrollbar class="formgenerator_right_scrollbar">
       <el-form
@@ -35,10 +37,15 @@
             ></el-input
           ></el-form-item>
           <el-form-item :label="$t('consult.是否必填')" prop="require">
-            <el-switch v-model="setform.required" @change="changeRequired"> </el-switch
+            <el-switch v-model="setform.required" @change="changeRequired">
+            </el-switch
           ></el-form-item>
           <el-form-item :label="$t('consult.是否隐藏')" prop="require">
-            <el-switch :active-value="1" :inactive-value="0" v-model="setform.isHide">
+            <el-switch
+              :active-value="1"
+              :inactive-value="0"
+              v-model="setform.isHide"
+            >
             </el-switch
           ></el-form-item>
           <!-- <el-form-item
@@ -214,7 +221,10 @@
               </el-option>
             </el-select>
           </el-form-item>
-          <el-form-item :label="$t('consult.可选起始时间')" prop="datetime_begin">
+          <el-form-item
+            :label="$t('consult.可选起始时间')"
+            prop="datetime_begin"
+          >
             <el-date-picker
               v-model="setform.properties.datetime_begin"
               type="datetime"
@@ -235,7 +245,10 @@
         </div>
         <div v-if="setform.type == 'upload'">
           <el-form-item :label="$t('consult.接收文件类型')" prop="accept">
-            <el-select v-model="setform.properties.upload_file_type" placeholder="请选择">
+            <el-select
+              v-model="setform.properties.upload_file_type"
+              placeholder="请选择"
+            >
               <el-option
                 v-for="item in uploadAccept"
                 :key="item.type"

@@ -378,7 +378,16 @@ export default {
 }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
+::v-deep .el-table {
+  .el-table__fixed-right {
+    z-index: 99 !important;
+    background-color: #ffffff;
+   
+  }
+ 
+}
+
 /* 防止学校列内容换行 */
 .el-table .el-table__cell[data-column-key="studentSchool"] {
   white-space: nowrap;

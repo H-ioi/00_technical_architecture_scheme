@@ -1,10 +1,24 @@
 <template>
   <div style="text-align: center">
     <div class="qrcode" ref="qrCodeUrl" id="qrcode"></div>
-    <!-- <div class="df_sb" style="width: 120px">
-      <el-button type="primary" size="small" @click="downloadClick">二维码</el-button>
-      <el-button type="primary" size="small" @click="onCopy">链接</el-button>
-    </div> -->
+    <div
+      class="df_sb"
+      style="
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-top: 20px;
+      "
+      v-if="showBtn"
+    >
+      <el-button type="primary" size="small" @click="downloadClick"
+        >下载二维码</el-button
+      >
+      <el-button type="primary" size="small" @click="onCopy"
+        >复制链接</el-button
+      >
+    </div>
   </div>
 </template>
 <script>
@@ -13,6 +27,14 @@ import VueClipBoard from "vue-clipboard2";
 export default {
   name: "TestUniWel",
   props: {
+    showBtn: {
+      type: Boolean,
+      value: false,
+    },
+    path: {
+      type: String,
+      value: "",
+    },
     codeId: {
       type: String,
       value: "",
@@ -24,7 +46,8 @@ export default {
   methods: {
     creatQrCode() {
       let qrcode = new QRCode(this.$refs.qrCodeUrl, {
-        text: `${process.env.VUE_APP_BASE_POOL}/#/thepool/activity/questionnaire?id=${this.codeId}`,
+        // text: `${process.env.VUE_APP_BASE_POOL}/#/thepool/activity/questionnaire?id=${this.codeId}`,
+        text: this.path,
         width: 120,
         height: 120,
         colorDark: "#000000",
@@ -33,11 +56,13 @@ export default {
       });
     },
     onCopy() {
-      this.$copyText(
-        `${process.env.VUE_APP_BASE_POOL}/#/thepool/activity/questionnaire?id=${this.codeId}`
-      ).then(
+      this.$copyText(this.path).then(
         (e) => {
           console.log("复制成功：", e);
+          this.$message({
+            message: "复制成功",
+            type: "success",
+          });
         },
         (e) => {
           console.log("复制失败：", e);
@@ -47,7 +72,9 @@ export default {
     // 下载二维码
     downloadClick() {
       // 先找到canvas节点下的二维码图片
-      const myCanvas = document.getElementById("qrcode").getElementsByTagName("canvas");
+      const myCanvas = document
+        .getElementById("qrcode")
+        .getElementsByTagName("canvas");
       const img = document.getElementById("qrcode").getElementsByTagName("img");
       // 创建一个a节点
       const a = document.createElement("a");
@@ -83,7 +110,7 @@ export default {
         img.src = myCanvas[0].toDataURL("image/jpg");
         a.href = img.src;
         // 设置下载文件的名字
-        a.download = this.form.title + this.form.w_type_title + "二维码";
+        a.download = "二维码";
         // 点击
         a.click();
 

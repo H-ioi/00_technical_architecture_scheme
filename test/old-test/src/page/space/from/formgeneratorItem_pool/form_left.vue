@@ -5,14 +5,20 @@
     </div>
 
     <el-scrollbar style="flex: 1">
-      <div
-        class="formlist"
-        v-for="(i, k) in formlist"
-        :key="k"
-        @click="addform(i.attribute)"
-      >
-        <!-- <i :class="i.icon"></i>{{ i.name }} -->
-        {{ $t("consult." + i.name) }}
+      <div v-for="(i, k) in formlist" :key="k">
+        <div
+          v-if="
+            formData['scene'] == '1'
+              ? true
+              : i.type != 'protocol' && i.type != 'sign'
+          "
+          class="formlist"
+          style="cursor: pointer; margin-bottom: 10px"
+          @click="addform(i.attribute)"
+        >
+          <!-- <i :class="i.icon"></i>{{ i.name }} -->
+          {{ $t("consult." + i.name) }}
+        </div>
       </div>
     </el-scrollbar>
   </div>
@@ -21,6 +27,12 @@
 <script>
 import { formlist } from "./form.js";
 export default {
+  props: {
+    formData: {
+      type: Object,
+      default: () => {},
+    },
+  },
   data() {
     return {
       // 可选择组件类型

@@ -381,7 +381,6 @@ const onSubmit = async (status: 0 | 1) => {
   display: flex;
   flex-wrap: wrap;
   justify-content: flex-end;
-  gap: 8px;
   width: 100%;
 }
 </style>

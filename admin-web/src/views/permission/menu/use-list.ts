@@ -7,7 +7,6 @@ import { permissionMenuApi } from '@/api'
 import type { PermissionMenuNode } from '@/types/modules/permission-menu'
 
 import {
-  menuActionColumn,
   menuTableToolbar,
   menuTableTree,
   tableCols,
@@ -133,7 +132,6 @@ export const useList = () => {
     dialogVisible,
     form,
     loading,
-    menuActionColumn,
     menuList,
     menuTableToolbar,
     menuTableTree,

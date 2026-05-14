@@ -7,7 +7,7 @@ export default {
   delete: '删除',
   assignMenu: '分配菜单',
   add: '新增',
-  addDept: '添加',
+  addDept: '新增',
   updateDept: '编辑',
   saveDept: '保存',
   deptUpdate: '更新',
@@ -40,11 +40,18 @@ export default {
 
   dept: {
     title: '部门管理',
-    description: '部门树与表单维护（对齐旧 `/admin/dept`）。',
+    description: '部门树状表格与同页弹窗新增/编辑（对齐旧 `/admin/dept`）。',
     parent: '上级节点 id',
     code: '部门编码',
     name: '部门名称',
-    sort: '排序'
+    sort: '排序',
+    colName: '部门名称',
+    colId: 'ID',
+    colParentId: '上级',
+    colSort: '排序',
+    formAdd: '新增部门',
+    formEdit: '编辑部门',
+    addChild: '新增子部门'
   },
 
   role: {
@@ -99,7 +106,7 @@ export default {
     saveOk: '保存成功',
     deleteDeptConfirm: '将永久删除所选部门，是否继续？',
     deptLoadErr: '部门数据加载失败',
-    pickDeptErr: '请先在左侧选择部门节点',
+    pickDeptErr: '请先在表格中点击一行作为当前部门，再使用该操作。',
     customDeptWarn: '数据权限「自定义」需勾选管辖部门。',
     deptScopeHint: '当数据权限为「自定义」时，在此勾选可访问部门。'
   }

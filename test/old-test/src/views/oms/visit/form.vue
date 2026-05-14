@@ -302,7 +302,7 @@ export default {
         ],
         targetUserContact: [
           {
-            required: true,
+            required: false,
             message: "请输入",
             trigger: "blur",
           },
@@ -314,7 +314,7 @@ export default {
           { required: true, message: "请输入受访部门", trigger: "blur" },
         ],
         visitHumanIdNo: [
-          { required: true, message: "请输入访客身份证", trigger: "blur" },
+          { required: false, message: "请输入访客身份证", trigger: "blur" },
         ],
         visitHumanName: [
           { required: true, message: "请输入访客姓名", trigger: "blur" },

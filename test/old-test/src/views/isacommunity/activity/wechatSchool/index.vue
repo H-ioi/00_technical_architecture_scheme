@@ -1,7 +1,7 @@
 <template>
   <div class="community_page">
     <div class="community_top">
-      <div class="community_top_title">{{ $t("isagroup.投票节目") }}</div>
+      <div class="community_top_title">{{ $t("isagroup.学校微信配置") }}</div>
       <div class="community_top_btn">
         <el-button
           v-if="permissions['busdriver_add']"
@@ -20,29 +20,29 @@
           :inline="true"
           :model="searchFrom"
         >
-          <el-form-item style="width: 180px">
+          <el-form-item style="width: 200px">
+            <el-select
+              clearable
+              style="width: 100%"
+              v-model="searchFrom['schoolId']"
+              :placeholder="$t('isagroup.请选择学校')"
+            >
+              <el-option
+                v-for="(i, k) in dictionary['school']"
+                :key="k"
+                :label="i18nlocel == 'en' ? i.enName : i.cnName || i.enName"
+                :value="i.id"
+              ></el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item style="width: 200px">
             <el-input
               clearable
               style="width: 100%"
               v-model="searchFrom['keyword']"
-              :placeholder="$t('isagroup.关键词')"
+              :placeholder="$t('isagroup.微信AppID')"
             ></el-input>
           </el-form-item>
-          <!-- <el-form-item style="width: 180px" >
-            <el-select
-              clearable
-              style="width: 100%"
-              v-model="searchFrom['schoolIds']"
-              :placeholder="$t('isagroup.请选择学校')"
-            >
-              <el-option
-                :key="k"
-                v-for="(i, k) in dictionary['school']"
-                :label="i.enName"
-                :value="i.id"
-              ></el-option>
-            </el-select>
-          </el-form-item> -->
           <el-form-item style="width: auto; margin-right: 0">
             <el-button
               class="button_text"
@@ -63,7 +63,7 @@
         <Table
           ref="Table"
           :showSelection="true"
-          :tableTitle="tabletitle['voteProgramTable']"
+          :tableTitle="tabletitle['wechatSchoolInfoTable']"
           :tableData="tableData"
           :tableBtn="tableBtn"
           @playTab="playTab"
@@ -88,16 +88,14 @@
         </div>
       </div>
     </div>
-    <!-- 新增编辑弹窗 -->
     <Form ref="Form" @getList="getList" />
-    <!-- 详情弹窗 -->
     <Detail ref="Detail" :title="$t('isagroup.详情')" />
   </div>
 </template>
 
 <script>
 import { mapGetters } from "vuex";
-import { getVoteProgramPage, delVoteprogram } from "@/api/isacommunity/voteprogram.js";
+import { getWechatInfoPage, delWechatSchoolInfo } from "@/api/isacommunity/wechatSchoolInfo.js";
 import tabletitle from "@/const/isacommunity/tabletitle.js";
 import consts from "@/const/isacommunity/consts.js";
 import Table from "@/components/communitycommon/Table.vue";
@@ -106,7 +104,7 @@ import Form from "./modal/form.vue";
 import Detail from "./modal/detail.vue";
 import dayjs from "dayjs";
 export default {
-  name: "teacher",
+  name: "wechatSchoolConfig",
   components: { Table, Pagination, Form, Detail },
   data() {
     return {
@@ -134,53 +132,65 @@ export default {
           permissions: "busdriver_edit",
         },
       ],
-      schoolList: [],
-      roleList: [],
-      detailData: {},
-      schoolId: "",
     };
   },
   created() {
     this.getBtn();
     this.initData();
   },
-  mounted() {},
   activated() {
     this.getList();
   },
   computed: {
     ...mapGetters(["permissions", "i18nlocel", "dictionary"]),
   },
+  watch: {
+    i18nlocel() {
+      this.formatData();
+    },
+  },
   methods: {
     initData() {
-      if (this.dictionary["school"].length == 1) {
-        this.schoolId = this.dictionary["school"][0].id;
-        this.pagination["schoolIds"] = this.schoolId;
-      }
       this.getList();
     },
     getList() {
-      getVoteProgramPage({
+      getWechatInfoPage({
         ...this.pagination,
         ...this.searchFrom,
       }).then((res) => {
         if (res.data.success) {
-          console.log("getVoteprogramPage", res.data.data);
-          let { data, total, current } = res.data.data;
-          this.paginationTotal = total;
-          this.tableData = data;
-          //   this.formatData();
+          const pack = res.data.data;
+          const data = pack.data || pack.records || pack.list || [];
+          let total = pack.total != null ? pack.total : pack.totalCount;
+          if (total == null && Array.isArray(data)) {
+            total = data.length;
+          }
+          this.paginationTotal = total || 0;
+          this.tableData = data || [];
+          this.formatData();
         }
       });
     },
     formatData() {
-      this.tableData.map((item) => {
-        item["createTime"] = dayjs(item["createTime"]).format("YYYY-MM-DD HH:mm");
-        item["updateTime"] = dayjs(item["updateTime"]).format("YYYY-MM-DD HH:mm");
+      this.tableData.forEach((item) => {
+        item.schoolIdLabel = this.schoolLabel(item.schoolId);
+        item.activeLabel = this.$getListLabel(consts["yesOrno"], String(item.active));
+        item.createdAt = item.createdAt
+          ? dayjs(item.createdAt).format("YYYY-MM-DD HH:mm")
+          : "--";
+        item.updatedAt = item.updatedAt
+          ? dayjs(item.updatedAt).format("YYYY-MM-DD HH:mm")
+          : "--";
       });
     },
-    playTab(name, item, scope) {
-      this.currenntItem = item;
+    schoolLabel(schoolId) {
+      if (schoolId == null || schoolId === "") return "--";
+      const list = this.dictionary["school"] || [];
+      const row = list.find((s) => String(s.id) === String(schoolId));
+      if (!row) return String(schoolId);
+      return this.i18nlocel === "en" ? row.enName || row.cnName : row.cnName || row.enName;
+    },
+    playTab(name, item) {
       switch (name) {
         case "look":
           this.rowClick(item);
@@ -192,12 +202,13 @@ export default {
     },
     delData() {
       let selectionId = this.$refs.Table.selectionId;
-      if (selectionId.length == 0) {
+      if (selectionId.length === 0) {
+        this.$message.warning(this.$t("isagroup.请选择要删除的数据"));
       } else {
         this.$alert(this.$t("isagroup.确定要删除吗？"), this.$t("isagroup.删除"), {
           confirmButtonText: this.$t("isagroup.确定"),
         }).then(() => {
-          delVoteprogram({ ids: selectionId }).then((res) => {
+          delWechatSchoolInfo({ ids: selectionId }).then((res) => {
             if (res.data.success) {
               this.$message.success(this.$t("isagroup.成功"));
               this.getList();
@@ -206,22 +217,20 @@ export default {
         });
       }
     },
-    rowClick(row, column, event) {
-      console.log("rowClick", row);
+    rowClick(row) {
       this.$refs["Detail"].showModal(row);
     },
     clear() {
       this.searchFrom = {};
       this.getList();
     },
-    // 分页
     handleCurrentChange(page) {
       this.pagination["current"] = page;
       this.getList();
     },
     getBtn() {
       this.tableBtn = this.permissionsBtn.filter((item) => {
-        return this.permissions[item["permissions"]] || item["type"] == "look";
+        return this.permissions[item["permissions"]] || item["type"] === "look";
       });
     },
     showForm(type, item = {}) {

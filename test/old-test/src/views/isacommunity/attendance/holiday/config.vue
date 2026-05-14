@@ -89,10 +89,10 @@
           <el-input v-model="formData.email" placeholder="请输入邮箱"></el-input>
         </el-form-item>
       </el-form>
-      <span slot="footer" class="dialog-footer">
+      <div slot="footer" class="dialog-footer" style="text-align: center;">
         <el-button @click="dialogVisible = false">取消</el-button>
         <el-button type="primary" @click="submitForm">确定</el-button>
-      </span>
+      </div>
     </el-dialog>
        
       </div>

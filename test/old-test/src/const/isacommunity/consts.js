@@ -177,8 +177,8 @@ export default {
   activityCheckinMethod: [
     { label: "自助签到", id: "0", value: "0", enLabel: "SelfCheckin" },
     { label: "员工扫码验票", id: "1", value: "1", enLabel: "EmployeeScan" },
-    { label: "自助扫码验票", id: "2", value: "2", enLabel: "SelfScan" },
-    { label: "无需签到", id: "3", value: "3", enLabel: "NoCheckin" },
+    // { label: "自助扫码验票", id: "2", value: "2", enLabel: "SelfScan" },
+    { label: "无需签到", id: "2", value: "2", enLabel: "NoCheckin" },
   ],
   programStatus: [
     { label: "待开始", id: "0", value: "0", enLabel: "Pending" },
@@ -220,16 +220,22 @@ export default {
   ],
   lotteryIdentifierType: [
     {
-      label: "手机号",
-      enLabel: "Phone number",
+      label: "无",
+      enLabel: "None",
       value: "0",
       id: "0",
     },
     {
-      label: "邮箱",
-      enLabel: "Email",
+      label: "手机号",
+      enLabel: "Phone number",
       value: "1",
       id: "1",
+    },
+    {
+      label: "邮箱",
+      enLabel: "Email",
+      value: "2",
+      id: "2",
     },
   ],
   attendanceOpenType: [

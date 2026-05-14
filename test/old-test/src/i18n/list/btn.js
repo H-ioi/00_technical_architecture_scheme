@@ -29,10 +29,13 @@ const btn = [
   ["更改冻结状态", "更改冻结状态", "Change Frozen Status"],
   ["复制", "复制", "Copy"],
   ["复制链接", "复制链接", "Copy Link"],
+  ["发送到微信", "发送到微信", "Send to WeChat"],
+  ["发送到微信测试", "发送到微信测试", "Send WeChat Test"],
   ["申请", "申请", "Apply"],
   ["毕业", "毕业", "Graduation"],
   ["重新入学", "重新入学", "Reenroll"],
   ["显示规则", "显示规则", "Show Rules"],
+  ["查看名单", "查看名单", "View List"],
   ["关联文章", "关联文章", "Associated Article"],
 ];
 export default btn;

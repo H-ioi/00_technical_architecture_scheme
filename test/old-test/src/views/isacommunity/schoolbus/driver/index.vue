@@ -27,7 +27,7 @@
           :inline="true"
           :model="searchFrom"
         >
-          <el-form-item style="width: 180px" v-if="dictionary['school'].length > 1">
+          <el-form-item style="width: 180px" v-if="schoolSelectList.length > 1">
             <el-select
               clearable
               style="width: 100%"
@@ -36,8 +36,8 @@
             >
               <el-option
                 :key="k"
-                v-for="(i, k) in dictionary['school']"
-                :label="i.enName"
+                v-for="(i, k) in schoolSelectList"
+                :label="schoolDropdownLabel(i)"
                 :value="i.id"
               ></el-option>
             </el-select>
@@ -130,8 +130,10 @@ import Form from "./modal/form.vue";
 import Detail from "./modal/detail.vue";
 import BatchUpdload from "./modal/batchupdload.vue";
 import dayjs from "dayjs";
+import schoolListBuscommonMixin from "@/mixins/schoolListBuscommon.js";
 export default {
   name: "teacher",
+  mixins: [schoolListBuscommonMixin],
   components: { Table, Pagination, Form, Detail, BatchUpdload },
   data() {
     return {
@@ -174,12 +176,13 @@ export default {
     this.getList();
   },
   computed: {
-    ...mapGetters(["permissions", "i18nlocel", "dictionary"]),
+    ...mapGetters(["permissions", "i18nlocel"]),
   },
   methods: {
-    initData() {
-      if (this.dictionary["school"].length == 1) {
-        this.schoolId = this.dictionary["school"][0].id;
+    async initData() {
+      await this.fetchSchoolListBuscommon();
+      if (this.schoolSelectList.length === 1) {
+        this.schoolId = this.schoolSelectList[0].id;
         this.pagination["schoolIds"] = this.schoolId;
       }
       this.getList();

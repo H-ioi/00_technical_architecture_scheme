@@ -16,7 +16,7 @@
       :tree="menuTableTree"
       :toolbar="menuTableToolbar"
       :actions="actions"
-      :action-column="menuActionColumn"
+      :action-column="{ width: 70, fixed: 'right' }"
       @refresh="loadTree">
       <template #column-icon="{ row }">
         <IconDisplay :name="row.icon" />

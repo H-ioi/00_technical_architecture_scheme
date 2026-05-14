@@ -139,7 +139,8 @@ export const tableCols = (t: Translate, pickupOptions: UniOption[]): UniTableCol
     prop: 'studentName',
     label: t('schoolBus.studentOrder.colStudentName'),
     type: 'text',
-    minWidth: 100
+    minWidth: 140,
+    showOverflowTooltip: true
   },
   {
     prop: 'studentGrade',

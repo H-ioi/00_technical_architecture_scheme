@@ -378,7 +378,13 @@ export default {
                 return item["type"] != "association";
               });
               this.$nextTick(() => {
-                this.$refs["CollectionTabel"].resetTitle(coverTitle);
+                var tableRef = this.$refs["CollectionTabel"];
+                if (
+                  tableRef &&
+                  typeof tableRef.resetTitle === "function"
+                ) {
+                  tableRef.resetTitle(coverTitle);
+                }
               });
               resolve(tableTitle);
             } else {

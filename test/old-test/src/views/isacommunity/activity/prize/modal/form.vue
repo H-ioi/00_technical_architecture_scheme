@@ -1,97 +1,37 @@
 <template>
   <div class="community_page">
-    <el-dialog
-      :title="$t('isagroup')[typeObj[modalType]]"
-      :visible.sync="showModal"
-      width="1000px"
-      :before-close="closeModal"
-      :close-on-click-modal="false"
-    >
+    <el-dialog :title="$t('isagroup')[typeObj[modalType]]" :visible.sync="showModal" width="1000px"
+      :before-close="closeModal" :close-on-click-modal="false">
       <div class="moadlFromBox" v-if="showModal">
-        <el-form
-          :label-position="'top'"
-          :inline="true"
-          :model="ruleForm"
-          :rules="rules"
-          ref="ruleForm"
-        >
+        <el-form :label-position="'top'" :inline="true" :model="ruleForm" :rules="rules" ref="ruleForm">
           <div class="df_center_wrap">
             <el-form-item :label="$t('isagroup.中文名')" prop="cnName" style="width: 50%">
-              <el-input
-                style="width: 100%"
-                v-model="ruleForm.cnName"
-                :placeholder="$t('consult.请输入')"
-                maxlength="100"
-              ></el-input>
+              <el-input style="width: 100%" v-model="ruleForm.cnName" :placeholder="$t('consult.请输入')"
+                maxlength="100"></el-input>
             </el-form-item>
             <el-form-item :label="$t('isagroup.英文名')" prop="enName" style="width: 50%">
-              <el-input
-                style="width: 100%"
-                v-model="ruleForm.enName"
-                :placeholder="$t('consult.请输入')"
-                maxlength="100"
-              ></el-input>
+              <el-input style="width: 100%" v-model="ruleForm.enName" :placeholder="$t('consult.请输入')"
+                maxlength="100"></el-input>
             </el-form-item>
-            <el-form-item
-              v-if="!isBind"
-              :label="$t('isagroup.活动项目')"
-              prop="programId"
-              style="width: 50%"
-            >
-              <el-select
-                clearable
-                style="width: 100%"
-                v-model="ruleForm['programId']"
-                :placeholder="$t('isagroup.请选择')"
-              >
-                <el-option
-                  v-for="(i, k) in programlist"
-                  :key="i.id"
-                  :label="i18nlocel == 'en' ? i.enName : i.cnName"
-                  :value="i.id"
-                ></el-option>
+            <el-form-item v-if="!isBind" :label="$t('isagroup.活动项目')" prop="programId" style="width: 50%">
+              <el-select clearable style="width: 100%" v-model="ruleForm['programId']"
+                :placeholder="$t('isagroup.请选择')">
+                <el-option v-for="(i, k) in programlist" :key="i.id" :label="i18nlocel == 'en' ? i.enName : i.cnName"
+                  :value="i.id"></el-option>
               </el-select>
             </el-form-item>
             <el-form-item :label="$t('isagroup.金额')" prop="amount" style="width: 50%">
-              <el-input-number
-                style="width: 100%"
-                v-model="ruleForm.amount"
-                :precision="0"
-                :step="0.01"
-                :min="0"
-                :placeholder="$t('consult.请输入')"
-              ></el-input-number>
+              <el-input-number style="width: 100%" v-model="ruleForm.amount" :precision="0" :step="0.01" :min="0"
+                :placeholder="$t('consult.请输入')"></el-input-number>
             </el-form-item>
-            <el-form-item
-              :label="$t('isagroup.数量')"
-              prop="prizeCount"
-              style="width: 50%"
-            >
-              <el-input-number
-                style="width: 100%"
-                v-model="ruleForm.prizeCount"
-                :precision="0"
-                :step="1"
-                :min="0"
-                :placeholder="$t('consult.请输入')"
-              ></el-input-number>
-            </el-form-item>
-            <el-form-item
-              :label="$t('isagroup.图片')"
-              prop="imageUrl"
-              style="width: 100%"
-            >
-              <el-upload
-                class="avatar-uploader"
-                action=""
-                :show-file-list="false"
-                :before-upload="beforeUpload"
-              >
-                <img
-                  v-if="ruleForm['imageUrl']"
-                  :src="ruleForm['imageUrl']"
-                  class="avatar"
-                />
+            <!-- 数量 prizeCount 字段暂时隐藏 -->
+            <!-- <el-form-item :label="$t('isagroup.数量')" prop="prizeCount" style="width: 50%">
+              <el-input-number style="width: 100%" v-model="ruleForm.prizeCount" :precision="0" :step="1" :min="0"
+                :placeholder="$t('consult.请输入')"></el-input-number>
+            </el-form-item> -->
+            <el-form-item :label="$t('isagroup.图片')" prop="imageUrl" style="width: 100%">
+              <el-upload class="avatar-uploader" action="" :show-file-list="false" :before-upload="beforeUpload">
+                <img v-if="ruleForm['imageUrl']" :src="ruleForm['imageUrl']" class="avatar" />
                 <i v-else class="el-icon-plus avatar-uploader-icon"></i>
               </el-upload>
             </el-form-item>
@@ -146,7 +86,7 @@ export default {
     this.rules = this.initRules();
     this.initData();
   },
-  mounted() {},
+  mounted() { },
   computed: {
     ...mapGetters(["permissions", "dictionary", "i18nlocel"]),
   },
@@ -158,7 +98,7 @@ export default {
     },
   },
   methods: {
-    async initData() {},
+    async initData() { },
     initRules() {
       let that = this;
       return {
@@ -171,9 +111,10 @@ export default {
         amount: [
           { required: true, message: that.$t("isagroup.请输入"), trigger: "blur" },
         ],
-        prizeCount: [
-          { required: true, message: that.$t("isagroup.请输入"), trigger: "blur" },
-        ],
+        // prizeCount 字段暂时隐藏，校验一并关闭
+        // prizeCount: [
+        //   { required: true, message: that.$t("isagroup.请输入"), trigger: "blur" },
+        // ],
         imageUrl: [
           { required: true, message: that.$t("isagroup.请上传"), trigger: "blur" },
         ],
@@ -183,18 +124,19 @@ export default {
       };
     },
     async showForm(type = "add", item = {}) {
-      if (this.isBind) {
-        this.ruleForm = {
-          ...this.ruleForm,
-          programId: this.bindProgramId,
-        };
-      } else {
+      if (type === "add") {
+        this.ruleForm = {};
+        if (this.isBind) {
+          this.ruleForm.programId = this.bindProgramId;
+        }
+      }
+      if (!this.isBind) {
         this.programlist = await getActivityProgramlist({ programTypes: ["1"] });
       }
       this.modalType = type;
       this.showModal = true;
-      if (type != "add") {
-        this.getDetail(item["id"]);
+      if (type !== "add" && item.id) {
+        this.getDetail(item.id);
       }
     },
     // 新增
@@ -230,7 +172,6 @@ export default {
               programId,
             } = res.data.data;
             this.ruleForm = {
-              ...this.ruleForm,
               id,
               cnName,
               enName,
@@ -267,6 +208,14 @@ export default {
       const response = await myRequest.upload(formData);
       return response.data.url;
     },
+    /** 数量字段界面隐藏时仍给后端默认数量，避免新增/编辑参数不完整 */
+    buildSubmitPayload() {
+      const p = { ...this.ruleForm };
+      if (p.prizeCount == null || p.prizeCount === "") {
+        p.prizeCount = 1;
+      }
+      return p;
+    },
     submitForm() {
       if (this.isSubmitting) {
         return;
@@ -278,10 +227,11 @@ export default {
           this.isSubmitting = true;
 
           try {
+            const payload = this.buildSubmitPayload();
             if (this.modalType == "add") {
-              this.addData(this.ruleForm);
+              this.addData(payload);
             } else {
-              this.editData(this.ruleForm);
+              this.editData(payload);
             }
           } catch (error) {
             // 捕获异常并重置提交状态

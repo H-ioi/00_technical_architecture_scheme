@@ -739,6 +739,9 @@ a {
     margin-bottom: 10px;
     .el-checkbox__label {
       white-space: wrap;
+      font-size: 14px;
+      font-weight: 400;
+      line-height: 16px;
     }
   }
   .el-radio {
@@ -781,13 +784,34 @@ a {
       justify-content: flex-end;
     }
   }
+  .protocol-content {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    .protocol-content-box {
+      padding: 10px 0;
+      box-sizing: border-box;
+
+      .protocol-content-text {
+        max-height: 400px;
+        overflow-y: auto;
+        font-weight: 400;
+        font-size: 14px;
+        cursor: default;
+        line-height: 18px;
+        color: #999999;
+        white-space: pre-wrap;
+        word-break: break-all;
+      }
+    }
+  }
   .protocol-container {
     display: flex;
     align-items: flex-start;
     .protocol {
       flex: 1;
       margin: 0;
-      padding: 5px 0 0 5px;
+      padding: 0 0 0 5px;
       .protocol-text {
         font-weight: 400;
         font-size: 14px;
@@ -872,8 +896,9 @@ a {
   }
 }
 .questionnaire-select-picker {
-  left: 10px !important;
-  right: 10px !important;
+  // left: 10px !important;
+  // right: 10px !important;
+  // min-width: 320px !important;
   .el-select-dropdown__item.selected {
     color: #d4ab85 !important;
     font-weight: 400;
