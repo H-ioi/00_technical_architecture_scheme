@@ -43,7 +43,7 @@
           :pagination="{ pageSize: 20, pageSizes: [10, 20, 50] }"
           :toolbar="{ refresh: true, density: true, columnSetting: true }"
           :actions="actions"
-          :action-column="{ width: 160, fixed: 'right' }"
+          :action-column="{ width: 110, fixed: 'right' }"
           class="permission-user__table"
           @load-success="onTableLoadSuccess"
           @request-error="tableEmpty.onRequestError">
@@ -66,21 +66,21 @@
 
 <script setup lang="ts">
 import { ElMessageBox } from 'element-plus'
-import { onMounted, ref } from 'vue'
 import type { UniTableRequestResult } from 'uni-ui-lib'
 import { UniDataTable, UniSearchForm, useUniI18n } from 'uni-ui-lib'
+import { onMounted, ref } from 'vue'
 
 import ListTableEmpty from '@/components/list-table-empty.vue'
 import { useListTableEmpty } from '@/composables/use-list-table-empty'
 
 import { permissionDeptApi, permissionRoleApi, permissionUserApi } from '@/api'
-import { normalizeArray } from '@/utils/api-response-normalize'
 import type { PermissionDeptRecord } from '@/types/modules/permission-dept'
 import type { PermissionUserRecord } from '@/types/modules/permission-user'
+import { normalizeArray } from '@/utils/api-response-normalize'
 
 import UserFormDialog from './components/form-dialog.vue'
-import { useList } from './use-list'
 import type { PermissionUserTableRow } from './use-list'
+import { useList } from './use-list'
 
 const { t } = useUniI18n()
 

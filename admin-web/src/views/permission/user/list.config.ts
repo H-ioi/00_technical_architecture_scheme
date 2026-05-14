@@ -26,7 +26,7 @@ export const searchForm = (t: Translate): UniFormConfig => ({
       colProps: { span: 8 }
     }
   ],
-  rowProps: { gutter: 16 },
+  rowProps: { gutter: 8 },
   colProps: { span: 8 }
 })
 
@@ -52,7 +52,7 @@ export const tableCols = (t: Translate, lockOptsList: UniOption[]): UniTableColu
     label: t('permission.user.colStatus'),
     width: 100,
     type: 'tag',
-    dict: lockOptsList
+    options: lockOptsList
   },
   { prop: 'createTime', label: t('permission.user.colCreated'), width: 168, type: 'datetime' }
 ]

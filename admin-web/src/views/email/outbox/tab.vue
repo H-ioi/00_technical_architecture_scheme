@@ -63,7 +63,7 @@
           :pagination="{ pageSize: 10, pageSizes: [10, 20, 50, 100] }"
           :toolbar="{ refresh: true, density: true, columnSetting: true }"
           :actions="draftActions"
-          :action-column="{ width: 110, fixed: 'right' }"
+          :action-column="{ width: 150, fixed: 'right' }"
           @load-success="onDraftTableLoadSuccess"
           @request-error="draftTableEmpty.onRequestError">
           <template #empty>

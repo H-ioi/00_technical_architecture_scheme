@@ -40,7 +40,7 @@ export const searchForm = (t: Translate, dpOptions: UniOption[]): UniFormConfig 
       colProps: { span: 8 }
     }
   ],
-  rowProps: { gutter: 16 },
+  rowProps: { gutter: 8 },
   colProps: { span: 8 }
 })
 

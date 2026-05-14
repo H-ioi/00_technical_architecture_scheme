@@ -58,7 +58,7 @@ export const searchForm = (
         ]
       : [])
   ],
-  rowProps: { gutter: 16 },
+  rowProps: { gutter: 8 },
   colProps: { span: 8 }
 })
 
@@ -80,7 +80,8 @@ export const tableCols = (t: Translate, statusOptions: UniOption[]): UniTableCol
     prop: 'schoolLabel',
     label: t('schoolBus.followTeacher.colSchool'),
     type: 'text',
-    minWidth: 120
+    minWidth: 180,
+    showOverflowTooltip: true
   },
   {
     prop: 'department',
@@ -152,9 +153,7 @@ export const teacherFormRules = (
       trigger: 'change'
     }
   ],
-  status: [
-    { required: true, message: t('schoolBus.followTeacher.ruleStatus'), trigger: 'change' }
-  ]
+  status: [{ required: true, message: t('schoolBus.followTeacher.ruleStatus'), trigger: 'change' }]
 })
 
 export const teacherAddPasswordRule = (t: Translate): FormRules<FollowTeacherFormModel> => ({

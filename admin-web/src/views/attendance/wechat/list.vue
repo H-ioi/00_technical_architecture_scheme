@@ -28,7 +28,7 @@
       :pagination="{ pageSize: 10, pageSizes: [10, 20, 50, 100] }"
       :toolbar="{ refresh: true, density: true, columnSetting: true }"
       :actions="actions"
-      :action-column="{ width: 88, fixed: 'right' }"
+      :action-column="{ width: 60, fixed: 'right' }"
       @selection-change="onSelectionChange"
       @load-success="onTableLoadSuccess"
       @request-error="tableEmpty.onRequestError">
@@ -60,9 +60,9 @@ import { ElMessage } from 'element-plus'
 import type { UniTableRequestResult } from 'uni-ui-lib'
 import { useUniI18n } from 'uni-ui-lib'
 
+import { attendanceWechatOpenidApi } from '@/api'
 import ListTableEmpty from '@/components/list-table-empty.vue'
 import { useListTableEmpty } from '@/composables/use-list-table-empty'
-import { attendanceWechatOpenidApi } from '@/api'
 import DetailDialog from './components/detail-dialog.vue'
 import { useList } from './use-list'
 

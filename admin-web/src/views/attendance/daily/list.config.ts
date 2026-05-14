@@ -122,7 +122,7 @@ export const searchForm = (
       colProps: { span: 6 }
     }
   ],
-  rowProps: { gutter: 16 },
+  rowProps: { gutter: 8 },
   colProps: { span: 6 }
 })
 

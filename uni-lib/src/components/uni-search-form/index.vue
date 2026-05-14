@@ -267,5 +267,9 @@ watch(
     gap: 8px;
     margin-top: 12px;
   }
+
+  :deep(.el-form-item) {
+    margin-bottom: 8px;
+  }
 }
 </style>

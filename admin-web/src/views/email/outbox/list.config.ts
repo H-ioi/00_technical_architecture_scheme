@@ -4,7 +4,7 @@ import type { UniFormConfig, UniTableColumn } from 'uni-ui-lib'
 type Loose = Record<string, unknown>
 
 export const searchForm = (t: Translate): UniFormConfig => ({
-  rowProps: { gutter: 16 },
+  rowProps: { gutter: 8 },
   schema: [
     {
       field: 'keyword',

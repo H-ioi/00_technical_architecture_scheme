@@ -17,11 +17,19 @@
       </template>
     </UniDataTable>
 
-    <el-dialog v-model="imgVisible" :title="$t('attendance.holidayTask.flowChart')" width="80%" destroy-on-close>
+    <el-dialog
+      v-model="imgVisible"
+      :title="$t('attendance.holidayTask.flowChart')"
+      width="80%"
+      destroy-on-close>
       <img v-if="flowImg" :src="flowImg" alt="" style="max-width: 100%; height: auto" />
     </el-dialog>
 
-    <el-dialog v-model="assignVisible" :title="$t('attendance.holidayFlow.procDef.setAssignee')" width="520px" destroy-on-close>
+    <el-dialog
+      v-model="assignVisible"
+      :title="$t('attendance.holidayFlow.procDef.setAssignee')"
+      width="520px"
+      destroy-on-close>
       <el-form label-width="120px">
         <el-form-item v-for="item in assignFields" :key="item.key" :label="item.name">
           <el-select
@@ -30,7 +38,11 @@
             filterable
             clearable
             style="width: 100%">
-            <el-option v-for="u in assignUsers" :key="u.username" :label="u.username" :value="u.username" />
+            <el-option
+              v-for="u in assignUsers"
+              :key="u.username"
+              :label="u.username"
+              :value="u.username" />
           </el-select>
           <el-select
             v-else-if="item.type === 'candidateUsers'"
@@ -51,7 +63,11 @@
             filterable
             clearable
             style="width: 100%">
-            <el-option v-for="u in assignUsers" :key="u.username" :label="u.username" :value="u.username" />
+            <el-option
+              v-for="u in assignUsers"
+              :key="u.username"
+              :label="u.username"
+              :value="u.username" />
           </el-select>
         </el-form-item>
       </el-form>
@@ -63,14 +79,19 @@
 </template>
 
 <script setup lang="ts">
-import type { UniTableAction, UniTableColumn, UniTableRequest, UniTableRequestResult } from 'uni-ui-lib'
-import { UniDataTable, useUniI18n, useUniListState } from 'uni-ui-lib'
 import { ElMessage, ElMessageBox } from 'element-plus'
+import type {
+  UniTableAction,
+  UniTableColumn,
+  UniTableRequest,
+  UniTableRequestResult
+} from 'uni-ui-lib'
+import { UniDataTable, useUniI18n, useUniListState } from 'uni-ui-lib'
 import { computed, ref } from 'vue'
 
+import { attendanceHolidayApi } from '@/api'
 import ListTableEmpty from '@/components/list-table-empty.vue'
 import { useListTableEmpty } from '@/composables/use-list-table-empty'
-import { attendanceHolidayApi } from '@/api'
 import { normalizeEnvelope, normalizePaged } from '@/utils/api-response-normalize'
 
 type Loose = Record<string, unknown>
@@ -104,7 +125,14 @@ const currentFlowId = ref<string | number>('')
 const currentTenantId = ref('')
 
 const columns = computed<UniTableColumn[]>(() => [
-  { prop: 'id', label: t('attendance.holidayFlow.procDef.colDefId'), type: 'text', width: 100 },
+  {
+    prop: 'id',
+    label: t('attendance.holidayFlow.procDef.colDefId'),
+    type: 'text',
+    width: 200,
+    showOverflowTooltip: true,
+    copyable: true
+  },
   {
     prop: 'deploymentName',
     label: t('attendance.holidayFlow.flowDef.colName'),
@@ -112,12 +140,18 @@ const columns = computed<UniTableColumn[]>(() => [
     minWidth: 140,
     showOverflowTooltip: true
   },
-  { prop: 'flowKey', label: t('attendance.holidayFlow.flowDef.colKey'), type: 'text', minWidth: 120 },
+  {
+    prop: 'flowKey',
+    label: t('attendance.holidayFlow.flowDef.colKey'),
+    type: 'text',
+    minWidth: 120
+  },
   {
     prop: 'tenantSchool',
     label: t('attendance.school'),
     type: 'text',
-    minWidth: 120,
+    minWidth: 240,
+    showOverflowTooltip: true,
     formatter: (row) => {
       const tid = String((row as Loose).tenantId ?? '')
       const p = tid.split('#')
@@ -153,9 +187,25 @@ const columns = computed<UniTableColumn[]>(() => [
       return p[2] || '—'
     }
   },
-  { prop: 'deploymentId', label: t('attendance.holidayFlow.procDef.colDeploymentId'), type: 'text', minWidth: 120 },
-  { prop: 'deploymentDate', label: t('attendance.holidayFlow.procDef.colDeployedAt'), type: 'datetime', minWidth: 160 },
-  { prop: 'version', label: t('attendance.holidayFlow.procDef.colVersion'), type: 'text', width: 88 }
+  {
+    prop: 'deploymentId',
+    label: t('attendance.holidayFlow.procDef.colDeploymentId'),
+    type: 'text',
+    minWidth: 240,
+    copyable: true
+  },
+  {
+    prop: 'deploymentDate',
+    label: t('attendance.holidayFlow.procDef.colDeployedAt'),
+    type: 'datetime',
+    minWidth: 160
+  },
+  {
+    prop: 'version',
+    label: t('attendance.holidayFlow.procDef.colVersion'),
+    type: 'text',
+    width: 88
+  }
 ])
 
 const loadData: UniTableRequest = async ({ pageNo, pageSize }) => {
@@ -206,11 +256,15 @@ const deleteRow = (row: Loose) => {
   if (deploymentId == null || deploymentId === '') {
     return
   }
-  ElMessageBox.confirm(t('attendance.holidayFlow.procDef.deleteConfirm'), t('attendance.tipTitle'), {
-    type: 'warning',
-    confirmButtonText: t('common.submit'),
-    cancelButtonText: t('common.cancel')
-  })
+  ElMessageBox.confirm(
+    t('attendance.holidayFlow.procDef.deleteConfirm'),
+    t('attendance.tipTitle'),
+    {
+      type: 'warning',
+      confirmButtonText: t('common.submit'),
+      cancelButtonText: t('common.cancel')
+    }
+  )
     .then(async () => {
       await attendanceHolidayApi.flowDeployDelete.remove(deploymentId as string | number)
       ElMessage.success(t('attendance.holiday.deleteSuccess'))

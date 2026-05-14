@@ -27,7 +27,7 @@
       :pagination="{ pageSize: 10, pageSizes: [10, 20, 50, 100] }"
       :toolbar="{ refresh: true, density: true, columnSetting: true }"
       :actions="actions"
-      :action-column="{ width: 88, fixed: 'right' }"
+      :action-column="{ width: 60, fixed: 'right' }"
       @load-success="onTableLoadSuccess"
       @request-error="tableEmpty.onRequestError">
       <template #empty>

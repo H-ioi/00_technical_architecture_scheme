@@ -33,7 +33,7 @@
           :pagination="{ pageSize: 10, pageSizes: [10, 20, 50, 100] }"
           :toolbar="{ refresh: true, density: true, columnSetting: true }"
           :actions="leaveActions"
-          :action-column="{ width: 168, fixed: 'right' }"
+          :action-column="{ width: 110, fixed: 'right' }"
           @load-success="onLeaveTableLoadSuccess"
           @request-error="leaveTableEmpty.onRequestError">
           <template #empty>
@@ -65,7 +65,7 @@
           :pagination="{ pageSize: 10, pageSizes: [10, 20, 50, 100] }"
           :toolbar="{ refresh: true, density: true, columnSetting: true }"
           :actions="returnActions"
-          :action-column="{ width: 88, fixed: 'right' }"
+          :action-column="{ width: 60, fixed: 'right' }"
           @load-success="onReturnTableLoadSuccess"
           @request-error="returnTableEmpty.onRequestError">
           <template #empty>
@@ -99,10 +99,10 @@ import type { UniTableRequestResult } from 'uni-ui-lib'
 import { UniDataTable, UniSearchForm } from 'uni-ui-lib'
 import { nextTick, onMounted, ref, watch } from 'vue'
 
+import { membershipApi } from '@/api'
 import ListTableEmpty from '@/components/list-table-empty.vue'
 import { useListTableEmpty } from '@/composables/use-list-table-empty'
 import { useTabQuerySync } from '@/composables/use-tab-query-sync'
-import { membershipApi } from '@/api'
 import type { SchoolOptionRecord } from '@/types/modules/membership'
 import DetailDrawer from './components/detail-drawer.vue'
 import HolidayFormDrawer from './components/holiday-form-drawer.vue'

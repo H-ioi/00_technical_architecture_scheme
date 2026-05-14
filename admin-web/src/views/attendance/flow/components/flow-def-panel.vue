@@ -19,7 +19,7 @@
       :pagination="{ pageSize: 10, pageSizes: [10, 20, 50, 100] }"
       :toolbar="{ refresh: true, density: true, columnSetting: true }"
       :actions="actions"
-      :action-column="{ width: 110, fixed: 'right' }"
+      :action-column="{ width: 150, fixed: 'right' }"
       @load-success="onTableLoadSuccess"
       @request-error="tableEmpty.onRequestError">
       <template #empty>
@@ -42,9 +42,9 @@ import { UniDataTable, UniSearchForm, useUniI18n, useUniListState } from 'uni-ui
 import { computed } from 'vue'
 import { useRouter } from 'vue-router'
 
+import { attendanceHolidayApi } from '@/api'
 import ListTableEmpty from '@/components/list-table-empty.vue'
 import { useListTableEmpty } from '@/composables/use-list-table-empty'
-import { attendanceHolidayApi } from '@/api'
 import { normalizePaged } from '@/utils/api-response-normalize'
 
 type Loose = Record<string, unknown>
@@ -69,6 +69,7 @@ const retryTable = () => {
 }
 
 const searchCfg = computed<UniFormConfig>(() => ({
+  rowProps: { gutter: 8 },
   schema: [
     {
       field: 'key',
@@ -120,7 +121,13 @@ const columns = computed<UniTableColumn[]>(() => [
       return v || '—'
     }
   },
-  { prop: 'school', label: t('attendance.school'), type: 'text', minWidth: 220 },
+  {
+    prop: 'school',
+    label: t('attendance.school'),
+    type: 'text',
+    minWidth: 220,
+    showOverflowTooltip: true
+  },
   {
     prop: 'needApproval',
     label: t('attendance.holidayFlow.flowDef.needApproval'),

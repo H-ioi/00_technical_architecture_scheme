@@ -7,7 +7,7 @@ export const statusOpts = (t: Translate): UniOption[] => [
 ]
 
 export const searchForm = (_t: Translate, statusOptsList: UniOption[]): UniFormConfig => ({
-  rowProps: { gutter: 16 },
+  rowProps: { gutter: 8 },
   schema: [
     {
       field: 'keyword',

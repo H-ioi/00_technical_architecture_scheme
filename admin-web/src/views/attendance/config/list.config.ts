@@ -44,7 +44,8 @@ export const searchForm = (t: Translate, schoolOptions: UniOption[]): UniFormCon
       },
       colProps: { span: 6 }
     }
-  ]
+  ],
+  rowProps: { gutter: 8 }
 })
 
 /** 列必须使用 `prop` / `label` / `formatter`，与 `list.config` 请假表一致；勿用 `field` / `labelKey` / `format'。 */
@@ -53,18 +54,14 @@ export const tableCols = (t: Translate): UniTableColumn[] => [
     prop: 'school',
     label: t('attendance.holidayConfig.school'),
     type: 'text',
-    minWidth: 140,
+    minWidth: 180,
     showOverflowTooltip: true
   },
   {
     prop: 'grades',
     label: t('attendance.holidayConfig.grades'),
-    type: 'text',
-    minWidth: 200,
-    formatter: (row) => {
-      const g = (row as { grades?: string[] }).grades
-      return g?.length ? g.join('、') : '-'
-    }
+    type: 'tags',
+    minWidth: 340
   },
   {
     prop: 'department',
