@@ -99,8 +99,6 @@ export default {
     formRuleSelect: 'Please select',
     formRuleInput: 'Please enter',
     formRuleUpload: 'Please upload',
-    quickJump: 'Jump to',
-    quickJumpBasic: 'Basic info',
     unsavedCloseConfirm: 'You have unsaved changes. Close without saving?',
     enumApprovalPending: 'Pending',
     enumApprovalAgree: 'Approved',

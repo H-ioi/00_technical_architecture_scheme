@@ -70,7 +70,7 @@ const matchesSchoolFilter = (
   selected: Set<string | number>
 ): boolean => {
   const raw = row.schoolIds
-  if (Array.isBoolean(raw)) return false
+  if (typeof raw === 'boolean') return false
   if (Array.isArray(raw)) {
     return raw.some((id) => selected.has(id as string | number))
   }

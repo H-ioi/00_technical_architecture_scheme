@@ -46,6 +46,10 @@ export interface UniFormField {
   viewOverflow?: UniFormViewOverflow
   emptyText?: string
   formItemProps?: Recordable & { rules?: FormItemRule | FormItemRule[] }
+  /**
+   * 传给 Element Plus 控件的属性；`ElInputNumber` 时 UniForm 会先合并默认 `controlsPosition: 'right'`，
+   * 再与本对象合并（同名字段以本对象为准）。
+   */
   componentProps?: Recordable
   colProps?: Partial<ColProps>
   slot?: string

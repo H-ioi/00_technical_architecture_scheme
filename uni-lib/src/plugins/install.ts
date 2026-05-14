@@ -1,7 +1,6 @@
 /**
  * 全量注册 uni-lib 组件与权限指令的 `app.use(UniLib)` 安装函数实现。
  */
-import { ElInputNumber } from 'element-plus'
 import type { App } from 'vue'
 
 import { UniConfigProvider } from '@/components/uni-config-provider'
@@ -41,11 +40,6 @@ const components = [
 ]
 
 export const install = (app: App, options: UniLibInstallOptions = {}) => {
-  // 全局数字输入：加减控件靠右，与各页 `el-input-number` / UniForm `ElInputNumber` 对齐
-  if (options.applyElementPlusPropDefaults !== false) {
-    ElInputNumber.setPropsDefaults({ controlsPosition: 'right' })
-  }
-
   if (options.config) {
     const config = normalizeUniConfig(options.config, defaultChangePasswordOnSuccess)
 

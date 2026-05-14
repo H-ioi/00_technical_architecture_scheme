@@ -15,17 +15,6 @@
       class="bus-order-form"
       :element-loading-text="$t('common.loading')">
       <div ref="formScrollRootRef" class="bus-order-form__scroll">
-        <!-- 表单内锚点跳转（非 Tab）：长抽屉内快速滚到顶部 / 路线 / 接送人 -->
-        <div v-if="!mainDisabled" class="bus-order-form__quick-jump">
-          <span class="bus-order-form__quick-jump-label">{{ $t('schoolBus.studentOrder.quickJump') }}</span>
-          <el-button text type="primary" @click="scrollFormTop">{{ $t('schoolBus.studentOrder.quickJumpBasic') }}</el-button>
-          <el-button text type="primary" @click="scrollFormTo('bus-order-routes')">
-            {{ $t('schoolBus.studentOrder.formRoutes') }}
-          </el-button>
-          <el-button text type="primary" @click="scrollFormTo('bus-order-persons')">
-            {{ $t('schoolBus.studentApply.detailPersonTitle') }}
-          </el-button>
-        </div>
         <UniForm
           ref="mainUniFormRef"
           v-model="ruleForm"
@@ -317,14 +306,14 @@
           </template>
         </UniForm>
       </div>
-
-      <div v-if="!mainDisabled" class="bus-order-form__footer-btns">
-        <el-button @click="close">{{ $t('schoolBus.cancel') }}</el-button>
-        <el-button type="primary" :loading="submitting" @click="submit">
-          {{ $t('schoolBus.submit') }}
-        </el-button>
-      </div>
     </div>
+
+    <template v-if="innerVisible && !mainDisabled" #footer>
+      <el-button @click="close">{{ $t('schoolBus.cancel') }}</el-button>
+      <el-button type="primary" :loading="submitting" @click="submit">
+        {{ $t('schoolBus.submit') }}
+      </el-button>
+    </template>
 
     <el-dialog
       v-model="routeDialogVisible"
@@ -858,10 +847,6 @@ const isFormDirty = () =>
   innerVisible.value &&
   baselineFormState.value !== '' &&
   snapshotFormState() !== baselineFormState.value
-
-const scrollFormTop = () => {
-  formScrollRootRef.value?.scrollTo({ top: 0, behavior: 'smooth' })
-}
 
 const scrollFormTo = (id: string) => {
   const root = formScrollRootRef.value
@@ -1694,6 +1679,12 @@ const submit = async () => {
   overflow: hidden;
   overflow-x: hidden;
   box-sizing: border-box;
+  padding-bottom: 0;
+}
+
+.bus-order-form-drawer :deep(.el-drawer__footer) {
+  flex-shrink: 0;
+  border-top: 1px solid var(--el-border-color-lighter);
 }
 
 .bus-order-form {
@@ -1739,21 +1730,6 @@ const submit = async () => {
   flex: 1 1 100%;
 }
 
-.bus-order-form__quick-jump {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 8px;
-  margin-bottom: 12px;
-  padding-bottom: 8px;
-  border-bottom: 1px solid var(--el-border-color-lighter);
-}
-
-.bus-order-form__quick-jump-label {
-  font-size: 13px;
-  color: var(--el-text-color-secondary);
-}
-
 .bus-order-form__anchor-target {
   scroll-margin-top: 12px;
 }
@@ -1774,14 +1750,6 @@ const submit = async () => {
   width: 48px;
   height: 48px;
   border-radius: 4px;
-}
-
-.bus-order-form__footer-btns {
-  margin-top: 16px;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: flex-end;
-  gap: 12px;
 }
 
 .bus-order-form__slot-plain :deep(.el-form-item__label-wrap),

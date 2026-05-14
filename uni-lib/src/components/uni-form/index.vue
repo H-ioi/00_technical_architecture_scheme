@@ -46,7 +46,7 @@
               :model-value="model[field.field]"
               :disabled="isFieldDisabled(field)"
               :readonly="isFieldReadonly(field)"
-              v-bind="field.componentProps"
+              v-bind="resolveDynamicComponentProps(field)"
               @update:model-value="(value: unknown) => handleFieldChange(field, value)" />
 
             <el-select
@@ -114,7 +114,6 @@
 import type { FormInstance, RowProps } from 'element-plus'
 import { computed, reactive, ref, watch } from 'vue'
 
-import UniFormViewValueText from './components/view-value-text.vue'
 import UniUpload from '@/components/uni-upload/index.vue'
 import type { Recordable, UniOption } from '@/types/shared'
 import type {
@@ -125,6 +124,7 @@ import type {
   UniFormViewOverflow
 } from '@/types/uni-form'
 import { formatDate, formatEmpty, resolveOption } from '@/utils/format'
+import UniFormViewValueText from './components/view-value-text.vue'
 
 const model = defineModel<Recordable>({ default: () => ({}) })
 
@@ -178,6 +178,21 @@ function normalizeRowProps(rowProps?: Partial<RowProps>): Partial<RowProps> {
 }
 
 const mergedRowProps = computed(() => normalizeRowProps(props.config.rowProps))
+
+/**
+ * 合并默认样式类 props（可被 `componentProps` 覆盖）
+ * 用以设置全局默认样式类 props
+ */
+function resolveDynamicComponentProps(field: UniFormField): Recordable {
+  const base = (field.componentProps ?? {}) as Recordable
+  if (field.component === 'ElInputNumber') {
+    return {
+      controlsPosition: 'right',
+      ...base
+    }
+  }
+  return base
+}
 
 const actions: UniFormActions = {
   setValue(field, value) {

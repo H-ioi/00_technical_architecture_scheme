@@ -13,10 +13,10 @@ const app = createApp(App)
 
 app.use(pinia)
 app.use(router)
-// uni-lib：HTTP/鉴权等 + ElInputNumber 默认 `controlsPosition: 'right'`（见 `applyElementPlusPropDefaults`）
-initUniLib(app)
 app.use(ElementPlus)
 
 app.use(i18n)
+
+initUniLib(app)
 
 app.mount('#app')
