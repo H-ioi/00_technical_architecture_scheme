@@ -10,7 +10,12 @@
       :toolbar="{ refresh: true, density: true, columnSetting: true }"
       :actions="actions"
       :action-column="{ width: 240, fixed: 'right' }"
-      @load-success="handleLoadSuccess" />
+      @load-success="onTableLoadSuccess"
+      @request-error="tableEmpty.onRequestError">
+      <template #empty>
+        <ListTableEmpty :kind="tableEmpty.kind" @reset="retryTable" @retry="retryTable" />
+      </template>
+    </UniDataTable>
 
     <el-dialog v-model="imgVisible" :title="$t('attendance.holidayTask.flowChart')" width="80%" destroy-on-close>
       <img v-if="flowImg" :src="flowImg" alt="" style="max-width: 100%; height: auto" />
@@ -58,11 +63,13 @@
 </template>
 
 <script setup lang="ts">
-import type { UniTableAction, UniTableColumn, UniTableRequest } from 'uni-ui-lib'
+import type { UniTableAction, UniTableColumn, UniTableRequest, UniTableRequestResult } from 'uni-ui-lib'
 import { UniDataTable, useUniI18n, useUniListState } from 'uni-ui-lib'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { computed, ref } from 'vue'
 
+import ListTableEmpty from '@/components/list-table-empty.vue'
+import { useListTableEmpty } from '@/composables/use-list-table-empty'
 import { attendanceHolidayApi } from '@/api'
 import { normalizeEnvelope, normalizePaged } from '@/utils/api-response-normalize'
 
@@ -75,6 +82,18 @@ const { t } = useUniI18n()
 const { filters, tableRef, handleLoadSuccess } = useUniListState({
   initialFilters: {}
 })
+
+const tableEmpty = useListTableEmpty(filters)
+
+const onTableLoadSuccess = (result: UniTableRequestResult) => {
+  tableEmpty.onLoadSuccess(result)
+  handleLoadSuccess(result)
+}
+
+const retryTable = () => {
+  tableEmpty.resetError()
+  tableRef.value?.refresh()
+}
 
 const imgVisible = ref(false)
 const flowImg = ref('')

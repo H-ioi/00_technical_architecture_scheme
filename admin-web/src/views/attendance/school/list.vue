@@ -33,7 +33,12 @@
       :toolbar="{ refresh: true, density: true, columnSetting: true }"
       :actions="actions"
       :action-column="{ width: 88, fixed: 'right' }"
-      @load-success="handleLoadSuccess" />
+      @load-success="onTableLoadSuccess"
+      @request-error="tableEmpty.onRequestError">
+      <template #empty>
+        <ListTableEmpty :kind="tableEmpty.kind" @reset="reset" @retry="retryTable" />
+      </template>
+    </UniDataTable>
 
     <DetailDialog v-model:visible="detailVisible" :source="activeRow" :config="detailConfig" />
   </section>
@@ -41,13 +46,15 @@
 
 <script setup lang="ts">
 import { ElMessage } from 'element-plus'
+import type { UniTableRequestResult } from 'uni-ui-lib'
 import { useUniI18n } from 'uni-ui-lib'
 
-import DetailDialog from './components/detail-dialog.vue'
-import { useList } from './use-list'
-
+import ListTableEmpty from '@/components/list-table-empty.vue'
+import { useListTableEmpty } from '@/composables/use-list-table-empty'
 import { attendanceSchoolApi } from '@/api'
 import { downloadBlob } from '@/utils/download'
+import DetailDialog from './components/detail-dialog.vue'
+import { useList } from './use-list'
 
 const { t } = useUniI18n()
 
@@ -66,6 +73,18 @@ const {
   searchCfg,
   tableRef
 } = useList()
+
+const tableEmpty = useListTableEmpty(filters)
+
+const onTableLoadSuccess = (result: UniTableRequestResult) => {
+  tableEmpty.onLoadSuccess(result)
+  handleLoadSuccess(result)
+}
+
+const retryTable = () => {
+  tableEmpty.resetError()
+  tableRef.value?.refresh()
+}
 
 const exportData = async () => {
   const raw: Record<string, unknown> = { ...filters.value }

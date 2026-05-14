@@ -13,6 +13,9 @@ export default {
   saveSuccess: 'Saved',
   deleteSuccess: 'Deleted',
   importSuccess: 'Imported',
+  importProgress: 'Importing…',
+  importHadRowErrors: 'Import finished with {count} issue(s) (showing up to 10):',
+  downloadErrorReport: 'Download error details',
   importInvalidType: 'Only .xls and .xlsx files are allowed',
   importTooLarge: 'File size must be under 10MB',
   confirmDeleteDriver: 'Delete selected drivers?',
@@ -20,6 +23,7 @@ export default {
   operationSuccess: 'Done',
   confirmDeleteRows: 'Delete selected?',
   pleaseSelect: 'Please select',
+  cascadeOptionsLoadFail: 'Failed to load campus/route filter data. Retry to reload.',
 
   driver: {
     pageTitle: 'Drivers',

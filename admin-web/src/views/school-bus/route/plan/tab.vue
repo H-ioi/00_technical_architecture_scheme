@@ -71,7 +71,8 @@
           :actions="routeActions"
           :action-column="{ width: 120, fixed: 'right' }"
           @selection-change="onRouteSelectionChange"
-          @load-success="handleRouteLoadSuccess">
+          @load-success="onRouteTableLoadSuccess"
+          @request-error="routeTableEmpty.onRequestError">
           <template #toolbar>
             <el-button
               v-uni-permission="ROUTE_LINE_COPY_PERMISSIONS"
@@ -86,6 +87,12 @@
               @click="deleteSelected">
               {{ $t('schoolBus.delete') }}
             </el-button>
+          </template>
+          <template #empty>
+            <ListTableEmpty
+              :kind="routeTableEmpty.kind"
+              @reset="resetRouteSearch"
+              @retry="retryRouteTable" />
           </template>
         </UniDataTable>
       </el-tab-pane>
@@ -112,7 +119,8 @@
           :actions="termActions"
           :action-column="{ width: 120, fixed: 'right' }"
           @selection-change="onTermSelectionChange"
-          @load-success="handleTermLoadSuccess">
+          @load-success="onTermTableLoadSuccess"
+          @request-error="termTableEmpty.onRequestError">
           <template #toolbar>
             <el-button
               v-uni-permission="'bussection_del'"
@@ -121,6 +129,12 @@
               @click="deleteTermsSelected">
               {{ $t('schoolBus.delete') }}
             </el-button>
+          </template>
+          <template #empty>
+            <ListTableEmpty
+              :kind="termTableEmpty.kind"
+              @reset="resetTermSearch"
+              @retry="retryTermTable" />
           </template>
         </UniDataTable>
       </el-tab-pane>
@@ -147,7 +161,8 @@
           :actions="stationActions"
           :action-column="{ width: 120, fixed: 'right' }"
           @selection-change="onStationSelectionChange"
-          @load-success="handleStationLoadSuccess">
+          @load-success="onStationTableLoadSuccess"
+          @request-error="stationTableEmpty.onRequestError">
           <template #toolbar>
             <el-button
               v-uni-permission="'busstation_del'"
@@ -156,6 +171,12 @@
               @click="deleteStationsSelected">
               {{ $t('schoolBus.delete') }}
             </el-button>
+          </template>
+          <template #empty>
+            <ListTableEmpty
+              :kind="stationTableEmpty.kind"
+              @reset="resetStationSearch"
+              @retry="retryStationTable" />
           </template>
         </UniDataTable>
       </el-tab-pane>
@@ -222,11 +243,14 @@
 </template>
 
 <script setup lang="ts">
-import { ElMessage } from 'element-plus'
-import type { UniTableColumn } from 'uni-ui-lib'
+import { ElLoading, ElMessage, ElMessageBox } from 'element-plus'
+import type { UniTableColumn, UniTableRequestResult } from 'uni-ui-lib'
 import { UniDataTable, UniSearchForm, useUniI18n } from 'uni-ui-lib'
 import { computed, nextTick, onMounted, ref, watch } from 'vue'
 
+import ListTableEmpty from '@/components/list-table-empty.vue'
+import { useListTableEmpty } from '@/composables/use-list-table-empty'
+import { useTabQuerySync } from '@/composables/use-tab-query-sync'
 import { membershipApi, schoolBusLineApi, schoolBusStationApi } from '@/api'
 import type { SchoolOptionRecord } from '@/types/modules/membership'
 
@@ -257,7 +281,9 @@ const pickSchoolRecords = (payload: unknown): SchoolOptionRecord[] => {
 
 const { locale, t } = useUniI18n()
 
-const activeTab = ref('routes')
+const ROUTE_PLAN_TABS = ['routes', 'term', 'station'] as const
+const activeTab = ref<(typeof ROUTE_PLAN_TABS)[number]>('routes')
+useTabQuerySync(activeTab, ROUTE_PLAN_TABS)
 
 const routeFileRef = ref<HTMLInputElement | null>(null)
 const stationFileRef = ref<HTMLInputElement | null>(null)
@@ -297,6 +323,18 @@ const {
   deleteSelected
 } = useRouteLines(routeFormRef, schoolRecords)
 
+const routeTableEmpty = useListTableEmpty(routeFilters)
+
+const onRouteTableLoadSuccess = (result: UniTableRequestResult) => {
+  routeTableEmpty.onLoadSuccess(result)
+  handleRouteLoadSuccess(result)
+}
+
+const retryRouteTable = () => {
+  routeTableEmpty.resetError()
+  routesTableRef.value?.refresh()
+}
+
 const {
   actions: termActions,
   columns: termColumns,
@@ -318,6 +356,18 @@ const {
   termFormVisible
 } = useTermSection(schoolRecords)
 
+const termTableEmpty = useListTableEmpty(termFilters)
+
+const onTermTableLoadSuccess = (result: UniTableRequestResult) => {
+  termTableEmpty.onLoadSuccess(result)
+  handleTermLoadSuccess(result)
+}
+
+const retryTermTable = () => {
+  termTableEmpty.resetError()
+  termTableRef.value?.refresh()
+}
+
 const {
   actions: stationActions,
   columns: stationColumns,
@@ -338,6 +388,18 @@ const {
   stationEditingId,
   stationFormVisible
 } = useStationSection(schoolRecords)
+
+const stationTableEmpty = useListTableEmpty(stationFilters)
+
+const onStationTableLoadSuccess = (result: UniTableRequestResult) => {
+  stationTableEmpty.onLoadSuccess(result)
+  handleStationLoadSuccess(result)
+}
+
+const retryStationTable = () => {
+  stationTableEmpty.resetError()
+  stationTableRef.value?.refresh()
+}
 
 const routeDetailRowText = (prop: UniTableColumn['prop']) => {
   if (!detailRecord.value || prop == null) {
@@ -423,6 +485,72 @@ const pickStationImport = () => {
 
 const IMPORT_MAX_BYTES = 10 * 1024 * 1024
 
+const summarizeImportRows = (
+  raw: unknown,
+  translate: (k: string, params?: Record<string, unknown>) => string
+): { previewText: string | null; downloadBody: string | null } => {
+  if (raw == null || typeof raw !== 'object') {
+    return { previewText: null, downloadBody: null }
+  }
+  const r = raw as Loose
+  const data =
+    r.data != null && typeof r.data === 'object' ? (r.data as Loose) : r
+  const msg = data.msg ?? data.message ?? data.errorMsg
+  if (typeof msg === 'string' && msg.trim()) {
+    return { previewText: msg.trim(), downloadBody: null }
+  }
+  const failList = data.failList ?? data.errorList ?? data.errors
+  if (Array.isArray(failList) && failList.length > 0) {
+    const lines = failList.map((x) => String(x))
+    const preview =
+      translate('schoolBus.importHadRowErrors', { count: failList.length }) +
+      '\n' +
+      lines.slice(0, 10).join('\n')
+    return { previewText: preview, downloadBody: lines.join('\n') }
+  }
+  return { previewText: null, downloadBody: null }
+}
+
+const downloadTextFile = (text: string, filename: string) => {
+  const blob = new Blob([text], { type: 'text/plain;charset=utf-8' })
+  const url = URL.createObjectURL(blob)
+  const a = document.createElement('a')
+  a.href = url
+  a.download = filename
+  a.click()
+  URL.revokeObjectURL(url)
+}
+
+const showImportFeedback = async (
+  summary: { previewText: string | null; downloadBody: string | null }
+) => {
+  if (!summary.previewText) {
+    return
+  }
+  if (summary.downloadBody) {
+    try {
+      await ElMessageBox.confirm(summary.previewText, t('common.tip'), {
+        type: 'info',
+        distinguishCancelAndClose: true,
+        confirmButtonText: t('common.close'),
+        cancelButtonText: t('schoolBus.downloadErrorReport')
+      })
+    } catch (action) {
+      if (action === 'cancel') {
+        downloadTextFile(
+          summary.downloadBody,
+          `school-bus-import-errors-${Date.now()}.txt`
+        )
+      }
+    }
+    return
+  }
+  await ElMessageBox.alert(summary.previewText, t('common.tip'), {
+    type: 'info',
+    confirmButtonText: t('common.close')
+  })
+}
+
 const isSpreadsheetFilename = (name: string) => {
   const lower = name.toLowerCase()
 
@@ -450,9 +578,19 @@ const onRouteImportFile = async (e: Event) => {
   }
 
   try {
-    await schoolBusLineApi.import.post(file)
-    ElMessage.success(t('schoolBus.importSuccess'))
-    refreshRoutes()
+    const loading = ElLoading.service({
+      lock: true,
+      text: t('schoolBus.importProgress'),
+      background: 'rgba(0, 0, 0, 0.2)'
+    })
+    try {
+      const result = await schoolBusLineApi.import.post(file)
+      ElMessage.success(t('schoolBus.importSuccess'))
+      refreshRoutes()
+      await showImportFeedback(summarizeImportRows(result, t))
+    } finally {
+      loading.close()
+    }
   } catch {
     /* request 层已提示 */
   }
@@ -479,9 +617,19 @@ const onStationImportFile = async (e: Event) => {
   }
 
   try {
-    await schoolBusStationApi.import.post(file)
-    ElMessage.success(t('schoolBus.importSuccess'))
-    refreshStations()
+    const loading = ElLoading.service({
+      lock: true,
+      text: t('schoolBus.importProgress'),
+      background: 'rgba(0, 0, 0, 0.2)'
+    })
+    try {
+      const result = await schoolBusStationApi.import.post(file)
+      ElMessage.success(t('schoolBus.importSuccess'))
+      refreshStations()
+      await showImportFeedback(summarizeImportRows(result, t))
+    } finally {
+      loading.close()
+    }
   } catch {
     /* request 层已提示 */
   }

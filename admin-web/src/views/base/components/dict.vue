@@ -31,9 +31,13 @@
       :toolbar="{ refresh: true, density: true, columnSetting: true }"
       :actions="actions"
       :action-column="{ width: 180, fixed: 'right' }"
-      @load-success="handleLoadSuccess"
-      @request-error="onTableRequestError"
-      @switch-change="onStatusSwitch" />
+      @load-success="onDictLoadSuccess"
+      @request-error="onDictRequestError"
+      @switch-change="onStatusSwitch">
+      <template #empty>
+        <ListTableEmpty :kind="tableEmpty.kind" @reset="reset" @retry="retryTable" />
+      </template>
+    </UniDataTable>
 
     <el-dialog
       v-model="formVisible"
@@ -88,10 +92,12 @@
 
 <script setup lang="ts">
 import { ElMessage } from 'element-plus'
-import type { Recordable, UniTableColumn, UniTableRequest } from 'uni-ui-lib'
+import type { Recordable, UniTableColumn, UniTableRequest, UniTableRequestResult } from 'uni-ui-lib'
 import { UniDataTable, UniForm, UniSearchForm, useUniI18n, useUniListState } from 'uni-ui-lib'
 import { computed, ref } from 'vue'
 
+import ListTableEmpty from '@/components/list-table-empty.vue'
+import { useListTableEmpty } from '@/composables/use-list-table-empty'
 import { baseDictApi } from '@/api'
 import type { BaseDictFieldRecord, BaseDictItemRecord } from '@/types/modules/base-dict'
 
@@ -154,6 +160,23 @@ const { queryModel, filters, tableRef, search, reset, handleLoadSuccess } = useU
   initialFilters: { keyword: '' }
 })
 
+const tableEmpty = useListTableEmpty(filters)
+
+const onDictLoadSuccess = (result: UniTableRequestResult) => {
+  tableEmpty.onLoadSuccess(result)
+  handleLoadSuccess(result)
+}
+
+const onDictRequestError = (err: unknown) => {
+  tableEmpty.onRequestError(err)
+  ElMessage.error(mt('messages.loadFail'))
+}
+
+const retryTable = () => {
+  tableEmpty.resetError()
+  tableRef.value?.refresh()
+}
+
 const formVisible = ref(false)
 const formMode = ref<'add' | 'edit'>('add')
 const deleteVisible = ref(false)
@@ -176,10 +199,6 @@ const searchCfg = computed(() => dictSearchForm(mt))
 
 const reloadTable = () => {
   tableRef.value?.refresh()
-}
-
-const onTableRequestError = () => {
-  ElMessage.error(mt('messages.loadFail'))
 }
 
 const tableRequest: UniTableRequest<BaseDictItemRecord> = async ({ filters: reqFilters }) => {

@@ -10,7 +10,12 @@
       :toolbar="{ refresh: true, density: true, columnSetting: true }"
       :actions="actions"
       :action-column="{ width: 200, fixed: 'right' }"
-      @load-success="handleLoadSuccess" />
+      @load-success="onTableLoadSuccess"
+      @request-error="tableEmpty.onRequestError">
+      <template #empty>
+        <ListTableEmpty :kind="tableEmpty.kind" @reset="retryTable" @retry="retryTable" />
+      </template>
+    </UniDataTable>
 
     <el-dialog v-model="approveVisible" :title="$t('attendance.holidayTask.approveTitle')" width="640px" destroy-on-close>
       <div class="holiday-task-approve__grid">
@@ -64,11 +69,13 @@
 </template>
 
 <script setup lang="ts">
-import type { UniTableAction, UniTableColumn, UniTableRequest } from 'uni-ui-lib'
+import type { UniTableAction, UniTableColumn, UniTableRequest, UniTableRequestResult } from 'uni-ui-lib'
 import { UniDataTable, useUniI18n, useUniListState } from 'uni-ui-lib'
 import { ElMessage } from 'element-plus'
 import { computed, reactive, ref } from 'vue'
 
+import ListTableEmpty from '@/components/list-table-empty.vue'
+import { useListTableEmpty } from '@/composables/use-list-table-empty'
 import { attendanceHolidayApi } from '@/api'
 import { normalizeEnvelope, normalizePaged } from '@/utils/api-response-normalize'
 
@@ -77,6 +84,18 @@ type Loose = Record<string, unknown>
 const { t } = useUniI18n()
 
 const { filters, tableRef, handleLoadSuccess } = useUniListState({ initialFilters: {} })
+
+const tableEmpty = useListTableEmpty(filters)
+
+const onTableLoadSuccess = (result: UniTableRequestResult) => {
+  tableEmpty.onLoadSuccess(result)
+  handleLoadSuccess(result)
+}
+
+const retryTable = () => {
+  tableEmpty.resetError()
+  tableRef.value?.refresh()
+}
 
 const approveVisible = ref(false)
 const traceVisible = ref(false)

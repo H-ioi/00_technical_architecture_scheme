@@ -51,7 +51,8 @@
       :actions="actions"
       :action-column="{ width: 140, fixed: 'right' }"
       @selection-change="onSelectionChange"
-      @load-success="handleLoadSuccess">
+      @load-success="onTableLoadSuccess"
+      @request-error="tableEmpty.onRequestError">
       <template #toolbar>
         <!-- 权限标识与旧系统一致，后端为历史拼写 teacheruser_enble -->
         <el-button
@@ -74,6 +75,9 @@
           {{ $t('schoolBus.delete') }}
         </el-button>
       </template>
+      <template #empty>
+        <ListTableEmpty :kind="tableEmpty.kind" @reset="reset" @retry="retryTable" />
+      </template>
     </UniDataTable>
 
     <TeacherForm
@@ -90,15 +94,17 @@
 
 <script setup lang="ts">
 import { ElMessage, ElMessageBox } from 'element-plus'
+import type { UniTableRequestResult } from 'uni-ui-lib'
 import { useUniI18n } from 'uni-ui-lib'
 import { computed, ref } from 'vue'
 
-import TeacherForm from './components/form.vue'
-import { useList } from './use-list'
-
+import ListTableEmpty from '@/components/list-table-empty.vue'
+import { useListTableEmpty } from '@/composables/use-list-table-empty'
 import { schoolBusFollowTeacherApi } from '@/api'
 import type { FollowTeacherRecord } from '@/types/modules/school-bus-follow-teacher'
 import { downloadBlob } from '@/utils/download'
+import TeacherForm from './components/form.vue'
+import { useList } from './use-list'
 
 const { t } = useUniI18n()
 const fileRef = ref<HTMLInputElement | null>(null)
@@ -123,6 +129,18 @@ const {
   statusOptions,
   tableRef
 } = useList()
+
+const tableEmpty = useListTableEmpty(filters)
+
+const onTableLoadSuccess = (result: UniTableRequestResult) => {
+  tableEmpty.onLoadSuccess(result)
+  handleLoadSuccess(result)
+}
+
+const retryTable = () => {
+  tableEmpty.resetError()
+  tableRef.value?.refresh()
+}
 
 const IMPORT_MAX_BYTES = 10 * 1024 * 1024
 const selection = ref<FollowTeacherRecord[]>([])

@@ -34,7 +34,8 @@
       :toolbar="{ refresh: true, density: true, columnSetting: true }"
       :actions="actions"
       :action-column="{ width: 220, fixed: 'right' }"
-      @load-success="handleLoadSuccess"
+      @load-success="onTableLoadSuccess"
+      @request-error="tableEmpty.onRequestError"
       @selection-change="onSelectionChange">
       <template #toolbar>
         <el-button
@@ -51,6 +52,9 @@
           {{ $t('attendance.delete') }}
         </el-button>
       </template>
+      <template #empty>
+        <ListTableEmpty :kind="tableEmpty.kind" @reset="reset" @retry="retryTable" />
+      </template>
     </UniDataTable>
 
     <PassFormDialog
@@ -63,9 +67,12 @@
 </template>
 
 <script setup lang="ts">
+import type { UniTableRequestResult } from 'uni-ui-lib'
 import { UniDataTable, UniSearchForm } from 'uni-ui-lib'
 import { onMounted } from 'vue'
 
+import ListTableEmpty from '@/components/list-table-empty.vue'
+import { useListTableEmpty } from '@/composables/use-list-table-empty'
 import PassFormDialog from './components/pass-form-dialog.vue'
 import { useList } from './use-list'
 
@@ -93,6 +100,18 @@ const {
   selection,
   tableRef
 } = useList()
+
+const tableEmpty = useListTableEmpty(filters)
+
+const onTableLoadSuccess = (result: UniTableRequestResult) => {
+  tableEmpty.onLoadSuccess(result)
+  handleLoadSuccess(result)
+}
+
+const retryTable = () => {
+  tableEmpty.resetError()
+  tableRef.value?.refresh()
+}
 
 onMounted(() => {
   initSchools()

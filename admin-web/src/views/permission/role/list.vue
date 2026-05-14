@@ -33,7 +33,12 @@
       :toolbar="{ refresh: true, density: true, columnSetting: true }"
       :actions="actions"
       :action-column="{ width: 220, fixed: 'right' }"
-      @load-success="handleLoadSuccess" />
+      @load-success="onTableLoadSuccess"
+      @request-error="tableEmpty.onRequestError">
+      <template #empty>
+        <ListTableEmpty :kind="tableEmpty.kind" @reset="reset" @retry="retryTable" />
+      </template>
+    </UniDataTable>
 
     <AssignMenuDialog
       v-model:visible="assignVisible"
@@ -101,7 +106,11 @@ import type { FormInstance, FormRules } from 'element-plus'
 import type { ElTree } from 'element-plus'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { computed, nextTick, reactive, ref } from 'vue'
+import type { UniTableRequestResult } from 'uni-ui-lib'
 import { UniDataTable, UniSearchForm, useUniI18n } from 'uni-ui-lib'
+
+import ListTableEmpty from '@/components/list-table-empty.vue'
+import { useListTableEmpty } from '@/composables/use-list-table-empty'
 
 import { permissionDeptApi, permissionRoleApi } from '@/api'
 import type { PermissionDeptRecord } from '@/types/modules/permission-dept'
@@ -243,6 +252,18 @@ const {
   },
   onDelete: deleteRole
 })
+
+const tableEmpty = useListTableEmpty(filters)
+
+const onTableLoadSuccess = (result: UniTableRequestResult) => {
+  tableEmpty.onLoadSuccess(result)
+  handleLoadSuccess(result)
+}
+
+const retryTable = () => {
+  tableEmpty.resetError()
+  tableRef.value?.refresh()
+}
 
 const reloadTable = () => {
   tableRef.value?.refresh()

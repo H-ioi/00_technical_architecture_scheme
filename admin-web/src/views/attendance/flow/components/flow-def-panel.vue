@@ -20,17 +20,30 @@
       :toolbar="{ refresh: true, density: true, columnSetting: true }"
       :actions="actions"
       :action-column="{ width: 160, fixed: 'right' }"
-      @load-success="handleLoadSuccess" />
+      @load-success="onTableLoadSuccess"
+      @request-error="tableEmpty.onRequestError">
+      <template #empty>
+        <ListTableEmpty :kind="tableEmpty.kind" @reset="reset" @retry="retryTable" />
+      </template>
+    </UniDataTable>
   </div>
 </template>
 
 <script setup lang="ts">
 import { ElMessage, ElMessageBox } from 'element-plus'
-import type { UniFormConfig, UniTableAction, UniTableColumn, UniTableRequest } from 'uni-ui-lib'
+import type {
+  UniFormConfig,
+  UniTableAction,
+  UniTableColumn,
+  UniTableRequest,
+  UniTableRequestResult
+} from 'uni-ui-lib'
 import { UniDataTable, UniSearchForm, useUniI18n, useUniListState } from 'uni-ui-lib'
 import { computed } from 'vue'
 import { useRouter } from 'vue-router'
 
+import ListTableEmpty from '@/components/list-table-empty.vue'
+import { useListTableEmpty } from '@/composables/use-list-table-empty'
 import { attendanceHolidayApi } from '@/api'
 import { normalizePaged } from '@/utils/api-response-normalize'
 
@@ -42,6 +55,18 @@ const router = useRouter()
 const { queryModel, filters, tableRef, handleLoadSuccess, reset, search } = useUniListState({
   initialFilters: { key: '' }
 })
+
+const tableEmpty = useListTableEmpty(filters)
+
+const onTableLoadSuccess = (result: UniTableRequestResult) => {
+  tableEmpty.onLoadSuccess(result)
+  handleLoadSuccess(result)
+}
+
+const retryTable = () => {
+  tableEmpty.resetError()
+  tableRef.value?.refresh()
+}
 
 const searchCfg = computed<UniFormConfig>(() => ({
   schema: [

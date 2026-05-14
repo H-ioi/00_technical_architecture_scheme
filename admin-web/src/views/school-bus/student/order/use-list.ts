@@ -45,7 +45,10 @@ export const useOrderList = () => {
     stationOptions,
     carSelectOptions,
     defaultSingleSchoolId,
-    syncSchoolSelection
+    syncSchoolSelection,
+    commonDataLoading,
+    commonDataError,
+    reloadCommonData
   } = useStudentOrderFilters()
 
   const initialFilters: Record<string, unknown> = {
@@ -64,6 +67,30 @@ export const useOrderList = () => {
   const multiSchool = computed(() => schoolRecords.value.length > 1)
   const pickupOpts = computed(() => pickupMethodOptions(t))
 
+  const hasSchoolSelection = computed(() => {
+    if (!multiSchool.value) {
+      return true
+    }
+    const v = queryModel.value.schoolIds
+    return Array.isArray(v) && v.length > 0
+  })
+
+  const searchCascade = computed(() => {
+    const q = queryModel.value
+    const hasSchool = hasSchoolSelection.value
+    return {
+      sectionDisabled: !hasSchool,
+      lineDisabled:
+        !hasSchool ||
+        q.sectionId === undefined ||
+        q.sectionId === null ||
+        q.sectionId === '',
+      stationDisabled: !hasSchool || !Array.isArray(q.lineIds) || q.lineIds.length === 0,
+      optionsLoading: commonDataLoading.value,
+      optionsFailed: commonDataError.value
+    }
+  })
+
   const searchCfg = computed(() =>
     searchForm(
       t,
@@ -72,7 +99,8 @@ export const useOrderList = () => {
       lineOptions.value,
       stationOptions.value,
       carSelectOptions.value,
-      multiSchool.value
+      multiSchool.value,
+      searchCascade.value
     )
   )
 
@@ -122,21 +150,56 @@ export const useOrderList = () => {
 
   onMounted(async () => {
     await initSchools()
+    if (schoolRecords.value.length === 1) {
+      queryModel.value.schoolIds = undefined
+    }
     nextTick(() => tableRef.value?.refresh())
   })
 
   watch(
-    () => queryModel.schoolIds,
-    (ids) => {
+    () => queryModel.value.schoolIds,
+    (ids, prev) => {
       syncSchoolSelection(ids as Array<string | number> | undefined)
+      if (!multiSchool.value) {
+        return
+      }
+      if (JSON.stringify(ids) === JSON.stringify(prev)) {
+        return
+      }
+      queryModel.value.sectionId = undefined
+      queryModel.value.lineIds = undefined
+      queryModel.value.stationIds = undefined
+    },
+    { deep: true }
+  )
+
+  watch(
+    () => queryModel.value.sectionId,
+    (next, prev) => {
+      if (next === prev) {
+        return
+      }
+      queryModel.value.lineIds = undefined
+      queryModel.value.stationIds = undefined
     }
+  )
+
+  watch(
+    () => queryModel.value.lineIds,
+    (next, prev) => {
+      if (JSON.stringify(next) === JSON.stringify(prev)) {
+        return
+      }
+      queryModel.value.stationIds = undefined
+    },
+    { deep: true }
   )
 
   watch(
     () => schoolRecords.value.length,
     (len) => {
       if (len === 1) {
-        queryModel.schoolIds = undefined
+        queryModel.value.schoolIds = undefined
         nextTick(() => tableRef.value?.refresh())
       }
     }
@@ -146,6 +209,7 @@ export const useOrderList = () => {
     actions,
     columns,
     closeDetail,
+    commonDataError,
     defaultSingleSchoolId,
     detailOrderId,
     detailVisible,
@@ -164,6 +228,7 @@ export const useOrderList = () => {
     formMode,
     editingOrderId,
     openFormAdd,
-    openFormEdit
+    openFormEdit,
+    reloadCommonData
   }
 }

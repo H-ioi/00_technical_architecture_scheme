@@ -45,7 +45,12 @@
           :actions="actions"
           :action-column="{ width: 160, fixed: 'right' }"
           class="permission-user__table"
-          @load-success="handleLoadSuccess" />
+          @load-success="onTableLoadSuccess"
+          @request-error="tableEmpty.onRequestError">
+          <template #empty>
+            <ListTableEmpty :kind="tableEmpty.kind" @reset="reset" @retry="retryTable" />
+          </template>
+        </UniDataTable>
       </el-col>
     </el-row>
 
@@ -62,7 +67,11 @@
 <script setup lang="ts">
 import { ElMessageBox } from 'element-plus'
 import { onMounted, ref } from 'vue'
+import type { UniTableRequestResult } from 'uni-ui-lib'
 import { UniDataTable, UniSearchForm, useUniI18n } from 'uni-ui-lib'
+
+import ListTableEmpty from '@/components/list-table-empty.vue'
+import { useListTableEmpty } from '@/composables/use-list-table-empty'
 
 import { permissionDeptApi, permissionRoleApi, permissionUserApi } from '@/api'
 import { normalizeArray } from '@/utils/api-response-normalize'
@@ -146,6 +155,18 @@ const {
   onEdit: openEdit,
   onDelete: deleteOne
 })
+
+const tableEmpty = useListTableEmpty(filters)
+
+const onTableLoadSuccess = (result: UniTableRequestResult) => {
+  tableEmpty.onLoadSuccess(result)
+  handleLoadSuccess(result)
+}
+
+const retryTable = () => {
+  tableEmpty.resetError()
+  tableRef.value?.refresh()
+}
 
 const reloadTable = () => {
   tableRef.value?.refresh()

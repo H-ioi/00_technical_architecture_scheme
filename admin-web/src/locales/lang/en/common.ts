@@ -33,5 +33,14 @@ export default {
   notFound: 'Page Not Found',
   forbidden: 'Forbidden',
   iconPicker: 'Icon picker',
-  iconSearch: 'Search icon name'
+  iconSearch: 'Search icon name',
+  retry: 'Retry',
+  tableEmpty: {
+    pending: 'Loading…',
+    noMatch: 'No rows match the current filters. Try broadening or changing your criteria.',
+    noData: 'No data yet.',
+    forbidden: 'You do not have permission to view this list. Contact an administrator if needed.',
+    network: 'Failed to load data. Check your connection and try again.',
+    clearFilters: 'Clear filters'
+  }
 }

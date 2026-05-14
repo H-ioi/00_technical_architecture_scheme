@@ -15,13 +15,23 @@
         <section class="proto-view__sign">
           <h2>{{ $t('protocol.signRecords') }}</h2>
           <UniDataTable
+            ref="signTableRef"
             row-key="id"
             :columns="signCols"
             :request="loadSign"
+            :filters="signTableFilters"
             :pagination="{ pageSize: 10, pageSizes: [10, 20, 50] }"
             :toolbar="{ refresh: true, fullscreen: true, columnSetting: true }"
             :action-column="{ fixed: false }"
-          />
+            @load-success="onSignTableLoadSuccess"
+            @request-error="signTableEmpty.onRequestError">
+            <template #empty>
+              <ListTableEmpty
+                :kind="signTableEmpty.kind"
+                @reset="retrySignTable"
+                @retry="retrySignTable" />
+            </template>
+          </UniDataTable>
         </section>
       </div>
     </el-card>
@@ -29,12 +39,13 @@
 </template>
 
 <script setup lang="ts">
-import type { UniOption, UniTableRequest } from 'uni-ui-lib'
-import { toUniOptions } from 'uni-ui-lib'
+import type { UniOption, UniTableRequest, UniTableRequestResult } from 'uni-ui-lib'
+import { toUniOptions, useUniI18n } from 'uni-ui-lib'
 import { computed, onMounted, ref } from 'vue'
-import { useUniI18n } from 'uni-ui-lib'
 import { useRoute, useRouter } from 'vue-router'
 
+import ListTableEmpty from '@/components/list-table-empty.vue'
+import { useListTableEmpty } from '@/composables/use-list-table-empty'
 import { membershipApi, protocolApi } from '@/api'
 import type { ProtocolDict, ProtocolRecord } from '@/types/modules/protocol'
 
@@ -139,6 +150,19 @@ const loadSign: UniTableRequest = ({ pageNo: current, pageSize: size }) =>
     protocolId: pid.value,
     schoolIds: signSchoolIds.value
   })
+
+const signTableRef = ref<{ refresh: () => void } | null>(null)
+const signTableFilters = ref<Record<string, unknown>>({})
+const signTableEmpty = useListTableEmpty(signTableFilters)
+
+const onSignTableLoadSuccess = (result: UniTableRequestResult) => {
+  signTableEmpty.onLoadSuccess(result)
+}
+
+const retrySignTable = () => {
+  signTableEmpty.resetError()
+  signTableRef.value?.refresh()
+}
 
 const back = () => {
   void router.push('/protocol')

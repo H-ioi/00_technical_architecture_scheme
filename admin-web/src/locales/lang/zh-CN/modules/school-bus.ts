@@ -13,6 +13,9 @@ export default {
   saveSuccess: '保存成功',
   deleteSuccess: '删除成功',
   importSuccess: '导入成功',
+  importProgress: '正在导入，请稍候…',
+  importHadRowErrors: '导入完成，但有 {count} 条问题（以下最多展示 10 条）：',
+  downloadErrorReport: '下载错误明细',
   importInvalidType: '仅支持上传 xls、xlsx 文件',
   importTooLarge: '文件大小不能超过 10MB',
   confirmDeleteDriver: '确定删除所选司机吗？',
@@ -20,7 +23,7 @@ export default {
   operationSuccess: '成功',
   confirmDeleteRows: '确定要删除吗？',
   pleaseSelect: '请选择',
-
+  cascadeOptionsLoadFail: '校区/路线等筛选数据加载失败，可点击重试重新拉取。',
   driver: {
     pageTitle: '司机管理',
     pageDesc: '维护校车司机档案，支持按校区与关键字筛选、批量导入与删除。',

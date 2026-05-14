@@ -51,7 +51,8 @@
       :actions="actions"
       :action-column="{ width: 160, fixed: 'right' }"
       @selection-change="onSelectionChange"
-      @load-success="handleLoadSuccess">
+      @load-success="onTableLoadSuccess"
+      @request-error="tableEmpty.onRequestError">
       <template #toolbar>
         <el-button
           v-uni-permission="'busoperation_del'"
@@ -60,6 +61,9 @@
           @click="del">
           {{ $t('schoolBus.delete') }}
         </el-button>
+      </template>
+      <template #empty>
+        <ListTableEmpty :kind="tableEmpty.kind" @reset="reset" @retry="retryTable" />
       </template>
     </UniDataTable>
 
@@ -85,15 +89,16 @@
 
 <script setup lang="ts">
 import { ElMessage, ElMessageBox } from 'element-plus'
-import type { UniTableColumn } from 'uni-ui-lib'
+import type { UniTableColumn, UniTableRequestResult } from 'uni-ui-lib'
 import { UniDataTable, UniSearchForm, useUniI18n } from 'uni-ui-lib'
 import { computed, ref } from 'vue'
 
-import OperationForm from './components/form.vue'
-import { useList } from './use-list'
-
+import ListTableEmpty from '@/components/list-table-empty.vue'
+import { useListTableEmpty } from '@/composables/use-list-table-empty'
 import { schoolBusOperationApi } from '@/api'
 import type { OperationRecord } from '@/types/modules/school-bus-operation'
+import OperationForm from './components/form.vue'
+import { useList } from './use-list'
 
 const { t } = useUniI18n()
 const fileRef = ref<HTMLInputElement | null>(null)
@@ -121,6 +126,18 @@ const {
   stationSource,
   tableRef
 } = useList()
+
+const tableEmpty = useListTableEmpty(filters)
+
+const onTableLoadSuccess = (result: UniTableRequestResult) => {
+  tableEmpty.onLoadSuccess(result)
+  handleLoadSuccess(result)
+}
+
+const retryTable = () => {
+  tableEmpty.resetError()
+  tableRef.value?.refresh()
+}
 
 const selection = ref<OperationRecord[]>([])
 const ids = computed(() => selection.value.map((item) => item.id))

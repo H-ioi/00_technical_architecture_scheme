@@ -33,7 +33,8 @@
       :toolbar="{ refresh: true, density: true, columnSetting: true }"
       :actions="actions"
       :action-column="{ width: 168, fixed: 'right' }"
-      @load-success="handleLoadSuccess"
+      @load-success="onTableLoadSuccess"
+      @request-error="tableEmpty.onRequestError"
       @selection-change="onSelectionChange"
     >
       <template #toolbar>
@@ -42,6 +43,9 @@
         <el-button type="danger" :disabled="batchDisabled" @click="batchStatus(-1)">
           {{ $t('email.deleteBatch') }}
         </el-button>
+      </template>
+      <template #empty>
+        <ListTableEmpty :kind="tableEmpty.kind" @reset="reset" @retry="retryTable" />
       </template>
     </UniDataTable>
 
@@ -79,8 +83,11 @@
 </template>
 
 <script setup lang="ts">
+import type { UniTableRequestResult } from 'uni-ui-lib'
 import { UniDataTable, UniSearchForm } from 'uni-ui-lib'
 
+import ListTableEmpty from '@/components/list-table-empty.vue'
+import { useListTableEmpty } from '@/composables/use-list-table-empty'
 import SendMailDialog from './components/send-mail-dialog.vue'
 import { useList } from './use-list'
 
@@ -105,6 +112,18 @@ const {
   viewModel,
   viewVisible
 } = useList()
+
+const tableEmpty = useListTableEmpty(filters)
+
+const onTableLoadSuccess = (result: UniTableRequestResult) => {
+  tableEmpty.onLoadSuccess(result)
+  handleLoadSuccess(result)
+}
+
+const retryTable = () => {
+  tableEmpty.resetError()
+  tableRef.value?.refresh()
+}
 </script>
 
 <style scoped lang="scss">

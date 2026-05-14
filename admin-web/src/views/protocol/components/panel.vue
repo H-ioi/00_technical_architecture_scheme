@@ -32,9 +32,19 @@
             row-key="id"
             :columns="signColumns"
             :request="loadSignData"
+            :filters="signTableFilters"
             :pagination="{ pageSize: 10, pageSizes: [10, 20, 50] }"
             :toolbar="false"
-            :action-column="{ fixed: false }" />
+            :action-column="{ fixed: false }"
+            @load-success="onSignTableLoadSuccess"
+            @request-error="signTableEmpty.onRequestError">
+            <template #empty>
+              <ListTableEmpty
+                :kind="signTableEmpty.kind"
+                @reset="retrySignTable"
+                @retry="retrySignTable" />
+            </template>
+          </UniDataTable>
         </section>
       </div>
     </div>
@@ -48,12 +58,14 @@
 </template>
 
 <script setup lang="ts">
-import type { UniTableRequest } from 'uni-ui-lib'
-import { computed, ref, watch } from 'vue'
+import type { UniTableRequest, UniTableRequestResult } from 'uni-ui-lib'
 import { useUniI18n } from 'uni-ui-lib'
+import { computed, ref, watch } from 'vue'
 
-import { protocolApi } from '@/api'
+import ListTableEmpty from '@/components/list-table-empty.vue'
+import { useListTableEmpty } from '@/composables/use-list-table-empty'
 import { useDialogDetailLoading } from '@/composables/use-dialog-detail-loading'
+import { protocolApi } from '@/api'
 import type { ProtocolPanelProps } from '@/types/components/protocol-panel'
 import type { ProtocolRecord } from '@/types/modules/protocol'
 
@@ -67,6 +79,18 @@ const { locale, t } = useUniI18n()
 const { detailLoading, runWithDetailLoading } = useDialogDetailLoading()
 const detail = ref<ProtocolRecord | null>(null)
 const signTableRef = ref<{ refresh: () => void } | null>(null)
+const signTableFilters = ref<Record<string, unknown>>({})
+const signTableEmpty = useListTableEmpty(signTableFilters)
+
+const onSignTableLoadSuccess = (result: UniTableRequestResult) => {
+  signTableEmpty.onLoadSuccess(result)
+}
+
+const retrySignTable = () => {
+  signTableEmpty.resetError()
+  signTableRef.value?.refresh()
+}
+
 const signColumns = computed(() => signCols(t))
 const signSchoolIds = computed(() =>
   props.schoolOptions.map((item) => item.value as string | number)

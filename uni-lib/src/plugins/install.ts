@@ -1,6 +1,7 @@
 /**
  * 全量注册 uni-lib 组件与权限指令的 `app.use(UniLib)` 安装函数实现。
  */
+import { ElInputNumber } from 'element-plus'
 import type { App } from 'vue'
 
 import { UniConfigProvider } from '@/components/uni-config-provider'
@@ -8,11 +9,11 @@ import { UniDataTable } from '@/components/uni-data-table'
 import { UniForm } from '@/components/uni-form'
 import { UniIcon } from '@/components/uni-icon'
 import { UniLayout, UniLayoutChangePasswordDialog } from '@/components/uni-layout'
+import UniLoginPage from '@/components/uni-login-page/index.vue'
 import { UniSearchForm } from '@/components/uni-search-form'
 import { UniThemeSettings } from '@/components/uni-theme-settings'
 import { setupUniTheme } from '@/components/uni-theme-settings/runtime'
 import { UniUpload } from '@/components/uni-upload'
-import UniLoginPage from '@/components/uni-login-page/index.vue'
 import { setupCopyDirective } from '@/directives/copy'
 import { setupDebounceClickDirective } from '@/directives/debounce-click'
 import { setupPermissionDirective } from '@/directives/permission'
@@ -40,6 +41,11 @@ const components = [
 ]
 
 export const install = (app: App, options: UniLibInstallOptions = {}) => {
+  // 全局数字输入：加减控件靠右，与各页 `el-input-number` / UniForm `ElInputNumber` 对齐
+  if (options.applyElementPlusPropDefaults !== false) {
+    ElInputNumber.setPropsDefaults({ controlsPosition: 'right' })
+  }
+
   if (options.config) {
     const config = normalizeUniConfig(options.config, defaultChangePasswordOnSuccess)
 

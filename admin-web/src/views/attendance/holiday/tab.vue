@@ -34,7 +34,15 @@
           :toolbar="{ refresh: true, density: true, columnSetting: true }"
           :actions="leaveActions"
           :action-column="{ width: 168, fixed: 'right' }"
-          @load-success="handleLeaveLoadSuccess" />
+          @load-success="onLeaveTableLoadSuccess"
+          @request-error="leaveTableEmpty.onRequestError">
+          <template #empty>
+            <ListTableEmpty
+              :kind="leaveTableEmpty.kind"
+              @reset="resetLeaveSearch"
+              @retry="retryLeaveTable" />
+          </template>
+        </UniDataTable>
       </el-tab-pane>
 
       <el-tab-pane :label="$t('attendance.holiday.tabReturn')" name="return">
@@ -58,7 +66,15 @@
           :toolbar="{ refresh: true, density: true, columnSetting: true }"
           :actions="returnActions"
           :action-column="{ width: 88, fixed: 'right' }"
-          @load-success="handleReturnLoadSuccess" />
+          @load-success="onReturnTableLoadSuccess"
+          @request-error="returnTableEmpty.onRequestError">
+          <template #empty>
+            <ListTableEmpty
+              :kind="returnTableEmpty.kind"
+              @reset="resetReturnSearch"
+              @retry="retryReturnTable" />
+          </template>
+        </UniDataTable>
       </el-tab-pane>
     </el-tabs>
 
@@ -79,18 +95,23 @@
 </template>
 
 <script setup lang="ts">
+import type { UniTableRequestResult } from 'uni-ui-lib'
 import { UniDataTable, UniSearchForm } from 'uni-ui-lib'
 import { nextTick, onMounted, ref, watch } from 'vue'
 
+import ListTableEmpty from '@/components/list-table-empty.vue'
+import { useListTableEmpty } from '@/composables/use-list-table-empty'
+import { useTabQuerySync } from '@/composables/use-tab-query-sync'
+import { membershipApi } from '@/api'
+import type { SchoolOptionRecord } from '@/types/modules/membership'
 import DetailDrawer from './components/detail-drawer.vue'
 import HolidayFormDrawer from './components/holiday-form-drawer.vue'
 import { useHolidayLeave } from './use-holiday-leave'
 import { useHolidayReturn } from './use-holiday-return'
 
-import { membershipApi } from '@/api'
-import type { SchoolOptionRecord } from '@/types/modules/membership'
-
-const activeTab = ref<'leave' | 'return'>('leave')
+const HOLIDAY_TABS = ['leave', 'return'] as const
+const activeTab = ref<(typeof HOLIDAY_TABS)[number]>('leave')
+useTabQuerySync(activeTab, HOLIDAY_TABS)
 const schoolRecords = ref<SchoolOptionRecord[]>([])
 const leaveAddVisible = ref(false)
 
@@ -111,6 +132,18 @@ const {
   tableRef: leaveTableRef
 } = useHolidayLeave(schoolRecords)
 
+const leaveTableEmpty = useListTableEmpty(leaveFilters)
+
+const onLeaveTableLoadSuccess = (result: UniTableRequestResult) => {
+  leaveTableEmpty.onLoadSuccess(result)
+  handleLeaveLoadSuccess(result)
+}
+
+const retryLeaveTable = () => {
+  leaveTableEmpty.resetError()
+  leaveTableRef.value?.refresh()
+}
+
 const {
   actions: returnActions,
   columns: returnColumns,
@@ -127,6 +160,18 @@ const {
   searchCfg: returnSearchConfig,
   tableRef: returnTableRef
 } = useHolidayReturn(schoolRecords)
+
+const returnTableEmpty = useListTableEmpty(returnFilters)
+
+const onReturnTableLoadSuccess = (result: UniTableRequestResult) => {
+  returnTableEmpty.onLoadSuccess(result)
+  handleReturnLoadSuccess(result)
+}
+
+const retryReturnTable = () => {
+  returnTableEmpty.resetError()
+  returnTableRef.value?.refresh()
+}
 
 const onLeaveFormSuccess = () => {
   leaveTableRef.value?.refresh()

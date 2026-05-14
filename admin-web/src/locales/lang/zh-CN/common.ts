@@ -34,5 +34,20 @@ export default {
   notFound: '页面不存在',
   forbidden: '无权限',
   iconPicker: '图标选择器',
-  iconSearch: '搜索图标名称'
+  iconSearch: '搜索图标名称',
+  retry: '重试',
+  tableEmpty: {
+    /** 列表首次加载前占位（表格 loading 时通常不可见） */
+    pending: '加载中…',
+    /** 当前查询条件下没有记录 */
+    noMatch: '暂无符合条件的数据，可尝试放宽或调整筛选条件',
+    /** 无筛选或默认条件下无数据 */
+    noData: '暂无数据',
+    /** 请求被拒绝（如 403） */
+    forbidden: '暂无权限查看该列表，如需访问请联系管理员',
+    /** 请求失败（网络或服务异常） */
+    network: '数据加载失败，请检查网络后重试',
+    /** 空态操作：清空筛选 */
+    clearFilters: '清空筛选条件'
+  }
 }

@@ -32,7 +32,15 @@
           :toolbar="{ refresh: true, density: true, columnSetting: true }"
           :actions="sentActions"
           :action-column="{ width: 110, fixed: 'right' }"
-          @load-success="handleSentLoadSuccess" />
+          @load-success="onSentTableLoadSuccess"
+          @request-error="sentTableEmpty.onRequestError">
+          <template #empty>
+            <ListTableEmpty
+              :kind="sentTableEmpty.kind"
+              @reset="resetSentSearch"
+              @retry="retrySentTable" />
+          </template>
+        </UniDataTable>
       </el-tab-pane>
 
       <el-tab-pane :label="$t('email.outbox.tabDraft')" name="draft">
@@ -56,7 +64,15 @@
           :toolbar="{ refresh: true, density: true, columnSetting: true }"
           :actions="draftActions"
           :action-column="{ width: 110, fixed: 'right' }"
-          @load-success="handleDraftLoadSuccess" />
+          @load-success="onDraftTableLoadSuccess"
+          @request-error="draftTableEmpty.onRequestError">
+          <template #empty>
+            <ListTableEmpty
+              :kind="draftTableEmpty.kind"
+              @reset="resetDraftSearch"
+              @retry="retryDraftTable" />
+          </template>
+        </UniDataTable>
       </el-tab-pane>
     </el-tabs>
 
@@ -78,15 +94,21 @@
 </template>
 
 <script setup lang="ts">
+import type { UniTableRequestResult } from 'uni-ui-lib'
 import { UniDataTable, UniSearchForm } from 'uni-ui-lib'
 import { ref } from 'vue'
 
+import ListTableEmpty from '@/components/list-table-empty.vue'
+import { useListTableEmpty } from '@/composables/use-list-table-empty'
+import { useTabQuerySync } from '@/composables/use-tab-query-sync'
 import OutboxComposeDialog from './components/outbox-compose-drawer.vue'
 import OutboxViewDialog from './components/outbox-view-dialog.vue'
 import { useOutboxDraft } from './use-outbox-draft'
 import { useOutboxSent } from './use-outbox-sent'
 
-const activeTab = ref<'sent' | 'draft'>('sent')
+const OUTBOX_TABS = ['sent', 'draft'] as const
+const activeTab = ref<(typeof OUTBOX_TABS)[number]>('sent')
+useTabQuerySync(activeTab, OUTBOX_TABS)
 
 const {
   actions: sentActions,
@@ -104,6 +126,18 @@ const {
   viewModel,
   viewVisible
 } = useOutboxSent()
+
+const sentTableEmpty = useListTableEmpty(sentFilters)
+
+const onSentTableLoadSuccess = (result: UniTableRequestResult) => {
+  sentTableEmpty.onLoadSuccess(result)
+  handleSentLoadSuccess(result)
+}
+
+const retrySentTable = () => {
+  sentTableEmpty.resetError()
+  sentTableRef.value?.refresh()
+}
 
 const {
   actions: draftActions,
@@ -125,6 +159,18 @@ const {
   submitComposeForm,
   tableRef: draftTableRef
 } = useOutboxDraft()
+
+const draftTableEmpty = useListTableEmpty(draftFilters)
+
+const onDraftTableLoadSuccess = (result: UniTableRequestResult) => {
+  draftTableEmpty.onLoadSuccess(result)
+  handleDraftLoadSuccess(result)
+}
+
+const retryDraftTable = () => {
+  draftTableEmpty.resetError()
+  draftTableRef.value?.refresh()
+}
 
 const onComposeSubmit = (status: 0 | 1) => {
   void submitComposeForm(status)

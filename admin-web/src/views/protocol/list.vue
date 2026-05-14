@@ -37,7 +37,8 @@
       :actions="actions"
       :action-column="{ width: 130, fixed: 'right' }"
       @selection-change="selection = $event as ProtocolRecord[]"
-      @load-success="handleLoadSuccess">
+      @load-success="onTableLoadSuccess"
+      @request-error="tableEmpty.onRequestError">
       <!-- toolbar 插槽放表格勾选后的批量操作，组件内部会和刷新/最大化/列设置工具合并到底部工具栏。 -->
       <template #toolbar>
         <div class="protocol-page__toolbar">
@@ -49,6 +50,9 @@
             {{ $t('protocol.delete') }}
           </el-button>
         </div>
+      </template>
+      <template #empty>
+        <ListTableEmpty :kind="tableEmpty.kind" @reset="reset" @retry="retryTable" />
       </template>
     </UniDataTable>
 
@@ -67,14 +71,16 @@
 
 <script setup lang="ts">
 import { ElMessage, ElMessageBox } from 'element-plus'
+import type { UniTableRequestResult } from 'uni-ui-lib'
 import { computed, ref } from 'vue'
 import { useUniI18n } from 'uni-ui-lib'
 
-import PForm from './components/form.vue'
-import { useList } from './use-list'
-
+import ListTableEmpty from '@/components/list-table-empty.vue'
+import { useListTableEmpty } from '@/composables/use-list-table-empty'
 import { protocolApi } from '@/api'
 import type { ProtocolRecord } from '@/types/modules/protocol'
+import PForm from './components/form.vue'
+import { useList } from './use-list'
 
 const { t } = useUniI18n()
 const {
@@ -98,6 +104,18 @@ const {
   tableRef,
   yesNoOptions
 } = useList()
+
+const tableEmpty = useListTableEmpty(filters)
+
+const onTableLoadSuccess = (result: UniTableRequestResult) => {
+  tableEmpty.onLoadSuccess(result)
+  handleLoadSuccess(result)
+}
+
+const retryTable = () => {
+  tableEmpty.resetError()
+  tableRef.value?.refresh()
+}
 
 const selection = ref<ProtocolRecord[]>([])
 const ids = computed(() => selection.value.map((item) => item.id))

@@ -2,6 +2,9 @@ import type { UniFormConfig, UniOption, UniTableColumn } from 'uni-ui-lib'
 
 import type { Translate } from '@/types/i18n'
 
+import type { StudentOrderSearchCascade } from '../use-student-order-filters'
+import { defaultStudentOrderSearchCascade } from '../use-student-order-filters'
+
 export const searchForm = (
   t: Translate,
   schoolOptions: UniOption[],
@@ -10,7 +13,8 @@ export const searchForm = (
   lineOptions: UniOption[],
   stationOptions: UniOption[],
   carOptions: { label: string; value: string | number }[],
-  multiSchool: boolean
+  multiSchool: boolean,
+  cascade: StudentOrderSearchCascade = defaultStudentOrderSearchCascade()
 ): UniFormConfig => ({
   schema: [
     ...(multiSchool
@@ -50,7 +54,9 @@ export const searchForm = (
       componentProps: {
         placeholder: t('schoolBus.studentApply.phSection'),
         clearable: true,
-        filterable: true
+        filterable: true,
+        disabled: cascade.sectionDisabled,
+        loading: cascade.optionsLoading
       },
       colProps: { span: 6 }
     },
@@ -64,7 +70,9 @@ export const searchForm = (
         clearable: true,
         filterable: true,
         multiple: true,
-        collapseTags: true
+        collapseTags: true,
+        disabled: cascade.lineDisabled,
+        loading: cascade.optionsLoading
       },
       colProps: { span: 6 }
     },
@@ -78,7 +86,9 @@ export const searchForm = (
         clearable: true,
         filterable: true,
         multiple: true,
-        collapseTags: true
+        collapseTags: true,
+        disabled: cascade.stationDisabled,
+        loading: cascade.optionsLoading
       },
       colProps: { span: 6 }
     },
@@ -99,7 +109,8 @@ export const searchForm = (
       options: carOptions,
       componentProps: {
         placeholder: t('schoolBus.studentApply.phCar'),
-        clearable: true
+        clearable: true,
+        loading: cascade.optionsLoading
       },
       colProps: { span: 6 }
     }
@@ -165,7 +176,7 @@ export const tableCols = (
     prop: 'studentName',
     label: t('schoolBus.studentApply.colStudentName'),
     type: 'text',
-    minWidth: 100
+    minWidth: 180
   },
   {
     prop: 'studentGrade',

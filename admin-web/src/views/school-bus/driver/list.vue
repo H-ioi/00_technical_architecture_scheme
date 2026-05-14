@@ -48,7 +48,8 @@
       :actions="actions"
       :action-column="{ width: 160, fixed: 'right' }"
       @selection-change="onSelectionChange"
-      @load-success="handleLoadSuccess">
+      @load-success="onTableLoadSuccess"
+      @request-error="tableEmpty.onRequestError">
       <template #toolbar>
         <el-button
           v-uni-permission="'busdriver_del'"
@@ -57,6 +58,9 @@
           @click="del">
           {{ $t('schoolBus.delete') }}
         </el-button>
+      </template>
+      <template #empty>
+        <ListTableEmpty :kind="tableEmpty.kind" @reset="reset" @retry="retryTable" />
       </template>
     </UniDataTable>
 
@@ -73,14 +77,16 @@
 
 <script setup lang="ts">
 import { ElMessage, ElMessageBox } from 'element-plus'
+import type { UniTableRequestResult } from 'uni-ui-lib'
 import { useUniI18n } from 'uni-ui-lib'
 import { computed, ref } from 'vue'
 
-import DriverForm from './components/form.vue'
-import { useList } from './use-list'
-
+import ListTableEmpty from '@/components/list-table-empty.vue'
+import { useListTableEmpty } from '@/composables/use-list-table-empty'
 import { schoolBusDriverApi } from '@/api'
 import type { DriverRecord as DriverRow } from '@/types/modules/school-bus-driver'
+import DriverForm from './components/form.vue'
+import { useList } from './use-list'
 
 const { t } = useUniI18n()
 const fileRef = ref<HTMLInputElement | null>(null)
@@ -104,6 +110,18 @@ const {
   statusOptions,
   tableRef
 } = useList()
+
+const tableEmpty = useListTableEmpty(filters)
+
+const onTableLoadSuccess = (result: UniTableRequestResult) => {
+  tableEmpty.onLoadSuccess(result)
+  handleLoadSuccess(result)
+}
+
+const retryTable = () => {
+  tableEmpty.resetError()
+  tableRef.value?.refresh()
+}
 
 const IMPORT_MAX_BYTES = 10 * 1024 * 1024
 

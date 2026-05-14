@@ -1,17 +1,31 @@
 <template>
-  <el-dialog
+  <el-drawer
     v-model="visible"
-    width="1000px"
+    class="bus-order-form-drawer"
+    direction="rtl"
+    size="min(1000px, 96vw)"
     destroy-on-close
     :title="dialogTitle"
     :close-on-click-modal="false"
+    :before-close="handleMainDialogBeforeClose"
     @closed="onClosed">
     <div
       v-if="innerVisible"
       v-loading="formDetailLoading"
       class="bus-order-form"
       :element-loading-text="$t('common.loading')">
-      <div class="bus-order-form__scroll">
+      <div ref="formScrollRootRef" class="bus-order-form__scroll">
+        <!-- 表单内锚点跳转（非 Tab）：长抽屉内快速滚到顶部 / 路线 / 接送人 -->
+        <div v-if="!mainDisabled" class="bus-order-form__quick-jump">
+          <span class="bus-order-form__quick-jump-label">{{ $t('schoolBus.studentOrder.quickJump') }}</span>
+          <el-button text type="primary" @click="scrollFormTop">{{ $t('schoolBus.studentOrder.quickJumpBasic') }}</el-button>
+          <el-button text type="primary" @click="scrollFormTo('bus-order-routes')">
+            {{ $t('schoolBus.studentOrder.formRoutes') }}
+          </el-button>
+          <el-button text type="primary" @click="scrollFormTo('bus-order-persons')">
+            {{ $t('schoolBus.studentApply.detailPersonTitle') }}
+          </el-button>
+        </div>
         <UniForm
           ref="mainUniFormRef"
           v-model="ruleForm"
@@ -35,7 +49,7 @@
             </el-autocomplete>
           </template>
           <template #field-routeTableSlot>
-            <div class="bus-order-form__block">
+            <div id="bus-order-routes" class="bus-order-form__block bus-order-form__anchor-target">
               <div class="bus-order-form__block-head">
                 <span>{{ $t('schoolBus.studentOrder.formRoutes') }}</span>
                 <el-button
@@ -46,7 +60,8 @@
                   {{ $t('schoolBus.studentOrder.formAddRoute') }}
                 </el-button>
               </div>
-              <el-table :data="routeTableData" border size="small">
+              <div class="bus-order-form__table-wrap">
+                <el-table :data="routeTableData" border size="small">
                 <el-table-column
                   prop="lineName"
                   :label="$t('schoolBus.studentApply.detailRouteLine')"
@@ -77,8 +92,7 @@
                   width="100" />
                 <el-table-column
                   :label="$t('schoolBus.studentOrder.formOps')"
-                  width="140"
-                  fixed="right">
+                  width="140">
                   <template #default="{ row, $index }">
                     <el-button type="primary" link @click="openRouteEdit(row, $index)">
                       {{ $t('schoolBus.edit') }}
@@ -88,19 +102,21 @@
                     </el-button>
                   </template>
                 </el-table-column>
-              </el-table>
+                </el-table>
+              </div>
             </div>
           </template>
 
           <template #field-personTableSlot>
-            <div class="bus-order-form__block">
+            <div id="bus-order-persons" class="bus-order-form__block bus-order-form__anchor-target">
               <div class="bus-order-form__block-head">
                 <span>{{ $t('schoolBus.studentApply.detailPersonTitle') }}</span>
                 <el-button type="primary" link @click="openPersonAdd">
                   {{ $t('schoolBus.studentOrder.formAddPerson') }}
                 </el-button>
               </div>
-              <el-table :data="personTableData" border size="small">
+              <div class="bus-order-form__table-wrap">
+                <el-table :data="personTableData" border size="small">
                 <el-table-column
                   prop="pickupRelationships"
                   :label="$t('schoolBus.studentApply.detailRelation')" />
@@ -119,8 +135,7 @@
                 </el-table-column>
                 <el-table-column
                   :label="$t('schoolBus.studentOrder.formOps')"
-                  width="140"
-                  fixed="right">
+                  width="140">
                   <template #default="{ row, $index }">
                     <el-button type="primary" link @click="openPersonEdit(row, $index)">
                       {{ $t('schoolBus.edit') }}
@@ -130,68 +145,84 @@
                     </el-button>
                   </template>
                 </el-table-column>
-              </el-table>
+                </el-table>
+              </div>
             </div>
           </template>
 
-          <template #field-approvalStatusSlot>
-            <el-radio-group
-              v-if="formType === 'apply'"
-              v-model="ruleForm.approvalStatus"
-              :disabled="mainDisabled || String(ruleForm.approvalStatus ?? '') === '2'"
-              @change="onApprovalChange">
-              <el-radio v-for="a in approvalOpts" :key="String(a.value)" :label="String(a.value)">
-                {{ a.label }}
-              </el-radio>
-            </el-radio-group>
-            <el-radio-group
-              v-else
-              v-model="ruleForm.approvalStatus"
-              :disabled="mainDisabled"
-              @change="onApprovalChange">
-              <el-radio label="1">{{ approvalOpts.find((x) => x.value === '1')?.label }}</el-radio>
-            </el-radio-group>
-          </template>
-
-          <template #field-paymentStatusSlot>
-            <el-radio-group
-              v-if="formType === 'apply'"
-              v-model="ruleForm.paymentStatus"
-              :disabled="mainDisabled"
-              @change="onPaymentChange">
-              <el-radio v-for="p in paymentOpts" :key="String(p.value)" :label="String(p.value)">
-                <span>{{ p.label }}</span>
-                <el-input-number
-                  v-if="
-                    canShowPayInfo &&
-                    String(ruleForm.paymentStatus) === '2' &&
-                    String(p.value) === '2'
-                  "
-                  v-model="ruleForm.paymentAmount"
-                  class="bus-order-form__pay-inline"
-                  :min="0"
-                  :step="0.1"
-                  :precision="2"
-                  :disabled="mainDisabled || !canEditPayInfo" />
-              </el-radio>
-            </el-radio-group>
-            <el-radio-group
-              v-else
-              v-model="ruleForm.paymentStatus"
-              :disabled="mainDisabled"
-              @change="onPaymentChange">
-              <el-radio label="2">
-                {{ paymentOpts.find((x) => String(x.value) === '2')?.label }}
-                <el-input-number
-                  v-if="canShowPayInfo"
-                  v-model="ruleForm.paymentAmount"
-                  class="bus-order-form__pay-inline"
-                  :min="0"
-                  :step="0.1"
-                  :precision="2"
-                  :disabled="mainDisabled || !canEditPayInfo" />
-              </el-radio>
-            </el-radio-group>
+          <template #field-approvalPaymentRowSlot>
+            <div class="bus-order-form__status-row">
+              <div
+                class="bus-order-form__status-col"
+                :class="{ 'bus-order-form__status-col--solo': !showPaymentRadios }">
+                <div class="bus-order-form__nested-field">
+                  <div class="bus-order-form__nested-label">
+                    {{ $t('schoolBus.studentOrder.formApprovalStatus') }}
+                  </div>
+                  <el-radio-group
+                    v-if="formType === 'apply'"
+                    v-model="ruleForm.approvalStatus"
+                    :disabled="mainDisabled || String(ruleForm.approvalStatus ?? '') === '2'"
+                    @change="onApprovalChange">
+                    <el-radio v-for="a in approvalOpts" :key="String(a.value)" :label="String(a.value)">
+                      {{ a.label }}
+                    </el-radio>
+                  </el-radio-group>
+                  <el-radio-group
+                    v-else
+                    v-model="ruleForm.approvalStatus"
+                    :disabled="mainDisabled"
+                    @change="onApprovalChange">
+                    <el-radio label="1">{{ approvalOpts.find((x) => x.value === '1')?.label }}</el-radio>
+                  </el-radio-group>
+                </div>
+              </div>
+              <div v-if="showPaymentRadios" class="bus-order-form__status-col">
+                <div class="bus-order-form__nested-field">
+                  <div class="bus-order-form__nested-label">
+                    {{ $t('schoolBus.studentOrder.formPaymentStatus') }}
+                  </div>
+                  <el-radio-group
+                    v-if="formType === 'apply'"
+                    v-model="ruleForm.paymentStatus"
+                    :disabled="mainDisabled"
+                    @change="onPaymentChange">
+                    <el-radio v-for="p in paymentOpts" :key="String(p.value)" :label="String(p.value)">
+                      <span>{{ p.label }}</span>
+                      <el-input-number
+                        v-if="
+                          canShowPayInfo &&
+                          String(ruleForm.paymentStatus) === '2' &&
+                          String(p.value) === '2'
+                        "
+                        v-model="ruleForm.paymentAmount"
+                        class="bus-order-form__pay-inline"
+                        :min="0"
+                        :step="0.1"
+                        :precision="2"
+                        :disabled="mainDisabled || !canEditPayInfo" />
+                    </el-radio>
+                  </el-radio-group>
+                  <el-radio-group
+                    v-else
+                    v-model="ruleForm.paymentStatus"
+                    :disabled="mainDisabled"
+                    @change="onPaymentChange">
+                    <el-radio label="2">
+                      {{ paymentOpts.find((x) => String(x.value) === '2')?.label }}
+                      <el-input-number
+                        v-if="canShowPayInfo"
+                        v-model="ruleForm.paymentAmount"
+                        class="bus-order-form__pay-inline"
+                        :min="0"
+                        :step="0.1"
+                        :precision="2"
+                        :disabled="mainDisabled || !canEditPayInfo" />
+                    </el-radio>
+                  </el-radio-group>
+                </div>
+              </div>
+            </div>
           </template>
 
           <template #field-signImageUrl>
@@ -376,7 +407,7 @@
         </el-button>
       </template>
     </el-dialog>
-  </el-dialog>
+    </el-drawer>
 </template>
 
 <script setup lang="ts">
@@ -447,6 +478,9 @@ const { locale, t } = useUniI18n()
 const { hasPermission } = useUniPermission()
 
 const innerVisible = ref(false)
+const formScrollRootRef = ref<HTMLElement | null>(null)
+const baselineFormState = ref('')
+const skipDirtyConfirm = ref(false)
 const mainUniFormRef = ref<InstanceType<typeof UniForm> | null>(null)
 const routeUniFormRef = ref<InstanceType<typeof UniForm> | null>(null)
 const personUniFormRef = ref<InstanceType<typeof UniForm> | null>(null)
@@ -678,6 +712,7 @@ const refreshPicker = () => {
 }
 
 const resetAll = () => {
+  baselineFormState.value = ''
   ruleForm.value = {}
   routeTableData.value = []
   personTableData.value = []
@@ -802,7 +837,57 @@ const loadDetail = async (id: string | number) => {
 
   setTimeout(() => {
     canComputedPrice.value = true
+    captureBaseline()
   }, 400)
+}
+
+const snapshotFormState = () =>
+  JSON.stringify({
+    ruleForm: ruleForm.value,
+    routes: routeTableData.value,
+    persons: personTableData.value
+  })
+
+const captureBaseline = () => {
+  void nextTick(() => {
+    baselineFormState.value = snapshotFormState()
+  })
+}
+
+const isFormDirty = () =>
+  innerVisible.value &&
+  baselineFormState.value !== '' &&
+  snapshotFormState() !== baselineFormState.value
+
+const scrollFormTop = () => {
+  formScrollRootRef.value?.scrollTo({ top: 0, behavior: 'smooth' })
+}
+
+const scrollFormTo = (id: string) => {
+  const root = formScrollRootRef.value
+  const el = typeof document !== 'undefined' ? document.getElementById(id) : null
+  if (!root || !el) {
+    return
+  }
+  el.scrollIntoView({ behavior: 'smooth', block: 'start' })
+}
+
+const handleMainDialogBeforeClose = (done: () => void) => {
+  if (skipDirtyConfirm.value || !isFormDirty()) {
+    done()
+    return
+  }
+  ElMessageBox.confirm(
+    t('schoolBus.studentOrder.unsavedCloseConfirm'),
+    t('common.tip'),
+    {
+      type: 'warning',
+      confirmButtonText: t('common.submit'),
+      cancelButtonText: t('common.cancel')
+    }
+  )
+    .then(() => done())
+    .catch(() => {})
 }
 
 watch(
@@ -823,6 +908,7 @@ watch(
       }
       canComputedPrice.value = true
       applyDefaultStatusForAdd()
+      captureBaseline()
       return
     }
     if (props.orderId != null) {
@@ -1368,10 +1454,11 @@ const onPaymentChange = (e?: string | number | boolean) => {
 
 const mainUniFormMode = computed(() => (mainDisabled.value ? 'view' : 'edit'))
 
+const showPaymentRadios = computed(() => String(ruleForm.value.approvalStatus ?? '') === '1')
+
 const mainFormConfig = computed<UniFormConfig>(() => {
   const hidePerson = String(ruleForm.value.pickupMethod ?? '') !== '2'
   const hideDeny = String(ruleForm.value.approvalStatus ?? '') !== '2'
-  const showPaymentRadios = String(ruleForm.value.approvalStatus ?? '') === '1'
   const showPayDetail = canShowPayInfo.value && String(ruleForm.value.paymentStatus) === '2'
 
   return {
@@ -1470,11 +1557,13 @@ const mainFormConfig = computed<UniFormConfig>(() => {
         }
       },
       {
-        field: 'approvalStatusSlot',
-        label: t('schoolBus.studentOrder.formApprovalStatus'),
+        field: 'approvalPaymentRowSlot',
+        label: '',
         component: 'ElInput',
         colProps: { span: 24 },
-        formItemProps: { class: 'bus-order-form__main-field-slot' }
+        formItemProps: {
+          class: 'bus-order-form__main-field-slot bus-order-form__slot-plain'
+        }
       },
       {
         field: 'denyReason',
@@ -1488,14 +1577,6 @@ const mainFormConfig = computed<UniFormConfig>(() => {
           maxlength: 300,
           showWordLimit: true
         }
-      },
-      {
-        field: 'paymentStatusSlot',
-        label: t('schoolBus.studentOrder.formPaymentStatus'),
-        component: 'ElInput',
-        hidden: !showPaymentRadios,
-        colProps: { span: 24 },
-        formItemProps: { class: 'bus-order-form__main-field-slot' }
       },
       {
         field: 'signImageUrl',
@@ -1564,16 +1645,25 @@ const buildPayload = (): BusOrderFormModel => {
 }
 
 const submit = async () => {
-  const valid = await mainUniFormRef.value?.validate().catch(() => false)
-  if (!valid) {
+  try {
+    await mainUniFormRef.value?.validate()
+  } catch (raw: unknown) {
+    const fields = raw as Record<string, unknown> | undefined
+    const firstKey =
+      fields && typeof fields === 'object' ? Object.keys(fields as Record<string, unknown>)[0] : undefined
+    if (firstKey) {
+      mainUniFormRef.value?.scrollToField(firstKey)
+    }
     return
   }
   if (routeTableData.value.length === 0) {
     ElMessage.error(t('schoolBus.studentOrder.formRouteRequired'))
+    scrollFormTo('bus-order-routes')
     return
   }
   if (String(ruleForm.value.pickupMethod) === '2' && personTableData.value.length === 0) {
     ElMessage.error(t('schoolBus.studentOrder.formPersonRequired'))
+    scrollFormTo('bus-order-persons')
     return
   }
   const data = buildPayload()
@@ -1586,6 +1676,7 @@ const submit = async () => {
     }
     ElMessage.success(t('schoolBus.operationSuccess'))
     emit('saved')
+    skipDirtyConfirm.value = true
     close()
   } catch {
     /* request 已提示 */
@@ -1596,6 +1687,77 @@ const submit = async () => {
 </script>
 
 <style scoped lang="scss">
+.bus-order-form-drawer :deep(.el-drawer__body) {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
+  overflow-x: hidden;
+  box-sizing: border-box;
+}
+
+.bus-order-form {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.bus-order-form__scroll {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  min-width: 0;
+}
+
+.bus-order-form__table-wrap {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+}
+
+.bus-order-form :deep(.el-form .el-row) {
+  max-width: 100%;
+}
+
+.bus-order-form__status-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: 16px;
+  width: 100%;
+  min-width: 0;
+}
+
+.bus-order-form__status-col {
+  flex: 1 1 260px;
+  min-width: 0;
+}
+
+.bus-order-form__status-col--solo {
+  flex: 1 1 100%;
+}
+
+.bus-order-form__quick-jump {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--el-border-color-lighter);
+}
+
+.bus-order-form__quick-jump-label {
+  font-size: 13px;
+  color: var(--el-text-color-secondary);
+}
+
+.bus-order-form__anchor-target {
+  scroll-margin-top: 12px;
+}
+
 .bus-order-form__block {
   margin-top: 16px;
 }

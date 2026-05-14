@@ -21,7 +21,22 @@ const pickArray = (payload: unknown): Record<string, unknown>[] => {
   return []
 }
 
-/** 旧 `const/isacommunity/consts.js` 中与乘车订单列表相关的枚举（value 与旧接口一致）。 */
+/** 列表查询区：多级联动禁用与下拉加载态（与 searchForm 最后一项配合）。 */
+export type StudentOrderSearchCascade = {
+  sectionDisabled: boolean
+  lineDisabled: boolean
+  stationDisabled: boolean
+  optionsLoading: boolean
+  optionsFailed: boolean
+}
+
+export const defaultStudentOrderSearchCascade = (): StudentOrderSearchCascade => ({
+  sectionDisabled: false,
+  lineDisabled: false,
+  stationDisabled: false,
+  optionsLoading: false,
+  optionsFailed: false
+})
 export const approvalStatusOptions = (t: (k: string) => string): UniOption[] => [
   { label: t('schoolBus.studentOrder.enumApprovalPending'), value: '0', type: 'info' },
   { label: t('schoolBus.studentOrder.enumApprovalAgree'), value: '1', type: 'success' },
@@ -78,6 +93,8 @@ export const useStudentOrderFilters = () => {
   const stationRows = ref<Record<string, unknown>[]>([])
   const carRows = ref<Record<string, unknown>[]>([])
   const selectedSchoolIds = ref<Array<string | number>>([])
+  const commonDataLoading = ref(false)
+  const commonDataError = ref(false)
 
   const schoolOptions = computed(() => membershipSchoolToOptions(schoolRecords.value, locale()))
 
@@ -134,16 +151,28 @@ export const useStudentOrderFilters = () => {
   )
 
   const hydrateSelectData = async () => {
-    const [sections, lines, stations, cars] = await Promise.all([
-      schoolBusCommonApi.sectionList.get(),
-      schoolBusCommonApi.lineList.get(),
-      schoolBusCommonApi.stationList.get(),
-      schoolBusCommonApi.carinfoList.get()
-    ])
-    sectionRows.value = pickArray(sections)
-    lineRows.value = pickArray(lines)
-    stationRows.value = pickArray(stations)
-    carRows.value = pickArray(cars)
+    commonDataLoading.value = true
+    commonDataError.value = false
+    try {
+      const [sections, lines, stations, cars] = await Promise.all([
+        schoolBusCommonApi.sectionList.get(),
+        schoolBusCommonApi.lineList.get(),
+        schoolBusCommonApi.stationList.get(),
+        schoolBusCommonApi.carinfoList.get()
+      ])
+      sectionRows.value = pickArray(sections)
+      lineRows.value = pickArray(lines)
+      stationRows.value = pickArray(stations)
+      carRows.value = pickArray(cars)
+    } catch {
+      commonDataError.value = true
+      sectionRows.value = []
+      lineRows.value = []
+      stationRows.value = []
+      carRows.value = []
+    } finally {
+      commonDataLoading.value = false
+    }
   }
 
   const initSchools = async () => {
@@ -185,6 +214,9 @@ export const useStudentOrderFilters = () => {
     carSelectOptions,
     defaultSingleSchoolId,
     selectedSchoolIds,
-    syncSchoolSelection
+    syncSchoolSelection,
+    commonDataLoading,
+    commonDataError,
+    reloadCommonData: hydrateSelectData
   }
 }
