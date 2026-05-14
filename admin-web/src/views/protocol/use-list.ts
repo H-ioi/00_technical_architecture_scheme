@@ -80,11 +80,11 @@ export const useList = () => {
 
   const actions = computed<UniTableAction[]>(() => [
     {
-      label: t('protocol.actions.detail'),
+      label: t('protocol.detail'),
       onClick: (row) => toDetail(row as Row)
     },
     {
-      label: t('protocol.actions.edit'),
+      label: t('protocol.edit'),
       code: 'protocol_edit',
       onClick: (row) => openForm('edit', row as Row)
     }

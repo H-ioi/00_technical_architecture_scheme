@@ -343,11 +343,11 @@ export const useRouteLines = (
 
   const actions = computed<UniTableAction[]>(() => [
     {
-      label: t('schoolBus.driver.actions.look'),
+      label: t('schoolBus.look'),
       onClick: (row) => openDetail(row as Loose)
     },
     {
-      label: t('schoolBus.driver.actions.edit'),
+      label: t('schoolBus.edit'),
       code: 'busline_edit',
       onClick: (row) => openRouteEdit(row as Loose)
     }
@@ -386,7 +386,7 @@ export const useRouteLines = (
     try {
       await ElMessageBox.confirm(
         t('schoolBus.routePlan.messages.confirmDeleteLines'),
-        t('schoolBus.driver.actions.delete'),
+        t('schoolBus.delete'),
         { type: 'warning' }
       )
     } catch {
@@ -395,7 +395,7 @@ export const useRouteLines = (
 
     try {
       await schoolBusLineApi.delete.delete(ids)
-      ElMessage.success(t('schoolBus.driver.messages.deleteSuccess'))
+      ElMessage.success(t('schoolBus.deleteSuccess'))
       tableRef.value?.refresh()
       selection.value = []
     } catch {

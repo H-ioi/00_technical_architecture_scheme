@@ -16,8 +16,8 @@
       :collapsed="true"
       :collapsed-rows="1"
       :action-min-span="0"
-      :submit-text="$t('member.actions.search')"
-      :reset-text="$t('member.actions.reset')"
+      :submit-text="$t('member.search')"
+      :reset-text="$t('member.reset')"
       @search="search"
       @reset="reset"
     />

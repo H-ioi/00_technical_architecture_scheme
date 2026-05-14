@@ -7,7 +7,7 @@
       </div>
       <div class="uni-list-page__header-actions">
         <el-button v-uni-permission="'sys_role_add'" type="primary" @click="openForm('add')">
-          {{ t('permission.actions.add') }}
+          {{ t('permission.add') }}
         </el-button>
       </div>
     </div>
@@ -18,8 +18,8 @@
       :collapsed="true"
       :collapsed-rows="1"
       :action-min-span="0"
-      :submit-text="t('permission.actions.search')"
-      :reset-text="t('permission.actions.reset')"
+      :submit-text="t('permission.search')"
+      :reset-text="t('permission.reset')"
       @search="search"
       @reset="reset" />
 
@@ -48,20 +48,20 @@
         roleFormMode === 'add' ? t('permission.role.formAdd') : t('permission.role.formEdit')
       ">
       <el-form ref="roleFormRef" :model="roleForm" :rules="roleRules" label-width="108px">
-        <el-form-item :label="t('permission.role.columns.name')" prop="roleName">
+        <el-form-item :label="t('permission.role.colName')" prop="roleName">
           <el-input v-model="roleForm.roleName" clearable maxlength="40" />
         </el-form-item>
-        <el-form-item :label="t('permission.role.columns.code')" prop="roleCode">
+        <el-form-item :label="t('permission.role.colCode')" prop="roleCode">
           <el-input
             v-model="roleForm.roleCode"
             :disabled="roleFormMode === 'edit'"
             clearable
             maxlength="40" />
         </el-form-item>
-        <el-form-item :label="t('permission.role.columns.desc')" prop="roleDesc">
+        <el-form-item :label="t('permission.role.colDesc')" prop="roleDesc">
           <el-input v-model="roleForm.roleDesc" type="textarea" maxlength="128" :rows="3" />
         </el-form-item>
-        <el-form-item :label="t('permission.role.columns.dpType')" prop="dpType">
+        <el-form-item :label="t('permission.role.colDpType')" prop="dpType">
           <el-select v-model.number="roleForm.dpType" class="perm-role-scope-select" filterable>
             <el-option
               v-for="o in dpOptions"
@@ -87,9 +87,9 @@
         </el-form-item>
       </el-form>
       <template #footer>
-        <el-button @click="roleFormVisible = false">{{ t('permission.actions.cancel') }}</el-button>
+        <el-button @click="roleFormVisible = false">{{ t('permission.cancel') }}</el-button>
         <el-button type="primary" :loading="roleSaving" @click="saveRole">{{
-          t('permission.actions.save')
+          t('permission.save')
         }}</el-button>
       </template>
     </el-dialog>
@@ -134,9 +134,9 @@ const roleForm = reactive<Row>({
 })
 
 const roleRules = computed<FormRules>(() => ({
-  roleName: [{ required: true, message: t('permission.role.columns.name'), trigger: 'blur' }],
-  roleCode: [{ required: true, message: t('permission.role.columns.code'), trigger: 'blur' }],
-  dpType: [{ required: true, message: t('permission.role.columns.dpType'), trigger: 'change' }]
+  roleName: [{ required: true, message: t('permission.role.colName'), trigger: 'blur' }],
+  roleCode: [{ required: true, message: t('permission.role.colCode'), trigger: 'blur' }],
+  dpType: [{ required: true, message: t('permission.role.colDpType'), trigger: 'change' }]
 }))
 
 const dpOptions = computed(() => dpTypeOptions(t))
@@ -144,7 +144,7 @@ const dpOptions = computed(() => dpTypeOptions(t))
 async function deleteRole(row: Row) {
   await ElMessageBox.confirm(
     t('permission.messages.deleteRoleConfirm', { name: row.roleName ?? row.roleCode ?? '' }),
-    t('permission.actions.delete'),
+    t('permission.delete'),
     { type: 'warning' }
   )
   await permissionRoleApi.remove.deleteById(row.roleId as string | number)

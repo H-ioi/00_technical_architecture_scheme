@@ -24,9 +24,9 @@
     </div>
 
     <template #footer>
-      <el-button @click="close">{{ $t('schoolBus.driver.actions.cancel') }}</el-button>
+      <el-button @click="close">{{ $t('schoolBus.cancel') }}</el-button>
       <el-button v-if="!isLook" type="primary" :loading="submitting" @click="submit">
-        {{ $t('schoolBus.driver.actions.submit') }}
+        {{ $t('schoolBus.submit') }}
       </el-button>
     </template>
   </el-dialog>
@@ -88,10 +88,10 @@ const dialogFormConfig = computed<UniFormConfig>(() => {
 const title = computed(() =>
   t(
     props.mode === 'add'
-      ? 'schoolBus.driver.actions.add'
+      ? 'schoolBus.add'
       : props.mode === 'look'
-        ? 'schoolBus.driver.actions.look'
-        : 'schoolBus.driver.actions.edit'
+        ? 'schoolBus.look'
+        : 'schoolBus.edit'
   )
 )
 
@@ -218,7 +218,7 @@ const submit = async () => {
     } else {
       await schoolBusCarApi.edit.post(payload)
     }
-    ElMessage.success(t('schoolBus.driver.messages.saveSuccess'))
+    ElMessage.success(t('schoolBus.saveSuccess'))
     emit('saved')
     close()
   } finally {

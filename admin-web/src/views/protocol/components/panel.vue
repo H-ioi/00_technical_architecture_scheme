@@ -1,7 +1,7 @@
 <template>
   <el-dialog
     v-model="visible"
-    :title="$t('protocol.detail.title')"
+    :title="$t('protocol.detailTitle')"
     width="1080px"
     destroy-on-close>
     <div
@@ -13,7 +13,7 @@
           <el-descriptions-item v-for="item in displayItems" :key="item.label" :label="item.label">
             {{ item.value || '--' }}
           </el-descriptions-item>
-          <el-descriptions-item :label="$t('protocol.fields.documentUrl')" :span="2">
+          <el-descriptions-item :label="$t('protocol.fieldDocumentUrl')" :span="2">
             <el-link
               v-if="detail.documentUrl"
               type="primary"
@@ -26,7 +26,7 @@
         </el-descriptions>
 
         <section class="protocol-detail__sign">
-          <h3>{{ $t('protocol.detail.signRecords') }}</h3>
+          <h3>{{ $t('protocol.signRecords') }}</h3>
           <UniDataTable
             ref="signTableRef"
             row-key="id"
@@ -41,7 +41,7 @@
 
     <template #footer>
       <el-button @click="visible = false">{{
-        $t('protocol.actions.close')
+        $t('protocol.close')
       }}</el-button>
     </template>
   </el-dialog>
@@ -92,18 +92,18 @@ const displayItems = computed(() => {
 
   return [
     { label: 'ID', value: record.id },
-    { label: t('protocol.fields.school'), value: schoolName.value },
-    { label: t('protocol.fields.cnName'), value: record.cnName },
-    { label: t('protocol.fields.enName'), value: record.enName },
+    { label: t('protocol.fieldSchool'), value: schoolName.value },
+    { label: t('protocol.fieldCnName'), value: record.cnName },
+    { label: t('protocol.fieldEnName'), value: record.enName },
     {
-      label: t('protocol.fields.protocolType'),
+      label: t('protocol.fieldProtocolType'),
       value: enumLabel('protocolType', record.protocolType)
     },
-    { label: t('protocol.fields.module'), value: enumLabel('module', record.module) },
-    { label: t('protocol.fields.needSign'), value: enumLabel('needSign', record.needSign) },
-    { label: t('protocol.fields.status'), value: enumLabel('status', record.status) },
-    { label: t('protocol.fields.createTime'), value: record.createTime },
-    { label: t('protocol.fields.updateTime'), value: record.updateTime }
+    { label: t('protocol.fieldModule'), value: enumLabel('module', record.module) },
+    { label: t('protocol.fieldNeedSign'), value: enumLabel('needSign', record.needSign) },
+    { label: t('protocol.fieldStatus'), value: enumLabel('status', record.status) },
+    { label: t('protocol.fieldCreateTime'), value: record.createTime },
+    { label: t('protocol.fieldUpdateTime'), value: record.updateTime }
   ]
 })
 

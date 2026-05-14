@@ -60,11 +60,11 @@ export const useList = (
 
   const actions = computed<UniTableAction[]>(() => [
     {
-      label: t('permission.actions.edit'),
+      label: t('permission.edit'),
       onClick: (row) => callbacks.onEdit(row as PermissionUserTableRow)
     },
     {
-      label: t('permission.actions.delete'),
+      label: t('permission.delete'),
       onClick: async (row) => {
         await callbacks.onDelete(row as PermissionUserTableRow)
         tableRef.value?.refresh()

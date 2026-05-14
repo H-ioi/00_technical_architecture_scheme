@@ -67,7 +67,7 @@ export const useList = () => {
 
   const actions = computed<UniTableAction[]>(() => [
     {
-      label: t('permission.actions.edit'),
+      label: t('permission.edit'),
       type: 'primary',
       code: 'sys_menu_edit',
       onClick: (row) => openEdit(row as PermissionMenuNode)

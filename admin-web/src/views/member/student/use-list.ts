@@ -68,7 +68,7 @@ export const useList = () => {
 
   const actions = computed<UniTableAction[]>(() => [
     {
-      label: t('member.actions.detail'),
+      label: t('member.detail'),
       code: 'dataform_file_look',
       onClick: (row) => show(row as Row)
     }

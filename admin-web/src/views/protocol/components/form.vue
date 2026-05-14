@@ -21,7 +21,7 @@
             @remove="clearDoc">
             <template #tip>
               <div class="protocol-form__upload-tip">
-                {{ $t('protocol.messages.uploadPdfSize') }}
+                {{ $t('protocol.uploadPdfSize') }}
               </div>
             </template>
           </UniUpload>
@@ -30,9 +30,9 @@
     </div>
 
     <template #footer>
-      <el-button @click="close">{{ $t('protocol.actions.cancel') }}</el-button>
+      <el-button @click="close">{{ $t('protocol.cancel') }}</el-button>
       <el-button type="primary" :loading="submitting" @click="submit">
-        {{ $t('protocol.actions.submit') }}
+        {{ $t('protocol.submit') }}
       </el-button>
     </template>
   </el-dialog>
@@ -75,7 +75,7 @@ const dialogFormConfig = computed<UniFormConfig>(() =>
   )
 )
 const title = computed(() =>
-  t(props.mode === 'add' ? 'protocol.actions.add' : 'protocol.actions.edit')
+  t(props.mode === 'add' ? 'protocol.add' : 'protocol.edit')
 )
 
 const revalidateDocument = () => {
@@ -139,7 +139,7 @@ const uploadReq = async (options: UploadRequestOptions) => {
   const url = await protocolApi.upload.post(file)
 
   if (!url) {
-    throw new Error(t('protocol.messages.uploadRequired'))
+    throw new Error(t('protocol.uploadRequired'))
   }
 
   formModel.value.documentUrl = url
@@ -174,7 +174,7 @@ const submit = async () => {
       await protocolApi.edit.post({ ...formModel.value })
     }
 
-    ElMessage.success(t('protocol.messages.saveSuccess'))
+    ElMessage.success(t('protocol.saveSuccess'))
     emit('saved')
     close()
   } finally {

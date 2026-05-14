@@ -14,10 +14,10 @@
 
     <template #footer>
       <el-button @click="modelValue = false">
-        {{ $t('schoolBus.driver.actions.cancel') }}
+        {{ $t('schoolBus.cancel') }}
       </el-button>
       <el-button type="primary" @click="submit">
-        {{ $t('schoolBus.driver.actions.submit') }}
+        {{ $t('schoolBus.submit') }}
       </el-button>
     </template>
   </el-dialog>
@@ -185,7 +185,7 @@ const submit = async () => {
     await schoolBusStationApi.add.post(payload)
   }
 
-  ElMessage.success(t('schoolBus.driver.messages.saveSuccess'))
+  ElMessage.success(t('schoolBus.saveSuccess'))
   modelValue.value = false
   emit('saved')
 }

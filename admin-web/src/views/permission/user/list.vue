@@ -7,7 +7,7 @@
       </div>
       <div class="uni-list-page__header-actions">
         <el-button v-uni-permission="'sys_user_add'" type="primary" @click="openAdd">
-          {{ t('permission.actions.add') }}
+          {{ t('permission.add') }}
         </el-button>
       </div>
     </div>
@@ -30,8 +30,8 @@
           :collapsed="true"
           :collapsed-rows="1"
           :action-min-span="0"
-          :submit-text="t('permission.actions.search')"
-          :reset-text="t('permission.actions.reset')"
+          :submit-text="t('permission.search')"
+          :reset-text="t('permission.reset')"
           @search="search"
           @reset="reset" />
         <UniDataTable
@@ -119,7 +119,7 @@ const formRecord = ref<PermissionUserRecord | null>(null)
 async function deleteOne(row: PermissionUserTableRow) {
   await ElMessageBox.confirm(
     t('permission.messages.deleteUserConfirm', { name: row.username ?? row.userId ?? '' }),
-    t('permission.actions.delete'),
+    t('permission.delete'),
     { type: 'warning' }
   )
   await permissionUserApi.remove.deleteById(row.userId as string | number)

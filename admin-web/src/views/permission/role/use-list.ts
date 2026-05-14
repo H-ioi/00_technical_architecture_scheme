@@ -37,15 +37,15 @@ export const useList = (callbacks: RoleListCallbacks) => {
 
   const actions = computed<UniTableAction[]>(() => [
     {
-      label: t('permission.actions.edit'),
+      label: t('permission.edit'),
       onClick: (row) => callbacks.onEdit('edit', row as Row)
     },
     {
-      label: t('permission.actions.assignMenu'),
+      label: t('permission.assignMenu'),
       onClick: (row) => callbacks.onAssign(row as Row)
     },
     {
-      label: t('permission.actions.delete'),
+      label: t('permission.delete'),
       onClick: async (row) => {
         await callbacks.onDelete(row as Row)
         tableRef.value?.refresh()

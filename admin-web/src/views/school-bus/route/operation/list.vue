@@ -7,16 +7,16 @@
       </div>
       <div class="uni-list-page__header-actions">
         <el-button v-uni-permission="'busoperation_export'" @click="exportData">
-          {{ $t('schoolBus.driver.actions.export') }}
+          {{ $t('schoolBus.export') }}
         </el-button>
         <el-button v-uni-permission="'busoperation_import'" @click="downloadImportTemplate">
-          {{ $t('schoolBus.driver.actions.downloadTemplate') }}
+          {{ $t('schoolBus.downloadTemplate') }}
         </el-button>
         <el-button v-uni-permission="'busoperation_import'" @click="pickImport">
-          {{ $t('schoolBus.driver.actions.import') }}
+          {{ $t('schoolBus.import') }}
         </el-button>
         <el-button v-uni-permission="'busoperation_add'" type="primary" @click="openForm('add')">
-          {{ $t('schoolBus.driver.actions.add') }}
+          {{ $t('schoolBus.add') }}
         </el-button>
       </div>
     </div>
@@ -34,8 +34,8 @@
       :collapsed="true"
       :collapsed-rows="1"
       :action-min-span="0"
-      :submit-text="$t('schoolBus.driver.actions.search')"
-      :reset-text="$t('schoolBus.driver.actions.reset')"
+      :submit-text="$t('schoolBus.search')"
+      :reset-text="$t('schoolBus.reset')"
       @search="search"
       @reset="reset" />
 
@@ -58,7 +58,7 @@
           type="danger"
           :disabled="ids.length === 0"
           @click="del">
-          {{ $t('schoolBus.driver.actions.delete') }}
+          {{ $t('schoolBus.delete') }}
         </el-button>
       </template>
     </UniDataTable>
@@ -73,7 +73,7 @@
       :station-source="stationSource"
       @saved="reload" />
 
-    <el-dialog v-model="detailVisible" width="900px" :title="$t('schoolBus.driver.actions.look')">
+    <el-dialog v-model="detailVisible" width="900px" :title="$t('schoolBus.look')">
       <el-descriptions v-if="detailRecord" :column="2" border>
         <el-descriptions-item v-for="col in columns" :key="String(col.prop)" :label="col.label">
           {{ detailRowText(col.prop) }}
@@ -166,18 +166,18 @@ const onImportFile = async (e: Event) => {
   }
 
   if (!isSpreadsheetFilename(file.name)) {
-    ElMessage.warning(t('schoolBus.driver.messages.importInvalidType'))
+    ElMessage.warning(t('schoolBus.importInvalidType'))
     return
   }
 
   if (file.size > IMPORT_MAX_BYTES) {
-    ElMessage.warning(t('schoolBus.driver.messages.importTooLarge'))
+    ElMessage.warning(t('schoolBus.importTooLarge'))
     return
   }
 
   try {
     await schoolBusOperationApi.import.post(file)
-    ElMessage.success(t('schoolBus.driver.messages.importSuccess'))
+    ElMessage.success(t('schoolBus.importSuccess'))
     reload()
   } catch {
     /* request 层已提示 */
@@ -220,10 +220,10 @@ const del = async () => {
   try {
     await ElMessageBox.confirm(
       t('schoolBus.routeOperation.messages.confirmDelete'),
-      t('schoolBus.driver.actions.delete'),
+      t('schoolBus.delete'),
       {
-        confirmButtonText: t('schoolBus.driver.actions.submit'),
-        cancelButtonText: t('schoolBus.driver.actions.cancel'),
+        confirmButtonText: t('schoolBus.submit'),
+        cancelButtonText: t('schoolBus.cancel'),
         type: 'warning'
       }
     )
@@ -232,7 +232,7 @@ const del = async () => {
   }
 
   await schoolBusOperationApi.delete.delete(ids.value)
-  ElMessage.success(t('schoolBus.driver.messages.deleteSuccess'))
+  ElMessage.success(t('schoolBus.deleteSuccess'))
   selection.value = []
   reload()
 }

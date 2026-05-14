@@ -81,10 +81,10 @@
                   fixed="right">
                   <template #default="{ row, $index }">
                     <el-button type="primary" link @click="openRouteEdit(row, $index)">
-                      {{ $t('schoolBus.driver.actions.edit') }}
+                      {{ $t('schoolBus.edit') }}
                     </el-button>
                     <el-button v-if="!mainDisabled" type="danger" link @click="removeRoute($index)">
-                      {{ $t('schoolBus.driver.actions.delete') }}
+                      {{ $t('schoolBus.delete') }}
                     </el-button>
                   </template>
                 </el-table-column>
@@ -123,10 +123,10 @@
                   fixed="right">
                   <template #default="{ row, $index }">
                     <el-button type="primary" link @click="openPersonEdit(row, $index)">
-                      {{ $t('schoolBus.driver.actions.edit') }}
+                      {{ $t('schoolBus.edit') }}
                     </el-button>
                     <el-button type="danger" link @click="removePerson($index)">
-                      {{ $t('schoolBus.driver.actions.delete') }}
+                      {{ $t('schoolBus.delete') }}
                     </el-button>
                   </template>
                 </el-table-column>
@@ -288,9 +288,9 @@
       </div>
 
       <div v-if="!mainDisabled" class="bus-order-form__footer-btns">
-        <el-button @click="close">{{ $t('schoolBus.driver.actions.cancel') }}</el-button>
+        <el-button @click="close">{{ $t('schoolBus.cancel') }}</el-button>
         <el-button type="primary" :loading="submitting" @click="submit">
-          {{ $t('schoolBus.driver.actions.submit') }}
+          {{ $t('schoolBus.submit') }}
         </el-button>
       </div>
     </div>
@@ -330,10 +330,10 @@
       </UniForm>
       <template #footer>
         <el-button @click="routeDialogVisible = false">
-          {{ $t('schoolBus.driver.actions.cancel') }}
+          {{ $t('schoolBus.cancel') }}
         </el-button>
         <el-button type="primary" @click="submitRoute">
-          {{ $t('schoolBus.driver.actions.submit') }}
+          {{ $t('schoolBus.submit') }}
         </el-button>
       </template>
     </el-dialog>
@@ -369,10 +369,10 @@
       </UniForm>
       <template #footer>
         <el-button @click="personDialogVisible = false">
-          {{ $t('schoolBus.driver.actions.cancel') }}
+          {{ $t('schoolBus.cancel') }}
         </el-button>
         <el-button type="primary" @click="submitPerson">
-          {{ $t('schoolBus.driver.actions.submit') }}
+          {{ $t('schoolBus.submit') }}
         </el-button>
       </template>
     </el-dialog>
@@ -507,19 +507,19 @@ const stationOptLabel = (s: { enName?: string; cnName?: string }) =>
   loc() === 'en' ? String(s.enName ?? s.cnName ?? '') : String(s.cnName ?? s.enName ?? '')
 
 const dialogTitle = computed(() =>
-  props.mode === 'add' ? t('schoolBus.driver.actions.add') : t('schoolBus.driver.actions.edit')
+  props.mode === 'add' ? t('schoolBus.add') : t('schoolBus.edit')
 )
 
 const routeDialogTitle = computed(() =>
   routeModalMode.value === 'add'
-    ? t('schoolBus.driver.actions.add')
-    : t('schoolBus.driver.actions.edit')
+    ? t('schoolBus.add')
+    : t('schoolBus.edit')
 )
 
 const personDialogTitle = computed(() =>
   personModalMode.value === 'add'
-    ? t('schoolBus.driver.actions.add')
-    : t('schoolBus.driver.actions.edit')
+    ? t('schoolBus.add')
+    : t('schoolBus.edit')
 )
 
 const mainDisabled = computed(() => {
@@ -1020,7 +1020,7 @@ const removeRoute = async (index: number) => {
   try {
     await ElMessageBox.confirm(
       t('schoolBus.studentOrder.messages.confirmDelete'),
-      t('schoolBus.driver.actions.delete'),
+      t('schoolBus.delete'),
       { type: 'warning' }
     )
   } catch {
@@ -1284,7 +1284,7 @@ const removePerson = async (index: number) => {
   try {
     await ElMessageBox.confirm(
       t('schoolBus.studentOrder.messages.confirmDelete'),
-      t('schoolBus.driver.actions.delete'),
+      t('schoolBus.delete'),
       { type: 'warning' }
     )
   } catch {

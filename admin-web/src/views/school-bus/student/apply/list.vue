@@ -9,13 +9,13 @@
         <el-button
           v-uni-permission="'busorder_import_intention_order'"
           @click="downloadIntentionTemplate">
-          {{ $t('schoolBus.driver.actions.downloadTemplate') }}
+          {{ $t('schoolBus.downloadTemplate') }}
         </el-button>
         <el-button v-uni-permission="'busorder_import_intention_order'" @click="pickImport">
-          {{ $t('schoolBus.driver.actions.import') }}
+          {{ $t('schoolBus.import') }}
         </el-button>
         <el-button v-uni-permission="'busorder_add'" type="primary" @click="openFormAdd">
-          {{ $t('schoolBus.driver.actions.add') }}
+          {{ $t('schoolBus.add') }}
         </el-button>
       </div>
     </div>
@@ -33,8 +33,8 @@
       :collapsed="true"
       :collapsed-rows="1"
       :action-min-span="0"
-      :submit-text="$t('schoolBus.driver.actions.search')"
-      :reset-text="$t('schoolBus.driver.actions.reset')"
+      :submit-text="$t('schoolBus.search')"
+      :reset-text="$t('schoolBus.reset')"
       @search="search"
       @reset="reset" />
 
@@ -75,7 +75,7 @@
           type="danger"
           :disabled="selection.length === 0"
           @click="del">
-          {{ $t('schoolBus.driver.actions.delete') }}
+          {{ $t('schoolBus.delete') }}
         </el-button>
       </template>
     </UniDataTable>
@@ -100,10 +100,10 @@
       <UniForm ref="rejectUniFormRef" v-model="rejectForm" mode="edit" :config="rejectFormConfig" />
       <template #footer>
         <el-button @click="rejectVisible = false">
-          {{ $t('schoolBus.driver.actions.cancel') }}
+          {{ $t('schoolBus.cancel') }}
         </el-button>
         <el-button type="primary" @click="confirmReject">
-          {{ $t('schoolBus.driver.actions.submit') }}
+          {{ $t('schoolBus.submit') }}
         </el-button>
       </template>
     </el-dialog>
@@ -208,16 +208,16 @@ const onImportFile = async (e: Event) => {
     return
   }
   if (!isSpreadsheetFilename(file.name)) {
-    ElMessage.warning(t('schoolBus.driver.messages.importInvalidType'))
+    ElMessage.warning(t('schoolBus.importInvalidType'))
     return
   }
   if (file.size > IMPORT_MAX_BYTES) {
-    ElMessage.warning(t('schoolBus.driver.messages.importTooLarge'))
+    ElMessage.warning(t('schoolBus.importTooLarge'))
     return
   }
   try {
     await schoolBusOrderApi.importIntentionOrder.post(file)
-    ElMessage.success(t('schoolBus.driver.messages.importSuccess'))
+    ElMessage.success(t('schoolBus.importSuccess'))
     reload()
   } catch {
     /* request 层已提示 */
@@ -324,7 +324,7 @@ const del = async () => {
   try {
     await ElMessageBox.confirm(
       t('schoolBus.studentApply.messages.confirmDelete'),
-      t('schoolBus.driver.actions.delete'),
+      t('schoolBus.delete'),
       { type: 'warning' }
     )
   } catch {

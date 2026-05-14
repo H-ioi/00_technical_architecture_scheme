@@ -110,11 +110,11 @@ export const useOrderList = () => {
 
   const actions = computed<UniTableAction[]>(() => [
     {
-      label: t('schoolBus.driver.actions.look'),
+      label: t('schoolBus.look'),
       onClick: (row) => openDetail(row as BusOrderRecord)
     },
     {
-      label: t('schoolBus.driver.actions.edit'),
+      label: t('schoolBus.edit'),
       code: 'busorder_edit',
       onClick: (row) => openFormEdit(row as BusOrderRecord)
     }

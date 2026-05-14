@@ -17,14 +17,14 @@ export const searchForm = (t: Translate, dpOptions: UniOption[]): UniFormConfig 
       field: 'roleName',
       label: '',
       component: 'ElInput',
-      componentProps: { placeholder: t('permission.role.columns.name'), clearable: true },
+      componentProps: { placeholder: t('permission.role.colName'), clearable: true },
       colProps: { span: 8 }
     },
     {
       field: 'roleCode',
       label: '',
       component: 'ElInput',
-      componentProps: { placeholder: t('permission.role.columns.code'), clearable: true },
+      componentProps: { placeholder: t('permission.role.colCode'), clearable: true },
       colProps: { span: 8 }
     },
     {
@@ -33,7 +33,7 @@ export const searchForm = (t: Translate, dpOptions: UniOption[]): UniFormConfig 
       component: 'ElSelect',
       options: dpOptions,
       componentProps: {
-        placeholder: t('permission.role.columns.dpType'),
+        placeholder: t('permission.role.colDpType'),
         clearable: true,
         filterable: true
       },
@@ -45,15 +45,15 @@ export const searchForm = (t: Translate, dpOptions: UniOption[]): UniFormConfig 
 })
 
 export const tableCols = (t: Translate): UniTableColumn[] => [
-  { prop: 'roleName', label: t('permission.role.columns.name'), minWidth: 140, type: 'text' },
-  { prop: 'roleCode', label: t('permission.role.columns.code'), minWidth: 120, type: 'text' },
+  { prop: 'roleName', label: t('permission.role.colName'), minWidth: 140, type: 'text' },
+  { prop: 'roleCode', label: t('permission.role.colCode'), minWidth: 120, type: 'text' },
   {
     prop: 'roleDesc',
-    label: t('permission.role.columns.desc'),
+    label: t('permission.role.colDesc'),
     minWidth: 160,
     type: 'text',
     showOverflowTooltip: true
   },
-  { prop: 'dpType', label: t('permission.role.columns.dpType'), width: 140, type: 'number' },
-  { prop: 'createTime', label: t('permission.role.columns.created'), width: 168, type: 'datetime' }
+  { prop: 'dpType', label: t('permission.role.colDpType'), width: 140, type: 'number' },
+  { prop: 'createTime', label: t('permission.role.colCreated'), width: 168, type: 'datetime' }
 ]

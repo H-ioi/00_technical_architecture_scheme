@@ -206,11 +206,11 @@ export const useStationSection = (schoolRecords: SchoolRecordsRef) => {
 
   const actions = computed<UniTableAction[]>(() => [
     {
-      label: t('schoolBus.driver.actions.look'),
+      label: t('schoolBus.look'),
       onClick: (row) => openStationDetail(row as Loose)
     },
     {
-      label: t('schoolBus.driver.actions.edit'),
+      label: t('schoolBus.edit'),
       code: 'busstation_edit',
       onClick: (row) => openStationEdit(row as Loose)
     }
@@ -231,7 +231,7 @@ export const useStationSection = (schoolRecords: SchoolRecordsRef) => {
     try {
       await ElMessageBox.confirm(
         t('schoolBus.routePlan.messages.confirmDeleteStations'),
-        t('schoolBus.driver.actions.delete'),
+        t('schoolBus.delete'),
         { type: 'warning' }
       )
     } catch {
@@ -240,7 +240,7 @@ export const useStationSection = (schoolRecords: SchoolRecordsRef) => {
 
     try {
       await schoolBusStationApi['delete'].delete(ids)
-      ElMessage.success(t('schoolBus.driver.messages.deleteSuccess'))
+      ElMessage.success(t('schoolBus.deleteSuccess'))
       tableRef.value?.refresh()
       selection.value = []
     } catch {

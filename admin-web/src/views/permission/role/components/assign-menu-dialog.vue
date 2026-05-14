@@ -3,7 +3,7 @@
     v-model="visible"
     destroy-on-close
     width="640px"
-    :title="t('permission.actions.assignMenu')">
+    :title="t('permission.assignMenu')">
     <div
       v-loading="loading"
       class="permission-assign-tree"
@@ -22,10 +22,10 @@
     </div>
     <template #footer>
       <el-button @click="visible = false">{{
-        t('permission.actions.cancel')
+        t('permission.cancel')
       }}</el-button>
       <el-button type="primary" :loading="saving" @click="submit">{{
-        t('permission.actions.save')
+        t('permission.save')
       }}</el-button>
     </template>
   </el-dialog>

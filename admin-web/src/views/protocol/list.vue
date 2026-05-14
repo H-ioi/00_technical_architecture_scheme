@@ -2,12 +2,12 @@
   <section class="uni-list-page protocol-page">
     <div class="uni-list-page__header">
       <div>
-        <h1>{{ $t('protocol.page.title') }}</h1>
-        <p>{{ $t('protocol.page.description') }}</p>
+        <h1>{{ $t('protocol.pageTitle') }}</h1>
+        <p>{{ $t('protocol.pageDesc') }}</p>
       </div>
       <div class="uni-list-page__header-actions">
         <el-button v-uni-permission="'protocol_add'" type="primary" @click="openForm('add')">
-          {{ $t('protocol.actions.add') }}
+          {{ $t('protocol.add') }}
         </el-button>
       </div>
     </div>
@@ -19,8 +19,8 @@
       :collapsed="true"
       :collapsed-rows="1"
       :action-min-span="0"
-      :submit-text="$t('protocol.actions.search')"
-      :reset-text="$t('protocol.actions.reset')"
+      :submit-text="$t('protocol.search')"
+      :reset-text="$t('protocol.reset')"
       @search="search"
       @reset="reset" />
 
@@ -46,7 +46,7 @@
             type="danger"
             :disabled="ids.length === 0"
             @click="del">
-            {{ $t('protocol.actions.delete') }}
+            {{ $t('protocol.delete') }}
           </el-button>
         </div>
       </template>
@@ -111,14 +111,14 @@ const del = async () => {
     return
   }
 
-  await ElMessageBox.confirm(t('protocol.messages.confirmDelete'), t('protocol.actions.delete'), {
-    confirmButtonText: t('protocol.actions.submit'),
-    cancelButtonText: t('protocol.actions.cancel'),
+  await ElMessageBox.confirm(t('protocol.confirmDelete'), t('protocol.delete'), {
+    confirmButtonText: t('protocol.submit'),
+    cancelButtonText: t('protocol.cancel'),
     type: 'warning'
   })
 
   await protocolApi.delete.delete(ids.value)
-  ElMessage.success(t('protocol.messages.deleteSuccess'))
+  ElMessage.success(t('protocol.deleteSuccess'))
   selection.value = []
   reload()
 }

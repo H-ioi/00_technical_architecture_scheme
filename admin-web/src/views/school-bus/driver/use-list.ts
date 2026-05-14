@@ -78,11 +78,11 @@ export const useList = () => {
 
   const actions = computed<UniTableAction[]>(() => [
     {
-      label: t('schoolBus.driver.actions.look'),
+      label: t('schoolBus.look'),
       onClick: (row) => openForm('look', row as Row)
     },
     {
-      label: t('schoolBus.driver.actions.edit'),
+      label: t('schoolBus.edit'),
       code: 'busdriver_edit',
       onClick: (row) => openForm('edit', row as Row)
     }

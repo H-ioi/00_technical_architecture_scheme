@@ -22,14 +22,14 @@
         <IconDisplay :name="row.icon" />
       </template>
       <template #column-type="{ row }">
-        <el-tag v-if="row.type === '0'" type="success">{{ t('permission.menu.type.left') }}</el-tag>
+        <el-tag v-if="row.type === '0'" type="success">{{ t('permission.menu.typeLeft') }}</el-tag>
         <el-tag v-else-if="row.type === '2'" type="success">{{
-          t('permission.menu.type.top')
+          t('permission.menu.typeTop')
         }}</el-tag>
         <el-tag v-else-if="row.type === '1'" type="info">{{
-          t('permission.menu.type.button')
+          t('permission.menu.typeButton')
         }}</el-tag>
-        <span v-else>{{ t('permission.menu.type.unknown') }}</span>
+        <span v-else>{{ t('permission.menu.typeUnknown') }}</span>
       </template>
       <template #column-keepAlive="{ row }">
         <el-tag v-if="row.keepAlive === '1'" type="success">{{

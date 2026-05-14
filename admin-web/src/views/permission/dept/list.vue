@@ -8,13 +8,13 @@
       <div class="uni-list-page__header-actions">
         <el-button-group>
           <el-button v-uni-permission="'sys_dept_add'" type="primary" @click="handlerAdd">
-            {{ t('permission.actions.addDept') }}
+            {{ t('permission.addDept') }}
           </el-button>
           <el-button v-uni-permission="'sys_dept_edit'" type="primary" @click="handlerEdit">
-            {{ t('permission.actions.updateDept') }}
+            {{ t('permission.updateDept') }}
           </el-button>
           <el-button v-uni-permission="'sys_dept_del'" type="primary" @click="handleDelete">
-            {{ t('permission.actions.deptDelete') }}
+            {{ t('permission.deptDelete') }}
           </el-button>
         </el-button-group>
       </div>
@@ -55,15 +55,15 @@
             </el-form-item>
             <el-form-item v-if="formStatus === 'update'">
               <el-button type="primary" @click="update">{{
-                t('permission.actions.deptUpdate')
+                t('permission.deptUpdate')
               }}</el-button>
-              <el-button @click="onCancel">{{ t('permission.actions.cancel') }}</el-button>
+              <el-button @click="onCancel">{{ t('permission.cancel') }}</el-button>
             </el-form-item>
             <el-form-item v-if="formStatus === 'create'">
               <el-button type="primary" @click="create">{{
-                t('permission.actions.saveDept')
+                t('permission.saveDept')
               }}</el-button>
-              <el-button @click="onCancel">{{ t('permission.actions.cancel') }}</el-button>
+              <el-button @click="onCancel">{{ t('permission.cancel') }}</el-button>
             </el-form-item>
           </el-form>
         </el-card>

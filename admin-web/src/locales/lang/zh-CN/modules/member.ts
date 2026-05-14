@@ -1,75 +1,56 @@
 export default {
+  /** 列表通用 */
+  detail: '查看',
+  search: '查询',
+  reset: '重置',
+  close: '关闭',
+  yes: '是',
+  no: '否',
+  fieldSchool: '校区',
+  fieldEmail: '邮箱',
+  fieldPhone: '手机号',
+  fieldStatus: '状态',
+  fieldCreateTime: '创建时间',
+  phKeywordInput: '请输入关键词',
+  phSchool: '请选择校区',
+  phStatus: '请选择状态',
+
   student: {
-    page: {
-      title: '学生列表',
-      description: '维护学生基础资料、家长联系人和账号状态。'
-    },
-    fields: {
-      name: '学生姓名',
-      admissionNo: '学号',
-      cnFullName: '中文名',
-      fullName: '英文名',
-      grade: '年级',
-      className: '班级',
-      form: '班级',
-      bus: '校巴',
-      dormitory: '住宿',
-      parentName: '家长姓名'
-    },
-    placeholders: {
-      keyword: '请输入学生、年级、班级、家长或手机号',
-      name: '请输入学生姓名',
-      grade: '请输入年级',
-      className: '请输入班级',
-      form: '请选择班级',
-      yearGroup: '请选择年级',
-      bus: '请选择校巴',
-      dormitory: '请选择住宿',
-      parentName: '请输入家长姓名'
-    },
-    options: {
-      yes: '是',
-      no: '否',
-      enrolled: '已入读',
-      leaving: '离校'
-    }
+    pageTitle: '学生列表',
+    pageDesc: '维护学生基础资料、家长联系人和账号状态。',
+    fieldName: '学生姓名',
+    fieldAdmissionNo: '学号',
+    fieldCnFullName: '中文名',
+    fieldFullName: '英文名',
+    fieldGrade: '年级',
+    fieldClassName: '班级',
+    fieldForm: '班级',
+    fieldBus: '校巴',
+    fieldDormitory: '住宿',
+    fieldParentName: '家长姓名',
+    phKeyword: '请输入学生、年级、班级、家长或手机号',
+    phName: '请输入学生姓名',
+    phGrade: '请输入年级',
+    phClassName: '请输入班级',
+    phForm: '请选择班级',
+    phYearGroup: '请选择年级',
+    phBus: '请选择校巴',
+    phDormitory: '请选择住宿',
+    phParentName: '请输入家长姓名',
+    enrolled: '已入读',
+    leaving: '离校'
   },
+
   teacher: {
-    page: {
-      title: '教师列表',
-      description: '维护教师资料、模块角色和账号状态。'
-    },
-    fields: {
-      teacherCode: '工号',
-      fullName: '姓名',
-      gender: '性别',
-      nationalities: '国籍',
-      role: '职位'
-    },
-    placeholders: {
-      role: '请选择职位'
-    },
-    options: {
-      unarchived: 'Unarchived',
-      archived: 'Archived'
-    }
-  },
-  fields: {
-    school: '校区',
-    email: '邮箱',
-    phone: '手机号',
-    status: '状态',
-    createTime: '创建时间'
-  },
-  placeholders: {
-    keywordInput: '请输入关键词',
-    school: '请选择校区',
-    status: '请选择状态'
-  },
-  actions: {
-    detail: '查看',
-    search: '查询',
-    reset: '重置',
-    close: '关闭'
+    pageTitle: '教师列表',
+    pageDesc: '维护教师资料、模块角色和账号状态。',
+    fieldTeacherCode: '工号',
+    fieldFullName: '姓名',
+    fieldGender: '性别',
+    fieldNationalities: '国籍',
+    fieldRole: '职位',
+    phRole: '请选择职位',
+    unarchived: 'Unarchived',
+    archived: 'Archived'
   }
 }

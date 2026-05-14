@@ -12,7 +12,7 @@
       <UniForm v-if="source" v-model="viewFormModel" :config="config" />
     </div>
     <template #footer>
-      <el-button @click="visible = false">{{ $t('member.actions.close') }}</el-button>
+      <el-button @click="visible = false">{{ $t('member.close') }}</el-button>
     </template>
   </el-drawer>
 </template>

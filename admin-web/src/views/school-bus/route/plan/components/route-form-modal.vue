@@ -107,14 +107,14 @@
                                   link
                                   size="small"
                                   @click="editCurrentStation(scope.row, scope.$index, index)">
-                                  {{ $t('schoolBus.driver.actions.edit') }}
+                                  {{ $t('schoolBus.edit') }}
                                 </el-button>
                                 <el-button
                                   type="danger"
                                   link
                                   size="small"
                                   @click="delCurrentStation(scope.$index, index)">
-                                  {{ $t('schoolBus.driver.actions.delete') }}
+                                  {{ $t('schoolBus.delete') }}
                                 </el-button>
                               </div>
                             </template>
@@ -137,10 +137,10 @@
         </UniForm>
         <div class="route-form-modal__footer-actions">
           <el-button size="large" @click="closeModal">
-            {{ $t('schoolBus.driver.actions.cancel') }}
+            {{ $t('schoolBus.cancel') }}
           </el-button>
           <el-button type="primary" size="large" @click="submitForm">
-            {{ $t('schoolBus.driver.actions.submit') }}
+            {{ $t('schoolBus.submit') }}
           </el-button>
         </div>
       </div>
@@ -159,10 +159,10 @@
           :config="nestedStationFormConfig" />
         <div class="route-form-modal__nested-footer">
           <el-button size="small" @click="closeAddStationModal">
-            {{ $t('schoolBus.driver.actions.cancel') }}
+            {{ $t('schoolBus.cancel') }}
           </el-button>
           <el-button type="primary" size="small" @click="submitAddStationForm">
-            {{ $t('schoolBus.driver.actions.submit') }}
+            {{ $t('schoolBus.submit') }}
           </el-button>
         </div>
       </el-dialog>
@@ -389,14 +389,14 @@ export default {
 
     async addData(data: Loose) {
       await schoolBusLineApi.add.post(data)
-      ElMessage.success(this.$t('schoolBus.driver.messages.saveSuccess'))
+      ElMessage.success(this.$t('schoolBus.saveSuccess'))
       this.$emit('saved')
       this.closeModal()
     },
 
     async editData(data: Loose) {
       await schoolBusLineApi.edit.post(data)
-      ElMessage.success(this.$t('schoolBus.driver.messages.saveSuccess'))
+      ElMessage.success(this.$t('schoolBus.saveSuccess'))
       this.$emit('saved')
       this.closeModal()
     },
@@ -661,11 +661,11 @@ export default {
       try {
         await ElMessageBox.confirm(
           this.$t('schoolBus.routePlan.form.confirmDeleteStop'),
-          this.$t('schoolBus.driver.actions.delete'),
+          this.$t('schoolBus.delete'),
           {
             type: 'warning',
-            confirmButtonText: this.$t('schoolBus.driver.actions.submit'),
-            cancelButtonText: this.$t('schoolBus.driver.actions.cancel')
+            confirmButtonText: this.$t('schoolBus.submit'),
+            cancelButtonText: this.$t('schoolBus.cancel')
           }
         )
       } catch {

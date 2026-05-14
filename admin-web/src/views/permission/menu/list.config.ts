@@ -32,47 +32,47 @@ export const menuActionColumn: UniTableActionColumnConfig = {
 export const tableCols = (t: Translate): UniTableColumn[] => [
   {
     prop: 'name',
-    label: t('permission.menu.columns.name'),
+    label: t('permission.menu.colName'),
     type: 'text',
     minWidth: 180
   },
   {
     prop: 'icon',
-    label: t('permission.menu.columns.icon'),
+    label: t('permission.menu.colIcon'),
     type: 'text',
     width: 100,
     align: 'center'
   },
   {
     prop: 'sort',
-    label: t('permission.menu.columns.sort'),
+    label: t('permission.menu.colSort'),
     type: 'text',
     width: 72,
     align: 'center'
   },
   {
     prop: 'path',
-    label: t('permission.menu.columns.path'),
+    label: t('permission.menu.colPath'),
     type: 'text',
     minWidth: 160
   },
   {
     prop: 'type',
-    label: t('permission.menu.columns.type'),
+    label: t('permission.menu.colType'),
     type: 'text',
     width: 100,
     align: 'center'
   },
   {
     prop: 'keepAlive',
-    label: t('permission.menu.columns.cache'),
+    label: t('permission.menu.colCache'),
     type: 'text',
     width: 88,
     align: 'center'
   },
   {
     prop: 'permission',
-    label: t('permission.menu.columns.permission'),
+    label: t('permission.menu.colPermission'),
     type: 'text',
     minWidth: 160
   }
@@ -89,7 +89,7 @@ export const menuEditDialogFormConfig = (
   rowProps: { gutter: 16 },
   colProps: { span: 24 },
   rules: {
-    name: [{ required: true, message: t('permission.menu.name'), trigger: 'blur' }],
+    name: [{ required: true, message: t('permission.menu.fieldName'), trigger: 'blur' }],
     sort: [{ required: true, message: t('permission.menu.sort'), trigger: 'change' }]
   },
   schema: [
@@ -115,11 +115,11 @@ export const menuEditDialogFormConfig = (
     },
     {
       field: 'name',
-      label: t('permission.menu.name'),
+      label: t('permission.menu.fieldName'),
       component: 'ElInput',
       componentProps: {
         clearable: true,
-        placeholder: t('permission.menu.name')
+        placeholder: t('permission.menu.fieldName')
       }
     },
     {

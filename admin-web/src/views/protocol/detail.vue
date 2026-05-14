@@ -2,10 +2,10 @@
   <section class="proto-view">
     <div class="proto-view__head">
       <div>
-        <h1>{{ $t('protocol.detail.title') }}</h1>
+        <h1>{{ $t('protocol.detailTitle') }}</h1>
         <p>{{ detail?.cnName || detail?.enName || pid }}</p>
       </div>
-      <el-button @click="back">{{ $t('protocol.actions.back') }}</el-button>
+      <el-button @click="back">{{ $t('protocol.back') }}</el-button>
     </div>
 
     <el-card shadow="never">
@@ -13,7 +13,7 @@
         <UniForm v-model="viewModel" :config="detailCfg" mode="view" />
 
         <section class="proto-view__sign">
-          <h2>{{ $t('protocol.detail.signRecords') }}</h2>
+          <h2>{{ $t('protocol.signRecords') }}</h2>
           <UniDataTable
             row-key="id"
             :columns="signCols"

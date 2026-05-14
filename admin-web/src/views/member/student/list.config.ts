@@ -3,32 +3,32 @@ import type { UniFormConfig, UniOption, UniTableColumn } from 'uni-ui-lib'
 import type { Translate } from '@/types/i18n'
 
 export const dormOpts = (t: Translate): UniOption[] => [
-  { label: t('member.student.options.yes'), value: '1', type: 'success' },
-  { label: t('member.student.options.no'), value: '0', type: 'info' }
+  { label: t('member.yes'), value: '1', type: 'success' },
+  { label: t('member.no'), value: '0', type: 'info' }
 ]
 
 export const busOpts = (t: Translate): UniOption[] => [
-  { label: t('member.student.options.yes'), value: '1', type: 'success' },
-  { label: t('member.student.options.no'), value: '0', type: 'info' }
+  { label: t('member.yes'), value: '1', type: 'success' },
+  { label: t('member.no'), value: '0', type: 'info' }
 ]
 
 export const ynDispOpts = (t: Translate): UniOption[] => [
-  { label: t('member.student.options.yes'), value: '1', type: 'success' },
-  { label: t('member.student.options.yes'), value: 'Yes', type: 'success' },
-  { label: t('member.student.options.no'), value: '0', type: 'info' },
-  { label: t('member.student.options.no'), value: 'No', type: 'info' }
+  { label: t('member.yes'), value: '1', type: 'success' },
+  { label: t('member.yes'), value: 'Yes', type: 'success' },
+  { label: t('member.no'), value: '0', type: 'info' },
+  { label: t('member.no'), value: 'No', type: 'info' }
 ]
 
 export const statusOpts = (t: Translate): UniOption[] => [
-  { label: t('member.student.options.enrolled'), value: '1', type: 'success' },
-  { label: t('member.student.options.leaving'), value: '2', type: 'warning' }
+  { label: t('member.student.enrolled'), value: '1', type: 'success' },
+  { label: t('member.student.leaving'), value: '2', type: 'warning' }
 ]
 
 export const stDispOpts = (t: Translate): UniOption[] => [
-  { label: t('member.student.options.enrolled'), value: '1', type: 'success' },
-  { label: t('member.student.options.enrolled'), value: 'Enrolled', type: 'success' },
-  { label: t('member.student.options.leaving'), value: '2', type: 'warning' },
-  { label: t('member.student.options.leaving'), value: 'Leaving', type: 'warning' }
+  { label: t('member.student.enrolled'), value: '1', type: 'success' },
+  { label: t('member.student.enrolled'), value: 'Enrolled', type: 'success' },
+  { label: t('member.student.leaving'), value: '2', type: 'warning' },
+  { label: t('member.student.leaving'), value: 'Leaving', type: 'warning' }
 ]
 
 export const searchForm = (
@@ -45,7 +45,7 @@ export const searchForm = (
       field: 'keywordssearch',
       label: '',
       component: 'ElInput',
-      componentProps: { placeholder: t('member.placeholders.keywordInput'), clearable: true },
+      componentProps: { placeholder: t('member.phKeywordInput'), clearable: true },
       colProps: { span: 6 }
     },
     {
@@ -54,7 +54,7 @@ export const searchForm = (
       component: 'ElSelect',
       options: schoolOptions,
       componentProps: {
-        placeholder: t('member.placeholders.school'),
+        placeholder: t('member.phSchool'),
         clearable: true,
         filterable: true
       },
@@ -66,7 +66,7 @@ export const searchForm = (
       component: 'ElSelect',
       options: yearGroupOptions,
       componentProps: {
-        placeholder: t('member.student.placeholders.yearGroup'),
+        placeholder: t('member.student.phYearGroup'),
         clearable: true,
         multiple: true,
         collapseTags: true
@@ -79,7 +79,7 @@ export const searchForm = (
       component: 'ElSelect',
       options: formOptions,
       componentProps: {
-        placeholder: t('member.student.placeholders.form'),
+        placeholder: t('member.student.phForm'),
         clearable: true,
         multiple: true,
         collapseTags: true
@@ -91,7 +91,7 @@ export const searchForm = (
       label: '',
       component: 'ElSelect',
       options: dormitoryOptions,
-      componentProps: { placeholder: t('member.student.placeholders.dormitory'), clearable: true },
+      componentProps: { placeholder: t('member.student.phDormitory'), clearable: true },
       colProps: { span: 6 }
     },
     {
@@ -99,7 +99,7 @@ export const searchForm = (
       label: '',
       component: 'ElSelect',
       options: busOptions,
-      componentProps: { placeholder: t('member.student.placeholders.bus'), clearable: true },
+      componentProps: { placeholder: t('member.student.phBus'), clearable: true },
       colProps: { span: 6 }
     },
     {
@@ -107,7 +107,7 @@ export const searchForm = (
       label: '',
       component: 'ElSelect',
       options: statusOptions,
-      componentProps: { placeholder: t('member.placeholders.status'), clearable: true },
+      componentProps: { placeholder: t('member.phStatus'), clearable: true },
       colProps: { span: 6 }
     }
   ],
@@ -124,7 +124,7 @@ export const tableCols = (
   { prop: 'id', label: 'ID', type: 'text', width: 90, fixed: 'left' },
   {
     prop: 'schoolIds',
-    label: t('member.fields.school'),
+    label: t('member.fieldSchool'),
     type: 'array',
     options: schoolOptions,
     lookup: { splitValues: true },
@@ -133,44 +133,44 @@ export const tableCols = (
   },
   {
     prop: 'admissonNo',
-    label: t('member.student.fields.admissionNo'),
+    label: t('member.student.fieldAdmissionNo'),
     type: 'text',
     minWidth: 120,
     showOverflowTooltip: true
   },
   {
     prop: 'cnFullName',
-    label: t('member.student.fields.cnFullName'),
+    label: t('member.student.fieldCnFullName'),
     type: 'text',
     minWidth: 120,
     showOverflowTooltip: true
   },
   {
     prop: 'fullName',
-    label: t('member.student.fields.fullName'),
+    label: t('member.student.fieldFullName'),
     type: 'text',
     minWidth: 140,
     showOverflowTooltip: true
   },
-  { prop: 'grade', label: t('member.student.fields.grade'), type: 'text', width: 110 },
-  { prop: 'formCode', label: t('member.student.fields.form'), type: 'text', width: 110 },
+  { prop: 'grade', label: t('member.student.fieldGrade'), type: 'text', width: 110 },
+  { prop: 'formCode', label: t('member.student.fieldForm'), type: 'text', width: 110 },
   {
     prop: 'busStatus',
-    label: t('member.student.fields.bus'),
+    label: t('member.student.fieldBus'),
     type: 'tag',
     options: ynDispOptions,
     width: 90
   },
   {
     prop: 'dormitoryStatus',
-    label: t('member.student.fields.dormitory'),
+    label: t('member.student.fieldDormitory'),
     type: 'tag',
     options: ynDispOptions,
     width: 90
   },
   {
     prop: 'studentStatus',
-    label: t('member.fields.status'),
+    label: t('member.fieldStatus'),
     type: 'tag',
     options: statusDispOptions,
     width: 110
@@ -185,29 +185,29 @@ export const detailForm = (t: Translate): UniFormConfig => ({
   view: { emptyText: '-' },
   schema: [
     { field: 'id', label: 'ID', component: 'ElInput' },
-    { field: 'schoolName', label: t('member.fields.school'), component: 'ElInput' },
-    { field: 'admissonNo', label: t('member.student.fields.admissionNo'), component: 'ElInput' },
-    { field: 'cnFullName', label: t('member.student.fields.cnFullName'), component: 'ElInput' },
-    { field: 'fullName', label: t('member.student.fields.fullName'), component: 'ElInput' },
-    { field: 'grade', label: t('member.student.fields.grade'), component: 'ElInput' },
-    { field: 'formCode', label: t('member.student.fields.form'), component: 'ElInput' },
+    { field: 'schoolName', label: t('member.fieldSchool'), component: 'ElInput' },
+    { field: 'admissonNo', label: t('member.student.fieldAdmissionNo'), component: 'ElInput' },
+    { field: 'cnFullName', label: t('member.student.fieldCnFullName'), component: 'ElInput' },
+    { field: 'fullName', label: t('member.student.fieldFullName'), component: 'ElInput' },
+    { field: 'grade', label: t('member.student.fieldGrade'), component: 'ElInput' },
+    { field: 'formCode', label: t('member.student.fieldForm'), component: 'ElInput' },
     {
       field: 'busStatus',
-      label: t('member.student.fields.bus'),
+      label: t('member.student.fieldBus'),
       component: 'ElInput',
       options: ynDispOpts(t),
       viewType: 'enum'
     },
     {
       field: 'dormitoryStatus',
-      label: t('member.student.fields.dormitory'),
+      label: t('member.student.fieldDormitory'),
       component: 'ElInput',
       options: ynDispOpts(t),
       viewType: 'enum'
     },
     {
       field: 'studentStatus',
-      label: t('member.fields.status'),
+      label: t('member.fieldStatus'),
       component: 'ElInput',
       options: stDispOpts(t),
       viewType: 'enum'

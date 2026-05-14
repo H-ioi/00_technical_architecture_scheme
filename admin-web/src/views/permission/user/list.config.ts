@@ -15,14 +15,14 @@ export const searchForm = (t: Translate): UniFormConfig => ({
       field: 'username',
       label: '',
       component: 'ElInput',
-      componentProps: { placeholder: t('permission.user.columns.username'), clearable: true },
+      componentProps: { placeholder: t('permission.user.colUsername'), clearable: true },
       colProps: { span: 8 }
     },
     {
       field: 'nickname',
       label: '',
       component: 'ElInput',
-      componentProps: { placeholder: t('permission.user.columns.nickname'), clearable: true },
+      componentProps: { placeholder: t('permission.user.colNickname'), clearable: true },
       colProps: { span: 8 }
     }
   ],
@@ -31,30 +31,30 @@ export const searchForm = (t: Translate): UniFormConfig => ({
 })
 
 export const tableCols = (t: Translate, lockOptsList: UniOption[]): UniTableColumn[] => [
-  { prop: 'username', label: t('permission.user.columns.username'), minWidth: 120 },
-  { prop: 'nickname', label: t('permission.user.columns.nickname'), minWidth: 120 },
+  { prop: 'username', label: t('permission.user.colUsername'), minWidth: 120 },
+  { prop: 'nickname', label: t('permission.user.colNickname'), minWidth: 120 },
   {
     prop: 'email',
-    label: t('permission.user.columns.email'),
+    label: t('permission.user.colEmail'),
     minWidth: 160,
     showOverflowTooltip: true
   },
-  { prop: 'phone', label: t('permission.user.columns.phone'), width: 120 },
-  { prop: 'deptName', label: t('permission.user.columns.dept'), minWidth: 120 },
+  { prop: 'phone', label: t('permission.user.colPhone'), width: 120 },
+  { prop: 'deptName', label: t('permission.user.colDept'), minWidth: 120 },
   {
     prop: 'rolesLabel',
-    label: t('permission.user.columns.roles'),
+    label: t('permission.user.colRoles'),
     minWidth: 160,
     showOverflowTooltip: true
   },
   {
     prop: 'lockFlag',
-    label: t('permission.user.columns.status'),
+    label: t('permission.user.colStatus'),
     width: 100,
     type: 'tag',
     dict: lockOptsList
   },
-  { prop: 'createTime', label: t('permission.user.columns.created'), width: 168, type: 'datetime' }
+  { prop: 'createTime', label: t('permission.user.colCreated'), width: 168, type: 'datetime' }
 ]
 
 export const permissionUserStatusRadios = (t: Translate): UniOption[] => [
@@ -63,15 +63,15 @@ export const permissionUserStatusRadios = (t: Translate): UniOption[] => [
 ]
 
 export const permissionUserFormRules = (t: Translate): FormRules<PermissionUserFormModel> => ({
-  username: [{ required: true, message: t('permission.user.columns.username'), trigger: 'blur' }],
-  deptId: [{ required: true, message: t('permission.user.placeholders.dept'), trigger: 'change' }],
+  username: [{ required: true, message: t('permission.user.colUsername'), trigger: 'blur' }],
+  deptId: [{ required: true, message: t('permission.user.phDept'), trigger: 'change' }],
   role: [
     {
       validator: (_rule, value, callback) => {
         if (Array.isArray(value) && value.length > 0) {
           callback()
         } else {
-          callback(new Error(t('permission.user.placeholders.role')))
+          callback(new Error(t('permission.user.phRole')))
         }
       },
       trigger: 'change'
@@ -92,7 +92,7 @@ export const permissionUserDialogForm = (
   schema: [
     {
       field: 'username',
-      label: t('permission.user.columns.username'),
+      label: t('permission.user.colUsername'),
       component: 'ElInput',
       componentProps: {
         maxlength: 50,
@@ -102,13 +102,13 @@ export const permissionUserDialogForm = (
     },
     {
       field: 'nickname',
-      label: t('permission.user.columns.nickname'),
+      label: t('permission.user.colNickname'),
       component: 'ElInput',
       componentProps: { maxlength: 20, autocomplete: 'off', clearable: true }
     },
     {
       field: 'password',
-      label: t('permission.user.placeholders.password'),
+      label: t('permission.user.phPassword'),
       component: 'ElInput',
       componentProps: {
         type: 'password',
@@ -120,31 +120,31 @@ export const permissionUserDialogForm = (
     },
     {
       field: 'email',
-      label: t('permission.user.columns.email'),
+      label: t('permission.user.colEmail'),
       component: 'ElInput',
       componentProps: { maxlength: 80, autocomplete: 'email', clearable: true }
     },
     {
       field: 'phone',
-      label: t('permission.user.columns.phone'),
+      label: t('permission.user.colPhone'),
       component: 'ElInput',
       componentProps: { maxlength: 11, clearable: true }
     },
     {
       field: 'deptId',
-      label: t('permission.user.columns.dept'),
+      label: t('permission.user.colDept'),
       component: 'ElSelect',
       options: deptOptions,
       componentProps: {
         filterable: true,
         clearable: true,
-        placeholder: t('permission.user.placeholders.dept'),
+        placeholder: t('permission.user.phDept'),
         style: { width: '100%' }
       }
     },
     {
       field: 'role',
-      label: t('permission.user.columns.roles'),
+      label: t('permission.user.colRoles'),
       component: 'ElSelect',
       options: roleOptions,
       componentProps: {
@@ -152,13 +152,13 @@ export const permissionUserDialogForm = (
         filterable: true,
         collapseTags: true,
         collapseTagsTooltip: true,
-        placeholder: t('permission.user.placeholders.role'),
+        placeholder: t('permission.user.phRole'),
         style: { width: '100%' }
       }
     },
     {
       field: 'lockFlag',
-      label: t('permission.user.columns.status'),
+      label: t('permission.user.colStatus'),
       component: 'ElRadioGroup',
       options: permissionUserStatusRadios(t)
     }

@@ -1,13 +1,13 @@
 <template>
   <el-dialog
     v-model="visible"
-    :title="$t('member.actions.detail')"
+    :title="$t('member.detail')"
     width="880px"
     destroy-on-close
   >
     <UniForm v-if="source" v-model="viewFormModel" :config="config" mode="view" />
     <template #footer>
-      <el-button @click="visible = false">{{ $t('member.actions.close') }}</el-button>
+      <el-button @click="visible = false">{{ $t('member.close') }}</el-button>
     </template>
   </el-dialog>
 </template>

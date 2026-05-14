@@ -326,11 +326,11 @@ export const useList = () => {
 
   const actions = computed<UniTableAction[]>(() => [
     {
-      label: t('schoolBus.driver.actions.look'),
+      label: t('schoolBus.look'),
       onClick: (row) => openDetail(row as OperationRecord)
     },
     {
-      label: t('schoolBus.driver.actions.edit'),
+      label: t('schoolBus.edit'),
       code: 'busoperation_edit',
       onClick: (row) => openForm('edit', row as OperationRecord)
     }

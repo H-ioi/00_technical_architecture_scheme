@@ -55,8 +55,8 @@
           :collapsed="true"
           :collapsed-rows="1"
           :action-min-span="0"
-          :submit-text="$t('schoolBus.driver.actions.search')"
-          :reset-text="$t('schoolBus.driver.actions.reset')"
+          :submit-text="$t('schoolBus.search')"
+          :reset-text="$t('schoolBus.reset')"
           @search="searchRoutes"
           @reset="resetRouteSearch" />
         <UniDataTable
@@ -84,7 +84,7 @@
               type="danger"
               :disabled="routeSelectedIds.length === 0"
               @click="deleteSelected">
-              {{ $t('schoolBus.driver.actions.delete') }}
+              {{ $t('schoolBus.delete') }}
             </el-button>
           </template>
         </UniDataTable>
@@ -96,8 +96,8 @@
           :collapsed="true"
           :collapsed-rows="1"
           :action-min-span="0"
-          :submit-text="$t('schoolBus.driver.actions.search')"
-          :reset-text="$t('schoolBus.driver.actions.reset')"
+          :submit-text="$t('schoolBus.search')"
+          :reset-text="$t('schoolBus.reset')"
           @search="searchTerms"
           @reset="resetTermSearch" />
         <UniDataTable
@@ -119,7 +119,7 @@
               type="danger"
               :disabled="termSelectedIds.length === 0"
               @click="deleteTermsSelected">
-              {{ $t('schoolBus.driver.actions.delete') }}
+              {{ $t('schoolBus.delete') }}
             </el-button>
           </template>
         </UniDataTable>
@@ -131,8 +131,8 @@
           :collapsed="true"
           :collapsed-rows="1"
           :action-min-span="0"
-          :submit-text="$t('schoolBus.driver.actions.search')"
-          :reset-text="$t('schoolBus.driver.actions.reset')"
+          :submit-text="$t('schoolBus.search')"
+          :reset-text="$t('schoolBus.reset')"
           @search="searchStations"
           @reset="resetStationSearch" />
         <UniDataTable
@@ -154,7 +154,7 @@
               type="danger"
               :disabled="stationSelectedIds.length === 0"
               @click="deleteStationsSelected">
-              {{ $t('schoolBus.driver.actions.delete') }}
+              {{ $t('schoolBus.delete') }}
             </el-button>
           </template>
         </UniDataTable>
@@ -183,7 +183,7 @@
       :multi-school="multiSchool"
       @saved="refreshStations" />
 
-    <el-dialog v-model="detailVisible" width="900px" :title="$t('schoolBus.driver.actions.look')">
+    <el-dialog v-model="detailVisible" width="900px" :title="$t('schoolBus.look')">
       <el-descriptions v-if="detailRecord" :column="2" border>
         <el-descriptions-item
           v-for="col in routeColumns"
@@ -197,7 +197,7 @@
     <el-dialog
       v-model="termDetailVisible"
       width="900px"
-      :title="$t('schoolBus.driver.actions.look')">
+      :title="$t('schoolBus.look')">
       <el-descriptions v-if="termDetailRecord" :column="2" border>
         <el-descriptions-item v-for="col in termColumns" :key="String(col.prop)" :label="col.label">
           {{ termDetailRowText(col.prop) }}
@@ -208,7 +208,7 @@
     <el-dialog
       v-model="stationDetailVisible"
       width="900px"
-      :title="$t('schoolBus.driver.actions.look')">
+      :title="$t('schoolBus.look')">
       <el-descriptions v-if="stationDetailRecord" :column="2" border>
         <el-descriptions-item
           v-for="col in stationColumns"
@@ -440,18 +440,18 @@ const onRouteImportFile = async (e: Event) => {
   }
 
   if (!isSpreadsheetFilename(file.name)) {
-    ElMessage.warning(t('schoolBus.driver.messages.importInvalidType'))
+    ElMessage.warning(t('schoolBus.importInvalidType'))
     return
   }
 
   if (file.size > IMPORT_MAX_BYTES) {
-    ElMessage.warning(t('schoolBus.driver.messages.importTooLarge'))
+    ElMessage.warning(t('schoolBus.importTooLarge'))
     return
   }
 
   try {
     await schoolBusLineApi.import.post(file)
-    ElMessage.success(t('schoolBus.driver.messages.importSuccess'))
+    ElMessage.success(t('schoolBus.importSuccess'))
     refreshRoutes()
   } catch {
     /* request 层已提示 */
@@ -469,18 +469,18 @@ const onStationImportFile = async (e: Event) => {
   }
 
   if (!isSpreadsheetFilename(file.name)) {
-    ElMessage.warning(t('schoolBus.driver.messages.importInvalidType'))
+    ElMessage.warning(t('schoolBus.importInvalidType'))
     return
   }
 
   if (file.size > IMPORT_MAX_BYTES) {
-    ElMessage.warning(t('schoolBus.driver.messages.importTooLarge'))
+    ElMessage.warning(t('schoolBus.importTooLarge'))
     return
   }
 
   try {
     await schoolBusStationApi.import.post(file)
-    ElMessage.success(t('schoolBus.driver.messages.importSuccess'))
+    ElMessage.success(t('schoolBus.importSuccess'))
     refreshStations()
   } catch {
     /* request 层已提示 */

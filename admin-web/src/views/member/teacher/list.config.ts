@@ -6,8 +6,8 @@ export const roleOpts = (roles: string[]): UniOption[] =>
   roles.map((item) => ({ label: item, value: item }))
 
 export const statusOpts = (t: Translate): UniOption[] => [
-  { label: t('member.teacher.options.unarchived'), value: '0', type: 'success' },
-  { label: t('member.teacher.options.archived'), value: '1', type: 'info' }
+  { label: t('member.teacher.unarchived'), value: '0', type: 'success' },
+  { label: t('member.teacher.archived'), value: '1', type: 'info' }
 ]
 
 export const searchForm = (
@@ -21,7 +21,7 @@ export const searchForm = (
       field: 'keywordssearch',
       label: '',
       component: 'ElInput',
-      componentProps: { placeholder: t('member.placeholders.keywordInput'), clearable: true },
+      componentProps: { placeholder: t('member.phKeywordInput'), clearable: true },
       colProps: { span: 6 }
     },
     {
@@ -30,7 +30,7 @@ export const searchForm = (
       component: 'ElSelect',
       options: schoolOptions,
       componentProps: {
-        placeholder: t('member.placeholders.school'),
+        placeholder: t('member.phSchool'),
         clearable: true,
         filterable: true
       },
@@ -41,7 +41,7 @@ export const searchForm = (
       label: '',
       component: 'ElSelect',
       options: roleOptions,
-      componentProps: { placeholder: t('member.teacher.placeholders.role'), clearable: true },
+      componentProps: { placeholder: t('member.teacher.phRole'), clearable: true },
       colProps: { span: 6 }
     },
     {
@@ -49,7 +49,7 @@ export const searchForm = (
       label: '',
       component: 'ElSelect',
       options: statusOptions,
-      componentProps: { placeholder: t('member.placeholders.status'), clearable: true },
+      componentProps: { placeholder: t('member.phStatus'), clearable: true },
       colProps: { span: 6 }
     }
   ],
@@ -65,7 +65,7 @@ export const tableCols = (
   { prop: 'id', label: 'ID', type: 'text', width: 90, fixed: 'left' },
   {
     prop: 'schoolIds',
-    label: t('member.fields.school'),
+    label: t('member.fieldSchool'),
     type: 'array',
     options: schoolOptions,
     lookup: { splitValues: true },
@@ -74,55 +74,55 @@ export const tableCols = (
   },
   {
     prop: 'isaTeacherCode',
-    label: t('member.teacher.fields.teacherCode'),
+    label: t('member.teacher.fieldTeacherCode'),
     type: 'text',
     width: 120,
     showOverflowTooltip: true
   },
   {
     prop: 'fullName',
-    label: t('member.teacher.fields.fullName'),
+    label: t('member.teacher.fieldFullName'),
     type: 'text',
     minWidth: 140,
     showOverflowTooltip: true
   },
-  { prop: 'gender', label: t('member.teacher.fields.gender'), type: 'text', width: 90 },
+  { prop: 'gender', label: t('member.teacher.fieldGender'), type: 'text', width: 90 },
   {
     prop: 'nationalities',
-    label: t('member.teacher.fields.nationalities'),
+    label: t('member.teacher.fieldNationalities'),
     type: 'text',
     minWidth: 120,
     showOverflowTooltip: true
   },
   {
     prop: 'phoneNumber',
-    label: t('member.fields.phone'),
+    label: t('member.fieldPhone'),
     type: 'copy',
     minWidth: 130,
     showOverflowTooltip: true
   },
   {
     prop: 'email',
-    label: t('member.fields.email'),
+    label: t('member.fieldEmail'),
     type: 'copy',
     minWidth: 190,
     showOverflowTooltip: true
   },
   {
     prop: 'role',
-    label: t('member.teacher.fields.role'),
+    label: t('member.teacher.fieldRole'),
     type: 'text',
     minWidth: 120,
     showOverflowTooltip: true
   },
   {
     prop: 'archived',
-    label: t('member.fields.status'),
+    label: t('member.fieldStatus'),
     type: 'tag',
     options: archivedStatusOptions,
     width: 110
   },
-  { prop: 'createTime', label: t('member.fields.createTime'), type: 'datetime', minWidth: 170 }
+  { prop: 'createTime', label: t('member.fieldCreateTime'), type: 'datetime', minWidth: 170 }
 ]
 
 export const detailForm = (t: Translate): UniFormConfig => ({
@@ -133,23 +133,23 @@ export const detailForm = (t: Translate): UniFormConfig => ({
   view: { emptyText: '-' },
   schema: [
     { field: 'id', label: 'ID', component: 'ElInput' },
-    { field: 'schoolName', label: t('member.fields.school'), component: 'ElInput' },
+    { field: 'schoolName', label: t('member.fieldSchool'), component: 'ElInput' },
     {
       field: 'isaTeacherCode',
-      label: t('member.teacher.fields.teacherCode'),
+      label: t('member.teacher.fieldTeacherCode'),
       component: 'ElInput'
     },
-    { field: 'fullName', label: t('member.teacher.fields.fullName'), component: 'ElInput' },
-    { field: 'gender', label: t('member.teacher.fields.gender'), component: 'ElInput' },
+    { field: 'fullName', label: t('member.teacher.fieldFullName'), component: 'ElInput' },
+    { field: 'gender', label: t('member.teacher.fieldGender'), component: 'ElInput' },
     {
       field: 'nationalities',
-      label: t('member.teacher.fields.nationalities'),
+      label: t('member.teacher.fieldNationalities'),
       component: 'ElInput'
     },
-    { field: 'phoneNumber', label: t('member.fields.phone'), component: 'ElInput' },
-    { field: 'email', label: t('member.fields.email'), component: 'ElInput' },
-    { field: 'role', label: t('member.teacher.fields.role'), component: 'ElInput' },
-    { field: 'archived', label: t('member.fields.status'), component: 'ElInput', viewType: 'tag' },
-    { field: 'createTime', label: t('member.fields.createTime'), component: 'ElInput' }
+    { field: 'phoneNumber', label: t('member.fieldPhone'), component: 'ElInput' },
+    { field: 'email', label: t('member.fieldEmail'), component: 'ElInput' },
+    { field: 'role', label: t('member.teacher.fieldRole'), component: 'ElInput' },
+    { field: 'archived', label: t('member.fieldStatus'), component: 'ElInput', viewType: 'tag' },
+    { field: 'createTime', label: t('member.fieldCreateTime'), component: 'ElInput' }
   ]
 })

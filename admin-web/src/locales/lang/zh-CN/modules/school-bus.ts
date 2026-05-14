@@ -1,4 +1,22 @@
 export default {
+  search: '查询',
+  reset: '重置',
+  add: '新增',
+  edit: '编辑',
+  look: '查看',
+  delete: '删除',
+  import: '导入',
+  downloadTemplate: '下载模板',
+  export: '导出',
+  cancel: '取消',
+  submit: '确定',
+  saveSuccess: '保存成功',
+  deleteSuccess: '删除成功',
+  importSuccess: '导入成功',
+  importInvalidType: '仅支持上传 xls、xlsx 文件',
+  importTooLarge: '文件大小不能超过 10MB',
+  confirmDelete: '确定删除所选司机吗？',
+
   driver: {
     page: {
       title: '司机管理',
@@ -36,44 +54,6 @@ export default {
       contact: '请输入联系方式',
 
       licenseType: '如 C1、A1'
-    },
-
-    actions: {
-      search: '查询',
-
-      reset: '重置',
-
-      add: '新增',
-
-      edit: '编辑',
-
-      look: '查看',
-
-      delete: '删除',
-
-      import: '导入',
-
-      downloadTemplate: '下载模板',
-
-      export: '导出',
-
-      cancel: '取消',
-
-      submit: '确定'
-    },
-
-    messages: {
-      saveSuccess: '保存成功',
-
-      deleteSuccess: '删除成功',
-
-      importSuccess: '导入成功',
-
-      importInvalidType: '仅支持上传 xls、xlsx 文件',
-
-      importTooLarge: '文件大小不能超过 10MB',
-
-      confirmDelete: '确定删除所选司机吗？'
     },
 
     options: {

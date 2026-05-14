@@ -1,4 +1,22 @@
 export default {
+  search: 'Search',
+  reset: 'Reset',
+  add: 'Add',
+  edit: 'Edit',
+  look: 'View',
+  delete: 'Delete',
+  import: 'Import',
+  downloadTemplate: 'Download template',
+  export: 'Export',
+  cancel: 'Cancel',
+  submit: 'OK',
+  saveSuccess: 'Saved',
+  deleteSuccess: 'Deleted',
+  importSuccess: 'Imported',
+  importInvalidType: 'Only .xls and .xlsx files are allowed',
+  importTooLarge: 'File size must be under 10MB',
+  confirmDelete: 'Delete selected drivers?',
+
   driver: {
     page: {
       title: 'Drivers',
@@ -22,27 +40,6 @@ export default {
       employeeNo: 'Employee no.',
       contact: 'Contact',
       licenseType: 'e.g. C1, A1'
-    },
-    actions: {
-      search: 'Search',
-      reset: 'Reset',
-      add: 'Add',
-      edit: 'Edit',
-      look: 'View',
-      delete: 'Delete',
-      import: 'Import',
-      downloadTemplate: 'Download template',
-      export: 'Export',
-      cancel: 'Cancel',
-      submit: 'OK'
-    },
-    messages: {
-      saveSuccess: 'Saved',
-      deleteSuccess: 'Deleted',
-      importSuccess: 'Imported',
-      importInvalidType: 'Only .xls and .xlsx files are allowed',
-      importTooLarge: 'File size must be under 10MB',
-      confirmDelete: 'Delete selected drivers?'
     },
     options: {
       enabled: 'Enabled',

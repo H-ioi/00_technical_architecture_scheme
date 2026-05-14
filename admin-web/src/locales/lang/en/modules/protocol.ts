@@ -1,61 +1,50 @@
 export default {
-  page: {
-    title: 'Protocol Management',
-    description: 'Maintain protocol documents, signing requirements, and status.'
-  },
-  fields: {
-    school: 'Campus',
-    cnName: 'Chinese Name',
-    enName: 'English Name',
-    protocolType: 'Protocol Type',
-    module: 'Module',
-    needSign: 'Requires Signature',
-    status: 'Status',
-    documentUrl: 'Document',
-    createTime: 'Created At',
-    updateTime: 'Updated At',
-    studentName: 'Name',
-    admissionNo: 'Admission No.',
-    grade: 'Grade',
-    signImageUrl: 'Signature'
-  },
-  placeholders: {
-    school: 'Select campus',
-    cnName: 'Chinese name',
-    enName: 'English name',
-    protocolType: 'Select protocol type',
-    module: 'Select module',
-    needSign: 'Select signing requirement',
-    status: 'Select status'
-  },
-  actions: {
-    add: 'Add',
-    edit: 'Edit',
-    detail: 'View',
-    delete: 'Delete',
-    search: 'Search',
-    reset: 'Reset',
-    submit: 'Confirm',
-    cancel: 'Cancel',
-    close: 'Close',
-    back: 'Back'
-  },
-  options: {
-    yes: 'Yes',
-    no: 'No',
-    enabled: 'Enabled',
-    disabled: 'Disabled'
-  },
-  messages: {
-    saveSuccess: 'Saved successfully',
-    deleteSuccess: 'Deleted successfully',
-    confirmDelete: 'Delete selected protocols?',
-    uploadPdfOnly: 'Only PDF files are allowed',
-    uploadPdfSize: 'PDF files cannot exceed 10 MB',
-    uploadRequired: 'Please upload the protocol document'
-  },
-  detail: {
-    title: 'Protocol Detail',
-    signRecords: 'Signature Records'
-  }
+  pageTitle: 'Protocol Management',
+  pageDesc: 'Maintain protocol documents, signing requirements, and status.',
+  search: 'Search',
+  reset: 'Reset',
+  add: 'Add',
+  edit: 'Edit',
+  detail: 'View',
+  delete: 'Delete',
+  submit: 'Confirm',
+  cancel: 'Cancel',
+  close: 'Close',
+  back: 'Back',
+  yes: 'Yes',
+  no: 'No',
+  enabled: 'Enabled',
+  disabled: 'Disabled',
+  saveSuccess: 'Saved successfully',
+  deleteSuccess: 'Deleted successfully',
+  confirmDelete: 'Delete selected protocols?',
+  uploadPdfOnly: 'Only PDF files are allowed',
+  uploadPdfSize: 'PDF files cannot exceed 10 MB',
+  uploadRequired: 'Please upload the protocol document',
+
+  fieldSchool: 'Campus',
+  fieldCnName: 'Chinese Name',
+  fieldEnName: 'English Name',
+  fieldProtocolType: 'Protocol Type',
+  fieldModule: 'Module',
+  fieldNeedSign: 'Requires Signature',
+  fieldStatus: 'Status',
+  fieldDocumentUrl: 'Document',
+  fieldCreateTime: 'Created At',
+  fieldUpdateTime: 'Updated At',
+  fieldStudentName: 'Name',
+  fieldAdmissionNo: 'Admission No.',
+  fieldGrade: 'Grade',
+  fieldSignImageUrl: 'Signature',
+
+  phSchool: 'Select campus',
+  phCnName: 'Chinese name',
+  phEnName: 'English name',
+  phProtocolType: 'Select protocol type',
+  phModule: 'Select module',
+  phNeedSign: 'Select signing requirement',
+  phStatus: 'Select status',
+
+  detailTitle: 'Protocol Detail',
+  signRecords: 'Signature Records'
 }

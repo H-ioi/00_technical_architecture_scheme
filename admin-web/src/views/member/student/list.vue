@@ -2,8 +2,8 @@
   <section class="uni-list-page">
     <div class="uni-list-page__header">
       <div>
-        <h1>{{ $t('member.student.page.title') }}</h1>
-        <p>{{ $t('member.student.page.description') }}</p>
+        <h1>{{ $t('member.student.pageTitle') }}</h1>
+        <p>{{ $t('member.student.pageDesc') }}</p>
       </div>
     </div>
 
@@ -13,8 +13,8 @@
       :collapsed="true"
       :collapsed-rows="1"
       :action-min-span="0"
-      :submit-text="$t('member.actions.search')"
-      :reset-text="$t('member.actions.reset')"
+      :submit-text="$t('member.search')"
+      :reset-text="$t('member.reset')"
       @search="search"
       @reset="reset" />
 
