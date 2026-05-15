@@ -22,11 +22,13 @@ export default defineConfig(({ mode }) => {
       exclude: ['uni-ui-lib']
     },
     resolve: {
-      dedupe: ['vue', 'vue-router'],
+      dedupe: ['vue', 'vue-router', '@vue/shared'],
       alias: {
         '@': fileURLToPath(new URL('./src', import.meta.url)),
         'uni-ui-lib/style.css': uniLibCss,
-        'uni-ui-lib/dist/index.css': uniLibCss
+        'uni-ui-lib/dist/index.css': uniLibCss,
+        /** vuedraggable 误把 UMD 标成 module；走源码入口，否则预构建会令 defineComponent 内 isFunction 异常 */
+        vuedraggable: fileURLToPath(new URL('./node_modules/vuedraggable/src/vuedraggable.js', import.meta.url))
       }
     },
     server: {

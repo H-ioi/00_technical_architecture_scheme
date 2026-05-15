@@ -76,7 +76,28 @@ const MENU_PATH_ALIASES: Record<string, string> = {
   '/isacommunity/email/send/index': '/email/send',
   '/isacommunity/email/send': '/email/send',
   '/isacommunity/email/outgo/index': '/email/outbox',
-  '/isacommunity/email/outgo': '/email/outbox'
+  '/isacommunity/email/outgo': '/email/outbox',
+  '/isacommunity/activity': '/activity/questionnaire',
+  '/isacommunity/activity/list/index': '/activity/questionnaire',
+  '/isacommunity/activity/list': '/activity/questionnaire',
+  '/isacommunity/activity/detail/index': '/activity/questionnaire',
+  '/isacommunity/activity/detail': '/activity/questionnaire',
+  '/isacommunity/activity/program/index': '/activity/questionnaire',
+  '/isacommunity/activity/program': '/activity/questionnaire',
+  '/isacommunity/activity/program/detail/index': '/activity/questionnaire',
+  '/isacommunity/activity/program/edit/index': '/activity/questionnaire',
+  '/isacommunity/activity/prize/index': '/activity/questionnaire',
+  '/isacommunity/activity/prize': '/activity/questionnaire',
+  '/isacommunity/activity/voteprogram/index': '/activity/questionnaire',
+  '/isacommunity/activity/voteprogram': '/activity/questionnaire',
+  '/isacommunity/activity/questionnaire/index': '/activity/questionnaire',
+  '/isacommunity/activity/questionnaire': '/activity/questionnaire',
+  '/isacommunity/activity/parentstudent/index': '/activity/questionnaire',
+  '/isacommunity/activity/parentstudent': '/activity/questionnaire',
+  '/isacommunity/activity/wechatSchool/index': '/activity/questionnaire',
+  '/isacommunity/activity/wechatSchool': '/activity/questionnaire',
+  '/isacommunity/activity/emailSchool/index': '/activity/questionnaire',
+  '/isacommunity/activity/emailSchool': '/activity/questionnaire'
 }
 
 const normPath = (path?: string) => {

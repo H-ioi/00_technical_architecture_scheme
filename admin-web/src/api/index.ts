@@ -6,6 +6,8 @@ import attendanceStudentApi from './modules/attendance-student'
 import attendanceWechatNoticeApi from './modules/attendance-wechat-notice'
 import attendanceWechatOpenidApi from './modules/attendance-wechat-openid'
 import authApi from './modules/auth'
+import activityApi from './modules/activity'
+import activityQuestionnaireApi from './modules/activity-questionnaire'
 import bulkEmailApi from './modules/bulk-email'
 import baseDictApi from './modules/base-dict'
 import captchaApi from './modules/captcha'
@@ -18,6 +20,7 @@ import permissionMenuApi from './modules/permission-menu'
 import permissionRoleApi from './modules/permission-role'
 import permissionUserApi from './modules/permission-user'
 import protocolApi from './modules/protocol'
+import publicFileApi from './modules/public-file'
 import schoolBusCarApi from './modules/school-bus-car'
 import schoolBusCommonApi from './modules/school-bus-common'
 import schoolBusDriverApi from './modules/school-bus-driver'
@@ -28,8 +31,11 @@ import schoolBusOperationApi from './modules/school-bus-operation'
 import schoolBusOrderApi from './modules/school-bus-order'
 import schoolBusSectionApi from './modules/school-bus-section'
 import schoolBusStationApi from './modules/school-bus-station'
+import templateDynamicApi from './modules/template-dynamic'
 
 export {
+  activityApi,
+  activityQuestionnaireApi,
   attendanceAccessApi,
   attendanceDailyApi,
   attendanceHolidayApi,
@@ -50,6 +56,7 @@ export {
   permissionRoleApi,
   permissionUserApi,
   protocolApi,
+  publicFileApi,
   schoolBusCarApi,
   schoolBusCommonApi,
   schoolBusDriverApi,
@@ -59,6 +66,7 @@ export {
   schoolBusOperationApi,
   schoolBusOrderApi,
   schoolBusSectionApi,
-  schoolBusStationApi
+  schoolBusStationApi,
+  templateDynamicApi
 }
 export type { CaptchaImageData } from '@/types/modules/captcha'

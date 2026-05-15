@@ -40,5 +40,10 @@ export default {
   email: 'Bulk email',
   emailGroup: 'Groups',
   emailSend: 'Sender mailboxes',
-  emailOutbox: 'Outbox'
+  emailOutbox: 'Outbox',
+  activity: 'Activities',
+  activityQuestionnaire: 'Questionnaires',
+  activityQuestionnaireDetail: 'Questionnaire detail',
+  activityQuestionnaireDesign: 'Designer',
+  activityQuestionnaireSubmissions: 'Submissions'
 }

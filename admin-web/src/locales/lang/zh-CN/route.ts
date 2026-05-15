@@ -40,5 +40,10 @@ export default {
   email: '群发邮件',
   emailGroup: '群组配置',
   emailSend: '发件箱配置',
-  emailOutbox: '发件列表'
+  emailOutbox: '发件列表',
+  activity: '活动管理',
+  activityQuestionnaire: '问卷管理',
+  activityQuestionnaireDetail: '问卷详情',
+  activityQuestionnaireDesign: '问卷设计',
+  activityQuestionnaireSubmissions: '答卷列表'
 }

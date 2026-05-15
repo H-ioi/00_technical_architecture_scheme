@@ -65,6 +65,63 @@ export const routes: AppRouteRecord[] = [
         ]
       },
       {
+        path: 'activity',
+        name: 'Activity',
+        redirect: '/activity/questionnaire',
+        meta: {
+          title: '活动管理',
+          titleKey: 'route.activity',
+          icon: 'Bell'
+        },
+        children: [
+          {
+            path: 'questionnaire',
+            name: 'ActivityQuestionnaireList',
+            component: () => import('@/views/activity/questionnaire/list.vue'),
+            meta: {
+              title: '问卷管理',
+              titleKey: 'route.activityQuestionnaire'
+            }
+          },
+          {
+            path: 'questionnaire/detail/:id',
+            name: 'ActivityQuestionnaireDetail',
+            component: () => import('@/views/activity/questionnaire/detail.vue'),
+            meta: {
+              title: '问卷详情',
+              titleKey: 'route.activityQuestionnaireDetail',
+              hidden: true,
+              activeMenu: '/activity/questionnaire',
+              tagDetailParam: 'id'
+            }
+          },
+          {
+            path: 'questionnaire/design/:id',
+            name: 'ActivityQuestionnaireDesign',
+            component: () => import('@/views/activity/questionnaire/design.vue'),
+            meta: {
+              title: '问卷设计',
+              titleKey: 'route.activityQuestionnaireDesign',
+              hidden: true,
+              activeMenu: '/activity/questionnaire',
+              tagDetailParam: 'id'
+            }
+          },
+          {
+            path: 'questionnaire/submissions/:id',
+            name: 'ActivityQuestionnaireSubmissions',
+            component: () => import('@/views/activity/questionnaire/submissions.vue'),
+            meta: {
+              title: '问卷答卷',
+              titleKey: 'route.activityQuestionnaireSubmissions',
+              hidden: true,
+              activeMenu: '/activity/questionnaire',
+              tagDetailParam: 'id'
+            }
+          }
+        ]
+      },
+      {
         path: 'base',
         name: 'Base',
         redirect: '/base/school',

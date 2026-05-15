@@ -31,5 +31,11 @@ export const API_PATHS = {
   /** 考勤请假 REST 前缀（旧 `holiday.js` baseUrl `/attendance`，含学生每日考勤 getData/getData2） */
   attendanceHolidayRest: '/attendance',
   /** 群发邮件（旧 `api/isacommunity/mail.js`，`/isacommunity/mailing`） */
-  mailing: '/isacommunity/mailing'
+  mailing: '/isacommunity/mailing',
+  /** 活动主数据（旧 `api/isacommunity/activity.js`） */
+  activity: '/isacommunity/activity',
+  /** 问卷（旧 `api/isacommunity/questionnaire.js`） */
+  activityQuestionnaire: '/isacommunity/activity/questionnaire',
+  /** 公共动态表单、文件信息等（前缀 `/publik`） */
+  publik: '/publik'
 } as const

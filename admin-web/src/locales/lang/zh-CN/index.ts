@@ -1,5 +1,6 @@
 import common from './common'
 import dashboard from './dashboard'
+import activity from './modules/activity'
 import email from './modules/email'
 import attendance from './modules/attendance'
 import base from './modules/base'
@@ -17,6 +18,7 @@ export default {
   common,
   route,
   dashboard,
+  activity,
   email,
   attendance,
   base,
