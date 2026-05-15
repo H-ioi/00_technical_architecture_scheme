@@ -32,7 +32,7 @@ import type { Translate } from '@/types/i18n'
 import type { UniFormConfig } from 'uni-ui-lib'
 import { UniForm, useUniI18n } from 'uni-ui-lib'
 
-import { yesNoOptions } from '@/views/activity/questionnaire/utils/questionnaire-utils'
+import { yesNoOptions } from '@/views/activity/questionnaire/questionnaire-utils'
 
 const emit = defineEmits<{ saved: [] }>()
 

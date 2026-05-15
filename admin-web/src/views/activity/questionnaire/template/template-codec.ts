@@ -1,4 +1,4 @@
-import type { DesignerField, DesignerOption, FieldProperties } from '@/views/activity/questionnaire/builder/types'
+import type { DesignerField, DesignerOption, FieldProperties } from './types'
 
 const EDITABLE_TYPES = new Set([
   'input',

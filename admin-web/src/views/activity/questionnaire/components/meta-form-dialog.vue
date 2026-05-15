@@ -28,7 +28,7 @@ import { activityApi, activityQuestionnaireApi } from '@/api'
 import type { Translate } from '@/types/i18n'
 import { normalizeArray, normalizeEnvelope } from '@/utils/api-response-normalize'
 
-import { useMembershipSchoolOptions, yesNoOptions } from '@/views/activity/questionnaire/utils/questionnaire-utils'
+import { useMembershipSchoolOptions, yesNoOptions } from '@/views/activity/questionnaire/questionnaire-utils'
 
 const emit = defineEmits<{ saved: [] }>()
 

@@ -83,7 +83,7 @@ import {
   fmtSubmissionCell,
   submissionColumnsFromFields,
   type SubmissionColumnMeta
-} from '@/views/activity/questionnaire/utils/submission-display'
+} from '@/views/activity/questionnaire/submission-display'
 import { ElMessage } from 'element-plus'
 import { useUniI18n } from 'uni-ui-lib'
 import { computed, reactive, ref, watch } from 'vue'

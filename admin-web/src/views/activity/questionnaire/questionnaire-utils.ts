@@ -69,7 +69,7 @@ export function useMembershipSchoolOptions() {
     return m
   })
 
-  /** 旧问卷列表：`schoolIds` 为 id 数组，表格列展示各校名 CSV。 */
+  /** 表单/摘要等处：将 `schoolIds` 转为各校名分隔文案（表格列改用 `UniTableColumn` array+options）。 */
   const schoolIdsCsv = (raw: unknown): string => {
     let ids: string[] = []
 

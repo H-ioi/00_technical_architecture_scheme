@@ -101,8 +101,8 @@ import { downloadBlob } from '@/utils/download'
 
 
 import QuestionnaireBuilder from '@/views/activity/questionnaire/components/questionnaire-builder.vue'
-import { deserializeTemplateFields, serializeTemplateBundle } from '@/views/activity/questionnaire/builder/template-codec'
-import type { DesignerField } from '@/views/activity/questionnaire/builder/types'
+import { deserializeTemplateFields, serializeTemplateBundle } from '@/views/activity/questionnaire/template/template-codec'
+import type { DesignerField } from '@/views/activity/questionnaire/template/types'
 
 
 
@@ -111,7 +111,7 @@ import {
   labelForValue,
   useMembershipSchoolOptions,
   yesNoOptions
-} from '@/views/activity/questionnaire/utils/questionnaire-utils'
+} from '@/views/activity/questionnaire/questionnaire-utils'
 
 import { ElMessage } from 'element-plus'
 

@@ -432,7 +432,7 @@ import type {
   DesignerFieldKnown,
   DesignerFieldRaw,
   DesignerOption
-} from '@/views/activity/questionnaire/builder/types'
+} from '@/views/activity/questionnaire/template/types'
 import {
   Aim,
   Calendar,
@@ -449,7 +449,7 @@ import {
   builderAddOptionRow,
   presetField,
   type PaletteType
-} from '@/views/activity/questionnaire/builder/field-presets'
+} from '@/views/activity/questionnaire/template/field-presets'
 import type { UniFormConfig } from 'uni-ui-lib'
 import { UniForm, useUniI18n } from 'uni-ui-lib'
 import type { Component } from 'vue'

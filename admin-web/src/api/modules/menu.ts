@@ -77,7 +77,9 @@ const MENU_PATH_ALIASES: Record<string, string> = {
   '/isacommunity/email/send': '/email/send',
   '/isacommunity/email/outgo/index': '/email/outbox',
   '/isacommunity/email/outgo': '/email/outbox',
-  '/isacommunity/activity': '/activity/questionnaire',
+  /** 旧后台「活动」目录根 → 前端分组 /activity（与 route.activity、侧栏 icon），非问卷页本身 */
+  '/isacommunity/activity': '/activity',
+  '/isacommunity/activity/index': '/activity',
   '/isacommunity/activity/list/index': '/activity/questionnaire',
   '/isacommunity/activity/list': '/activity/questionnaire',
   '/isacommunity/activity/detail/index': '/activity/questionnaire',
@@ -132,6 +134,31 @@ const collectPermissions = (menu: BackendMenuRecord) =>
 const routeIdx = (routes: RouteRecordNormalized[]) =>
   new Map(routes.map((route) => [route.path, route]))
 
+/** 多端旧路径常映射到同一前端路由，后端树易产生重复 sibling；侧边栏按 path 保留首条 */
+const dedupeMenuSiblingsByPath = (menus: AppMenuRecord[]): AppMenuRecord[] => {
+  const seen = new Set<string>()
+  const out: AppMenuRecord[] = []
+
+  for (const m of menus) {
+    const children = m.children?.length ? dedupeMenuSiblingsByPath(m.children) : undefined
+
+    const node: AppMenuRecord =
+      children?.length ?? m.children?.length
+        ? { ...m, children }
+        : { ...m, children: undefined }
+
+    if (seen.has(node.path)) {
+      continue
+    }
+
+    seen.add(node.path)
+
+    out.push(node)
+  }
+
+  return out
+}
+
 const buildMenus = (
   items: BackendMenuRecord[],
   routes: RouteRecordNormalized[]
@@ -169,7 +196,7 @@ const buildMenus = (
       }
     })
 
-  const menus = mapMenus(items)
+  const menus = dedupeMenuSiblingsByPath(mapMenus(items))
 
   return {
     menus,

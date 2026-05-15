@@ -1,6 +1,6 @@
-import type { DesignerFieldKnown, DesignerOption } from '@/views/activity/questionnaire/builder/types'
+import type { DesignerFieldKnown, DesignerOption } from './types'
 
-import { createFontId, newTemplateFieldId } from '@/views/activity/questionnaire/builder/template-codec'
+import { createFontId, newTemplateFieldId } from './template-codec'
 
 export const BUILDER_PALETTE_TYPES = [
   'input',
