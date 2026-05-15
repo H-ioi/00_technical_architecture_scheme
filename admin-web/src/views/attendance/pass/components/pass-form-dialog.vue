@@ -9,7 +9,10 @@
     <!-- 对齐旧版 passModel.vue：批量时展示选中行列表，放行方式 / 日期 / 时段 / 备注 与单行生成共用表单 -->
     <div v-if="isBatch" class="holiday-pass-dialog__batch">
       <el-table :data="batchRows" size="small" max-height="220">
-        <el-table-column prop="studentNo" :label="$t('attendance.holidayPass.colStudentNo')" width="120" />
+        <el-table-column
+          prop="studentNo"
+          :label="$t('attendance.holidayPass.colStudentNo')"
+          width="120" />
         <el-table-column prop="studentName" :label="$t('attendance.studentName')" width="100" />
         <el-table-column prop="studentSchool" :label="$t('attendance.school')" min-width="120" />
         <el-table-column prop="studentGrade" :label="$t('attendance.grade')" width="88" />
@@ -58,7 +61,9 @@
 
     <template v-if="!viewOnly" #footer>
       <el-button @click="open = false">{{ $t('common.cancel') }}</el-button>
-      <el-button type="primary" :loading="loading" @click="submit">{{ $t('common.submit') }}</el-button>
+      <el-button type="primary" :loading="loading" @click="submit">{{
+        $t('common.submit')
+      }}</el-button>
     </template>
   </el-dialog>
 </template>
@@ -161,7 +166,9 @@ const rules = computed<UniFormConfig['rules']>(() => ({
     }
   ],
   way: [{ required: true, message: t('attendance.holidayPass.ruleWay'), trigger: 'change' }],
-  passTime: [{ required: true, message: t('attendance.holidayPass.rulePassTime'), trigger: 'change' }],
+  passTime: [
+    { required: true, message: t('attendance.holidayPass.rulePassTime'), trigger: 'change' }
+  ],
   dateLimit: [
     {
       validator: (_rule, _value, cb) => {
@@ -226,7 +233,6 @@ const passFormConfig = computed<UniFormConfig>(() => ({
     }
   ]
 }))
-
 
 watch(timeRangeModel, (v) => {
   if (Array.isArray(v) && v.length === 2) {
@@ -294,7 +300,10 @@ const onClose = () => {
   uniFormRef.value?.resetFields()
 }
 
-const queryStudents = (query: string, cb: (rows: { value: string; studentNo: string }[]) => void) => {
+const queryStudents = (
+  query: string,
+  cb: (rows: { value: string; studentNo: string }[]) => void
+) => {
   const q = query.trim()
   if (!q) {
     cb([])
@@ -409,12 +418,15 @@ const submit = async () => {
 </script>
 
 <style scoped lang="scss">
-.holiday-pass-dialog__batch {
-  margin-bottom: 16px;
-}
-.holiday-pass-dialog__hint {
-  margin-top: 8px;
-  font-size: 13px;
-  color: var(--el-text-color-secondary);
+.holiday-pass-dialog {
+  &__batch {
+    margin-bottom: 16px;
+  }
+
+  &__hint {
+    margin-top: 8px;
+    font-size: 13px;
+    color: var(--el-text-color-secondary);
+  }
 }
 </style>

@@ -89,19 +89,16 @@ import templateDynamicApi, {
 } from '@/api/modules/template-dynamic'
 import type { Translate } from '@/types/i18n'
 
-import {
-
-  normalizeArray,
-  normalizeEnvelope,
-  normalizePayload
-} from '@/utils/api-response-normalize'
+import { normalizeArray, normalizeEnvelope, normalizePayload } from '@/utils/api-response-normalize'
 
 import { downloadBlob } from '@/utils/download'
 
-
-
 import QuestionnaireBuilder from '@/views/activity/questionnaire/components/questionnaire-builder.vue'
-import type { DesignerField, DesignerOption, FieldProperties } from '@/types/modules/activity-questionnaire'
+import type {
+  DesignerField,
+  DesignerOption,
+  FieldProperties
+} from '@/types/modules/activity-questionnaire'
 
 import { ElMessage } from 'element-plus'
 
@@ -178,8 +175,7 @@ function deserializeTemplateFields(rows: TemplateCodecLoose[]): DesignerField[] 
     }
 
     if (type === 'radio') {
-      props.option_default =
-        optionDefaultMarks.length !== 0 ? String(optionDefaultMarks[0]) : ''
+      props.option_default = optionDefaultMarks.length !== 0 ? String(optionDefaultMarks[0]) : ''
     } else if (type === 'checkbox' || type === 'select') {
       const multi = props.option_multi === true || props.option_multi === 'true'
       if (multi || type === 'checkbox') {
@@ -197,8 +193,7 @@ function deserializeTemplateFields(rows: TemplateCodecLoose[]): DesignerField[] 
       props.datetime_pattern = String(props.datetime_pattern ?? props.format ?? 'yyyy-MM-dd')
     }
 
-    const regexHintFromProps =
-      typeof props.regexHint === 'string' ? props.regexHint : undefined
+    const regexHintFromProps = typeof props.regexHint === 'string' ? props.regexHint : undefined
 
     out.push({
       kind: 'known',
@@ -216,10 +211,7 @@ function deserializeTemplateFields(rows: TemplateCodecLoose[]): DesignerField[] 
           : typeof props.regexpattern === 'string'
             ? props.regexpattern
             : '',
-      regexHint:
-        typeof item.regexHint === 'string'
-          ? item.regexHint
-          : regexHintFromProps ?? '',
+      regexHint: typeof item.regexHint === 'string' ? item.regexHint : (regexHintFromProps ?? ''),
       mark: typeof item.mark === 'string' ? item.mark : undefined,
       datetimeTypeKey:
         typeof item.datetime_type === 'string'
@@ -425,9 +417,7 @@ function mutationId(raw: unknown): string | undefined {
   const u = normalizePayload(raw)
   if (typeof u === 'string' || typeof u === 'number') {
     return String(u)
-
   }
-
 
   return undefined
 }
@@ -462,13 +452,13 @@ const outerReady = computed(() => {
 const isViewMode = computed(() => String(route.query.mode ?? '') === 'view')
 
 const pageTitle = computed(() =>
-  isViewMode.value ? tr('route.activityQuestionnaireDetail') : tr('route.activityQuestionnaireDesign')
+  isViewMode.value
+    ? tr('route.activityQuestionnaireDetail')
+    : tr('route.activityQuestionnaireDesign')
 )
 
 const pageDesc = computed(() =>
-  isViewMode.value
-    ? tr('activity.qDetailPageDesc')
-    : tr('activity.questionnaireDesignPageDesc')
+  isViewMode.value ? tr('activity.qDetailPageDesc') : tr('activity.questionnaireDesignPageDesc')
 )
 
 const { loadSchoolOptions, schoolIdsCsv } = useMembershipSchoolOptions()
@@ -506,8 +496,8 @@ const metaActivityDisplay = computed(() => {
 
   const label =
     locale.value === 'en'
-      ? row.activityEnName ?? row.activityCnName ?? row.activityName ?? row.name ?? row.id
-      : row.activityCnName ?? row.activityEnName ?? row.activityName ?? row.name ?? row.id
+      ? (row.activityEnName ?? row.activityCnName ?? row.activityName ?? row.name ?? row.id)
+      : (row.activityCnName ?? row.activityEnName ?? row.activityName ?? row.name ?? row.id)
 
   return String(label ?? aid)
 })
@@ -562,7 +552,6 @@ async function loadTemplateSide(qid: string) {
 
   const tid = head.id as string | number | undefined
 
-
   if (tid == null) {
     return
   }
@@ -581,28 +570,23 @@ async function loadTemplateSide(qid: string) {
 async function loadQuestionnaire(qid: string) {
   loading.value = true
   try {
-
-
     await loadSchoolOptions()
-
 
     await loadActivityPool(qid)
 
     const raw = await activityQuestionnaireApi.detail.get(qid)
 
-
-
     const d = normalizeEnvelope(raw) as Row
 
     form.name = String(d.name ?? '')
 
-    form.schoolIds = Array.isArray(d.schoolIds) ? (d.schoolIds as unknown[]).map((x) => x as string | number) : []
+    form.schoolIds = Array.isArray(d.schoolIds)
+      ? (d.schoolIds as unknown[]).map((x) => x as string | number)
+      : []
 
     form.activityId = d.activityId as string | number | undefined
 
     form.status = Number(d.status ?? 1)
-
-
 
     form.needStudentInfo = String(d.needStudentInfo ?? '0')
 
@@ -615,11 +599,7 @@ async function loadQuestionnaire(qid: string) {
   }
 }
 
-
-
 function resetMeta() {
-
-
   form.name = ''
   form.schoolIds = []
   form.activityId = undefined
@@ -632,9 +612,6 @@ function resetMeta() {
   fields.value = []
   bumpBuilder()
 }
-
-
-
 
 watch(
   outerId,
@@ -650,10 +627,7 @@ watch(
   },
 
   { immediate: true }
-
 )
-
-
 
 const copySignupForPage = async (): Promise<void> => {
   const id = outerId.value
@@ -707,13 +681,10 @@ const doExport = async (): Promise<void> => {
     downloadBlob(blob as Blob, `questionnaire-${id}.xlsx`)
 
     ElMessage.success(tr('email.opOk'))
-
   } catch {
     ElMessage.error(tr('activity.exportQuestionnaireFail'))
-
   } finally {
     exporting.value = false
-
   }
 }
 
@@ -726,22 +697,14 @@ const saveQuestions = async () => {
     return
   }
 
-
   if (!outerReady.value) {
     ElMessage.warning(tr('activity.qDesignNoQuestionnaire'))
     return
   }
 
-
-
   saving.value = true
 
-
-
-
   try {
-
-
     const targetOuter = outerId.value
 
     const label = String(form.name ?? '').trim()
@@ -749,7 +712,6 @@ const saveQuestions = async () => {
     if (!label) {
       ElMessage.warning(tr('activity.qTemplateLabelRequired'))
       return
-
     }
 
     const bundle = serializeTemplateBundle(label, fields.value, templateFormId.value || null)
@@ -757,7 +719,6 @@ const saveQuestions = async () => {
     if (templateFormId.value) {
       await templateDynamicApi.templateEdit.post(bundle)
     } else {
-
       const tid = mutationId(await templateDynamicApi.templateAdd.post(bundle))
 
       if (!tid) {
@@ -782,103 +743,105 @@ const saveQuestions = async () => {
 </script>
 
 <style scoped lang="scss">
-.q-design__header-actions {
-  align-items: center;
-}
-
-.q-design__header-divider {
-  margin: 0 8px;
-  height: 1.25em;
-  border-color: var(--el-border-color);
-}
-
-.q-design__card {
-  border-radius: 12px;
-  border: 1px solid var(--el-border-color-lighter);
-}
-
-.q-design__card :deep(.el-card__body) {
-  padding: 16px 20px 28px;
-}
-
-.q-design__banner {
-  margin: 0 0 18px;
-  padding: 8px 12px;
-  border-radius: 10px;
-  align-items: flex-start;
-}
-
-.q-design__banner :deep(.el-alert__description) {
-  margin-top: 0;
-  font-size: 13px;
-  line-height: 1.5;
-}
-
-.q-design__banner--warn {
-  margin-bottom: 14px;
-}
-
-.q-design__meta-block {
-  padding: 0 0 20px;
-  margin-bottom: 8px;
-  border-bottom: 1px solid var(--el-border-color-extra-light);
-}
-
-.q-design__subtitle {
-  margin: 0 0 12px;
-  padding: 0;
-  font-size: 15px;
-  font-weight: 600;
-  color: var(--el-text-color-primary);
-  letter-spacing: 0.02em;
-}
-
-.q-design__meta-grid {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 12px 20px;
-}
-
-@media (max-width: 1080px) {
-  .q-design__meta-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+.q-design {
+  &__header-actions {
+    align-items: center;
   }
-}
 
-@media (max-width: 640px) {
-  .q-design__meta-grid {
-    grid-template-columns: 1fr;
+  &__header-divider {
+    margin: 0 8px;
+    height: 1.25em;
+    border-color: var(--el-border-color);
   }
-}
 
-.q-design__meta-item--full {
-  grid-column: 1 / -1;
-}
+  &__card {
+    border-radius: 12px;
+    border: 1px solid var(--el-border-color-lighter);
+  }
 
-.q-design__meta-lbl {
-  font-size: 12px;
-  color: var(--el-text-color-secondary);
-  margin-bottom: 6px;
-  line-height: 1.3;
-}
+  &__card :deep(.el-card__body) {
+    padding: 16px 20px 28px;
+  }
 
-.q-design__meta-val {
-  font-size: 14px;
-  color: var(--el-text-color-primary);
-  line-height: 1.5;
-  word-break: break-word;
-}
+  &__banner {
+    margin: 0 0 18px;
+    padding: 8px 12px;
+    border-radius: 10px;
+    align-items: flex-start;
+  }
 
-.q-design__builder-head {
-  margin: 22px 0 12px;
-}
+  &__banner :deep(.el-alert__description) {
+    margin-top: 0;
+    font-size: 13px;
+    line-height: 1.5;
+  }
 
-.q-design__builder-head .q-design__subtitle {
-  margin-bottom: 0;
-}
+  &__banner--warn {
+    margin-bottom: 14px;
+  }
 
-.q-design__inst-text {
-  white-space: pre-wrap;
-  word-break: break-word;
+  &__meta-block {
+    padding: 0 0 20px;
+    margin-bottom: 8px;
+    border-bottom: 1px solid var(--el-border-color-extra-light);
+  }
+
+  &__subtitle {
+    margin: 0 0 12px;
+    padding: 0;
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--el-text-color-primary);
+    letter-spacing: 0.02em;
+  }
+
+  &__meta-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 12px 20px;
+  }
+
+  @media (width <= 1080px) {
+    &__meta-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (width <= 640px) {
+    &__meta-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  &__meta-item--full {
+    grid-column: 1 / -1;
+  }
+
+  &__meta-lbl {
+    font-size: 12px;
+    color: var(--el-text-color-secondary);
+    margin-bottom: 6px;
+    line-height: 1.3;
+  }
+
+  &__meta-val {
+    font-size: 14px;
+    color: var(--el-text-color-primary);
+    line-height: 1.5;
+    overflow-wrap: anywhere;
+  }
+
+  &__builder-head {
+    margin: 22px 0 12px;
+  }
+
+  &__builder-head .q-design__subtitle {
+    margin-bottom: 0;
+  }
+
+  &__inst-text {
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+  }
 }
 </style>

@@ -1670,19 +1670,21 @@ const submit = async () => {
 </script>
 
 <style scoped lang="scss">
-.bus-order-form-drawer :deep(.el-drawer__body) {
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  overflow: hidden;
-  overflow-x: hidden;
-  box-sizing: border-box;
-  padding-bottom: 0;
-}
+.bus-order-form-drawer {
+  :deep(.el-drawer__body) {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    overflow: hidden;
+    overflow-x: hidden;
+    box-sizing: border-box;
+    padding-bottom: 0;
+  }
 
-.bus-order-form-drawer :deep(.el-drawer__footer) {
-  flex-shrink: 0;
-  border-top: 1px solid var(--el-border-color-lighter);
+  :deep(.el-drawer__footer) {
+    flex-shrink: 0;
+    border-top: 1px solid var(--el-border-color-lighter);
+  }
 }
 
 .bus-order-form {
@@ -1690,124 +1692,124 @@ const submit = async () => {
   display: flex;
   flex-direction: column;
   min-height: 0;
-}
 
-.bus-order-form__scroll {
-  flex: 1;
-  min-height: 0;
-  overflow-y: auto;
-  overflow-x: hidden;
-  min-width: 0;
-}
+  &__scroll {
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+    overflow-x: hidden;
+    min-width: 0;
+  }
 
-.bus-order-form__table-wrap {
-  width: 100%;
-  max-width: 100%;
-  min-width: 0;
-}
+  &__table-wrap {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+  }
 
-.bus-order-form :deep(.el-form .el-row) {
-  max-width: 100%;
-}
+  :deep(.el-form .el-row) {
+    max-width: 100%;
+  }
 
-.bus-order-form__status-row {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: flex-start;
-  gap: 16px;
-  width: 100%;
-  min-width: 0;
-}
+  &__status-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    gap: 16px;
+    width: 100%;
+    min-width: 0;
+  }
 
-.bus-order-form__status-col {
-  flex: 1 1 260px;
-  min-width: 0;
-}
+  &__status-col {
+    flex: 1 1 260px;
+    min-width: 0;
+  }
 
-.bus-order-form__status-col--solo {
-  flex: 1 1 100%;
-}
+  &__status-col--solo {
+    flex: 1 1 100%;
+  }
 
-.bus-order-form__anchor-target {
-  scroll-margin-top: 12px;
-}
+  &__anchor-target {
+    scroll-margin-top: 12px;
+  }
 
-.bus-order-form__block {
-  margin-top: 16px;
-}
+  &__block {
+    margin-top: 16px;
+  }
 
-.bus-order-form__block-head {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 8px;
-  font-weight: 500;
-}
+  &__block-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 8px;
+    font-weight: 500;
+  }
 
-.bus-order-form__thumb {
-  width: 48px;
-  height: 48px;
-  border-radius: 4px;
-}
+  &__thumb {
+    width: 48px;
+    height: 48px;
+    border-radius: 4px;
+  }
 
-.bus-order-form__slot-plain :deep(.el-form-item__label-wrap),
-.bus-order-form__slot-plain :deep(.el-form-item__label) {
-  display: none;
-}
+  &__slot-plain :deep(.el-form-item__label-wrap),
+  &__slot-plain :deep(.el-form-item__label) {
+    display: none;
+  }
 
-.bus-order-form__nested-field {
-  margin-bottom: 12px;
-}
+  &__nested-field {
+    margin-bottom: 12px;
+  }
 
-.bus-order-form__nested-label {
-  font-size: 12px;
-  color: var(--el-text-color-regular);
-  line-height: 1.5;
-  margin-bottom: 6px;
-}
+  &__nested-label {
+    font-size: 12px;
+    color: var(--el-text-color-regular);
+    line-height: 1.5;
+    margin-bottom: 6px;
+  }
 
-.bus-order-form__pay-inline {
-  width: 120px;
-  margin-left: 8px;
-}
+  &__pay-inline {
+    width: 120px;
+    margin-left: 8px;
+  }
 
-.bus-order-form__upload-row {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  flex-wrap: wrap;
-}
+  &__upload-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
 
-.bus-order-form__sign-block {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 12px;
-}
+  &__sign-block {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
 
-.bus-order-form__sign-image {
-  width: 160px;
-  height: 120px;
-  border: 1px solid var(--el-border-color);
-  border-radius: 4px;
-  background: var(--el-fill-color-light);
-}
+  &__sign-image {
+    width: 160px;
+    height: 120px;
+    border: 1px solid var(--el-border-color);
+    border-radius: 4px;
+    background: var(--el-fill-color-light);
+  }
 
-.bus-order-form__sign-image :deep(.el-image__inner) {
-  object-fit: contain;
-}
+  &__sign-image :deep(.el-image__inner) {
+    object-fit: contain;
+  }
 
-.bus-order-form__url {
-  font-size: 12px;
-  color: var(--el-text-color-secondary);
-  word-break: break-all;
-}
+  &__url {
+    font-size: 12px;
+    color: var(--el-text-color-secondary);
+    word-break: break-all;
+  }
 
-.bus-order-form__hidden-file {
-  position: absolute;
-  width: 0;
-  height: 0;
-  opacity: 0;
-  pointer-events: none;
+  &__hidden-file {
+    position: absolute;
+    width: 0;
+    height: 0;
+    opacity: 0;
+    pointer-events: none;
+  }
 }
 </style>

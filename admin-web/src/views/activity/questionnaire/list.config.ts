@@ -15,7 +15,7 @@ export const searchForm = (
       component: 'ElInput',
       label: '',
       componentProps: { placeholder: t('activity.questionnaireName'), clearable: true },
-      colProps: { span: 5 }
+      colProps: { span: 6 }
     },
     {
       field: 'schoolIds',
@@ -27,7 +27,7 @@ export const searchForm = (
         clearable: true,
         filterable: true
       },
-      colProps: { span: 5 }
+      colProps: { span: 6 }
     },
     {
       field: 'activityId',
@@ -47,7 +47,7 @@ export const searchForm = (
       label: '',
       options: ynDispOptions,
       componentProps: { placeholder: t('activity.questionnaireValid'), clearable: true },
-      colProps: { span: 4 }
+      colProps: { span: 6 }
     },
     {
       field: 'createStartTime',
@@ -59,7 +59,7 @@ export const searchForm = (
         clearable: true,
         valueFormat: 'YYYY-MM-DD HH:mm:ss'
       },
-      colProps: { span: 7 }
+      colProps: { span: 6 }
     },
     {
       field: 'createEndTime',
@@ -71,10 +71,11 @@ export const searchForm = (
         clearable: true,
         valueFormat: 'YYYY-MM-DD HH:mm:ss'
       },
-      colProps: { span: 7 }
+      colProps: { span: 6 }
     }
   ],
-  rowProps: { gutter: 8 }
+  rowProps: { gutter: 8 },
+  colProps: { span: 6 }
 })
 
 /** 问卷列表列（与 `member/student` 等模块的 `tableCols` 命名一致） */

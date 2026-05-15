@@ -10,40 +10,40 @@
       </div>
     </div>
     <UniSearchForm
-      v-model="qm"
-      :config="sch"
+      v-model="queryModel"
+      :config="searchCfg"
       :collapsed="true"
       :collapsed-rows="1"
       :action-min-span="0"
       :submit-text="$t('activity.search')"
       :reset-text="$t('activity.reset')"
-      @search="sea"
-      @reset="rst" />
+      @search="search"
+      @reset="reset" />
     <UniDataTable
-      ref="tb"
+      ref="tableRef"
       row-key="id"
       selection="multiple"
-      :columns="cols"
-      :request="lod"
-      :filters="filt"
+      :columns="columns"
+      :request="loadData"
+      :filters="filters"
       :pagination="{ pageSize: 10, pageSizes: [10, 20, 50, 100] }"
       :toolbar="{ refresh: true, columnSetting: true }"
-      :actions="acts"
+      :actions="actions"
       :action-column="{ width: 140, fixed: 'right' }"
-      @load-success="hdl"
-      @selection-change="onSel">
+      @load-success="handleLoadSuccess"
+      @selection-change="onSelectionChange">
       <template #toolbar>
         <el-button
           v-uni-permission="'busdriver_edit'"
           plain
-          :disabled="!selIds.length"
+          :disabled="!selectedIds.length"
           @click="openBatchStatus">
           {{ $t('activity.qBatchChangeStatus') }}
         </el-button>
         <el-button
           v-uni-permission="'busdriver_edit'"
           plain
-          :disabled="!selIds.length"
+          :disabled="!selectedIds.length"
           @click="openBatchFrozen">
           {{ $t('activity.qBatchChangeFrozen') }}
         </el-button>
@@ -51,16 +51,16 @@
           v-uni-permission="'busdriver_del'"
           type="danger"
           plain
-          :disabled="!selIds.length"
-          @click="del">
+          :disabled="!selectedIds.length"
+          @click="deleteSelected">
           {{ $t('activity.delBatch') }}
         </el-button>
       </template>
     </UniDataTable>
 
-    <MetaFormDialog ref="metaDlg" @saved="onDlgSaved" />
-    <QuestionnaireCopyDialog ref="copyDlg" @saved="onDlgSaved" />
-    <BatchFlagDialog ref="batchDlg" @saved="onDlgSaved" />
+    <MetaFormDialog ref="metaDlg" @saved="handleSaved" />
+    <QuestionnaireCopyDialog ref="copyDlg" @saved="handleSaved" />
+    <BatchFlagDialog ref="batchDlg" @saved="handleSaved" />
   </section>
 </template>
 
@@ -79,22 +79,22 @@ const copyDlg = ref<InstanceType<typeof QuestionnaireCopyDialog> | null>(null)
 const batchDlg = ref<InstanceType<typeof BatchFlagDialog> | null>(null)
 
 const {
-  acts,
-  cols,
-  del,
-  filt,
-  hdl,
-  lod,
-  onDlgSaved,
-  onSel,
+  actions,
+  columns,
+  deleteSelected,
+  filters,
+  handleLoadSuccess,
+  handleSaved,
+  loadData,
+  onSelectionChange,
   openBatchFrozen,
   openBatchStatus,
   openMetaAdd,
-  qm,
-  rst,
-  sea,
-  selIds,
-  sch,
-  tb
+  queryModel,
+  reset,
+  search,
+  searchCfg,
+  selectedIds,
+  tableRef
 } = useQuestionnaireList({ metaDlg, copyDlg, batchDlg })
 </script>

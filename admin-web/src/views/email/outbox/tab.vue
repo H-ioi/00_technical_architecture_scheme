@@ -178,7 +178,9 @@ const onComposeSubmit = (status: 0 | 1) => {
 </script>
 
 <style scoped lang="scss">
-.email-outbox-tab__tabs {
-  margin-top: 8px;
+.email-outbox-tab {
+  &__tabs {
+    margin-top: 8px;
+  }
 }
 </style>

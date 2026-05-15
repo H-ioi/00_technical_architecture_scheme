@@ -6,7 +6,7 @@
         <p v-if="subtitle" class="uni-list-page__description">{{ subtitle }}</p>
       </div>
       <div class="uni-list-page__header-actions q-submissions__header-actions">
-        <el-button :loading="exporting" @click="doExport">{{
+        <el-button :loading="exporting" @click="exportAnswers">{{
           $t('activity.exportQuestionnaire')
         }}</el-button>
         <el-divider direction="vertical" class="q-submissions__header-divider" />
@@ -16,14 +16,14 @@
 
     <UniDataTable
       :key="questionnaireId"
-      ref="tb"
+      ref="tableRef"
       row-key="id"
-      :columns="cols"
-      :request="lod"
-      :filters="filt"
+      :columns="columns"
+      :request="loadData"
+      :filters="filters"
       :pagination="{ pageSize: 10, pageSizes: [10, 20, 50, 100] }"
       :toolbar="{ refresh: true, columnSetting: true }"
-      @load-success="hdl">
+      @load-success="handleLoadSuccess">
       <template v-if="hasUploadCols" #[attachColumnSlot]="{ row }">
         <el-button
           type="primary"
@@ -41,7 +41,7 @@
       </template>
     </UniDataTable>
 
-    <el-dialog v-model="fileDlg" :title="$t('activity.qSubmissionAttachTitle')" width="520px">
+    <el-dialog v-model="fileDialogVisible" :title="$t('activity.qSubmissionAttachTitle')" width="520px">
       <div class="q-sub-files">
         <el-button
           v-for="f in fileRows"
@@ -69,44 +69,46 @@ import { useQuestionnaireSubmissions } from './use-submissions'
 const attachColumnSlot = computed(() => `column-${submissionAttachColumnProp}` as const)
 
 const {
-  cols,
-  doExport,
+  columns,
+  exportAnswers,
   downloadOne,
   exporting,
-  fileDlg,
+  fileDialogVisible,
   fileRows,
-  filt,
+  filters,
   goBack,
-  hdl,
+  handleLoadSuccess,
   hasUploadCols,
-  lod,
+  loadData,
   metaLoading,
   openFiles,
   questionnaireId,
   subtitle,
-  tb
+  tableRef
 } = useQuestionnaireSubmissions()
 </script>
 
 <style scoped lang="scss">
 /** 与问卷 **`edit.vue`** 页头一致：主操作在前，竖线分隔，**返回** 使用 `plain` */
-.q-submissions__header-actions {
-  align-items: center;
-}
+.q-submissions {
+  &__header-actions {
+    align-items: center;
+  }
 
-.q-submissions__header-divider {
-  margin: 0 8px;
-  height: 1.25em;
-  border-color: var(--el-border-color);
+  &__header-divider {
+    margin: 0 8px;
+    height: 1.25em;
+    border-color: var(--el-border-color);
+  }
 }
 
 .q-sub-files {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-}
 
-.q-sub-file {
-  margin-bottom: 6px;
+  .q-sub-file {
+    margin-bottom: 6px;
+  }
 }
 </style>

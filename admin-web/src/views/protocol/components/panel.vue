@@ -1,9 +1,5 @@
 <template>
-  <el-dialog
-    v-model="visible"
-    :title="$t('protocol.detailTitle')"
-    width="1080px"
-    destroy-on-close>
+  <el-dialog v-model="visible" :title="$t('protocol.detailTitle')" width="1080px" destroy-on-close>
     <div
       v-loading="detailLoading"
       class="protocol-detail-loading-wrap"
@@ -50,9 +46,7 @@
     </div>
 
     <template #footer>
-      <el-button @click="visible = false">{{
-        $t('protocol.close')
-      }}</el-button>
+      <el-button @click="visible = false">{{ $t('protocol.close') }}</el-button>
     </template>
   </el-dialog>
 </template>
@@ -144,20 +138,17 @@ const loadSignData: UniTableRequest = ({ pageNo: current, pageSize: size }) => {
   })
 }
 
-watch(
-  visible,
-  async (isOpen) => {
-    if (!isOpen || !props.source?.id) {
-      return
-    }
-
-    detail.value = null
-    await runWithDetailLoading(async () => {
-      detail.value = await protocolApi.info.get(props.source!.id)
-      signTableRef.value?.refresh()
-    })
+watch(visible, async (isOpen) => {
+  if (!isOpen || !props.source?.id) {
+    return
   }
-)
+
+  detail.value = null
+  await runWithDetailLoading(async () => {
+    detail.value = await protocolApi.info.get(props.source!.id)
+    signTableRef.value?.refresh()
+  })
+})
 </script>
 
 <style scoped lang="scss">

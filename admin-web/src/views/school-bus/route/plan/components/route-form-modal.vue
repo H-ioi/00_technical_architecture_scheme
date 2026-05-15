@@ -819,6 +819,7 @@ export default {
 .route-form-modal__collapse {
   width: 100%;
   border: none;
+
   --el-collapse-border-color: transparent;
 
   :deep(.el-collapse-item) {

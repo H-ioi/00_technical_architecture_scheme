@@ -191,14 +191,17 @@ onMounted(() => {
 </script>
 
 <style scoped lang="scss">
-.permission-user__tree {
-  border: 1px solid var(--el-border-color-lighter);
-  border-radius: 4px;
-  padding: 8px;
-  min-height: 400px;
-  margin-bottom: 12px;
-}
-.permission-user__table {
-  margin-top: 8px;
+.permission-user {
+  &__tree {
+    border: 1px solid var(--el-border-color-lighter);
+    border-radius: 4px;
+    padding: 8px;
+    min-height: 400px;
+    margin-bottom: 12px;
+  }
+
+  &__table {
+    margin-top: 8px;
+  }
 }
 </style>

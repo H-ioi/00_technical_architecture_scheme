@@ -99,5 +99,3 @@ const exportData = async () => {
   }
 }
 </script>
-
-<style scoped lang="scss"></style>

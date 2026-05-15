@@ -628,15 +628,17 @@ const onStationImportFile = async (e: Event) => {
 </script>
 
 <style scoped lang="scss">
-.school-bus-route-plan__tabs {
-  margin-top: 8px;
-}
+.school-bus-route-plan {
+  &__tabs {
+    margin-top: 8px;
+  }
 
-.school-bus-route-plan__file {
-  position: absolute;
-  width: 0;
-  height: 0;
-  opacity: 0;
-  pointer-events: none;
+  &__file {
+    position: absolute;
+    width: 0;
+    height: 0;
+    opacity: 0;
+    pointer-events: none;
+  }
 }
 </style>

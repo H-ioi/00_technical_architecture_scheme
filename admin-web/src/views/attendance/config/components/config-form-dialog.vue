@@ -1,5 +1,10 @@
 <template>
-  <el-dialog v-model="innerVisible" :title="title" width="520px" destroy-on-close @closed="onClosed">
+  <el-dialog
+    v-model="innerVisible"
+    :title="title"
+    width="520px"
+    destroy-on-close
+    @closed="onClosed">
     <UniForm ref="uniFormRef" v-model="model" mode="edit" :config="formConfig" />
     <template #footer>
       <el-button @click="innerVisible = false">{{ $t('common.cancel') }}</el-button>
@@ -60,7 +65,9 @@ const formConfig = computed<UniFormConfig>(() => ({
   formProps: { labelWidth: '100px' },
   colProps: { span: 24 },
   rules: {
-    school: [{ required: true, message: t('attendance.holidayConfig.ruleSchool'), trigger: 'change' }],
+    school: [
+      { required: true, message: t('attendance.holidayConfig.ruleSchool'), trigger: 'change' }
+    ],
     department: [
       { required: true, message: t('attendance.holidayConfig.ruleDepartment'), trigger: 'change' }
     ],
@@ -140,7 +147,9 @@ const submit = async () => {
   try {
     const api = model.id ? attendanceHolidayApi.sysConfigUpdate : attendanceHolidayApi.sysConfigSave
     await api.post({ ...model })
-    ElMessage.success(model.id ? t('attendance.holidayConfig.saveOk') : t('attendance.holidayConfig.addOk'))
+    ElMessage.success(
+      model.id ? t('attendance.holidayConfig.saveOk') : t('attendance.holidayConfig.addOk')
+    )
     emit('success')
     innerVisible.value = false
   } finally {

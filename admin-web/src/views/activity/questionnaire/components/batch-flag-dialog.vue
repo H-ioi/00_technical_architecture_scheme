@@ -18,7 +18,9 @@
       :config="formConfig" />
     <template #footer>
       <el-button @click="visible = false">{{ $t('common.cancel') }}</el-button>
-      <el-button type="primary" :loading="saving" @click="submit">{{ $t('common.submit') }}</el-button>
+      <el-button type="primary" :loading="saving" @click="submit">{{
+        $t('common.submit')
+      }}</el-button>
     </template>
   </el-dialog>
 </template>
@@ -140,11 +142,13 @@ defineExpose({
 </script>
 
 <style scoped lang="scss">
-.activity-q-batch-flag__hint {
-  margin-bottom: 12px;
-}
+.activity-q-batch-flag {
+  &__hint {
+    margin-bottom: 12px;
+  }
 
-.activity-q-batch-flag__form {
-  margin-top: 4px;
+  &__form {
+    margin-top: 4px;
+  }
 }
 </style>

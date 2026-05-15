@@ -290,6 +290,7 @@ const reloadTable = () => {
 .perm-role-scope-select {
   width: 100%;
 }
+
 .perm-role-scope-hint {
   margin: 0 0 8px;
   font-size: 12px;

@@ -17,18 +17,39 @@
       </template>
     </UniDataTable>
 
-    <el-dialog v-model="approveVisible" :title="$t('attendance.holidayTask.approveTitle')" width="640px" destroy-on-close>
+    <el-dialog
+      v-model="approveVisible"
+      :title="$t('attendance.holidayTask.approveTitle')"
+      width="640px"
+      destroy-on-close>
       <div class="holiday-task-approve__grid">
-        <p><strong>{{ $t('attendance.studentName') }}：</strong>{{ formData.studentName || formData.name || '—' }}</p>
-        <p><strong>{{ $t('attendance.admissionNo') }}：</strong>{{ formData.admissonNo || '—' }}</p>
-        <p><strong>{{ $t('attendance.school') }}：</strong>{{ formData.studentSchool || '—' }}</p>
-        <p><strong>{{ $t('attendance.grade') }}：</strong>{{ formData.studentGrade || '—' }}</p>
-        <p><strong>{{ $t('attendance.className') }}：</strong>{{ formData.studentClass || '—' }}</p>
+        <p>
+          <strong>{{ $t('attendance.studentName') }}：</strong
+          >{{ formData.studentName || formData.name || '—' }}
+        </p>
+        <p>
+          <strong>{{ $t('attendance.admissionNo') }}：</strong>{{ formData.admissonNo || '—' }}
+        </p>
+        <p>
+          <strong>{{ $t('attendance.school') }}：</strong>{{ formData.studentSchool || '—' }}
+        </p>
+        <p>
+          <strong>{{ $t('attendance.grade') }}：</strong>{{ formData.studentGrade || '—' }}
+        </p>
+        <p>
+          <strong>{{ $t('attendance.className') }}：</strong>{{ formData.studentClass || '—' }}
+        </p>
         <p>
           <strong>{{ $t('attendance.holiday.detailBeginTime') }}：</strong
-          >{{ formData.beginTime ? `${formData.beginTime} ${$t('attendance.holidayTask.to')} ${formData.endTime}` : '—' }}
+          >{{
+            formData.beginTime
+              ? `${formData.beginTime} ${$t('attendance.holidayTask.to')} ${formData.endTime}`
+              : '—'
+          }}
         </p>
-        <p class="holiday-task-approve__full"><strong>{{ $t('attendance.holiday.reason') }}：</strong>{{ formData.reason || '—' }}</p>
+        <p class="holiday-task-approve__full">
+          <strong>{{ $t('attendance.holiday.reason') }}：</strong>{{ formData.reason || '—' }}
+        </p>
         <div v-if="taskName === '护士审批'" class="holiday-task-approve__full">
           <span class="required">{{ $t('attendance.holiday.infectious') }}</span>
           <el-radio-group v-model="formData.isInfectious">
@@ -36,7 +57,9 @@
             <el-radio label="102">{{ $t('attendance.no') }}</el-radio>
           </el-radio-group>
         </div>
-        <div v-if="taskName === '护士审批' && formData.isInfectious === '101'" class="holiday-task-approve__full">
+        <div
+          v-if="taskName === '护士审批' && formData.isInfectious === '101'"
+          class="holiday-task-approve__full">
           <span>{{ $t('attendance.holidayTask.extendTime') }}</span>
           <el-date-picker
             v-model="formData.dateRange"
@@ -45,16 +68,28 @@
             format="YYYY-MM-DD HH:mm"
             style="width: 100%" />
         </div>
-        <el-input v-model="formData.remark" type="textarea" :rows="3" :placeholder="$t('attendance.holiday.detailBeginTime')" />
+        <el-input
+          v-model="formData.remark"
+          type="textarea"
+          :rows="3"
+          :placeholder="$t('attendance.holiday.detailBeginTime')" />
       </div>
       <template #footer>
         <el-button @click="approveVisible = false">{{ $t('common.cancel') }}</el-button>
-        <el-button type="danger" :loading="submitting" @click="reject">{{ $t('attendance.holidayTask.reject') }}</el-button>
-        <el-button type="primary" :loading="submitting" @click="approve">{{ $t('attendance.holidayTask.approve') }}</el-button>
+        <el-button type="danger" :loading="submitting" @click="reject">{{
+          $t('attendance.holidayTask.reject')
+        }}</el-button>
+        <el-button type="primary" :loading="submitting" @click="approve">{{
+          $t('attendance.holidayTask.approve')
+        }}</el-button>
       </template>
     </el-dialog>
 
-    <el-dialog v-model="traceVisible" :title="$t('attendance.holidayTask.flowChart')" width="80%" destroy-on-close>
+    <el-dialog
+      v-model="traceVisible"
+      :title="$t('attendance.holidayTask.flowChart')"
+      width="80%"
+      destroy-on-close>
       <img v-if="flowImg" :src="flowImg" alt="" style="max-width: 100%" />
       <el-steps direction="vertical" style="margin-top: 16px">
         <el-step
@@ -69,7 +104,12 @@
 </template>
 
 <script setup lang="ts">
-import type { UniTableAction, UniTableColumn, UniTableRequest, UniTableRequestResult } from 'uni-ui-lib'
+import type {
+  UniTableAction,
+  UniTableColumn,
+  UniTableRequest,
+  UniTableRequestResult
+} from 'uni-ui-lib'
 import { UniDataTable, useUniI18n, useUniListState } from 'uni-ui-lib'
 import { ElMessage } from 'element-plus'
 import { computed, reactive, ref } from 'vue'
@@ -114,13 +154,40 @@ const formData = reactive<Loose>({
 
 const columns = computed<UniTableColumn[]>(() => [
   { prop: 'taskId', label: t('attendance.holidayTask.colTaskId'), type: 'text', minWidth: 120 },
-  { prop: 'taskName', label: t('attendance.holidayTask.colTaskName'), type: 'text', minWidth: 120, showOverflowTooltip: true },
-  { prop: 'procDefName', label: t('attendance.holidayTask.colProcName'), type: 'text', minWidth: 120, showOverflowTooltip: true },
-  { prop: 'startUserName', label: t('attendance.holidayTask.colStarter'), type: 'text', minWidth: 100 },
+  {
+    prop: 'taskName',
+    label: t('attendance.holidayTask.colTaskName'),
+    type: 'text',
+    minWidth: 120,
+    showOverflowTooltip: true
+  },
+  {
+    prop: 'procDefName',
+    label: t('attendance.holidayTask.colProcName'),
+    type: 'text',
+    minWidth: 120,
+    showOverflowTooltip: true
+  },
+  {
+    prop: 'startUserName',
+    label: t('attendance.holidayTask.colStarter'),
+    type: 'text',
+    minWidth: 100
+  },
   { prop: 'studentSchool', label: t('attendance.school'), type: 'text', minWidth: 120 },
   { prop: 'studentName', label: t('attendance.studentName'), type: 'text', minWidth: 100 },
-  { prop: 'startTime', label: t('attendance.holidayTask.colStartTime'), type: 'datetime', minWidth: 160 },
-  { prop: 'assigneeName', label: t('attendance.holidayTask.colAssignee'), type: 'text', minWidth: 100 }
+  {
+    prop: 'startTime',
+    label: t('attendance.holidayTask.colStartTime'),
+    type: 'datetime',
+    minWidth: 160
+  },
+  {
+    prop: 'assigneeName',
+    label: t('attendance.holidayTask.colAssignee'),
+    type: 'text',
+    minWidth: 100
+  }
 ])
 
 const loadData: UniTableRequest = async ({ pageNo, pageSize }) => {
@@ -213,9 +280,11 @@ const actions = computed<UniTableAction[]>(() => [
   gap: 8px;
   font-size: 14px;
 }
+
 .holiday-task-approve__full {
   width: 100%;
 }
+
 .required::before {
   content: '*';
   color: var(--el-color-danger);

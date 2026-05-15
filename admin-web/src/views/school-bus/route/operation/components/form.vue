@@ -1,9 +1,5 @@
 <template>
-  <el-dialog
-    v-model="visible"
-    :title="title"
-    width="1000px"
-    destroy-on-close>
+  <el-dialog v-model="visible" :title="title" width="1000px" destroy-on-close>
     <div
       v-loading="detailLoading"
       class="school-bus-operation-form__wrap"
@@ -148,33 +144,17 @@ const carUniOptions = computed(() =>
 
 const dialogRules = computed<FormRules<OperationFormModel>>(() => {
   const r: FormRules<OperationFormModel> = {
-    sectionId: [
-      { required: true, message: t('schoolBus.pleaseSelect'), trigger: 'change' }
-    ],
-    lineId: [
-      { required: true, message: t('schoolBus.pleaseSelect'), trigger: 'change' }
-    ],
-    stationId: [
-      { required: true, message: t('schoolBus.pleaseSelect'), trigger: 'change' }
-    ],
-    schoolTimeType: [
-      { required: true, message: t('schoolBus.pleaseSelect'), trigger: 'change' }
-    ],
-    carId: [
-      { required: true, message: t('schoolBus.pleaseSelect'), trigger: 'change' }
-    ],
-    rideDate: [
-      { required: true, message: t('schoolBus.pleaseSelect'), trigger: 'change' }
-    ],
-    arrivalTime: [
-      { required: true, message: t('schoolBus.pleaseSelect'), trigger: 'change' }
-    ]
+    sectionId: [{ required: true, message: t('schoolBus.pleaseSelect'), trigger: 'change' }],
+    lineId: [{ required: true, message: t('schoolBus.pleaseSelect'), trigger: 'change' }],
+    stationId: [{ required: true, message: t('schoolBus.pleaseSelect'), trigger: 'change' }],
+    schoolTimeType: [{ required: true, message: t('schoolBus.pleaseSelect'), trigger: 'change' }],
+    carId: [{ required: true, message: t('schoolBus.pleaseSelect'), trigger: 'change' }],
+    rideDate: [{ required: true, message: t('schoolBus.pleaseSelect'), trigger: 'change' }],
+    arrivalTime: [{ required: true, message: t('schoolBus.pleaseSelect'), trigger: 'change' }]
   }
 
   if (multiSchool.value) {
-    r.school = [
-      { required: true, message: t('schoolBus.driver.ruleSchoolIds'), trigger: 'change' }
-    ]
+    r.school = [{ required: true, message: t('schoolBus.driver.ruleSchoolIds'), trigger: 'change' }]
   }
 
   return r
@@ -391,9 +371,7 @@ const onLineChange = async (lineId: string | number | undefined) => {
     return
   }
 
-  const st = normalizeArray(
-    await schoolBusCommonApi.stationList.get({ lineId })
-  ) as StationRow[]
+  const st = normalizeArray(await schoolBusCommonApi.stationList.get({ lineId })) as StationRow[]
 
   stationOptionsFiltered.value = st
 
@@ -555,12 +533,14 @@ const submit = async () => {
 </script>
 
 <style scoped lang="scss">
-.school-bus-operation-form__wrap {
-  max-height: 560px;
-  overflow: auto;
-}
+.school-bus-operation-form {
+  &__wrap {
+    max-height: 560px;
+    overflow: auto;
+  }
 
-.school-bus-operation-form__full {
-  width: 100%;
+  &__full {
+    width: 100%;
+  }
 }
 </style>

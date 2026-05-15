@@ -1,9 +1,5 @@
 <template>
-  <el-dialog
-    v-model="visible"
-    :title="title"
-    width="1000px"
-    destroy-on-close>
+  <el-dialog v-model="visible" :title="title" width="1000px" destroy-on-close>
     <div
       v-loading="detailLoading"
       class="school-bus-exception-form__wrap"
@@ -149,36 +145,20 @@ const needDispatchUniOptions = computed(() => [
 
 const dialogRules = computed<FormRules<ExceptionFormModel>>(() => {
   const r: FormRules<ExceptionFormModel> = {
-    sectionId: [
-      { required: true, message: t('schoolBus.pleaseSelect'), trigger: 'change' }
-    ],
-    lineId: [
-      { required: true, message: t('schoolBus.pleaseSelect'), trigger: 'change' }
-    ],
-    carId: [
-      { required: true, message: t('schoolBus.pleaseSelect'), trigger: 'change' }
-    ],
-    exceptionDate: [
-      { required: true, message: t('schoolBus.pleaseSelect'), trigger: 'change' }
-    ],
-    exceptionType: [
-      { required: true, message: t('schoolBus.pleaseSelect'), trigger: 'change' }
-    ],
-    details: [
-      { required: true, message: t('schoolBus.pleaseSelect'), trigger: 'blur' }
-    ]
+    sectionId: [{ required: true, message: t('schoolBus.pleaseSelect'), trigger: 'change' }],
+    lineId: [{ required: true, message: t('schoolBus.pleaseSelect'), trigger: 'change' }],
+    carId: [{ required: true, message: t('schoolBus.pleaseSelect'), trigger: 'change' }],
+    exceptionDate: [{ required: true, message: t('schoolBus.pleaseSelect'), trigger: 'change' }],
+    exceptionType: [{ required: true, message: t('schoolBus.pleaseSelect'), trigger: 'change' }],
+    details: [{ required: true, message: t('schoolBus.pleaseSelect'), trigger: 'blur' }]
   }
 
   if (multiSchool.value) {
-    r.school = [
-      { required: true, message: t('schoolBus.driver.ruleSchoolIds'), trigger: 'change' }
-    ]
+    r.school = [{ required: true, message: t('schoolBus.driver.ruleSchoolIds'), trigger: 'change' }]
   }
 
   if (formModel.value.exceptionType === '1') {
-    r.needDispatch = [
-      { required: true, message: t('schoolBus.pleaseSelect'), trigger: 'change' }
-    ]
+    r.needDispatch = [{ required: true, message: t('schoolBus.pleaseSelect'), trigger: 'change' }]
     if (formModel.value.needDispatch === 1) {
       r.dispatchCarId = [
         { required: true, message: t('schoolBus.pleaseSelect'), trigger: 'change' }
@@ -600,12 +580,14 @@ const submit = async () => {
 </script>
 
 <style scoped lang="scss">
-.school-bus-exception-form__wrap {
-  max-height: 560px;
-  overflow: auto;
-}
+.school-bus-exception-form {
+  &__wrap {
+    max-height: 560px;
+    overflow: auto;
+  }
 
-.school-bus-exception-form__full {
-  width: 100%;
+  &__full {
+    width: 100%;
+  }
 }
 </style>

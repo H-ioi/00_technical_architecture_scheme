@@ -308,37 +308,39 @@ watch(
 </script>
 
 <style scoped lang="scss">
-.order-detail__loading {
-  padding: 24px;
-  text-align: center;
-}
+.order-detail {
+  &__loading {
+    padding: 24px;
+    text-align: center;
+  }
 
-.order-detail__desc {
-  margin-bottom: 16px;
-}
+  &__desc {
+    margin-bottom: 16px;
+  }
 
-.order-detail__pay {
-  margin: 16px 0;
-}
+  &__pay {
+    margin: 16px 0;
+  }
 
-.order-detail__sign {
-  margin: 16px 0;
-}
+  &__sign {
+    margin: 16px 0;
+  }
 
-.order-detail__sign-img {
-  max-width: 240px;
-  max-height: 120px;
-  margin-top: 8px;
-}
+  &__sign-img {
+    max-width: 240px;
+    max-height: 120px;
+    margin-top: 8px;
+  }
 
-.order-detail__sub-title {
-  margin: 16px 0 8px;
-  font-size: 14px;
-  font-weight: 600;
-}
+  &__sub-title {
+    margin: 16px 0 8px;
+    font-size: 14px;
+    font-weight: 600;
+  }
 
-.order-detail__thumb {
-  width: 64px;
-  height: 64px;
+  &__thumb {
+    width: 64px;
+    height: 64px;
+  }
 }
 </style>

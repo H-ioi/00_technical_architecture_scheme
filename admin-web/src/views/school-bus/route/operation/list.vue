@@ -256,11 +256,13 @@ const del = async () => {
 </script>
 
 <style scoped lang="scss">
-.school-bus-route-operation__file {
-  position: absolute;
-  width: 0;
-  height: 0;
-  opacity: 0;
-  pointer-events: none;
+.school-bus-route-operation {
+  &__file {
+    position: absolute;
+    width: 0;
+    height: 0;
+    opacity: 0;
+    pointer-events: none;
+  }
 }
 </style>

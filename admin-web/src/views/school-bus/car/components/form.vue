@@ -1,9 +1,5 @@
 <template>
-  <el-dialog
-    v-model="visible"
-    :title="title"
-    width="720px"
-    destroy-on-close>
+  <el-dialog v-model="visible" :title="title" width="720px" destroy-on-close>
     <div
       v-loading="detailLoading"
       class="school-bus-car-form__body"
@@ -228,20 +224,22 @@ const submit = async () => {
 </script>
 
 <style scoped lang="scss">
-.car-form__upload {
-  margin-top: 12px;
-}
+.car-form {
+  &__upload {
+    margin-top: 12px;
+  }
 
-.car-form__upload-label {
-  margin-bottom: 8px;
-  font-size: 13px;
-}
+  &__upload-label {
+    margin-bottom: 8px;
+    font-size: 13px;
+  }
 
-.car-form__url {
-  display: block;
-  margin-top: 8px;
-  font-size: 12px;
-  color: var(--el-text-color-secondary);
-  word-break: break-all;
+  &__url {
+    display: block;
+    margin-top: 8px;
+    font-size: 12px;
+    color: var(--el-text-color-secondary);
+    word-break: break-all;
+  }
 }
 </style>

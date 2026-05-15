@@ -10,7 +10,9 @@
     <UniForm ref="uniFormRef" v-model="form" mode="edit" :config="formConfig" />
     <template #footer>
       <el-button @click="visible = false">{{ $t('common.cancel') }}</el-button>
-      <el-button type="primary" :loading="saving" @click="submit">{{ $t('common.submit') }}</el-button>
+      <el-button type="primary" :loading="saving" @click="submit">{{
+        $t('common.submit')
+      }}</el-button>
     </template>
   </el-dialog>
 </template>
@@ -69,7 +71,9 @@ async function loadActivities() {
   const rows = normalizeArray(raw) as Record<string, unknown>[]
   actOpts.value = rows.map((x) => ({
     label: String(
-      locale.value === 'en' ? x.activityEnName ?? x.activityCnName : x.activityCnName ?? x.activityEnName ?? x.id
+      locale.value === 'en'
+        ? (x.activityEnName ?? x.activityCnName)
+        : (x.activityCnName ?? x.activityEnName ?? x.id)
     ),
     value: x.id as string | number
   }))

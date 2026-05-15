@@ -169,7 +169,9 @@ const submit = async () => {
 </script>
 
 <style scoped lang="scss">
-.email-send-dialog__full {
-  width: 100%;
+.email-send-dialog {
+  &__full {
+    width: 100%;
+  }
 }
 </style>

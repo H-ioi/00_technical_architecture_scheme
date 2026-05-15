@@ -1,9 +1,5 @@
 <template>
-  <el-dialog
-    v-model="visible"
-    destroy-on-close
-    width="640px"
-    :title="t('permission.assignMenu')">
+  <el-dialog v-model="visible" destroy-on-close width="640px" :title="t('permission.assignMenu')">
     <div
       v-loading="loading"
       class="permission-assign-tree"
@@ -21,9 +17,7 @@
         :default-checked-keys="checkedKeys" />
     </div>
     <template #footer>
-      <el-button @click="visible = false">{{
-        t('permission.cancel')
-      }}</el-button>
+      <el-button @click="visible = false">{{ t('permission.cancel') }}</el-button>
       <el-button type="primary" :loading="saving" @click="submit">{{
         t('permission.save')
       }}</el-button>

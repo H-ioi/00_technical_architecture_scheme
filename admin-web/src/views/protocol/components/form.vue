@@ -1,9 +1,5 @@
 <template>
-  <el-dialog
-    v-model="visible"
-    :title="title"
-    width="920px"
-    destroy-on-close>
+  <el-dialog v-model="visible" :title="title" width="920px" destroy-on-close>
     <div
       v-loading="detailLoading"
       class="protocol-form__body"
@@ -74,9 +70,7 @@ const dialogFormConfig = computed<UniFormConfig>(() =>
     props.statusOptions
   )
 )
-const title = computed(() =>
-  t(props.mode === 'add' ? 'protocol.add' : 'protocol.edit')
-)
+const title = computed(() => t(props.mode === 'add' ? 'protocol.add' : 'protocol.edit'))
 
 const revalidateDocument = () => {
   nextTick(() => {
@@ -198,9 +192,11 @@ watch(visible, async (isOpen) => {
 </script>
 
 <style scoped lang="scss">
-.protocol-form__upload-tip {
-  margin-top: 8px;
-  color: var(--app-text-color-secondary);
-  font-size: 12px;
+.protocol-form {
+  &__upload-tip {
+    margin-top: 8px;
+    color: var(--app-text-color-secondary);
+    font-size: 12px;
+  }
 }
 </style>

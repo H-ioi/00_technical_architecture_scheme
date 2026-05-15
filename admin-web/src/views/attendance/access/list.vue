@@ -75,5 +75,3 @@ const retryTable = () => {
   tableRef.value?.refresh()
 }
 </script>
-
-<style scoped lang="scss"></style>

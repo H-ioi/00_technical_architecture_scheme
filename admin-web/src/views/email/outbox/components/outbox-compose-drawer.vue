@@ -161,7 +161,9 @@ const composeFormConfig = computed<UniFormConfig>(() => ({
         placeholder: tr('email.outbox.attachHint'),
         class: 'email-compose-control',
         onBlur: () => {
-          void uniFormExpose()?.validateField?.('toGroups')?.catch(() => {})
+          void uniFormExpose()
+            ?.validateField?.('toGroups')
+            ?.catch(() => {})
         }
       }
     },
@@ -231,7 +233,9 @@ const composeFormConfig = computed<UniFormConfig>(() => ({
 watch(
   () => form.value.toGroups,
   () => {
-    void uniFormExpose()?.validateField?.('otherMails')?.catch(() => {})
+    void uniFormExpose()
+      ?.validateField?.('otherMails')
+      ?.catch(() => {})
   }
 )
 

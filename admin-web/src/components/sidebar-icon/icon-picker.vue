@@ -107,17 +107,21 @@ const onClear = () => {
 .icon-picker__input {
   width: 100%;
 }
+
 .icon-picker__prefix-ico {
   font-size: 18px;
 }
+
 .icon-picker__open {
   padding: 0 4px;
   font-weight: 700;
   letter-spacing: 1px;
 }
+
 .icon-picker__search {
   margin-bottom: 12px;
 }
+
 .icon-picker__grid-wrap {
   max-height: 360px;
   overflow-y: auto;
@@ -125,11 +129,13 @@ const onClear = () => {
   border-radius: 6px;
   padding: 8px;
 }
+
 .icon-picker__grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(48px, 1fr));
   gap: 8px;
 }
+
 .icon-picker__cell {
   display: flex;
   align-items: center;
@@ -145,15 +151,18 @@ const onClear = () => {
   transition:
     border-color 0.15s,
     background 0.15s;
+
   &:hover {
     border-color: var(--el-color-primary-light-5);
     background: var(--el-fill-color-light);
   }
+
   &.is-active {
     border-color: var(--el-color-primary);
     background: var(--el-color-primary-light-9);
   }
 }
+
 .icon-picker__cell-ico {
   font-size: 22px;
 }

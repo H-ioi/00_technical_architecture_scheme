@@ -10,9 +10,7 @@
       </template>
     </UniForm>
     <template #footer>
-      <el-button @click="visible = false">{{
-        t('permission.cancel')
-      }}</el-button>
+      <el-button @click="visible = false">{{ t('permission.cancel') }}</el-button>
       <el-button type="primary" :loading="submitting" @click="onSaveClick">{{
         t('permission.save')
       }}</el-button>
@@ -67,16 +65,20 @@ const dialogFormConfig = computed<UniFormConfig>(() =>
   menuEditDialogFormConfig(t, props.parentOptions)
 )
 
-watch(visible, (opened) => {
-  if (!opened) {
-    return
-  }
-  const { children: _drop, ...rest } = props.snapshot
-  draft.value = { ...emptyDraft(), ...rest }
-  void nextTick(() => {
-    uniFormRef.value?.clearValidate()
-  })
-}, { flush: 'sync' })
+watch(
+  visible,
+  (opened) => {
+    if (!opened) {
+      return
+    }
+    const { children: _drop, ...rest } = props.snapshot
+    draft.value = { ...emptyDraft(), ...rest }
+    void nextTick(() => {
+      uniFormRef.value?.clearValidate()
+    })
+  },
+  { flush: 'sync' }
+)
 
 const onSaveClick = async () => {
   try {

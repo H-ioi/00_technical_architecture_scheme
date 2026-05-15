@@ -73,7 +73,9 @@
       </template>
       <template #field-weekDays>
         <el-checkbox-group v-model="form.weekDays">
-          <el-checkbox v-for="d in weekOpts" :key="d.value" :label="d.value">{{ d.label }}</el-checkbox>
+          <el-checkbox v-for="d in weekOpts" :key="d.value" :label="d.value">{{
+            d.label
+          }}</el-checkbox>
         </el-checkbox-group>
       </template>
       <template #field-dateLimit>
@@ -170,15 +172,11 @@ const form = reactive({
   attachments: ''
 })
 const rules = computed<UniFormConfig['rules']>(() => ({
-  admissonNo: [
-    { required: true, message: t('attendance.holiday.ruleStudent'), trigger: 'change' }
-  ],
+  admissonNo: [{ required: true, message: t('attendance.holiday.ruleStudent'), trigger: 'change' }],
   type: [{ required: true, message: t('attendance.holiday.ruleType'), trigger: 'change' }],
   scope: [{ required: true, message: t('attendance.holiday.ruleScope'), trigger: 'change' }],
   reason: [{ required: true, message: t('attendance.holiday.ruleReason'), trigger: 'blur' }],
-  dateRange: [
-    { required: true, message: t('attendance.holiday.ruleDate'), trigger: 'change' }
-  ],
+  dateRange: [{ required: true, message: t('attendance.holiday.ruleDate'), trigger: 'change' }],
   dateLimit: [
     {
       validator: (_rule, _value, cb) => {
@@ -468,43 +466,47 @@ const doSubmit = async () => {
 </script>
 
 <style scoped lang="scss">
-.holiday-form-drawer__form {
-  padding-right: 8px;
-}
-
-.holiday-form-drawer__student {
-  margin-top: 8px;
-  font-size: 13px;
-  line-height: 1.6;
-  .label {
-    color: var(--el-text-color-secondary);
-  }
-}
-
-.holiday-form-drawer__footer {
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  flex-wrap: wrap;
-  width: 100%;
-  :deep(.el-checkbox:last-of-type) {
-    margin-right: 20px;
-  }
-}
-
-.holiday-form-drawer__parent {
-  max-width: min(360px, 100%);
-
-  :deep(.el-checkbox) {
-    align-items: flex-start;
-    height: auto;
-    white-space: normal;
+.holiday-form-drawer {
+  &__form {
+    padding-right: 8px;
   }
 
-  :deep(.el-checkbox__label) {
-    color: var(--el-text-color-secondary);
+  &__student {
+    margin-top: 8px;
     font-size: 13px;
-    line-height: 1.5;
+    line-height: 1.6;
+
+    .label {
+      color: var(--el-text-color-secondary);
+    }
+  }
+
+  &__footer {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    flex-wrap: wrap;
+    width: 100%;
+
+    :deep(.el-checkbox:last-of-type) {
+      margin-right: 20px;
+    }
+  }
+
+  &__parent {
+    max-width: min(360px, 100%);
+
+    :deep(.el-checkbox) {
+      align-items: flex-start;
+      height: auto;
+      white-space: normal;
+    }
+
+    :deep(.el-checkbox__label) {
+      color: var(--el-text-color-secondary);
+      font-size: 13px;
+      line-height: 1.5;
+    }
   }
 }
 </style>

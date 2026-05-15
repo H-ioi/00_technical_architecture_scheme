@@ -386,12 +386,13 @@ $holidays-flow-stage-h: calc(100vh - 296px);
   overflow-y: auto;
   border-left: 1px solid var(--el-border-color-lighter);
   background: var(--el-bg-color);
-
   scrollbar-width: thin;
   scrollbar-color: var(--el-border-color-darker) transparent;
+
   &::-webkit-scrollbar {
     width: 8px;
   }
+
   &::-webkit-scrollbar-thumb {
     background: var(--el-border-color);
     border-radius: 4px;

@@ -141,5 +141,3 @@ const del = async () => {
   reload()
 }
 </script>
-
-<style scoped lang="scss"></style>

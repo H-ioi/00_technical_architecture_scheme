@@ -17,7 +17,11 @@
       </template>
     </UniDataTable>
 
-    <el-dialog v-model="traceVisible" :title="$t('attendance.holidayTask.flowChart')" width="80%" destroy-on-close>
+    <el-dialog
+      v-model="traceVisible"
+      :title="$t('attendance.holidayTask.flowChart')"
+      width="80%"
+      destroy-on-close>
       <img v-if="flowImg" :src="flowImg" alt="" style="max-width: 100%" />
       <el-steps direction="vertical" style="margin-top: 16px">
         <el-step
@@ -31,7 +35,12 @@
 </template>
 
 <script setup lang="ts">
-import type { UniTableAction, UniTableColumn, UniTableRequest, UniTableRequestResult } from 'uni-ui-lib'
+import type {
+  UniTableAction,
+  UniTableColumn,
+  UniTableRequest,
+  UniTableRequestResult
+} from 'uni-ui-lib'
 import { UniDataTable, useUniI18n, useUniListState } from 'uni-ui-lib'
 import { computed, ref } from 'vue'
 
@@ -68,18 +77,44 @@ const hiTasks = ref<Loose[]>([])
 
 const columns = computed<UniTableColumn[]>(() => {
   const base: UniTableColumn[] = [
-    { prop: 'flowDefId', label: t('attendance.holidayTask.colFlowDefId'), type: 'text', minWidth: 120 },
-    { prop: 'flowDefName', label: t('attendance.holidayTask.colProcName'), type: 'text', minWidth: 120, showOverflowTooltip: true }
+    {
+      prop: 'flowDefId',
+      label: t('attendance.holidayTask.colFlowDefId'),
+      type: 'text',
+      minWidth: 120
+    },
+    {
+      prop: 'flowDefName',
+      label: t('attendance.holidayTask.colProcName'),
+      type: 'text',
+      minWidth: 120,
+      showOverflowTooltip: true
+    }
   ]
   if (props.variant === 'done') {
-    base.push({ prop: 'userName', label: t('attendance.holidayTask.colStarter'), type: 'text', minWidth: 100 })
+    base.push({
+      prop: 'userName',
+      label: t('attendance.holidayTask.colStarter'),
+      type: 'text',
+      minWidth: 100
+    })
   }
   base.push(
     { prop: 'studentSchool', label: t('attendance.school'), type: 'text', minWidth: 120 },
     { prop: 'studentName', label: t('attendance.studentName'), type: 'text', minWidth: 100 },
-    { prop: 'startDate', label: t('attendance.holidayTask.colStartTime'), type: 'text', minWidth: 140 },
+    {
+      prop: 'startDate',
+      label: t('attendance.holidayTask.colStartTime'),
+      type: 'text',
+      minWidth: 140
+    },
     { prop: 'endDate', label: t('attendance.holidayTask.colEndTime'), type: 'text', minWidth: 140 },
-    { prop: 'flowProceId', label: t('attendance.holidayTask.colInstanceId'), type: 'text', minWidth: 140 }
+    {
+      prop: 'flowProceId',
+      label: t('attendance.holidayTask.colInstanceId'),
+      type: 'text',
+      minWidth: 140
+    }
   )
   return base
 })

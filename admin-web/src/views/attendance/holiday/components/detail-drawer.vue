@@ -37,8 +37,10 @@ const viewFormModel = useViewOnlyFormModel(() => props.source)
 </script>
 
 <style scoped lang="scss">
-.holiday-detail-drawer__body {
-  min-height: 200px;
-  position: relative;
+.holiday-detail-drawer {
+  &__body {
+    min-height: 200px;
+    position: relative;
+  }
 }
 </style>

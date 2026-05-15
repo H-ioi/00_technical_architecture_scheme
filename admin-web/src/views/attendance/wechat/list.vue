@@ -115,5 +115,3 @@ const batchStatus = async (status: number) => {
   }
 }
 </script>
-
-<style scoped lang="scss"></style>

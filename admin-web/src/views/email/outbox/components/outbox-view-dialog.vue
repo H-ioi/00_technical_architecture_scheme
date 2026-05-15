@@ -12,7 +12,9 @@
       <div class="email-outbox-view__row">
         <span class="email-outbox-view__label">{{ $t('email.outbox.colSendStatus') }}</span>
         <span class="email-outbox-view__val">
-          <template v-if="Number(detail.sendResult) === 1">{{ $t('email.outbox.sendOk') }}</template>
+          <template v-if="Number(detail.sendResult) === 1">{{
+            $t('email.outbox.sendOk')
+          }}</template>
           <template v-else-if="Number(detail.sendResult) === 0">
             {{ $t('email.outbox.sendFail') }}
             <template v-if="detail.sendDetails"> 【{{ detail.sendDetails }}】</template>
@@ -38,7 +40,9 @@
       </div>
       <div class="email-outbox-view__row">
         <span class="email-outbox-view__label">{{ $t('email.outbox.colContent') }}</span>
-        <span class="email-outbox-view__val email-outbox-view__pre">{{ detail.content || '—' }}</span>
+        <span class="email-outbox-view__val email-outbox-view__pre">{{
+          detail.content || '—'
+        }}</span>
       </div>
     </div>
     <template #footer>
@@ -94,7 +98,7 @@ const formatGroupNames = (list: unknown): string => {
 
   &__val {
     flex: 1;
-    word-break: break-word;
+    overflow-wrap: anywhere;
   }
 
   &__pre {

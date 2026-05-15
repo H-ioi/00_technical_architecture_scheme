@@ -252,11 +252,13 @@ const del = async () => {
 </script>
 
 <style scoped lang="scss">
-.school-bus-route-exception__file {
-  position: absolute;
-  width: 0;
-  height: 0;
-  opacity: 0;
-  pointer-events: none;
+.school-bus-route-exception {
+  &__file {
+    position: absolute;
+    width: 0;
+    height: 0;
+    opacity: 0;
+    pointer-events: none;
+  }
 }
 </style>

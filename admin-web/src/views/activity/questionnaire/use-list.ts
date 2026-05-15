@@ -12,31 +12,31 @@ import { normalizeArray, normalizePaged } from '@/utils/api-response-normalize'
 
 import { searchForm, tableCols } from './list.config'
 
-function stripSlash(s: string): string {
-  return s.replace(/\/$/, '')
+function stripTrailingSlash(path: string): string {
+  return path.replace(/\/$/, '')
 }
 
 function buildQuestionnaireSignupUrl(questionnaireId: string | number): string {
-  const origin = stripSlash(String(import.meta.env.VITE_COMMUNITY_WEB_ORIGIN ?? ''))
+  const origin = stripTrailingSlash(String(import.meta.env.VITE_COMMUNITY_WEB_ORIGIN ?? ''))
   if (!origin) {
     return ''
   }
   return `${origin}/#/isacommunity/activity/questionnaire/signup?id=${encodeURIComponent(String(questionnaireId))}`
 }
 
-function yesNoOptions(t: (k: string) => string): UniOption[] {
+function yesNoOptions(t: Translate): UniOption[] {
   return [
     { label: t('activity.yes'), value: '1' },
     { label: t('activity.no'), value: '0' }
   ]
 }
 
-function fmtTs(v: unknown, empty = '—') {
-  if (v == null || v === '') {
-    return empty
+function formatListTimestamp(value: unknown, emptyText = '—') {
+  if (value == null || value === '') {
+    return emptyText
   }
-  const d = dayjs(String(v))
-  return d.isValid() ? d.format('YYYY-MM-DD HH:mm') : String(v)
+  const d = dayjs(String(value))
+  return d.isValid() ? d.format('YYYY-MM-DD HH:mm') : String(value)
 }
 
 function useMembershipSchoolOptions() {
@@ -56,7 +56,7 @@ function useMembershipSchoolOptions() {
   return { schoolOptions, loadSchoolOptions }
 }
 
-type L = Record<string, unknown>
+type QuestionnaireListRow = Record<string, unknown>
 
 export function useQuestionnaireList(refs: QuestionnaireListDialogRefs) {
   const { t, locale } = useUniI18n()
@@ -68,17 +68,17 @@ export function useQuestionnaireList(refs: QuestionnaireListDialogRefs) {
 
   const ynDispOptions = computed(() => yesNoOptions(tr))
 
-  const loadActs = async () => {
+  const loadOpts = async () => {
     try {
       const raw = await activityApi.listBrief.get({ questionnaireFlag: 1 })
       const rows = normalizeArray(raw) as Record<string, unknown>[]
-      activityOptions.value = rows.map((x) => ({
+      activityOptions.value = rows.map((row) => ({
         label: String(
           locale.value === 'en'
-            ? (x.activityEnName ?? x.activityCnName ?? x.activityName ?? x.name ?? x.id ?? '')
-            : (x.activityCnName ?? x.activityEnName ?? x.activityName ?? x.name ?? x.id ?? '')
+            ? (row.activityEnName ?? row.activityCnName ?? row.activityName ?? row.name ?? row.id ?? '')
+            : (row.activityCnName ?? row.activityEnName ?? row.activityName ?? row.name ?? row.id ?? '')
         ),
-        value: x.id as string | number
+        value: row.id as string | number
       }))
     } catch {
       activityOptions.value = []
@@ -87,36 +87,39 @@ export function useQuestionnaireList(refs: QuestionnaireListDialogRefs) {
 
   onMounted(async () => {
     await loadSchoolOptions()
-    await loadActs()
+    await loadOpts()
   })
+
+  const initialFilters = {
+    name: '',
+    schoolIds: undefined,
+    activityId: undefined,
+    status: undefined,
+    createStartTime: undefined,
+    createEndTime: undefined
+  } as Record<string, unknown>
 
   const {
-    queryModel: qm,
-    filters: filt,
-    handleLoadSuccess: hdl,
-    reset: rst,
-    search: sea,
-    tableRef: tb
+    queryModel,
+    filters,
+    handleLoadSuccess,
+    reset,
+    search,
+    tableRef
   } = useUniListState({
-    initialFilters: {
-      name: '',
-      schoolIds: undefined,
-      activityId: undefined,
-      status: undefined,
-      createStartTime: undefined,
-      createEndTime: undefined
-    } as Record<string, unknown>
+    initialFilters
   })
 
-  const sch = computed(() =>
+  const searchCfg = computed(() =>
     searchForm(tr, schoolOptions.value, activityOptions.value, ynDispOptions.value)
   )
 
-  const cols = computed(() => tableCols(tr, schoolOptions.value, ynDispOptions.value))
+  const columns = computed(() => tableCols(tr, schoolOptions.value, ynDispOptions.value))
 
-  const selRows = ref<L[]>([])
-  const selIds = computed(
-    () => selRows.value.map((r) => r.id).filter((x) => x != null) as Array<string | number>
+  const selectedRows = ref<QuestionnaireListRow[]>([])
+  const selectedIds = computed(
+    () =>
+      selectedRows.value.map((row) => row.id).filter((id) => id != null) as Array<string | number>
   )
 
   /** 与成员列表一致：`schoolIds` 为数组，便于 UniTable `type:array` 按 options 展示 */
@@ -130,45 +133,49 @@ export function useQuestionnaireList(refs: QuestionnaireListDialogRefs) {
     if (typeof raw === 'string') {
       return raw
         .split(/[,;\s]+/)
-        .map((s) => s.trim())
+        .map((segment) => segment.trim())
         .filter(Boolean)
     }
     return [raw]
   }
 
-  const fmt = (list: L[]) => {
+  const applyRowDisplayFormat = (list: QuestionnaireListRow[]) => {
     for (const row of list) {
       row.schoolIds = normalizeSchoolIdsForTable(row.schoolIds)
       row.status = row.status == null ? '' : String(row.status)
       row.frozen = row.frozen == null ? '' : String(row.frozen)
       row.needStudentInfo = row.needStudentInfo == null ? '' : String(row.needStudentInfo)
-      row.createTime = fmtTs(row.createTime)
-      row.updateTime = fmtTs(row.updateTime)
+      row.createTime = formatListTimestamp(row.createTime)
+      row.updateTime = formatListTimestamp(row.updateTime)
     }
   }
 
-  const onSel = (rows: Record<string, unknown>[]) => {
-    selRows.value = rows as L[]
+  const onSelectionChange = (rows: Record<string, unknown>[]) => {
+    selectedRows.value = rows as QuestionnaireListRow[]
   }
 
-  const lod: UniTableRequest = async ({ pageNo, pageSize, filters: f }) => {
-    const fl = f as L
+  const loadData: UniTableRequest = async ({
+    pageNo: current,
+    pageSize: size,
+    filters: filterModel
+  }) => {
+    const f = filterModel as QuestionnaireListRow
     const raw = await activityQuestionnaireApi.page.get({
-      current: pageNo,
-      size: pageSize,
-      name: fl.name || undefined,
-      schoolIds: fl.schoolIds || undefined,
-      activityId: fl.activityId || undefined,
-      status: fl.status || undefined,
-      createStartTime: fl.createStartTime || undefined,
-      createEndTime: fl.createEndTime || undefined
+      current,
+      size,
+      name: f.name || undefined,
+      schoolIds: f.schoolIds || undefined,
+      activityId: f.activityId || undefined,
+      status: f.status || undefined,
+      createStartTime: f.createStartTime || undefined,
+      createEndTime: f.createEndTime || undefined
     })
-    const { list, total } = normalizePaged<L>(raw)
-    fmt(list)
+    const { list, total } = normalizePaged<QuestionnaireListRow>(raw)
+    applyRowDisplayFormat(list)
     return { data: list, total }
   }
 
-  const copySignup = async (row: L) => {
+  const copySignupLink = async (row: QuestionnaireListRow) => {
     if (row.id == null) {
       return
     }
@@ -185,7 +192,7 @@ export function useQuestionnaireList(refs: QuestionnaireListDialogRefs) {
     }
   }
 
-  const openDesignerEdit = (row: L) => {
+  const openDesignerEdit = (row: QuestionnaireListRow) => {
     if (row.id == null) {
       return
     }
@@ -195,71 +202,74 @@ export function useQuestionnaireList(refs: QuestionnaireListDialogRefs) {
     })
   }
 
-  const openSubmissions = (row: L) => {
+  const openSubmissions = (row: QuestionnaireListRow) => {
     if (row.id == null) {
       return
     }
     router.push({ name: 'ActivityQuestionnaireSubmissions', params: { id: String(row.id) } })
   }
 
-  const acts = computed<UniTableAction[]>(() => [
-    { label: tr('activity.questionnaireRowData'), onClick: (row) => openSubmissions(row as L) },
+  const actions = computed<UniTableAction[]>(() => [
+    {
+      label: tr('activity.questionnaireRowData'),
+      onClick: (row) => openSubmissions(row as QuestionnaireListRow)
+    },
     {
       label: tr('activity.entryEdit'),
       code: 'busdriver_edit',
-      onClick: (row) => void refs.metaDlg.value?.open('edit', row as L)
+      onClick: (row) => void refs.metaDlg.value?.open('edit', row as QuestionnaireListRow)
     },
     {
       label: tr('activity.questionnaireDesigner'),
       code: 'busdriver_edit',
-      onClick: (row) => openDesignerEdit(row as L)
+      onClick: (row) => openDesignerEdit(row as QuestionnaireListRow)
     },
     {
       label: tr('activity.actionCopyQuestionnaire'),
       code: 'busdriver_edit',
-      onClick: (row) => void refs.copyDlg.value?.open(row as L)
+      onClick: (row) => void refs.copyDlg.value?.open(row as QuestionnaireListRow)
     },
-    { label: tr('activity.copySignupLink'), onClick: (row) => void copySignup(row as L) }
+    { label: tr('activity.copySignupLink'), onClick: (row) => void copySignupLink(row as QuestionnaireListRow) }
   ])
 
-  const del = async () => {
-    if (!selIds.value.length) {
+  const deleteSelected = async () => {
+    if (!selectedIds.value.length) {
       return
     }
     await ElMessageBox.confirm(tr('activity.confirmDeleteQuestionnaire'), tr('common.tip'), {
       type: 'warning'
     })
-    await activityQuestionnaireApi.remove.delete(selIds.value)
+    await activityQuestionnaireApi.remove.delete(selectedIds.value)
     ElMessage.success(tr('activity.deleteOk'))
-    selRows.value = []
-    tb.value?.refresh()
+    selectedRows.value = []
+    tableRef.value?.refresh()
   }
 
   const openMetaAdd = () => refs.metaDlg.value?.open('add')
 
-  const onDlgSaved = () => tb.value?.refresh()
+  const handleSaved = () => tableRef.value?.refresh()
 
-  const openBatchStatus = () => refs.batchDlg.value?.open('status', selIds.value)
+  const openBatchStatus = () => refs.batchDlg.value?.open('status', selectedIds.value)
 
-  const openBatchFrozen = () => refs.batchDlg.value?.open('frozen', selIds.value)
+  const openBatchFrozen = () => refs.batchDlg.value?.open('frozen', selectedIds.value)
 
   return {
-    acts,
-    cols,
-    del,
-    filt,
-    hdl,
-    lod,
-    onDlgSaved,
-    onSel,
+    actions,
+    columns,
+    deleteSelected,
+    filters,
+    handleLoadSuccess,
+    handleSaved,
+    loadData,
+    onSelectionChange,
     openBatchFrozen,
     openBatchStatus,
     openMetaAdd,
-    qm,
-    rst,
-    sea,
-    selIds,
-    sch,
-    tb
+    queryModel,
+    reset,
+    search,
+    searchCfg,
+    selectedIds,
+    tableRef
   }
 }

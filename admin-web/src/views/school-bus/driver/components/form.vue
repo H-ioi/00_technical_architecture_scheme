@@ -1,9 +1,5 @@
 <template>
-  <el-dialog
-    v-model="visible"
-    :title="title"
-    width="640px"
-    destroy-on-close>
+  <el-dialog v-model="visible" :title="title" width="640px" destroy-on-close>
     <div
       v-loading="detailLoading"
       class="school-bus-driver-form__body"

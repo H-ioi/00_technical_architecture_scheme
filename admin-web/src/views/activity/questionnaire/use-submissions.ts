@@ -23,7 +23,7 @@ import {
 
 function submissionColumnsFromFields(
   fields: Record<string, unknown>[],
-  t: {
+  labels: {
     submissionColCreateTime: string
     submissionColHiddenSuffix: string
     studentBirth: string
@@ -34,12 +34,12 @@ function submissionColumnsFromFields(
   opts: { appendStudentCols: boolean }
 ): SubmissionColumnMeta[] {
   const rows = [...fields]
-    .filter((f) => String(f.type ?? '') !== 'association')
+    .filter((field) => String(field.type ?? '') !== 'association')
     .sort((a, b) => Number(a.sort ?? 0) - Number(b.sort ?? 0))
 
   const base: SubmissionColumnMeta[] = rows.map((item) => {
     const hid = Boolean(item.isHide)
-    const label = `${String(item.label ?? '')}${hid ? t.submissionColHiddenSuffix : ''}`
+    const label = `${String(item.label ?? '')}${hid ? labels.submissionColHiddenSuffix : ''}`
     const propsRaw = Array.isArray(item.properties) ? (item.properties as Record<string, unknown>[]) : []
     return {
       prop: String(item.id ?? ''),
@@ -53,25 +53,25 @@ function submissionColumnsFromFields(
     ? [
         {
           prop: 'studentBirthDate',
-          label: t.studentBirth,
+          label: labels.studentBirth,
           kind: '__student__',
           properties: []
         },
         {
           prop: 'studentGender',
-          label: t.studentGender,
+          label: labels.studentGender,
           kind: '__student__',
           properties: []
         },
         {
           prop: 'studentSchool',
-          label: t.studentSchool,
+          label: labels.studentSchool,
           kind: '__student__',
           properties: []
         },
         {
           prop: 'studentName',
-          label: t.studentName,
+          label: labels.studentName,
           kind: '__student__',
           properties: []
         }
@@ -83,24 +83,24 @@ function submissionColumnsFromFields(
     ...base,
     {
       prop: 'createTime',
-      label: t.submissionColCreateTime,
+      label: labels.submissionColCreateTime,
       kind: '__meta__',
       properties: []
     }
   ].filter((c) => c.prop)
 }
 
-function parseJsonMaybe(v: unknown): unknown {
-  if (v == null || v === '') {
+function parseJsonMaybe(value: unknown): unknown {
+  if (value == null || value === '') {
     return null
   }
-  if (typeof v !== 'string') {
-    return v
+  if (typeof value !== 'string') {
+    return value
   }
   try {
-    return JSON.parse(v)
+    return JSON.parse(value)
   } catch {
-    return v
+    return value
   }
 }
 
@@ -119,18 +119,18 @@ function propsOptions(meta: SubmissionColumnMeta): { id: number; label?: string;
   return out
 }
 
-function fmtStudentGender(raw: unknown, tMale: string, tFemale: string): string {
+function formatSubmissionStudentGender(raw: unknown, labelMale: string, labelFemale: string): string {
   if (raw === true || raw === 'true' || raw === 1 || raw === '1') {
-    return tMale
+    return labelMale
   }
   if (raw === false || raw === 'false' || raw === 0 || raw === '0') {
-    return tFemale
+    return labelFemale
   }
   return raw == null || raw === '' ? '—' : String(raw)
 }
 
-function fmtSubmissionCell(meta: SubmissionColumnMeta, raw: unknown, uploadIds?: number[]): unknown {
-  const v = raw
+function formatSubmissionCellValue(meta: SubmissionColumnMeta, rawValue: unknown, uploadIds?: number[]): unknown {
+  const v = rawValue
   switch (meta.kind) {
     case '__student__':
       return v == null || v === '' ? '—' : `${v}`
@@ -190,24 +190,24 @@ function fmtSubmissionCell(meta: SubmissionColumnMeta, raw: unknown, uploadIds?:
   }
 }
 
-function collectUploadNumericIds(raw: unknown): number[] {
-  const parsed = parseJsonMaybe(raw)
+function collectUploadNumericIds(rawValue: unknown): number[] {
+  const parsed = parseJsonMaybe(rawValue)
   if (Array.isArray(parsed)) {
     return parsed.map((x) => Number(x)).filter((n) => Number.isFinite(n))
   }
-  if (typeof raw === 'string') {
-    const m = raw.match(/\d+/gu)
+  if (typeof rawValue === 'string') {
+    const m = rawValue.match(/\d+/gu)
     if (m?.length) {
       return m.map((s) => Number(s)).filter((n) => Number.isFinite(n))
     }
   }
-  if (typeof raw === 'number' && Number.isFinite(raw)) {
-    return [raw]
+  if (typeof rawValue === 'number' && Number.isFinite(rawValue)) {
+    return [rawValue]
   }
   return []
 }
 
-type Row = Record<string, unknown>
+type SubmissionApiRow = Record<string, unknown>
 
 export function useQuestionnaireSubmissions() {
   const route = useRoute()
@@ -218,28 +218,28 @@ export function useQuestionnaireSubmissions() {
   const subtitle = ref('')
   const metaLoading = ref(false)
   const exporting = ref(false)
-  const fileDlg = ref(false)
+  const fileDialogVisible = ref(false)
   const fileRows = ref<Array<{ id: string | number; originalName?: string }>>([])
 
   const questionnaireId = computed(() => String(route.params.id ?? '').trim())
 
   const columnMetas = ref<SubmissionColumnMeta[]>([])
 
-  const { filters: filt, handleLoadSuccess: hdl, tableRef: tb } = useUniListState({
+  const { filters, handleLoadSuccess, tableRef } = useUniListState({
     initialFilters: {} as Record<string, unknown>
   })
 
-  const cols = computed(() =>
+  const columns = computed(() =>
     submissionTableCols(columnMetas.value, tr('activity.qSubmissionAttach'))
   )
 
-  const hasUploadCols = computed(() => columnMetas.value.some((c) => c.kind === 'upload'))
+  const hasUploadCols = computed(() => columnMetas.value.some((col) => col.kind === 'upload'))
 
   function lookupField(formFields: SubmissionAnswerField[], fieldId: string): unknown {
-    return formFields.find((f) => String(f.templateFormFieldId ?? '') === fieldId)?.value
+    return formFields.find((field) => String(field.templateFormFieldId ?? '') === fieldId)?.value
   }
 
-  function composeSubmissionRow(apiRow: Row): SubmissionRowMap {
+  function composeSubmissionRow(apiRow: SubmissionApiRow): SubmissionRowMap {
     const formFields = (Array.isArray(apiRow.fields)
       ? (apiRow.fields as SubmissionAnswerField[])
       : []) as SubmissionAnswerField[]
@@ -268,7 +268,7 @@ export function useQuestionnaireSubmissions() {
 
         mapped[key] =
           meta.prop === 'studentGender'
-            ? fmtStudentGender(
+            ? formatSubmissionStudentGender(
                 raw,
                 tr('activity.submissionGenderMale'),
                 tr('activity.submissionGenderFemale')
@@ -293,7 +293,7 @@ export function useQuestionnaireSubmissions() {
         continue
       }
 
-      mapped[key] = String(fmtSubmissionCell(meta, rawAns))
+      mapped[key] = String(formatSubmissionCellValue(meta, rawAns))
     }
 
     return mapped
@@ -312,7 +312,7 @@ export function useQuestionnaireSubmissions() {
     metaLoading.value = true
     try {
       const dRaw = await activityQuestionnaireApi.detail.get(qid)
-      const meta = normalizeEnvelope(dRaw) as Row
+      const meta = normalizeEnvelope(dRaw) as SubmissionApiRow
       subtitle.value = `${tr('activity.questionnaireName')}: ${String(meta.name ?? '')}`
 
       const needStu =
@@ -320,7 +320,7 @@ export function useQuestionnaireSubmissions() {
         meta.needStudentInfo === 1 ||
         String(meta.needStudentInfo) === '1'
 
-      const colT = {
+      const columnLabels = {
         submissionColCreateTime: tr('activity.submissionColCreateTime'),
         submissionColHiddenSuffix: tr('activity.submissionColHiddenSuffix'),
         studentBirth: tr('activity.submissionStudentBirth'),
@@ -330,16 +330,18 @@ export function useQuestionnaireSubmissions() {
       }
 
       const listRaw = await templateDynamicApi.listByOuterId.get({ outerId: qid, scene: Q_SCENE })
-      const tplList = normalizeArray(listRaw) as Row[]
-      let tableFields: Row[] = []
+      const tplList = normalizeArray(listRaw) as SubmissionApiRow[]
+      let tableFields: SubmissionApiRow[] = []
 
       if (tplList.length && Array.isArray(tplList[0]?.fields)) {
-        tableFields = tplList[0].fields as Row[]
+        tableFields = tplList[0].fields as SubmissionApiRow[]
       }
 
-      columnMetas.value = submissionColumnsFromFields(tableFields, colT, { appendStudentCols: needStu })
+      columnMetas.value = submissionColumnsFromFields(tableFields, columnLabels, {
+        appendStudentCols: needStu
+      })
       await nextTick()
-      tb.value?.refresh()
+      tableRef.value?.refresh()
     } catch {
       columnMetas.value = []
       ElMessage.error(tr('activity.loadDetailFail'))
@@ -350,7 +352,7 @@ export function useQuestionnaireSubmissions() {
 
   watch(questionnaireId, () => void bootstrap(), { immediate: true })
 
-  const lod: UniTableRequest = async ({ pageNo, pageSize }) => {
+  const loadData: UniTableRequest = async ({ pageNo: current, pageSize: size }) => {
     const qid = questionnaireId.value
 
     if (!qid || !columnMetas.value.length) {
@@ -358,15 +360,15 @@ export function useQuestionnaireSubmissions() {
     }
 
     const raw = await templateDynamicApi.paginateIsaCommunity.post({
-      current: pageNo,
-      size: pageSize,
+      current,
+      size,
       scene: Q_SCENE,
       outerId: qid
     })
 
     const { list, total } = normalizePaged(raw)
 
-    const data = (list as Row[]).map((r) => composeSubmissionRow(r))
+    const data = (list as SubmissionApiRow[]).map((row) => composeSubmissionRow(row))
 
     return { data, total }
   }
@@ -375,7 +377,7 @@ export function useQuestionnaireSubmissions() {
     router.back()
   }
 
-  async function doExport() {
+  async function exportAnswers() {
     const qid = questionnaireId.value
     if (!qid) {
       return
@@ -403,7 +405,7 @@ export function useQuestionnaireSubmissions() {
 
     try {
       const raw = await publicFileApi.infoByIds.get(ids.join(','))
-      const arr = normalizeArray(raw) as Row[]
+      const arr = normalizeArray(raw) as SubmissionApiRow[]
 
       fileRows.value = arr
         .map((x) => ({
@@ -417,7 +419,7 @@ export function useQuestionnaireSubmissions() {
         }))
         .filter((x) => x.id != null) as typeof fileRows.value
 
-      fileDlg.value = true
+      fileDialogVisible.value = true
     } catch {
       ElMessage.error(tr('activity.qSubmissionAttachFail'))
     }
@@ -433,21 +435,21 @@ export function useQuestionnaireSubmissions() {
   }
 
   return {
-    cols,
-    doExport,
+    columns,
+    exportAnswers,
     downloadOne,
     exporting,
-    fileDlg,
+    fileDialogVisible,
     fileRows,
-    filt,
+    filters,
     goBack,
-    hdl,
+    handleLoadSuccess,
     hasUploadCols,
-    lod,
+    loadData,
     metaLoading,
     openFiles,
     questionnaireId,
     subtitle,
-    tb
+    tableRef
   }
 }

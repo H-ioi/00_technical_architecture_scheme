@@ -19,8 +19,7 @@
       :submit-text="$t('member.search')"
       :reset-text="$t('member.reset')"
       @search="search"
-      @reset="reset"
-    />
+      @reset="reset" />
 
     <UniDataTable
       ref="tableRef"
@@ -35,11 +34,14 @@
       :action-column="{ width: 168, fixed: 'right' }"
       @load-success="onTableLoadSuccess"
       @request-error="tableEmpty.onRequestError"
-      @selection-change="onSelectionChange"
-    >
+      @selection-change="onSelectionChange">
       <template #toolbar>
-        <el-button :disabled="batchDisabled" @click="batchStatus(0)">{{ $t('email.archive') }}</el-button>
-        <el-button :disabled="batchDisabled" @click="batchStatus(1)">{{ $t('email.markActive') }}</el-button>
+        <el-button :disabled="batchDisabled" @click="batchStatus(0)">{{
+          $t('email.archive')
+        }}</el-button>
+        <el-button :disabled="batchDisabled" @click="batchStatus(1)">{{
+          $t('email.markActive')
+        }}</el-button>
         <el-button type="danger" :disabled="batchDisabled" @click="batchStatus(-1)">
           {{ $t('email.deleteBatch') }}
         </el-button>
@@ -53,14 +55,15 @@
       v-model="dialogVisible"
       v-model:form="formModel"
       :mode="dialogMode"
-      @success="tableRef?.refresh()"
-    />
+      @success="tableRef?.refresh()" />
 
     <el-dialog v-model="viewVisible" :title="$t('email.view')" width="520px" destroy-on-close>
       <div class="email-send-view">
         <div class="email-send-view__row">
           <span class="email-send-view__label">{{ $t('email.send.colUsers') }}</span>
-          <span class="email-send-view__val">{{ viewModel.userLines.length ? viewModel.userLines.join('，') : '—' }}</span>
+          <span class="email-send-view__val">{{
+            viewModel.userLines.length ? viewModel.userLines.join('，') : '—'
+          }}</span>
         </div>
         <div class="email-send-view__row">
           <span class="email-send-view__label">{{ $t('email.send.colEmail365') }}</span>
@@ -147,7 +150,7 @@ const retryTable = () => {
 
   &__val {
     flex: 1;
-    word-break: break-word;
+    overflow-wrap: anywhere;
   }
 }
 </style>

@@ -44,13 +44,15 @@ const goCreateFlow = () => {
 </script>
 
 <style scoped lang="scss">
-.attendance-flow-list__tabs {
-  margin-top: 0;
-}
+.attendance-flow-list {
+  &__tabs {
+    margin-top: 0;
+  }
 
-.attendance-flow-list__desc {
-  margin: 8px 0 0;
-  font-size: 13px;
-  color: var(--el-text-color-secondary);
+  &__desc {
+    margin: 8px 0 0;
+    font-size: 13px;
+    color: var(--el-text-color-secondary);
+  }
 }
 </style>

@@ -196,7 +196,9 @@ watch(
 </script>
 
 <style scoped lang="scss">
-.attendance-holiday-tab__tabs {
-  margin-top: 8px;
+.attendance-holiday-tab {
+  &__tabs {
+    margin-top: 8px;
+  }
 }
 </style>

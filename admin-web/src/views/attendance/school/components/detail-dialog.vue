@@ -1,9 +1,5 @@
 <template>
-  <el-dialog
-    v-model="visible"
-    :title="$t('attendance.detail')"
-    width="880px"
-    destroy-on-close>
+  <el-dialog v-model="visible" :title="$t('attendance.detail')" width="880px" destroy-on-close>
     <UniForm v-if="source" v-model="viewFormModel" :config="config" mode="view" />
     <template #footer>
       <el-button @click="visible = false">{{ $t('member.close') }}</el-button>
@@ -26,5 +22,3 @@ const props = defineProps<{
 
 const viewFormModel = useViewOnlyFormModel(() => props.source)
 </script>
-
-<style scoped lang="scss"></style>
