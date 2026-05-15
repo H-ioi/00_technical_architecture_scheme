@@ -18,9 +18,9 @@
               size="small"
               class="qb__type-btn"
               @click="add(btn)">
-              <el-icon :size="16" class="qb__type-btn-ic"
-                ><component :is="PALETTE_ICON[btn]"
-              /></el-icon>
+              <el-icon :size="16" class="qb__type-btn-ic">
+                <component :is="PALETTE_ICON[btn]" />
+              </el-icon>
               <span class="qb__type-btn-txt">{{ t(`activity.qbTypes.${btn}`) }}</span>
             </el-button>
           </div>
@@ -67,7 +67,9 @@
                       class="qb__drag-h"
                       :title="t('activity.qbDrag')"
                       @click.stop>
-                      <el-icon><Rank /></el-icon>
+                      <el-icon>
+                        <Rank />
+                      </el-icon>
                     </span>
                     <span class="qb__badge">{{ idx + 1 }}</span>
                     <el-tag size="small" type="primary" effect="plain">{{ rowBadge(row) }}</el-tag>
@@ -281,139 +283,143 @@
               <template v-else-if="draft">
                 <UniForm v-model="draft" mode="edit" class="qb__form" :config="qbSideFormConfig">
                   <template #field-_qbEditor>
-                  <template v-if="draft.type === 'input'">
-                    <div class="qb__fake-item">
-                      <div class="qb__fake-label">{{ t('activity.qbPlaceholder') }}</div>
-                      <el-input v-model="draft.properties.placeholder" />
-                    </div>
-                    <div class="qb__fake-item">
-                      <div class="qb__fake-label">{{ t('activity.qbRegex') }}</div>
-                      <el-input v-model="draft.regex" />
-                    </div>
-                    <div class="qb__fake-item">
-                      <div class="qb__fake-label">{{ t('activity.qbRegexHint') }}</div>
-                      <el-input v-model="draft.regexHint" />
-                    </div>
-                  </template>
+                    <template v-if="draft.type === 'input'">
+                      <div class="qb__fake-item">
+                        <div class="qb__fake-label">{{ t('activity.qbPlaceholder') }}</div>
+                        <el-input v-model="draft.properties.placeholder" />
+                      </div>
+                      <div class="qb__fake-item">
+                        <div class="qb__fake-label">{{ t('activity.qbRegex') }}</div>
+                        <el-input v-model="draft.regex" />
+                      </div>
+                      <div class="qb__fake-item">
+                        <div class="qb__fake-label">{{ t('activity.qbRegexHint') }}</div>
+                        <el-input v-model="draft.regexHint" />
+                      </div>
+                    </template>
 
-                  <template v-else-if="draft.type === 'textarea'">
-                    <div class="qb__fake-item">
-                      <div class="qb__fake-label">{{ t('activity.qbPlaceholder') }}</div>
-                      <el-input v-model="draft.properties.placeholder" />
-                    </div>
-                    <div class="qb__fake-item">
-                      <div class="qb__fake-label">{{ t('activity.qbTextRows') }}</div>
-                      <el-input-number
-                        v-model="draft.properties.text_num_line"
-                        :min="1"
-                        :max="20"
-                        controls-position="right"
-                        style="width: 100%" />
-                    </div>
-                  </template>
+                    <template v-else-if="draft.type === 'textarea'">
+                      <div class="qb__fake-item">
+                        <div class="qb__fake-label">{{ t('activity.qbPlaceholder') }}</div>
+                        <el-input v-model="draft.properties.placeholder" />
+                      </div>
+                      <div class="qb__fake-item">
+                        <div class="qb__fake-label">{{ t('activity.qbTextRows') }}</div>
+                        <el-input-number
+                          v-model="draft.properties.text_num_line"
+                          :min="1"
+                          :max="20"
+                          controls-position="right"
+                          style="width: 100%" />
+                      </div>
+                    </template>
 
-                  <template
-                    v-else-if="
-                      draft.type === 'radio' || draft.type === 'checkbox' || draft.type === 'select'
-                    ">
-                    <div v-if="draft.type === 'select'" class="qb__fake-item qb__fake-item--switch">
-                      <span class="qb__fake-label">{{ t('activity.qbMulti') }}</span>
-                      <el-switch v-model="selMultiToggle" />
-                    </div>
+                    <template
+                      v-else-if="
+                        draft.type === 'radio' ||
+                        draft.type === 'checkbox' ||
+                        draft.type === 'select'
+                      ">
+                      <div
+                        v-if="draft.type === 'select'"
+                        class="qb__fake-item qb__fake-item--switch">
+                        <span class="qb__fake-label">{{ t('activity.qbMulti') }}</span>
+                        <el-switch v-model="selMultiToggle" />
+                      </div>
 
-                    <div class="qb__opts-head">
-                      <span class="qb__opts-title">{{ t('activity.qbOptions') }}</span>
-                    </div>
+                      <div class="qb__opts-head">
+                        <span class="qb__opts-title">{{ t('activity.qbOptions') }}</span>
+                      </div>
 
-                    <div class="qb__opts-body">
-                      <el-scrollbar
-                        class="qb__scroll qb__scroll--opts"
-                        max-height="min(440px, 48vh)">
-                        <div class="qb__opts-strip">
-                          <el-radio-group
-                            v-if="useSingleDefaultPicker"
-                            v-model="radioDefault"
-                            class="qb__opt-block">
-                            <div
-                              v-for="(opt, oi) in opts"
-                              :key="opt.id"
-                              class="qb__opt qb__opt--with-default">
-                              <span class="qb__opt-idx">{{ oi + 1 }}</span>
-                              <el-input
-                                v-model="opt.label"
-                                :placeholder="t('activity.qbOptLabel')" />
-                              <el-radio
-                                :label="String(opt.id)"
-                                :title="t('activity.qbDefault')"
-                                class="qb__opt-default-el" />
-                              <el-button
-                                text
-                                link
-                                type="danger"
-                                :icon="Delete"
-                                class="qb__opt-remove"
-                                :title="t('activity.qbRemove')"
-                                @click="rmOption(oi)" />
-                            </div>
-                          </el-radio-group>
+                      <div class="qb__opts-body">
+                        <el-scrollbar
+                          class="qb__scroll qb__scroll--opts"
+                          max-height="min(440px, 48vh)">
+                          <div class="qb__opts-strip">
+                            <el-radio-group
+                              v-if="useSingleDefaultPicker"
+                              v-model="radioDefault"
+                              class="qb__opt-block">
+                              <div
+                                v-for="(opt, oi) in opts"
+                                :key="opt.id"
+                                class="qb__opt qb__opt--with-default">
+                                <span class="qb__opt-idx">{{ oi + 1 }}</span>
+                                <el-input
+                                  v-model="opt.label"
+                                  :placeholder="t('activity.qbOptLabel')" />
+                                <el-radio
+                                  :label="String(opt.id)"
+                                  :title="t('activity.qbDefault')"
+                                  class="qb__opt-default-el" />
+                                <el-button
+                                  text
+                                  link
+                                  type="danger"
+                                  :icon="Delete"
+                                  class="qb__opt-remove"
+                                  :title="t('activity.qbRemove')"
+                                  @click="rmOption(oi)" />
+                              </div>
+                            </el-radio-group>
 
-                          <div v-else-if="useMultiDefaultPicker" class="qb__opt-block">
-                            <div
-                              v-for="(opt, oi) in opts"
-                              :key="opt.id"
-                              class="qb__opt qb__opt--with-default">
-                              <span class="qb__opt-idx">{{ oi + 1 }}</span>
-                              <el-input
-                                v-model="opt.label"
-                                :placeholder="t('activity.qbOptLabel')" />
-                              <el-checkbox
-                                :model-value="multiDefaultHas(Number(opt.id))"
-                                :title="t('activity.qbDefault')"
-                                class="qb__opt-default-el qb__opt-default-el--chk"
-                                @change="onMultiDefaultChange(Number(opt.id), $event)" />
-                              <el-button
-                                text
-                                link
-                                type="danger"
-                                :icon="Delete"
-                                class="qb__opt-remove"
-                                :title="t('activity.qbRemove')"
-                                @click="rmOption(oi)" />
+                            <div v-else-if="useMultiDefaultPicker" class="qb__opt-block">
+                              <div
+                                v-for="(opt, oi) in opts"
+                                :key="opt.id"
+                                class="qb__opt qb__opt--with-default">
+                                <span class="qb__opt-idx">{{ oi + 1 }}</span>
+                                <el-input
+                                  v-model="opt.label"
+                                  :placeholder="t('activity.qbOptLabel')" />
+                                <el-checkbox
+                                  :model-value="multiDefaultHas(Number(opt.id))"
+                                  :title="t('activity.qbDefault')"
+                                  class="qb__opt-default-el qb__opt-default-el--chk"
+                                  @change="onMultiDefaultChange(Number(opt.id), $event)" />
+                                <el-button
+                                  text
+                                  link
+                                  type="danger"
+                                  :icon="Delete"
+                                  class="qb__opt-remove"
+                                  :title="t('activity.qbRemove')"
+                                  @click="rmOption(oi)" />
+                              </div>
                             </div>
                           </div>
-                        </div>
-                      </el-scrollbar>
-                      <el-button
-                        size="small"
-                        type="primary"
-                        class="qb__opts-add"
-                        plain
-                        @click="addOptionRow">
-                        + {{ t('activity.qbAddOption') }}
-                      </el-button>
-                    </div>
-                  </template>
+                        </el-scrollbar>
+                        <el-button
+                          size="small"
+                          type="primary"
+                          class="qb__opts-add"
+                          plain
+                          @click="addOptionRow">
+                          + {{ t('activity.qbAddOption') }}
+                        </el-button>
+                      </div>
+                    </template>
 
-                  <template v-else-if="draft.type === 'datetimepicker'">
-                    <div class="qb__fake-item">
-                      <div class="qb__fake-label">{{ t('activity.qbDateMode') }}</div>
-                      <el-select
-                        v-model="draft.datetimeTypeKey"
-                        style="width: 100%"
-                        @change="syncDt">
-                        <el-option :label="t('activity.qbDateOnly')" value="date" />
-                        <el-option :label="t('activity.qbDatetime')" value="datetime" />
-                        <el-option :label="t('activity.qbYearMonth')" value="month" />
-                      </el-select>
-                    </div>
-                    <div class="qb__fake-item">
-                      <div class="qb__fake-label">{{ t('activity.qbPattern') }}</div>
-                      <el-input
-                        v-model="draft.properties.datetime_pattern"
-                        maxlength="80"
-                        show-word-limit />
-                    </div>
-                  </template>
+                    <template v-else-if="draft.type === 'datetimepicker'">
+                      <div class="qb__fake-item">
+                        <div class="qb__fake-label">{{ t('activity.qbDateMode') }}</div>
+                        <el-select
+                          v-model="draft.datetimeTypeKey"
+                          style="width: 100%"
+                          @change="syncDt">
+                          <el-option :label="t('activity.qbDateOnly')" value="date" />
+                          <el-option :label="t('activity.qbDatetime')" value="datetime" />
+                          <el-option :label="t('activity.qbYearMonth')" value="month" />
+                        </el-select>
+                      </div>
+                      <div class="qb__fake-item">
+                        <div class="qb__fake-label">{{ t('activity.qbPattern') }}</div>
+                        <el-input
+                          v-model="draft.properties.datetime_pattern"
+                          maxlength="80"
+                          show-word-limit />
+                      </div>
+                    </template>
                   </template>
                 </UniForm>
               </template>
@@ -432,7 +438,7 @@ import type {
   DesignerFieldKnown,
   DesignerFieldRaw,
   DesignerOption
-} from '@/views/activity/questionnaire/template/types'
+} from '@/types/modules/activity-questionnaire'
 import {
   Aim,
   Calendar,
@@ -444,17 +450,190 @@ import {
   Select as SelectIcon
 } from '@element-plus/icons-vue'
 
-import {
-  BUILDER_PALETTE_TYPES,
-  builderAddOptionRow,
-  presetField,
-  type PaletteType
-} from '@/views/activity/questionnaire/template/field-presets'
 import type { UniFormConfig } from 'uni-ui-lib'
 import { UniForm, useUniI18n } from 'uni-ui-lib'
 import type { Component } from 'vue'
 import { computed, onUnmounted, ref, watch } from 'vue'
 import draggable from 'vuedraggable'
+
+function createFontId(): string {
+  if (typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function') {
+    return `f_${crypto.randomUUID()}`
+  }
+  return `f_${Date.now()}_${Math.random().toString(36).slice(2, 9)}`
+}
+
+function newTemplateFieldId(): string {
+  return `-${Math.random().toString(36).slice(2, 11)}`
+}
+
+const BUILDER_PALETTE_TYPES = [
+  'input',
+  'textarea',
+  'radio',
+  'checkbox',
+  'select',
+  'datetimepicker'
+] as const
+
+type PaletteType = (typeof BUILDER_PALETTE_TYPES)[number]
+
+function nextSeqOptionId(opts: DesignerOption[]): number {
+  const nums = opts.map((o) => Number(o.id)).filter((n) => Number.isFinite(n))
+  let m = nums.length ? Math.max(...nums, 0) : 0
+  m++
+  while (nums.includes(m)) {
+    m++
+  }
+  return m
+}
+
+function defaultOptions(kind: 'radio' | 'checkbox' | 'select'): DesignerOption[] {
+  return [
+    { label: kind === 'select' ? '选项一' : '选项1', id: 1, value: '', isHide: 0 },
+    { label: kind === 'select' ? '选项二' : '选项2', id: 2, value: '', isHide: 0 }
+  ]
+}
+
+function radioProps(): DesignerFieldKnown['properties'] {
+  const option = defaultOptions('radio')
+  return {
+    option,
+    option_default: String(option[0].id),
+    searchable: false
+  }
+}
+
+function presetField(type: PaletteType): DesignerFieldKnown {
+  const id = newTemplateFieldId()
+  switch (type) {
+    case 'input':
+      return {
+        kind: 'known',
+        fontId: createFontId(),
+        id,
+        type: 'input',
+        label: '单行文本',
+        required: false,
+        readonly: false,
+        disabled: false,
+        isHide: false,
+        regex: '',
+        regexHint: '',
+        datetimeTypeKey: '',
+        properties: { placeholder: '' }
+      }
+    case 'textarea':
+      return {
+        kind: 'known',
+        fontId: createFontId(),
+        id,
+        type: 'textarea',
+        label: '多行文本',
+        required: false,
+        readonly: false,
+        disabled: false,
+        isHide: false,
+        regex: '',
+        regexHint: '',
+        datetimeTypeKey: '',
+        properties: {
+          placeholder: '',
+          text_num_line: 3,
+          text_num_column: 40
+        }
+      }
+    case 'radio':
+      return {
+        kind: 'known',
+        fontId: createFontId(),
+        id,
+        type: 'radio',
+        label: '单选题',
+        required: false,
+        readonly: false,
+        disabled: false,
+        isHide: false,
+        regex: '',
+        regexHint: '',
+        datetimeTypeKey: '',
+        properties: radioProps()
+      }
+    case 'checkbox':
+      return {
+        kind: 'known',
+        fontId: createFontId(),
+        id,
+        type: 'checkbox',
+        label: '多选题',
+        required: false,
+        readonly: false,
+        disabled: false,
+        isHide: false,
+        regex: '',
+        regexHint: '',
+        datetimeTypeKey: '',
+        properties: {
+          option: defaultOptions('checkbox'),
+          option_default: [],
+          searchable: false
+        }
+      }
+    case 'select':
+      return {
+        kind: 'known',
+        fontId: createFontId(),
+        id,
+        type: 'select',
+        label: '下拉',
+        required: false,
+        readonly: false,
+        disabled: false,
+        isHide: false,
+        regex: '',
+        regexHint: '',
+        datetimeTypeKey: '',
+        properties: {
+          option: defaultOptions('select'),
+          option_default: [],
+          option_multi: false,
+          searchable: true
+        }
+      }
+    case 'datetimepicker':
+      return {
+        kind: 'known',
+        fontId: createFontId(),
+        id,
+        type: 'datetimepicker',
+        label: '日期时间',
+        required: false,
+        readonly: false,
+        disabled: false,
+        isHide: false,
+        regex: '',
+        regexHint: '',
+        datetimeTypeKey: 'date',
+        properties: {
+          datetime_type: 'date',
+          datetime_pattern: 'yyyy-MM-dd'
+        }
+      }
+    default: {
+      const _x: never = type
+      throw new Error(`unknown palette type ${_x}`)
+    }
+  }
+}
+
+function builderAddOptionRow(f: DesignerFieldKnown): DesignerFieldKnown {
+  const p = { ...f.properties }
+  const list = [...(Array.isArray(p.option) ? p.option : [])]
+  const nid = nextSeqOptionId(list)
+  list.push({ label: `选项${nid}`, id: nid, value: '', isHide: 0 })
+  p.option = list
+  return { ...f, properties: p }
+}
 
 const PALETTE_ICON: Record<PaletteType, Component> = {
   input: EditPen,
@@ -549,7 +728,6 @@ watch(
   },
 
   { immediate: true }
-
 )
 
 function cloneKnown(row: DesignerFieldKnown): DesignerFieldKnown {
@@ -669,7 +847,6 @@ function knownHeaderProp(fontId: string): { required: boolean; isHide: boolean }
 
 function onRowClick(fontId: string): void {
   if (props.readonly) {
-
     return
   }
 
@@ -679,10 +856,7 @@ function onRowClick(fontId: string): void {
 function selectRow(fontId: string): void {
   if (props.readonly) {
     return
-
   }
-
-
 
   if (debTimer) {
     clearTimeout(debTimer)
@@ -926,8 +1100,6 @@ function add(bt: PaletteType): void {
     return
   }
 
-
-
   const row = presetField(bt)
   emit('update:modelValue', [...props.modelValue, row])
 
@@ -936,10 +1108,8 @@ function add(bt: PaletteType): void {
 
 function remove(ix: number): void {
   if (props.readonly) {
-
     return
   }
-
 
   const fid = props.modelValue[ix]?.fontId
   if (debTimer) {
@@ -965,11 +1135,8 @@ function remove(ix: number): void {
 
 function addOptionRow(): void {
   if (props.readonly) {
-
-
     return
   }
-
 
   const d = draft.value
 
@@ -982,11 +1149,8 @@ function addOptionRow(): void {
 
 function rmOption(oi: number): void {
   if (props.readonly) {
-
     return
   }
-
-
 
   ensureOpts()
   const list = [...opts.value]

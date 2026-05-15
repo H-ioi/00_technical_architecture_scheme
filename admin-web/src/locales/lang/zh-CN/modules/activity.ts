@@ -121,6 +121,7 @@ export default {
   loadDetailFail: '加载详情失败。',
   delBatch: '删除',
   lookDetail: '查看',
+  questionnaireRowData: '数据',
   entryEdit: '编辑',
   confirmDeleteQuestionnaire: '确定删除所选问卷？',
   deleteOk: '已删除。',

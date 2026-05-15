@@ -125,6 +125,7 @@ export default {
   loadDetailFail: 'Failed to load detail.',
   delBatch: 'Delete',
   lookDetail: 'View',
+  questionnaireRowData: 'Data',
   entryEdit: 'Edit',
   confirmDeleteQuestionnaire: 'Delete selected questionnaires?',
   deleteOk: 'Deleted.',

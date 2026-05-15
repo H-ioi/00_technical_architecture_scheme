@@ -32,7 +32,12 @@ import type { Translate } from '@/types/i18n'
 import type { UniFormConfig } from 'uni-ui-lib'
 import { UniForm, useUniI18n } from 'uni-ui-lib'
 
-import { yesNoOptions } from '@/views/activity/questionnaire/questionnaire-utils'
+function yesNoOptions(t: Translate): Array<{ label: string; value: string }> {
+  return [
+    { label: t('activity.yes'), value: '1' },
+    { label: t('activity.no'), value: '0' }
+  ]
+}
 
 const emit = defineEmits<{ saved: [] }>()
 

@@ -87,7 +87,7 @@ export const routes: AppRouteRecord[] = [
             path: 'questionnaire/detail/:id',
             name: 'ActivityQuestionnaireDetail',
             redirect: (to) => ({
-              name: 'ActivityQuestionnaireDesign',
+              name: 'ActivityQuestionnaireEdit',
               params: { id: String(to.params.id) },
               query: { ...to.query, mode: 'view' }
             }),
@@ -100,9 +100,9 @@ export const routes: AppRouteRecord[] = [
             }
           },
           {
-            path: 'questionnaire/design/:id',
-            name: 'ActivityQuestionnaireDesign',
-            component: () => import('@/views/activity/questionnaire/design.vue'),
+            path: 'questionnaire/edit/:id',
+            name: 'ActivityQuestionnaireEdit',
+            component: () => import('@/views/activity/questionnaire/edit.vue'),
             meta: {
               title: '问卷设计',
               titleKey: 'route.activityQuestionnaireDesign',
@@ -110,6 +110,15 @@ export const routes: AppRouteRecord[] = [
               activeMenu: '/activity/questionnaire',
               tagDetailParam: 'id'
             }
+          },
+          {
+            path: 'questionnaire/design/:id',
+            redirect: (to) => ({
+              name: 'ActivityQuestionnaireEdit',
+              params: { id: String(to.params.id) },
+              query: to.query
+            }),
+            meta: { hidden: true }
           },
           {
             path: 'questionnaire/submissions/:id',

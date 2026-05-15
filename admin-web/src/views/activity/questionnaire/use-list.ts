@@ -1,30 +1,62 @@
-import type { Ref } from 'vue'
 import type { UniOption, UniTableAction, UniTableRequest } from 'uni-ui-lib'
-import { useUniI18n, useUniListState } from 'uni-ui-lib'
+import { toUniOptions, useUniI18n, useUniListState } from 'uni-ui-lib'
+import dayjs from 'dayjs'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { computed, onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
 
-import { activityApi, activityQuestionnaireApi } from '@/api'
+import { activityApi, activityQuestionnaireApi, membershipApi } from '@/api'
 import type { Translate } from '@/types/i18n'
+import type { QuestionnaireListDialogRefs } from '@/types/modules/activity-questionnaire'
 import { normalizeArray, normalizePaged } from '@/utils/api-response-normalize'
 
-import { questionnaireSearchForm, questionnaireTableColumns } from './list.config'
-import {
-  buildQuestionnaireSignupUrl,
-  fmtTs,
-  useMembershipSchoolOptions,
-  yesNoOptions
-} from './questionnaire-utils'
+import { searchForm, tableCols } from './list.config'
+
+function stripSlash(s: string): string {
+  return s.replace(/\/$/, '')
+}
+
+function buildQuestionnaireSignupUrl(questionnaireId: string | number): string {
+  const origin = stripSlash(String(import.meta.env.VITE_COMMUNITY_WEB_ORIGIN ?? ''))
+  if (!origin) {
+    return ''
+  }
+  return `${origin}/#/isacommunity/activity/questionnaire/signup?id=${encodeURIComponent(String(questionnaireId))}`
+}
+
+function yesNoOptions(t: (k: string) => string): UniOption[] {
+  return [
+    { label: t('activity.yes'), value: '1' },
+    { label: t('activity.no'), value: '0' }
+  ]
+}
+
+function fmtTs(v: unknown, empty = '—') {
+  if (v == null || v === '') {
+    return empty
+  }
+  const d = dayjs(String(v))
+  return d.isValid() ? d.format('YYYY-MM-DD HH:mm') : String(v)
+}
+
+function useMembershipSchoolOptions() {
+  const { locale } = useUniI18n()
+  const schoolOptions = ref<UniOption[]>([])
+
+  const loadSchoolOptions = async () => {
+    const raw = await membershipApi.school.get()
+    const list = Array.isArray(raw) ? raw : []
+    schoolOptions.value = toUniOptions(list, {
+      labelKeys:
+        locale.value === 'en' ? ['enName', 'name', 'cnName'] : ['cnName', 'name', 'enName'],
+      valueKey: 'id'
+    })
+  }
+
+  return { schoolOptions, loadSchoolOptions }
+}
 
 type L = Record<string, unknown>
-
-/** 列表页弹窗 ref（由 `list.vue` 传入，供行内操作打开） */
-export type QuestionnaireListDialogRefs = {
-  metaDlg: Ref<{ open: (mode: 'add' | 'edit', row?: L) => void | Promise<void> } | null>
-  copyDlg: Ref<{ open: (row: L) => void | Promise<void> } | null>
-  batchDlg: Ref<{ open: (kind: 'status' | 'frozen', ids: Array<string | number>) => void } | null>
-}
 
 export function useQuestionnaireList(refs: QuestionnaireListDialogRefs) {
   const { t, locale } = useUniI18n()
@@ -32,15 +64,15 @@ export function useQuestionnaireList(refs: QuestionnaireListDialogRefs) {
   const router = useRouter()
 
   const { schoolOptions, loadSchoolOptions } = useMembershipSchoolOptions()
-  const activityOpts = ref<UniOption[]>([])
+  const activityOptions = ref<UniOption[]>([])
 
-  const ynOpts = computed(() => yesNoOptions(tr))
+  const ynDispOptions = computed(() => yesNoOptions(tr))
 
   const loadActs = async () => {
     try {
       const raw = await activityApi.listBrief.get({ questionnaireFlag: 1 })
       const rows = normalizeArray(raw) as Record<string, unknown>[]
-      activityOpts.value = rows.map((x) => ({
+      activityOptions.value = rows.map((x) => ({
         label: String(
           locale.value === 'en'
             ? (x.activityEnName ?? x.activityCnName ?? x.activityName ?? x.name ?? x.id ?? '')
@@ -49,7 +81,7 @@ export function useQuestionnaireList(refs: QuestionnaireListDialogRefs) {
         value: x.id as string | number
       }))
     } catch {
-      activityOpts.value = []
+      activityOptions.value = []
     }
   }
 
@@ -77,12 +109,10 @@ export function useQuestionnaireList(refs: QuestionnaireListDialogRefs) {
   })
 
   const sch = computed(() =>
-    questionnaireSearchForm(tr, schoolOptions.value, activityOpts.value, ynOpts.value)
+    searchForm(tr, schoolOptions.value, activityOptions.value, ynDispOptions.value)
   )
 
-  const cols = computed(() =>
-    questionnaireTableColumns(tr, schoolOptions.value, ynOpts.value)
-  )
+  const cols = computed(() => tableCols(tr, schoolOptions.value, ynDispOptions.value))
 
   const selRows = ref<L[]>([])
   const selIds = computed(
@@ -160,17 +190,20 @@ export function useQuestionnaireList(refs: QuestionnaireListDialogRefs) {
       return
     }
     router.push({
-      name: 'ActivityQuestionnaireDesign',
+      name: 'ActivityQuestionnaireEdit',
       params: { id: String(row.id) }
     })
   }
 
-  const openDetail = (row: L) => {
-    router.push({ name: 'ActivityQuestionnaireDetail', params: { id: String(row.id) } })
+  const openSubmissions = (row: L) => {
+    if (row.id == null) {
+      return
+    }
+    router.push({ name: 'ActivityQuestionnaireSubmissions', params: { id: String(row.id) } })
   }
 
   const acts = computed<UniTableAction[]>(() => [
-    { label: tr('activity.lookDetail'), onClick: (row) => openDetail(row as L) },
+    { label: tr('activity.questionnaireRowData'), onClick: (row) => openSubmissions(row as L) },
     {
       label: tr('activity.entryEdit'),
       code: 'busdriver_edit',

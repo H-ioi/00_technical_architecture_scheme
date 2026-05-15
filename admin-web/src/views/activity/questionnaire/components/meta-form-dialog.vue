@@ -20,15 +20,37 @@
 
 <script setup lang="ts">
 import type { UniFormConfig, UniOption } from 'uni-ui-lib'
-import { UniForm, useUniI18n } from 'uni-ui-lib'
+import { UniForm, toUniOptions, useUniI18n } from 'uni-ui-lib'
 import { ElMessage } from 'element-plus'
 import { computed, reactive, ref } from 'vue'
 
-import { activityApi, activityQuestionnaireApi } from '@/api'
+import { activityApi, activityQuestionnaireApi, membershipApi } from '@/api'
 import type { Translate } from '@/types/i18n'
 import { normalizeArray, normalizeEnvelope } from '@/utils/api-response-normalize'
 
-import { useMembershipSchoolOptions, yesNoOptions } from '@/views/activity/questionnaire/questionnaire-utils'
+function yesNoOptions(t: Translate): UniOption[] {
+  return [
+    { label: t('activity.yes'), value: '1' },
+    { label: t('activity.no'), value: '0' }
+  ]
+}
+
+function useMembershipSchoolOptions() {
+  const { locale } = useUniI18n()
+  const schoolOptions = ref<UniOption[]>([])
+
+  const loadSchoolOptions = async () => {
+    const raw = await membershipApi.school.get()
+    const list = Array.isArray(raw) ? raw : []
+    schoolOptions.value = toUniOptions(list, {
+      labelKeys:
+        locale.value === 'en' ? ['enName', 'name', 'cnName'] : ['cnName', 'name', 'enName'],
+      valueKey: 'id'
+    })
+  }
+
+  return { schoolOptions, loadSchoolOptions }
+}
 
 const emit = defineEmits<{ saved: [] }>()
 
