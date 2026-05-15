@@ -7,20 +7,7 @@
     append-to-body
     :close-on-click-modal="false"
     @closed="onClosed">
-    <el-form ref="formRef" label-position="top" :model="form" :rules="rules">
-      <el-form-item :label="$t('activity.qCopyNewName')" prop="newName">
-        <el-input v-model="form.newName" maxlength="100" show-word-limit />
-      </el-form-item>
-      <el-form-item :label="$t('activity.questionnaireActivity')" prop="newActivityId">
-        <el-select v-model="form.newActivityId" filterable clearable style="width: 100%">
-          <el-option
-            v-for="o in actOpts"
-            :key="String(o.value)"
-            :label="o.label"
-            :value="o.value" />
-        </el-select>
-      </el-form-item>
-    </el-form>
+    <UniForm ref="uniFormRef" v-model="form" mode="edit" :config="formConfig" />
     <template #footer>
       <el-button @click="visible = false">{{ $t('common.cancel') }}</el-button>
       <el-button type="primary" :loading="saving" @click="submit">{{ $t('common.submit') }}</el-button>
@@ -29,16 +16,14 @@
 </template>
 
 <script setup lang="ts">
-import type { UniOption } from 'uni-ui-lib'
-import type { FormInstance, FormRules } from 'element-plus'
+import type { UniFormConfig, UniOption } from 'uni-ui-lib'
+import { UniForm, useUniI18n } from 'uni-ui-lib'
 import { ElMessage } from 'element-plus'
 import { computed, reactive, ref } from 'vue'
 
 import { activityApi, activityQuestionnaireApi } from '@/api'
 import type { Translate } from '@/types/i18n'
 import { normalizeArray } from '@/utils/api-response-normalize'
-import { useUniI18n } from 'uni-ui-lib'
-
 const emit = defineEmits<{ saved: [] }>()
 
 const { t, locale } = useUniI18n()
@@ -47,7 +32,7 @@ const tr = t as Translate
 const visible = ref(false)
 const saving = ref(false)
 const sourceId = ref<string | number | undefined>(undefined)
-const formRef = ref<FormInstance>()
+const uniFormRef = ref<InstanceType<typeof UniForm> | null>(null)
 const actOpts = ref<UniOption[]>([])
 
 const form = reactive({
@@ -55,12 +40,29 @@ const form = reactive({
   newActivityId: undefined as string | number | undefined
 })
 
-const rules = computed(
-  (): FormRules => ({
+const formConfig = computed<UniFormConfig>(() => ({
+  formProps: { labelPosition: 'top' },
+  colProps: { span: 24 },
+  rules: {
     newName: [{ required: true, message: tr('activity.ruleInput'), trigger: 'blur' }],
     newActivityId: [{ required: true, message: tr('activity.ruleSelect'), trigger: 'change' }]
-  })
-)
+  } as UniFormConfig['rules'],
+  schema: [
+    {
+      field: 'newName',
+      label: tr('activity.qCopyNewName'),
+      component: 'ElInput',
+      componentProps: { maxlength: 100, showWordLimit: true }
+    },
+    {
+      field: 'newActivityId',
+      label: tr('activity.questionnaireActivity'),
+      component: 'ElSelect',
+      options: actOpts.value,
+      componentProps: { filterable: true, clearable: true, style: { width: '100%' } }
+    }
+  ]
+}))
 
 async function loadActivities() {
   const raw = await activityApi.listBrief.get()
@@ -77,11 +79,15 @@ const onClosed = () => {
   sourceId.value = undefined
   form.newName = ''
   form.newActivityId = undefined
-  formRef.value?.resetFields()
+  uniFormRef.value?.clearValidate()
 }
 
 const submit = async () => {
-  await formRef.value?.validate()
+  try {
+    await uniFormRef.value?.validate()
+  } catch {
+    return
+  }
   if (sourceId.value == null) {
     return
   }

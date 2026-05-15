@@ -86,7 +86,11 @@ export const routes: AppRouteRecord[] = [
           {
             path: 'questionnaire/detail/:id',
             name: 'ActivityQuestionnaireDetail',
-            component: () => import('@/views/activity/questionnaire/detail.vue'),
+            redirect: (to) => ({
+              name: 'ActivityQuestionnaireDesign',
+              params: { id: String(to.params.id) },
+              query: { ...to.query, mode: 'view' }
+            }),
             meta: {
               title: '问卷详情',
               titleKey: 'route.activityQuestionnaireDetail',

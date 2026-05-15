@@ -52,33 +52,8 @@
       :title="
         roleFormMode === 'add' ? t('permission.role.formAdd') : t('permission.role.formEdit')
       ">
-      <el-form ref="roleFormRef" :model="roleForm" :rules="roleRules" label-width="108px">
-        <el-form-item :label="t('permission.role.colName')" prop="roleName">
-          <el-input v-model="roleForm.roleName" clearable maxlength="40" />
-        </el-form-item>
-        <el-form-item :label="t('permission.role.colCode')" prop="roleCode">
-          <el-input
-            v-model="roleForm.roleCode"
-            :disabled="roleFormMode === 'edit'"
-            clearable
-            maxlength="40" />
-        </el-form-item>
-        <el-form-item :label="t('permission.role.colDesc')" prop="roleDesc">
-          <el-input v-model="roleForm.roleDesc" type="textarea" maxlength="128" :rows="3" />
-        </el-form-item>
-        <el-form-item :label="t('permission.role.colDpType')" prop="dpType">
-          <el-select v-model.number="roleForm.dpType" class="perm-role-scope-select" filterable>
-            <el-option
-              v-for="o in dpOptions"
-              :key="String(o.value)"
-              :label="o.label"
-              :value="Number(o.value)" />
-          </el-select>
-        </el-form-item>
-        <el-form-item v-if="roleForm.dpType === 6">
-          <template #label>
-            <span>{{ t('permission.role.dpCustom') }}</span>
-          </template>
+      <UniForm ref="uniFormRef" v-model="roleForm" mode="edit" :config="roleFormConfig">
+        <template #field-deptIds>
           <p class="perm-role-scope-hint">{{ t('permission.messages.deptScopeHint') }}</p>
           <el-tree
             ref="scopeTreeRef"
@@ -89,8 +64,8 @@
             default-expand-all
             check-strictly
             :props="{ label: 'name', children: 'children' }" />
-        </el-form-item>
-      </el-form>
+        </template>
+      </UniForm>
       <template #footer>
         <el-button @click="roleFormVisible = false">{{ t('permission.cancel') }}</el-button>
         <el-button type="primary" :loading="roleSaving" @click="saveRole">{{
@@ -102,10 +77,10 @@
 </template>
 
 <script setup lang="ts">
-import type { ElTree, FormInstance, FormRules } from 'element-plus'
+import type { ElTree } from 'element-plus'
 import { ElMessage, ElMessageBox } from 'element-plus'
-import type { UniTableRequestResult } from 'uni-ui-lib'
-import { UniDataTable, UniSearchForm, useUniI18n } from 'uni-ui-lib'
+import type { UniFormConfig, UniTableRequestResult } from 'uni-ui-lib'
+import { UniDataTable, UniForm, UniSearchForm, useUniI18n } from 'uni-ui-lib'
 import { computed, nextTick, reactive, ref } from 'vue'
 
 import ListTableEmpty from '@/components/list-table-empty.vue'
@@ -127,7 +102,7 @@ const assignRole = ref<Row | null>(null)
 const roleFormVisible = ref(false)
 const roleFormMode = ref<'add' | 'edit'>('add')
 const roleSaving = ref(false)
-const roleFormRef = ref<FormInstance>()
+const uniFormRef = ref<InstanceType<typeof UniForm> | null>(null)
 const scopeTreeRef = ref<InstanceType<typeof ElTree>>()
 const deptScopeTree = ref<PermissionDeptRecord[]>([])
 
@@ -141,10 +116,52 @@ const roleForm = reactive<Row>({
   deptIds: []
 })
 
-const roleRules = computed<FormRules>(() => ({
-  roleName: [{ required: true, message: t('permission.role.colName'), trigger: 'blur' }],
-  roleCode: [{ required: true, message: t('permission.role.colCode'), trigger: 'blur' }],
-  dpType: [{ required: true, message: t('permission.role.colDpType'), trigger: 'change' }]
+const roleFormConfig = computed<UniFormConfig>(() => ({
+  formProps: { labelWidth: '108px' },
+  colProps: { span: 24 },
+  rules: {
+    roleName: [{ required: true, message: t('permission.role.colName'), trigger: 'blur' }],
+    roleCode: [{ required: true, message: t('permission.role.colCode'), trigger: 'blur' }],
+    dpType: [{ required: true, message: t('permission.role.colDpType'), trigger: 'change' }]
+  } as UniFormConfig['rules'],
+  schema: [
+    {
+      field: 'roleName',
+      label: t('permission.role.colName'),
+      component: 'ElInput',
+      componentProps: { clearable: true, maxlength: 40 }
+    },
+    {
+      field: 'roleCode',
+      label: t('permission.role.colCode'),
+      component: 'ElInput',
+      componentProps: {
+        disabled: roleFormMode.value === 'edit',
+        clearable: true,
+        maxlength: 40
+      }
+    },
+    {
+      field: 'roleDesc',
+      label: t('permission.role.colDesc'),
+      component: 'ElInput',
+      componentProps: { type: 'textarea', maxlength: 128, rows: 3 }
+    },
+    {
+      field: 'dpType',
+      label: t('permission.role.colDpType'),
+      component: 'ElSelect',
+      options: dpOptions.value,
+      componentProps: { filterable: true, class: 'perm-role-scope-select' }
+    },
+    {
+      field: 'deptIds',
+      label: t('permission.role.dpCustom'),
+      component: 'ElInput',
+      hidden: roleForm.dpType !== 6,
+      formItemProps: { class: 'perm-role-dept-tree-item' }
+    }
+  ]
 }))
 
 const dpOptions = computed(() => dpTypeOptions(t))
@@ -196,7 +213,7 @@ async function openForm(mode: 'add' | 'edit', row?: Row) {
 }
 
 async function saveRole() {
-  const ok = await roleFormRef.value?.validate().catch(() => false)
+  const ok = await uniFormRef.value?.validate().catch(() => false)
   if (!ok) {
     return
   }

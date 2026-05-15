@@ -37,6 +37,8 @@ export type DesignerFieldKnown = {
   mark?: string
   datetimeTypeKey?: string
   properties: FieldProperties
+  /** 问卷设计器 UniForm 插槽占位，不参与序列化 */
+  _qbEditor?: string
 }
 
 export type DesignerFieldRaw = {

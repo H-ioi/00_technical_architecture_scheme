@@ -231,7 +231,11 @@ function displayCell(row: RowMap, c: SubmissionColumnMeta): string {
 }
 
 function goBack() {
-  router.push(`/activity/questionnaire/detail/${questionnaireId.value}`)
+  router.push({
+    name: 'ActivityQuestionnaireDesign',
+    params: { id: String(questionnaireId.value) },
+    query: { mode: 'view' }
+  })
 }
 
 async function doExport() {

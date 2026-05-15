@@ -2,18 +2,37 @@
   <section class="q-design uni-list-page">
     <div class="uni-list-page__header">
       <div>
-        <h1>{{ $t('route.activityQuestionnaireDesign') }}</h1>
-        <p class="uni-list-page__description">{{ $t('activity.questionnaireDesignPageDesc') }}</p>
+        <h1>{{ pageTitle }}</h1>
+        <p class="uni-list-page__description">{{ pageDesc }}</p>
       </div>
       <div class="uni-list-page__header-actions q-design__header-actions">
-        <el-button
-          v-uni-permission="'busdriver_edit'"
-          type="primary"
-          :loading="saving"
-          :disabled="!outerReady"
-          @click="saveQuestions">
-          {{ $t('activity.questionnaireSaveQuestions') }}
-        </el-button>
+        <template v-if="isViewMode">
+          <el-button :disabled="!outerReady" @click="copySignupForPage">{{
+            $t('activity.copySignupLink')
+          }}</el-button>
+          <el-button
+            v-uni-permission="'busdriver_edit'"
+            :disabled="!outerReady"
+            @click="goEditDesign">
+            {{ $t('activity.questionnaireDesigner') }}
+          </el-button>
+          <el-button :disabled="!outerReady" @click="openSubmissions">{{
+            $t('activity.questionnaireSubmissions')
+          }}</el-button>
+          <el-button :loading="exporting" :disabled="!outerReady" @click="doExport">{{
+            $t('activity.exportQuestionnaire')
+          }}</el-button>
+        </template>
+        <template v-else>
+          <el-button
+            v-uni-permission="'busdriver_edit'"
+            type="primary"
+            :loading="saving"
+            :disabled="!outerReady"
+            @click="saveQuestions">
+            {{ $t('activity.questionnaireSaveQuestions') }}
+          </el-button>
+        </template>
         <el-divider direction="vertical" class="q-design__header-divider" />
         <el-button plain @click="goBack">{{ $t('activity.back') }}</el-button>
       </div>
@@ -54,7 +73,11 @@
         <h3 class="q-design__subtitle">{{ $t('activity.qTemplateSection') }}</h3>
       </div>
 
-      <QuestionnaireBuilder v-if="outerReady" :key="builderTick" v-model="fields" />
+      <QuestionnaireBuilder
+        v-if="outerReady"
+        :key="builderTick"
+        v-model="fields"
+        :readonly="isViewMode" />
     </el-card>
   </section>
 </template>
@@ -73,6 +96,7 @@ import {
   normalizePayload
 } from '@/utils/api-response-normalize'
 
+import { downloadBlob } from '@/utils/download'
 
 
 
@@ -82,8 +106,12 @@ import type { DesignerField } from '@/views/activity/questionnaire/builder/types
 
 
 
-import { yesNoOptions, labelForValue } from '@/views/activity/format-labels'
-import { useMembershipSchoolOptions } from '@/views/activity/use-membership-school-options'
+import {
+  buildQuestionnaireSignupUrl,
+  labelForValue,
+  useMembershipSchoolOptions,
+  yesNoOptions
+} from '@/views/activity/questionnaire/utils/questionnaire-utils'
 
 import { ElMessage } from 'element-plus'
 
@@ -124,6 +152,8 @@ const loading = ref(false)
 
 const saving = ref(false)
 
+const exporting = ref(false)
+
 const builderTick = ref(0)
 
 function bumpBuilder(): void {
@@ -136,6 +166,18 @@ const outerReady = computed(() => {
   const id = outerId.value
   return id !== '' && id !== 'new'
 })
+
+const isViewMode = computed(() => String(route.query.mode ?? '') === 'view')
+
+const pageTitle = computed(() =>
+  isViewMode.value ? tr('route.activityQuestionnaireDetail') : tr('route.activityQuestionnaireDesign')
+)
+
+const pageDesc = computed(() =>
+  isViewMode.value
+    ? tr('activity.qDetailPageDesc')
+    : tr('activity.questionnaireDesignPageDesc')
+)
 
 const { loadSchoolOptions, schoolIdsCsv } = useMembershipSchoolOptions()
 
@@ -321,12 +363,78 @@ watch(
 
 
 
+const copySignupForPage = async (): Promise<void> => {
+  const id = outerId.value
+  if (!id) {
+    return
+  }
+
+  const url = buildQuestionnaireSignupUrl(id)
+  if (!url) {
+    ElMessage.warning(tr('activity.signupLinkUnavailable'))
+
+    return
+  }
+
+  try {
+    await navigator.clipboard.writeText(url)
+    ElMessage.success(tr('activity.signupLinkCopied'))
+  } catch {
+    ElMessage.error(tr('activity.signupLinkCopyFail'))
+  }
+}
+
+function goEditDesign(): void {
+  router.push({
+    name: 'ActivityQuestionnaireDesign',
+    params: { id: outerId.value },
+    query: {}
+  })
+}
+
+function openSubmissions(): void {
+  const id = outerId.value
+  if (!id) {
+    return
+  }
+
+  router.push({ name: 'ActivityQuestionnaireSubmissions', params: { id } })
+}
+
+const doExport = async (): Promise<void> => {
+  const id = outerId.value
+  if (!id) {
+    return
+  }
+
+  exporting.value = true
+
+  try {
+    const blob = await activityQuestionnaireApi.exportAnswersBlob.get(id)
+
+    downloadBlob(blob as Blob, `questionnaire-${id}.xlsx`)
+
+    ElMessage.success(tr('email.opOk'))
+
+  } catch {
+    ElMessage.error(tr('activity.exportQuestionnaireFail'))
+
+  } finally {
+    exporting.value = false
+
+  }
+}
+
 const goBack = () => {
   router.push({ path: '/activity/questionnaire' })
 }
 
-
 const saveQuestions = async () => {
+  if (isViewMode.value) {
+    return
+  }
+
+
   if (!outerReady.value) {
     ElMessage.warning(tr('activity.qDesignNoQuestionnaire'))
     return

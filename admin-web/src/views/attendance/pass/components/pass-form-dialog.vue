@@ -22,38 +22,28 @@
       </el-table>
     </div>
 
-    <el-form ref="formRef" :model="form" :rules="rules" label-width="140px" :disabled="viewOnly">
-      <el-form-item v-if="!isBatch" :label="$t('attendance.holiday.pickStudent')" prop="studentNo">
-        <el-autocomplete
-          v-model="displayStudent"
-          style="width: 100%"
-          :fetch-suggestions="queryStudents"
-          :placeholder="$t('attendance.holiday.pickStudentPh')"
-          :trigger-on-focus="false"
-          clearable
-          :disabled="viewOnly || !!form.id"
-          @select="onStudentSelect"
-          @clear="onStudentClear" />
-        <div v-if="studentLine" class="holiday-pass-dialog__hint">{{ studentLine }}</div>
-      </el-form-item>
-
-      <el-form-item :label="$t('attendance.holidayPass.way')" prop="way">
-        <el-select v-model="form.way" style="width: 100%" :placeholder="$t('attendance.holidayPass.way')">
-          <el-option :label="$t('attendance.holidayPass.wayParents')" value="parents" />
-          <el-option :label="$t('attendance.holidayPass.waySelf')" value="self" />
-        </el-select>
-      </el-form-item>
-
-      <el-form-item :label="$t('attendance.holidayPass.passTime')" prop="passTime">
-        <el-date-picker
-          v-model="form.passTime"
-          type="date"
-          value-format="YYYY-MM-DD"
-          style="width: 100%"
-          :placeholder="$t('attendance.holidayPass.passTime')" />
-      </el-form-item>
-
-      <el-form-item :label="$t('attendance.holidayPass.slot')" prop="dateLimit">
+    <UniForm
+      ref="uniFormRef"
+      v-model="form"
+      :mode="viewOnly ? 'view' : 'edit'"
+      class="holiday-pass-dialog__form"
+      :config="passFormConfig">
+      <template #field-studentNo>
+        <div>
+          <el-autocomplete
+            v-model="displayStudent"
+            style="width: 100%"
+            :fetch-suggestions="queryStudents"
+            :placeholder="$t('attendance.holiday.pickStudentPh')"
+            :trigger-on-focus="false"
+            clearable
+            :disabled="viewOnly || !!form.id"
+            @select="onStudentSelect"
+            @clear="onStudentClear" />
+          <div v-if="studentLine" class="holiday-pass-dialog__hint">{{ studentLine }}</div>
+        </div>
+      </template>
+      <template #field-dateLimit>
         <el-time-picker
           v-model="timeRangeModel"
           is-range
@@ -63,12 +53,8 @@
           style="width: 100%"
           :start-placeholder="$t('attendance.holiday.timeStart')"
           :end-placeholder="$t('attendance.holiday.timeEnd')" />
-      </el-form-item>
-
-      <el-form-item :label="$t('attendance.holiday.reasonPh')">
-        <el-input v-model="form.memo" type="textarea" :rows="3" resize="none" />
-      </el-form-item>
-    </el-form>
+      </template>
+    </UniForm>
 
     <template v-if="!viewOnly" #footer>
       <el-button @click="open = false">{{ $t('common.cancel') }}</el-button>
@@ -78,7 +64,8 @@
 </template>
 
 <script setup lang="ts">
-import type { FormInstance, FormRules } from 'element-plus'
+import type { UniFormConfig } from 'uni-ui-lib'
+import { UniForm } from 'uni-ui-lib'
 import { ElMessage } from 'element-plus'
 import dayjs from 'dayjs'
 import { computed, nextTick, reactive, ref, watch } from 'vue'
@@ -124,7 +111,7 @@ const dialogTitle = computed(() =>
 
 const viewOnly = computed(() => props.viewOnly)
 
-const formRef = ref<FormInstance>()
+const uniFormRef = ref<InstanceType<typeof UniForm> | null>(null)
 const loading = ref(false)
 const displayStudent = ref('')
 const studentInfo = ref<Loose>({})
@@ -156,7 +143,7 @@ const studentLine = computed(() => {
   return `${t('attendance.studentName')}：${name} · ${s.schoolName ?? s.enName ?? ''}`
 })
 
-const rules = computed<FormRules>(() => ({
+const rules = computed<UniFormConfig['rules']>(() => ({
   studentNo: [
     {
       validator: (_rule, value, cb) => {
@@ -189,6 +176,58 @@ const rules = computed<FormRules>(() => ({
   ]
 }))
 
+const passFormConfig = computed<UniFormConfig>(() => ({
+  formProps: { labelWidth: '140px', disabled: viewOnly.value },
+  colProps: { span: 24 },
+  rules: rules.value,
+  schema: [
+    {
+      field: 'studentNo',
+      label: t('attendance.holiday.pickStudent'),
+      component: 'ElInput',
+      hidden: isBatch.value,
+      componentProps: { style: { display: 'none' } }
+    },
+    {
+      field: 'way',
+      label: t('attendance.holidayPass.way'),
+      component: 'ElSelect',
+      options: [
+        { label: t('attendance.holidayPass.wayParents'), value: 'parents' },
+        { label: t('attendance.holidayPass.waySelf'), value: 'self' }
+      ],
+      componentProps: {
+        style: { width: '100%' },
+        placeholder: t('attendance.holidayPass.way')
+      }
+    },
+    {
+      field: 'passTime',
+      label: t('attendance.holidayPass.passTime'),
+      component: 'ElDatePicker',
+      componentProps: {
+        type: 'date',
+        valueFormat: 'YYYY-MM-DD',
+        style: { width: '100%' },
+        placeholder: t('attendance.holidayPass.passTime')
+      }
+    },
+    {
+      field: 'dateLimit',
+      label: t('attendance.holidayPass.slot'),
+      component: 'ElInput',
+      componentProps: { style: { display: 'none' } }
+    },
+    {
+      field: 'memo',
+      label: t('attendance.holiday.reasonPh'),
+      component: 'ElInput',
+      componentProps: { type: 'textarea', rows: 3, resize: 'none' }
+    }
+  ]
+}))
+
+
 watch(timeRangeModel, (v) => {
   if (Array.isArray(v) && v.length === 2) {
     form.dateLimit = v
@@ -218,7 +257,7 @@ watch(
     if (isBatch.value) {
       /** 对齐旧批量弹窗打开：共用字段重置为默认值，逐项更新仍走后端 leave/pass/update */
       resetEmpty()
-      void nextTick(() => formRef.value?.clearValidate())
+      void nextTick(() => uniFormRef.value?.clearValidate())
       return
     }
     const row = props.edit
@@ -252,7 +291,7 @@ watch(
 )
 
 const onClose = () => {
-  formRef.value?.resetFields()
+  uniFormRef.value?.resetFields()
 }
 
 const queryStudents = (query: string, cb: (rows: { value: string; studentNo: string }[]) => void) => {
@@ -316,7 +355,7 @@ const buildPayload = (extra: Loose) => {
 const submit = async () => {
   /** 单行与批量均需校验放行方式 / 放行日期 / 时段（对齐旧版 passModel.vue）；批量不校验「选择学生」 */
   try {
-    await formRef.value?.validate()
+    await uniFormRef.value?.validate()
   } catch {
     return
   }

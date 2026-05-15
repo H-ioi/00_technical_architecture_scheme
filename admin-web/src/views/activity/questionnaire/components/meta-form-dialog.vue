@@ -10,43 +10,7 @@
     <el-alert type="info" show-icon :closable="false" class="activity-q-meta__hint">
       {{ $t('activity.qMetaDesignerHint') }}
     </el-alert>
-    <el-form ref="formRef" class="activity-q-meta__form" label-position="top" :model="form" :rules="rules">
-      <el-form-item :label="$t('activity.questionnaireName')" prop="name">
-        <el-input v-model="form.name" maxlength="255" show-word-limit />
-      </el-form-item>
-      <el-form-item :label="$t('activity.colSchool')" prop="schoolIds">
-        <el-select
-          v-model="form.schoolIds"
-          multiple
-          collapse-tags
-          collapse-tags-tooltip
-          filterable
-          style="width: 100%"
-          :placeholder="$t('activity.ruleSelect')"
-          @change="onSchoolChange">
-          <el-option v-for="o in schoolOpts" :key="String(o.value)" :label="o.label" :value="o.value" />
-        </el-select>
-      </el-form-item>
-      <el-form-item :label="$t('activity.questionnaireActivity')" prop="activityId">
-        <el-select v-model="form.activityId" filterable clearable style="width: 100%">
-          <el-option v-for="o in activityFiltered" :key="String(o.value)" :label="o.label" :value="o.value" />
-        </el-select>
-      </el-form-item>
-      <el-form-item :label="$t('activity.questionnaireValid')" prop="status">
-        <el-select v-model="form.status" style="width: 100%">
-          <el-option :label="$t('activity.qStatusEffective')" :value="1" />
-          <el-option :label="$t('activity.qStatusInactive')" :value="0" />
-        </el-select>
-      </el-form-item>
-      <el-form-item :label="$t('activity.questionnaireNeedStudent')" prop="needStudentInfo">
-        <el-select v-model="form.needStudentInfo" style="width: 100%">
-          <el-option v-for="o in ynSel" :key="String(o.value)" :label="o.label" :value="String(o.value)" />
-        </el-select>
-      </el-form-item>
-      <el-form-item :label="$t('activity.colInstructions')" prop="instructions">
-        <el-input v-model="form.instructions" type="textarea" :rows="2" maxlength="100" show-word-limit />
-      </el-form-item>
-    </el-form>
+    <UniForm ref="uniFormRef" v-model="form" mode="edit" class="activity-q-meta__form" :config="formConfig" />
     <template #footer>
       <el-button @click="visible = false">{{ $t('common.cancel') }}</el-button>
       <el-button type="primary" :loading="saving" @click="submit">{{ $t('common.submit') }}</el-button>
@@ -55,18 +19,16 @@
 </template>
 
 <script setup lang="ts">
-import type { UniOption } from 'uni-ui-lib'
-import type { FormInstance, FormRules } from 'element-plus'
+import type { UniFormConfig, UniOption } from 'uni-ui-lib'
+import { UniForm, useUniI18n } from 'uni-ui-lib'
 import { ElMessage } from 'element-plus'
 import { computed, reactive, ref } from 'vue'
 
 import { activityApi, activityQuestionnaireApi } from '@/api'
 import type { Translate } from '@/types/i18n'
 import { normalizeArray, normalizeEnvelope } from '@/utils/api-response-normalize'
-import { useUniI18n } from 'uni-ui-lib'
 
-import { yesNoOptions } from '@/views/activity/format-labels'
-import { useMembershipSchoolOptions } from '@/views/activity/use-membership-school-options'
+import { useMembershipSchoolOptions, yesNoOptions } from '@/views/activity/questionnaire/utils/questionnaire-utils'
 
 const emit = defineEmits<{ saved: [] }>()
 
@@ -97,7 +59,7 @@ const ynSel = computed(() => yesNoOptions(tr))
 const visible = ref(false)
 const saving = ref(false)
 const mode = ref<'add' | 'edit'>('add')
-const formRef = ref<FormInstance>()
+const uniFormRef = ref<InstanceType<typeof UniForm> | null>(null)
 const activityPool = ref<Row[]>([])
 
 const form = reactive({
@@ -114,8 +76,10 @@ const dlgTitle = computed(() =>
   mode.value === 'add' ? tr('activity.qMetaAddTitle') : tr('activity.qMetaEditTitle')
 )
 
-const rules = computed(
-  (): FormRules => ({
+const formConfig = computed<UniFormConfig>(() => ({
+  formProps: { labelPosition: 'top' },
+  colProps: { span: 24 },
+  rules: {
     name: [{ required: true, message: tr('activity.ruleInput'), trigger: 'blur' }],
     schoolIds: [
       {
@@ -129,8 +93,63 @@ const rules = computed(
     activityId: [{ required: true, message: tr('activity.ruleSelect'), trigger: 'change' }],
     status: [{ required: true, message: tr('activity.ruleSelect'), trigger: 'change' }],
     needStudentInfo: [{ required: true, message: tr('activity.ruleSelect'), trigger: 'change' }]
-  })
-)
+  } as UniFormConfig['rules'],
+  schema: [
+    {
+      field: 'name',
+      label: tr('activity.questionnaireName'),
+      component: 'ElInput',
+      componentProps: { maxlength: 255, showWordLimit: true }
+    },
+    {
+      field: 'schoolIds',
+      label: tr('activity.colSchool'),
+      component: 'ElSelect',
+      options: schoolOpts.value,
+      onChange: () => {
+        onSchoolChange()
+      },
+      componentProps: {
+        multiple: true,
+        collapseTags: true,
+        collapseTagsTooltip: true,
+        filterable: true,
+        placeholder: tr('activity.ruleSelect'),
+        style: { width: '100%' }
+      }
+    },
+    {
+      field: 'activityId',
+      label: tr('activity.questionnaireActivity'),
+      component: 'ElSelect',
+      options: activityFiltered.value,
+      componentProps: { filterable: true, clearable: true, style: { width: '100%' } }
+    },
+    {
+      field: 'status',
+      label: tr('activity.questionnaireValid'),
+      component: 'ElSelect',
+      options: [
+        { label: tr('activity.qStatusEffective'), value: 1 },
+        { label: tr('activity.qStatusInactive'), value: 0 }
+      ],
+      componentProps: { style: { width: '100%' } }
+    },
+    {
+      field: 'needStudentInfo',
+      label: tr('activity.questionnaireNeedStudent'),
+      component: 'ElSelect',
+      options: ynSel.value,
+      componentProps: { style: { width: '100%' } }
+    },
+    {
+      field: 'instructions',
+      label: tr('activity.colInstructions'),
+      component: 'ElInput',
+      componentProps: { type: 'textarea', rows: 2, maxlength: 100, showWordLimit: true }
+    }
+  ]
+}))
 
 const activityFiltered = computed((): UniOption[] => {
   const rows = activityPool.value
@@ -196,7 +215,11 @@ async function fillFromDetail(id: string | number) {
 }
 
 const submit = async () => {
-  await formRef.value?.validate()
+  try {
+    await uniFormRef.value?.validate()
+  } catch {
+    return
+  }
 
   const payload: Record<string, unknown> = {
     name: form.name,
@@ -225,7 +248,7 @@ const submit = async () => {
 
 const onClosed = () => {
   resetForm()
-  formRef.value?.resetFields()
+  uniFormRef.value?.clearValidate()
   activityPool.value = []
 }
 

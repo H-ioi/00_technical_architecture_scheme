@@ -1,49 +1,6 @@
 <template>
   <el-dialog v-model="innerVisible" :title="title" width="520px" destroy-on-close @closed="onClosed">
-    <el-form ref="formRef" :model="model" :rules="rules" label-width="100px">
-      <el-form-item :label="$t('attendance.holidayConfig.school')" prop="school">
-        <el-select
-          v-model="model.school"
-          filterable
-          clearable
-          style="width: 100%"
-          :placeholder="$t('attendance.phSchool')">
-          <el-option
-            v-for="s in schoolOptions"
-            :key="String(s.value)"
-            :label="s.label"
-            :value="s.value" />
-        </el-select>
-      </el-form-item>
-      <el-form-item :label="$t('attendance.holidayConfig.department')" prop="department">
-        <el-select
-          v-model="model.department"
-          style="width: 100%"
-          :placeholder="$t('attendance.holidayConfig.department')">
-          <el-option
-            v-for="d in departmentOptions"
-            :key="d.value"
-            :label="d.label"
-            :value="d.value" />
-        </el-select>
-      </el-form-item>
-      <el-form-item
-        v-if="gradeVisible"
-        :label="$t('attendance.holidayConfig.grades')"
-        prop="grades">
-        <el-select
-          v-model="model.grades"
-          multiple
-          filterable
-          style="width: 100%"
-          :placeholder="$t('attendance.holidayConfig.grades')">
-          <el-option v-for="g in gradeOptions" :key="g.value" :label="g.label" :value="g.value" />
-        </el-select>
-      </el-form-item>
-      <el-form-item :label="$t('attendance.holidayConfig.email')" prop="email">
-        <el-input v-model="model.email" :placeholder="$t('attendance.holidayConfig.email')" />
-      </el-form-item>
-    </el-form>
+    <UniForm ref="uniFormRef" v-model="model" mode="edit" :config="formConfig" />
     <template #footer>
       <el-button @click="innerVisible = false">{{ $t('common.cancel') }}</el-button>
       <el-button type="primary" :loading="submitting" @click="submit">{{
@@ -54,22 +11,21 @@
 </template>
 
 <script setup lang="ts">
-import type { FormInstance, FormRules } from 'element-plus'
+import type { UniFormConfig, UniOption } from 'uni-ui-lib'
+import { UniForm, useUniI18n } from 'uni-ui-lib'
 import { ElMessage } from 'element-plus'
 import { computed, reactive, ref, watch } from 'vue'
-import { useI18n } from 'vue-i18n'
 
 import { attendanceHolidayApi } from '@/api'
 import type { AttendanceHolidaySysConfigRecord } from '@/types/modules/attendance-holiday'
-import type { UniFormFieldOption } from 'uni-ui-lib'
 
 const props = defineProps<{
   visible: boolean
   title: string
   modelValue: AttendanceHolidaySysConfigRecord
-  schoolOptions: UniFormFieldOption[]
-  departmentOptions: { label: string; value: string }[]
-  gradeOptions: UniFormFieldOption[]
+  schoolOptions: UniOption[]
+  departmentOptions: UniOption[]
+  gradeOptions: UniOption[]
 }>()
 
 const emit = defineEmits<{
@@ -77,7 +33,7 @@ const emit = defineEmits<{
   success: []
 }>()
 
-const { t } = useI18n()
+const { t } = useUniI18n()
 
 const innerVisible = computed({
   get: () => props.visible,
@@ -97,15 +53,64 @@ const gradeVisible = computed(() => {
   return !d || !['dorm', 'bus', 'doctor', 'all'].includes(d)
 })
 
-const formRef = ref<FormInstance>()
+const uniFormRef = ref<InstanceType<typeof UniForm> | null>(null)
 const submitting = ref(false)
 
-const rules = computed<FormRules>(() => ({
-  school: [{ required: true, message: t('attendance.holidayConfig.ruleSchool'), trigger: 'change' }],
-  department: [{ required: true, message: t('attendance.holidayConfig.ruleDepartment'), trigger: 'change' }],
-  email: [
-    { required: true, message: t('attendance.holidayConfig.ruleEmail'), trigger: 'blur' },
-    { type: 'email', message: t('attendance.holidayConfig.emailInvalid'), trigger: 'blur' }
+const formConfig = computed<UniFormConfig>(() => ({
+  formProps: { labelWidth: '100px' },
+  colProps: { span: 24 },
+  rules: {
+    school: [{ required: true, message: t('attendance.holidayConfig.ruleSchool'), trigger: 'change' }],
+    department: [
+      { required: true, message: t('attendance.holidayConfig.ruleDepartment'), trigger: 'change' }
+    ],
+    email: [
+      { required: true, message: t('attendance.holidayConfig.ruleEmail'), trigger: 'blur' },
+      { type: 'email', message: t('attendance.holidayConfig.emailInvalid'), trigger: 'blur' }
+    ]
+  } as UniFormConfig['rules'],
+  schema: [
+    {
+      field: 'school',
+      label: t('attendance.holidayConfig.school'),
+      component: 'ElSelect',
+      options: props.schoolOptions,
+      componentProps: {
+        filterable: true,
+        clearable: true,
+        placeholder: t('attendance.phSchool'),
+        style: { width: '100%' }
+      }
+    },
+    {
+      field: 'department',
+      label: t('attendance.holidayConfig.department'),
+      component: 'ElSelect',
+      options: props.departmentOptions,
+      componentProps: {
+        placeholder: t('attendance.holidayConfig.department'),
+        style: { width: '100%' }
+      }
+    },
+    {
+      field: 'grades',
+      label: t('attendance.holidayConfig.grades'),
+      component: 'ElSelect',
+      options: props.gradeOptions,
+      hidden: !gradeVisible.value,
+      componentProps: {
+        multiple: true,
+        filterable: true,
+        placeholder: t('attendance.holidayConfig.grades'),
+        style: { width: '100%' }
+      }
+    },
+    {
+      field: 'email',
+      label: t('attendance.holidayConfig.email'),
+      component: 'ElInput',
+      componentProps: { placeholder: t('attendance.holidayConfig.email') }
+    }
   ]
 }))
 
@@ -122,11 +127,15 @@ watch(
 )
 
 const onClosed = () => {
-  formRef.value?.resetFields()
+  uniFormRef.value?.clearValidate()
 }
 
 const submit = async () => {
-  await formRef.value?.validate()
+  try {
+    await uniFormRef.value?.validate()
+  } catch {
+    return
+  }
   submitting.value = true
   try {
     const api = model.id ? attendanceHolidayApi.sysConfigUpdate : attendanceHolidayApi.sysConfigSave

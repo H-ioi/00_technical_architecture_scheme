@@ -29,7 +29,7 @@
       :pagination="{ pageSize: 10, pageSizes: [10, 20, 50, 100] }"
       :toolbar="{ refresh: true, columnSetting: true }"
       :actions="acts"
-      :action-column="{ width: 360, fixed: 'right' }"
+      :action-column="{ width: 140, fixed: 'right' }"
       @load-success="hdl"
       @selection-change="onSel">
       <template #toolbar>
@@ -86,15 +86,15 @@ import { useRouter } from 'vue-router'
 
 import { ElMessage, ElMessageBox } from 'element-plus'
 
-import { fmtTs, yesNoOptions } from '@/views/activity/format-labels'
-
-import { useMembershipSchoolOptions } from '@/views/activity/use-membership-school-options'
-
 import BatchFlagDialog from '@/views/activity/questionnaire/components/batch-flag-dialog.vue'
 import QuestionnaireCopyDialog from '@/views/activity/questionnaire/components/copy-dialog.vue'
 import MetaFormDialog from '@/views/activity/questionnaire/components/meta-form-dialog.vue'
-
-import { buildQuestionnaireSignupUrl } from '@/views/activity/questionnaire/utils/questionnaire-external-urls'
+import {
+  buildQuestionnaireSignupUrl,
+  fmtTs,
+  useMembershipSchoolOptions,
+  yesNoOptions
+} from '@/views/activity/questionnaire/utils/questionnaire-utils'
 
 type L = Record<string, unknown>
 
@@ -118,8 +118,8 @@ const loadActs = async () => {
     activityOpts.value = rows.map((x) => ({
       label: String(
         locale.value === 'en'
-          ? x.activityEnName ?? x.activityCnName ?? x.activityName ?? x.name ?? x.id ?? ''
-          : x.activityCnName ?? x.activityEnName ?? x.activityName ?? x.name ?? x.id ?? ''
+          ? (x.activityEnName ?? x.activityCnName ?? x.activityName ?? x.name ?? x.id ?? '')
+          : (x.activityCnName ?? x.activityEnName ?? x.activityName ?? x.name ?? x.id ?? '')
       ),
       value: x.id as string | number
     }))
@@ -345,8 +345,6 @@ const copySignup = async (row: L) => {
     ElMessage.error(tr('activity.signupLinkCopyFail'))
   }
 }
-
-
 
 const openDesignerEdit = (row: L) => {
   if (row.id == null) {

@@ -30,47 +30,7 @@
       :title="$t('attendance.holidayFlow.procDef.setAssignee')"
       width="520px"
       destroy-on-close>
-      <el-form label-width="120px">
-        <el-form-item v-for="item in assignFields" :key="item.key" :label="item.name">
-          <el-select
-            v-if="item.type === 'assignee'"
-            v-model="item.value"
-            filterable
-            clearable
-            style="width: 100%">
-            <el-option
-              v-for="u in assignUsers"
-              :key="u.username"
-              :label="u.username"
-              :value="u.username" />
-          </el-select>
-          <el-select
-            v-else-if="item.type === 'candidateUsers'"
-            v-model="item.value"
-            filterable
-            clearable
-            style="width: 100%">
-            <el-option
-              v-for="u in assignUsers"
-              :key="u.userId"
-              :label="`${u.nickname}[${u.username}]`"
-              :value="u.userId" />
-          </el-select>
-          <el-select
-            v-else-if="item.type === 'group'"
-            v-model="item.value"
-            multiple
-            filterable
-            clearable
-            style="width: 100%">
-            <el-option
-              v-for="u in assignUsers"
-              :key="u.username"
-              :label="u.username"
-              :value="u.username" />
-          </el-select>
-        </el-form-item>
-      </el-form>
+      <UniForm v-model="assignFormModel" mode="edit" :config="assignFormConfig" />
       <template #footer>
         <el-button type="primary" @click="submitAssign">{{ $t('common.submit') }}</el-button>
       </template>
@@ -81,12 +41,14 @@
 <script setup lang="ts">
 import { ElMessage, ElMessageBox } from 'element-plus'
 import type {
+  UniFormConfig,
+  UniOption,
   UniTableAction,
   UniTableColumn,
   UniTableRequest,
   UniTableRequestResult
 } from 'uni-ui-lib'
-import { UniDataTable, useUniI18n, useUniListState } from 'uni-ui-lib'
+import { UniDataTable, UniForm, useUniI18n, useUniListState } from 'uni-ui-lib'
 import { computed, ref } from 'vue'
 
 import { attendanceHolidayApi } from '@/api'
@@ -98,7 +60,18 @@ type Loose = Record<string, unknown>
 
 type AssignField = { name: string; key: string; type: string; value: unknown }
 
-const { t } = useUniI18n()
+function assignFieldOptions(f: AssignField, users: Loose[]): UniOption[] {
+  if (f.type === 'candidateUsers') {
+    return users.map((u) => ({
+      label: `${u.nickname}[${u.username}]`,
+      value: u.userId as string | number
+    }))
+  }
+  return users.map((u) => ({
+    label: String(u.username ?? ''),
+    value: String(u.username ?? '')
+  }))
+}
 
 const { filters, tableRef, handleLoadSuccess } = useUniListState({
   initialFilters: {}
@@ -118,9 +91,29 @@ const retryTable = () => {
 
 const imgVisible = ref(false)
 const flowImg = ref('')
+const { t } = useUniI18n()
+
+const assignFormModel = ref<Record<string, unknown>>({})
 const assignVisible = ref(false)
 const assignFields = ref<AssignField[]>([])
 const assignUsers = ref<Loose[]>([])
+
+const assignFormConfig = computed<UniFormConfig>(() => ({
+  formProps: { labelWidth: '120px' },
+  colProps: { span: 24 },
+  schema: assignFields.value.map((f) => ({
+    field: f.key,
+    label: f.name,
+    component: 'ElSelect',
+    options: assignFieldOptions(f, assignUsers.value),
+    componentProps: {
+      multiple: f.type === 'group',
+      filterable: true,
+      clearable: true,
+      style: { width: '100%' }
+    }
+  }))
+}))
 const currentFlowId = ref<string | number>('')
 const currentTenantId = ref('')
 
@@ -233,13 +226,14 @@ const openAssign = async (id: string | number, tenantId: string) => {
     ? fields.map((f) => ({ ...f, value: f.value ?? (f.type === 'group' ? [] : '') }))
     : []
   assignUsers.value = (body.users as Loose[]) ?? []
+  assignFormModel.value = Object.fromEntries(assignFields.value.map((it) => [it.key, it.value]))
   assignVisible.value = true
 }
 
 const submitAssign = async () => {
   const variable: Loose = {}
   for (const item of assignFields.value) {
-    variable[item.key] = item.value
+    variable[item.key] = assignFormModel.value[item.key]
   }
   variable.id = currentFlowId.value
   await attendanceHolidayApi.flowVariableSet.post({

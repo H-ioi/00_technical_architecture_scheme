@@ -1,9 +1,9 @@
 <template>
   <div class="qb" role="application" :aria-label="t('activity.qbPaletteTitle')">
     <div class="qb__workspace">
-      <div class="qb__body">
+      <div class="qb__body" :class="{ 'qb__body--readonly': readonly }">
         <!-- 左侧：添加题型 -->
-        <aside class="qb__palette qb__panel">
+        <aside v-if="!readonly" class="qb__palette qb__panel">
           <div class="qb__palette-head">
             <span class="qb__panel-title">{{ t('activity.qbPaletteTitle') }}</span>
             <span class="qb__toolbar-count qb__muted">{{
@@ -43,6 +43,7 @@
               v-model="orderedFields"
               item-key="fontId"
               handle=".qb__drag-h"
+              :disabled="readonly"
               :animation="180"
               ghost-class="qb__ghost"
               drag-class="qb__drag"
@@ -52,13 +53,20 @@
                 <div
                   :key="row.fontId"
                   class="qb__row"
-                  :class="{ active: selFontId === row.fontId }"
-                  role="button"
-                  tabindex="0"
-                  @click="selectRow(row.fontId)"
-                  @keydown.enter.prevent="selectRow(row.fontId)">
+                  :class="{
+                    active: !readonly && selFontId === row.fontId,
+                    'qb__row--readonly': readonly
+                  }"
+                  :role="readonly ? undefined : 'button'"
+                  :tabindex="readonly ? undefined : 0"
+                  @click="onRowClick(row.fontId)"
+                  @keydown.enter.prevent="onRowClick(row.fontId)">
                   <div class="qb__row-toolbar">
-                    <span class="qb__drag-h" :title="t('activity.qbDrag')" @click.stop>
+                    <span
+                      v-if="!readonly"
+                      class="qb__drag-h"
+                      :title="t('activity.qbDrag')"
+                      @click.stop>
                       <el-icon><Rank /></el-icon>
                     </span>
                     <span class="qb__badge">{{ idx + 1 }}</span>
@@ -72,6 +80,7 @@
                       {{ t('activity.qbHide') }}
                     </el-tag>
                     <el-button
+                      v-if="!readonly"
                       text
                       type="danger"
                       :icon="Delete"
@@ -230,7 +239,7 @@
         </div>
 
         <!-- 右侧：选中题目的表单编辑 -->
-        <aside class="qb__editor qb__panel">
+        <aside v-if="!readonly" class="qb__editor qb__panel">
           <div class="qb__editor-head">
             <span class="qb__panel-title">{{ t('activity.qbPropsTitle') }}</span>
           </div>
@@ -270,51 +279,47 @@
               </el-alert>
 
               <template v-else-if="draft">
-                <el-form label-position="top" class="qb__form">
-                  <div class="qb__sect qb__sect--base">
-                    <el-form-item :label="t('activity.qbFieldLabel')">
-                      <el-input
-                        v-model="draft.label"
-                        type="textarea"
-                        :autosize="{ minRows: 3, maxRows: 10 }"
-                        maxlength="255"
-                        show-word-limit />
-                    </el-form-item>
-                  </div>
-
+                <UniForm v-model="draft" mode="edit" class="qb__form" :config="qbSideFormConfig">
+                  <template #field-_qbEditor>
                   <template v-if="draft.type === 'input'">
-                    <el-form-item :label="t('activity.qbPlaceholder')">
+                    <div class="qb__fake-item">
+                      <div class="qb__fake-label">{{ t('activity.qbPlaceholder') }}</div>
                       <el-input v-model="draft.properties.placeholder" />
-                    </el-form-item>
-                    <el-form-item :label="t('activity.qbRegex')">
+                    </div>
+                    <div class="qb__fake-item">
+                      <div class="qb__fake-label">{{ t('activity.qbRegex') }}</div>
                       <el-input v-model="draft.regex" />
-                    </el-form-item>
-                    <el-form-item :label="t('activity.qbRegexHint')">
+                    </div>
+                    <div class="qb__fake-item">
+                      <div class="qb__fake-label">{{ t('activity.qbRegexHint') }}</div>
                       <el-input v-model="draft.regexHint" />
-                    </el-form-item>
+                    </div>
                   </template>
 
                   <template v-else-if="draft.type === 'textarea'">
-                    <el-form-item :label="t('activity.qbPlaceholder')">
+                    <div class="qb__fake-item">
+                      <div class="qb__fake-label">{{ t('activity.qbPlaceholder') }}</div>
                       <el-input v-model="draft.properties.placeholder" />
-                    </el-form-item>
-                    <el-form-item :label="t('activity.qbTextRows')">
+                    </div>
+                    <div class="qb__fake-item">
+                      <div class="qb__fake-label">{{ t('activity.qbTextRows') }}</div>
                       <el-input-number
                         v-model="draft.properties.text_num_line"
                         :min="1"
                         :max="20"
                         controls-position="right"
                         style="width: 100%" />
-                    </el-form-item>
+                    </div>
                   </template>
 
                   <template
                     v-else-if="
                       draft.type === 'radio' || draft.type === 'checkbox' || draft.type === 'select'
                     ">
-                    <el-form-item v-if="draft.type === 'select'" :label="t('activity.qbMulti')">
+                    <div v-if="draft.type === 'select'" class="qb__fake-item qb__fake-item--switch">
+                      <span class="qb__fake-label">{{ t('activity.qbMulti') }}</span>
                       <el-switch v-model="selMultiToggle" />
-                    </el-form-item>
+                    </div>
 
                     <div class="qb__opts-head">
                       <span class="qb__opts-title">{{ t('activity.qbOptions') }}</span>
@@ -390,7 +395,8 @@
                   </template>
 
                   <template v-else-if="draft.type === 'datetimepicker'">
-                    <el-form-item :label="t('activity.qbDateMode')">
+                    <div class="qb__fake-item">
+                      <div class="qb__fake-label">{{ t('activity.qbDateMode') }}</div>
                       <el-select
                         v-model="draft.datetimeTypeKey"
                         style="width: 100%"
@@ -399,15 +405,17 @@
                         <el-option :label="t('activity.qbDatetime')" value="datetime" />
                         <el-option :label="t('activity.qbYearMonth')" value="month" />
                       </el-select>
-                    </el-form-item>
-                    <el-form-item :label="t('activity.qbPattern')">
+                    </div>
+                    <div class="qb__fake-item">
+                      <div class="qb__fake-label">{{ t('activity.qbPattern') }}</div>
                       <el-input
                         v-model="draft.properties.datetime_pattern"
                         maxlength="80"
                         show-word-limit />
-                    </el-form-item>
+                    </div>
                   </template>
-                </el-form>
+                  </template>
+                </UniForm>
               </template>
             </div>
           </template>
@@ -442,7 +450,8 @@ import {
   presetField,
   type PaletteType
 } from '@/views/activity/questionnaire/builder/field-presets'
-import { useUniI18n } from 'uni-ui-lib'
+import type { UniFormConfig } from 'uni-ui-lib'
+import { UniForm, useUniI18n } from 'uni-ui-lib'
 import type { Component } from 'vue'
 import { computed, onUnmounted, ref, watch } from 'vue'
 import draggable from 'vuedraggable'
@@ -456,11 +465,41 @@ const PALETTE_ICON: Record<PaletteType, Component> = {
   datetimepicker: Calendar
 }
 
-const props = defineProps<{ modelValue: DesignerField[] }>()
+const props = withDefaults(
+  defineProps<{
+    modelValue: DesignerField[]
+    readonly?: boolean
+  }>(),
+  { readonly: false }
+)
 const emit = defineEmits<{ 'update:modelValue': [DesignerField[]] }>()
 
 const { t } = useUniI18n()
 const tr = t as Translate
+
+const qbSideFormConfig = computed<UniFormConfig>(() => ({
+  formProps: { labelPosition: 'top' },
+  colProps: { span: 24 },
+  schema: [
+    {
+      field: 'label',
+      label: t('activity.qbFieldLabel'),
+      component: 'ElInput',
+      componentProps: {
+        type: 'textarea',
+        autosize: { minRows: 3, maxRows: 10 },
+        maxlength: 255,
+        showWordLimit: true
+      }
+    },
+    {
+      field: '_qbEditor',
+      label: '',
+      component: 'ElInput',
+      componentProps: { style: { display: 'none' } }
+    }
+  ]
+}))
 
 const selFontId = ref<string | null>(null)
 
@@ -487,8 +526,19 @@ let debTimer: ReturnType<typeof setTimeout> | null = null
 const DEB_MS = 160
 
 watch(
-  () => props.modelValue.length,
+  () => [props.readonly, props.modelValue.length] as const,
   () => {
+    if (props.readonly) {
+      if (debTimer) {
+        clearTimeout(debTimer)
+        debTimer = null
+      }
+      selFontId.value = null
+      draft.value = null
+
+      return
+    }
+
     if (props.modelValue.length && selFontId.value == null) {
       selFontId.value = props.modelValue[0].fontId
     }
@@ -497,7 +547,9 @@ watch(
       selFontId.value = props.modelValue[0]?.fontId ?? null
     }
   },
+
   { immediate: true }
+
 )
 
 function cloneKnown(row: DesignerFieldKnown): DesignerFieldKnown {
@@ -615,7 +667,23 @@ function knownHeaderProp(fontId: string): { required: boolean; isHide: boolean }
   return { required: !!row.required, isHide: !!row.isHide }
 }
 
+function onRowClick(fontId: string): void {
+  if (props.readonly) {
+
+    return
+  }
+
+  selectRow(fontId)
+}
+
 function selectRow(fontId: string): void {
+  if (props.readonly) {
+    return
+
+  }
+
+
+
   if (debTimer) {
     clearTimeout(debTimer)
     debTimer = null
@@ -854,6 +922,12 @@ function syncDt(): void {
 }
 
 function add(bt: PaletteType): void {
+  if (props.readonly) {
+    return
+  }
+
+
+
   const row = presetField(bt)
   emit('update:modelValue', [...props.modelValue, row])
 
@@ -861,6 +935,12 @@ function add(bt: PaletteType): void {
 }
 
 function remove(ix: number): void {
+  if (props.readonly) {
+
+    return
+  }
+
+
   const fid = props.modelValue[ix]?.fontId
   if (debTimer) {
     clearTimeout(debTimer)
@@ -884,6 +964,13 @@ function remove(ix: number): void {
 }
 
 function addOptionRow(): void {
+  if (props.readonly) {
+
+
+    return
+  }
+
+
   const d = draft.value
 
   if (!d || (d.type !== 'radio' && d.type !== 'checkbox' && d.type !== 'select')) {
@@ -894,6 +981,13 @@ function addOptionRow(): void {
 }
 
 function rmOption(oi: number): void {
+  if (props.readonly) {
+
+    return
+  }
+
+
+
   ensureOpts()
   const list = [...opts.value]
   const removed = list[oi]
@@ -947,13 +1041,18 @@ function rmOption(oi: number): void {
   min-height: min(620px, calc(100vh - 260px));
 }
 
+.qb__body--readonly {
+  grid-template-columns: minmax(0, 1fr);
+}
+
 @media (max-width: 960px) {
   .qb__body {
     grid-template-columns: 1fr;
     min-height: auto;
   }
 
-  .qb__scroll--list :deep(.el-scrollbar__wrap) {
+  .qb__scroll--list :deep(.el-scrollbar__wrap),
+  .qb__scroll--opts :deep(.el-scrollbar__wrap) {
     max-height: min(480px, 55vh) !important;
   }
 }
@@ -1068,6 +1167,10 @@ function rmOption(oi: number): void {
   overflow-x: hidden;
 }
 
+.qb__opts-strip {
+  padding-right: 12px;
+}
+
 .qb__draggable {
   display: flex;
   flex-direction: column;
@@ -1114,6 +1217,18 @@ function rmOption(oi: number): void {
   border-color: var(--el-color-primary);
   background: var(--el-fill-color-blank);
   box-shadow: 0 0 0 1px color-mix(in srgb, var(--el-color-primary) 35%, transparent);
+}
+
+.qb__row--readonly {
+  cursor: default;
+}
+
+.qb__row--readonly:hover {
+  border-color: var(--el-border-color-lighter);
+}
+
+.qb__row--readonly:focus-visible {
+  outline: none;
 }
 
 .qb__row-toolbar {
@@ -1270,6 +1385,24 @@ function rmOption(oi: number): void {
   max-width: none;
 }
 
+.qb__fake-item {
+  margin-bottom: 16px;
+}
+
+.qb__fake-label {
+  font-size: 12px;
+  line-height: 1.5;
+  margin-bottom: 6px;
+  color: var(--el-text-color-regular);
+}
+
+.qb__fake-item--switch {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
 .qb__sect--base {
   padding-bottom: 8px;
   margin-bottom: 12px;
@@ -1287,14 +1420,6 @@ function rmOption(oi: number): void {
   flex-direction: column;
   gap: 10px;
   min-width: 0;
-}
-
-.qb__opts-scroll {
-  max-height: min(420px, 42vh);
-  overflow-x: hidden;
-  overflow-y: auto;
-  padding-right: 4px;
-  margin-right: -4px;
 }
 
 .qb__opts-add {

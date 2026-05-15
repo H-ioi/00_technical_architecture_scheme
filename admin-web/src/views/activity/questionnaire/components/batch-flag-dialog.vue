@@ -10,13 +10,12 @@
     <el-alert type="info" show-icon :closable="false" class="activity-q-batch-flag__hint">
       {{ hint }}
     </el-alert>
-    <el-form ref="formRef" class="activity-q-batch-flag__form" label-position="top" :model="form" :rules="rules">
-      <el-form-item :label="flagLabel" prop="value">
-        <el-select v-model="form.value" style="width: 100%">
-          <el-option v-for="o in opts" :key="String(o.value)" :label="o.label" :value="String(o.value)" />
-        </el-select>
-      </el-form-item>
-    </el-form>
+    <UniForm
+      ref="uniFormRef"
+      v-model="form"
+      mode="edit"
+      class="activity-q-batch-flag__form"
+      :config="formConfig" />
     <template #footer>
       <el-button @click="visible = false">{{ $t('common.cancel') }}</el-button>
       <el-button type="primary" :loading="saving" @click="submit">{{ $t('common.submit') }}</el-button>
@@ -25,15 +24,15 @@
 </template>
 
 <script setup lang="ts">
-import type { FormInstance, FormRules } from 'element-plus'
 import { ElMessage } from 'element-plus'
 import { computed, reactive, ref } from 'vue'
 
 import { activityQuestionnaireApi } from '@/api'
 import type { Translate } from '@/types/i18n'
-import { useUniI18n } from 'uni-ui-lib'
+import type { UniFormConfig } from 'uni-ui-lib'
+import { UniForm, useUniI18n } from 'uni-ui-lib'
 
-import { yesNoOptions } from '@/views/activity/format-labels'
+import { yesNoOptions } from '@/views/activity/questionnaire/utils/questionnaire-utils'
 
 const emit = defineEmits<{ saved: [] }>()
 
@@ -46,7 +45,7 @@ const visible = ref(false)
 const saving = ref(false)
 const kindRef = ref<Kind>('status')
 const idsRef = ref<Array<string | number>>([])
-const formRef = ref<FormInstance>()
+const uniFormRef = ref<InstanceType<typeof UniForm> | null>(null)
 
 const form = reactive({
   value: '1'
@@ -68,20 +67,35 @@ const flagLabel = computed(() =>
 
 const opts = computed(() => yesNoOptions(tr))
 
-const rules = computed(
-  (): FormRules => ({
+const formConfig = computed<UniFormConfig>(() => ({
+  formProps: { labelPosition: 'top' },
+  colProps: { span: 24 },
+  rules: {
     value: [{ required: true, message: tr('activity.ruleSelect'), trigger: 'change' }]
-  })
-)
+  } as UniFormConfig['rules'],
+  schema: [
+    {
+      field: 'value',
+      label: flagLabel.value,
+      component: 'ElSelect',
+      options: opts.value,
+      componentProps: { style: { width: '100%' } }
+    }
+  ]
+}))
 
 const onClosed = () => {
   idsRef.value = []
   form.value = '1'
-  formRef.value?.resetFields()
+  uniFormRef.value?.clearValidate()
 }
 
 const submit = async () => {
-  await formRef.value?.validate()
+  try {
+    await uniFormRef.value?.validate()
+  } catch {
+    return
+  }
   const ids = idsRef.value
   if (!ids.length) {
     ElMessage.warning(tr('activity.qSelRowsFirst'))

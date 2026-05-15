@@ -1,43 +1,6 @@
 <template>
   <el-dialog v-model="visible" :title="title" width="560px" destroy-on-close>
-    <el-form ref="formRef" :model="form" :rules="rules" label-width="120px">
-      <el-form-item :label="$t('email.send.colUsers')" prop="userIds">
-        <el-select
-          v-model="form.userIds"
-          multiple
-          filterable
-          clearable
-          class="email-send-dialog__full"
-        >
-          <el-option
-            v-for="u in userOptions"
-            :key="String(u.userId)"
-            :label="u.username"
-            :value="String(u.userId)"
-          />
-        </el-select>
-      </el-form-item>
-      <el-form-item :label="$t('email.send.colEmail365')" prop="email">
-        <el-input v-model="form.email" clearable />
-      </el-form-item>
-      <el-form-item :label="$t('email.send.assignGroups')" prop="mailgroupIds">
-        <el-select
-          v-model="form.mailgroupIds"
-          multiple
-          filterable
-          clearable
-          class="email-send-dialog__full"
-        >
-          <el-option v-for="g in groupOptions" :key="String(g.id)" :label="g.name" :value="g.id" />
-        </el-select>
-      </el-form-item>
-      <el-form-item :label="$t('email.status')" prop="status">
-        <el-radio-group v-model="form.status">
-          <el-radio label="1">{{ $t('email.statusActive') }}</el-radio>
-          <el-radio label="0">{{ $t('email.statusArchived') }}</el-radio>
-        </el-radio-group>
-      </el-form-item>
-    </el-form>
+    <UniForm ref="uniFormRef" v-model="form" mode="edit" :config="formConfig" />
     <template #footer>
       <el-button @click="visible = false">{{ $t('common.cancel') }}</el-button>
       <el-button type="primary" @click="submit">{{ $t('common.submit') }}</el-button>
@@ -46,12 +9,12 @@
 </template>
 
 <script setup lang="ts">
-import type { FormInstance, FormRules } from 'element-plus'
+import type { UniFormConfig, UniOption } from 'uni-ui-lib'
+import { UniForm, useUniI18n } from 'uni-ui-lib'
 import { ElMessage } from 'element-plus'
 import { computed, ref, watch } from 'vue'
 
 import { bulkEmailApi } from '@/api'
-import { useUniI18n } from 'uni-ui-lib'
 
 import { normalizeEnvelope, normalizePaged } from '@/utils/api-response-normalize'
 
@@ -77,7 +40,7 @@ const visible = defineModel<boolean>({ required: true })
 const form = defineModel<SendMailFormModel>('form', { required: true })
 
 const { t } = useUniI18n()
-const formRef = ref<FormInstance>()
+const uniFormRef = ref<InstanceType<typeof UniForm> | null>(null)
 const userOptions = ref<{ userId: string | number; username: string }[]>([])
 const groupOptions = ref<{ id: string | number; name: string }[]>([])
 
@@ -85,11 +48,74 @@ const title = computed(() =>
   props.mode === 'add' ? t('email.send.dialogAdd') : t('email.send.dialogEdit')
 )
 
-const rules: FormRules = {
-  userIds: [{ required: true, message: () => t('email.send.ruleUsers'), trigger: 'change' }],
-  email: [{ required: true, message: () => t('email.send.ruleEmail'), trigger: 'blur' }],
-  status: [{ required: true, message: () => t('email.send.ruleStatus'), trigger: 'change' }]
-}
+const userUniOptions = computed<UniOption[]>(() =>
+  userOptions.value.map((u) => ({
+    label: u.username,
+    value: String(u.userId)
+  }))
+)
+
+const groupUniOptions = computed<UniOption[]>(() =>
+  groupOptions.value.map((g) => ({
+    label: g.name,
+    value: g.id
+  }))
+)
+
+const statusRadios = computed<UniOption[]>(() => [
+  { label: t('email.statusActive'), value: '1' },
+  { label: t('email.statusArchived'), value: '0' }
+])
+
+const formConfig = computed<UniFormConfig>(() => ({
+  formProps: { labelWidth: '120px' },
+  colProps: { span: 24 },
+  rules: {
+    userIds: [{ required: true, message: () => t('email.send.ruleUsers'), trigger: 'change' }],
+    email: [{ required: true, message: () => t('email.send.ruleEmail'), trigger: 'blur' }],
+    status: [{ required: true, message: () => t('email.send.ruleStatus'), trigger: 'change' }]
+  } as UniFormConfig['rules'],
+  schema: [
+    {
+      field: 'userIds',
+      label: t('email.send.colUsers'),
+      component: 'ElSelect',
+      options: userUniOptions.value,
+      componentProps: {
+        multiple: true,
+        filterable: true,
+        clearable: true,
+        style: { width: '100%' },
+        class: 'email-send-dialog__full'
+      }
+    },
+    {
+      field: 'email',
+      label: t('email.send.colEmail365'),
+      component: 'ElInput',
+      componentProps: { clearable: true }
+    },
+    {
+      field: 'mailgroupIds',
+      label: t('email.send.assignGroups'),
+      component: 'ElSelect',
+      options: groupUniOptions.value,
+      componentProps: {
+        multiple: true,
+        filterable: true,
+        clearable: true,
+        style: { width: '100%' },
+        class: 'email-send-dialog__full'
+      }
+    },
+    {
+      field: 'status',
+      label: t('email.status'),
+      component: 'ElRadioGroup',
+      options: statusRadios.value
+    }
+  ]
+}))
 
 const loadOptions = async () => {
   const [usersRaw, groupsRaw] = await Promise.all([
@@ -120,9 +146,11 @@ watch(visible, (vis) => {
 })
 
 const submit = async () => {
-  await formRef.value?.validate().catch(() => {
+  try {
+    await uniFormRef.value?.validate()
+  } catch {
     throw new Error('validation')
-  })
+  }
   try {
     await bulkEmailApi.userMailinfoSaveRelations.post({
       userMailinfoId: form.value.userMailinfoId || '',

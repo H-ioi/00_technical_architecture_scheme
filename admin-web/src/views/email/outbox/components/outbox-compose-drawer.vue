@@ -9,164 +9,19 @@
     append-to-body
     @closed="onDrawerClosed">
     <div class="email-compose-drawer__inner">
-      <el-form
-        ref="formRef"
-        :model="form"
-        :rules="rules"
+      <UniForm
+        ref="uniFormRef"
+        v-model="form"
+        mode="edit"
         class="email-compose-form"
-        label-position="top">
-        <div class="email-compose-rows">
-          <div class="email-compose-row">
-            <span class="email-compose-row__label">{{ $t('email.outbox.colMailInfo') }}</span>
-            <div class="email-compose-row__field">
-              <el-form-item prop="mailInfoId" class="email-compose-form-item--flush">
-                <el-select
-                  v-model="form.mailInfoId"
-                  filterable
-                  clearable
-                  :placeholder="$t('email.outbox.colMailInfo')"
-                  class="email-compose-control">
-                  <el-option
-                    v-for="u in mailSenderOptions"
-                    :key="String(u.id)"
-                    :label="String(u.email ?? u.id)"
-                    :value="u.id" />
-                </el-select>
-              </el-form-item>
-            </div>
-          </div>
-
-          <div class="email-compose-row">
-            <span class="email-compose-row__label">{{ $t('email.outbox.colToGroups') }}</span>
-            <div class="email-compose-row__field">
-              <el-form-item prop="toGroups" class="email-compose-form-item--flush">
-                <el-select
-                  v-model="form.toGroups"
-                  multiple
-                  filterable
-                  clearable
-                  collapse-tags
-                  collapse-tags-tooltip
-                  :placeholder="$t('email.outbox.colToGroups')"
-                  class="email-compose-control">
-                  <el-option
-                    v-for="g in mailGroupOptions"
-                    :key="String(g.id)"
-                    :label="String(g.name ?? g.id)"
-                    :value="g.id" />
-                </el-select>
-              </el-form-item>
-            </div>
-          </div>
-
-          <div class="email-compose-row">
-            <span class="email-compose-row__label">{{ $t('email.outbox.colToManual') }}</span>
-            <div class="email-compose-row__field">
-              <el-form-item prop="otherMails" class="email-compose-form-item--flush">
-                <el-input
-                  v-model="form.otherMails"
-                  clearable
-                  :placeholder="$t('email.outbox.attachHint')"
-                  class="email-compose-control"
-                  @blur="formRef?.validateField('toGroups')" />
-              </el-form-item>
-            </div>
-          </div>
-
-          <div class="email-compose-row">
-            <span class="email-compose-row__label">{{ $t('email.outbox.colCcGroups') }}</span>
-            <div class="email-compose-row__field">
-              <el-form-item prop="ccGroups" class="email-compose-form-item--flush">
-                <el-select
-                  v-model="form.ccGroups"
-                  multiple
-                  filterable
-                  clearable
-                  collapse-tags
-                  collapse-tags-tooltip
-                  :placeholder="$t('email.outbox.colCcGroups')"
-                  class="email-compose-control">
-                  <el-option
-                    v-for="g in mailGroupOptions"
-                    :key="String(g.id)"
-                    :label="String(g.name ?? g.id)"
-                    :value="g.id" />
-                </el-select>
-              </el-form-item>
-            </div>
-          </div>
-
-          <div class="email-compose-row">
-            <span class="email-compose-row__label">{{ $t('email.outbox.colCcManual') }}</span>
-            <div class="email-compose-row__field">
-              <el-form-item prop="otherCC" class="email-compose-form-item--flush">
-                <el-input
-                  v-model="form.otherCC"
-                  clearable
-                  :placeholder="$t('email.outbox.attachHint')"
-                  class="email-compose-control" />
-              </el-form-item>
-            </div>
-          </div>
-
-          <div class="email-compose-row">
-            <span class="email-compose-row__label">{{ $t('email.outbox.colBccGroups') }}</span>
-            <div class="email-compose-row__field">
-              <el-form-item prop="bccGroups" class="email-compose-form-item--flush">
-                <el-select
-                  v-model="form.bccGroups"
-                  multiple
-                  filterable
-                  clearable
-                  collapse-tags
-                  collapse-tags-tooltip
-                  :placeholder="$t('email.outbox.colBccGroups')"
-                  class="email-compose-control">
-                  <el-option
-                    v-for="g in mailGroupOptions"
-                    :key="String(g.id)"
-                    :label="String(g.name ?? g.id)"
-                    :value="g.id" />
-                </el-select>
-              </el-form-item>
-            </div>
-          </div>
-
-          <div class="email-compose-row">
-            <span class="email-compose-row__label">{{ $t('email.outbox.colBccManual') }}</span>
-            <div class="email-compose-row__field">
-              <el-form-item prop="otherBCC" class="email-compose-form-item--flush">
-                <el-input
-                  v-model="form.otherBCC"
-                  clearable
-                  :placeholder="$t('email.outbox.attachHint')"
-                  class="email-compose-control" />
-              </el-form-item>
-            </div>
-          </div>
-
-          <div class="email-compose-row email-compose-row--subject">
-            <span class="email-compose-row__label">{{ $t('email.outbox.colSubject') }}</span>
-            <div class="email-compose-row__field">
-              <el-form-item prop="subject" class="email-compose-form-item--flush">
-                <el-input
-                  v-model="form.subject"
-                  clearable
-                  :placeholder="$t('email.outbox.colSubject')"
-                  class="email-compose-control" />
-              </el-form-item>
-            </div>
-          </div>
-        </div>
-
-        <div class="email-compose-editor">
-          <UniEditor
-            v-model="contentHtml"
-            class="email-compose-uni-editor"
-            height="min(360px, 38vh)"
-            :placeholder="contentPlaceholder" />
-        </div>
-      </el-form>
+        :config="composeFormConfig" />
+      <div class="email-compose-editor">
+        <UniEditor
+          v-model="contentHtml"
+          class="email-compose-uni-editor"
+          height="min(360px, 38vh)"
+          :placeholder="contentPlaceholder" />
+      </div>
     </div>
 
     <template #footer>
@@ -184,8 +39,8 @@
 </template>
 
 <script setup lang="ts">
-import type { FormInstance, FormRules } from 'element-plus'
-import { useUniI18n } from 'uni-ui-lib'
+import type { UniFormConfig, UniOption } from 'uni-ui-lib'
+import { UniForm, useUniI18n } from 'uni-ui-lib'
 import { computed, ref, watch } from 'vue'
 
 import UniEditor from '@/components/uni-editor/index.vue'
@@ -210,7 +65,29 @@ const form = defineModel<Loose>('form', { required: true })
 const { t } = useUniI18n()
 const tr = t as Translate
 
-const formRef = ref<FormInstance>()
+const uniFormRef = ref<InstanceType<typeof UniForm> | null>(null)
+
+type UniFormExpose = {
+  validate?: () => Promise<unknown>
+  validateField?: (prop: string | string[]) => Promise<void>
+  resetFields?: () => void
+}
+
+const uniFormExpose = () => uniFormRef.value as unknown as UniFormExpose | null
+
+const senderOpts = computed<UniOption[]>(() =>
+  props.mailSenderOptions.map((u) => ({
+    label: String(u.email ?? u.id),
+    value: u.id as string | number
+  }))
+)
+
+const groupOpts = computed<UniOption[]>(() =>
+  props.mailGroupOptions.map((g) => ({
+    label: String(g.name ?? g.id),
+    value: g.id as string | number
+  }))
+)
 
 /** 正文 HTML 与 `sendRecord` 的 `content` 字段一致，交给 `UniEditor`（AiEditor）编辑 */
 const contentHtml = computed({
@@ -237,27 +114,134 @@ const validateRecipients = (_rule: unknown, _value: unknown, callback: (e?: Erro
   }
 }
 
-const rules = computed<FormRules>(() => ({
-  mailInfoId: [{ required: true, message: tr('email.outbox.ruleMailInfo'), trigger: 'change' }],
-  subject: [{ required: true, message: tr('email.outbox.ruleSubject'), trigger: 'blur' }],
-  toGroups: [{ validator: validateRecipients, trigger: 'change' }],
-  otherMails: [{ validator: validateRecipients, trigger: 'blur' }]
+const composeFormConfig = computed<UniFormConfig>(() => ({
+  formProps: { labelPosition: 'top' },
+  rowProps: { gutter: 8 },
+  colProps: { span: 24 },
+  rules: {
+    mailInfoId: [{ required: true, message: tr('email.outbox.ruleMailInfo'), trigger: 'change' }],
+    subject: [{ required: true, message: tr('email.outbox.ruleSubject'), trigger: 'blur' }],
+    toGroups: [{ validator: validateRecipients, trigger: 'change' }],
+    otherMails: [{ validator: validateRecipients, trigger: 'blur' }]
+  } as UniFormConfig['rules'],
+  schema: [
+    {
+      field: 'mailInfoId',
+      label: tr('email.outbox.colMailInfo'),
+      component: 'ElSelect',
+      options: senderOpts.value,
+      componentProps: {
+        filterable: true,
+        clearable: true,
+        placeholder: tr('email.outbox.colMailInfo'),
+        class: 'email-compose-control'
+      }
+    },
+    {
+      field: 'toGroups',
+      label: tr('email.outbox.colToGroups'),
+      component: 'ElSelect',
+      options: groupOpts.value,
+      componentProps: {
+        multiple: true,
+        filterable: true,
+        clearable: true,
+        collapseTags: true,
+        collapseTagsTooltip: true,
+        placeholder: tr('email.outbox.colToGroups'),
+        class: 'email-compose-control'
+      }
+    },
+    {
+      field: 'otherMails',
+      label: tr('email.outbox.colToManual'),
+      component: 'ElInput',
+      componentProps: {
+        clearable: true,
+        placeholder: tr('email.outbox.attachHint'),
+        class: 'email-compose-control',
+        onBlur: () => {
+          void uniFormExpose()?.validateField?.('toGroups')?.catch(() => {})
+        }
+      }
+    },
+    {
+      field: 'ccGroups',
+      label: tr('email.outbox.colCcGroups'),
+      component: 'ElSelect',
+      options: groupOpts.value,
+      componentProps: {
+        multiple: true,
+        filterable: true,
+        clearable: true,
+        collapseTags: true,
+        collapseTagsTooltip: true,
+        placeholder: tr('email.outbox.colCcGroups'),
+        class: 'email-compose-control'
+      }
+    },
+    {
+      field: 'otherCC',
+      label: tr('email.outbox.colCcManual'),
+      component: 'ElInput',
+      componentProps: {
+        clearable: true,
+        placeholder: tr('email.outbox.attachHint'),
+        class: 'email-compose-control'
+      }
+    },
+    {
+      field: 'bccGroups',
+      label: tr('email.outbox.colBccGroups'),
+      component: 'ElSelect',
+      options: groupOpts.value,
+      componentProps: {
+        multiple: true,
+        filterable: true,
+        clearable: true,
+        collapseTags: true,
+        collapseTagsTooltip: true,
+        placeholder: tr('email.outbox.colBccGroups'),
+        class: 'email-compose-control'
+      }
+    },
+    {
+      field: 'otherBCC',
+      label: tr('email.outbox.colBccManual'),
+      component: 'ElInput',
+      componentProps: {
+        clearable: true,
+        placeholder: tr('email.outbox.attachHint'),
+        class: 'email-compose-control'
+      }
+    },
+    {
+      field: 'subject',
+      label: tr('email.outbox.colSubject'),
+      component: 'ElInput',
+      componentProps: {
+        clearable: true,
+        placeholder: tr('email.outbox.colSubject'),
+        class: 'email-compose-control'
+      }
+    }
+  ]
 }))
 
 watch(
   () => form.value.toGroups,
   () => {
-    formRef.value?.validateField('otherMails').catch(() => {})
+    void uniFormExpose()?.validateField?.('otherMails')?.catch(() => {})
   }
 )
 
 const onDrawerClosed = () => {
-  formRef.value?.resetFields?.()
+  uniFormExpose()?.resetFields?.()
 }
 
 const onSubmit = async (status: 0 | 1) => {
   try {
-    await formRef.value?.validate()
+    await uniFormRef.value?.validate()
   } catch {
     return
   }

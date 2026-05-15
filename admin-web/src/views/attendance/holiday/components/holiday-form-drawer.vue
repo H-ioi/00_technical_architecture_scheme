@@ -7,13 +7,13 @@
     destroy-on-close
     class="holiday-form-drawer"
     @closed="onClosed">
-    <el-form
-      ref="formRef"
-      :model="form"
-      :rules="rules"
-      label-width="132px"
-      class="holiday-form-drawer__form">
-      <el-form-item :label="$t('attendance.holiday.pickStudent')" prop="admissonNo">
+    <UniForm
+      ref="uniFormRef"
+      v-model="form"
+      mode="edit"
+      class="holiday-form-drawer__form"
+      :config="holidayDrawerFormConfig">
+      <template #field-admissonNo>
         <el-autocomplete
           v-model="displayStudent"
           :fetch-suggestions="queryStudents"
@@ -41,51 +41,17 @@
             >{{ studentInfo.formCode || '—' }}
           </p>
         </div>
-      </el-form-item>
-
-      <el-form-item :label="$t('attendance.holiday.leaveType')" prop="type">
-        <el-select
-          v-model="form.type"
-          style="width: 100%"
-          :placeholder="$t('attendance.holiday.selectType')">
-          <el-option :label="$t('attendance.holiday.leavePersonal')" value="101" />
-          <el-option :label="$t('attendance.holiday.leaveSick')" value="102" />
-        </el-select>
-      </el-form-item>
-
-      <el-form-item :label="$t('attendance.holiday.scope')" prop="scope">
+      </template>
+      <template #field-scope>
         <el-checkbox-group v-model="form.scope">
-          <el-checkbox label="course">{{
-            $t('attendance.holiday.scopeCourse')
-          }}</el-checkbox>
+          <el-checkbox label="course">{{ $t('attendance.holiday.scopeCourse') }}</el-checkbox>
           <el-checkbox label="dorm">{{ $t('attendance.holiday.scopeDorm') }}</el-checkbox>
           <el-checkbox label="bus">{{ $t('attendance.holiday.scopeBus') }}</el-checkbox>
         </el-checkbox-group>
-      </el-form-item>
-
-      <el-form-item :label="$t('attendance.holiday.fixed')" prop="fixed">
-        <el-select v-model="form.fixed" style="width: 100%" @change="onFixedChange">
-          <el-option :label="$t('attendance.yes')" value="101" />
-          <el-option :label="$t('attendance.no')" value="102" />
-        </el-select>
-      </el-form-item>
-
-      <el-form-item
-        v-if="form.fixed === '101'"
-        :label="$t('attendance.holiday.weekDays')"
-        prop="weekDays">
-        <el-checkbox-group v-model="form.weekDays">
-          <el-checkbox v-for="d in weekOpts" :key="d.value" :label="d.value">{{
-            d.label
-          }}</el-checkbox>
-        </el-checkbox-group>
-      </el-form-item>
-
-      <el-form-item
-        v-if="form.fixed === '102'"
-        :label="$t('attendance.holiday.dateRange')"
-        prop="dateRange">
+      </template>
+      <template #field-dateRange>
         <el-date-picker
+          v-if="form.fixed === '102'"
           v-model="form.dateRange"
           type="datetimerange"
           range-separator="~"
@@ -94,13 +60,8 @@
           value-format="YYYY-MM-DD HH:mm"
           format="YYYY-MM-DD HH:mm"
           style="width: 100%" />
-      </el-form-item>
-
-      <el-form-item
-        v-if="form.fixed === '101'"
-        :label="$t('attendance.holiday.dateRange')"
-        prop="dateRange">
         <el-date-picker
+          v-else-if="form.fixed === '101'"
           v-model="form.dateRange"
           type="daterange"
           range-separator="-"
@@ -109,12 +70,13 @@
           value-format="YYYY-MM-DD"
           format="YYYY-MM-DD"
           style="width: 100%" />
-      </el-form-item>
-
-      <el-form-item
-        v-if="form.fixed === '101'"
-        :label="$t('attendance.holiday.timeSlot')"
-        prop="dateLimit">
+      </template>
+      <template #field-weekDays>
+        <el-checkbox-group v-model="form.weekDays">
+          <el-checkbox v-for="d in weekOpts" :key="d.value" :label="d.value">{{ d.label }}</el-checkbox>
+        </el-checkbox-group>
+      </template>
+      <template #field-dateLimit>
         <el-time-picker
           v-model="form.dateLimit"
           is-range
@@ -124,17 +86,8 @@
           value-format="HH:mm"
           format="HH:mm"
           style="width: 100%" />
-      </el-form-item>
-
-      <el-form-item :label="$t('attendance.holiday.reason')" prop="reason">
-        <el-input
-          v-model="form.reason"
-          type="textarea"
-          :rows="4"
-          :placeholder="$t('attendance.holiday.reasonPh')" />
-      </el-form-item>
-
-      <el-form-item :label="$t('attendance.holiday.attachments')">
+      </template>
+      <template #field-attachments>
         <el-upload
           list-type="picture-card"
           :file-list="fileList"
@@ -144,15 +97,8 @@
           :on-preview="onPreview">
           <el-icon><Plus /></el-icon>
         </el-upload>
-      </el-form-item>
-
-      <el-form-item :label="$t('attendance.holiday.needPass')" prop="needPass">
-        <el-select v-model="form.needPass" style="width: 100%">
-          <el-option :label="$t('attendance.yes')" value="101" />
-          <el-option :label="$t('attendance.no')" value="102" />
-        </el-select>
-      </el-form-item>
-    </el-form>
+      </template>
+    </UniForm>
 
     <template #footer>
       <div class="holiday-form-drawer__footer">
@@ -174,13 +120,14 @@
 
 <script setup lang="ts">
 import { Plus } from '@element-plus/icons-vue'
-import type { FormInstance, FormRules, UploadUserFile } from 'element-plus'
+import type { UploadUserFile } from 'element-plus'
 import { ElMessage } from 'element-plus'
+import type { UniFormConfig } from 'uni-ui-lib'
+import { UniForm, useUniI18n } from 'uni-ui-lib'
 import { computed, reactive, ref, watch } from 'vue'
 
 import { attendanceHolidayApi, membershipApi, protocolApi } from '@/api'
 import { normalizeArray, normalizePayload } from '@/utils/api-response-normalize'
-import { useUniI18n } from 'uni-ui-lib'
 
 type Loose = Record<string, unknown>
 
@@ -192,7 +139,7 @@ const emit = defineEmits<{
 
 const { t } = useUniI18n()
 
-const formRef = ref<FormInstance>()
+const uniFormRef = ref<InstanceType<typeof UniForm> | null>(null)
 const submitting = ref(false)
 const displayStudent = ref('')
 const fileList = ref<UploadUserFile[]>([])
@@ -218,10 +165,11 @@ const form = reactive({
   dateLimit: ['08:00', '17:00'] as [string, string],
   reason: '',
   needPass: '101',
-  parentResponsible: false
+  parentResponsible: false,
+  /** UniForm 占位字段，不参与请假提交 */
+  attachments: ''
 })
-
-const rules = computed<FormRules>(() => ({
+const rules = computed<UniFormConfig['rules']>(() => ({
   admissonNo: [
     { required: true, message: t('attendance.holiday.ruleStudent'), trigger: 'change' }
   ],
@@ -232,9 +180,126 @@ const rules = computed<FormRules>(() => ({
     { required: true, message: t('attendance.holiday.ruleDate'), trigger: 'change' }
   ],
   dateLimit: [
-    { required: true, message: t('attendance.holiday.ruleSlot'), trigger: 'change' }
+    {
+      validator: (_rule, _value, cb) => {
+        if (form.fixed !== '101') {
+          cb()
+          return
+        }
+        if (!Array.isArray(form.dateLimit) || form.dateLimit.length !== 2) {
+          cb(new Error(t('attendance.holiday.ruleSlot')))
+          return
+        }
+        cb()
+      },
+      trigger: 'change'
+    }
   ],
-  weekDays: [{ required: true, message: t('attendance.holiday.ruleWeek'), trigger: 'change' }]
+  weekDays: [
+    {
+      validator: (_rule, value, cb) => {
+        if (form.fixed !== '101') {
+          cb()
+          return
+        }
+        if (!Array.isArray(value) || value.length === 0) {
+          cb(new Error(t('attendance.holiday.ruleWeek')))
+          return
+        }
+        cb()
+      },
+      trigger: 'change'
+    }
+  ]
+}))
+
+const holidayDrawerFormConfig = computed<UniFormConfig>(() => ({
+  formProps: { labelWidth: '132px' },
+  colProps: { span: 24 },
+  rules: rules.value,
+  schema: [
+    {
+      field: 'admissonNo',
+      label: t('attendance.holiday.pickStudent'),
+      component: 'ElInput',
+      componentProps: { style: { display: 'none' } }
+    },
+    {
+      field: 'type',
+      label: t('attendance.holiday.leaveType'),
+      component: 'ElSelect',
+      options: [
+        { label: t('attendance.holiday.leavePersonal'), value: '101' },
+        { label: t('attendance.holiday.leaveSick'), value: '102' }
+      ],
+      componentProps: { style: { width: '100%' }, placeholder: t('attendance.holiday.selectType') }
+    },
+    {
+      field: 'scope',
+      label: t('attendance.holiday.scope'),
+      component: 'ElInput',
+      componentProps: { style: { display: 'none' } }
+    },
+    {
+      field: 'fixed',
+      label: t('attendance.holiday.fixed'),
+      component: 'ElSelect',
+      options: [
+        { label: t('attendance.yes'), value: '101' },
+        { label: t('attendance.no'), value: '102' }
+      ],
+      onChange: () => {
+        onFixedChange()
+      },
+      componentProps: { style: { width: '100%' } }
+    },
+    {
+      field: 'weekDays',
+      label: t('attendance.holiday.weekDays'),
+      component: 'ElInput',
+      hidden: form.fixed !== '101',
+      componentProps: { style: { display: 'none' } }
+    },
+    {
+      field: 'dateRange',
+      label: t('attendance.holiday.dateRange'),
+      component: 'ElInput',
+      componentProps: { style: { display: 'none' } }
+    },
+    {
+      field: 'dateLimit',
+      label: t('attendance.holiday.timeSlot'),
+      component: 'ElInput',
+      hidden: form.fixed !== '101',
+      componentProps: { style: { display: 'none' } }
+    },
+    {
+      field: 'reason',
+      label: t('attendance.holiday.reason'),
+      component: 'ElInput',
+      componentProps: {
+        type: 'textarea',
+        rows: 4,
+        placeholder: t('attendance.holiday.reasonPh')
+      }
+    },
+    {
+      field: 'attachments',
+      label: t('attendance.holiday.attachments'),
+      component: 'ElInput',
+      componentProps: { style: { display: 'none' } }
+    },
+    {
+      field: 'needPass',
+      label: t('attendance.holiday.needPass'),
+      component: 'ElSelect',
+      options: [
+        { label: t('attendance.yes'), value: '101' },
+        { label: t('attendance.no'), value: '102' }
+      ],
+      componentProps: { style: { width: '100%' } }
+    }
+  ]
 }))
 
 const queryStudents = (
@@ -290,7 +355,7 @@ const onClosed = () => {
 }
 
 const resetInner = () => {
-  formRef.value?.resetFields()
+  uniFormRef.value?.resetFields()
   form.admissonNo = ''
   form.type = ''
   form.scope = []
@@ -301,6 +366,7 @@ const resetInner = () => {
   form.reason = ''
   form.needPass = '101'
   form.parentResponsible = false
+  form.attachments = ''
   displayStudent.value = ''
   studentInfo.value = {}
   fileList.value = []
@@ -366,12 +432,11 @@ const buildPayload = (): Loose => {
 }
 
 const submit = async () => {
-  const el = formRef.value
-  if (!el) {
+  if (!uniFormRef.value) {
     return
   }
   try {
-    await el.validate()
+    await uniFormRef.value.validate()
   } catch {
     return
   }
