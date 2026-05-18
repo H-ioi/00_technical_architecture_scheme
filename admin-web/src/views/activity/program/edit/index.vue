@@ -5,7 +5,7 @@
         <h1>{{ pageTitle }}</h1>
       </div>
       <div class="uni-list-page__header-actions activity-program-edit__actions">
-        <template v-if="isEditRoute">
+        <template v-if="canSubmit">
           <el-button type="primary" :loading="saving" @click="submit">
             {{ $t('common.submit') }}
           </el-button>
@@ -15,7 +15,8 @@
           v-else-if="detailId && canEdit"
           v-uni-permission="'busdriver_edit'"
           type="primary"
-          @click="goEdit">
+          @click="goEdit"
+        >
           {{ $t('activity.entryEdit') }}
         </el-button>
         <el-button @click="goBack">{{ $t('activity.back') }}</el-button>
@@ -25,10 +26,11 @@
     <div v-loading="loading" class="activity-program-edit__body">
       <UniForm
         ref="uniFormRef"
-        v-model="form"
+        v-model="formModel"
         :mode="uniMode"
         class="activity-program-edit__form"
-        :config="formConfig">
+        :config="formConfig"
+      >
         <template #field-backgroundImage>
           <div class="activity-program-edit__cover">
             <el-upload
@@ -36,11 +38,12 @@
               class="activity-program-edit__cover-upload"
               accept="image/*"
               :show-file-list="false"
-              :before-upload="onCoverBeforeUpload">
+              :before-upload="onCoverBeforeUpload"
+            >
               <el-button type="primary">{{ $t('activity.pickCover') }}</el-button>
             </el-upload>
             <div v-if="form.backgroundImage" class="activity-program-edit__cover-preview">
-              <img :src="form.backgroundImage" alt="" />
+              <img :src="form.backgroundImage" alt="">
             </div>
           </div>
         </template>
@@ -49,7 +52,8 @@
             <div
               v-for="item in quotasList"
               :key="item.roundNo"
-              class="activity-program-edit__quota-row">
+              class="activity-program-edit__quota-row"
+            >
               <span class="activity-program-edit__quota-label">{{ item.roundNo }}:</span>
               <el-input-number
                 v-if="uniMode === 'edit'"
@@ -59,7 +63,8 @@
                 :step="1"
                 :precision="0"
                 controls-position="right"
-                style="width: 200px" />
+                style="width: 200px"
+              />
               <span v-else>{{ item.quotaCount }}</span>
             </div>
           </div>
@@ -77,12 +82,13 @@ import { useProgramEditPage } from './use-program-edit'
 const {
   bodyLocked,
   canEdit,
+  canSubmit,
   detailId,
   form,
+  formModel,
   formConfig,
   goBack,
   goEdit,
-  isEditRoute,
   loading,
   onCoverBeforeUpload,
   pageTitle,
@@ -149,11 +155,6 @@ const {
   &__quota-label {
     min-width: 28px;
     color: var(--el-text-color-regular);
-  }
-
-  :deep(.activity-program-edit__bg-slot .el-form-item__content .el-input),
-  :deep(.activity-program-edit__quota-slot .el-form-item__content .el-input) {
-    display: none;
   }
 }
 </style>

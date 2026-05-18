@@ -18,7 +18,8 @@
       :submit-text="$t('activity.search')"
       :reset-text="$t('activity.reset')"
       @search="search"
-      @reset="reset" />
+      @reset="reset"
+    />
     <UniDataTable
       ref="tableRef"
       row-key="id"
@@ -29,16 +30,17 @@
       :pagination="{ pageSize: 10, pageSizes: [10, 20, 50, 100] }"
       :toolbar="{ refresh: true, columnSetting: true }"
       :actions="actions"
-      :action-column="{ width: 110, fixed: 'right' }"
+      :action-column="{ width: 180, fixed: 'right' }"
       @load-success="handleLoadSuccess"
       @selection-change="onSelectionChange"
-      @row-click="onRowClick">
+    >
       <template #toolbar>
         <el-button
           v-uni-permission="'busdriver_edit'"
           plain
           :disabled="!selectedIds.length"
-          @click="openCopy">
+          @click="openCopy"
+        >
           {{ $t('activity.programCopy') }}
         </el-button>
         <el-button
@@ -46,12 +48,17 @@
           type="danger"
           plain
           :disabled="!selectedIds.length"
-          @click="deleteBatch">
+          @click="deleteBatch"
+        >
           {{ $t('activity.delBatch') }}
         </el-button>
       </template>
     </UniDataTable>
-    <ProgramCopyDialog v-model="copyOpen" :program-ids="selectedIds" @success="onCopySuccess" />
+    <ProgramCopyDialog
+      v-model="copyOpen"
+      :program-ids="selectedIds"
+      @success="onCopySuccess"
+    />
   </section>
 </template>
 
@@ -72,7 +79,6 @@ const {
   goCreate,
   handleLoadSuccess,
   loadData,
-  onRowClick,
   onSelectionChange,
   openCopy,
   queryModel,

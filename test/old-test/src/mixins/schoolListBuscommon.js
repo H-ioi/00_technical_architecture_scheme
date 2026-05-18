@@ -28,8 +28,8 @@ export default {
 		schoolDropdownLabel (row) {
 			if (!row) return "";
 			return this.i18nlocel === "en"
-				? row.enName || row.cnName || ""
-				: row.cnName || row.enName || "";
+				? row.enName || row.cnName || row.label || ""
+				: row.cnName || row.label || row.enName || "";
 		},
 	},
 };

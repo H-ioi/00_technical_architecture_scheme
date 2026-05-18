@@ -292,6 +292,10 @@ import {
 } from "@/api/isacommunity/schoolEmailConfig.js";
 import consts from "@/const/isacommunity/consts.js";
 import schoolListBuscommonMixin from "@/mixins/schoolListBuscommon.js";
+import {
+  normalizeSchoolIds,
+  schoolIdIncluded,
+} from "@/util/isacommunity-teacher-user.js";
 import { mapGetters } from "vuex";
 export default {
   name: "detail",
@@ -319,16 +323,37 @@ export default {
       deep: true,
     },
   },
+  created() {
+    this.bootstrapSchoolList();
+  },
   computed: {
-    ...mapGetters(["i18nlocel"]),
+    ...mapGetters(["i18nlocel", "dictionary"]),
+    /** 优先 buscommon 校区列表，未加载时回退 Vuex dictionary */
+    detailSchoolList() {
+      if (this.schoolSelectList.length) {
+        return this.schoolSelectList;
+      }
+      return this.dictionary["school"] || [];
+    },
   },
   methods: {
-    /** 接口校区 id 多为字符串，字典 option 的 id 多为数字 */
-    schoolIdIncluded(rawIds, schoolId) {
-      const sid = schoolId != null ? String(schoolId) : "";
-      if (!sid) return false;
-      const arr = Array.isArray(rawIds) ? rawIds : [];
-      return arr.some((x) => String(x) === sid);
+    async bootstrapSchoolList() {
+      await this.fetchSchoolListBuscommon();
+      if (this.detailRow) {
+        this.applyDetailRow(this.detailRow);
+      }
+    },
+    schoolIdIncluded,
+    formatSchoolIdsLabel(rawIds) {
+      const ids = normalizeSchoolIds({ schoolIds: rawIds });
+      if (!ids.length) return "--";
+      const labels = [];
+      this.detailSchoolList.forEach((school) => {
+        if (schoolIdIncluded(ids, school.id)) {
+          labels.push(this.schoolDropdownLabel(school));
+        }
+      });
+      return labels.length ? labels.join(" / ") : "--";
     },
     normalizeEmailConfigIdList(raw) {
       if (raw == null || raw === "") {
@@ -436,24 +461,18 @@ export default {
           ? Number(row.visibleScope)
           : 0;
       const vf = row.visibleScopeFile;
-      const activitySchoolIds = row.schoolIds || [];
-      const wechatSchoolIds = row.wechatPushSchoolIds || [];
+      const activitySchoolIds = normalizeSchoolIds(row);
+      const wechatSchoolIds = normalizeSchoolIds({
+        schoolIds: row.wechatPushSchoolIds,
+      });
       const yn = (v) =>
         this.$getListLabel(
           consts["yesOrno"],
           String(v == null || v === "" ? "0" : v)
         );
 
-      const schoolIdsLabel = [];
-      const wechatPushSchoolIdsLabel = [];
-      this.schoolSelectList.forEach((school) => {
-        if (this.schoolIdIncluded(activitySchoolIds, school.id)) {
-          schoolIdsLabel.push(this.schoolDropdownLabel(school));
-        }
-        if (this.schoolIdIncluded(wechatSchoolIds, school.id)) {
-          wechatPushSchoolIdsLabel.push(this.schoolDropdownLabel(school));
-        }
-      });
+      const schoolIdsLabel = this.formatSchoolIdsLabel(activitySchoolIds);
+      const wechatPushSchoolIdsLabel = this.formatSchoolIdsLabel(wechatSchoolIds);
 
       const ticketPrice = row.ticketPrice;
       const ticketNotifyEmailEnabled = row.ticketNotifyEmailEnabled;
@@ -508,10 +527,16 @@ export default {
             : "公开",
         visibleScopeFileLabel:
           visibleScope === 1 && vf && vf.fileName ? vf.fileName : "--",
-        registrationLimitLabel:
-          row.registrationLimit != null && row.registrationLimit !== ""
-            ? String(row.registrationLimit)
-            : "--",
+        registrationLimitLabel: (() => {
+          const raw = row.registrationLimit;
+          if (raw == null || raw === "") {
+            return "--";
+          }
+          if (Number(raw) === 0) {
+            return this.$t("isagroup.不限制");
+          }
+          return String(raw);
+        })(),
         ticketNotifyEmailsLabel:
           Number(ticketPrice) > 0 && String(ticketNotifyEmailEnabled) === "1"
             ? Array.isArray(ticketNotifyEmails)
@@ -520,8 +545,8 @@ export default {
             : this.i18nlocel == "en"
             ? "Disabled"
             : "关闭",
-        schoolIdsLabel: String(schoolIdsLabel),
-        wechatPushSchoolIdsLabel: String(wechatPushSchoolIdsLabel),
+        schoolIdsLabel,
+        wechatPushSchoolIdsLabel,
       };
     },
     /** 父级传入的接口 layer → 详情展示（仍含邮箱等衍生异步请求） */
@@ -532,7 +557,7 @@ export default {
         return;
       }
       this.detailLoading = true;
-      const activitySchoolIds = row.schoolIds || [];
+      const activitySchoolIds = normalizeSchoolIds(row);
       this.$nextTick(() => {
         try {
           this.detailData = this.buildActivityDetailViewModel(row);

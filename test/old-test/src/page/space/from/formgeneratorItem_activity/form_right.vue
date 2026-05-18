@@ -54,6 +54,11 @@
                   :label="item.label + (item.isHidden ? '(隐藏)' : '')"
                   :prop="item.fontId"
                 >
+                  <div
+                    v-if="item.placeholder"
+                    class="form-item-remark"
+                    v-html="item.placeholder"
+                  ></div>
                   <!-- 单文本输入框 -->
                   <el-input
                     style="width: 100%"

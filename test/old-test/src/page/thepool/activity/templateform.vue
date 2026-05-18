@@ -29,7 +29,6 @@
                   style="width: 100%"
                   v-model="templateFrom.collectionName"
                   :placeholder="$t('consult.请输入')"
-                  :maxlength="30"
                 ></el-input>
               </el-form-item>
               <el-form-item

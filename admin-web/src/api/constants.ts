@@ -36,6 +36,10 @@ export const API_PATHS = {
   activity: '/isacommunity/activity',
   /** 活动项目（旧 `api/isacommunity/activityprogram.js`） */
   activityProgram: '/isacommunity/activity/program',
+  /** 活动奖品（旧 `api/isacommunity/prize.js`） */
+  activityPrize: '/isacommunity/activity/program/prize',
+  /** 投票节目（旧 `api/isacommunity/voteprogram.js`） */
+  activityVoteProgram: '/isacommunity/activity/program/voteProgram',
   /** 问卷（旧 `api/isacommunity/questionnaire.js`） */
   activityQuestionnaire: '/isacommunity/activity/questionnaire',
   /** 活动反馈导出（旧 `api/isacommunity/feedback.js`） */
@@ -43,5 +47,7 @@ export const API_PATHS = {
   /** 公共动态表单、文件信息等（前缀 `/publik`） */
   publik: '/publik',
   /** 校区邮箱配置（活动表单关联，旧 `api/isacommunity/schoolEmailConfig.js`） */
-  schoolEmailConfig: '/isacommunity/schoolEmailConfig'
+  schoolEmailConfig: '/isacommunity/schoolEmailConfig',
+  /** 校区微信配置（旧 `api/isacommunity/wechatSchoolInfo.js`） */
+  wechatSchoolInfo: '/isacommunity/wechatSchoolInfo'
 } as const

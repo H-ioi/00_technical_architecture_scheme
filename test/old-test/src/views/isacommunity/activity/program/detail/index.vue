@@ -598,7 +598,7 @@ export default {
                     String(rule["createLotteryPool"])
                   ),
                   lotteryIdentifierType: this.$getListLabel(
-                    consts["lotteryParticipantScope"],
+                    consts["lotteryIdentifierType"],
                     String(rule["lotteryIdentifierType"])
                   ),
                   lotteryParticipantScope: this.$getListLabel(

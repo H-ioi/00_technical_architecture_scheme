@@ -15,17 +15,21 @@
           :rules="rules"
           ref="ruleForm"
         >
-          <div class="df_center_wrap" style="max-height: 600px; overflow-y: auto">
+          <div
+            class="df_center_wrap"
+            style="max-height: 600px; overflow-y: auto"
+          >
             <el-form-item
               :label="$t('isagroup.校区')"
-              prop="school"
+              prop="schoolIds"
               style="width: 49%"
               v-if="dictionary['school'].length > 1"
             >
               <el-select
                 style="width: 100%"
-                v-model="ruleForm['school']"
+                v-model="ruleForm['schoolIds']"
                 :placeholder="$t('common.请选择')"
+                multiple
               >
                 <el-option
                   :key="k"
@@ -35,7 +39,11 @@
                 ></el-option>
               </el-select>
             </el-form-item>
-            <el-form-item :label="$t('isagroup.昵称')" prop="nickname" style="width: 49%">
+            <el-form-item
+              :label="$t('isagroup.昵称')"
+              prop="nickname"
+              style="width: 49%"
+            >
               <el-input
                 style="width: 100%"
                 v-model="ruleForm.nickname"
@@ -55,7 +63,11 @@
                 maxlength="50"
               ></el-input>
             </el-form-item>
-            <el-form-item :label="$t('isagroup.邮箱')" prop="email" style="width: 49%">
+            <el-form-item
+              :label="$t('isagroup.邮箱')"
+              prop="email"
+              style="width: 49%"
+            >
               <el-input
                 style="width: 100%"
                 v-model="ruleForm.email"
@@ -63,7 +75,11 @@
                 maxlength="50"
               ></el-input>
             </el-form-item>
-            <el-form-item :label="$t('isagroup.手机号')" prop="phone" style="width: 49%">
+            <el-form-item
+              :label="$t('isagroup.手机号')"
+              prop="phone"
+              style="width: 49%"
+            >
               <el-input
                 style="width: 100%"
                 v-model="ruleForm.phone"
@@ -71,7 +87,11 @@
                 maxlength="50"
               ></el-input>
             </el-form-item>
-            <el-form-item :label="'模块'" prop="modules" style="width: 49%">
+            <el-form-item
+              :label="$t('isagroup.模块')"
+              prop="modules"
+              style="width: 49%"
+            >
               <el-select
                 multiple
                 collapse-tags
@@ -87,7 +107,11 @@
                 ></el-option>
               </el-select>
             </el-form-item>
-            <el-form-item :label="'角色'" prop="roles" style="width: 49%">
+            <el-form-item
+              :label="$t('isagroup.角色')"
+              prop="roles"
+              style="width: 49%"
+            >
               <el-select
                 multiple
                 collapse-tags
@@ -103,15 +127,24 @@
                 ></el-option>
               </el-select>
             </el-form-item>
-            <el-form-item :label="$t('isagroup.密码')" prop="password" style="width: 49%">
+            <el-form-item
+              :label="$t('isagroup.密码')"
+              prop="password"
+              style="width: 49%"
+            >
               <el-input
                 style="width: 100%"
                 v-model="ruleForm.password"
+                type="password"
                 :placeholder="$t('consult.请输入')"
                 maxlength="50"
               ></el-input>
             </el-form-item>
-            <el-form-item :label="$t('isagroup.状态')" prop="status" style="width: 49%">
+            <el-form-item
+              :label="$t('isagroup.状态')"
+              prop="status"
+              style="width: 49%"
+            >
               <el-select
                 style="width: 100%"
                 v-model="ruleForm['status']"
@@ -127,9 +160,12 @@
             </el-form-item>
           </div>
           <el-form-item class="modalFromBtn">
-            <el-button type="primary" size="medium" @click="submitForm('ruleForm')">{{
-              $t("isagroup.确认")
-            }}</el-button>
+            <el-button
+              type="primary"
+              size="medium"
+              @click="submitForm('ruleForm')"
+              >{{ $t("isagroup.确认") }}</el-button
+            >
             <el-button type="default" size="medium" @click="closeModal">{{
               $t("isagroup.取消")
             }}</el-button>
@@ -141,10 +177,20 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
-import { addTeacher, editTeacher, getTeacherDetail } from "@/api/isacommunity/user.js";
-import { formrules } from "@/util/form.js";
+import {
+  addTeacher,
+  editTeacher,
+  getTeacherDetail,
+} from "@/api/isacommunity/user.js";
 import consts from "@/const/isacommunity/consts.js";
+import { formrules } from "@/util/form.js";
+import {
+  MODULE_OPTIONS,
+  ROLE_OPTIONS,
+  normalizeIdList,
+  normalizeSchoolIds,
+} from "@/util/isacommunity-teacher-user.js";
+import { mapGetters } from "vuex";
 export default {
   name: "form",
   props: {},
@@ -157,31 +203,44 @@ export default {
       modalType: "add",
       showModal: false,
       ruleForm: {},
-      moduleOptions: [
-        { id: 1, label: "校巴", enLabel: "School Bus" },
-        { id: 2, label: "活动", enLabel: "Activity" },
-      ],
-      roleOptions: [
-        { id: 1, label: "校巴运营", enLabel: "School Bus Operation" },
-        { id: 2, label: "跟车老师", enLabel: "Car Teacher" },
-        { id: 3, label: "活动签到", enLabel: "Activity Check-in" },
-      ],
+      moduleOptions: MODULE_OPTIONS,
+      roleOptions: ROLE_OPTIONS,
       rules: {
-        school: [
-          { required: true, message: that.$t("isagroup.请选择"), trigger: "blur" },
+        schoolIds: [
+          {
+            required: true,
+            message: that.$t("isagroup.请选择"),
+            trigger: "blur",
+          },
         ],
         nickname: [
-          { required: true, message: that.$t("isagroup.请输入"), trigger: "blur" },
+          {
+            required: true,
+            message: that.$t("isagroup.请输入"),
+            trigger: "blur",
+          },
         ],
         department: [
-          { required: true, message: that.$t("isagroup.请输入"), trigger: "blur" },
+          {
+            required: true,
+            message: that.$t("isagroup.请输入"),
+            trigger: "blur",
+          },
         ],
         email: [
-          { required: true, message: that.$t("isagroup.请输入"), trigger: "blur" },
+          {
+            required: true,
+            message: that.$t("isagroup.请输入"),
+            trigger: "blur",
+          },
           { validator: formrulesdata["isEmail"], trigger: "blur" },
         ],
         phone: [
-          { required: true, message: that.$t("isagroup.请输入"), trigger: "blur" },
+          {
+            required: true,
+            message: that.$t("isagroup.请输入"),
+            trigger: "blur",
+          },
           { validator: formrulesdata["isMobileNumber"], trigger: "blur" },
         ],
         modules: [
@@ -201,10 +260,18 @@ export default {
           },
         ],
         password: [
-          { required: true, message: that.$t("isagroup.请输入"), trigger: "blur" },
+          {
+            required: true,
+            message: that.$t("isagroup.请输入"),
+            trigger: "blur",
+          },
         ],
         status: [
-          { required: true, message: that.$t("isagroup.请选择"), trigger: "blur" },
+          {
+            required: true,
+            message: that.$t("isagroup.请选择"),
+            trigger: "blur",
+          },
         ],
       },
     };
@@ -232,7 +299,7 @@ export default {
           let schoolId = this.dictionary["school"][0].id;
           this.ruleForm = {
             ...this.ruleForm,
-            school: schoolId,
+            schoolIds: [schoolId],
           };
         }
       }
@@ -260,8 +327,8 @@ export default {
     getDetail(id) {
       getTeacherDetail(id).then(async (res) => {
         if (res.data.success) {
-          let {
-            school,
+          const data = res.data.data;
+          const {
             nickname,
             department,
             email,
@@ -269,20 +336,29 @@ export default {
             status,
             modules,
             roles,
-          } = res.data.data;
+            password,
+          } = data;
+          let schoolIds = normalizeSchoolIds(data);
+          if (
+            schoolIds.length === 0 &&
+            this.dictionary["school"].length === 1
+          ) {
+            schoolIds = [this.dictionary["school"][0].id];
+          }
 
           this.$nextTick(() => {
             this.ruleForm = {
               ...this.ruleForm,
               id,
-              school,
+              schoolIds,
               nickname,
               department,
               email,
               phone,
               status,
-              modules: Array.isArray(modules) ? modules : [],
-              roles: Array.isArray(roles) ? roles : [],
+              password,
+              modules: normalizeIdList(modules),
+              roles: normalizeIdList(roles),
             };
           });
         }

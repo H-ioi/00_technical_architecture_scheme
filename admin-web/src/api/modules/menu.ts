@@ -89,18 +89,18 @@ const MENU_PATH_ALIASES: Record<string, string> = {
   '/isacommunity/activity/program/detail/index': '/activity/program/detail',
   '/isacommunity/activity/program/detail': '/activity/program/detail',
   '/isacommunity/activity/program/edit/index': '/activity/program/detail',
-  '/isacommunity/activity/prize/index': '/activity/questionnaire',
-  '/isacommunity/activity/prize': '/activity/questionnaire',
-  '/isacommunity/activity/voteprogram/index': '/activity/questionnaire',
-  '/isacommunity/activity/voteprogram': '/activity/questionnaire',
+  '/isacommunity/activity/prize/index': '/activity/prize',
+  '/isacommunity/activity/prize': '/activity/prize',
+  '/isacommunity/activity/voteprogram/index': '/activity/vote-program',
+  '/isacommunity/activity/voteprogram': '/activity/vote-program',
   '/isacommunity/activity/questionnaire/index': '/activity/questionnaire',
   '/isacommunity/activity/questionnaire': '/activity/questionnaire',
-  '/isacommunity/activity/parentstudent/index': '/activity/questionnaire',
-  '/isacommunity/activity/parentstudent': '/activity/questionnaire',
-  '/isacommunity/activity/wechatSchool/index': '/activity/questionnaire',
-  '/isacommunity/activity/wechatSchool': '/activity/questionnaire',
-  '/isacommunity/activity/emailSchool/index': '/activity/questionnaire',
-  '/isacommunity/activity/emailSchool': '/activity/questionnaire'
+  '/isacommunity/activity/parentstudent/index': '/activity/parent-student',
+  '/isacommunity/activity/parentstudent': '/activity/parent-student',
+  '/isacommunity/activity/wechatSchool/index': '/activity/wechat-school',
+  '/isacommunity/activity/wechatSchool': '/activity/wechat-school',
+  '/isacommunity/activity/emailSchool/index': '/activity/email-school',
+  '/isacommunity/activity/emailSchool': '/activity/email-school'
 }
 
 const normPath = (path?: string) => {

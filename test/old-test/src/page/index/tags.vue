@@ -49,6 +49,7 @@
 </template>
 <script>
 import { mapGetters, mapState } from "vuex";
+import { resolveMenuLabel } from "@/util/menu-i18n";
 export default {
   name: "Tags",
   data() {
@@ -86,9 +87,9 @@ export default {
 
   methods: {
     resetShowName(tagItem) {
-      // console.log("resetShowName", this.tagList, tagItem);
-      let { label, enLabel } = tagItem;
-      return enLabel ? enLabel : label;
+      const { label, enLabel } = tagItem;
+      if (enLabel && enLabel !== label) return enLabel;
+      return resolveMenuLabel({ label, name: label }, this.$i18n, "label");
     },
     getTabLabel(label) {
       return label;

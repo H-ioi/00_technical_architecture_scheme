@@ -49,5 +49,10 @@ export default {
   activityQuestionnaireDesign: '问卷设计',
   activityQuestionnaireSubmissions: '答卷列表',
   activityProgram: '活动项目',
-  activityProgramDetail: '活动项目详情'
+  activityProgramDetail: '活动项目详情',
+  activityPrize: '奖品列表',
+  activityVoteProgram: '投票节目',
+  activityParentStudent: '家长学生关联管理',
+  activityWechatSchool: '微信配置',
+  activityEmailSchool: '邮箱配置'
 }

@@ -267,6 +267,7 @@ export default {
         item.label = item.fieldName;
         item.type = item.fieldType;
         item.fieldId = item.fieldId;
+        item.remark = item.remark || "";
         item.readonly = item.readonly ? true : false;
         item.disabled = item.disabled ? true : false;
         item.properties = item.properties ? item.properties : [];

@@ -42,7 +42,7 @@
               :placeholder="$t('isagroup.关键词')"
             ></el-input>
           </el-form-item>
-          <el-form-item style="width: 240px" v-if="dictionary['school'].length > 1">
+          <el-form-item style="width: 240px" v-if="teacherSchoolList.length > 1">
             <el-select
               filterable
               style="width: 100%"
@@ -53,8 +53,8 @@
             >
               <el-option
                 :key="i.id"
-                v-for="(i, k) in dictionary['school']"
-                :label="i.enName"
+                v-for="(i, k) in teacherSchoolList"
+                :label="schoolDropdownLabel(i)"
                 :value="i.id"
               ></el-option>
             </el-select>
@@ -145,21 +145,18 @@ import Pagination from "@/components/communitycommon/Pagination.vue";
 import Form from "./modal/form.vue";
 import Detail from "./modal/detail.vue";
 import BatchUpdload from "./modal/batchupdload.vue";
+import schoolListBuscommonMixin from "@/mixins/schoolListBuscommon.js";
+import {
+  MODULE_OPTIONS,
+  ROLE_OPTIONS,
+  resolveSchoolDisplayLabels,
+  formatOptionLabels,
+} from "@/util/isacommunity-teacher-user.js";
 // 引入 dayjs
 import dayjs from "dayjs";
-
-const MODULE_OPTIONS = [
-  { id: 1, label: "校巴", enLabel: "School Bus" },
-  { id: 2, label: "活动", enLabel: "Activity" },
-];
-
-const ROLE_OPTIONS = [
-  { id: 1, label: "校巴运营", enLabel: "School Bus Operation" },
-  { id: 2, label: "跟车老师", enLabel: "Car Teacher" },
-  { id: 3, label: "活动签到", enLabel: "Activity Check-in" },
-];
 export default {
   name: "teacher",
+  mixins: [schoolListBuscommonMixin],
   components: { Table, Pagination, Detail, Form, BatchUpdload },
   data() {
     return {
@@ -199,6 +196,16 @@ export default {
   },
   computed: {
     ...mapGetters(["dictionary", "permissions", "i18nlocel"]),
+    teacherSchoolList() {
+      const fromBus =
+        Array.isArray(this.schoolSelectList) && this.schoolSelectList.length > 0
+          ? this.schoolSelectList
+          : [];
+      const dict = Array.isArray(this.dictionary["school"])
+        ? this.dictionary["school"]
+        : [];
+      return fromBus.length > 0 ? fromBus : dict;
+    },
   },
   watch: {
     i18nlocel() {
@@ -207,11 +214,14 @@ export default {
   },
   methods: {
     initData() {
-      //   this.getBtn();
-      if (this.dictionary["school"].length == 1) {
-        this.pagination["schoolIds"] = this.dictionary["school"][0].id;
-      }
-      this.getList();
+      var self = this;
+      var proceed = () => {
+        if (self.teacherSchoolList.length === 1) {
+          self.pagination["schoolIds"] = self.teacherSchoolList[0].id;
+        }
+        self.getList();
+      };
+      this.fetchSchoolListBuscommon().then(proceed).catch(proceed);
     },
     getList() {
       getTeacherPage({
@@ -229,15 +239,20 @@ export default {
     },
     formatData() {
       this.tableData.map((item) => {
-        item["schoolLabel"] = this.$getListLabel(
-          this.dictionary["school"],
-          item["school"],
-          "enName",
-          "id"
+        item["schoolLabel"] = resolveSchoolDisplayLabels(item, this.teacherSchoolList, (sch) =>
+          this.schoolDropdownLabel(sch)
         );
         item["statusLabel"] = this.$getListLabel(consts["statusType"], item["status"]);
-        item["modulesLabel"] = this.formatOptionLabels(item["modules"], MODULE_OPTIONS);
-        item["rolesLabel"] = this.formatOptionLabels(item["roles"], ROLE_OPTIONS);
+        item["modulesLabel"] = formatOptionLabels(
+          item["modules"],
+          MODULE_OPTIONS,
+          this.i18nlocel
+        );
+        item["rolesLabel"] = formatOptionLabels(
+          item["roles"],
+          ROLE_OPTIONS,
+          this.i18nlocel
+        );
         item["lastLoginTime"] = item["lastLoginTime"]
           ? dayjs(item["lastLoginTime"]).format("YYYY-MM-DD HH:mm")
           : "--";
@@ -245,13 +260,6 @@ export default {
           ? dayjs(item["createTime"]).format("YYYY-MM-DD HH:mm")
           : "--";
       });
-    },
-    formatOptionLabels(ids, options) {
-      if (!Array.isArray(ids) || ids.length === 0) return "--";
-      const labelList = options
-        .filter((item) => ids.includes(item.id))
-        .map((item) => (this.i18nlocel == "en" ? item.enLabel : item.label));
-      return labelList.length > 0 ? labelList.join(" / ") : "--";
     },
     playTab(name, item, scope) {
       this.currenntItem = item;

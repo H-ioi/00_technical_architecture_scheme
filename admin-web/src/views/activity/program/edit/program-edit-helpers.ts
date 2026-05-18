@@ -43,7 +43,7 @@ export function isPrizeCountOnlyEdit(item: Record<string, unknown>): boolean {
 export function labelFromOptions(
   value: unknown,
   options: UniOption[],
-  locale: string
+  _locale: string
 ): string {
   const v = value == null ? '' : String(value)
   const hit = options.find((o) => String(o.value) === v)

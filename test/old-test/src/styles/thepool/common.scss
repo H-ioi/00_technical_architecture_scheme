@@ -290,6 +290,14 @@
         }
 
         .formgenerator_form_right {
+          .form-item-remark {
+            font-size: 14px;
+            color: #999999;
+            line-height: 18px;
+            margin-bottom: 10px;
+            // 识别换行符号换行
+            white-space: pre-wrap;
+          }
           .formgenerator_form_right_title {
             font-family: PingFangSC, PingFang SC;
             font-weight: 500;
@@ -326,6 +334,28 @@
             }
             .is_showHidden {
               background: #efefef !important;
+            }
+            .el-checkbox {
+              display: flex;
+              align-items: flex-start;
+              margin-bottom: 10px;
+              .el-checkbox__label {
+                font-weight: 400;
+                white-space: pre-wrap;
+                word-break: break-word;
+                line-height: 18px;
+              }
+            }
+            .el-radio {
+              display: flex;
+              align-items: flex-start;
+              margin-bottom: 10px;
+              .el-radio__label {
+                font-weight: 400;
+                white-space: pre-wrap;
+                word-break: break-word;
+                line-height: 18px;
+              }
             }
           }
         }

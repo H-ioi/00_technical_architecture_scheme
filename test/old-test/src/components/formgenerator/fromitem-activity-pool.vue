@@ -27,6 +27,11 @@
             },
           ]"
         >
+          <div
+            v-if="item.placeholder"
+            class="form-item-remark"
+            v-html="item.placeholder"
+          ></div>
           <!-- 单文本输入框 -->
           <el-input
             v-if="item.type == 'input'"

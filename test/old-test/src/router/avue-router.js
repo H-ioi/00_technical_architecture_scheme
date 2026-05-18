@@ -1,4 +1,6 @@
 import { getStore } from "@/util/store";
+import i18n from "@/i18n/i18n";
+import { resolveMenuLabel } from "@/util/menu-i18n";
 const RouterPlugin = function () {
   this.$router = null
   this.$store = null
@@ -92,16 +94,8 @@ RouterPlugin.install = function (router, store) {
         const component = 'views' + oMenu.path
 
         const name = oMenu[propsDefault.label]
-        // 设置英文名称
-        let enName = oMenu[propsDefault.label]
-        if (oMenu['menufiled']) {
-          oMenu['menufiled'].map(menufiled => {
-            if (menufiled['sysMenuType'] == 'en_US') {
-              enName = menufiled['sysMenuValue']
-            }
-          })
-          // console.log('enName', enName);
-        }
+        // 设置英文名称：后端 menufiled 或前端 i18n 词典
+        const enName = resolveMenuLabel(oMenu, i18n, propsDefault.label)
 
 
         const icon = oMenu[propsDefault.icon]

@@ -962,6 +962,36 @@ a {
     padding: 10px;
     box-sizing: border-box;
     background: #ffffff;
+    .form-item-remark {
+      font-size: 14px;
+      color: #999999;
+      line-height: 18px;
+      margin-bottom: 10px;
+      // 识别换行符号换行
+      white-space: pre-wrap;
+    }
+    .el-checkbox {
+      display: flex;
+      align-items: flex-start;
+      margin-bottom: 10px;
+      .el-checkbox__label {
+        font-weight: 400;
+        white-space: pre-wrap;
+        word-break: break-word;
+        line-height: 18px;
+      }
+    }
+    .el-radio {
+      display: flex;
+      align-items: flex-start;
+      margin-bottom: 10px;
+      .el-radio__label {
+        font-weight: 400;
+        white-space: pre-wrap;
+        word-break: break-word;
+        line-height: 18px;
+      }
+    }
   }
   .questionnaire-info {
     color: #ffffff !important;

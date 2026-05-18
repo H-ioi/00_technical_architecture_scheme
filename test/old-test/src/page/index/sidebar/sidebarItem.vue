@@ -31,11 +31,11 @@
               <img :src="`/svg/menu/${item.icon}.svg`" alt="" />
               <!-- <div class="menuText">{{ item[labelKey] }}</div> -->
               <div class="menuText">
-                {{ i18nlocel == "en" ? resetShowName(item) : item[labelKey] }}
+                {{ getMenuLabel(item) }}
               </div>
             </div>
 
-            <div v-if="item[childrenKey].length == 0">{{ item[labelKey] }}</div>
+            <div v-if="item[childrenKey].length == 0">{{ getMenuLabel(item) }}</div>
             <div v-else>
               <div
                 v-for="(child, cindex) in item[childrenKey]"
@@ -57,9 +57,7 @@
                   ]"
                 >
                   <!-- <span>{{ child[labelKey] }}</span> -->
-                  <span>{{
-                    i18nlocel == "en" ? resetShowName(child) : child[labelKey]
-                  }}</span>
+                  <span>{{ getMenuLabel(child) }}</span>
                   <i
                     :ref="child.path + 'icon'"
                     v-if="child[childrenKey].length !== 0"
@@ -86,7 +84,7 @@
                     v-for="(c, i) in child[childrenKey]"
                     :index="(c[pathKey], i)"
                   >
-                    {{ i18nlocel == "en" ? resetShowName(c) : c[labelKey] }}
+                    {{ getMenuLabel(c) }}
                   </div>
                 </div>
               </div>
@@ -100,6 +98,7 @@
 <script>
 import { mapGetters } from "vuex";
 import { validatenull } from "@/util/validate";
+import { resolveMenuLabel, resolveMenuLabelByLocale } from "@/util/menu-i18n";
 import config from "./config.js";
 export default {
   name: "SidebarItem",
@@ -157,17 +156,16 @@ export default {
     }
   },
   methods: {
+    getMenuLabel(item) {
+      return resolveMenuLabelByLocale(
+        item,
+        this.$i18n,
+        this.i18nlocel,
+        this.labelKey
+      );
+    },
     resetShowName(tagItem) {
-      // 设置英文名称
-      let enName = tagItem["label"];
-      if (tagItem["menufiled"]) {
-        tagItem["menufiled"].map(menufiled => {
-          if (menufiled["sysMenuType"] == "en_US") {
-            enName = menufiled["sysMenuValue"];
-          }
-        });
-      }
-      return enName;
+      return resolveMenuLabel(tagItem, this.$i18n, this.labelKey);
     },
     getCurrentLeftMenu(item) {
       let currentPath = this.$route.path;

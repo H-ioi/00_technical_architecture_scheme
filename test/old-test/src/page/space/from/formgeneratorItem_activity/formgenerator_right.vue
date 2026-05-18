@@ -327,6 +327,14 @@
             </div>
           </el-upload>
         </div>
+        <el-form-item :label="$t('consult.备注')" prop="placeholder">
+          <el-input
+            v-model="setform.placeholder"
+            :placeholder="$t('consult.请输入')"
+            type="textarea"
+            rows="20"
+          ></el-input
+        ></el-form-item>
       </el-form>
     </el-scrollbar>
   </div>

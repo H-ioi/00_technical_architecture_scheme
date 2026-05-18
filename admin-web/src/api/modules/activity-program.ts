@@ -17,6 +17,10 @@ export default {
     name: '活动项目详情',
     get: async (id: string | number) => await request.get(`${path}/get/${id}`)
   },
+  listBrief: {
+    name: '活动项目简要列表',
+    get: async (params?: Record<string, unknown>) => await request.get(`${path}/list`, { params })
+  },
   add: {
     name: '新增活动项目',
     post: async (data: Record<string, unknown>[]) => await request.post(`${path}/add`, data)
@@ -37,5 +41,15 @@ export default {
       namePrefix: string
       targetActivityId: string | number
     }) => await request.post(`${path}/copyBatch`, data)
+  },
+  editStatus: {
+    name: '切换活动项目状态',
+    post: async (data: { id: string | number; startFlag: boolean }) => {
+      const formData = new FormData()
+      formData.append('id', String(data.id))
+      formData.append('startFlag', String(data.startFlag))
+
+      return await request.post(`${path}/editStatus`, formData)
+    }
   }
 }

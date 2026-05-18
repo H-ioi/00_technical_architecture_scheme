@@ -25,7 +25,10 @@
             }}</el-button>
           </el-form-item>
         </el-form>
-        <div v-if="!readOnly || showExportEnded" class="activity-search-toolbar__actions">
+        <div
+          v-if="!readOnly || showExportEnded"
+          class="activity-search-toolbar__actions"
+        >
           <el-button
             v-if="!readOnly && permissions['busdriver_edit']"
             type="primary"
@@ -37,7 +40,8 @@
           <el-button
             v-if="
               !readOnly &&
-              (permissions['busdriver_del'] || permissions['activity_ticket_del'])
+              (permissions['busdriver_del'] ||
+                permissions['activity_ticket_del'])
             "
             type="danger"
             size="medium"
@@ -99,9 +103,9 @@
         label-position="top"
         class="voteinfo-dialog-form"
       >
-        <el-form-item :label="$t('isagroup.签到记录')" prop="checkinId">
+        <el-form-item :label="$t('isagroup.签到记录')" prop="codeId">
           <el-select
-            v-model="dialogForm.checkinId"
+            v-model="dialogForm.codeId"
             filterable
             :placeholder="$t('isagroup.请选择')"
             style="width: 100%"
@@ -169,9 +173,9 @@ import {
 import Pagination from "@/components/communitycommon/Pagination.vue";
 import Table from "@/components/communitycommon/Table.vue";
 import tabletitle from "@/const/isacommunity/tabletitle.js";
+import { downloadUtf8Csv } from "@/util/download";
 import dayjs from "dayjs";
 import { mapGetters } from "vuex";
-import { downloadUtf8Csv } from "@/util/download";
 
 import activityDetailPagination from "../mixins/activityDetailPagination.js";
 import {
@@ -217,7 +221,7 @@ export default {
       dialogVisible: false,
       voteExportLoading: false,
       dialogForm: {
-        checkinId: null,
+        codeId: null,
         voteId: null,
         voter: "",
         phone: "",
@@ -245,7 +249,7 @@ export default {
         { required: true, message: msg, trigger: "blur" },
       ];
       return {
-        // checkinId: req(this.$t("isagroup.请选择签到记录")),
+        // codeId: req(this.$t("isagroup.请选择签到记录")),
         voteId: req(this.$t("isagroup.请选择投票节目")),
         // voter: reqBlur(this.$t("isagroup.请输入")),
         // phone: reqBlur(this.$t("isagroup.请输入")),
@@ -385,9 +389,7 @@ export default {
           header: c.label,
           key: c.prop,
         }));
-        const rows = allRaw.map((item, i) =>
-          this.formatRow(item, i, 1, 1)
-        );
+        const rows = allRaw.map((item, i) => this.formatRow(item, i, 1, 1));
         downloadUtf8Csv(
           `activity-vote-records-${this.activityId}.csv`,
           rows,
@@ -461,7 +463,7 @@ export default {
         return;
       }
       this.dialogForm = {
-        checkinId: null,
+        codeId: null,
         voteId: null,
         voter: "",
         phone: "",
@@ -486,7 +488,7 @@ export default {
           return;
         }
         const aid = this.activityId;
-        const cid = this.dialogForm.checkinId;
+        const cid = this.dialogForm.codeId;
         const vid = this.dialogForm.voteId;
         // if (cid == null || cid === "" || vid == null || vid === "") {
         //   return;
@@ -496,7 +498,7 @@ export default {
             typeof aid === "string" && /^\d+$/.test(aid) && aid.length <= 16
               ? Number(aid)
               : aid,
-          checkinId: Number(cid),
+          codeId: Number(cid),
           voteId: Number(vid),
           voter: this.dialogForm.voter,
           phone: this.dialogForm.phone,

@@ -153,12 +153,19 @@ export function useProgramEditPage() {
   const loading = ref(false)
   const saving = ref(false)
   const form = reactive<ActivityProgramFormModel>(emptyForm())
+  const formModel = computed({
+    get: () => form,
+    set: (value: ActivityProgramFormModel) => {
+      Object.assign(form, value)
+    }
+  })
   const quotasList = ref<ActivityProgramQuotaRow[]>([])
   const activityRows = ref<Loose[]>([])
 
   const serverStatus = ref('')
   const serverType = ref('')
   const serverTotalRounds = ref<number | string>(0)
+  const activityStatus = ref('')
 
   const detailId = computed(() => {
     const raw = route.query.id
@@ -170,7 +177,6 @@ export function useProgramEditPage() {
 
   const isEditRoute = computed(() => route.query.mode === 'edit')
   const isCreate = computed(() => !detailId.value)
-  const uniMode = computed<'view' | 'edit'>(() => (isEditRoute.value ? 'edit' : 'view'))
 
   const pageTitle = computed(() =>
     isCreate.value
@@ -221,12 +227,22 @@ export function useProgramEditPage() {
     if (!detailId.value) {
       return false
     }
-    return canEditProgramRow({
+    if (activityStatus.value === '3') {
+      return false
+    }
+    const programEditable = canEditProgramRow({
       programStatus: serverStatus.value,
       programType: serverType.value,
       totalRounds: serverTotalRounds.value
     })
+    if (activityStatus.value === '2') {
+      return programEditable
+    }
+    return programEditable
   })
+
+  const canSubmit = computed(() => isEditRoute.value && (isCreate.value || canEdit.value))
+  const uniMode = computed<'view' | 'edit'>(() => (canSubmit.value ? 'edit' : 'view'))
 
   const loadActivities = async () => {
     const raw = await activityApi.listBrief.get()
@@ -338,12 +354,28 @@ export function useProgramEditPage() {
     }
   }
 
+  const loadActivityStatus = async () => {
+    if (form.activityId == null || form.activityId === '') {
+      activityStatus.value = ''
+      return
+    }
+    try {
+      const raw = await activityApi.detail.get(form.activityId)
+      const row = normalizeEnvelope(raw)
+      activityStatus.value =
+        row.activityStatus != null && row.activityStatus !== '' ? String(row.activityStatus) : ''
+    } catch {
+      activityStatus.value = ''
+    }
+  }
+
   const resetForCreate = () => {
     Object.assign(form, emptyForm())
     quotasList.value = []
     serverStatus.value = ''
     serverType.value = ''
     serverTotalRounds.value = 0
+    activityStatus.value = ''
   }
 
   watch(
@@ -413,6 +445,7 @@ export function useProgramEditPage() {
     await loadActivities()
     if (detailId.value) {
       await loadDetail()
+      await loadActivityStatus()
     } else if (isEditRoute.value) {
       resetForCreate()
     }
@@ -448,6 +481,14 @@ export function useProgramEditPage() {
 
   const submit = async () => {
     if (!isEditRoute.value) {
+      return
+    }
+    if (!isCreate.value && activityStatus.value === '3') {
+      ElMessage.warning(tr('activity.programActivityEndedNoStatus'))
+      return
+    }
+    if (!isCreate.value && !canEdit.value) {
+      ElMessage.warning(tr('activity.programEditLimited'))
       return
     }
     const ok = await uniFormRef.value?.validate().catch(() => false)
@@ -491,11 +532,13 @@ export function useProgramEditPage() {
     loading,
     saving,
     form,
+    formModel,
     formConfig,
     uniMode,
     pageTitle,
     detailId,
     isEditRoute,
+    canSubmit,
     isCreate,
     canEdit,
     goBack,

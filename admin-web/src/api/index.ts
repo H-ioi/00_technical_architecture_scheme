@@ -7,8 +7,11 @@ import attendanceWechatNoticeApi from './modules/attendance-wechat-notice'
 import attendanceWechatOpenidApi from './modules/attendance-wechat-openid'
 import authApi from './modules/auth'
 import activityApi from './modules/activity'
+import activityParentStudentApi from './modules/activity-parent-student'
 import activityProgramApi from './modules/activity-program'
 import activityQuestionnaireApi from './modules/activity-questionnaire'
+import activityPrizeApi from './modules/activity-prize'
+import activityVoteProgramApi from './modules/activity-vote-program'
 import bulkEmailApi from './modules/bulk-email'
 import baseDictApi from './modules/base-dict'
 import captchaApi from './modules/captcha'
@@ -34,11 +37,15 @@ import schoolBusSectionApi from './modules/school-bus-section'
 import schoolBusStationApi from './modules/school-bus-station'
 import schoolEmailConfigApi from './modules/school-email-config'
 import templateDynamicApi from './modules/template-dynamic'
+import wechatSchoolInfoApi from './modules/wechat-school-info'
 
 export {
   activityApi,
+  activityParentStudentApi,
   activityProgramApi,
+  activityPrizeApi,
   activityQuestionnaireApi,
+  activityVoteProgramApi,
   attendanceAccessApi,
   attendanceDailyApi,
   attendanceHolidayApi,
@@ -71,6 +78,7 @@ export {
   schoolBusSectionApi,
   schoolBusStationApi,
   schoolEmailConfigApi,
-  templateDynamicApi
+  templateDynamicApi,
+  wechatSchoolInfoApi
 }
 export type { CaptchaImageData } from '@/types/modules/captcha'

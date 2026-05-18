@@ -115,6 +115,42 @@ export const routes: AppRouteRecord[] = [
             }
           },
           {
+            path: 'prize',
+            name: 'ActivityPrizeList',
+            component: () => import('@/views/activity/prize/list.vue'),
+            meta: {
+              title: '奖品列表',
+              titleKey: 'route.activityPrize'
+            }
+          },
+          {
+            path: 'vote-program',
+            name: 'ActivityVoteProgramList',
+            component: () => import('@/views/activity/vote-program/list.vue'),
+            meta: {
+              title: '投票节目',
+              titleKey: 'route.activityVoteProgram'
+            }
+          },
+          {
+            path: 'wechat-school',
+            name: 'ActivityWechatSchoolList',
+            component: () => import('@/views/activity/wechat-school/list.vue'),
+            meta: {
+              title: '微信配置',
+              titleKey: 'route.activityWechatSchool'
+            }
+          },
+          {
+            path: 'email-school',
+            name: 'ActivityEmailSchoolList',
+            component: () => import('@/views/activity/email-school/list.vue'),
+            meta: {
+              title: '邮箱配置',
+              titleKey: 'route.activityEmailSchool'
+            }
+          },
+          {
             path: 'questionnaire',
             name: 'ActivityQuestionnaireList',
             component: () => import('@/views/activity/questionnaire/list.vue'),
@@ -170,6 +206,15 @@ export const routes: AppRouteRecord[] = [
               hidden: true,
               activeMenu: '/activity/questionnaire',
               tagDetailParam: 'id'
+            }
+          },
+          {
+            path: 'parent-student',
+            name: 'ActivityParentStudent',
+            component: () => import('@/views/activity/parent-student/list.vue'),
+            meta: {
+              title: '家长学生关联管理',
+              titleKey: 'route.activityParentStudent'
             }
           }
         ]

@@ -5,9 +5,9 @@ import { ElMessage, ElMessageBox } from 'element-plus'
 import { computed, onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
 
-import { activityProgramApi, membershipApi } from '@/api'
+import { activityApi, activityProgramApi, membershipApi } from '@/api'
 import type { Translate } from '@/types/i18n'
-import { normalizePaged } from '@/utils/api-response-normalize'
+import { normalizeEnvelope, normalizePaged } from '@/utils/api-response-normalize'
 
 import {
   canEditProgramRow,
@@ -148,11 +148,59 @@ export function useActivityProgramList(copyVisible: { value: boolean }) {
     router.push({ name: 'ActivityProgramDetail', query: { mode: 'edit' } })
   }
 
+  const isActivityEnded = async (row: Row) => {
+    if (row.activityStatus != null && row.activityStatus !== '') {
+      return String(row.activityStatus) === '3'
+    }
+    if (row.activityId == null || row.activityId === '') {
+      return false
+    }
+    try {
+      const raw = await activityApi.detail.get(row.activityId as string | number)
+      const detail = normalizeEnvelope(raw) as Row
+
+      return String(detail.activityStatus ?? '') === '3'
+    } catch {
+      ElMessage.error(tr('activity.loadDetailFail'))
+      return true
+    }
+  }
+
+  const changeProgramStatus = async (row: Row, startFlag: boolean) => {
+    if (row.id == null) {
+      return
+    }
+    if (await isActivityEnded(row)) {
+      ElMessage.warning(tr('activity.programActivityEndedNoStatus'))
+      return
+    }
+    try {
+      await ElMessageBox.confirm(
+        startFlag ? tr('activity.confirmStartProgram') : tr('activity.confirmEndProgram'),
+        tr('common.tip'),
+        { type: 'warning' }
+      )
+    } catch {
+      return
+    }
+    try {
+      await activityProgramApi.editStatus.post({
+        id: row.id as string | number,
+        startFlag
+      })
+      ElMessage.success(tr('activity.saveOk'))
+      tableRef.value?.refresh()
+    } catch {
+      ElMessage.error(tr('activity.saveFail'))
+    }
+  }
+
   const actions = computed<UniTableAction[]>(() => [
     { label: tr('activity.lookDetail'), onClick: (row) => goDetail(row as Row, 'view') },
     {
       label: tr('activity.entryEdit'),
       code: 'busdriver_edit',
+      visible: (row) => canEditProgramRow(row as Row),
       onClick: (row) => {
         const r = row as Row
         if (!canEditProgramRow(r)) {
@@ -164,12 +212,20 @@ export function useActivityProgramList(copyVisible: { value: boolean }) {
           'edit'
         )
       }
+    },
+    {
+      label: tr('activity.programStart'),
+      code: 'busdriver_edit',
+      visible: (row) => String((row as Row).programStatus ?? '') === '0',
+      onClick: (row) => void changeProgramStatus(row as Row, true)
+    },
+    {
+      label: tr('activity.programEnd'),
+      code: 'busdriver_edit',
+      visible: (row) => String((row as Row).programStatus ?? '') === '1',
+      onClick: (row) => void changeProgramStatus(row as Row, false)
     }
   ])
-
-  const onRowClick = (row: Record<string, unknown>) => {
-    goDetail(row as Row, 'view')
-  }
 
   const deleteBatch = async () => {
     if (!selectedIds.value.length) {
@@ -209,7 +265,6 @@ export function useActivityProgramList(copyVisible: { value: boolean }) {
     handleLoadSuccess,
     loadData,
     lockedSchoolId,
-    onRowClick,
     onSelectionChange,
     openCopy,
     queryModel,

@@ -49,5 +49,10 @@ export default {
   activityQuestionnaireDesign: 'Designer',
   activityQuestionnaireSubmissions: 'Submissions',
   activityProgram: 'Activity programs',
-  activityProgramDetail: 'Program detail'
+  activityProgramDetail: 'Program detail',
+  activityPrize: 'Prizes',
+  activityVoteProgram: 'Vote programs',
+  activityParentStudent: 'Parent-student links',
+  activityWechatSchool: 'WeChat config',
+  activityEmailSchool: 'Email config'
 }

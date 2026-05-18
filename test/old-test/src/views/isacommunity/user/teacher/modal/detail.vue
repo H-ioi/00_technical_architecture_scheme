@@ -17,10 +17,21 @@
                 v-for="(item, index) in tabletitle['followTeacherTable']"
                 :key="index"
               >
-                <span>{{ $t("isagroup")[item.label] }}</span>
-                <span :title="$checkNull(baseInfo[item.prop])">{{
-                  $checkNull(baseInfo[item.prop])
-                }}</span>
+                <span>{{ teacherUserDetailResolveLabel(item.label) }}</span>
+                <span class="orderDetail_baseinfo_value">
+                  <el-tooltip
+                    placement="top"
+                    effect="light"
+                    :content="teacherUserDetailDisplayValue(item.prop)"
+                    :disabled="
+                      !teacherUserDetailTooltipEnabled(item.prop)
+                    "
+                  >
+                    <span class="orderDetail_baseinfo_value_text">{{
+                      teacherUserDetailDisplayValue(item.prop)
+                    }}</span>
+                  </el-tooltip>
+                </span>
               </div>
             </div>
           </div>
@@ -35,21 +46,18 @@ import { mapGetters } from "vuex";
 import { getTeacherDetail } from "@/api/isacommunity/user.js";
 import consts from "@/const/isacommunity/consts.js";
 import tabletitle from "@/const/isacommunity/tabletitle.js";
-// 引入 dayjs
+import {
+  MODULE_OPTIONS,
+  ROLE_OPTIONS,
+  resolveSchoolDisplayLabels,
+  formatOptionLabels,
+} from "@/util/isacommunity-teacher-user.js";
+import schoolListBuscommonMixin from "@/mixins/schoolListBuscommon.js";
 import dayjs from "dayjs";
 
-const MODULE_OPTIONS = [
-  { id: 1, label: "校巴", enLabel: "School Bus" },
-  { id: 2, label: "活动", enLabel: "Activity" },
-];
-
-const ROLE_OPTIONS = [
-  { id: 1, label: "校巴运营", enLabel: "School Bus Operation" },
-  { id: 2, label: "跟车老师", enLabel: "Car Teacher" },
-  { id: 3, label: "活动签到", enLabel: "Activity Check-in" },
-];
 export default {
   name: "detail",
+  mixins: [schoolListBuscommonMixin],
   props: {
     title: String,
   },
@@ -65,8 +73,29 @@ export default {
   mounted() {},
   computed: {
     ...mapGetters(["i18nlocel", "dictionary", "permissions"]),
+    teacherSchoolList() {
+      const fromBus =
+        Array.isArray(this.schoolSelectList) && this.schoolSelectList.length > 0
+          ? this.schoolSelectList
+          : [];
+      const dict = Array.isArray(this.dictionary["school"])
+        ? this.dictionary["school"]
+        : [];
+      return fromBus.length > 0 ? fromBus : dict;
+    },
   },
   methods: {
+    teacherUserDetailResolveLabel(label) {
+      const key = "isagroup." + label;
+      return this.$te(key) ? this.$t(key) : label;
+    },
+    teacherUserDetailDisplayValue(prop) {
+      return this.$checkNull(this.baseInfo[prop]);
+    },
+    teacherUserDetailTooltipEnabled(prop) {
+      var val = this.baseInfo[prop];
+      return val != null && val !== "" && val !== "--";
+    },
     showModal(item) {
       this.showDialog = true;
       this.getDetail(item.id);
@@ -75,58 +104,55 @@ export default {
       this.baseInfo = {};
       this.showDialog = false;
     },
-    // 获取详情
     getDetail(id) {
-      getTeacherDetail(id).then(async (res) => {
-        if (res.data.success) {
-          let {
-            school,
-            nickname,
-            department,
-            email,
-            phone,
-            status,
-            modules,
-            roles,
-            lastLoginTime,
-            createTime,
-          } = res.data.data;
+      var self = this;
+      var fetchDetail = function () {
+        getTeacherDetail(id).then(async (res) => {
+          if (res.data.success) {
+            var data = res.data.data;
+            var nickname = data.nickname;
+            var department = data.department;
+            var email = data.email;
+            var phone = data.phone;
+            var status = data.status;
+            var modules = data.modules;
+            var roles = data.roles;
+            var lastLoginTime = data.lastLoginTime;
+            var createTime = data.createTime;
 
-          this.$nextTick(() => {
-            this.baseInfo = {
-              ...this.baseInfo,
-              id,
-              nickname,
-              department,
-              email,
-              phone,
-              schoolLabel: this.$getListLabel(
-                this.dictionary["school"],
-                school,
-                "enName",
-                "id"
-              ),
-
-              statusLabel: this.$getListLabel(consts["statusType"], status),
-              modulesLabel: this.formatOptionLabels(modules, MODULE_OPTIONS),
-              rolesLabel: this.formatOptionLabels(roles, ROLE_OPTIONS),
-              lastLoginTime: lastLoginTime
-                ? dayjs(lastLoginTime).format("YYYY-MM-DD HH:mm")
-                : "--",
-              createTime: createTime
-                ? dayjs(createTime).format("YYYY-MM-DD HH:mm")
-                : "--",
-            };
-          });
-        }
-      });
-    },
-    formatOptionLabels(ids, options) {
-      if (!Array.isArray(ids) || ids.length === 0) return "--";
-      const labelList = options
-        .filter((item) => ids.includes(item.id))
-        .map((item) => (this.i18nlocel == "en" ? item.enLabel : item.label));
-      return labelList.length > 0 ? labelList.join(" / ") : "--";
+            self.$nextTick(() => {
+              self.baseInfo = {
+                id: id,
+                nickname: nickname,
+                department: department,
+                email: email,
+                phone: phone,
+                schoolLabel: resolveSchoolDisplayLabels(
+                  data,
+                  self.teacherSchoolList,
+                  function (sch) {
+                    return self.schoolDropdownLabel(sch);
+                  }
+                ),
+                statusLabel: self.$getListLabel(consts["statusType"], status),
+                modulesLabel: formatOptionLabels(
+                  modules,
+                  MODULE_OPTIONS,
+                  self.i18nlocel
+                ),
+                rolesLabel: formatOptionLabels(roles, ROLE_OPTIONS, self.i18nlocel),
+                lastLoginTime: lastLoginTime
+                  ? dayjs(lastLoginTime).format("YYYY-MM-DD HH:mm")
+                  : "--",
+                createTime: createTime
+                  ? dayjs(createTime).format("YYYY-MM-DD HH:mm")
+                  : "--",
+              };
+            });
+          }
+        });
+      };
+      this.fetchSchoolListBuscommon().then(fetchDetail).catch(fetchDetail);
     },
   },
 };
@@ -137,5 +163,21 @@ export default {
   margin-right: 0px;
   padding-right: 20px;
   box-sizing: border-box;
+}
+.orderDetail_baseinfo_value {
+  flex: 1;
+  min-width: 0;
+  padding-right: 10px;
+  box-sizing: border-box;
+}
+.orderDetail_baseinfo_value_text {
+  display: block;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 14px;
+  line-height: 22px;
+  color: #333;
 }
 </style>
