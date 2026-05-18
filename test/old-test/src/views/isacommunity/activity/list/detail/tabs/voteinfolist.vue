@@ -173,8 +173,16 @@ import dayjs from "dayjs";
 import { mapGetters } from "vuex";
 import { downloadUtf8Csv } from "@/util/download";
 
+import activityDetailPagination from "../mixins/activityDetailPagination.js";
+import {
+  extractPageList,
+  pageTotalOrNull,
+  totalFromPagePayload,
+} from "../utils/tabPageHelpers.js";
+
 export default {
   name: "ActivityVoteInfoList",
+  mixins: [activityDetailPagination],
   components: { Table, Pagination },
   props: {
     activityId: {
@@ -296,7 +304,7 @@ export default {
         .then((res) => {
           if (res.data.success) {
             const payload = res.data.data || {};
-            const list = this.extractPageList(payload);
+            const list = extractPageList(payload);
             this.checkinOptions = Array.isArray(list) ? list : [];
           }
         })
@@ -329,34 +337,6 @@ export default {
           this.voteProgramLoading = false;
         });
     },
-    extractPageList(payload) {
-      if (!payload || typeof payload !== "object") {
-        return [];
-      }
-      if (Array.isArray(payload)) {
-        return payload;
-      }
-      if (Array.isArray(payload.records)) {
-        return payload.records;
-      }
-      if (Array.isArray(payload.content)) {
-        return payload.content;
-      }
-      if (Array.isArray(payload.list)) {
-        return payload.list;
-      }
-      if (Array.isArray(payload.data)) {
-        return payload.data;
-      }
-      if (
-        payload.data &&
-        typeof payload.data === "object" &&
-        Array.isArray(payload.data.records)
-      ) {
-        return payload.data.records;
-      }
-      return [];
-    },
     buildVoteRecordParams(cur, sz) {
       return {
         activityId: this.activityId,
@@ -384,13 +364,8 @@ export default {
             break;
           }
           const payload = res.data.data || {};
-          const list = this.extractPageList(payload);
-          const total =
-            payload.total !== undefined && payload.total !== null
-              ? payload.total
-              : payload.totalElements != null
-              ? payload.totalElements
-              : null;
+          const list = extractPageList(payload);
+          const total = pageTotalOrNull(payload);
           if (typeof total === "number") {
             totalKnown = total;
           }
@@ -463,14 +438,8 @@ export default {
         .then((res) => {
           if (res.data.success) {
             const payload = res.data.data || {};
-            const list = this.extractPageList(payload);
-            const total =
-              payload.total !== undefined && payload.total !== null
-                ? payload.total
-                : payload.totalElements != null
-                ? payload.totalElements
-                : 0;
-            this.paginationTotal = total;
+            const list = extractPageList(payload);
+            this.paginationTotal = totalFromPagePayload(payload);
             this.tableData = list.map((item, index) =>
               this.formatRow(item, index, cur, sz)
             );
@@ -485,15 +454,6 @@ export default {
         .finally(() => {
           this.listLoading = false;
         });
-    },
-    handleCurrentChange(page) {
-      this.pagination.current = page;
-      this.getList();
-    },
-    handleSizeChange(size) {
-      this.pagination.size = size;
-      this.pagination.current = 1;
-      this.getList();
     },
     playTab() {},
     openAdd() {

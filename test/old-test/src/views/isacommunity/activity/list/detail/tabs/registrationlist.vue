@@ -53,13 +53,13 @@
           class="activity-search-toolbar__actions"
         >
           <template v-if="!readOnly">
-            <el-button
+            <!-- <el-button
               v-if="permissions['busdriver_edit']"
               type="primary"
               size="medium"
               @click="openAdd"
               >{{ $t("btn.新增") }}</el-button
-            >
+            > -->
             <el-upload
               v-if="permissions['busdriver_edit']"
               class="registration-upload"
@@ -82,7 +82,8 @@
             >
             <el-button
               v-if="
-                permissions['activity_ticket_del'] || permissions['busdriver_del']
+                permissions['activity_ticket_del'] ||
+                permissions['busdriver_del']
               "
               type="danger"
               size="medium"
@@ -93,10 +94,7 @@
             >
           </template>
           <el-button
-            v-if="
-              showExportEnded &&
-              permissions['busdriver_edit']
-            "
+            v-if="showExportEnded && permissions['busdriver_edit']"
             type="primary"
             size="medium"
             plain
@@ -257,12 +255,20 @@ import {
 import Pagination from "@/components/communitycommon/Pagination.vue";
 import Table from "@/components/communitycommon/Table.vue";
 import tabletitle from "@/const/isacommunity/tabletitle.js";
+import { downloadUtf8Csv } from "@/util/download";
 import dayjs from "dayjs";
 import { mapGetters } from "vuex";
-import { downloadUtf8Csv } from "@/util/download";
+
+import activityDetailPagination from "../mixins/activityDetailPagination.js";
+import {
+  extractPageList,
+  pageTotalOrNull,
+  totalFromPagePayload,
+} from "../utils/tabPageHelpers.js";
 
 export default {
   name: "ActivityRegistrationList",
+  mixins: [activityDetailPagination],
   components: { Table, Pagination },
   props: {
     activityId: {
@@ -324,7 +330,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(["permissions", "i18nlocel"]),
+    ...mapGetters(["permissions"]),
     /**
      * POST /activity/ticket/import（拼接 base 后供 el-upload 的 action 必填；
      * 实际上传走 handleImport → importActivityTicket（仅 file，不含 activityId）
@@ -428,35 +434,6 @@ export default {
       }
       return null;
     },
-    /** 兼容 MyBatis-Plus / PageHelper / Spring Data 等分页返回结构 */
-    extractPageList(payload) {
-      if (!payload || typeof payload !== "object") {
-        return [];
-      }
-      if (Array.isArray(payload)) {
-        return payload;
-      }
-      if (Array.isArray(payload.records)) {
-        return payload.records;
-      }
-      if (Array.isArray(payload.content)) {
-        return payload.content;
-      }
-      if (Array.isArray(payload.list)) {
-        return payload.list;
-      }
-      if (Array.isArray(payload.data)) {
-        return payload.data;
-      }
-      if (
-        payload.data &&
-        typeof payload.data === "object" &&
-        Array.isArray(payload.data.records)
-      ) {
-        return payload.data.records;
-      }
-      return [];
-    },
     buildTicketListParams(cur, sz) {
       const params = {
         activityId: this.activityId,
@@ -492,13 +469,8 @@ export default {
             break;
           }
           const payload = res.data.data || {};
-          const list = this.extractPageList(payload);
-          const total =
-            payload.total !== undefined && payload.total !== null
-              ? payload.total
-              : payload.totalElements != null
-              ? payload.totalElements
-              : null;
+          const list = extractPageList(payload);
+          const total = pageTotalOrNull(payload);
           if (typeof total === "number") {
             totalKnown = total;
           }
@@ -518,14 +490,8 @@ export default {
           header: c.label,
           key: c.prop,
         }));
-        const rows = allRaw.map((item, i) =>
-          this.formatRow(item, i, 1, 1)
-        );
-        downloadUtf8Csv(
-          `activity-tickets-${this.activityId}.csv`,
-          rows,
-          cols
-        );
+        const rows = allRaw.map((item, i) => this.formatRow(item, i, 1, 1));
+        downloadUtf8Csv(`activity-tickets-${this.activityId}.csv`, rows, cols);
         this.$message.success(this.$t("isagroup.成功"));
       } catch (e) {
         this.$message.error(this.$t("isagroup.失败"));
@@ -547,13 +513,8 @@ export default {
         .then((res) => {
           if (res.data.success) {
             const payload = res.data.data || {};
-            const list = this.extractPageList(payload);
-            const total =
-              payload.total !== undefined && payload.total !== null
-                ? payload.total
-                : payload.totalElements != null
-                ? payload.totalElements
-                : 0;
+            const list = extractPageList(payload);
+            const total = totalFromPagePayload(payload);
             this.paginationTotal = total;
             const pageForSeq = cur;
             const size = sz;
@@ -589,15 +550,6 @@ export default {
           ? dayjs(item.registerTime).format("YYYY-MM-DD HH:mm")
           : "--",
       };
-    },
-    handleCurrentChange(page) {
-      this.pagination.current = page;
-      this.getList();
-    },
-    handleSizeChange(size) {
-      this.pagination.size = size;
-      this.pagination.current = 1;
-      this.getList();
     },
     /**
      * 买票 parentId 对应 Java Long：不能用 Number 解析（超大整数会精度丢失），

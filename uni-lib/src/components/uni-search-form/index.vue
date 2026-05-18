@@ -208,7 +208,8 @@ watch(
 )
 </script>
 
-<style scoped lang="scss">
+<!-- dist + 单独引入 index.css：去 scoped，避免 data-v 与 CSS 不一致 -->
+<style lang="scss">
 .uni-search-form {
   &__body {
     display: flex;
@@ -268,7 +269,7 @@ watch(
     margin-top: 12px;
   }
 
-  :deep(.el-form-item) {
+  .el-form-item {
     margin-bottom: 8px;
   }
 }

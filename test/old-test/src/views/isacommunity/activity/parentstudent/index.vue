@@ -83,7 +83,6 @@ import { getParentStudent } from "@/api/isacommunity/activity.js";
 import tabletitle from "@/const/isacommunity/tabletitle.js";
 import consts from "@/const/isacommunity/consts.js";
 import Table from "@/components/communitycommon/Table.vue";
-import dayjs from "dayjs";
 export default {
   name: "teacher",
   components: { Table },
@@ -102,11 +101,7 @@ export default {
         },
         {
           label: "学号",
-          prop: "studentNo",
-        },
-        {
-          label: "校区",
-          prop: "campus",
+          prop: "admissionNo",
         },
         {
           label: "年级",
@@ -147,11 +142,20 @@ export default {
   },
   methods: {
     getList() {
+      const phoneRaw = this.searchFrom && this.searchFrom.phone;
+      const phone =
+        typeof phoneRaw === "string"
+          ? phoneRaw.trim()
+          : String(phoneRaw || "").trim();
+      if (!phone) {
+        this.$message.warning(this.$t("isagroup.请输入关键词后再查询"));
+        return;
+      }
       getParentStudent({
         ...this.searchFrom,
+        phone,
       }).then((res) => {
         if (res.data.success) {
-          console.log("getVoteprogramPage", res.data.data);
           let { activities, parent, students } = res.data.data;
           this.parentData = parent;
           this.studentTableData = students;
@@ -167,7 +171,9 @@ export default {
     },
     clear() {
       this.searchFrom = {};
-      this.getList();
+      this.parentData = {};
+      this.studentTableData = [];
+      this.activityTableData = [];
     },
   },
 };

@@ -67,13 +67,53 @@ export const routes: AppRouteRecord[] = [
       {
         path: 'activity',
         name: 'Activity',
-        redirect: '/activity/questionnaire',
+        redirect: '/activity/list',
         meta: {
           title: '活动管理',
           titleKey: 'route.activity',
           icon: 'Bell'
         },
         children: [
+          {
+            path: 'list',
+            name: 'ActivityEventList',
+            component: () => import('@/views/activity/list/list.vue'),
+            meta: {
+              title: '活动列表',
+              titleKey: 'route.activityEventList'
+            }
+          },
+          {
+            path: 'detail',
+            name: 'ActivityEventDetail',
+            component: () => import('@/views/activity/detail/index.vue'),
+            meta: {
+              title: '活动详情',
+              titleKey: 'route.activityEventDetail',
+              hidden: true,
+              activeMenu: '/activity/list'
+            }
+          },
+          {
+            path: 'program',
+            name: 'ActivityProgramList',
+            component: () => import('@/views/activity/program/list.vue'),
+            meta: {
+              title: '活动项目',
+              titleKey: 'route.activityProgram'
+            }
+          },
+          {
+            path: 'program/detail',
+            name: 'ActivityProgramDetail',
+            component: () => import('@/views/activity/program/edit/index.vue'),
+            meta: {
+              title: '活动项目详情',
+              titleKey: 'route.activityProgramDetail',
+              hidden: true,
+              activeMenu: '/activity/program'
+            }
+          },
           {
             path: 'questionnaire',
             name: 'ActivityQuestionnaireList',

@@ -325,7 +325,6 @@
             <el-form-item
               :label="$t('isagroup.报名人数限制')"
               prop="registrationLimit"
-              class="activity-form-item--row-label"
             >
               <div class="activity-form-registration-limit">
                 <el-radio-group
@@ -372,7 +371,7 @@
           <el-col :xs="24" :span="24">
             <el-form-item
               :label="$t('isagroup.可见范围名单')"
-              class="activity-form-item--action-only activity-form-item--row-label"
+              class="activity-form-item--action-only"
             >
               <div class="visible-scope-file-actions">
                 <el-button
@@ -1498,7 +1497,7 @@ export default {
     padding-right: 4px;
     box-sizing: border-box;
 
-    /* 本行表单项：标签与控件同一行（覆盖 el-form 的 label-top + 子项 100% 宽） */
+    /* 报名人数限制：全局样式隐藏了 el-input-number 增减按钮，此处仅在本字段恢复 */
     .activity-form__row--limit-scope {
       /* community/common.scss 内全局隐藏了 .el-input-number 的增减按钮，此处仅恢复本字段 */
       ::v-deep .el-input-number.activity-form-registration-cap {
@@ -1507,51 +1506,6 @@ export default {
           display: flex !important;
           align-items: center;
           justify-content: center;
-        }
-      }
-
-      ::v-deep .el-form-item.activity-form-item--row-label {
-        display: flex;
-        flex-direction: row;
-        flex-wrap: nowrap;
-        align-items: center;
-        width: 100%;
-        box-sizing: border-box;
-      }
-
-      ::v-deep
-        .el-form-item.activity-form-item--row-label
-        .el-form-item__label {
-        float: none !important;
-        display: inline-flex !important;
-        align-items: center;
-        line-height: 1.3;
-        padding: 0 10px 0 0 !important;
-        text-align: left;
-        width: auto !important;
-        flex: 0 0 auto;
-        min-width: 0;
-        max-width: 10em;
-        white-space: normal;
-        word-break: break-word;
-      }
-
-      ::v-deep
-        .el-form-item.activity-form-item--row-label
-        .el-form-item__content {
-        margin-left: 0 !important;
-        display: block;
-        flex: 1;
-        min-width: 0;
-        line-height: normal;
-        width: auto !important;
-      }
-
-      /* 覆盖本行 .el-form-item__content>div 的 100% 宽，与开关+数字同排不撑满 */
-      ::v-deep .el-col {
-        .el-form-item--row-label .el-form-item__content > div {
-          width: auto !important;
-          max-width: 100%;
         }
       }
     }

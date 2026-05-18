@@ -32,7 +32,7 @@ export interface UniLibConfigAuth {
 }
 
 export interface UniConfigShell {
-  /** 退出登录后的路由路径，默认 <code>/login</code> */
+  /** 退出登录或 HTTP 401 后的登录页路径，默认 <code>/login</code>（整页跳转，与改密成功登出逻辑一致）。 */
   logoutRedirect?: string
   themeStorageKey?: string
   defaultTheme?: UniThemeOptions

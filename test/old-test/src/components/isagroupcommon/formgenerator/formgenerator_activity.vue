@@ -87,26 +87,24 @@
 </template>
 
 <script>
-import {
-  formlist,
-  dateTimeType,
-  uploadAccept,
-  setformrules,
-} from "./formgeneratorItem_activity/form.js";
 import { regeList } from "@/const/space/regex.js";
-import { createCode, deepClone } from "@/util/util.js";
+import { createCode } from "@/util/util.js";
 import { rule } from "@/util/validateRules.js";
+import {
+  dateTimeType,
+  setformrules,
+  uploadAccept,
+} from "./formgeneratorItem_activity/form.js";
 // 动态模板
 import {
   addTemplate,
-  getTemplateDetail,
   editTemplate,
-  getTemplateRegex,
+  getTemplateDetail,
 } from "@/api/space/templatedynamic.js";
+import { formrules } from "@/util/form.js";
 import FormLeft from "./formgeneratorItem_activity/form_left.vue";
 import FormRight from "./formgeneratorItem_activity/form_right.vue";
 import formgeneratorRight from "./formgeneratorItem_activity/formgenerator_right.vue";
-import { formrules } from "@/util/form.js";
 export default {
   components: {
     FormLeft,

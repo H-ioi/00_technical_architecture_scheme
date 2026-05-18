@@ -7,6 +7,7 @@ import attendanceWechatNoticeApi from './modules/attendance-wechat-notice'
 import attendanceWechatOpenidApi from './modules/attendance-wechat-openid'
 import authApi from './modules/auth'
 import activityApi from './modules/activity'
+import activityProgramApi from './modules/activity-program'
 import activityQuestionnaireApi from './modules/activity-questionnaire'
 import bulkEmailApi from './modules/bulk-email'
 import baseDictApi from './modules/base-dict'
@@ -31,10 +32,12 @@ import schoolBusOperationApi from './modules/school-bus-operation'
 import schoolBusOrderApi from './modules/school-bus-order'
 import schoolBusSectionApi from './modules/school-bus-section'
 import schoolBusStationApi from './modules/school-bus-station'
+import schoolEmailConfigApi from './modules/school-email-config'
 import templateDynamicApi from './modules/template-dynamic'
 
 export {
   activityApi,
+  activityProgramApi,
   activityQuestionnaireApi,
   attendanceAccessApi,
   attendanceDailyApi,
@@ -67,6 +70,7 @@ export {
   schoolBusOrderApi,
   schoolBusSectionApi,
   schoolBusStationApi,
+  schoolEmailConfigApi,
   templateDynamicApi
 }
 export type { CaptchaImageData } from '@/types/modules/captcha'

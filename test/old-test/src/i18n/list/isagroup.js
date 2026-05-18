@@ -66,6 +66,11 @@ const isagroup = [
   ["英文名", "英文名", "EN Name"],
   ["状态", "状态", "Status"],
   ["关键词", "关键词", "Key words"],
+  [
+    "请输入关键词后再查询",
+    "请输入关键词后再查询",
+    "Please enter a keyword before searching",
+  ],
   ["职位", "职位", "Role"],
   ["ID", "ID", "ID"],
   ["工号", "工号", "Employee number"],

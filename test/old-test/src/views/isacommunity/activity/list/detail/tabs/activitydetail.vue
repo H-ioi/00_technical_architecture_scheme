@@ -286,7 +286,6 @@
 </template>
 
 <script>
-import { getActivityDetail } from "@/api/isacommunity/activity.js";
 import {
   getSchoolEmailConfigDetail,
   getSchoolEmailConfigList,
@@ -299,26 +298,25 @@ export default {
   mixins: [schoolListBuscommonMixin],
   props: {
     activityId: String,
+    /** 父级 getActivityDetail 返回的 data 对象，子组件不再请求详情接口 */
+    detailRow: {
+      type: Object,
+      default: null,
+    },
   },
   data() {
     return {
       detailData: {},
       detailLoading: false,
-      /** 并发请求序号，仅最后一次响应可更新界面与结束 loading */
-      _getDetailReqId: 0,
     };
   },
   watch: {
-    activityId: {
-      handler(newVal) {
-        if (!newVal) {
-          this.detailData = {};
-          this.detailLoading = false;
-          return;
-        }
-        this.getDetail();
+    detailRow: {
+      handler(row) {
+        this.applyDetailRow(row);
       },
       immediate: true,
+      deep: true,
     },
   },
   computed: {
@@ -526,45 +524,29 @@ export default {
         wechatPushSchoolIdsLabel: String(wechatPushSchoolIdsLabel),
       };
     },
-    async applyActivityDetailResponse(res) {
-      const body = res && res.data;
-      const row = body && body.data;
-      if (
-        !row ||
-        typeof row !== "object" ||
-        body.success === false ||
-        body.code === 1
-      ) {
-        return;
-      }
-      await this.fetchSchoolListBuscommon();
-
-      const activitySchoolIds = row.schoolIds || [];
-      this.$nextTick(() => {
-        this.detailData = this.buildActivityDetailViewModel(row);
-        this.resolveEmailConfigLabels(
-          row.emailConfigIds,
-          activitySchoolIds,
-          row.emailConfigEmails
-        );
-      });
-    },
-    async getDetail() {
-      if (!this.activityId) {
+    /** 父级传入的接口 layer → 详情展示（仍含邮箱等衍生异步请求） */
+    applyDetailRow(row) {
+      if (row == null || typeof row !== "object") {
         this.detailData = {};
         this.detailLoading = false;
         return;
       }
       this.detailLoading = true;
-      try {
-        const res = await getActivityDetail(this.activityId);
-        await this.applyActivityDetailResponse(res);
-      } catch {
-        // 接口取消或网络异常：已由 loading finally 收尾
-        this.detailLoading = false;
-      } finally {
-        this.detailLoading = false;
-      }
+      const activitySchoolIds = row.schoolIds || [];
+      this.$nextTick(() => {
+        try {
+          this.detailData = this.buildActivityDetailViewModel(row);
+          this.resolveEmailConfigLabels(
+            row.emailConfigIds,
+            activitySchoolIds,
+            row.emailConfigEmails
+          );
+        } catch {
+          this.detailData = {};
+        } finally {
+          this.detailLoading = false;
+        }
+      });
     },
   },
 };

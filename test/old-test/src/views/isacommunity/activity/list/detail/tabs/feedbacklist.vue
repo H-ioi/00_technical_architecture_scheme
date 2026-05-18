@@ -234,8 +234,12 @@ import tabletitle from "@/const/isacommunity/tabletitle.js";
 import dayjs from "dayjs";
 import { mapGetters } from "vuex";
 
+import activityDetailPagination from "../mixins/activityDetailPagination.js";
+import { extractPageList, totalFromPagePayload } from "../utils/tabPageHelpers.js";
+
 export default {
   name: "ActivityFeedbackList",
+  mixins: [activityDetailPagination],
   components: { Table, Pagination },
   props: {
     activityId: {
@@ -362,34 +366,6 @@ export default {
         );
       }
     },
-    extractPageList(payload) {
-      if (!payload || typeof payload !== "object") {
-        return [];
-      }
-      if (Array.isArray(payload)) {
-        return payload;
-      }
-      if (Array.isArray(payload.records)) {
-        return payload.records;
-      }
-      if (Array.isArray(payload.content)) {
-        return payload.content;
-      }
-      if (Array.isArray(payload.list)) {
-        return payload.list;
-      }
-      if (Array.isArray(payload.data)) {
-        return payload.data;
-      }
-      if (
-        payload.data &&
-        typeof payload.data === "object" &&
-        Array.isArray(payload.data.records)
-      ) {
-        return payload.data.records;
-      }
-      return [];
-    },
     ynLabel(val) {
       if (val === 1 || val === "1") {
         return this.$t("isagroup.是");
@@ -460,14 +436,8 @@ export default {
         .then((res) => {
           if (res.data.success) {
             const payload = res.data.data || {};
-            const list = this.extractPageList(payload);
-            const total =
-              payload.total !== undefined && payload.total !== null
-                ? payload.total
-                : payload.totalElements != null
-                ? payload.totalElements
-                : 0;
-            this.paginationTotal = total;
+            const list = extractPageList(payload);
+            this.paginationTotal = totalFromPagePayload(payload);
             this.tableData = list.map((item, index) =>
               this.formatRow(item, index, cur, sz)
             );
@@ -482,15 +452,6 @@ export default {
         .finally(() => {
           this.listLoading = false;
         });
-    },
-    handleCurrentChange(page) {
-      this.pagination.current = page;
-      this.getList();
-    },
-    handleSizeChange(size) {
-      this.pagination.size = size;
-      this.pagination.current = 1;
-      this.getList();
     },
     playTab(type, row) {
       if (type === "view") {

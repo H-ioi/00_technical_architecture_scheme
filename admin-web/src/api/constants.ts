@@ -34,8 +34,14 @@ export const API_PATHS = {
   mailing: '/isacommunity/mailing',
   /** 活动主数据（旧 `api/isacommunity/activity.js`） */
   activity: '/isacommunity/activity',
+  /** 活动项目（旧 `api/isacommunity/activityprogram.js`） */
+  activityProgram: '/isacommunity/activity/program',
   /** 问卷（旧 `api/isacommunity/questionnaire.js`） */
   activityQuestionnaire: '/isacommunity/activity/questionnaire',
+  /** 活动反馈导出（旧 `api/isacommunity/feedback.js`） */
+  activityFeedback: '/isacommunity/activity/feedback',
   /** 公共动态表单、文件信息等（前缀 `/publik`） */
-  publik: '/publik'
+  publik: '/publik',
+  /** 校区邮箱配置（活动表单关联，旧 `api/isacommunity/schoolEmailConfig.js`） */
+  schoolEmailConfig: '/isacommunity/schoolEmailConfig'
 } as const

@@ -42,8 +42,12 @@ export default {
   emailSend: '发件箱配置',
   emailOutbox: '发件列表',
   activity: '活动管理',
+  activityEventList: '活动列表',
+  activityEventDetail: '活动详情',
   activityQuestionnaire: '问卷管理',
   activityQuestionnaireDetail: '问卷详情',
   activityQuestionnaireDesign: '问卷设计',
-  activityQuestionnaireSubmissions: '答卷列表'
+  activityQuestionnaireSubmissions: '答卷列表',
+  activityProgram: '活动项目',
+  activityProgramDetail: '活动项目详情'
 }

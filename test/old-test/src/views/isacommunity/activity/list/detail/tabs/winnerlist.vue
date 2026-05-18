@@ -40,7 +40,10 @@
             }}</el-button>
           </el-form-item>
         </el-form>
-        <div v-if="!readOnly || showExportEnded" class="activity-search-toolbar__actions">
+        <div
+          v-if="!readOnly || showExportEnded"
+          class="activity-search-toolbar__actions"
+        >
           <el-button
             v-if="!readOnly && permissions['busdriver_edit']"
             type="primary"
@@ -50,7 +53,9 @@
             >{{ $t("btn.新增") }}</el-button
           >
           <el-button
-            v-if="(!readOnly || showExportEnded) && permissions['busdriver_edit']"
+            v-if="
+              (!readOnly || showExportEnded) && permissions['busdriver_edit']
+            "
             type="primary"
             size="medium"
             plain
@@ -61,7 +66,8 @@
           <el-button
             v-if="
               !readOnly &&
-              (permissions['busdriver_del'] || permissions['activity_ticket_del'])
+              (permissions['busdriver_del'] ||
+                permissions['activity_ticket_del'])
             "
             type="danger"
             size="medium"
@@ -223,8 +229,12 @@ import tabletitle from "@/const/isacommunity/tabletitle.js";
 import dayjs from "dayjs";
 import { mapGetters } from "vuex";
 
+import activityDetailPagination from "../mixins/activityDetailPagination.js";
+import { extractPageList, totalFromPagePayload } from "../utils/tabPageHelpers.js";
+
 export default {
   name: "ActivityWinnerList",
+  mixins: [activityDetailPagination],
   components: { Table, Pagination },
   props: {
     activityId: {
@@ -485,34 +495,6 @@ export default {
       this.tableRenderKey += 1;
       this.getList();
     },
-    extractPageList(payload) {
-      if (!payload || typeof payload !== "object") {
-        return [];
-      }
-      if (Array.isArray(payload)) {
-        return payload;
-      }
-      if (Array.isArray(payload.records)) {
-        return payload.records;
-      }
-      if (Array.isArray(payload.content)) {
-        return payload.content;
-      }
-      if (Array.isArray(payload.list)) {
-        return payload.list;
-      }
-      if (Array.isArray(payload.data)) {
-        return payload.data;
-      }
-      if (
-        payload.data &&
-        typeof payload.data === "object" &&
-        Array.isArray(payload.data.records)
-      ) {
-        return payload.data.records;
-      }
-      return [];
-    },
     formatTime(raw) {
       if (!raw) {
         return "--";
@@ -520,12 +502,10 @@ export default {
       return dayjs(raw).format("YYYY-MM-DD HH:mm");
     },
     formatRow(item, index, current, size) {
-      const seq = (current - 1) * size + index + 1;
       const idPart = item.id != null ? String(item.id) : `noid-${index}`;
       const base = {
         ...item,
         _rowKey: `${idPart}-p${current}-i${index}`,
-        _seq: String(seq).padStart(2, "0"),
         programName: item.programName != null ? item.programName : "--",
         ticketCode:
           item.ticketCode != null && item.ticketCode !== ""
@@ -594,14 +574,8 @@ export default {
         .then((res) => {
           if (res.data.success) {
             const payload = res.data.data || {};
-            const list = this.extractPageList(payload);
-            const total =
-              payload.total !== undefined && payload.total !== null
-                ? payload.total
-                : payload.totalElements != null
-                ? payload.totalElements
-                : 0;
-            this.paginationTotal = total;
+            const list = extractPageList(payload);
+            this.paginationTotal = totalFromPagePayload(payload);
             this.tableData = list.map((item, index) =>
               this.formatRow(item, index, cur, sz)
             );
@@ -616,15 +590,6 @@ export default {
         .finally(() => {
           this.listLoading = false;
         });
-    },
-    handleCurrentChange(page) {
-      this.pagination.current = page;
-      this.getList();
-    },
-    handleSizeChange(size) {
-      this.pagination.size = size;
-      this.pagination.current = 1;
-      this.getList();
     },
     playTab(type, row) {
       if (type === "edit") {
@@ -684,9 +649,7 @@ export default {
               ? String(d.ticketCode)
               : "",
           checkinId:
-            lookupRaw != null && lookupRaw !== ""
-              ? Number(lookupRaw)
-              : null,
+            lookupRaw != null && lookupRaw !== "" ? Number(lookupRaw) : null,
           name: d.name || "",
           phone: d.phone != null ? String(d.phone) : "",
           email: d.email || "",

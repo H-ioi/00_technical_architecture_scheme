@@ -8,6 +8,35 @@ import { routes } from './routes'
 /** 免登录路径 */
 const pub = ['/login']
 
+function shouldForceLoginOnMenuFetchFailure(error: unknown): boolean {
+  if (typeof error !== 'object' || error === null) {
+    return false
+  }
+  const ax = error as { response?: { status?: number; data?: unknown }; message?: string }
+  if (typeof ax.response?.status === 'number' && ax.response.status === 401) {
+    return true
+  }
+  const msg = typeof ax.message === 'string' ? ax.message : ''
+  if (/invalid\s*token|token\s*invalid|登录已过期|未登录|unauthorized/i.test(msg)) {
+    return true
+  }
+  const data = ax.response?.data
+  if (data && typeof data === 'object' && !Array.isArray(data)) {
+    const d = data as Record<string, unknown>
+    const bodyMsg =
+      (typeof d.msg === 'string' ? d.msg : '') || (typeof d.message === 'string' ? d.message : '')
+    if (/invalid\s*token|token\s*invalid/i.test(bodyMsg)) {
+      return true
+    }
+    const code = d.code
+    const c = typeof code === 'number' ? code : typeof code === 'string' ? Number(code) : NaN
+    if (c === 401) {
+      return true
+    }
+  }
+  return false
+}
+
 export const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes,
@@ -49,15 +78,7 @@ router.beforeEach(async (to) => {
     } catch (error: unknown) {
       routeAccessStore.markAccessHydrated()
 
-      const status =
-        typeof error === 'object' &&
-        error !== null &&
-        'response' in error &&
-        typeof (error as { response?: { status?: unknown } }).response?.status === 'number'
-          ? (error as { response: { status: number } }).response.status
-          : undefined
-
-      if (status === 401) {
+      if (shouldForceLoginOnMenuFetchFailure(error)) {
         userStore.resetAuth()
 
         return {

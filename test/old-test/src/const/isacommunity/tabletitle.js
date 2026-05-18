@@ -2262,11 +2262,11 @@ export default {
   /** 活动详情-获奖名单（抽奖类） — 仅 minWidth */
   activityPrizeAwardLotteryTable: [
     {
-      label: "序号",
-      prop: "_seq",
+      label: "ID",
+      prop: "id",
       hasEn: true,
       hasColor: false,
-      minWidth: "56px",
+      minWidth: "72px",
     },
     {
       label: "项目名",
@@ -2307,11 +2307,11 @@ export default {
   /** 活动详情-获奖名单（投票类） — 仅 minWidth */
   activityPrizeAwardVoteTable: [
     {
-      label: "序号",
-      prop: "_seq",
+      label: "ID",
+      prop: "id",
       hasEn: true,
       hasColor: false,
-      minWidth: "56px",
+      minWidth: "72px",
     },
     {
       label: "参赛节目",
@@ -2359,11 +2359,11 @@ export default {
   /** 活动详情-获奖名单（比赛类） — 仅 minWidth */
   activityPrizeAwardCompetitionTable: [
     {
-      label: "序号",
-      prop: "_seq",
+      label: "ID",
+      prop: "id",
       hasEn: true,
       hasColor: false,
-      minWidth: "56px",
+      minWidth: "72px",
     },
     {
       label: "项目名",

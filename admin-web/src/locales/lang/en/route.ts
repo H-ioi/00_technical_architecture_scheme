@@ -42,8 +42,12 @@ export default {
   emailSend: 'Sender mailboxes',
   emailOutbox: 'Outbox',
   activity: 'Activities',
+  activityEventList: 'Activities',
+  activityEventDetail: 'Activity detail',
   activityQuestionnaire: 'Questionnaires',
   activityQuestionnaireDetail: 'Questionnaire detail',
   activityQuestionnaireDesign: 'Designer',
-  activityQuestionnaireSubmissions: 'Submissions'
+  activityQuestionnaireSubmissions: 'Submissions',
+  activityProgram: 'Activity programs',
+  activityProgramDetail: 'Program detail'
 }

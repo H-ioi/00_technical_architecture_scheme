@@ -283,7 +283,7 @@
               <Table
                 ref="Table"
                 :showSelection="false"
-                :tableTitle="tabletitle['voteProgramTable']"
+                :tableTitle="voteProgramTableTitle"
                 :tableData="voteList"
                 :tableBtn="voteBtn"
                 @playTab="playVoteTab"
@@ -501,6 +501,11 @@ export default {
         return true;
       }
       return false;
+    },
+    /** 详情页已展示所属活动项目，表格不再重复「项目名称」列 */
+    voteProgramTableTitle() {
+      const cols = this.tabletitle.voteProgramTable || [];
+      return cols.filter((col) => col.prop !== "programName");
     },
     programEditRestriction() {
       const a = String(this.activityActivityStatus || "");

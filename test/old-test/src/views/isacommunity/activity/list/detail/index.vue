@@ -31,6 +31,7 @@
               v-if="isViewMode"
               ref="activityInfo"
               :activity-id="activityId"
+              :detail-row="activityDetailRow"
             />
             <Form
               v-else
@@ -160,9 +161,6 @@
 <script>
 import { getActivityDetail } from "@/api/isacommunity/activity.js";
 import { ACTIVITY_PATHS } from "@/const/isacommunity/activityRoutes.js";
-import consts from "@/const/isacommunity/consts.js";
-import tabletitle from "@/const/isacommunity/tabletitle.js";
-import { mapGetters } from "vuex";
 import Form from "../modal/form.vue";
 import ActivityDetail from "./tabs/activitydetail.vue";
 import BlessingList from "./tabs/blessinglist.vue";
@@ -173,6 +171,18 @@ import QuestionnaireContent from "./tabs/questionnairecontent.vue";
 import RegistrationList from "./tabs/registrationlist.vue";
 import VoteInfoList from "./tabs/voteinfolist.vue";
 import WinnerList from "./tabs/winnerlist.vue";
+
+/** 非「活动基本信息」Tab：ref 字段名与要调用的实例方法 */
+const TAB_REF_LOADERS = {
+  activityProgram: { ref: "activityProgram", method: "getDetail" },
+  activityRegistrationCount: { ref: "registrationList", method: "getList" },
+  activityCheckinCount: { ref: "checkinList", method: "getList" },
+  activityWinnerList: { ref: "winnerList", method: "getList" },
+  activityVoteInfo: { ref: "voteInfoList", method: "getList" },
+  activityBlessing: { ref: "blessingList", method: "getList" },
+  activityFeedback: { ref: "feedbackList", method: "getList" },
+  activityQuestionnaire: { ref: "questionnaireContent", method: "load" },
+};
 
 export default {
   name: "ActivityListDetail",
@@ -190,17 +200,19 @@ export default {
   },
   data() {
     return {
-      consts: consts,
-      tabletitle: tabletitle,
       activityId: "",
-      /** 与 consts.activityStatus 一致：0待发布 1已发布 2已开始 3已结束 */
+      /** 后端活动状态：0待发布 1已发布 2已开始 3已结束 */
       activityStatus: "",
+      /** 查看态基本信息 Tab：接口层详情，由 loadActivityDetail 写入，交给子组件展示 */
+      activityDetailRow: null,
       activeName: "activityInfo",
       scrollHeight: "",
+      /** 同 activityId 并发 loadActivityDetail 时复用同一 Promise，避免 repeat-request 互挤 */
+      _detailFetchPromise: null,
+      _detailFetchRequestId: null,
     };
   },
   computed: {
-    ...mapGetters(["permissions", "i18nlocel", "dictionary"]),
     isViewMode() {
       return this.$route.query.mode !== "edit";
     },
@@ -254,12 +266,15 @@ export default {
   watch: {
     "$route.query.id"() {
       this.syncActivityId();
-      this.loadActivityStatus().then(() => {
-        this.bootstrapActiveTab();
+      this.loadActivityDetail().then(() => {
+        this.bootstrapAfterDetailLoaded();
       });
     },
     "$route.query.mode"() {
-      this.bootstrapActiveTab();
+      this.syncActivityId();
+      this.loadActivityDetail().then(() => {
+        this.bootstrapAfterDetailLoaded();
+      });
     },
   },
   created() {
@@ -268,10 +283,8 @@ export default {
   mounted() {
     this.updateContentHeight();
     window.addEventListener("resize", this.updateContentHeight);
-    this.loadActivityStatus().then(() => {
-      this.$nextTick(() => {
-        this.bootstrapActiveTab();
-      });
+    this.loadActivityDetail().then(() => {
+      this.bootstrapAfterDetailLoaded();
     });
   },
   beforeDestroy() {
@@ -289,22 +302,51 @@ export default {
     goBack() {
       this.$router.push({ path: ACTIVITY_PATHS.list });
     },
-    loadActivityStatus() {
+    /** 拉活动详情：更新 activityStatus、activityDetailRow；同 id 在途请求合并为一次 */
+    loadActivityDetail() {
       if (!this.activityId) {
         this.activityStatus = "";
+        this.activityDetailRow = null;
+        this._detailFetchPromise = null;
+        this._detailFetchRequestId = null;
         this.redirectIfEndedEdit();
         return Promise.resolve();
       }
-      return getActivityDetail(this.activityId)
+      const requestId = this.activityId;
+      if (
+        this._detailFetchPromise &&
+        this._detailFetchRequestId === requestId
+      ) {
+        return this._detailFetchPromise;
+      }
+      this._detailFetchRequestId = requestId;
+      this._detailFetchPromise = getActivityDetail(requestId)
         .then((res) => {
+          if (this.activityId !== requestId) {
+            return null;
+          }
           if (res.data.success && res.data.data) {
             const raw = res.data.data.activityStatus;
             this.activityStatus =
               raw !== undefined && raw !== null ? String(raw) : "";
+            this.activityDetailRow = res.data.data;
+          } else {
+            this.activityDetailRow = null;
           }
           this.$nextTick(() => this.redirectIfEndedEdit());
         })
-        .catch(() => Promise.resolve());
+        .catch(() => {
+          if (this.activityId === requestId) {
+            this.activityDetailRow = null;
+          }
+        })
+        .finally(() => {
+          if (this._detailFetchRequestId === requestId) {
+            this._detailFetchPromise = null;
+            this._detailFetchRequestId = null;
+          }
+        });
+      return this._detailFetchPromise;
     },
     /** 已结束活动禁止停留在编辑 URL */
     redirectIfEndedEdit() {
@@ -336,27 +378,40 @@ export default {
         this.$refs.activityForm.submitForm("ruleForm");
       }
     },
-    onFormSaved(newId) {
-      const id =
-        newId !== undefined && newId !== null && newId !== ""
-          ? String(
-              typeof newId === "object" && newId !== null && "id" in newId
-                ? newId.id
-                : newId
-            )
-          : this.activityId;
-      this.$router.replace({
-        path: this.$route.path,
-        query: { ...this.$route.query, ...(id ? { id } : {}), mode: "view" },
-      });
-      this.$nextTick(() => {
-        this.syncActivityId();
-        this.loadActivityStatus();
-        // this.refreshActivityInfo();
+    /** 保存后切到查看态：必须在路由导航完成后再 sync + 拉详情，避免 $nextTick 早于 query 更新导致子组件拿不到 activityDetailRow */
+    refreshDetailAfterSavedNavigation() {
+      this.syncActivityId();
+      return this.loadActivityDetail().then(() => {
+        this.bootstrapAfterDetailLoaded();
       });
     },
+    onFormSaved(newId) {
+      const parsed = this.normalizeSavedActivityId(newId);
+      const id = parsed || this.activityId;
+      const nextQuery = {
+        ...this.$route.query,
+        ...(id ? { id: String(id) } : {}),
+        mode: "view",
+      };
+      const run = () => this.refreshDetailAfterSavedNavigation();
+      this.$router.replace(
+        { path: this.$route.path, query: nextQuery },
+        run,
+        run
+      );
+    },
+    /** 表单 @saved 可能传 id 字符串或 { id } */
+    normalizeSavedActivityId(raw) {
+      if (raw === undefined || raw === null || raw === "") {
+        return "";
+      }
+      if (typeof raw === "object" && raw !== null && "id" in raw) {
+        return String(raw.id);
+      }
+      return String(raw);
+    },
     // refreshActivityInfo() {
-    //   this.loadActivityStatus().then(() => {
+    //   this.loadActivityDetail().then(() => {
     //     if (this.$refs.activityInfo) {
     //       this.$refs.activityInfo.getDetail();
     //     }
@@ -364,123 +419,54 @@ export default {
     // },
     bootstrapActiveTab() {
       this.syncActivityId();
+      this.refreshActiveTabContent();
+    },
+    /**
+     * loadActivityDetail 已写入 activityDetailRow 后：查看+基本信息 tab 不必再 refresh（避免重复 GET）；
+     * 编辑态或其它 tab 仍刷新。
+     */
+    bootstrapAfterDetailLoaded() {
+      this.syncActivityId();
       this.$nextTick(() => {
-        if (this.activeName === "activityInfo") {
-          if (!this.isViewMode && this.$refs.activityForm) {
-            if (this.activityId) {
-              this.$refs.activityForm.showForm("edit", {
-                id: this.activityId,
-              });
-            } else {
-              this.$refs.activityForm.showForm("add", {});
-            }
-          } else if (this.isViewMode && this.$refs.activityInfo) {
-            this.$refs.activityInfo.getDetail();
-          }
-        } else if (
-          this.activeName === "activityProgram" &&
-          this.$refs.activityProgram
-        ) {
-          this.$refs.activityProgram.getDetail();
-        } else if (
-          this.activeName === "activityRegistrationCount" &&
-          this.$refs.registrationList
-        ) {
-          this.$refs.registrationList.getList();
-        } else if (
-          this.activeName === "activityCheckinCount" &&
-          this.$refs.checkinList
-        ) {
-          this.$refs.checkinList.getList();
-        } else if (
-          this.activeName === "activityWinnerList" &&
-          this.$refs.winnerList
-        ) {
-          this.$refs.winnerList.getList();
-        } else if (
-          this.activeName === "activityVoteInfo" &&
-          this.$refs.voteInfoList
-        ) {
-          this.$refs.voteInfoList.getList();
-        } else if (
-          this.activeName === "activityBlessing" &&
-          this.$refs.blessingList
-        ) {
-          this.$refs.blessingList.getList();
-        } else if (
-          this.activeName === "activityFeedback" &&
-          this.$refs.feedbackList
-        ) {
-          this.$refs.feedbackList.getList();
-        } else if (
-          this.activeName === "activityQuestionnaire" &&
-          this.$refs.questionnaireContent
-        ) {
-          this.$refs.questionnaireContent.load();
+        if (!this.isViewMode) {
+          this.refreshActiveTabContent();
+          return;
         }
+        if (this.activeName === "activityInfo") {
+          return;
+        }
+        this.refreshActiveTabContent();
       });
     },
-    initData() {
-      this.bootstrapActiveTab();
+    /** 挂载 / 路由变化 / 切换 Tab 时按需拉取当前 Tab 数据 */
+    refreshActiveTabContent() {
+      this.$nextTick(() => {
+        if (this.activeName === "activityInfo") {
+          this.loadActivityInfoTab();
+          return;
+        }
+        const spec = TAB_REF_LOADERS[this.activeName];
+        if (!spec) return;
+        const vm = this.$refs[spec.ref];
+        const fn = vm && vm[spec.method];
+        if (typeof fn === "function") fn.call(vm);
+      });
+    },
+    loadActivityInfoTab() {
+      if (!this.isViewMode && this.$refs.activityForm) {
+        if (this.activityId) {
+          this.$refs.activityForm.showForm("edit", {
+            id: this.activityId,
+          });
+        } else {
+          this.$refs.activityForm.showForm("add", {});
+        }
+      } else if (this.isViewMode && this.activityId) {
+        this.loadActivityDetail();
+      }
     },
     handleClick() {
-      switch (this.activeName) {
-        case "activityInfo":
-          if (!this.isViewMode && this.$refs.activityForm) {
-            if (this.activityId) {
-              this.$refs.activityForm.showForm("edit", {
-                id: this.activityId,
-              });
-            } else {
-              this.$refs.activityForm.showForm("add", {});
-            }
-          } else if (this.isViewMode && this.$refs.activityInfo) {
-            this.$refs.activityInfo.getDetail();
-          }
-          break;
-        case "activityProgram":
-          if (this.$refs.activityProgram) {
-            this.$refs.activityProgram.getDetail();
-          }
-          break;
-        case "activityRegistrationCount":
-          if (this.$refs.registrationList) {
-            this.$refs.registrationList.getList();
-          }
-          break;
-        case "activityCheckinCount":
-          if (this.$refs.checkinList) {
-            this.$refs.checkinList.getList();
-          }
-          break;
-        case "activityWinnerList":
-          if (this.$refs.winnerList) {
-            this.$refs.winnerList.getList();
-          }
-          break;
-        case "activityVoteInfo":
-          if (this.$refs.voteInfoList) {
-            this.$refs.voteInfoList.getList();
-          }
-          break;
-        case "activityBlessing":
-          if (this.$refs.blessingList) {
-            this.$refs.blessingList.getList();
-          }
-          break;
-        case "activityFeedback":
-          if (this.$refs.feedbackList) {
-            this.$refs.feedbackList.getList();
-          }
-          break;
-        case "activityQuestionnaire":
-          if (this.$refs.questionnaireContent) {
-            this.$refs.questionnaireContent.load();
-          }
-          break;
-        default:
-          break;
-      }
+      this.refreshActiveTabContent();
     },
     updateContentHeight() {
       if (this.$refs.contentContainer) {

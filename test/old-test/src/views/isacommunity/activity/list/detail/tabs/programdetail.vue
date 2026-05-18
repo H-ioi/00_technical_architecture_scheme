@@ -158,11 +158,10 @@ import {
 } from "@/api/isacommunity/activityprogram.js";
 import { getVoteProgramListByprogram } from "@/api/isacommunity/voteprogram.js";
 import consts from "@/const/isacommunity/consts.js";
-import tabletitle from "@/const/isacommunity/tabletitle.js";
 import dayjs from "dayjs";
 import { mapGetters } from "vuex";
 export default {
-  name: "detail",
+  name: "ActivityProgramDetail",
   components: {},
   props: {
     activityId: String,
@@ -175,11 +174,6 @@ export default {
   data() {
     return {
       consts: consts,
-      tablestyle: consts["tablestyle"],
-      tabletitle: tabletitle,
-      showDialog: false,
-      detailData: {},
-      driverList: [],
       programlist: [],
       detailLoading: false,
       typeColor: {
@@ -189,12 +183,8 @@ export default {
       },
     };
   },
-  created() { },
-  mounted() {
-    // this.getDetail();
-  },
   computed: {
-    ...mapGetters(["i18nlocel", "dictionary", "permissions"]),
+    ...mapGetters(["i18nlocel"]),
     /** 结束态与父传入 readOnly（即 activityEnded）一致，仅用其控制按钮栏 */
     showProgramControlBar() {
       return !this.readOnly;
@@ -267,9 +257,6 @@ export default {
       } finally {
         this.detailLoading = false;
       }
-    },
-    setProgramType(e) {
-      return this.$getListLabel(consts["programStatus"], e);
     },
     setProgramRules(data) {
       let type = data["programType"];
@@ -369,10 +356,10 @@ export default {
       if (this.readOnly) {
         return;
       }
-      let fromDdata = new FormData();
-      fromDdata.append("id", Number(item["id"]));
-      fromDdata.append("startFlag", type);
-      editActivityProgramStatus(fromDdata).then(async (res) => {
+      let formData = new FormData();
+      formData.append("id", Number(item["id"]));
+      formData.append("startFlag", type);
+      editActivityProgramStatus(formData).then(async (res) => {
         if (res) {
           this.$message({
             message: !type

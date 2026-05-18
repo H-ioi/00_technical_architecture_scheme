@@ -1,7 +1,8 @@
 ﻿import axios, {
-  type AxiosError,
+  AxiosError,
   type AxiosInstance,
   type AxiosRequestConfig,
+  type AxiosResponse,
   type InternalAxiosRequestConfig
 } from 'axios'
 import { ElMessage } from 'element-plus'
@@ -26,6 +27,36 @@ const DEFAULT_MESSAGES = {
   unauthorized: '登录已过期，请重新登录',
   forbidden: '没有权限访问该资源',
   networkError: '网络异常，请稍后重试'
+}
+
+/** 并发 401 时只处理一次，避免多次提示与重复跳转 */
+let handlingHttp401 = false
+
+/**
+ * 与 {@link shell.logoutRedirect} 一致：整页跳转登录（SPA 路由由浏览器重新加载）。
+ * 附带 redirect 供登录成功后回到当前页（路径与 admin-web router 约定对齐）。
+ */
+const assignToLoginAfterUnauthorized = (loginPath: string) => {
+  if (typeof window === 'undefined') {
+    return
+  }
+  const normalized = loginPath.startsWith('/') ? loginPath : `/${loginPath}`
+
+  try {
+    const pathOnly = window.location.pathname
+    if (pathOnly === normalized || pathOnly.endsWith(normalized)) {
+      window.location.assign(normalized)
+      return
+    }
+
+    const current =
+      `${pathOnly}${window.location.search}${window.location.hash}`.replace(/[#?]$/, '') || '/'
+    const url = new URL(normalized, window.location.origin)
+    url.searchParams.set('redirect', current)
+    window.location.assign(url.pathname + url.search + url.hash)
+  } catch {
+    window.location.assign(normalized)
+  }
 }
 
 const isFilled = (value: unknown) => value !== undefined && value !== null && value !== ''
@@ -148,16 +179,29 @@ export const createUniRequest = (options: UniRequestOptions = {}): AxiosInstance
 
       return options.onRequest ? options.onRequest(config) : config
     },
-    (error) => {
+    (error: unknown) => {
       options.progress?.done()
       return Promise.reject(error)
     }
   )
 
   instance.interceptors.response.use(
-    async (response) => {
+    async (response: AxiosResponse) => {
       clearPending(response.config as UniInternalRequestConfig)
       options.progress?.done()
+
+      /** 网关偶发仍进 2xx 的协商、或 validateStatus 放宽时，统一走错误链以触发 401 处理 */
+      if (response.status === 401) {
+        return Promise.reject(
+          new AxiosError(
+            'Request failed with status code 401',
+            AxiosError.ERR_BAD_REQUEST,
+            response.config,
+            response.request,
+            response
+          )
+        )
+      }
 
       const next = {
         ...response,
@@ -203,12 +247,26 @@ const coerceBusinessCode = (value: unknown): number | undefined => {
   return undefined
 }
 
+/** 业务壳表示登录态失效（HTTP 可能仍为 200，解包抛错后路由读不到 response.status） */
+const isAuthBusinessFailure = (result: Record<string, unknown>, message: string): boolean => {
+  const c = coerceBusinessCode(result.code)
+  if (c === 401) {
+    return true
+  }
+  const rawMsg = `${message} ${typeof result.msg === 'string' ? result.msg : ''} ${typeof result.message === 'string' ? result.message : ''}`
+  const m = rawMsg.toLowerCase()
+  return /invalid\s*token|token\s*invalid|token\s*expired|expired\s*token|登录已过期|未登录|请先登录|unauthorized|认证失败|鉴权失败/.test(
+    m
+  )
+}
+
 const createApiEnvelopeParser = (
   unwrap: boolean | undefined,
   successCode: number | undefined,
   successCodes: number[] | undefined,
   userParse: UniRequestOptions['parseResponseData'],
-  messages: typeof DEFAULT_MESSAGES
+  messages: typeof DEFAULT_MESSAGES,
+  onEnvelopeAuthFailure?: () => void
 ) => {
   if (userParse || !unwrap) {
     return userParse
@@ -235,6 +293,11 @@ const createApiEnvelopeParser = (
         (typeof result.message === 'string' ? result.message : undefined) ??
         (typeof result.msg === 'string' ? result.msg : undefined) ??
         messages.badResponse
+
+      if (onEnvelopeAuthFailure && isAuthBusinessFailure(result, message)) {
+        onEnvelopeAuthFailure()
+        throw new Error(message)
+      }
 
       ElMessage.error(message)
       throw new Error(message)
@@ -264,6 +327,18 @@ export const initUniHttpClient = () => {
     ...requestOptions
   } = runtime.request
 
+  const triggerUnauthorized = () => {
+    if (handlingHttp401) {
+      return
+    }
+    handlingHttp401 = true
+    useUserStore().resetAuth()
+    ElMessage.error(messages.unauthorized)
+    const loginPath = getUniConfig().shell?.logoutRedirect ?? '/login'
+    assignToLoginAfterUnauthorized(loginPath)
+    requestOptions.onUnauthorized?.()
+  }
+
   defaultClient = createUniRequest({
     ...requestOptions,
     parseResponseData: createApiEnvelopeParser(
@@ -271,7 +346,8 @@ export const initUniHttpClient = () => {
       apiSuccessCode,
       apiSuccessCodes,
       parseResponseData,
-      messages
+      messages,
+      triggerUnauthorized
     ),
     onRequest: async (config) => {
       const next = onRequest ? await onRequest(config) : config
@@ -294,16 +370,17 @@ export const initUniHttpClient = () => {
 
       return next
     },
-    onUnauthorized: () => {
-      useUserStore().resetAuth()
-      ElMessage.error(messages.unauthorized)
-      requestOptions.onUnauthorized?.()
-    },
+    onUnauthorized: triggerUnauthorized,
     onForbidden: () => {
       ElMessage.error(messages.forbidden)
       requestOptions.onForbidden?.()
     },
     onError: (error) => {
+      const status = (error as AxiosError).response?.status
+      if (status === 401 || status === 403) {
+        requestOptions.onError?.(error)
+        return
+      }
       ElMessage.error(error.message || messages.networkError)
       requestOptions.onError?.(error)
     }

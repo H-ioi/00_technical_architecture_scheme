@@ -21,7 +21,7 @@ function pickQuestionnaireId(data) {
   if (!data || typeof data !== "object") {
     return null;
   }
-  var candidates = [
+  const candidates = [
     data.questionnaireId,
     data.questionnaire_id,
     data.activityQuestionnaireId,
@@ -33,8 +33,8 @@ function pickQuestionnaireId(data) {
   ) {
     candidates.push(data.activityQuestionnaire.id);
   }
-  for (var i = 0; i < candidates.length; i++) {
-    var v = candidates[i];
+  for (let i = 0; i < candidates.length; i += 1) {
+    const v = candidates[i];
     if (v !== undefined && v !== null && v !== "") {
       return String(v);
     }
