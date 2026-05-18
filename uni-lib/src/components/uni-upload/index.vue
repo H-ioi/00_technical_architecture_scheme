@@ -157,4 +157,4 @@ const handleProgress: UploadProps['onProgress'] = (event, file, files) =>
 const handleChange: UploadProps['onChange'] = (file, files) => emit('change', file, files)
 </script>
 
-<style scoped lang="scss"></style>
+<style lang="scss"></style>

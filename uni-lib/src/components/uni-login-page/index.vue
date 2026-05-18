@@ -114,7 +114,7 @@ const loginWithCaptcha = async (captchaVerification: string) => {
 }
 </script>
 
-<style scoped lang="scss">
+<style lang="scss">
 .uni-login-page {
   position: relative;
   display: grid;

@@ -57,4 +57,4 @@ const resolveIcon = (icon: string | undefined, iconMap: UniLayoutIconMap) =>
   icon ? (iconMap[icon] ?? uniIconMap[icon]) : undefined
 </script>
 
-<style scoped lang="scss"></style>
+<style lang="scss"></style>

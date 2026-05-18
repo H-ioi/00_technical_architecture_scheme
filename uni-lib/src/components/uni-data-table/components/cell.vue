@@ -184,7 +184,7 @@ const switchModel = computed({
 }) as WritableComputedRef<unknown>
 </script>
 
-<style scoped lang="scss">
+<style lang="scss">
 .uni-table-cell {
   display: inline-flex;
   flex-wrap: wrap;
@@ -224,7 +224,7 @@ const switchModel = computed({
 
   &.is-overflow-tooltip &__text,
   &.is-overflow-tooltip &__ellipsis,
-  &.is-overflow-tooltip :deep(.el-link) {
+  &.is-overflow-tooltip .el-link {
     min-width: 0;
     overflow: hidden;
     text-overflow: ellipsis;

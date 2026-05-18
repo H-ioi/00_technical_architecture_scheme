@@ -45,7 +45,7 @@ const emit = defineEmits<{
 }>()
 </script>
 
-<style scoped lang="scss">
+<style lang="scss">
 .uni-table-column-settings {
   max-height: 280px;
   overflow-y: auto;
@@ -71,13 +71,13 @@ const emit = defineEmits<{
     cursor: move;
   }
 
-  &__item :deep(.el-checkbox) {
+  &__item .el-checkbox {
     flex: 1;
     min-width: 0;
     height: 24px;
   }
 
-  &__item :deep(.el-checkbox__label) {
+  &__item .el-checkbox__label {
     overflow: hidden;
     font-size: 12px;
     line-height: 24px;
@@ -85,7 +85,7 @@ const emit = defineEmits<{
     white-space: nowrap;
   }
 
-  &__item :deep(.el-select__wrapper) {
+  &__item .el-select__wrapper {
     min-height: 24px;
     padding: 0 6px;
   }

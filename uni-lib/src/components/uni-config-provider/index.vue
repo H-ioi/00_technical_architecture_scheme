@@ -40,4 +40,4 @@ const { locale } = useI18n({ useScope: 'global' })
 const epLocale = computed(() => resolveElementPlusLocale(locale.value))
 </script>
 
-<style scoped lang="scss"></style>
+<style lang="scss"></style>

@@ -513,7 +513,7 @@ const onUserCommand = (command: string) => {
 }
 </script>
 
-<style scoped lang="scss">
+<style lang="scss">
 .uni-layout {
   width: 100%;
   height: 100vh;

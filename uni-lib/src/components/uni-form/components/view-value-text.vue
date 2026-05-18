@@ -82,7 +82,7 @@ onUnmounted(() => {
 })
 </script>
 
-<style scoped lang="scss">
+<style lang="scss">
 .uni-form-view-value-text {
   color: var(--uni-text-color);
   display: inline-block;

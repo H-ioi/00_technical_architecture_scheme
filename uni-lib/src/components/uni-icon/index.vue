@@ -36,7 +36,7 @@ const iconStyle = computed(() => ({
 }))
 </script>
 
-<style scoped lang="scss">
+<style lang="scss">
 .uni-icon {
   display: inline-flex;
   flex: none;
@@ -45,7 +45,7 @@ const iconStyle = computed(() => ({
   line-height: 1;
   vertical-align: -0.125em;
 
-  :deep(svg) {
+  svg {
     display: block;
     width: 100%;
     height: 100%;

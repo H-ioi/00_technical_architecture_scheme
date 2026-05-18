@@ -241,10 +241,10 @@ watch(visible, (nextVisible) => {
 })
 </script>
 
-<style scoped lang="scss">
+<style lang="scss">
 .uni-theme-settings {
   /** 避免 gutter 负 margin、输入框最小宽度导致抽屉内横向溢出 */
-  :deep(.el-drawer__body) {
+  .el-drawer__body {
     box-sizing: border-box;
     min-width: 0;
     overflow-x: hidden;
@@ -259,24 +259,24 @@ watch(visible, (nextVisible) => {
     overflow-y: auto;
   }
 
-  :deep(.el-row) {
+  .el-row {
     margin-bottom: 0;
     max-width: 100%;
   }
 
-  :deep(.el-col) {
+  .el-col {
     min-width: 0;
   }
 
-  :deep(.el-col .el-form-item) {
+  .el-col .el-form-item {
     margin-bottom: 12px;
   }
 
-  :deep(.el-form-item) {
+  .el-form-item {
     margin-bottom: 14px;
   }
 
-  :deep(.el-form-item__content) {
+  .el-form-item__content {
     min-width: 0;
   }
 
@@ -306,12 +306,12 @@ watch(visible, (nextVisible) => {
     max-width: 100%;
     margin-bottom: 8px;
 
-    :deep(.el-input) {
+    .el-input {
       width: 100%;
       min-width: 0;
     }
 
-    :deep(.el-button) {
+    .el-button {
       flex-shrink: 0;
     }
   }

@@ -307,7 +307,7 @@ const onToolbarRefresh = () => {
 }
 </script>
 
-<style scoped lang="scss">
+<style lang="scss">
 .uni-layout-tags {
   display: flex;
   gap: 0;
@@ -340,7 +340,7 @@ const onToolbarRefresh = () => {
     cursor: pointer;
     user-select: none;
 
-    :deep(.el-tag__close) {
+    .el-tag__close {
       width: 0;
       margin-left: 0;
       overflow: hidden;
@@ -351,8 +351,8 @@ const onToolbarRefresh = () => {
         opacity 0.2s ease;
     }
 
-    &:hover :deep(.el-tag__close),
-    &.is-active :deep(.el-tag__close) {
+    &:hover .el-tag__close,
+    &.is-active .el-tag__close {
       width: 14px;
       margin-left: 6px;
       opacity: 1;
@@ -369,7 +369,7 @@ const onToolbarRefresh = () => {
     padding-left: 8px;
     margin-left: 8px;
 
-    :deep(.el-button) {
+    .el-button {
       width: 30px;
       height: 30px;
       margin-left: 0;

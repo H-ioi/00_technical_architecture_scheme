@@ -219,7 +219,7 @@ watch(visible, async (isOpen) => {
 })
 </script>
 
-<style scoped lang="scss">
+<style lang="scss">
 .security-verify {
   &__header {
     display: flex;

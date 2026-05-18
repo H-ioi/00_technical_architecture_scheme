@@ -389,9 +389,9 @@ defineExpose({
 })
 </script>
 
-<style scoped lang="scss">
+<style lang="scss">
 .uni-form {
-  :deep(.el-form-item__content) {
+  .el-form-item__content {
     min-width: 0;
   }
 

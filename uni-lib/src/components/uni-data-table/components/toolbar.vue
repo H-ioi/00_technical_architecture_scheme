@@ -77,7 +77,7 @@ const emit = defineEmits<{
 }>()
 </script>
 
-<style scoped lang="scss">
+<style lang="scss">
 .uni-table-toolbar {
   &__panel {
     display: flex;

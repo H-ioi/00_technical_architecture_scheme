@@ -533,7 +533,7 @@ watch(
 )
 </script>
 
-<style scoped lang="scss">
+<style lang="scss">
 .uni-data-table {
   min-width: 0;
   width: 100%;
@@ -549,15 +549,12 @@ watch(
     background: var(--el-bg-color);
   }
 
-  &.is-fullscreen :deep(.el-table) {
+  &.is-fullscreen .el-table {
     flex: 1;
   }
 
-  :deep(.el-table) {
+  .el-table {
     width: 100%;
-  }
-
-  :deep(.el-table) {
     --el-table-border-color: #edf0f5;
     --el-table-header-bg-color: #fafbfc;
     --el-table-row-hover-bg-color: #f7f9ff;
@@ -567,14 +564,14 @@ watch(
     font-size: 13px;
   }
 
-  :deep(.el-table th.el-table__cell) {
+  .el-table th.el-table__cell {
     height: 44px;
     color: var(--app-text-color-secondary);
     font-weight: 600;
     background: #fafbfc;
   }
 
-  :deep(.el-table .el-table__cell) {
+  .el-table .el-table__cell {
     padding: 9px 0;
   }
 
@@ -584,7 +581,7 @@ watch(
      插槽根节点若用 display:contents 则 UniTableCell 无法成为独立 flex 子项，
      width:100%/ellipsis 百分比参照错误 → 正文区宽度塌缩为 「…」（tooltip 仍能读到全文）。
     */
-    :deep(.el-table__body-wrapper .el-table__body tr td.el-table__cell > .cell) {
+    .el-table__body-wrapper .el-table__body tr td.el-table__cell > .cell {
       display: inline-flex;
       align-items: center;
       gap: 0;
@@ -605,11 +602,11 @@ watch(
     display: contents;
   }
 
-  :deep(.el-table__inner-wrapper::before) {
+  .el-table__inner-wrapper::before {
     height: 0;
   }
 
-  :deep(.uni-data-table__pagination) {
+  .uni-data-table__pagination {
     margin-top: 0;
   }
 

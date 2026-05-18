@@ -208,7 +208,7 @@ watch(
 )
 </script>
 
-<style scoped lang="scss">
+<style lang="scss">
 .uni-search-form {
   &__body {
     display: flex;
@@ -268,7 +268,7 @@ watch(
     margin-top: 12px;
   }
 
-  :deep(.el-form-item) {
+  .el-form-item {
     margin-bottom: 8px;
   }
 }
