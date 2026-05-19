@@ -20,7 +20,11 @@
           v-for="field in section.fields"
           :key="field.field"
           v-bind="field.colProps ?? section.colProps ?? config.colProps">
-          <el-form-item :label="field.label" :prop="field.field" v-bind="field.formItemProps">
+          <el-form-item
+            :label="field.label"
+            :prop="field.field"
+            v-bind="field.formItemProps"
+            :rules="field.rules">
             <slot
               v-if="$slots[`field-${field.field}`]"
               :name="`field-${field.field}`"
@@ -267,7 +271,11 @@ const isFieldReadonly = (field: UniFormField) =>
 const getFieldOptions = (field: UniFormField) =>
   dynamicState[field.field]?.options ?? field.options ?? []
 
-const fields = computed(() => props.config.schema.filter(isFieldVisible))
+/** 读取 model 以追踪 hidden/visible 联动，否则仅改 schema 外字段时不会重算显隐 */
+const fields = computed(() => {
+  void model.value
+  return props.config.schema.filter(isFieldVisible)
+})
 const fieldMap = computed(() => new Map(fields.value.map((field) => [field.field, field])))
 const groupedSections = computed(() => {
   if (!props.config.sections?.length) {

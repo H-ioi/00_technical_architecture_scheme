@@ -38,6 +38,8 @@ export interface UniFormField {
   disabled?: boolean | ((context: UniFormContext) => boolean)
   readonly?: boolean | ((context: UniFormContext) => boolean)
   required?: boolean | ((context: UniFormContext) => boolean)
+  /** 表单项校验规则，传给 `el-form-item` 的 `rules` */
+  rules?: FormItemRule | FormItemRule[]
   onChange?: (context: UniFormContext) => void | Promise<void>
   onHidden?: (context: UniFormContext) => void
   viewRender?: (context: UniFormContext) => unknown

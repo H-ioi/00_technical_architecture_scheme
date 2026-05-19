@@ -222,6 +222,33 @@ export function useActivityDetailPage() {
     { label: t('activity.visibleScopeRestricted'), value: 1 }
   ])
 
+  const visibleScopeLabel = computed(() => {
+    const v = Number(form.visibleScope)
+    return visibleScopeOpts.value.find((item) => Number(item.value) === v)?.label ?? '—'
+  })
+
+  const isRestrictedVisibleScope = computed(() => Number(form.visibleScope) === 1)
+
+  const visibleScopeFileId = computed(() => {
+    const id = form.visibleScopeFile?.id
+    if (id == null || id === '') {
+      return ''
+    }
+    return id as string | number
+  })
+
+  const hasVisibleScopeFile = computed(() => visibleScopeFileId.value !== '')
+
+  const visibleScopeDrawerVisible = ref(false)
+
+  const openVisibleScopeDrawer = () => {
+    if (!hasVisibleScopeFile.value) {
+      ElMessage.warning(t('activity.visibleScopeNeedUpload'))
+      return
+    }
+    visibleScopeDrawerVisible.value = true
+  }
+
   const showActivityStatus = computed(() => !isCreate.value)
 
   const formConfig = computed(() =>
@@ -470,6 +497,19 @@ export function useActivityDetailPage() {
   }
 
   watch(
+    () => form.registrationUnlimited,
+    (unlimited) => {
+      if (unlimited) {
+        return
+      }
+      const n = Number(form.registrationLimit)
+      if (!Number.isFinite(n) || n < 1) {
+        form.registrationLimit = 1
+      }
+    }
+  )
+
+  watch(
     () => [...form.schoolIds],
     () => {
       void loadEmailOptions()
@@ -517,6 +557,12 @@ export function useActivityDetailPage() {
     onCoverBeforeUpload,
     downloadVisibleTpl,
     onVisibleScopeFile,
-    loadDetail
+    loadDetail,
+    visibleScopeLabel,
+    isRestrictedVisibleScope,
+    visibleScopeFileId,
+    hasVisibleScopeFile,
+    visibleScopeDrawerVisible,
+    openVisibleScopeDrawer
   }
 }

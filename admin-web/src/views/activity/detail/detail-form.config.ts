@@ -7,7 +7,10 @@ const optionLabel = (options: UniOption[], value: unknown) =>
 
 const optionLabels = (options: UniOption[], value: unknown) => {
   const values = Array.isArray(value) ? value : value == null || value === '' ? [] : [value]
-  return values.map((item) => optionLabel(options, item)).filter(Boolean).join(', ')
+  return values
+    .map((item) => optionLabel(options, item))
+    .filter(Boolean)
+    .join(', ')
 }
 
 const rangeLabel = (value: unknown) =>
@@ -42,7 +45,7 @@ const ynSwitchField = (
   options: ynOptions,
   viewType: 'enum',
   componentProps: ynSwitchProps(t),
-  colProps: halfCol,
+  colProps: { span: 6 },
   formItemProps: { class: 'activity-detail-form__switch-slot' },
   rules: [{ required: true, message: t('activity.ruleSelect'), trigger: 'change' }],
   ...extra
@@ -70,43 +73,13 @@ export function buildActivityDetailFormConfig(
     showActivityStatus
   } = opts
 
-  const metaFields: NonNullable<UniFormConfig['schema']> = showActivityStatus
-    ? [
-        {
-          field: 'id',
-          label: t('activity.colId'),
-          component: 'ElInput',
-          componentProps: { disabled: true, style: { width: '100%' } },
-          colProps: thirdCol
-        },
-        {
-          field: 'activityStatus',
-          label: t('activity.colStatus'),
-          component: 'ElSelect',
-          options: statusOptions,
-          viewType: 'enum',
-          componentProps: { style: { width: '100%' } },
-          colProps: thirdCol,
-          rules: [{ required: true, message: t('activity.ruleSelect'), trigger: 'change' }]
-        },
-        {
-          field: 'publisher',
-          label: t('activity.colPublisher'),
-          component: 'ElInput',
-          componentProps: { disabled: true, style: { width: '100%' } },
-          colProps: thirdCol
-        }
-      ]
-    : []
-
   const schema: UniFormConfig['schema'] = [
-    ...metaFields,
     {
       field: 'activityCnName',
       label: t('activity.eventNameCn'),
       component: 'ElInput',
       componentProps: { maxlength: 100, clearable: true, style: { width: '100%' } },
-      colProps: halfCol,
+      colProps: { span: 8 },
       rules: [{ required: true, message: t('activity.ruleInput'), trigger: 'blur' }]
     },
     {
@@ -114,8 +87,18 @@ export function buildActivityDetailFormConfig(
       label: t('activity.eventNameEn'),
       component: 'ElInput',
       componentProps: { maxlength: 100, clearable: true, style: { width: '100%' } },
-      colProps: halfCol,
+      colProps: { span: 8 },
       rules: [{ required: true, message: t('activity.ruleInput'), trigger: 'blur' }]
+    },
+    {
+      field: 'activityStatus',
+      label: t('activity.colStatus'),
+      component: 'ElRadioGroup',
+      options: statusOptions,
+      viewType: 'enum',
+      componentProps: { disabled: true, style: { width: '100%' } },
+      colProps: { span: 8 },
+      rules: [{ required: true, message: t('activity.ruleSelect'), trigger: 'change' }]
     },
     {
       field: 'introCn',
@@ -128,7 +111,7 @@ export function buildActivityDetailFormConfig(
         showWordLimit: true,
         style: { width: '100%' }
       },
-      colProps: fullCol
+      colProps: { span: 12 }
     },
     {
       field: 'introEn',
@@ -141,7 +124,7 @@ export function buildActivityDetailFormConfig(
         showWordLimit: true,
         style: { width: '100%' }
       },
-      colProps: fullCol
+      colProps: { span: 12 }
     },
     {
       field: 'imageUrl',
@@ -208,7 +191,7 @@ export function buildActivityDetailFormConfig(
         style: { width: '100%' }
       },
       viewRender: (context) => rangeLabel(context.value),
-      colProps: fullCol,
+      colProps: { span: 8 },
       rules: [
         {
           type: 'array' as const,
@@ -229,7 +212,7 @@ export function buildActivityDetailFormConfig(
         style: { width: '100%' }
       },
       viewRender: (context) => rangeLabel(context.value),
-      colProps: fullCol,
+      colProps: { span: 8 },
       rules: [
         {
           type: 'array' as const,
@@ -253,7 +236,7 @@ export function buildActivityDetailFormConfig(
         placeholder: t('activity.ruleSelect'),
         style: { width: '100%' }
       },
-      colProps: fullCol,
+      colProps: { span: 8 },
       rules: [
         {
           type: 'array' as const,
@@ -270,41 +253,25 @@ export function buildActivityDetailFormConfig(
       component: 'ElRadioGroup',
       options: checkinOptions,
       viewType: 'enum',
-      colProps: fullCol,
+      colProps: { span: 8 },
       rules: [{ required: true, message: t('activity.ruleSelect'), trigger: 'change' }]
     },
     {
       field: 'ticketPrice',
       label: t('activity.colTicketPrice'),
       component: 'ElInputNumber',
-      componentProps: { min: 0, precision: 2, controlsPosition: 'right', style: { width: '100%' } },
-      colProps: halfCol
+      componentProps: { min: 0, precision: 2, controlsPosition: 'right' },
+      colProps: { span: 6 }
     },
     {
       field: 'registrationLimit',
       label: t('activity.registrationLimit'),
-      component: 'ElInputNumber',
-      viewRender: (context) =>
-        modelValue(context, 'registrationUnlimited') ? t('activity.regUnlimited') : context.value,
-      colProps: fullCol,
-      formItemProps: { class: 'activity-detail-form__reg-slot' }
+      colProps: { span: 10 }
     },
     {
       field: 'visibleScope',
       label: t('activity.visibleScope'),
-      component: 'ElRadioGroup',
-      options: visibleScopeOptions,
-      viewType: 'enum',
-      colProps: fullCol,
-      rules: [{ required: true, message: t('activity.ruleSelect'), trigger: 'change' }]
-    },
-    {
-      field: 'visibleScopeFileName',
-      label: t('activity.visibleScopeFile'),
-      component: 'ElInput',
-      hidden: (context) => Number(modelValue(context, 'visibleScope')) !== 1,
-      componentProps: { disabled: true, style: { width: '100%' } },
-      colProps: halfCol
+      colProps: { span: 24 }
     },
     ynSwitchField('recommended', t('activity.colRecommended'), t, ynOptions),
     ynSwitchField('banner', t('activity.colBanner'), t, ynOptions),
@@ -325,14 +292,7 @@ export function buildActivityDetailFormConfig(
         placeholder: t('activity.emailConfigsPh'),
         style: { width: '100%' }
       },
-      colProps: fullCol
-    },
-    {
-      field: 'ticketNotifyEmailsLabel',
-      label: t('activity.ticketNotifyEmails'),
-      component: 'ElInput',
-      componentProps: { disabled: true, style: { width: '100%' } },
-      colProps: fullCol
+      colProps: { span: 12 }
     },
     {
       field: 'wechatPushSchoolIds',
@@ -343,10 +303,9 @@ export function buildActivityDetailFormConfig(
       componentProps: {
         multiple: true,
         filterable: true,
-        collapseTags: true,
         style: { width: '100%' }
       },
-      colProps: fullCol
+      colProps: { span: 12 }
     },
     {
       field: 'wechatPushContent',
@@ -355,7 +314,7 @@ export function buildActivityDetailFormConfig(
       componentProps: {
         type: 'textarea',
         rows: 2,
-        maxlength: 20,
+        maxlength: 200,
         showWordLimit: true,
         style: { width: '100%' }
       },
@@ -393,10 +352,11 @@ export function buildActivityDetailFormConfig(
   const sections: UniFormSection[] = [
     {
       title: t('activity.detailSectionBase'),
+      // 展示顺序以 schema 声明为准；勿在 sections 里前置字段，否则会打乱栅格行内顺序
       fields: [
-        ...(showActivityStatus ? ['id', 'activityStatus', 'publisher'] : []),
         'activityCnName',
         'activityEnName',
+        ...(showActivityStatus ? ['activityStatus'] : []),
         'introCn',
         'introEn'
       ]
@@ -411,13 +371,7 @@ export function buildActivityDetailFormConfig(
     },
     {
       title: t('activity.detailSectionRegistration'),
-      fields: [
-        'checkinMethod',
-        'ticketPrice',
-        'registrationLimit',
-        'visibleScope',
-        'visibleScopeFileName'
-      ]
+      fields: ['checkinMethod', 'ticketPrice', 'registrationLimit', 'visibleScope']
     },
     {
       title: t('activity.detailSectionFlags'),

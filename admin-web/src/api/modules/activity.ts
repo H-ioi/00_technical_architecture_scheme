@@ -91,6 +91,11 @@ export default {
       })
     }
   },
+  visibleScopeListByFile: {
+    name: '按文件分页查询活动可见范围名单',
+    get: async (params: { fileId: string | number; current?: number; size?: number }) =>
+      await request.get(`${path}/visibleScopeList/listByFile`, { params })
+  },
   ticketPage: {
     name: '活动报名分页',
     get: async (params: Record<string, unknown>) =>

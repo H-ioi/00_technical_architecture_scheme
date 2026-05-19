@@ -170,6 +170,65 @@
                   class="activity-event-detail__reg-cap" />
               </div>
             </template>
+            <template #field-visibleScope>
+              <div class="activity-event-detail__scope">
+                <el-radio-group
+                  v-if="uniMode === 'edit'"
+                  v-model="form.visibleScope"
+                  class="activity-event-detail__scope-radios">
+                  <el-radio :label="0">{{ $t('activity.visibleScopePublic') }}</el-radio>
+                  <el-radio :label="1">{{ $t('activity.visibleScopeRestricted') }}</el-radio>
+                </el-radio-group>
+                <span v-else class="activity-event-detail__scope-view">{{
+                  visibleScopeLabel
+                }}</span>
+                <div v-if="isRestrictedVisibleScope" class="activity-event-detail__scope-panel">
+                  <p v-if="form.visibleScopeFileName" class="activity-event-detail__scope-file">
+                    {{ $t('activity.visibleScopeFile') }}：{{ form.visibleScopeFileName }}
+                  </p>
+                  <template v-if="uniMode === 'edit'">
+                    <div class="activity-event-detail__scope-actions">
+                      <el-button type="primary" plain @click="downloadVisibleTpl">
+                        {{ $t('activity.visibleScopeTpl') }}
+                      </el-button>
+                      <el-upload
+                        accept=".xlsx,.xls"
+                        :show-file-list="false"
+                        :disabled="!form.id"
+                        :before-upload="
+                          (raw) => {
+                            void onVisibleScopeFile(raw as File)
+                            return false
+                          }
+                        ">
+                        <el-button plain :disabled="!form.id">
+                          {{ $t('activity.visibleScopeUpload') }}
+                        </el-button>
+                      </el-upload>
+                      <el-button
+                        v-if="hasVisibleScopeFile"
+                        plain
+                        @click="openVisibleScopeDrawer">
+                        {{ $t('activity.visibleScopeView') }}
+                      </el-button>
+                    </div>
+                    <p v-if="!form.id" class="activity-event-detail__scope-tip">
+                      {{ $t('activity.visibleScopeNeedSave') }}
+                    </p>
+                    <p v-else class="activity-event-detail__scope-tip">
+                      {{ $t('activity.visibleScopeHint') }}
+                    </p>
+                  </template>
+                  <div
+                    v-else-if="hasVisibleScopeFile"
+                    class="activity-event-detail__scope-actions">
+                    <el-button plain @click="openVisibleScopeDrawer">
+                      {{ $t('activity.visibleScopeView') }}
+                    </el-button>
+                  </div>
+                </div>
+              </div>
+            </template>
             <template #field-detailCn>
               <UniEditor
                 v-if="uniMode === 'edit'"
@@ -197,32 +256,6 @@
               <span v-else class="activity-event-detail__html-empty">—</span>
             </template>
           </UniForm>
-
-          <el-card
-            v-if="Number(form.visibleScope) === 1 && detailId && canSubmit"
-            shadow="never"
-            class="activity-event-detail__scope-card">
-            <template #header>
-              <span>{{ $t('activity.visibleScopeBlock') }}</span>
-            </template>
-            <p class="activity-event-detail__scope-tip">{{ $t('activity.visibleScopeHint') }}</p>
-            <div class="activity-event-detail__scope-actions">
-              <el-button type="primary" plain @click="downloadVisibleTpl">
-                {{ $t('activity.visibleScopeTpl') }}
-              </el-button>
-              <el-upload
-                accept=".xlsx,.xls"
-                :show-file-list="false"
-                :before-upload="
-                  (raw) => {
-                    void onVisibleScopeFile(raw as File)
-                    return false
-                  }
-                ">
-                <el-button plain>{{ $t('activity.visibleScopeUpload') }}</el-button>
-              </el-upload>
-            </div>
-          </el-card>
         </div>
       </el-tab-pane>
       <el-tab-pane :label="$t('activity.programListTitle')" name="program">
@@ -300,6 +333,10 @@
         <el-empty :description="$t('activity.detailTabPending')" />
       </el-tab-pane>
     </el-tabs>
+
+    <VisibleScopeDrawer
+      v-model:visible="visibleScopeDrawerVisible"
+      :file-id="visibleScopeFileId" />
   </section>
 </template>
 
@@ -317,6 +354,7 @@ import QuestionnaireContent from './tabs/questionnaire-content.vue'
 import RegistrationTab from './tabs/registration.vue'
 import VoteInfoTab from './tabs/vote-info.vue'
 import WinnerTab from './tabs/winner.vue'
+import VisibleScopeDrawer from './components/visible-scope-drawer.vue'
 import { useActivityDetailPage } from './use-activity-detail-page'
 
 type DetailTabActions = {
@@ -345,11 +383,17 @@ const {
   onVisibleScopeFile,
   relatedEntries,
   downloadVisibleTpl,
+  isRestrictedVisibleScope,
+  visibleScopeFileId,
+  hasVisibleScopeFile,
+  visibleScopeDrawerVisible,
+  openVisibleScopeDrawer,
   pageTitle,
   saving,
   submit,
   uniFormRef,
-  uniMode
+  uniMode,
+  visibleScopeLabel
 } = useActivityDetailPage()
 
 const registrationTabRef = ref<DetailTabActions | null>(null)
@@ -460,12 +504,36 @@ const hasHeaderLeadingActions = computed(() => canSubmit.value || hasDetailTabHe
     color: var(--el-text-color-regular);
   }
 
-  &__scope-card {
-    margin-top: 8px;
+  &__scope {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+  }
+
+  &__scope-radios {
+    flex-wrap: wrap;
+  }
+
+  &__scope-view {
+    color: var(--el-text-color-regular);
+  }
+
+  &__scope-panel {
+    padding: 12px;
+    border-radius: var(--el-border-radius-base);
+    border: 1px solid var(--el-border-color-lighter);
+    background: var(--el-fill-color-light);
+  }
+
+  &__scope-file {
+    margin: 0 0 8px;
+    font-size: 13px;
+    color: var(--el-text-color-regular);
   }
 
   &__scope-tip {
-    margin: 0 0 12px;
+    margin: 8px 0 0;
     font-size: 13px;
     color: var(--el-text-color-secondary);
   }
