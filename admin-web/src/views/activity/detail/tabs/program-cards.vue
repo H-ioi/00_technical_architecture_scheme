@@ -1,179 +1,196 @@
 <template>
   <section v-loading="loading" class="activity-program-cards">
     <el-empty v-if="!loading && !cards.length" :description="$t('activity.detailTabNoData')" />
-    <div v-else class="activity-program-cards__grid">
-      <el-card
+    <el-row v-else :gutter="16" class="activity-program-cards__grid">
+      <el-col
         v-for="card in cards"
         :key="String(card.programInfo.id)"
-        shadow="never"
-        class="activity-program-cards__card">
-        <template #header>
-          <div class="activity-program-cards__head">
-            <div class="activity-program-cards__head-main">
-              <span class="activity-program-cards__title">{{
-                isEn
-                  ? String(card.programInfo.enName ?? card.programInfo.cnName ?? '')
-                  : String(card.programInfo.cnName ?? card.programInfo.enName ?? '')
-              }}</span>
-              <el-tag size="small" effect="plain" type="info">
-                {{ programTypeText(card.programInfo.programType) }}
-              </el-tag>
+        :xs="24"
+        :sm="12"
+        :md="8"
+        :lg="6">
+        <article class="activity-program-cards__card">
+          <header class="activity-program-cards__header">
+            <div class="activity-program-cards__header-text">
+              <h3 class="activity-program-cards__title">
+                {{ pickLocaleName(card.programInfo, locale) }}
+              </h3>
             </div>
-            <el-tag
-              size="small"
-              :type="
+            <span
+              v-if="
+                Number(card.programInfo.programType) === 1 &&
                 Number(card.programInfo.programStatus) === 1
-                  ? 'success'
-                  : Number(card.programInfo.programStatus) === 0
-                    ? 'warning'
-                    : 'info'
               "
-              effect="light">
-              {{ statusText(card.programInfo) }}
-            </el-tag>
-          </div>
-        </template>
+              class="activity-program-cards__round-badge">
+              {{
+                isEn
+                  ? `Round ${String(card.programInfo.currentRound ?? '').padStart(2, '0')}`
+                  : `?${String(card.programInfo.currentRound ?? '').padStart(2, '0')}?`
+              }}
+            </span>
+            <span
+              v-else-if="Number(card.programInfo.programType) !== 1"
+              class="activity-program-cards__status-badge">
+              {{
+                Number(card.programInfo.programStatus) === 0
+                  ? $t('activity.programStatusPending')
+                  : Number(card.programInfo.programStatus) === 1
+                    ? $t('activity.programStatusProgress')
+                    : Number(card.programInfo.programStatus) === 2
+                      ? $t('activity.programStatusEnded')
+                      : '-'
+              }}
+            </span>
+          </header>
 
-        <el-descriptions :column="2" size="small" border class="activity-program-cards__desc">
-          <el-descriptions-item label="ID">
-            {{ card.programInfo.id ?? '-' }}
-          </el-descriptions-item>
-          <el-descriptions-item
+          <div
             v-if="Number(card.programInfo.programType) === 1"
-            :label="$t('activity.colTotalRounds')">
-            {{ card.programInfo.totalRounds ?? '-' }}
-          </el-descriptions-item>
-          <el-descriptions-item
-            v-if="Number(card.programInfo.programType) === 1"
-            :label="$t('activity.colCurrentRound')">
-            {{ card.programInfo.currentRound ?? '-' }}
-          </el-descriptions-item>
-          <el-descriptions-item
-            v-if="Number(card.programInfo.programType) === 1"
-            :label="$t('activity.winnerQuota')">
-            {{ ruleObj(card.programInfo).prizeCount ?? '-' }}
-          </el-descriptions-item>
-          <el-descriptions-item
-            v-if="Number(card.programInfo.programType) === 1"
-            :label="$t('activity.prizeCount')">
-            {{ ruleObj(card.programInfo).prizeCount ?? '-' }}
-          </el-descriptions-item>
-          <el-descriptions-item
-            v-if="Number(card.programInfo.programType) === 2"
-            :label="$t('activity.winnerQuota')">
-            {{ ruleObj(card.programInfo).prizeCount ?? '-' }}
-          </el-descriptions-item>
-        </el-descriptions>
-
-        <div
-          v-if="programRuleTags(card.programInfo).length"
-          class="activity-program-cards__section">
-          <div class="activity-program-cards__section-title">{{ $t('activity.programRules') }}</div>
-          <div class="activity-program-cards__tags">
-            <el-tag
-              v-for="(tag, index) in programRuleTags(card.programInfo)"
-              :key="`${card.programInfo.id}-rule-${index}`"
-              size="small"
-              effect="plain">
-              {{ tag }}
-            </el-tag>
+            class="activity-program-cards__stats">
+            <div
+              v-for="item in lotteryStats(card.programInfo)"
+              :key="item.key"
+              :class="['activity-program-cards__stat', { 'is-active': item.active }]">
+              <span class="activity-program-cards__stat-label">{{ item.label }}</span>
+              <strong class="activity-program-cards__stat-value">{{ item.value }}</strong>
+            </div>
           </div>
-        </div>
 
-        <div
-          v-if="Number(card.programInfo.programType) === 2 && card.bindInfo.voteNames"
-          class="activity-program-cards__section">
-          <div class="activity-program-cards__section-title">
-            {{ $t('activity.voteProgramTitle') }}
-          </div>
-          <p class="activity-program-cards__text">{{ card.bindInfo.voteNames }}</p>
-        </div>
-
-        <div v-if="card.programInfo.backgroundImage" class="activity-program-cards__section">
-          <div class="activity-program-cards__section-title">
-            {{ $t('activity.programBackground') }}
-          </div>
-          <el-image
-            class="activity-program-cards__cover"
-            :src="String(card.programInfo.backgroundImage)"
-            fit="cover"
-            :preview-src-list="[String(card.programInfo.backgroundImage)]"
-            preview-teleported />
-        </div>
-
-        <div
-          v-if="Number(card.programInfo.programType) === 1 && card.bindInfo.prizeList?.length"
-          class="activity-program-cards__section activity-program-cards__prizes">
-          <div class="activity-program-cards__section-title">
-            {{ $t('activity.prizeListTitle') }}
-          </div>
-          <ul class="activity-program-cards__prize-list">
-            <li
-              v-for="(prize, index) in card.bindInfo.prizeList"
-              :key="`${card.programInfo.id}-prize-${index}`"
-              class="activity-program-cards__prize">
-              <el-image
-                v-if="prize.imageUrl"
-                class="activity-program-cards__prize-img"
-                :src="String(prize.imageUrl)"
-                fit="cover"
-                :preview-src-list="[String(prize.imageUrl)]"
-                preview-teleported />
-              <div v-else class="activity-program-cards__prize-placeholder">—</div>
-              <div class="activity-program-cards__prize-body">
-                <div class="activity-program-cards__prize-name">{{
-                  isEn
-                    ? String(prize.enName ?? prize.cnName ?? '-')
-                    : String(prize.cnName ?? prize.enName ?? '-')
-                }}</div>
-                <div class="activity-program-cards__prize-amount">{{ prize.amount != null && prize.amount !== '' ? `${prize.amount} RMB` : '-' }}</div>
-              </div>
-            </li>
-          </ul>
-        </div>
-
-        <div
-          v-if="!readOnly && Number(card.programInfo.programStatus) !== 2"
-          class="activity-program-cards__actions">
-          <el-button
-            v-if="!card.programInfo.currentRoundStatus"
-            v-uni-permission="'busdriver_edit'"
-            type="primary"
-            :loading="changingId === card.programInfo.id"
-            @click="changeStatus(card.programInfo, true)">
-            {{ $t('activity.programStart') }}
-          </el-button>
-          <el-button
+          <el-descriptions
             v-else
-            v-uni-permission="'busdriver_edit'"
-            type="primary"
-            :loading="changingId === card.programInfo.id"
-            @click="changeStatus(card.programInfo, false)">
-            {{ $t('activity.programEnd') }}
-          </el-button>
-        </div>
-      </el-card>
-    </div>
+            :column="2"
+            size="small"
+            border
+            class="activity-program-cards__desc">
+            <el-descriptions-item label="ID">{{ card.programInfo.id ?? '-' }}</el-descriptions-item>
+            <el-descriptions-item :label="$t('activity.programType')">
+              {{ programTypeText(card.programInfo.programType) }}
+            </el-descriptions-item>
+            <el-descriptions-item
+              v-if="Number(card.programInfo.programType) === 2"
+              :label="$t('activity.winnerQuota')">
+              {{ ruleObj(card.programInfo).prizeCount ?? '-' }}
+            </el-descriptions-item>
+          </el-descriptions>
+
+          <section
+            v-if="programRuleTags(card.programInfo).length"
+            class="activity-program-cards__block">
+            <h4 class="activity-program-cards__block-title">{{ $t('activity.programRules') }}</h4>
+            <div class="activity-program-cards__tags">
+              <span
+                v-for="(tag, index) in programRuleTags(card.programInfo)"
+                :key="`${card.programInfo.id}-rule-${index}`"
+                :class="['activity-program-cards__tag', `is-${tag.tone}`]">
+                {{ tag.text }}
+              </span>
+            </div>
+          </section>
+
+          <section
+            v-if="Number(card.programInfo.programType) === 2 && card.bindInfo.voteNames"
+            class="activity-program-cards__block">
+            <h4 class="activity-program-cards__block-title">
+              {{ $t('activity.voteProgramTitle') }}
+            </h4>
+            <p class="activity-program-cards__text">{{ card.bindInfo.voteNames }}</p>
+          </section>
+
+          <section v-if="card.programInfo.backgroundImage" class="activity-program-cards__block">
+            <h4 class="activity-program-cards__block-title">
+              {{ $t('activity.programBackground') }}
+            </h4>
+            <el-image
+              class="activity-program-cards__cover"
+              :src="String(card.programInfo.backgroundImage)"
+              fit="cover"
+              :preview-src-list="[String(card.programInfo.backgroundImage)]"
+              preview-teleported />
+          </section>
+
+          <section
+            v-if="Number(card.programInfo.programType) === 1 && card.bindInfo.prizeList?.length"
+            class="activity-program-cards__block">
+            <h4 class="activity-program-cards__block-title">{{ $t('activity.prizeListTitle') }}</h4>
+            <ul class="activity-program-cards__prize-list">
+              <li
+                v-for="(prize, index) in card.bindInfo.prizeList"
+                :key="`${card.programInfo.id}-prize-${index}`"
+                class="activity-program-cards__prize">
+                <div class="activity-program-cards__prize-media">
+                  <el-image
+                    v-if="prize.imageUrl"
+                    class="activity-program-cards__prize-img"
+                    :src="String(prize.imageUrl)"
+                    fit="cover"
+                    :preview-src-list="[String(prize.imageUrl)]"
+                    preview-teleported />
+                  <span v-else class="activity-program-cards__prize-placeholder">-</span>
+                </div>
+                <div class="activity-program-cards__prize-main">
+                  <div class="activity-program-cards__prize-name">{{ prizeName(prize) }}</div>
+                  <p v-if="prizeSubtitle(prize)" class="activity-program-cards__prize-desc">
+                    {{ prizeSubtitle(prize) }}
+                  </p>
+                  <span class="activity-program-cards__prize-tag">{{
+                    $t('activity.programCardPremiumPrize')
+                  }}</span>
+                </div>
+                <div class="activity-program-cards__prize-price">{{ prizeAmount(prize) }}</div>
+              </li>
+            </ul>
+          </section>
+
+          <footer
+            v-if="!readOnly && Number(card.programInfo.programStatus) !== 2"
+            class="activity-program-cards__footer">
+            <el-button
+              v-if="!card.programInfo.currentRoundStatus"
+              v-uni-permission="'busdriver_edit'"
+              class="activity-program-cards__cta"
+              :loading="changingId === card.programInfo.id"
+              @click="changeStatus(card.programInfo, true)">
+              {{
+                Number(card.programInfo.programType) === 1
+                  ? $t('activity.programCardStartDraw')
+                  : $t('activity.programStart')
+              }}
+            </el-button>
+            <el-button
+              v-else
+              v-uni-permission="'busdriver_edit'"
+              class="activity-program-cards__cta"
+              :loading="changingId === card.programInfo.id"
+              @click="changeStatus(card.programInfo, false)">
+              {{
+                Number(card.programInfo.programType) === 1
+                  ? $t('activity.programCardEndDraw')
+                  : $t('activity.programEnd')
+              }}
+            </el-button>
+          </footer>
+        </article>
+      </el-col>
+    </el-row>
   </section>
 </template>
 
 <script setup lang="ts">
-import { useUniI18n } from 'uni-ui-lib'
-import { ElMessage } from 'element-plus'
 import dayjs from 'dayjs'
+import { ElMessage } from 'element-plus'
+import { useUniI18n } from 'uni-ui-lib'
 import { computed, onMounted, ref, watch } from 'vue'
 
 import { activityPrizeApi, activityProgramApi, activityVoteProgramApi } from '@/api'
 import type { Translate } from '@/types/i18n'
 import { normalizeArray, normalizeEnvelope } from '@/utils/api-response-normalize'
+import { pickLocaleName } from '@/utils/locale-name'
 
 type Row = Record<string, unknown>
+type RuleTag = { text: string; tone: 'muted' | 'accent' }
 type ProgramCard = { programInfo: Row; bindInfo: Row & { prizeList?: Row[]; voteNames?: string } }
+type StatItem = { key: string; label: string; value: string; active?: boolean }
 
-const props = defineProps<{
-  activityId: string | number
-  readOnly?: boolean
-}>()
+const props = defineProps<{ activityId: string | number; readOnly?: boolean }>()
 
 const { t, locale } = useUniI18n()
 const tr = t as Translate
@@ -183,6 +200,15 @@ const cards = ref<ProgramCard[]>([])
 
 const isEn = computed(() => locale.value === 'en')
 
+const prizeName = (row: Row) => pickLocaleName(row, locale.value) || '-'
+const prizeSubtitle = (row: Row) => {
+  const primary = pickLocaleName(row, locale.value)
+  const alt = pickLocaleName(row, isEn.value ? 'zh-CN' : 'en')
+  return alt && alt !== primary ? alt : ''
+}
+const prizeAmount = (row: Row) =>
+  row.amount != null && row.amount !== '' ? `${row.amount} RMB` : '-'
+
 const programTypeText = (value: unknown) => {
   const n = Number(value)
   if (n === 1) return tr('activity.programTypeLottery')
@@ -191,23 +217,36 @@ const programTypeText = (value: unknown) => {
   return '-'
 }
 
-const statusText = (row: Row) => {
-  if (Number(row.programType) === 1 && Number(row.programStatus) === 1) {
-    return isEn.value ? `Round ${row.currentRound ?? ''}` : `第${row.currentRound ?? ''}轮`
-  }
-  const n = Number(row.programStatus)
-  if (n === 0) return tr('activity.programStatusPending')
-  if (n === 1) return tr('activity.programStatusProgress')
-  if (n === 2) return tr('activity.programStatusEnded')
-  return '-'
-}
+const cardSubtitle = (row: Row) =>
+  `${programTypeText(row.programType)}${tr('activity.programCardManageSuffix')}`
 
 const ruleObj = (row: Row): Row =>
   row.rule && typeof row.rule === 'object' ? (row.rule as Row) : {}
 
 const flagOn = (value: unknown) => value === true || value === 1 || value === '1'
 
-const lotteryRuleTags = (rule: Row): string[] => {
+const lotteryStats = (row: Row): StatItem[] => {
+  const rule = ruleObj(row)
+  const quota = rule.prizeCount != null && rule.prizeCount !== '' ? String(rule.prizeCount) : '-'
+  const inProgress = Number(row.programStatus) === 1
+  return [
+    { key: 'id', label: tr('activity.programCardLotteryId'), value: String(row.id ?? '-') },
+    {
+      key: 'total',
+      label: tr('activity.colTotalRounds'),
+      value: String(row.totalRounds ?? '-')
+    },
+    {
+      key: 'current',
+      label: tr('activity.colCurrentRound'),
+      value: String(row.currentRound ?? '-'),
+      active: inProgress
+    },
+    { key: 'prize', label: tr('activity.prizeCount'), value: quota }
+  ]
+}
+
+const lotteryRuleTags = (rule: Row): RuleTag[] => {
   const idText =
     String(rule.lotteryIdentifierType ?? '') === '1'
       ? tr('activity.lotteryIdPhone')
@@ -216,35 +255,64 @@ const lotteryRuleTags = (rule: Row): string[] => {
     String(rule.lotteryParticipantScope ?? '') === '1'
       ? tr('activity.lotteryScopeUnwon')
       : tr('activity.lotteryScopeAll')
-  return [
-    flagOn(rule.needPayment) ? tr('activity.ruleNeedPayment') : tr('activity.ruleNoPayment'),
-    flagOn(rule.needCheckin) ? tr('activity.ruleNeedCheckin') : tr('activity.ruleNoCheckin'),
-    flagOn(rule.createLotteryPool)
-      ? tr('activity.ruleCreateLotteryPool')
-      : tr('activity.ruleNoLotteryPool'),
-    rule.lotteryIdentifierType != null
-      ? `${tr('activity.lotteryIdentifierTypePrefix')}${idText}`
-      : '',
-    rule.lotteryParticipantScope != null
-      ? `${tr('activity.lotteryParticipantScopePrefix')}${scopeText}`
-      : ''
-  ].filter(Boolean)
+  const tags: RuleTag[] = [
+    {
+      text: flagOn(rule.needPayment)
+        ? tr('activity.ruleNeedPayment')
+        : tr('activity.ruleNoPayment'),
+      tone: flagOn(rule.needPayment) ? 'accent' : 'muted'
+    },
+    {
+      text: flagOn(rule.needCheckin)
+        ? tr('activity.ruleNeedCheckin')
+        : tr('activity.ruleNoCheckin'),
+      tone: flagOn(rule.needCheckin) ? 'accent' : 'muted'
+    },
+    {
+      text: flagOn(rule.createLotteryPool)
+        ? tr('activity.ruleCreateLotteryPool')
+        : tr('activity.ruleNoLotteryPool'),
+      tone: flagOn(rule.createLotteryPool) ? 'accent' : 'muted'
+    }
+  ]
+  if (rule.lotteryIdentifierType != null) {
+    tags.push({
+      text: `${tr('activity.lotteryIdentifierTypePrefix')}${idText}`,
+      tone: 'muted'
+    })
+  }
+  if (rule.lotteryParticipantScope != null) {
+    tags.push({
+      text: `${tr('activity.lotteryParticipantScopePrefix')}${scopeText}`,
+      tone: 'accent'
+    })
+  }
+  return tags
 }
 
-const competitionRuleTags = (rule: Row): string[] => {
-  const parts = [flagOn(rule.needVote) ? tr('activity.ruleNeedVote') : tr('activity.ruleNoVote')]
+const competitionRuleTags = (rule: Row): RuleTag[] => {
+  const tags: RuleTag[] = [
+    {
+      text: flagOn(rule.needVote) ? tr('activity.ruleNeedVote') : tr('activity.ruleNoVote'),
+      tone: flagOn(rule.needVote) ? 'accent' : 'muted'
+    }
+  ]
   if (rule.votePerAttemptCount) {
-    parts.push(`${tr('activity.votePerAttemptCount')}${rule.votePerAttemptCount}`)
+    tags.push({
+      text: `${tr('activity.votePerAttemptCount')}${rule.votePerAttemptCount}`,
+      tone: 'muted'
+    })
   }
   if (rule.voteStartTime) {
-    parts.push(
-      `${tr('activity.voteTime')}${dayjs(String(rule.voteStartTime)).format('YYYY-MM-DD HH:mm:ss')}-${dayjs(String(rule.voteEndTime)).format('YYYY-MM-DD HH:mm:ss')}`
-    )
+    tags.push({
+      text: `${tr('activity.voteTime')}${dayjs(String(rule.voteStartTime)).format('YYYY-MM-DD HH:mm:ss')}-${dayjs(String(rule.voteEndTime)).format('YYYY-MM-DD HH:mm:ss')}`,
+      tone: 'muted'
+    })
   }
-  return parts
+  return tags
 }
 
-const programRuleTags = (row: Row): string[] => {
+const programRuleTags = (row: Row): RuleTag[] => {
   const rule = ruleObj(row)
   const type = Number(row.programType)
   if (type === 1) return lotteryRuleTags(rule)
@@ -254,7 +322,7 @@ const programRuleTags = (row: Row): string[] => {
       String(rule.blessingDisplayRule ?? '') === '2'
         ? tr('activity.blessingLeftRight')
         : tr('activity.blessingTopBottom')
-    return [`${tr('activity.blessingDisplayRule')}${blessText}`]
+    return [{ text: `${tr('activity.blessingDisplayRule')}${blessText}`, tone: 'muted' }]
   }
   return []
 }
@@ -285,13 +353,10 @@ const loadCards = async () => {
         const voteRaw = await activityVoteProgramApi.listByProgram.get({
           programId: item.id as string | number
         })
-        const voteRows = normalizeArray(voteRaw) as Row[]
-        bindInfo.voteNames = voteRows
-          .map((row) =>
-            String(isEn.value ? (row.enName ?? row.cnName ?? '') : (row.cnName ?? row.enName ?? ''))
-          )
+        bindInfo.voteNames = (normalizeArray(voteRaw) as Row[])
+          .map((row) => pickLocaleName(row, locale.value))
           .filter(Boolean)
-          .join('、')
+          .join('?')
       }
       rows.push({ programInfo, bindInfo })
     }
@@ -322,73 +387,153 @@ onMounted(() => void loadCards())
 
 <style scoped lang="scss">
 .activity-program-cards {
+  --prog-navy: #101828;
+  --prog-accent-bg: #fff7ed;
+  --prog-accent-text: #c2410c;
+
   &__grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(420px, 1fr));
-    gap: 16px;
+    width: 100%;
   }
 
   &__card {
-    :deep(.el-card__header) {
-      padding: 12px 16px;
-      background: var(--el-fill-color-lighter);
-    }
-
-    :deep(.el-card__body) {
-      display: flex;
-      flex-direction: column;
-      gap: 14px;
-      padding: 16px;
-    }
+    height: 100%;
+    padding: 20px;
+    border-radius: 16px;
+    background: #fff;
+    border: 1px solid var(--el-border-color-lighter);
+    box-shadow: 0 8px 24px rgb(16 24 40 / 8%);
   }
 
-  &__head {
+  &__header {
     display: flex;
     align-items: flex-start;
     justify-content: space-between;
-    gap: 12px;
+    gap: 16px;
+    margin-bottom: 20px;
   }
 
-  &__head-main {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: 8px;
+  &__header-text {
     min-width: 0;
   }
 
   &__title {
-    font-size: 15px;
+    margin: 0;
+    font-size: 18px;
+    font-weight: 700;
+    line-height: 1.3;
+    color: var(--prog-navy);
+  }
+
+  &__subtitle {
+    margin: 6px 0 0;
+    font-size: 13px;
+    color: var(--el-text-color-secondary);
+  }
+
+  &__round-badge,
+  &__status-badge {
+    flex-shrink: 0;
+    padding: 6px 14px;
+    border-radius: 999px;
+    font-size: 13px;
     font-weight: 600;
-    line-height: 1.4;
-    color: var(--el-text-color-primary);
+    line-height: 1.2;
+  }
+
+  &__round-badge {
+    color: #fff;
+    background: var(--prog-navy);
+  }
+
+  &__status-badge {
+    color: var(--prog-navy);
+    background: var(--el-fill-color-light);
+  }
+
+  &__stats {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 8px;
+    margin-bottom: 16px;
+  }
+
+  &__stat {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    min-height: 68px;
+    padding: 10px 6px;
+    border: 1px solid var(--el-border-color-lighter);
+    border-radius: 10px;
+    background: #fff;
+    text-align: center;
+
+    &.is-active {
+      border-color: var(--prog-navy);
+      background: var(--prog-navy);
+      box-shadow: 0 4px 12px rgb(16 24 40 / 18%);
+
+      .activity-program-cards__stat-label,
+      .activity-program-cards__stat-value {
+        color: #fff;
+      }
+    }
+  }
+
+  &__stat-label {
+    font-size: 12px;
+    color: var(--el-text-color-secondary);
+    line-height: 1.3;
+  }
+
+  &__stat-value {
+    font-size: 18px;
+    font-weight: 700;
+    line-height: 1.1;
+    color: var(--prog-navy);
   }
 
   &__desc {
     width: 100%;
+    margin-bottom: 16px;
+  }
 
-    :deep(.el-descriptions__label) {
-      width: 88px;
-      font-weight: 500;
+  &__block {
+    margin-bottom: 18px;
+
+    &:last-of-type {
+      margin-bottom: 0;
     }
   }
 
-  &__section {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-  }
-
-  &__section-title {
-    font-size: 13px;
-    font-weight: 600;
-    color: var(--el-text-color-regular);
+  &__block-title {
+    margin: 0 0 10px;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--el-text-color-secondary);
   }
 
   &__tags {
     display: flex;
     flex-wrap: wrap;
-    gap: 6px;
+    gap: 8px;
+  }
+
+  &__tag {
+    padding: 6px 12px;
+    border-radius: 8px;
+    font-size: 13px;
+    line-height: 1.3;
+
+    &.is-muted {
+      color: var(--el-text-color-regular);
+      background: var(--el-fill-color-light);
+    }
+
+    &.is-accent {
+      color: var(--prog-accent-text);
+      background: var(--prog-accent-bg);
+    }
   }
 
   &__text {
@@ -396,26 +541,20 @@ onMounted(() => void loadCards())
     font-size: 13px;
     line-height: 1.6;
     color: var(--el-text-color-primary);
-    word-break: break-word;
   }
 
   &__cover {
     width: 100%;
-    max-width: 280px;
-    height: 120px;
-    border-radius: 6px;
+    max-width: 320px;
+    height: 128px;
+    border-radius: 10px;
     border: 1px solid var(--el-border-color-lighter);
-  }
-
-  &__prizes {
-    padding-top: 4px;
-    border-top: 1px dashed var(--el-border-color-lighter);
   }
 
   &__prize-list {
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 12px;
     margin: 0;
     padding: 0;
     list-style: none;
@@ -424,54 +563,113 @@ onMounted(() => void loadCards())
   &__prize {
     display: flex;
     align-items: center;
-    gap: 12px;
-    padding: 10px 12px;
-    border-radius: 8px;
+    gap: 16px;
+    padding: 14px 16px;
+    border-radius: 12px;
     background: var(--el-fill-color-lighter);
     border: 1px solid var(--el-border-color-lighter);
   }
 
-  &__prize-img,
-  &__prize-placeholder {
+  &__prize-media {
     flex-shrink: 0;
-    width: 64px;
-    height: 64px;
-    border-radius: 6px;
+    width: 72px;
+    height: 72px;
+    padding: 6px;
+    border-radius: 10px;
+    background: #fff;
     border: 1px solid var(--el-border-color-lighter);
+  }
+
+  &__prize-img {
+    width: 100%;
+    height: 100%;
+    border-radius: 6px;
   }
 
   &__prize-placeholder {
     display: flex;
     align-items: center;
     justify-content: center;
+    width: 100%;
+    height: 100%;
     font-size: 13px;
     color: var(--el-text-color-placeholder);
-    background: var(--el-fill-color-blank);
   }
 
-  &__prize-body {
-    min-width: 0;
+  &__prize-main {
     flex: 1;
+    min-width: 0;
   }
 
   &__prize-name {
-    font-size: 14px;
-    font-weight: 500;
-    color: var(--el-text-color-primary);
-    word-break: break-word;
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--prog-navy);
   }
 
-  &__prize-amount {
-    margin-top: 4px;
+  &__prize-desc {
+    margin: 4px 0 8px;
     font-size: 13px;
-    color: var(--el-color-primary);
+    color: var(--el-text-color-secondary);
   }
 
-  &__actions {
-    display: flex;
-    justify-content: flex-end;
+  &__prize-tag {
+    display: inline-block;
+    padding: 2px 8px;
+    border: 1px solid var(--el-border-color);
+    border-radius: 4px;
+    font-size: 12px;
+    color: var(--el-text-color-secondary);
+  }
+
+  &__prize-price {
+    flex-shrink: 0;
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--el-text-color-secondary);
+  }
+
+  &__footer {
+    margin-top: 20px;
     padding-top: 4px;
-    border-top: 1px solid var(--el-border-color-lighter);
+  }
+
+  &__cta {
+    width: 100%;
+    height: 44px;
+    border: none !important;
+    border-radius: 10px !important;
+    font-size: 15px !important;
+    font-weight: 600 !important;
+    color: #fff !important;
+    background: var(--prog-navy) !important;
+
+    &:hover,
+    &:focus {
+      color: #fff !important;
+      background: #1e293b !important;
+    }
+  }
+}
+
+@media (max-width: 992px) {
+  .activity-program-cards__stats {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 576px) {
+  .activity-program-cards__stat.is-active {
+    grid-column: 1 / -1;
+  }
+
+  .activity-program-cards__prize {
+    flex-wrap: wrap;
+  }
+
+  .activity-program-cards__prize-price {
+    width: 100%;
+    text-align: right;
   }
 }
 </style>

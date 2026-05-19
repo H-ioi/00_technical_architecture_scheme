@@ -84,3 +84,14 @@ export function getCustomerUuid(): string {
   fingerprint = fingerprint.replace(/[^0-9]/g, '')
   return fingerprint.slice(0, 11)
 }
+
+/** 详情/表单：后端单值或数组统一为 id 列表 */
+export function coerceIdList(raw: unknown): Array<string | number> {
+  if (!Array.isArray(raw)) {
+    if (raw == null || raw === '') {
+      return []
+    }
+    return [raw as string | number]
+  }
+  return raw.filter((x) => x != null && x !== '') as Array<string | number>
+}

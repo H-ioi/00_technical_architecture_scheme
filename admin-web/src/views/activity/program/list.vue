@@ -6,7 +6,7 @@
         <p class="uni-list-page__description">{{ $t('activity.programListDesc') }}</p>
       </div>
       <div v-uni-permission="'busdriver_edit'" class="uni-list-page__header-actions">
-        <el-button type="primary" @click="goCreate">{{ $t('activity.add') }}</el-button>
+        <el-button type="primary" @click="goProgramCreate">{{ $t('activity.add') }}</el-button>
       </div>
     </div>
     <UniSearchForm
@@ -65,6 +65,7 @@
 <script setup lang="ts">
 import { UniDataTable, UniSearchForm } from 'uni-ui-lib'
 import { ref } from 'vue'
+import { useRouter } from 'vue-router'
 
 import ProgramCopyDialog from './components/program-copy-dialog.vue'
 import { useActivityProgramList } from './use-list'
@@ -80,6 +81,20 @@ const props = withDefaults(
   }
 )
 
+const router = useRouter()
+
+const goProgramCreate = () => {
+  void router.push({
+    name: 'ActivityProgramDetail',
+    query: {
+      mode: 'edit',
+      ...(props.activityId != null && props.activityId !== ''
+        ? { activityId: String(props.activityId) }
+        : {})
+    }
+  })
+}
+
 const copyOpen = ref(false)
 
 const {
@@ -87,7 +102,6 @@ const {
   columns,
   deleteBatch,
   filters,
-  goCreate,
   handleLoadSuccess,
   loadData,
   onSelectionChange,

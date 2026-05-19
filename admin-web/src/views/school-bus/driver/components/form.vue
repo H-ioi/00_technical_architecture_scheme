@@ -86,24 +86,21 @@ const resetForm = () => {
   })
 }
 
-const toNum = (value: unknown): number | undefined => {
-  if (value === '' || value === null || value === undefined) {
-    return undefined
-  }
-
-  const n = Number(value)
-
-  return Number.isFinite(n) ? n : undefined
-}
-
 const fillForm = (record: DriverRecord) => {
+  const ageRaw = record.age
+  const age =
+    ageRaw === '' || ageRaw === null || ageRaw === undefined
+      ? undefined
+      : Number.isFinite(Number(ageRaw))
+        ? Number(ageRaw)
+        : undefined
   formModel.value = {
     id: record.id,
     schoolIds: Array.isArray(record.schoolIds) ? record.schoolIds : [],
     name: record.name,
     employeeNo: record.employeeNo,
     contact: record.contact,
-    age: toNum(record.age),
+    age,
     licenseType: record.licenseType,
     status: record.status === undefined || record.status === null ? 1 : Number(record.status)
   }

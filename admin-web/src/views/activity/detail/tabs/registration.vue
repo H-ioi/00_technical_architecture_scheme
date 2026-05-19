@@ -239,16 +239,20 @@ const onSelectionChange = (rows: Record<string, unknown>[]) => {
   selectedRows.value = rows as Row[]
 }
 
-const openEdit = (row: Row) => {
-  editingRow.value = row
-  Object.assign(form, row)
-  dialogVisible.value = true
-}
-
 const actions = computed<UniTableAction[]>(() =>
   props.readOnly
     ? []
-    : [{ label: tr('activity.entryEdit'), code: 'busdriver_edit', onClick: (row) => openEdit(row as Row) }]
+    : [
+        {
+          label: tr('activity.entryEdit'),
+          code: 'busdriver_edit',
+          onClick: (row) => {
+            editingRow.value = row as Row
+            Object.assign(form, row)
+            dialogVisible.value = true
+          }
+        }
+      ]
 )
 
 const deleteSelected = async () => {

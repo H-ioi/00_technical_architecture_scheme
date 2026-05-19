@@ -61,3 +61,20 @@ export function detailCellDisplay(
   const val = record[String(prop)]
   return val == null || val === '' ? '--' : String(val)
 }
+
+/** 校车级联接口 schoolIds：表单 school 字段 + 单校默认 id */
+export function schoolIdsForCascadeApi(
+  schoolField: unknown,
+  options: { multiSchool: boolean; defaultSchoolId?: string | number | null }
+): Array<string | number> {
+  if (Array.isArray(schoolField)) {
+    return schoolField as Array<string | number>
+  }
+  if (schoolField != null && schoolField !== '') {
+    return [schoolField as string | number]
+  }
+  if (!options.multiSchool && options.defaultSchoolId != null) {
+    return [options.defaultSchoolId]
+  }
+  return []
+}

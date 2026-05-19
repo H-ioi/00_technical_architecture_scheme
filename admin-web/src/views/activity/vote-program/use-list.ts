@@ -49,24 +49,15 @@ export function useVoteProgramList({ formDlg }: DialogRefs) {
     return { data: list, total }
   }
 
-  const openAdd = () => {
-    formDlg.value?.open('add')
-  }
-
-  const openEdit = (row: Row) => {
-    formDlg.value?.open('edit', row)
-  }
-
-  const openDetail = (row: Row) => {
-    formDlg.value?.open('view', row)
-  }
-
   const actions = computed<UniTableAction[]>(() => [
-    { label: tr('activity.lookDetail'), onClick: (row) => openDetail(row as Row) },
+    {
+      label: tr('activity.lookDetail'),
+      onClick: (row) => void formDlg.value?.open('view', row as Row)
+    },
     {
       label: tr('activity.entryEdit'),
       code: 'busdriver_edit',
-      onClick: (row) => openEdit(row as Row)
+      onClick: (row) => void formDlg.value?.open('edit', row as Row)
     }
   ])
 
@@ -104,7 +95,6 @@ export function useVoteProgramList({ formDlg }: DialogRefs) {
     loadData,
     refreshTable,
     onSelectionChange,
-    openAdd,
     queryModel,
     reset,
     search,

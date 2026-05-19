@@ -118,16 +118,14 @@ export const useList = () => {
     }
   }
 
-  const showDetail = (row: AttendanceStudentRecord) => {
-    activeRow.value = row
-    detailVisible.value = true
-  }
-
   /** 旧页「查看」未绑定权限码，全员可见。 */
   const actions = computed<UniTableAction[]>(() => [
     {
       label: t('attendance.detail'),
-      onClick: (row) => showDetail(row as AttendanceStudentRecord)
+      onClick: (row) => {
+        activeRow.value = row as AttendanceStudentRecord
+        detailVisible.value = true
+      }
     }
   ])
 

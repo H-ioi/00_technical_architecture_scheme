@@ -68,10 +68,6 @@ export const useList = () => {
     }
   }
 
-  const toDetail = (row: Row) => {
-    void router.push(`/protocol/detail/${row.id}`)
-  }
-
   const openForm = (mode: 'add' | 'edit', row?: Row) => {
     formMode.value = mode
     activeRow.value = row ?? null
@@ -81,7 +77,7 @@ export const useList = () => {
   const actions = computed<UniTableAction[]>(() => [
     {
       label: t('protocol.detail'),
-      onClick: (row) => toDetail(row as Row)
+      onClick: (row) => void router.push(`/protocol/detail/${(row as Row).id}`)
     },
     {
       label: t('protocol.edit'),

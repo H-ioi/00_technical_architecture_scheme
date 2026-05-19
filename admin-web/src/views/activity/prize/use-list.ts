@@ -79,18 +79,15 @@ export function useActivityPrizeList(formDlg: DialogRef) {
     selectedRows.value = rows as ActivityPrizeRow[]
   }
 
-  const openAdd = () => formDlg.value?.open('add')
-
-  const openEdit = (row: ActivityPrizeRow) => formDlg.value?.open('edit', row)
-
-  const openDetail = (row: ActivityPrizeRow) => formDlg.value?.open('view', row)
-
   const actions = computed<UniTableAction[]>(() => [
-    { label: tr('activity.lookDetail'), onClick: (row) => void openDetail(row as ActivityPrizeRow) },
+    {
+      label: tr('activity.lookDetail'),
+      onClick: (row) => void formDlg.value?.open('view', row as ActivityPrizeRow)
+    },
     {
       label: tr('activity.entryEdit'),
       code: 'busdriver_edit',
-      onClick: (row) => void openEdit(row as ActivityPrizeRow)
+      onClick: (row) => void formDlg.value?.open('edit', row as ActivityPrizeRow)
     }
   ])
 
@@ -125,8 +122,6 @@ export function useActivityPrizeList(formDlg: DialogRef) {
     loadData,
     refreshTable,
     onSelectionChange,
-    openAdd,
-    openDetail,
     queryModel,
     reset,
     search,

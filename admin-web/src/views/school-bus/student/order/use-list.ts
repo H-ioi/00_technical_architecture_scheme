@@ -113,11 +113,6 @@ export const useOrderList = () => {
   const detailVisible = ref(false)
   const detailOrderId = ref<string | number | null>(null)
 
-  const openDetail = (row: BusOrderRecord) => {
-    detailOrderId.value = row.id
-    detailVisible.value = true
-  }
-
   const closeDetail = () => {
     detailVisible.value = false
     detailOrderId.value = null
@@ -140,7 +135,10 @@ export const useOrderList = () => {
   const actions = computed<UniTableAction[]>(() => [
     {
       label: t('schoolBus.look'),
-      onClick: (row) => openDetail(row as BusOrderRecord)
+      onClick: (row) => {
+        detailOrderId.value = (row as BusOrderRecord).id
+        detailVisible.value = true
+      }
     },
     {
       label: t('schoolBus.edit'),
@@ -218,7 +216,6 @@ export const useOrderList = () => {
     handleLoadSuccess,
     loadData,
     multiSchool,
-    openDetail,
     queryModel,
     refreshTable,
     reset,

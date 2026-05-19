@@ -111,15 +111,13 @@ export const useList = () => {
     }
   }
 
-  const showDetail = (row: AttendanceSchoolRecord) => {
-    activeRow.value = row
-    detailVisible.value = true
-  }
-
   const actions = computed<UniTableAction[]>(() => [
     {
       label: t('attendance.detail'),
-      onClick: (row) => showDetail(row as AttendanceSchoolRecord)
+      onClick: (row) => {
+        activeRow.value = row as AttendanceSchoolRecord
+        detailVisible.value = true
+      }
     }
   ])
 

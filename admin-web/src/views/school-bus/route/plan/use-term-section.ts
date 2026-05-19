@@ -157,30 +157,21 @@ export const useTermSection = (schoolRecords: SchoolRecordsRef) => {
     }
   }
 
-  const openTermDetail = (row: Loose) => {
-    termDetailRecord.value = row
-    termDetailVisible.value = true
-  }
-
-  const openTermEdit = (row: Loose) => {
-    termEditingId.value = row.id as string | number
-    termFormVisible.value = true
-  }
-
-  const openTermAdd = () => {
-    termEditingId.value = null
-    termFormVisible.value = true
-  }
-
   const actions = computed<UniTableAction[]>(() => [
     {
       label: t('schoolBus.look'),
-      onClick: (row) => openTermDetail(row as Loose)
+      onClick: (row) => {
+        termDetailRecord.value = row as Loose
+        termDetailVisible.value = true
+      }
     },
     {
       label: t('schoolBus.edit'),
       code: 'bussection_edit',
-      onClick: (row) => openTermEdit(row as Loose)
+      onClick: (row) => {
+        termEditingId.value = (row as Loose).id as string | number
+        termFormVisible.value = true
+      }
     }
   ])
 
@@ -235,7 +226,6 @@ export const useTermSection = (schoolRecords: SchoolRecordsRef) => {
     loadTerms,
     multiSchool,
     onSelectionChange,
-    openTermAdd,
     queryModel,
     reset,
     search,

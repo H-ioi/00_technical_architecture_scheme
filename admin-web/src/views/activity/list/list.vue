@@ -6,7 +6,11 @@
         <p class="uni-list-page__description">{{ $t('activity.eventListDesc') }}</p>
       </div>
       <div v-uni-permission="'busdriver_edit'" class="uni-list-page__header-actions">
-        <el-button type="primary" @click="goCreate">{{ $t('activity.add') }}</el-button>
+        <el-button
+          type="primary"
+          @click="router.push({ name: 'ActivityEventDetail', query: { mode: 'edit' } })">
+          {{ $t('activity.add') }}
+        </el-button>
       </div>
     </div>
     <UniSearchForm
@@ -83,8 +87,11 @@
 
 <script setup lang="ts">
 import { UniDataTable, UniSearchForm } from 'uni-ui-lib'
+import { useRouter } from 'vue-router'
 
 import { useActivityEventList } from './use-list'
+
+const router = useRouter()
 
 const {
   actions,
@@ -93,7 +100,6 @@ const {
   exportFeedbackBatch,
   exportQuestionnaireByActivityBatch,
   filters,
-  goCreate,
   handleLoadSuccess,
   handleSendWechat,
   loadData,

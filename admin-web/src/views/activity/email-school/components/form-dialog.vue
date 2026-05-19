@@ -33,6 +33,7 @@ import type {
   SchoolEmailConfigRow
 } from '@/types/modules/school-email-config'
 import type { Translate } from '@/types/i18n'
+import { appModuleOptionsFromRows } from '@/utils/activity-email-school'
 import { normalizeArray, normalizeEnvelope } from '@/utils/api-response-normalize'
 
 const emit = defineEmits<{ saved: [] }>()
@@ -131,40 +132,15 @@ async function loadSchoolOptions() {
   })
 }
 
-function normalizeAppModuleOptions(rows: Record<string, unknown>[]): UniOption[] {
-  const normalizedRows = rows.map((row) => {
-    const value = row.value ?? row.moduleCode ?? row.code ?? row.key ?? row.id
-    return {
-      value,
-      label: row.label ?? row.name ?? row.desc ?? row.moduleName ?? value
-    }
-  })
-  const options = toUniOptions(normalizedRows, {
-    labelKeys: ['label'],
-    valueKey: 'value'
-  })
-  if (!options.some((item) => String(item.value) === '1')) {
-    options.unshift({ label: tr('activity.appModuleActivity'), value: '1' })
-  }
-  return options.map((item) => ({ ...item, value: String(item.value) }))
-}
-
 async function loadAppModuleOptions() {
   try {
     const raw = await schoolEmailConfigApi.appModules.get()
-    appModuleOptions.value = normalizeAppModuleOptions(normalizeArray(raw) as Record<string, unknown>[])
+    appModuleOptions.value = appModuleOptionsFromRows(
+      normalizeArray(raw) as Record<string, unknown>[],
+      tr('activity.appModuleActivity')
+    )
   } catch {
-    appModuleOptions.value = normalizeAppModuleOptions([])
-  }
-}
-
-function ensureAppModuleOption(value: unknown) {
-  if (value == null || value === '') {
-    return
-  }
-  const val = String(value)
-  if (!appModuleOptions.value.some((item) => String(item.value) === val)) {
-    appModuleOptions.value.push({ label: val, value: val })
+    appModuleOptions.value = appModuleOptionsFromRows([], tr('activity.appModuleActivity'))
   }
 }
 
@@ -172,7 +148,9 @@ async function fillFromDetail(id: string | number) {
   const raw = await schoolEmailConfigApi.detail.get(id)
   const d = normalizeEnvelope(raw) as SchoolEmailConfigRow
   const appModule = String(d.appModule ?? '1')
-  ensureAppModuleOption(appModule)
+  if (!appModuleOptions.value.some((item) => String(item.value) === appModule)) {
+    appModuleOptions.value.push({ label: appModule, value: appModule })
+  }
   const schoolHit =
     d.schoolId == null || d.schoolId === ''
       ? undefined

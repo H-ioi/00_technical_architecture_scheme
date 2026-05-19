@@ -131,20 +131,6 @@ function normalizeRowStatus(item: BaseDictItemRecord): BaseDictItemRecord {
   return { ...item, status }
 }
 
-function parseSortField(raw: BaseDictItemRecord['sort']): number | undefined {
-  if (raw === '' || raw === null || raw === undefined) {
-    return undefined
-  }
-
-  const n = typeof raw === 'number' ? raw : Number.parseInt(String(raw).trim(), 10)
-
-  return Number.isFinite(n) ? n : undefined
-}
-
-function sortPayload(sort: number | undefined): string | number | '' {
-  return sort === undefined ? '' : sort
-}
-
 type AttrRow = BaseDictFieldRecord & { _rk: string; isedit?: boolean }
 
 const props = defineProps<{
@@ -268,7 +254,13 @@ const openAdd = () => {
 const openEdit = (row: BaseDictItemRecord) => {
   formMode.value = 'edit'
   currentEditId.value = row.id
-  ruleForm.value = { label: row.label, sort: parseSortField(row.sort) }
+  let sortVal: number | undefined
+  const rawSort = row.sort
+  if (rawSort !== '' && rawSort != null) {
+    const n = typeof rawSort === 'number' ? rawSort : Number.parseInt(String(rawSort).trim(), 10)
+    sortVal = Number.isFinite(n) ? n : undefined
+  }
+  ruleForm.value = { label: row.label, sort: sortVal }
   formVisible.value = true
 }
 
@@ -280,13 +272,13 @@ const submitForm = async () => {
       await baseDictApi.edit.put({
         id: currentEditId.value,
         label: payload.label,
-        sort: sortPayload(payload.sort)
+        sort: payload.sort === undefined ? '' : payload.sort
       })
       ElMessage.success(mt('messages.updateOk'))
     } else {
       await baseDictApi.add.post({
         label: payload.label,
-        sort: sortPayload(payload.sort),
+        sort: payload.sort === undefined ? '' : payload.sort,
         type: props.dictType
       })
       ElMessage.success(mt('messages.addOk'))

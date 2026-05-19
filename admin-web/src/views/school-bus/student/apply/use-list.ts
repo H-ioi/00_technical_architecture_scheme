@@ -140,11 +140,6 @@ export const useApplyList = () => {
   const detailVisible = ref(false)
   const detailOrderId = ref<string | number | null>(null)
 
-  const openDetail = (row: BusOrderRecord) => {
-    detailOrderId.value = row.id
-    detailVisible.value = true
-  }
-
   const closeDetail = () => {
     detailVisible.value = false
     detailOrderId.value = null
@@ -237,7 +232,6 @@ export const useApplyList = () => {
     schoolOptions,
     detailVisible,
     detailOrderId,
-    openDetail,
     closeDetail,
     formVisible,
     formMode,

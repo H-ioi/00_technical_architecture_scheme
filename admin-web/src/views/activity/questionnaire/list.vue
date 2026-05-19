@@ -6,7 +6,7 @@
         <p class="uni-list-page__description">{{ $t('activity.questionnaireDesc') }}</p>
       </div>
       <div v-uni-permission="'busdriver_edit'" class="uni-list-page__header-actions">
-        <el-button type="primary" @click="openMetaAdd">{{ $t('activity.add') }}</el-button>
+        <el-button type="primary" @click="metaDlg?.open('add')">{{ $t('activity.add') }}</el-button>
       </div>
     </div>
     <UniSearchForm
@@ -47,7 +47,7 @@
           v-uni-permission="'busdriver_edit'"
           plain
           :disabled="!selectedIds.length"
-          @click="openBatchFrozen"
+          @click="batchDlg?.open('frozen', selectedIds)"
         >
           {{ $t('activity.qBatchChangeFrozen') }}
         </el-button>
@@ -103,9 +103,6 @@ const {
   loadData,
   refreshTable,
   onSelectionChange,
-  openBatchFrozen,
-  openBatchStatus,
-  openMetaAdd,
   queryModel,
   reset,
   search,

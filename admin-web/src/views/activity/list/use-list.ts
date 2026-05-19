@@ -139,10 +139,6 @@ export function useActivityEventList() {
     router.push({ name: 'ActivityEventDetail', query: { id: String(row.id), mode } })
   }
 
-  const goCreate = () => {
-    router.push({ name: 'ActivityEventDetail', query: { mode: 'edit' } })
-  }
-
   const actions = computed<UniTableAction[]>(() => [
     { label: tr('activity.lookDetail'), onClick: (row) => goDetail(row as ActivityRow, 'view') },
     {
@@ -285,7 +281,6 @@ export function useActivityEventList() {
     search,
     searchCfg,
     selectedIds,
-    goCreate,
     handleSendWechat,
     selectedRows,
     tableRef

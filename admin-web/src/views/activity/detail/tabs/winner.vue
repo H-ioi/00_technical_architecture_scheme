@@ -1,6 +1,14 @@
 <template>
   <section class="activity-winner-tab">
-    <el-radio-group v-model="winnerKind" class="activity-winner-tab__kind" @change="changeKind">
+    <el-radio-group
+      v-model="winnerKind"
+      class="activity-winner-tab__kind"
+      @change="
+        () => {
+          selectedRows = []
+          tableRef?.refresh?.()
+        }
+      ">
       <el-radio-button label="lottery">{{ $t('activity.winnerLottery') }}</el-radio-button>
       <el-radio-button label="competition">{{ $t('activity.winnerCompetition') }}</el-radio-button>
     </el-radio-group>
@@ -158,7 +166,10 @@ const formCfg = computed<UniFormConfig>(() => {
       componentProps: {
         filterable: true,
         style: { width: '100%' },
-        onChange: onProgramChange
+        onChange: (value: string | number) => {
+          const found = programOptions.value.find((item) => String(item.value) === String(value))
+          form.programName = found?.label
+        }
       },
       colProps: { xs: 24, sm: 12 }
     }
@@ -279,12 +290,8 @@ const loadPrograms = async () => {
     }))
 }
 
-const onProgramChange = (value: string | number) => {
-  const found = programOptions.value.find((item) => String(item.value) === String(value))
-  form.programName = found?.label
-}
-
-const emptyForm = () => {
+const openAdd = () => {
+  dialogMode.value = 'add'
   Object.assign(form, {
     id: undefined,
     programId: undefined,
@@ -296,19 +303,24 @@ const emptyForm = () => {
     email: '',
     awardRank: ''
   })
-}
-
-const openAdd = () => {
-  dialogMode.value = 'add'
-  emptyForm()
   void loadPrograms()
   dialogVisible.value = true
 }
 
 const openEdit = async (row: Row) => {
   dialogMode.value = 'edit'
-  emptyForm()
   const data = normalizeEnvelope(await activityApi.prizeAwardDetail.get(row.id as string | number))
+  Object.assign(form, {
+    id: undefined,
+    programId: undefined,
+    programName: '',
+    ticketCode: '',
+    checkinId: undefined,
+    name: '',
+    phone: '',
+    email: '',
+    awardRank: ''
+  })
   Object.assign(form, {
     id: data.id,
     programId: data.programId ?? data.program_id,
@@ -321,8 +333,11 @@ const openEdit = async (row: Row) => {
     awardRank: data.awardRank ?? ''
   })
   await loadPrograms()
-  if (form.programId) {
-    onProgramChange(form.programId as string | number)
+  if (form.programId != null) {
+    const found = programOptions.value.find(
+      (item) => String(item.value) === String(form.programId)
+    )
+    form.programName = found?.label
   }
   dialogVisible.value = true
 }
@@ -349,7 +364,8 @@ const fetchByTicketCode = async () => {
   const pid = row.programId ?? row.program_id
   if (pid != null) {
     form.programId = pid
-    onProgramChange(pid as string | number)
+    const found = programOptions.value.find((item) => String(item.value) === String(pid))
+    form.programName = found?.label
   }
 }
 
@@ -421,11 +437,6 @@ const exportWinners = async () => {
   } finally {
     exporting.value = false
   }
-}
-
-const changeKind = () => {
-  selectedRows.value = []
-  tableRef.value?.refresh()
 }
 
 defineExpose({

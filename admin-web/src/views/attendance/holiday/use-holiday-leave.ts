@@ -35,7 +35,8 @@ export const useHolidayLeave = (schoolRecords: Ref<SchoolOptionRecord[]>) => {
     endTime: undefined
   }
 
-  const { queryModel, filters, tableRef, handleLoadSuccess, reset, search } = useUniListState({
+  const { queryModel, filters, tableRef, handleLoadSuccess, refreshTable, reset, search } =
+    useUniListState({
     initialFilters
   })
 
@@ -184,6 +185,7 @@ export const useHolidayLeave = (schoolRecords: Ref<SchoolOptionRecord[]>) => {
     handleLoadSuccess,
     loadData,
     queryModel,
+    refreshTable,
     reset,
     search,
     searchCfg,

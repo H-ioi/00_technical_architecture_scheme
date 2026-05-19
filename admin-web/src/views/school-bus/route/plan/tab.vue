@@ -17,7 +17,10 @@
         </el-button>
       </div>
       <div v-else-if="activeTab === 'term'" class="uni-list-page__header-actions">
-        <el-button v-uni-permission="'bussection_add'" type="primary" @click="openTermAdd">
+        <el-button
+          v-uni-permission="'bussection_add'"
+          type="primary"
+          @click="((termEditingId = null), (termFormVisible = true))">
           {{ $t('schoolBus.routePlan.addTerm') }}
         </el-button>
       </div>
@@ -28,7 +31,10 @@
         <el-button v-uni-permission="'busstation_import'" @click="stationFileRef?.click()">
           {{ $t('schoolBus.routePlan.importStation') }}
         </el-button>
-        <el-button v-uni-permission="'busstation_add'" type="primary" @click="openStationAdd">
+        <el-button
+          v-uni-permission="'busstation_add'"
+          type="primary"
+          @click="((stationEditingId = null), (stationFormVisible = true))">
           {{ $t('schoolBus.routePlan.addStation') }}
         </el-button>
       </div>
@@ -316,7 +322,6 @@ const {
   handleLoadSuccess: handleTermLoadSuccess,
   loadTerms,
   onSelectionChange: onTermSelectionChange,
-  openTermAdd,
   queryModel: termQueryModel,
   reset: resetTermSearch,
   search: searchTerms,
@@ -342,7 +347,6 @@ const {
   handleLoadSuccess: handleStationLoadSuccess,
   loadStations,
   onSelectionChange: onStationSelectionChange,
-  openStationAdd,
   queryModel: stationQueryModel,
   reset: resetStationSearch,
   search: searchStations,

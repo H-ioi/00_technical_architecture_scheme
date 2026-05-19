@@ -94,6 +94,7 @@ import type { Translate } from '@/types/i18n'
 import { normalizeArray, normalizeEnvelope, normalizePayload } from '@/utils/api-response-normalize'
 
 import { downloadBlob } from '@/utils/download'
+import { buildQuestionnaireSignupUrl } from '@/utils/questionnaire-url'
 
 import QuestionnaireBuilder from '@/views/activity/questionnaire/components/questionnaire-builder.vue'
 import type {
@@ -335,14 +336,6 @@ function serializeTemplateBundle(
     body.id = templateFormId
   }
   return body
-}
-
-function buildQuestionnaireSignupUrl(questionnaireId: string | number): string {
-  const origin = String(import.meta.env.VITE_COMMUNITY_WEB_ORIGIN ?? '').replace(/\/$/, '')
-  if (!origin) {
-    return ''
-  }
-  return `${origin}/#/isacommunity/activity/questionnaire/signup?id=${encodeURIComponent(String(questionnaireId))}`
 }
 
 type Row = Record<string, unknown>

@@ -6,7 +6,9 @@
         <p class="attendance-flow-list__desc">{{ $t('attendance.holidayFlow.pageDesc') }}</p>
       </div>
       <div v-if="active === 'def'" class="uni-list-page__header-actions">
-        <el-button type="primary" @click="goCreateFlow">{{
+        <el-button
+          type="primary"
+          @click="router.push({ name: 'AttendanceHolidayFlowDesignCreate' })">{{
           $t('attendance.holidayFlow.flowDef.add')
         }}</el-button>
       </div>
@@ -32,9 +34,6 @@ import ProcDefPanel from './components/proc-def-panel.vue'
 const router = useRouter()
 const active = ref<'def' | 'proc'>('def')
 
-const goCreateFlow = () => {
-  void router.push({ name: 'AttendanceHolidayFlowDesignCreate' })
-}
 </script>
 
 <style scoped lang="scss">

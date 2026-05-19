@@ -12,16 +12,9 @@ import type { QuestionnaireListDialogRefs } from '@/types/modules/activity-quest
 import { normalizeArray, normalizePaged } from '@/utils/api-response-normalize'
 import { dateFormat } from '@/utils/tool'
 
-import { searchForm, tableCols } from './list.config'
+import { buildQuestionnaireSignupUrl } from '@/utils/questionnaire-url'
 
-/** 问卷报名页完整 URL */
-function buildQuestionnaireSignupUrl(questionnaireId: string | number): string {
-  const origin = String(import.meta.env.VITE_COMMUNITY_WEB_ORIGIN ?? '').replace(/\/$/, '')
-  if (!origin) {
-    return ''
-  }
-  return `${origin}/#/isacommunity/activity/questionnaire/signup?id=${encodeURIComponent(String(questionnaireId))}`
-}
+import { searchForm, tableCols } from './list.config'
 
 type QuestionnaireListRow = Record<string, unknown>
 
@@ -99,26 +92,21 @@ export function useQuestionnaireList(
       selectedRows.value.map((row) => row.id).filter((id) => id != null) as Array<string | number>
   )
 
-  /** 与成员列表一致：`schoolIds` 为数组，便于 UniTable `type:array` 按 options 展示 */
-  const normalizeSchoolIdsForTable = (raw: unknown): unknown => {
-    if (Array.isArray(raw)) {
-      return raw
-    }
-    if (raw == null || raw === '') {
-      return []
-    }
-    if (typeof raw === 'string') {
-      return raw
-        .split(/[,;\s]+/)
-        .map((segment) => segment.trim())
-        .filter(Boolean)
-    }
-    return [raw]
-  }
-
   const applyRowDisplayFormat = (list: QuestionnaireListRow[]) => {
     for (const row of list) {
-      row.schoolIds = normalizeSchoolIdsForTable(row.schoolIds)
+      const rawSchoolIds = row.schoolIds
+      if (Array.isArray(rawSchoolIds)) {
+        row.schoolIds = rawSchoolIds
+      } else if (rawSchoolIds == null || rawSchoolIds === '') {
+        row.schoolIds = []
+      } else if (typeof rawSchoolIds === 'string') {
+        row.schoolIds = rawSchoolIds
+          .split(/[,;\s]+/)
+          .map((segment) => segment.trim())
+          .filter(Boolean)
+      } else {
+        row.schoolIds = [rawSchoolIds]
+      }
       row.status = row.status == null ? '' : String(row.status)
       row.frozen = row.frozen == null ? '' : String(row.frozen)
       row.needStudentInfo = row.needStudentInfo == null ? '' : String(row.needStudentInfo)
@@ -173,27 +161,15 @@ export function useQuestionnaireList(
     }
   }
 
-  const openDesignerEdit = (row: QuestionnaireListRow) => {
-    if (row.id == null) {
-      return
-    }
-    router.push({
-      name: 'ActivityQuestionnaireEdit',
-      params: { id: String(row.id) }
-    })
-  }
-
-  const openSubmissions = (row: QuestionnaireListRow) => {
-    if (row.id == null) {
-      return
-    }
-    router.push({ name: 'ActivityQuestionnaireSubmissions', params: { id: String(row.id) } })
-  }
-
   const actions = computed<UniTableAction[]>(() => [
     {
       label: tr('activity.questionnaireRowData'),
-      onClick: (row) => openSubmissions(row as QuestionnaireListRow)
+      onClick: (row) => {
+        const id = (row as QuestionnaireListRow).id
+        if (id != null) {
+          void router.push({ name: 'ActivityQuestionnaireSubmissions', params: { id: String(id) } })
+        }
+      }
     },
     {
       label: tr('activity.entryEdit'),
@@ -203,7 +179,12 @@ export function useQuestionnaireList(
     {
       label: tr('activity.questionnaireDesigner'),
       code: 'busdriver_edit',
-      onClick: (row) => openDesignerEdit(row as QuestionnaireListRow)
+      onClick: (row) => {
+        const id = (row as QuestionnaireListRow).id
+        if (id != null) {
+          void router.push({ name: 'ActivityQuestionnaireEdit', params: { id: String(id) } })
+        }
+      }
     },
     {
       label: tr('activity.actionCopyQuestionnaire'),
@@ -226,12 +207,6 @@ export function useQuestionnaireList(
     tableRef.value?.refresh()
   }
 
-  const openMetaAdd = () => refs.metaDlg.value?.open('add')
-
-  const openBatchStatus = () => refs.batchDlg.value?.open('status', selectedIds.value)
-
-  const openBatchFrozen = () => refs.batchDlg.value?.open('frozen', selectedIds.value)
-
   return {
     actions,
     columns,
@@ -241,9 +216,6 @@ export function useQuestionnaireList(
     loadData,
     refreshTable,
     onSelectionChange,
-    openBatchFrozen,
-    openBatchStatus,
-    openMetaAdd,
     queryModel,
     reset,
     search,

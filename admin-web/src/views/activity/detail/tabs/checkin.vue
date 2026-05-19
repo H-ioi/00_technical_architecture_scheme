@@ -209,27 +209,46 @@ const { queryModel, filters, handleLoadSuccess, reset, search } = useUniListStat
 })
 
 const decorateRows = (list: Row[]) => {
-  const yesNo = (value: unknown) =>
-    value === true || value === 1 || value === '1' ? tr('activity.yes') : tr('activity.no')
-  const fmtTime = (value: unknown) => {
-    if (value == null || value === '') {
-      return ''
-    }
-    const d = dayjs(String(value))
-    return d.isValid() ? d.format('YYYY-MM-DD HH:mm') : String(value)
-  }
-
   for (const row of list) {
     row.codeStr = row.code == null ? '' : String(row.code)
     const ticketId = row.ticketId ?? row.ticket_id
     row.ticketIdStr = ticketId == null ? '' : String(ticketId)
     row.paidLabel = String(row.paid) === '1' || row.paid === true ? tr('activity.paidYes') : tr('activity.paidNo')
-    row.checkinLabel = yesNo(row.checkin ?? row.checked_in)
-    row.participateLotteryLabel = yesNo(row.participateLottery ?? row.participate_lottery)
-    row.lotteryValidateLabel = yesNo(row.lottery_validate)
-    row.allowLotteryLabel = yesNo(row.allowLottery ?? row.allow_lottery)
-    row.checkinTimeLabel = fmtTime(row.checkinTime ?? row.checkin_time)
-    row.createdAtLabel = fmtTime(row.createdAt ?? row.created_at)
+    const checkinVal = row.checkin ?? row.checked_in
+    row.checkinLabel =
+      checkinVal === true || checkinVal === 1 || checkinVal === '1'
+        ? tr('activity.yes')
+        : tr('activity.no')
+    const participateVal = row.participateLottery ?? row.participate_lottery
+    row.participateLotteryLabel =
+      participateVal === true || participateVal === 1 || participateVal === '1'
+        ? tr('activity.yes')
+        : tr('activity.no')
+    row.lotteryValidateLabel =
+      row.lottery_validate === true || row.lottery_validate === 1 || row.lottery_validate === '1'
+        ? tr('activity.yes')
+        : tr('activity.no')
+    const allowVal = row.allowLottery ?? row.allow_lottery
+    row.allowLotteryLabel =
+      allowVal === true || allowVal === 1 || allowVal === '1' ? tr('activity.yes') : tr('activity.no')
+    const checkinRaw = row.checkinTime ?? row.checkin_time
+    if (checkinRaw == null || checkinRaw === '') {
+      row.checkinTimeLabel = ''
+    } else {
+      const checkinDay = dayjs(String(checkinRaw))
+      row.checkinTimeLabel = checkinDay.isValid()
+        ? checkinDay.format('YYYY-MM-DD HH:mm')
+        : String(checkinRaw)
+    }
+    const createdRaw = row.createdAt ?? row.created_at
+    if (createdRaw == null || createdRaw === '') {
+      row.createdAtLabel = ''
+    } else {
+      const createdDay = dayjs(String(createdRaw))
+      row.createdAtLabel = createdDay.isValid()
+        ? createdDay.format('YYYY-MM-DD HH:mm')
+        : String(createdRaw)
+    }
   }
 }
 

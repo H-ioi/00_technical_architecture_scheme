@@ -89,15 +89,13 @@ export const useList = () => {
     }
   }
 
-  const showDetail = (row: AttendanceWechatOpenidRecord) => {
-    activeRow.value = row
-    detailVisible.value = true
-  }
-
   const actions = computed<UniTableAction[]>(() => [
     {
       label: t('attendance.detail'),
-      onClick: (row) => showDetail(row as AttendanceWechatOpenidRecord)
+      onClick: (row) => {
+        activeRow.value = row as AttendanceWechatOpenidRecord
+        detailVisible.value = true
+      }
     }
   ])
 

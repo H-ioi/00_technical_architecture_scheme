@@ -29,6 +29,7 @@ import { computed, nextTick, ref, watch } from 'vue'
 import { schoolBusCommonApi, schoolBusExceptionApi } from '@/api'
 import { useDialogDetailLoading } from '@/composables/use-dialog-detail-loading'
 import { normalizeArray, normalizeEnvelope } from '@/utils/api-response-normalize'
+import { schoolIdsForCascadeApi } from '@/utils/school-bus'
 import type { SchoolOptionRecord } from '@/types/modules/membership'
 import type { ExceptionFormModel, ExceptionRecord } from '@/types/modules/school-bus-exception'
 
@@ -327,24 +328,6 @@ const close = () => {
   visible.value = false
 }
 
-const schoolIdsForApi = (): Array<string | number> => {
-  const s = formModel.value.school
-
-  if (Array.isArray(s)) {
-    return s
-  }
-
-  if (s != null && s !== '') {
-    return [s as string | number]
-  }
-
-  if (!multiSchool.value && props.defaultSchoolId != null) {
-    return [props.defaultSchoolId]
-  }
-
-  return []
-}
-
 const onSchoolChange = async (e: Array<string | number> | string | number) => {
   formModel.value.sectionId = undefined
   formModel.value.lineId = undefined
@@ -377,7 +360,10 @@ const onSectionChange = async (sectionId: string | number | undefined) => {
 
   lineOptionsFiltered.value = normalizeArray(
     await schoolBusCommonApi.lineList.get({
-      schoolIds: schoolIdsForApi(),
+      schoolIds: schoolIdsForCascadeApi(formModel.value.school, {
+        multiSchool: multiSchool.value,
+        defaultSchoolId: props.defaultSchoolId
+      }),
       sectionId
     })
   ) as LineRow[]

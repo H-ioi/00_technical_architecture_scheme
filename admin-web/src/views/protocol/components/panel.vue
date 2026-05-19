@@ -32,13 +32,13 @@
             :pagination="{ pageSize: 10, pageSizes: [10, 20, 50] }"
             :toolbar="false"
             :action-column="{ fixed: false }"
-            @load-success="onSignTableLoadSuccess"
+            @load-success="signTableEmpty.onLoadSuccess"
             @request-error="signTableEmpty.onRequestError">
             <template #empty>
               <ListTableEmpty
                 :kind="signTableEmpty.kind"
-                @reset="retrySignTable"
-                @retry="retrySignTable" />
+                @reset="signTableEmpty.retry"
+                @retry="signTableEmpty.retry" />
             </template>
           </UniDataTable>
         </section>
@@ -52,7 +52,7 @@
 </template>
 
 <script setup lang="ts">
-import type { UniTableRequest, UniTableRequestResult } from 'uni-ui-lib'
+import type { UniTableRequest } from 'uni-ui-lib'
 import { useUniI18n } from 'uni-ui-lib'
 import { computed, ref, watch } from 'vue'
 
@@ -74,16 +74,7 @@ const { detailLoading, runWithDetailLoading } = useDialogDetailLoading()
 const detail = ref<ProtocolRecord | null>(null)
 const signTableRef = ref<{ refresh: () => void } | null>(null)
 const signTableFilters = ref<Record<string, unknown>>({})
-const signTableEmpty = useListTableEmpty(signTableFilters)
-
-const onSignTableLoadSuccess = (result: UniTableRequestResult) => {
-  signTableEmpty.onLoadSuccess(result)
-}
-
-const retrySignTable = () => {
-  signTableEmpty.resetError()
-  signTableRef.value?.refresh()
-}
+const signTableEmpty = useListTableEmpty(signTableFilters, { tableRef: signTableRef })
 
 const signColumns = computed(() => signCols(t))
 const signSchoolIds = computed(() =>

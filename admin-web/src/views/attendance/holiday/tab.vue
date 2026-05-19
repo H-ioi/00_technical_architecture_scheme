@@ -34,13 +34,13 @@
           :toolbar="{ refresh: true, density: true, columnSetting: true }"
           :actions="leaveActions"
           :action-column="{ width: 110, fixed: 'right' }"
-          @load-success="onLeaveTableLoadSuccess"
+          @load-success="leaveTableEmpty.onLoadSuccess"
           @request-error="leaveTableEmpty.onRequestError">
           <template #empty>
             <ListTableEmpty
               :kind="leaveTableEmpty.kind"
               @reset="resetLeaveSearch"
-              @retry="retryLeaveTable" />
+              @retry="leaveTableEmpty.retry" />
           </template>
         </UniDataTable>
       </el-tab-pane>
@@ -66,19 +66,19 @@
           :toolbar="{ refresh: true, density: true, columnSetting: true }"
           :actions="returnActions"
           :action-column="{ width: 60, fixed: 'right' }"
-          @load-success="onReturnTableLoadSuccess"
+          @load-success="returnTableEmpty.onLoadSuccess"
           @request-error="returnTableEmpty.onRequestError">
           <template #empty>
             <ListTableEmpty
               :kind="returnTableEmpty.kind"
               @reset="resetReturnSearch"
-              @retry="retryReturnTable" />
+              @retry="returnTableEmpty.retry" />
           </template>
         </UniDataTable>
       </el-tab-pane>
     </el-tabs>
 
-    <HolidayFormDrawer v-model:visible="leaveAddVisible" @success="onLeaveFormSuccess" />
+    <HolidayFormDrawer v-model:visible="leaveAddVisible" @success="refreshLeaveTable" />
 
     <DetailDrawer
       v-model:visible="leaveDetailVisible"
@@ -95,7 +95,6 @@
 </template>
 
 <script setup lang="ts">
-import type { UniTableRequestResult } from 'uni-ui-lib'
 import { UniDataTable, UniSearchForm } from 'uni-ui-lib'
 import { nextTick, onMounted, ref, watch } from 'vue'
 
@@ -126,23 +125,17 @@ const {
   handleLoadSuccess: handleLeaveLoadSuccess,
   loadData: loadLeaveData,
   queryModel: leaveQueryModel,
+  refreshTable: refreshLeaveTable,
   reset: resetLeaveSearch,
   search: searchLeave,
   searchCfg: leaveSearchConfig,
   tableRef: leaveTableRef
 } = useHolidayLeave(schoolRecords)
 
-const leaveTableEmpty = useListTableEmpty(leaveFilters)
-
-const onLeaveTableLoadSuccess = (result: UniTableRequestResult) => {
-  leaveTableEmpty.onLoadSuccess(result)
-  handleLeaveLoadSuccess(result)
-}
-
-const retryLeaveTable = () => {
-  leaveTableEmpty.resetError()
-  leaveTableRef.value?.refresh()
-}
+const leaveTableEmpty = useListTableEmpty(leaveFilters, {
+  tableRef: leaveTableRef,
+  afterLoadSuccess: handleLeaveLoadSuccess
+})
 
 const {
   actions: returnActions,
@@ -161,21 +154,10 @@ const {
   tableRef: returnTableRef
 } = useHolidayReturn(schoolRecords)
 
-const returnTableEmpty = useListTableEmpty(returnFilters)
-
-const onReturnTableLoadSuccess = (result: UniTableRequestResult) => {
-  returnTableEmpty.onLoadSuccess(result)
-  handleReturnLoadSuccess(result)
-}
-
-const retryReturnTable = () => {
-  returnTableEmpty.resetError()
-  returnTableRef.value?.refresh()
-}
-
-const onLeaveFormSuccess = () => {
-  leaveTableRef.value?.refresh()
-}
+const returnTableEmpty = useListTableEmpty(returnFilters, {
+  tableRef: returnTableRef,
+  afterLoadSuccess: handleReturnLoadSuccess
+})
 
 onMounted(async () => {
   schoolRecords.value = await membershipApi.school.get()

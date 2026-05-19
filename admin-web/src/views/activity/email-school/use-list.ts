@@ -1,5 +1,5 @@
 import type { UniOption, UniTableAction, UniTableRequest } from 'uni-ui-lib'
-import { toUniOptions, useUniI18n, useUniListState } from 'uni-ui-lib'
+import { useUniI18n, useUniListState } from 'uni-ui-lib'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { computed, onMounted, ref } from 'vue'
 
@@ -8,6 +8,7 @@ import type { Translate } from '@/types/i18n'
 import type { SchoolEmailConfigRow } from '@/types/modules/school-email-config'
 import { useMembershipSchoolOptions } from '@/composables/use-membership-school-options'
 import { normalizeArray, normalizePaged } from '@/utils/api-response-normalize'
+import { appModuleOptionsFromRows } from '@/utils/activity-email-school'
 import { dateFormat } from '@/utils/tool'
 
 import type FormDialog from './components/form-dialog.vue'
@@ -35,36 +36,15 @@ export function useEmailSchoolList(formDlg: DialogRef) {
       selectedRows.value.map((row) => row.id).filter((id) => id != null) as Array<string | number>
   )
 
-  const normalizeAppModuleOptions = (rows: Record<string, unknown>[]) => {
-    const seen = new Set<string>()
-    const options: UniOption[] = []
-    for (const row of rows) {
-      const value = row.value ?? row.moduleCode ?? row.code ?? row.key ?? row.id
-      const label = row.label ?? row.name ?? row.desc ?? row.moduleName ?? value
-      if (value == null || label == null) {
-        continue
-      }
-      const key = String(value)
-      if (seen.has(key)) {
-        continue
-      }
-      seen.add(key)
-      options.push({ value: key, label: String(label) })
-    }
-    if (!seen.has('1')) {
-      options.unshift({ value: '1', label: tr('activity.appModuleActivity') })
-    }
-    return options
-  }
-
   const loadAppModuleOptions = async () => {
     try {
       const raw = await schoolEmailConfigApi.appModules.get()
-      appModuleOptions.value = normalizeAppModuleOptions(
-        normalizeArray(raw) as Record<string, unknown>[]
+      appModuleOptions.value = appModuleOptionsFromRows(
+        normalizeArray(raw) as Record<string, unknown>[],
+        tr('activity.appModuleActivity')
       )
     } catch {
-      appModuleOptions.value = normalizeAppModuleOptions([])
+      appModuleOptions.value = appModuleOptionsFromRows([], tr('activity.appModuleActivity'))
     }
   }
 
@@ -97,16 +77,15 @@ export function useEmailSchoolList(formDlg: DialogRef) {
     return { data: list, total }
   }
 
-  const openAdd = () => formDlg.value?.open('add')
-  const openEdit = (row: SchoolEmailConfigRow) => formDlg.value?.open('edit', row)
-  const openDetail = (row: SchoolEmailConfigRow) => formDlg.value?.open('view', row)
-
   const actions = computed<UniTableAction[]>(() => [
-    { label: tr('activity.lookDetail'), onClick: (row) => void openDetail(row as SchoolEmailConfigRow) },
+    {
+      label: tr('activity.lookDetail'),
+      onClick: (row) => void formDlg.value?.open('view', row as SchoolEmailConfigRow)
+    },
     {
       label: tr('activity.entryEdit'),
       code: 'busdriver_edit',
-      onClick: (row) => void openEdit(row as SchoolEmailConfigRow)
+      onClick: (row) => void formDlg.value?.open('edit', row as SchoolEmailConfigRow)
     }
   ])
 
@@ -145,8 +124,6 @@ export function useEmailSchoolList(formDlg: DialogRef) {
     loadData,
     refreshTable,
     onSelectionChange,
-    openAdd,
-    openDetail,
     queryModel,
     reset,
     search,

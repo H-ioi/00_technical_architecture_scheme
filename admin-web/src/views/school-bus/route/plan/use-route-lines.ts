@@ -268,24 +268,18 @@ export const useRouteLines = (
     }
   }
 
-  const openDetail = (row: Loose) => {
-    detailRecord.value = row
-    detailVisible.value = true
-  }
-
-  const openRouteEdit = (row: Loose) => {
-    routeFormRef.value?.showForm('edit', row)
-  }
-
   const actions = computed<UniTableAction[]>(() => [
     {
       label: t('schoolBus.look'),
-      onClick: (row) => openDetail(row as Loose)
+      onClick: (row) => {
+        detailRecord.value = row as Loose
+        detailVisible.value = true
+      }
     },
     {
       label: t('schoolBus.edit'),
       code: 'busline_edit',
-      onClick: (row) => openRouteEdit(row as Loose)
+      onClick: (row) => void routeFormRef.value?.showForm('edit', row as Loose)
     }
   ])
 

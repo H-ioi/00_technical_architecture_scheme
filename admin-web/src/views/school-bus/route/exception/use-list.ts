@@ -294,15 +294,13 @@ export const useList = () => {
     formVisible.value = true
   }
 
-  const openDetail = (row: ExceptionRecord) => {
-    detailRecord.value = row
-    detailVisible.value = true
-  }
-
   const actions = computed<UniTableAction[]>(() => [
     {
       label: t('schoolBus.look'),
-      onClick: (row) => openDetail(row as ExceptionRecord)
+      onClick: (row) => {
+        detailRecord.value = row as ExceptionRecord
+        detailVisible.value = true
+      }
     },
     {
       label: t('schoolBus.edit'),
@@ -352,7 +350,6 @@ export const useList = () => {
     handleLoadSuccess,
     loadData,
     multiSchool,
-    openDetail,
     openForm,
     queryModel,
     refreshTable,

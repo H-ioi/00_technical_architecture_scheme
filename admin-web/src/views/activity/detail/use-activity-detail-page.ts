@@ -11,6 +11,7 @@ import type { Translate } from '@/types/i18n'
 import type { ActivityDetailFormModel } from '@/types/modules/activity-detail-form'
 import { normalizeEnvelope, normalizePayload } from '@/utils/api-response-normalize'
 import { downloadResponseBlob } from '@/utils/download'
+import { coerceIdList } from '@/utils/tool'
 
 import { activityStatusOptions, checkinMethodOptions } from '../list/list.config'
 import { buildActivityDetailFormConfig } from './detail-form.config'
@@ -71,16 +72,6 @@ function rowToModel(d: Loose, ticketNotifyDisabledText: string): ActivityDetailF
   const reg = Number.isFinite(regRaw) ? regRaw : 0
   const vf = d.visibleScopeFile as Record<string, unknown> | undefined
 
-  const toIdList = (raw: unknown): Array<string | number> => {
-    if (!Array.isArray(raw)) {
-      if (raw == null || raw === '') {
-        return []
-      }
-      return [raw as string | number]
-    }
-    return raw.filter((x) => x != null && x !== '') as Array<string | number>
-  }
-
   return {
     id: d.id as string | number | undefined,
     publisher: String(d.publisher ?? ''),
@@ -101,7 +92,7 @@ function rowToModel(d: Loose, ticketNotifyDisabledText: string): ActivityDetailF
       d.registrationStartTime && d.registrationEndTime
         ? [String(d.registrationStartTime), String(d.registrationEndTime)]
         : [],
-    schoolIds: toIdList(d.schoolIds),
+    schoolIds: coerceIdList(d.schoolIds),
     checkinMethod: d.checkinMethod != null ? String(d.checkinMethod) : '0',
     ticketPrice: d.ticketPrice ?? 0,
     recommended: d.recommended != null ? String(d.recommended) : '0',
@@ -112,12 +103,12 @@ function rowToModel(d: Loose, ticketNotifyDisabledText: string): ActivityDetailF
     registrationLimit: reg === 0 ? 1 : reg,
     visibleScope: d.visibleScope != null && d.visibleScope !== '' ? Number(d.visibleScope) : 0,
     visibleScopeFileName: vf?.fileName != null ? String(vf.fileName) : '',
-    emailConfigIds: toIdList(d.emailConfigIds),
+    emailConfigIds: coerceIdList(d.emailConfigIds),
     ticketNotifyEmailEnabled:
       d.ticketNotifyEmailEnabled != null ? String(d.ticketNotifyEmailEnabled) : '0',
     ticketNotifyEmails: d.ticketNotifyEmails,
     ticketNotifyEmailsLabel: formatTicketNotifyEmails(d, ticketNotifyDisabledText),
-    wechatPushSchoolIds: toIdList(d.wechatPushSchoolIds),
+    wechatPushSchoolIds: coerceIdList(d.wechatPushSchoolIds),
     wechatPushContent: String(d.wechatPushContent ?? ''),
     wechatPushRemark: String(d.wechatPushRemark ?? ''),
     activityStatus:
@@ -292,7 +283,8 @@ export function useActivityDetailPage() {
 
   const uniMode = computed<'view' | 'edit'>(() => (canSubmit.value ? 'edit' : 'view'))
 
-  const meaningfulHtml = (raw?: string) => {
+  const detailHtmlCn = computed(() => {
+    const raw = form.detailCn
     if (raw == null || raw === '') {
       return ''
     }
@@ -301,10 +293,19 @@ export function useActivityDetailPage() {
       return ''
     }
     return String(raw)
-  }
+  })
 
-  const detailHtmlCn = computed(() => meaningfulHtml(form.detailCn))
-  const detailHtmlEn = computed(() => meaningfulHtml(form.detailEn))
+  const detailHtmlEn = computed(() => {
+    const raw = form.detailEn
+    if (raw == null || raw === '') {
+      return ''
+    }
+    const text = String(raw).replace(/<[^>]+>/g, '').trim()
+    if (!text) {
+      return ''
+    }
+    return String(raw)
+  })
 
   const mergeEmailDetails = async () => {
     const selected = form.emailConfigIds.map((x) => String(x))
@@ -406,10 +407,6 @@ export function useActivityDetailPage() {
 
   const goBack = () => {
     void router.push({ name: 'ActivityEventList' })
-  }
-
-  const goEdit = () => {
-    void router.replace({ query: { ...route.query, mode: 'edit' } })
   }
 
   const handleDetailTabChange = (name: string | number) => {
@@ -556,7 +553,6 @@ export function useActivityDetailPage() {
     relatedEntries,
     handleDetailTabChange,
     goBack,
-    goEdit,
     submit,
     onCoverBeforeUpload,
     downloadVisibleTpl,

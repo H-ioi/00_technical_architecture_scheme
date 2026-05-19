@@ -129,18 +129,6 @@ export function useActivityProgramList(
     router.push({ name: 'ActivityProgramDetail', query: { id: String(row.id), mode } })
   }
 
-  const goCreate = () => {
-    router.push({
-      name: 'ActivityProgramDetail',
-      query: {
-        mode: 'edit',
-        ...(options.activityId != null && options.activityId !== ''
-          ? { activityId: String(options.activityId) }
-          : {})
-      }
-    })
-  }
-
   const isActivityEnded = async (row: Row) => {
     if (row.activityStatus != null && row.activityStatus !== '') {
       return String(row.activityStatus) === '3'
@@ -254,7 +242,6 @@ export function useActivityProgramList(
     columns,
     deleteBatch,
     filters,
-    goCreate,
     handleLoadSuccess,
     loadData,
     lockedSchoolId,

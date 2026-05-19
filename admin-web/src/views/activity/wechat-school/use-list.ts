@@ -64,16 +64,15 @@ export function useWechatSchoolList(formDlg: DialogRef) {
     return { data: list, total }
   }
 
-  const openAdd = () => formDlg.value?.open('add')
-  const openEdit = (row: WechatSchoolInfoRow) => formDlg.value?.open('edit', row)
-  const openDetail = (row: WechatSchoolInfoRow) => formDlg.value?.open('view', row)
-
   const actions = computed<UniTableAction[]>(() => [
-    { label: tr('activity.lookDetail'), onClick: (row) => void openDetail(row as WechatSchoolInfoRow) },
+    {
+      label: tr('activity.lookDetail'),
+      onClick: (row) => void formDlg.value?.open('view', row as WechatSchoolInfoRow)
+    },
     {
       label: tr('activity.entryEdit'),
       code: 'busdriver_edit',
-      onClick: (row) => void openEdit(row as WechatSchoolInfoRow)
+      onClick: (row) => void formDlg.value?.open('edit', row as WechatSchoolInfoRow)
     }
   ])
 
@@ -112,8 +111,6 @@ export function useWechatSchoolList(formDlg: DialogRef) {
     loadData,
     refreshTable,
     onSelectionChange,
-    openAdd,
-    openDetail,
     queryModel,
     reset,
     search,

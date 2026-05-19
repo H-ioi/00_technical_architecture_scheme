@@ -25,13 +25,7 @@ export const useBusOrderFormDialog = () => {
     formVisible.value = true
   }
 
-  const closeForm = () => {
-    formVisible.value = false
-    editingOrderId.value = null
-  }
-
   return {
-    closeForm,
     editingOrderId,
     formMode,
     formVisible,

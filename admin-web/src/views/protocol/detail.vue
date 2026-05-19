@@ -26,13 +26,13 @@
             :pagination="{ pageSize: 10, pageSizes: [10, 20, 50] }"
             :toolbar="{ refresh: true, fullscreen: true, columnSetting: true }"
             :action-column="{ fixed: false }"
-            @load-success="onSignTableLoadSuccess"
+            @load-success="signTableEmpty.onLoadSuccess"
             @request-error="signTableEmpty.onRequestError">
             <template #empty>
               <ListTableEmpty
                 :kind="signTableEmpty.kind"
-                @reset="retrySignTable"
-                @retry="retrySignTable" />
+                @reset="signTableEmpty.retry"
+                @retry="signTableEmpty.retry" />
             </template>
           </UniDataTable>
         </section>
@@ -42,7 +42,7 @@
 </template>
 
 <script setup lang="ts">
-import type { UniOption, UniTableRequest, UniTableRequestResult } from 'uni-ui-lib'
+import type { UniOption, UniTableRequest } from 'uni-ui-lib'
 import { toUniOptions, useUniI18n } from 'uni-ui-lib'
 import { computed, onMounted, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
@@ -156,16 +156,7 @@ const loadSign: UniTableRequest = ({ pageNo: current, pageSize: size }) =>
 
 const signTableRef = ref<{ refresh: () => void } | null>(null)
 const signTableFilters = ref<Record<string, unknown>>({})
-const signTableEmpty = useListTableEmpty(signTableFilters)
-
-const onSignTableLoadSuccess = (result: UniTableRequestResult) => {
-  signTableEmpty.onLoadSuccess(result)
-}
-
-const retrySignTable = () => {
-  signTableEmpty.resetError()
-  signTableRef.value?.refresh()
-}
+const signTableEmpty = useListTableEmpty(signTableFilters, { tableRef: signTableRef })
 
 const back = () => {
   void router.push('/protocol')

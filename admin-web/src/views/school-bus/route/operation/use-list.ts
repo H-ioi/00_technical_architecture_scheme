@@ -259,15 +259,13 @@ export const useList = () => {
     formVisible.value = true
   }
 
-  const openDetail = (row: OperationRecord) => {
-    detailRecord.value = row
-    detailVisible.value = true
-  }
-
   const actions = computed<UniTableAction[]>(() => [
     {
       label: t('schoolBus.look'),
-      onClick: (row) => openDetail(row as OperationRecord)
+      onClick: (row) => {
+        detailRecord.value = row as OperationRecord
+        detailVisible.value = true
+      }
     },
     {
       label: t('schoolBus.edit'),
@@ -316,7 +314,6 @@ export const useList = () => {
     lineOptions,
     loadData,
     multiSchool,
-    openDetail,
     openForm,
     queryModel,
     refreshTable,

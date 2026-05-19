@@ -141,30 +141,21 @@ export const useStationSection = (schoolRecords: SchoolRecordsRef) => {
     }
   }
 
-  const openStationDetail = (row: Loose) => {
-    stationDetailRecord.value = row
-    stationDetailVisible.value = true
-  }
-
-  const openStationEdit = (row: Loose) => {
-    stationEditingId.value = row.id as string | number
-    stationFormVisible.value = true
-  }
-
-  const openStationAdd = () => {
-    stationEditingId.value = null
-    stationFormVisible.value = true
-  }
-
   const actions = computed<UniTableAction[]>(() => [
     {
       label: t('schoolBus.look'),
-      onClick: (row) => openStationDetail(row as Loose)
+      onClick: (row) => {
+        stationDetailRecord.value = row as Loose
+        stationDetailVisible.value = true
+      }
     },
     {
       label: t('schoolBus.edit'),
       code: 'busstation_edit',
-      onClick: (row) => openStationEdit(row as Loose)
+      onClick: (row) => {
+        stationEditingId.value = (row as Loose).id as string | number
+        stationFormVisible.value = true
+      }
     }
   ])
 
@@ -219,7 +210,6 @@ export const useStationSection = (schoolRecords: SchoolRecordsRef) => {
     loadStations,
     multiSchool,
     onSelectionChange,
-    openStationAdd,
     queryModel,
     reset,
     search,
