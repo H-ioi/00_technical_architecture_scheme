@@ -152,27 +152,7 @@ const reload = () => {
   tableRef.value?.refresh()
 }
 
-const detailRowText = (prop: UniTableColumn['prop']) => {
-  if (!detailRecord.value || prop == null) {
-    return ''
-  }
-
-  const val = (detailRecord.value as Record<string, unknown>)[String(prop)]
-
-  return val == null || val === '' ? '--' : String(val)
-}
-
-const pickImport = () => {
-  fileRef.value?.click()
-}
-
 const IMPORT_MAX_BYTES = 10 * 1024 * 1024
-
-const isSpreadsheetFilename = (name: string) => {
-  const lower = name.toLowerCase()
-
-  return lower.endsWith('.xls') || lower.endsWith('.xlsx')
-}
 
 const onImportFile = async (e: Event) => {
   const input = e.target as HTMLInputElement
