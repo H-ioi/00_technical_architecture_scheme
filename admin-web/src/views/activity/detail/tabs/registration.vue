@@ -25,47 +25,14 @@
       @load-success="handleLoadSuccess"
       @selection-change="onSelectionChange"
     >
-      <template v-if="!readOnly || showExportEnded" #toolbar>
-        <template v-if="!readOnly">
-          <el-upload
-            v-uni-permission="'busdriver_edit'"
-            accept=".xlsx,.xls"
-            :show-file-list="false"
-            :before-upload="importTickets"
-          >
-            <el-button type="primary" :loading="importing">
-              {{ $t('activity.import') }}
-            </el-button>
-          </el-upload>
-          <el-button
-            v-uni-permission="'busdriver_edit'"
-            type="primary"
-            plain
-            :disabled="!activityId"
-            @click="downloadTemplate"
-          >
-            {{ $t('activity.downloadTemplate') }}
-          </el-button>
-        </template>
+      <template v-if="!readOnly && canDeleteRegistration" #toolbar>
         <el-button
-          v-if="!readOnly && canDeleteRegistration"
           type="danger"
           plain
           :disabled="!selectedIds.length"
           @click="deleteSelected"
         >
           {{ $t('activity.delBatch') }}
-        </el-button>
-        <el-button
-          v-if="showExportEnded"
-          v-uni-permission="'busdriver_edit'"
-          type="primary"
-          plain
-          :disabled="!activityId"
-          :loading="exporting"
-          @click="exportCsv"
-        >
-          {{ $t('activity.export') }}
         </el-button>
       </template>
     </UniDataTable>
@@ -378,4 +345,10 @@ const submit = async () => {
     saving.value = false
   }
 }
+
+defineExpose({
+  downloadTemplate,
+  exportCsv,
+  importTickets
+})
 </script>

@@ -13,16 +13,109 @@
           <el-button type="primary" :loading="saving" @click="submit">
             {{ $t('common.submit') }}
           </el-button>
-          <el-divider direction="vertical" class="activity-event-detail__divider" />
         </template>
-        <el-button
-          v-else-if="!isEditRoute && detailId && canEdit"
-          v-uni-permission="'busdriver_edit'"
-          type="primary"
-          @click="goEdit"
-        >
-          {{ $t('activity.entryEdit') }}
-        </el-button>
+        <div v-if="hasDetailTabHeaderActions" class="activity-event-detail__tab-actions">
+          <template v-if="activeDetailTab === 'registration'">
+            <el-upload
+              v-if="String(form.activityStatus) !== '3'"
+              v-uni-permission="'busdriver_edit'"
+              accept=".xlsx,.xls"
+              :show-file-list="false"
+              :before-upload="uploadRegistrationTickets">
+              <el-button type="primary">{{ $t('activity.import') }}</el-button>
+            </el-upload>
+            <el-button
+              v-if="String(form.activityStatus) !== '3'"
+              v-uni-permission="'busdriver_edit'"
+              type="primary"
+              plain
+              @click="registrationTabRef?.downloadTemplate?.()">
+              {{ $t('activity.downloadTemplate') }}
+            </el-button>
+            <el-button
+              v-if="String(form.activityStatus) === '3'"
+              v-uni-permission="'busdriver_edit'"
+              type="primary"
+              plain
+              @click="registrationTabRef?.exportCsv?.()">
+              {{ $t('activity.export') }}
+            </el-button>
+          </template>
+          <el-button
+            v-else-if="activeDetailTab === 'checkin' && String(form.activityStatus) === '3'"
+            v-uni-permission="'busdriver_edit'"
+            type="primary"
+            plain
+            @click="checkinTabRef?.exportCsv?.()">
+            {{ $t('activity.export') }}
+          </el-button>
+          <template v-else-if="activeDetailTab === 'winner'">
+            <el-button
+              v-if="String(form.activityStatus) === '2'"
+              v-uni-permission="'busdriver_edit'"
+              type="primary"
+              @click="winnerTabRef?.openAdd?.()">
+              {{ $t('activity.add') }}
+            </el-button>
+            <el-button
+              v-if="String(form.activityStatus) === '2' || String(form.activityStatus) === '3'"
+              v-uni-permission="'busdriver_edit'"
+              type="primary"
+              plain
+              @click="winnerTabRef?.exportWinners?.()">
+              {{ $t('activity.export') }}
+            </el-button>
+          </template>
+          <template v-else-if="activeDetailTab === 'voteInfo'">
+            <el-button
+              v-if="String(form.activityStatus) === '2'"
+              v-uni-permission="'busdriver_edit'"
+              type="primary"
+              @click="voteInfoTabRef?.openAdd?.()">
+              {{ $t('activity.add') }}
+            </el-button>
+            <el-button
+              v-if="String(form.activityStatus) === '3'"
+              v-uni-permission="'busdriver_edit'"
+              type="primary"
+              plain
+              @click="voteInfoTabRef?.exportCsv?.()">
+              {{ $t('activity.export') }}
+            </el-button>
+          </template>
+          <template v-else-if="activeDetailTab === 'blessing'">
+            <el-button
+              v-if="String(form.activityStatus) === '2'"
+              v-uni-permission="'busdriver_edit'"
+              type="primary"
+              @click="blessingTabRef?.openAdd?.()">
+              {{ $t('activity.add') }}
+            </el-button>
+            <el-button
+              v-if="String(form.activityStatus) === '3'"
+              v-uni-permission="'busdriver_edit'"
+              type="primary"
+              plain
+              @click="blessingTabRef?.exportCsv?.()">
+              {{ $t('activity.export') }}
+            </el-button>
+          </template>
+          <el-button
+            v-else-if="
+              activeDetailTab === 'feedback' &&
+              (String(form.activityStatus) === '2' || String(form.activityStatus) === '3')
+            "
+            v-uni-permission="'busdriver_edit'"
+            type="primary"
+            plain
+            @click="feedbackTabRef?.exportFeedback?.()">
+            {{ $t('activity.export') }}
+          </el-button>
+        </div>
+        <el-divider
+          v-if="hasHeaderLeadingActions"
+          direction="vertical"
+          class="activity-event-detail__divider" />
         <el-button @click="goBack">{{ $t('activity.back') }}</el-button>
       </div>
     </div>
@@ -30,8 +123,7 @@
     <el-tabs
       v-model="activeDetailTab"
       class="activity-event-detail__tabs"
-      @tab-change="handleDetailTabChange"
-    >
+      @tab-change="handleDetailTabChange">
       <el-tab-pane :label="$t('activity.activityBaseInfo')" name="base">
         <div v-loading="loading" class="activity-event-detail__body">
           <UniForm
@@ -39,8 +131,7 @@
             v-model="formModel"
             :mode="uniMode"
             class="activity-event-detail__form"
-            :config="formConfig"
-          >
+            :config="formConfig">
             <template #field-imageUrl>
               <div class="activity-event-detail__cover">
                 <el-upload
@@ -48,12 +139,11 @@
                   class="activity-event-detail__cover-upload"
                   accept="image/*"
                   :show-file-list="false"
-                  :before-upload="onCoverBeforeUpload"
-                >
+                  :before-upload="onCoverBeforeUpload">
                   <el-button type="primary">{{ $t('activity.coverPick') }}</el-button>
                 </el-upload>
                 <div v-if="form.imageUrl" class="activity-event-detail__cover-preview">
-                  <img :src="form.imageUrl" alt="">
+                  <img :src="form.imageUrl" alt="" />
                 </div>
               </div>
             </template>
@@ -77,8 +167,7 @@
                   :step="1"
                   :precision="0"
                   controls-position="right"
-                  class="activity-event-detail__reg-cap"
-                />
+                  class="activity-event-detail__reg-cap" />
               </div>
             </template>
             <template #field-detailCn>
@@ -87,13 +176,11 @@
                 v-model="form.detailCn"
                 class="activity-event-detail__uni-editor"
                 height="min(280px, 32vh)"
-                :placeholder="$t('activity.detailCnPh')"
-              />
+                :placeholder="$t('activity.detailCnPh')" />
               <div
                 v-else-if="detailHtmlCn"
                 class="activity-event-detail__html-body"
-                v-html="detailHtmlCn"
-              />
+                v-html="detailHtmlCn" />
               <span v-else class="activity-event-detail__html-empty">—</span>
             </template>
             <template #field-detailEn>
@@ -102,13 +189,11 @@
                 v-model="form.detailEn"
                 class="activity-event-detail__uni-editor"
                 height="min(280px, 32vh)"
-                :placeholder="$t('activity.detailEnPh')"
-              />
+                :placeholder="$t('activity.detailEnPh')" />
               <div
                 v-else-if="detailHtmlEn"
                 class="activity-event-detail__html-body"
-                v-html="detailHtmlEn"
-              />
+                v-html="detailHtmlEn" />
               <span v-else class="activity-event-detail__html-empty">—</span>
             </template>
           </UniForm>
@@ -116,8 +201,7 @@
           <el-card
             v-if="Number(form.visibleScope) === 1 && detailId && canSubmit"
             shadow="never"
-            class="activity-event-detail__scope-card"
-          >
+            class="activity-event-detail__scope-card">
             <template #header>
               <span>{{ $t('activity.visibleScopeBlock') }}</span>
             </template>
@@ -134,8 +218,7 @@
                     void onVisibleScopeFile(raw as File)
                     return false
                   }
-                "
-              >
+                ">
                 <el-button plain>{{ $t('activity.visibleScopeUpload') }}</el-button>
               </el-upload>
             </div>
@@ -143,80 +226,77 @@
         </div>
       </el-tab-pane>
       <el-tab-pane :label="$t('activity.programListTitle')" name="program">
-        <ActivityProgramCards
+        <ProgramCards
           v-if="detailId"
           :key="`${detailId}-${tabRefreshKeys.program}`"
           :activity-id="detailId"
-          :read-only="String(form.activityStatus) === '3'"
-        />
+          :read-only="String(form.activityStatus) === '3'" />
       </el-tab-pane>
       <el-tab-pane :label="$t('activity.questionnaireContentTitle')" name="questionnaire">
-        <ActivityQuestionnaireContent
+        <QuestionnaireContent
           v-if="detailId"
           :key="`${detailId}-${tabRefreshKeys.questionnaire}`"
-          :activity-id="detailId"
-        />
+          :activity-id="detailId" />
       </el-tab-pane>
       <el-tab-pane :label="$t('activity.registrationListTitle')" name="registration">
-        <ActivityRegistrationTab
+        <RegistrationTab
           v-if="detailId"
+          ref="registrationTabRef"
           :key="`${detailId}-${tabRefreshKeys.registration}`"
           :activity-id="detailId"
           :read-only="String(form.activityStatus) === '3'"
-          :show-export-ended="String(form.activityStatus) === '3'"
-        />
+          :show-export-ended="String(form.activityStatus) === '3'" />
       </el-tab-pane>
       <el-tab-pane :label="$t('activity.checkinListTitle')" name="checkin">
-        <ActivityCheckinTab
+        <CheckinTab
           v-if="detailId"
+          ref="checkinTabRef"
           :key="`${detailId}-${tabRefreshKeys.checkin}`"
           :activity-id="detailId"
           :read-only="String(form.activityStatus) === '3'"
-          :show-export-ended="String(form.activityStatus) === '3'"
-        />
+          :show-export-ended="String(form.activityStatus) === '3'" />
       </el-tab-pane>
       <el-tab-pane :label="$t('activity.winnerListTitle')" name="winner">
-        <ActivityWinnerTab
+        <WinnerTab
           v-if="detailId"
+          ref="winnerTabRef"
           :key="`${detailId}-${tabRefreshKeys.winner}`"
           :activity-id="detailId"
           :read-only="String(form.activityStatus) !== '2'"
-          :show-export-ended="String(form.activityStatus) === '3'"
-        />
+          :show-export-ended="String(form.activityStatus) === '3'" />
       </el-tab-pane>
       <el-tab-pane :label="$t('activity.voteInfoTitle')" name="voteInfo">
-        <ActivityVoteInfoTab
+        <VoteInfoTab
           v-if="detailId"
+          ref="voteInfoTabRef"
           :key="`${detailId}-${tabRefreshKeys.voteInfo}`"
           :activity-id="detailId"
           :read-only="String(form.activityStatus) !== '2'"
-          :show-export-ended="String(form.activityStatus) === '3'"
-        />
+          :show-export-ended="String(form.activityStatus) === '3'" />
       </el-tab-pane>
       <el-tab-pane :label="$t('activity.blessingListTitle')" name="blessing">
-        <ActivityBlessingTab
+        <BlessingTab
           v-if="detailId"
+          ref="blessingTabRef"
           :key="`${detailId}-${tabRefreshKeys.blessing}`"
           :activity-id="detailId"
           :read-only="String(form.activityStatus) !== '2'"
-          :show-export-ended="String(form.activityStatus) === '3'"
-        />
+          :show-export-ended="String(form.activityStatus) === '3'" />
       </el-tab-pane>
       <el-tab-pane :label="$t('activity.feedbackListTitle')" name="feedback">
-        <ActivityFeedbackTab
+        <FeedbackTab
           v-if="detailId"
+          ref="feedbackTabRef"
           :key="`${detailId}-${tabRefreshKeys.feedback}`"
           :activity-id="detailId"
           :read-only="String(form.activityStatus) !== '2'"
-          :show-export-ended="String(form.activityStatus) === '3'"
-        />
+          :show-export-ended="String(form.activityStatus) === '3'" />
       </el-tab-pane>
       <el-tab-pane
         v-for="entry in relatedEntries"
         :key="entry.name"
         :label="entry.label"
-        :name="entry.name"
-      >
+        :name="entry.name">
         <el-empty :description="$t('activity.detailTabPending')" />
       </el-tab-pane>
     </el-tabs>
@@ -225,23 +305,32 @@
 
 <script setup lang="ts">
 import { UniForm } from 'uni-ui-lib'
+import { computed, ref } from 'vue'
 
 import UniEditor from '@/components/uni-editor/index.vue'
 
-import ActivityBlessingTab from './tabs/blessing.vue'
-import ActivityCheckinTab from './tabs/checkin.vue'
-import ActivityFeedbackTab from './tabs/feedback.vue'
-import ActivityProgramCards from './tabs/program-cards.vue'
-import ActivityQuestionnaireContent from './tabs/questionnaire-content.vue'
-import ActivityRegistrationTab from './tabs/registration.vue'
-import ActivityVoteInfoTab from './tabs/vote-info.vue'
-import ActivityWinnerTab from './tabs/winner.vue'
+import BlessingTab from './tabs/blessing.vue'
+import CheckinTab from './tabs/checkin.vue'
+import FeedbackTab from './tabs/feedback.vue'
+import ProgramCards from './tabs/program-cards.vue'
+import QuestionnaireContent from './tabs/questionnaire-content.vue'
+import RegistrationTab from './tabs/registration.vue'
+import VoteInfoTab from './tabs/vote-info.vue'
+import WinnerTab from './tabs/winner.vue'
 import { useActivityDetailPage } from './use-activity-detail-page'
+
+type DetailTabActions = {
+  downloadTemplate?: () => void
+  exportCsv?: () => void
+  exportFeedback?: () => void
+  exportWinners?: () => void
+  importTickets?: (file: File) => boolean
+  openAdd?: () => void
+}
 
 const {
   detailHtmlCn,
   detailHtmlEn,
-  canEdit,
   canSubmit,
   detailId,
   form,
@@ -250,9 +339,7 @@ const {
   activeDetailTab,
   tabRefreshKeys,
   goBack,
-  goEdit,
   handleDetailTabChange,
-  isEditRoute,
   loading,
   onCoverBeforeUpload,
   onVisibleScopeFile,
@@ -264,6 +351,30 @@ const {
   uniFormRef,
   uniMode
 } = useActivityDetailPage()
+
+const registrationTabRef = ref<DetailTabActions | null>(null)
+const checkinTabRef = ref<DetailTabActions | null>(null)
+const winnerTabRef = ref<DetailTabActions | null>(null)
+const voteInfoTabRef = ref<DetailTabActions | null>(null)
+const blessingTabRef = ref<DetailTabActions | null>(null)
+const feedbackTabRef = ref<DetailTabActions | null>(null)
+
+const uploadRegistrationTickets = (file: File) =>
+  registrationTabRef.value?.importTickets?.(file) ?? false
+
+const hasDetailTabHeaderActions = computed(() => {
+  const status = String(form.activityStatus)
+  if (!detailId.value) return false
+  if (activeDetailTab.value === 'registration') return status !== '3' || status === '3'
+  if (activeDetailTab.value === 'checkin') return status === '3'
+  if (activeDetailTab.value === 'winner') return status === '2' || status === '3'
+  if (activeDetailTab.value === 'voteInfo') return status === '2' || status === '3'
+  if (activeDetailTab.value === 'blessing') return status === '2' || status === '3'
+  if (activeDetailTab.value === 'feedback') return status === '2' || status === '3'
+  return false
+})
+
+const hasHeaderLeadingActions = computed(() => canSubmit.value || hasDetailTabHeaderActions.value)
 </script>
 
 <style scoped lang="scss">
@@ -274,6 +385,13 @@ const {
 
   &__actions {
     align-items: center;
+  }
+
+  &__tab-actions {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-left: 8px;
   }
 
   &__divider {
@@ -293,6 +411,23 @@ const {
 
   &__form {
     margin-bottom: 16px;
+
+    :deep(.uni-form__section-title) {
+      margin: 20px 0 12px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid var(--el-border-color-lighter);
+
+      &:first-child {
+        margin-top: 0;
+      }
+
+      h3 {
+        margin: 0;
+        font-size: 15px;
+        font-weight: 600;
+        color: var(--el-text-color-primary);
+      }
+    }
   }
 
   &__cover {
@@ -377,6 +512,12 @@ const {
 
   :deep(.activity-detail-form__reg-slot .el-form-item__content .el-input-number) {
     display: none;
+  }
+
+  :deep(.activity-detail-form__switch-slot .el-form-item__content) {
+    display: flex;
+    align-items: center;
+    min-height: 32px;
   }
 }
 </style>

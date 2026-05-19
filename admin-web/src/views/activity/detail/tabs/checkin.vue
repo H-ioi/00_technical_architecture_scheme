@@ -22,20 +22,7 @@
       :actions="actions"
       :action-column="{ width: 100, fixed: 'right' }"
       @load-success="handleLoadSuccess"
-    >
-      <template v-if="showExportEnded" #toolbar>
-        <el-button
-          v-uni-permission="'busdriver_edit'"
-          type="primary"
-          plain
-          :disabled="!activityId"
-          :loading="exporting"
-          @click="exportCsv"
-        >
-          {{ $t('activity.export') }}
-        </el-button>
-      </template>
-    </UniDataTable>
+    />
 
     <el-dialog
       v-model="dialogVisible"
@@ -376,4 +363,8 @@ const submit = async () => {
     saving.value = false
   }
 }
+
+defineExpose({
+  exportCsv
+})
 </script>

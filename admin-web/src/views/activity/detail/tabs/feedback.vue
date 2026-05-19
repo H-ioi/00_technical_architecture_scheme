@@ -53,16 +53,6 @@
             {{ $t('activity.visibleNo') }}
           </el-button>
         </template>
-        <el-button
-          v-if="!readOnly || showExportEnded"
-          v-uni-permission="'busdriver_edit'"
-          type="primary"
-          plain
-          :loading="exporting"
-          @click="exportFeedback"
-        >
-          {{ $t('activity.export') }}
-        </el-button>
       </template>
     </UniDataTable>
 
@@ -347,4 +337,8 @@ const exportFeedback = async () => {
     exporting.value = false
   }
 }
+
+defineExpose({
+  exportFeedback
+})
 </script>

@@ -30,30 +30,14 @@
       @load-success="handleLoadSuccess"
       @selection-change="onSelectionChange"
     >
-      <template #toolbar>
-        <template v-if="!readOnly">
-          <el-button v-uni-permission="'busdriver_edit'" type="primary" @click="openAdd">
-            {{ $t('activity.add') }}
-          </el-button>
-          <el-button
-            v-if="canDelete"
-            type="danger"
-            plain
-            :disabled="!selectedIds.length"
-            @click="deleteSelected"
-          >
-            {{ $t('activity.delBatch') }}
-          </el-button>
-        </template>
+      <template v-if="!readOnly && canDelete" #toolbar>
         <el-button
-          v-if="!readOnly || showExportEnded"
-          v-uni-permission="'busdriver_edit'"
-          type="primary"
+          type="danger"
           plain
-          :loading="exporting"
-          @click="exportWinners"
+          :disabled="!selectedIds.length"
+          @click="deleteSelected"
         >
-          {{ $t('activity.export') }}
+          {{ $t('activity.delBatch') }}
         </el-button>
       </template>
     </UniDataTable>
@@ -442,6 +426,11 @@ const changeKind = () => {
   selectedRows.value = []
   tableRef.value?.refresh()
 }
+
+defineExpose({
+  exportWinners,
+  openAdd
+})
 
 void nextTick(() => {
   tableRef.value?.refresh()

@@ -18,8 +18,7 @@
       :submit-text="$t('activity.search')"
       :reset-text="$t('activity.reset')"
       @search="search"
-      @reset="reset"
-    />
+      @reset="reset" />
     <UniDataTable
       ref="tableRef"
       row-key="id"
@@ -32,47 +31,41 @@
       :actions="actions"
       :action-column="{ width: 110, fixed: 'right' }"
       @load-success="handleLoadSuccess"
-      @selection-change="onSelectionChange"
-    >
+      @selection-change="onSelectionChange">
       <template #toolbar>
         <el-button
           v-uni-permission="'busdriver_edit'"
           plain
           :disabled="!selectedIds.length"
-          @click="handleSendWechat(selectedRows, false)"
-        >
+          @click="handleSendWechat(selectedRows, false)">
           {{ $t('activity.sendWechat') }}
         </el-button>
         <el-button
           v-uni-permission="'busdriver_edit'"
           plain
           :disabled="!selectedIds.length"
-          @click="handleSendWechat(selectedRows, true)"
-        >
+          @click="handleSendWechat(selectedRows, true)">
           {{ $t('activity.sendWechatTest') }}
         </el-button>
         <el-button
           v-uni-permission="'busdriver_edit'"
           plain
           :disabled="!selectedIds.length"
-          @click="exportFeedbackBatch"
-        >
+          @click="exportFeedbackBatch">
           {{ $t('activity.exportFeedback') }}
         </el-button>
         <el-button
           v-uni-permission="'busdriver_edit'"
           plain
           :disabled="!selectedIds.length"
-          @click="exportQuestionnaireByActivityBatch"
-        >
+          @click="exportQuestionnaireByActivityBatch">
           {{ $t('activity.exportQuestionnaireByActivity') }}
         </el-button>
         <el-button
           v-uni-permission="'busdriver_edit'"
           plain
           :disabled="!selectedIds.length"
-          @click="publishBatch"
-        >
+          @click="publishBatch">
           {{ $t('activity.publishBatch') }}
         </el-button>
         <el-button
@@ -80,8 +73,7 @@
           type="danger"
           plain
           :disabled="!selectedIds.length"
-          @click="deleteBatch"
-        >
+          @click="deleteBatch">
           {{ $t('activity.delBatch') }}
         </el-button>
       </template>

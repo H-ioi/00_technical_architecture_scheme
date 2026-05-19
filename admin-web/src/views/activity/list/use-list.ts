@@ -8,7 +8,7 @@ import { useRouter } from 'vue-router'
 import { activityApi, activityQuestionnaireApi, membershipApi } from '@/api'
 import type { Translate } from '@/types/i18n'
 import { normalizePaged } from '@/utils/api-response-normalize'
-import { downloadBlob } from '@/utils/download'
+import { downloadBlob, downloadResponseBlob } from '@/utils/download'
 
 import {
   activityStatusOptions,
@@ -172,9 +172,9 @@ export function useActivityEventList() {
     {
       label: tr('activity.entryEdit'),
       code: 'busdriver_edit',
-      visible: (row) => String((row as ActivityRow).activityStatus) !== '3',
+      visible: (row) => ['0', '1'].includes(String((row as ActivityRow).activityStatus)),
       onClick: (row) => {
-        if (String((row as ActivityRow).activityStatus) === '3') {
+        if (!['0', '1'].includes(String((row as ActivityRow).activityStatus))) {
           ElMessage.warning(tr('activity.eventEndedNoEdit'))
           return
         }
@@ -222,8 +222,8 @@ export function useActivityEventList() {
     }
     try {
       for (const id of selectedIds.value) {
-        const blob = await activityApi.feedbackExport.get(id)
-        downloadBlob(blob as Blob, `activity-feedback-${id}.xlsx`)
+        const response = await activityApi.feedbackExport.get(id)
+        downloadResponseBlob(response, `activity-feedback-${id}.xlsx`)
       }
       ElMessage.success(tr('activity.saveOk'))
     } catch {

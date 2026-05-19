@@ -27,9 +27,6 @@
     >
       <template #toolbar>
         <template v-if="!readOnly">
-          <el-button v-uni-permission="'busdriver_edit'" type="primary" @click="openAdd">
-            {{ $t('activity.add') }}
-          </el-button>
           <el-button
             v-if="canDelete"
             type="danger"
@@ -56,16 +53,6 @@
             {{ $t('activity.visibleNo') }}
           </el-button>
         </template>
-        <el-button
-          v-if="showExportEnded"
-          v-uni-permission="'busdriver_edit'"
-          type="primary"
-          plain
-          :loading="exporting"
-          @click="exportCsv"
-        >
-          {{ $t('activity.export') }}
-        </el-button>
       </template>
     </UniDataTable>
 
@@ -443,4 +430,9 @@ const exportCsv = async () => {
     exporting.value = false
   }
 }
+
+defineExpose({
+  exportCsv,
+  openAdd
+})
 </script>

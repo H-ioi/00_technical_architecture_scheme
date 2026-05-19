@@ -176,7 +176,6 @@ function buildPayload(m: ActivityDetailFormModel): Record<string, unknown> {
 
 export function useActivityDetailPage() {
   const { t, locale } = useUniI18n()
-  const tr = t as Translate
   const route = useRoute()
   const router = useRouter()
 
@@ -215,18 +214,18 @@ export function useActivityDetailPage() {
 
   const isEditRoute = computed(() => route.query.mode === 'edit')
   const isCreate = computed(() => !detailId.value)
-  const ynOpts = computed(() => yesNo(tr))
-  const statusOpts = computed(() => activityStatusOptions(tr))
-  const checkinOpts = computed(() => checkinMethodOptions(tr))
+  const ynOpts = computed(() => yesNo(t))
+  const statusOpts = computed(() => activityStatusOptions(t))
+  const checkinOpts = computed(() => checkinMethodOptions(t))
   const visibleScopeOpts = computed<UniOption[]>(() => [
-    { label: tr('activity.visibleScopePublic'), value: 0 },
-    { label: tr('activity.visibleScopeRestricted'), value: 1 }
+    { label: t('activity.visibleScopePublic'), value: 0 },
+    { label: t('activity.visibleScopeRestricted'), value: 1 }
   ])
 
   const showActivityStatus = computed(() => !isCreate.value)
 
   const formConfig = computed(() =>
-    buildActivityDetailFormConfig(tr, {
+    buildActivityDetailFormConfig(t, {
       schoolOptions: schoolOptions.value,
       emailOptions: emailConfigOptions.value,
       ynOptions: ynOpts.value,
@@ -255,10 +254,10 @@ export function useActivityDetailPage() {
   })
   const pageTitle = computed(() =>
     isCreate.value
-      ? tr('activity.eventCreateTitle')
+      ? t('activity.eventCreateTitle')
       : canSubmit.value
-        ? tr('activity.eventDetailEditTitle')
-        : tr('activity.eventDetailTitle')
+        ? t('activity.eventDetailEditTitle')
+        : t('activity.eventDetailTitle')
   )
 
   const uniMode = computed<'view' | 'edit'>(() => (canSubmit.value ? 'edit' : 'view'))
@@ -345,9 +344,9 @@ export function useActivityDetailPage() {
   }
 
   const applyDetail = (row: Loose) => {
-    Object.assign(form, rowToModel(row, tr('activity.ticketNotifyDisabled')))
+    Object.assign(form, rowToModel(row, t('activity.ticketNotifyDisabled')))
     if (String(row.activityStatus ?? '') === '3' && isEditRoute.value) {
-      ElMessage.warning(tr('activity.eventEndedNoEdit'))
+      ElMessage.warning(t('activity.eventEndedNoEdit'))
       void router.replace({ query: { ...route.query, id: detailId.value, mode: 'view' } })
     }
   }
@@ -363,13 +362,13 @@ export function useActivityDetailPage() {
       const raw = await activityApi.detail.get(detailId.value)
       const row = normalizeEnvelope(raw) as Loose
       if (!row || !Object.keys(row).length) {
-        ElMessage.error(tr('activity.loadDetailFail'))
+        ElMessage.error(t('activity.loadDetailFail'))
         return
       }
       applyDetail(row)
       await loadEmailOptions()
     } catch {
-      ElMessage.error(tr('activity.loadDetailFail'))
+      ElMessage.error(t('activity.loadDetailFail'))
     } finally {
       loading.value = false
     }
@@ -396,7 +395,7 @@ export function useActivityDetailPage() {
       try {
         form.imageUrl = await protocolApi.upload.post(rawFile)
       } catch {
-        ElMessage.error(tr('activity.coverUploadFail'))
+        ElMessage.error(t('activity.coverUploadFail'))
       }
     })()
     return false
@@ -407,21 +406,21 @@ export function useActivityDetailPage() {
       const response = await activityApi.visibleScopeTemplate.get()
       downloadResponseBlob(response, 'visible-scope-template.xlsx')
     } catch {
-      ElMessage.error(tr('activity.exportFail'))
+      ElMessage.error(t('activity.exportFail'))
     }
   }
 
   const onVisibleScopeFile = async (file: File) => {
     if (!form.id) {
-      ElMessage.warning(tr('activity.visibleScopeNeedSave'))
+      ElMessage.warning(t('activity.visibleScopeNeedSave'))
       return
     }
     try {
       await activityApi.visibleScopeImport.post(form.id as string | number, file)
-      ElMessage.success(tr('activity.saveOk'))
+      ElMessage.success(t('activity.saveOk'))
       await loadDetail()
     } catch {
-      ElMessage.error(tr('activity.visibleScopeImportFail'))
+      ElMessage.error(t('activity.visibleScopeImportFail'))
     }
   }
 
@@ -430,14 +429,14 @@ export function useActivityDetailPage() {
       return
     }
     if (!canSubmit.value) {
-      ElMessage.warning(tr('activity.eventEndedNoEdit'))
+      ElMessage.warning(t('activity.eventEndedNoEdit'))
       return
     }
     if (
       !form.registrationUnlimited &&
       (!form.registrationLimit || Number(form.registrationLimit) < 1)
     ) {
-      ElMessage.warning(tr('activity.registrationLimitInvalid'))
+      ElMessage.warning(t('activity.registrationLimitInvalid'))
       return
     }
     const valid = await uniFormRef.value?.validate().catch(() => false)
@@ -454,7 +453,7 @@ export function useActivityDetailPage() {
           data = data.data as Loose
         }
         const newId = data?.id
-        ElMessage.success(tr('activity.saveOk'))
+        ElMessage.success(t('activity.saveOk'))
         if (newId != null && newId !== '') {
           void router.replace({ query: { id: String(newId), mode: 'view' } })
         } else {
@@ -462,7 +461,7 @@ export function useActivityDetailPage() {
         }
       } else {
         await activityApi.edit.post(payload)
-        ElMessage.success(tr('activity.saveOk'))
+        ElMessage.success(t('activity.saveOk'))
         await loadDetail()
       }
     } finally {
