@@ -1,6 +1,6 @@
 <template>
-  <section class="uni-list-page">
-    <div class="uni-list-page__header">
+  <section class="uni-list-page" :class="{ 'uni-list-page--embedded': embedded }">
+    <div v-if="!embedded" class="uni-list-page__header">
       <div>
         <h1>{{ $t('activity.programListTitle') }}</h1>
         <p class="uni-list-page__description">{{ $t('activity.programListDesc') }}</p>
@@ -69,6 +69,17 @@ import { ref } from 'vue'
 import ProgramCopyDialog from './components/program-copy-dialog.vue'
 import { useActivityProgramList } from './use-list'
 
+const props = withDefaults(
+  defineProps<{
+    embedded?: boolean
+    activityId?: string | number
+  }>(),
+  {
+    embedded: false,
+    activityId: undefined
+  }
+)
+
 const copyOpen = ref(false)
 
 const {
@@ -87,7 +98,7 @@ const {
   searchCfg,
   selectedIds,
   tableRef
-} = useActivityProgramList(copyOpen)
+} = useActivityProgramList(copyOpen, { activityId: props.activityId })
 
 const onCopySuccess = () => {
   tableRef.value?.refresh()

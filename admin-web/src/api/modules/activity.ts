@@ -5,6 +5,8 @@ import { request } from 'uni-ui-lib'
 
 const path = API_PATHS.activity
 const feedbackPath = API_PATHS.activityFeedback
+const blessingPath = `${API_PATHS.activityProgram}/blessing`
+const prizeAwardPath = `${API_PATHS.activityPrize}/award`
 
 const repeatQuery = (key: string, values: Array<string | number>) =>
   values.map((v) => `${key}=${encodeURIComponent(String(v))}`).join('&')
@@ -77,5 +79,131 @@ export default {
         params: { activityId }
       })
     }
+  },
+  ticketPage: {
+    name: '活动报名分页',
+    get: async (params: Record<string, unknown>) =>
+      await request.get(`${path}/ticket/getPage`, { params })
+  },
+  ticketEdit: {
+    name: '编辑活动报名',
+    post: async (data: Record<string, unknown>) => await request.post(`${path}/ticket/edit`, data)
+  },
+  ticketTemplate: {
+    name: '下载活动报名导入模板',
+    get: async () =>
+      await request.get<Blob, Blob>(`${path}/ticket/download`, { responseType: 'blob' })
+  },
+  ticketImport: {
+    name: '导入活动报名',
+    post: async (file: File) => {
+      const fd = new FormData()
+      fd.append('file', file)
+      return await request.post(`${path}/ticket/import`, fd, {
+        headers: { VERSION: 'B' }
+      })
+    }
+  },
+  ticketRemove: {
+    name: '删除活动报名',
+    delete: async (ids: Array<string | number>) =>
+      await request.delete(`${path}/ticket/del?${repeatQuery('ids', ids)}`)
+  },
+  checkinPage: {
+    name: '活动签到分页',
+    get: async (params: Record<string, unknown>) =>
+      await request.get(`${path}/checkin/getPage`, { params })
+  },
+  checkinEdit: {
+    name: '编辑活动签到',
+    post: async (data: Record<string, unknown>) => await request.post(`${path}/checkin/edit`, data)
+  },
+  feedbackPage: {
+    name: '活动反馈分页',
+    get: async (params: Record<string, unknown>) =>
+      await request.get(`${feedbackPath}/getFeedbackPage`, { params })
+  },
+  feedbackDetail: {
+    name: '活动反馈详情',
+    get: async (id: string | number) => await request.get(`${feedbackPath}/get/${id}`)
+  },
+  feedbackEdit: {
+    name: '编辑活动反馈',
+    post: async (data: Record<string, unknown>) => await request.post(`${feedbackPath}/edit`, data)
+  },
+  feedbackRemove: {
+    name: '删除活动反馈',
+    delete: async (ids: Array<string | number>) =>
+      await request.delete(`${feedbackPath}/del?${repeatQuery('ids', ids)}`)
+  },
+  blessingPage: {
+    name: '祝福语分页',
+    get: async (params: Record<string, unknown>) =>
+      await request.get(`${blessingPath}/getBlessingPage`, { params })
+  },
+  blessingDetail: {
+    name: '祝福语详情',
+    get: async (id: string | number) => await request.get(`${blessingPath}/get/${id}`)
+  },
+  blessingAdd: {
+    name: '新增祝福语',
+    post: async (data: Record<string, unknown>) => await request.post(`${blessingPath}/add`, data)
+  },
+  blessingEdit: {
+    name: '编辑祝福语',
+    post: async (data: Record<string, unknown>) => await request.post(`${blessingPath}/edit`, data)
+  },
+  blessingRemove: {
+    name: '删除祝福语',
+    delete: async (ids: Array<string | number>) =>
+      await request.delete(`${blessingPath}/del?${repeatQuery('ids', ids)}`)
+  },
+  prizeAwardLotteryPage: {
+    name: '抽奖获奖分页',
+    get: async (params: Record<string, unknown>) =>
+      await request.get(`${prizeAwardPath}/getLotteryPage`, { params })
+  },
+  prizeAwardCompetitionPage: {
+    name: '比赛获奖分页',
+    get: async (params: Record<string, unknown>) =>
+      await request.get(`${prizeAwardPath}/getCompetitionPage`, { params })
+  },
+  prizeAwardDetail: {
+    name: '获奖详情',
+    get: async (id: string | number) => await request.get(`${prizeAwardPath}/get/${id}`)
+  },
+  prizeAwardByTicketCode: {
+    name: '按票码查询获奖人',
+    get: async (ticketCode: string) =>
+      await request.get(`${prizeAwardPath}/getByTicketCode`, { params: { ticketCode } })
+  },
+  prizeAwardAdd: {
+    name: '新增获奖记录',
+    post: async (data: Record<string, unknown>) => await request.post(`${prizeAwardPath}/add`, data)
+  },
+  prizeAwardEdit: {
+    name: '编辑获奖记录',
+    post: async (data: Record<string, unknown>) => await request.post(`${prizeAwardPath}/edit`, data)
+  },
+  prizeAwardRemove: {
+    name: '删除获奖记录',
+    delete: async (ids: Array<string | number>) =>
+      await request.delete(`${prizeAwardPath}/del?${repeatQuery('ids', ids)}`)
+  },
+  prizeAwardLotteryExport: {
+    name: '导出抽奖获奖',
+    get: async (params: Record<string, unknown>) =>
+      await request.get<Blob, Blob>(`${prizeAwardPath}/exportLottery`, {
+        params,
+        responseType: 'blob'
+      })
+  },
+  prizeAwardCompetitionExport: {
+    name: '导出比赛获奖',
+    get: async (params: Record<string, unknown>) =>
+      await request.get<Blob, Blob>(`${prizeAwardPath}/exportCompetition`, {
+        params,
+        responseType: 'blob'
+      })
   }
 }

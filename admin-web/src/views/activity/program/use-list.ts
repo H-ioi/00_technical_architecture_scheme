@@ -3,7 +3,7 @@ import { toUniOptions, useUniI18n, useUniListState } from 'uni-ui-lib'
 import dayjs from 'dayjs'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { computed, onMounted, ref } from 'vue'
-import { useRouter } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 
 import { activityApi, activityProgramApi, membershipApi } from '@/api'
 import type { Translate } from '@/types/i18n'
@@ -44,9 +44,13 @@ function useMembershipSchoolOptions() {
   return { schoolOptions: schoolOptionsRef, loadSchoolOptions }
 }
 
-export function useActivityProgramList(copyVisible: { value: boolean }) {
+export function useActivityProgramList(
+  copyVisible: { value: boolean },
+  options: { activityId?: string | number } = {}
+) {
   const { t, locale } = useUniI18n()
   const tr = t as Translate
+  const route = useRoute()
   const router = useRouter()
 
   const { schoolOptions, loadSchoolOptions } = useMembershipSchoolOptions()
@@ -69,6 +73,12 @@ export function useActivityProgramList(copyVisible: { value: boolean }) {
   })
 
   const initialFilters = {
+    activityId:
+      options.activityId != null && options.activityId !== ''
+        ? String(options.activityId)
+        : route.query.activityId != null && route.query.activityId !== ''
+        ? String(route.query.activityId)
+        : undefined,
     activityKeyword: '',
     programKeyword: '',
     schoolIds: undefined,
@@ -126,6 +136,7 @@ export function useActivityProgramList(copyVisible: { value: boolean }) {
     const raw = await activityProgramApi.page.get({
       current,
       size,
+      activityId: f.activityId as string | number | undefined,
       schoolIds: lockedSchoolId.value ?? f.schoolIds ?? undefined,
       activityKeyword: (f.activityKeyword as string) || undefined,
       programKeyword: (f.programKeyword as string) || undefined,
@@ -145,7 +156,15 @@ export function useActivityProgramList(copyVisible: { value: boolean }) {
   }
 
   const goCreate = () => {
-    router.push({ name: 'ActivityProgramDetail', query: { mode: 'edit' } })
+    router.push({
+      name: 'ActivityProgramDetail',
+      query: {
+        mode: 'edit',
+        ...(options.activityId != null && options.activityId !== ''
+          ? { activityId: String(options.activityId) }
+          : {})
+      }
+    })
   }
 
   const isActivityEnded = async (row: Row) => {

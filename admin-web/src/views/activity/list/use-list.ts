@@ -172,6 +172,7 @@ export function useActivityEventList() {
     {
       label: tr('activity.entryEdit'),
       code: 'busdriver_edit',
+      visible: (row) => String((row as ActivityRow).activityStatus) !== '3',
       onClick: (row) => {
         if (String((row as ActivityRow).activityStatus) === '3') {
           ElMessage.warning(tr('activity.eventEndedNoEdit'))
@@ -181,10 +182,6 @@ export function useActivityEventList() {
       }
     }
   ])
-
-  const onRowClick = (row: Record<string, unknown>) => {
-    goDetail(row as ActivityRow, 'view')
-  }
 
   const handleSendWechat = async (items: ActivityRow[], isTest: boolean) => {
     const list = items.length ? items : []
@@ -260,8 +257,8 @@ export function useActivityEventList() {
       (row) => idSet.has(String(row.id)) && String(row.activityStatus) === '0'
     )
     const ids = pendingRows
-      .map((row) => Number(row.id))
-      .filter((n) => Number.isFinite(n)) as number[]
+      .map((row) => row.id)
+      .filter((id) => id != null) as Array<string | number>
     if (!ids.length) {
       ElMessage.warning(tr('activity.noPendingInSelection'))
       return
@@ -305,7 +302,6 @@ export function useActivityEventList() {
     filters,
     handleLoadSuccess,
     loadData,
-    onRowClick,
     onSelectionChange,
     publishBatch,
     queryModel,

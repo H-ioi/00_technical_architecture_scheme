@@ -226,6 +226,14 @@ export function buildActivityDetailFormConfig(
       colProps: { xs: 24, sm: 8 }
     },
     {
+      field: 'wechatNotify',
+      label: t('activity.wechatNotify'),
+      component: 'ElSelect',
+      options: ynOptions,
+      componentProps: { disabled: true, style: { width: '100%' } },
+      colProps: { xs: 24, sm: 8 }
+    },
+    {
       field: 'registrationLimit',
       label: t('activity.registrationLimit'),
       component: 'ElInputNumber',
@@ -242,6 +250,13 @@ export function buildActivityDetailFormConfig(
       rules: [{ required: true, message: t('activity.ruleSelect'), trigger: 'change' }]
     },
     {
+      field: 'visibleScopeFileName',
+      label: t('activity.visibleScopeFile'),
+      component: 'ElInput',
+      componentProps: { disabled: true, style: { width: '100%' } },
+      colProps: { xs: 24, sm: 12 }
+    },
+    {
       field: 'emailConfigIds',
       label: t('activity.emailConfigs'),
       component: 'ElSelect',
@@ -253,6 +268,13 @@ export function buildActivityDetailFormConfig(
         placeholder: t('activity.emailConfigsPh'),
         style: { width: '100%' }
       },
+      colProps: { span: 24 }
+    },
+    {
+      field: 'ticketNotifyEmailsLabel',
+      label: t('activity.ticketNotifyEmails'),
+      component: 'ElInput',
+      componentProps: { disabled: true, style: { width: '100%' } },
       colProps: { span: 24 }
     },
     {
@@ -313,13 +335,27 @@ export function buildActivityDetailFormConfig(
   const head: NonNullable<UniFormConfig['schema']> = showActivityStatus
     ? [
         {
+          field: 'id',
+          label: t('activity.colId'),
+          component: 'ElInput',
+          componentProps: { disabled: true, style: { width: '100%' } },
+          colProps: { xs: 24, sm: 8 }
+        },
+        {
           field: 'activityStatus',
           label: t('activity.colStatus'),
           component: 'ElSelect',
           options: statusOptions,
           componentProps: { style: { width: '100%' } },
-          colProps: { span: 24 },
+          colProps: { xs: 24, sm: 8 },
           rules: [{ required: true, message: t('activity.ruleSelect'), trigger: 'change' }]
+        },
+        {
+          field: 'publisher',
+          label: t('activity.colPublisher'),
+          component: 'ElInput',
+          componentProps: { disabled: true, style: { width: '100%' } },
+          colProps: { xs: 24, sm: 8 }
         }
       ]
     : []

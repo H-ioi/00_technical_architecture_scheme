@@ -15,6 +15,12 @@ export type { UniRequestOptions, UniRequestProgress } from '@/types/uni-request'
 
 type UniInternalRequestConfig = InternalAxiosRequestConfig & {
   __uniRequestKey?: string
+  /** Per-request escape hatch for download APIs that need response headers. */
+  rawResponse?: boolean
+}
+
+export type UniRawResponseRequestConfig = AxiosRequestConfig & {
+  rawResponse: true
 }
 
 type HeaderMap = Record<string, unknown>
@@ -209,7 +215,7 @@ export const createUniRequest = (options: UniRequestOptions = {}): AxiosInstance
       }
       const resolved = options.onResponse ? await Promise.resolve(options.onResponse(next)) : next
 
-      return resolved.data
+      return (response.config as UniInternalRequestConfig).rawResponse ? resolved : resolved.data
     },
     (error: AxiosError) => {
       clearPending(error.config as UniInternalRequestConfig)

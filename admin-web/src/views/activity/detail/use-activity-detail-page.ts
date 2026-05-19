@@ -52,10 +52,15 @@ function emptyModel(defaultSchool?: string | number): ActivityDetailFormModel {
     recommended: '0',
     banner: '0',
     needFeedback: '0',
+    wechatNotify: '0',
     registrationUnlimited: true,
     registrationLimit: 1,
     visibleScope: 0,
+    visibleScopeFileName: '',
     emailConfigIds: [],
+    ticketNotifyEmailEnabled: '0',
+    ticketNotifyEmails: [],
+    ticketNotifyEmailsLabel: '',
     wechatPushSchoolIds: [],
     wechatPushContent: '',
     wechatPushRemark: '',
@@ -66,11 +71,24 @@ function emptyModel(defaultSchool?: string | number): ActivityDetailFormModel {
   }
 }
 
-function rowToModel(d: Loose): ActivityDetailFormModel {
+function formatTicketNotifyEmails(d: Loose, disabledText: string): string {
+  if (Number(d.ticketPrice) <= 0 || String(d.ticketNotifyEmailEnabled ?? '0') !== '1') {
+    return disabledText
+  }
+  const raw = d.ticketNotifyEmails
+  if (Array.isArray(raw)) {
+    return raw.map((x) => String(x ?? '').trim()).filter(Boolean).join(', ')
+  }
+  return String(raw ?? '').trim()
+}
+
+function rowToModel(d: Loose, ticketNotifyDisabledText: string): ActivityDetailFormModel {
   const regRaw = Number(d.registrationLimit)
   const reg = Number.isFinite(regRaw) ? regRaw : 0
+  const vf = d.visibleScopeFile as Record<string, unknown> | undefined
   return {
     id: d.id as string | number | undefined,
+    publisher: String(d.publisher ?? ''),
     activityCnName: String(d.activityCnName ?? ''),
     activityEnName: String(d.activityEnName ?? ''),
     introCn: String(d.introCn ?? ''),
@@ -94,10 +112,16 @@ function rowToModel(d: Loose): ActivityDetailFormModel {
     recommended: d.recommended != null ? String(d.recommended) : '0',
     banner: d.banner != null ? String(d.banner) : '0',
     needFeedback: d.needFeedback != null ? String(d.needFeedback) : '0',
+    wechatNotify: d.wechatNotify != null ? String(d.wechatNotify) : '0',
     registrationUnlimited: reg === 0,
     registrationLimit: reg === 0 ? 1 : reg,
     visibleScope: d.visibleScope != null && d.visibleScope !== '' ? Number(d.visibleScope) : 0,
+    visibleScopeFileName: vf?.fileName != null ? String(vf.fileName) : '',
     emailConfigIds: normalizeIdArray(d.emailConfigIds),
+    ticketNotifyEmailEnabled:
+      d.ticketNotifyEmailEnabled != null ? String(d.ticketNotifyEmailEnabled) : '0',
+    ticketNotifyEmails: d.ticketNotifyEmails,
+    ticketNotifyEmailsLabel: formatTicketNotifyEmails(d, ticketNotifyDisabledText),
     wechatPushSchoolIds: normalizeIdArray(d.wechatPushSchoolIds),
     wechatPushContent: String(d.wechatPushContent ?? ''),
     wechatPushRemark: String(d.wechatPushRemark ?? ''),
@@ -119,11 +143,23 @@ function buildPayload(m: ActivityDetailFormModel): Record<string, unknown> {
     registrationTime,
     registrationUnlimited,
     visibleScopeFile: _vf,
+    visibleScopeFileName: _vfn,
     magicNo: _mn,
+    publisher: _publisher,
+    wechatNotify: _wechatNotify,
+    ticketNotifyEmailEnabled: _tne,
+    ticketNotifyEmails: _tns,
+    ticketNotifyEmailsLabel: _tnsl,
     ...rest
   } = m
   void _vf
+  void _vfn
   void _mn
+  void _publisher
+  void _wechatNotify
+  void _tne
+  void _tns
+  void _tnsl
   const out: Record<string, unknown> = { ...rest }
   if (activityTime.length === 2) {
     out.activityStartTime = activityTime[0]
@@ -147,10 +183,27 @@ export function useActivityDetailPage() {
   const uniFormRef = ref<InstanceType<typeof UniForm> | null>(null)
   const loading = ref(false)
   const saving = ref(false)
+  const activeDetailTab = ref('base')
+  const tabRefreshKeys = reactive<Record<string, number>>({
+    program: 0,
+    questionnaire: 0,
+    registration: 0,
+    checkin: 0,
+    feedback: 0,
+    blessing: 0,
+    voteInfo: 0,
+    winner: 0
+  })
   const schoolOptions = ref<UniOption[]>([])
   const emailConfigOptions = ref<UniOption[]>([])
   const lockedSchool = ref<string | number | undefined>(undefined)
   const form = reactive<ActivityDetailFormModel>(emptyModel())
+  const formModel = computed({
+    get: () => form,
+    set: (value: ActivityDetailFormModel) => {
+      Object.assign(form, value)
+    }
+  })
 
   const detailId = computed(() => {
     const raw = route.query.id
@@ -162,16 +215,6 @@ export function useActivityDetailPage() {
 
   const isEditRoute = computed(() => route.query.mode === 'edit')
   const isCreate = computed(() => !detailId.value)
-  const pageTitle = computed(() =>
-    isCreate.value
-      ? tr('activity.eventCreateTitle')
-      : isEditRoute.value
-        ? tr('activity.eventDetailEditTitle')
-        : tr('activity.eventDetailTitle')
-  )
-
-  const uniMode = computed<'view' | 'edit'>(() => (isEditRoute.value ? 'edit' : 'view'))
-
   const ynOpts = computed(() => yesNo(tr))
   const statusOpts = computed(() => activityStatusOptions(tr))
   const checkinOpts = computed(() => checkinMethodOptions(tr))
@@ -200,6 +243,25 @@ export function useActivityDetailPage() {
     }
     return String(form.activityStatus ?? '') !== '3'
   })
+  const canSubmit = computed(
+    () => isEditRoute.value && (isCreate.value || !['2', '3'].includes(String(form.activityStatus)))
+  )
+  const relatedEntries = computed(() => {
+    if (!detailId.value) {
+      return []
+    }
+
+    return []
+  })
+  const pageTitle = computed(() =>
+    isCreate.value
+      ? tr('activity.eventCreateTitle')
+      : canSubmit.value
+        ? tr('activity.eventDetailEditTitle')
+        : tr('activity.eventDetailTitle')
+  )
+
+  const uniMode = computed<'view' | 'edit'>(() => (canSubmit.value ? 'edit' : 'view'))
 
   const meaningfulHtml = (raw?: string) => {
     if (raw == null || raw === '') {
@@ -283,7 +345,7 @@ export function useActivityDetailPage() {
   }
 
   const applyDetail = (row: Loose) => {
-    Object.assign(form, rowToModel(row))
+    Object.assign(form, rowToModel(row, tr('activity.ticketNotifyDisabled')))
     if (String(row.activityStatus ?? '') === '3' && isEditRoute.value) {
       ElMessage.warning(tr('activity.eventEndedNoEdit'))
       void router.replace({ query: { ...route.query, id: detailId.value, mode: 'view' } })
@@ -319,6 +381,14 @@ export function useActivityDetailPage() {
 
   const goEdit = () => {
     void router.replace({ query: { ...route.query, mode: 'edit' } })
+  }
+
+  const handleDetailTabChange = (name: string | number) => {
+    const tabName = String(name)
+    activeDetailTab.value = tabName
+    if (tabName in tabRefreshKeys) {
+      tabRefreshKeys[tabName] += 1
+    }
   }
 
   const onCoverBeforeUpload = (rawFile: File) => {
@@ -359,6 +429,10 @@ export function useActivityDetailPage() {
     if (!isEditRoute.value) {
       return
     }
+    if (!canSubmit.value) {
+      ElMessage.warning(tr('activity.eventEndedNoEdit'))
+      return
+    }
     if (
       !form.registrationUnlimited &&
       (!form.registrationLimit || Number(form.registrationLimit) < 1)
@@ -382,7 +456,7 @@ export function useActivityDetailPage() {
         const newId = data?.id
         ElMessage.success(tr('activity.saveOk'))
         if (newId != null && newId !== '') {
-          void router.replace({ query: { id: String(newId), mode: 'edit' } })
+          void router.replace({ query: { id: String(newId), mode: 'view' } })
         } else {
           void router.push({ name: 'ActivityEventList' })
         }
@@ -422,8 +496,11 @@ export function useActivityDetailPage() {
     detailHtmlCn,
     detailHtmlEn,
     form,
+    formModel,
     formConfig,
     uniFormRef,
+    activeDetailTab,
+    tabRefreshKeys,
     loading,
     saving,
     uniMode,
@@ -432,6 +509,9 @@ export function useActivityDetailPage() {
     isCreate,
     isEditRoute,
     canEdit,
+    canSubmit,
+    relatedEntries,
+    handleDetailTabChange,
     goBack,
     goEdit,
     submit,

@@ -1,6 +1,7 @@
 /** 活动详情 / 编辑表单模型（与 POST /add、/edit 字段对齐）。 */
 export interface ActivityDetailFormModel {
   id?: string | number
+  publisher?: string
   activityCnName: string
   activityEnName: string
   introCn?: string
@@ -19,10 +20,15 @@ export interface ActivityDetailFormModel {
   recommended: string
   banner: string
   needFeedback: string
+  wechatNotify?: string
   registrationUnlimited: boolean
   registrationLimit?: number
   visibleScope: number
+  visibleScopeFileName?: string
   emailConfigIds: Array<string | number>
+  ticketNotifyEmailEnabled?: string
+  ticketNotifyEmails?: unknown
+  ticketNotifyEmailsLabel?: string
   wechatPushSchoolIds: Array<string | number>
   wechatPushContent?: string
   wechatPushRemark?: string

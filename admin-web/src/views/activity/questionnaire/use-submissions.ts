@@ -2,6 +2,7 @@ import type { UniTableRequest } from 'uni-ui-lib'
 import { useUniI18n, useUniListState } from 'uni-ui-lib'
 import { ElMessage } from 'element-plus'
 import { computed, nextTick, ref, watch } from 'vue'
+import type { Ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 
 import { activityQuestionnaireApi, publicFileApi, templateDynamicApi } from '@/api'
@@ -16,7 +17,6 @@ import { normalizeArray, normalizeEnvelope, normalizePaged } from '@/utils/api-r
 import { downloadBlob } from '@/utils/download'
 
 import {
-  submissionAttachColumnProp,
   submissionDisplayProp,
   submissionTableCols
 } from './submissions.config'
@@ -209,7 +209,10 @@ function collectUploadNumericIds(rawValue: unknown): number[] {
 
 type SubmissionApiRow = Record<string, unknown>
 
-export function useQuestionnaireSubmissions() {
+export function useQuestionnaireSubmissions(options?: {
+  questionnaireId?: Ref<string>
+  redirectOnMissing?: boolean
+}) {
   const route = useRoute()
   const router = useRouter()
   const { t } = useUniI18n()
@@ -221,7 +224,9 @@ export function useQuestionnaireSubmissions() {
   const fileDialogVisible = ref(false)
   const fileRows = ref<Array<{ id: string | number; originalName?: string }>>([])
 
-  const questionnaireId = computed(() => String(route.params.id ?? '').trim())
+  const questionnaireId = computed(() =>
+    options?.questionnaireId ? options.questionnaireId.value : String(route.params.id ?? '').trim()
+  )
 
   const columnMetas = ref<SubmissionColumnMeta[]>([])
 
@@ -305,7 +310,9 @@ export function useQuestionnaireSubmissions() {
 
     const qid = questionnaireId.value
     if (!qid || qid === 'new') {
-      await router.replace({ name: 'ActivityQuestionnaireList' })
+      if (options?.redirectOnMissing !== false) {
+        await router.replace({ name: 'ActivityQuestionnaireList' })
+      }
       return
     }
 

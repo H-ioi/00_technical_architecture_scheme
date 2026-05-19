@@ -12,6 +12,7 @@ export type ProgramFormEditCtx = {
   programTypeOptions: UniOption[]
   bodyLocked: boolean
   typeChoiceLocked: boolean
+  prizeCountMin: number
 }
 
 function dp(lock: boolean, extra?: Record<string, unknown>) {
@@ -28,7 +29,8 @@ export function buildProgramEditFormConfig(t: Translate, ctx: ProgramFormEditCtx
     blessingOptions,
     programTypeOptions,
     bodyLocked,
-    typeChoiceLocked
+    typeChoiceLocked,
+    prizeCountMin
   } = ctx
 
   const lock = bodyLocked
@@ -131,7 +133,7 @@ export function buildProgramEditFormConfig(t: Translate, ctx: ProgramFormEditCtx
             label: t('activity.checkinStartOffset'),
             component: 'ElInputNumber',
             componentProps: {
-              min: 0,
+              min: prizeCountMin,
               step: 1,
               precision: 0,
               controlsPosition: 'right',

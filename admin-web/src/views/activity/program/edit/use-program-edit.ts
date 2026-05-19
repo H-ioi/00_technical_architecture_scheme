@@ -208,6 +208,10 @@ export function useProgramEditPage() {
   )
 
   const typeChoiceLocked = computed(() => !isCreate.value || bodyLocked.value)
+  const quotaTotal = computed(() =>
+    quotasList.value.reduce((sum, item) => sum + (Number(item.quotaCount) || 0), 0)
+  )
+  const prizeCountMin = computed(() => (form.programType === '1' ? quotaTotal.value : 0))
 
   const formConfig = computed(() =>
     buildProgramEditFormConfig(tr, {
@@ -219,7 +223,8 @@ export function useProgramEditPage() {
       blessingOptions: blessingRuleOptions(tr),
       programTypeOptions: listProgTypeOptions(tr),
       bodyLocked: bodyLocked.value,
-      typeChoiceLocked: typeChoiceLocked.value
+      typeChoiceLocked: typeChoiceLocked.value,
+      prizeCountMin: prizeCountMin.value
     })
   )
 
@@ -265,6 +270,34 @@ export function useProgramEditPage() {
       }
     }
     quotasList.value = list
+  }
+
+  const syncPrizeCountWithQuotas = () => {
+    if (form.programType !== '1') {
+      return
+    }
+    const min = quotaTotal.value
+    if (Number(form.prizeCount) < min) {
+      form.prizeCount = min
+    }
+  }
+
+  const getQuotaMax = (row: ActivityProgramQuotaRow) => {
+    const prizeCount = Number(form.prizeCount) || 0
+    const current = Number(row.quotaCount) || 0
+    const otherTotal = quotaTotal.value - current
+
+    return Math.max(1, prizeCount - otherTotal)
+  }
+
+  const normalizeQuotaRow = (row: ActivityProgramQuotaRow) => {
+    if (bodyLocked.value) {
+      return
+    }
+    const max = getQuotaMax(row)
+    const value = Number(row.quotaCount) || 1
+    row.quotaCount = Math.min(Math.max(value, 1), max)
+    syncPrizeCountWithQuotas()
   }
 
   const applyDetail = (d: Loose) => {
@@ -393,6 +426,7 @@ export function useProgramEditPage() {
       } else if (totalRounds < currentLength) {
         quotasList.value = quotasList.value.slice(0, totalRounds)
       }
+      syncPrizeCountWithQuotas()
     }
   )
 
@@ -410,6 +444,7 @@ export function useProgramEditPage() {
         if (n > 0) {
           fillQuotasFromDetail([], n)
         }
+        syncPrizeCountWithQuotas()
       } else if (p === '2') {
         form.needVote = '0'
         form.votePerAttemptCount = 0
@@ -546,6 +581,8 @@ export function useProgramEditPage() {
     submit,
     onCoverBeforeUpload,
     quotasList,
+    getQuotaMax,
+    normalizeQuotaRow,
     bodyLocked
   }
 }

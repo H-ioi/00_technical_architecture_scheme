@@ -1,6 +1,6 @@
 <template>
-  <section class="uni-list-page">
-    <div class="uni-list-page__header">
+  <section class="uni-list-page" :class="{ 'uni-list-page--embedded': embedded }">
+    <div v-if="!embedded" class="uni-list-page__header">
       <div>
         <h1>{{ $t('activity.questionnaireTitle') }}</h1>
         <p class="uni-list-page__description">{{ $t('activity.questionnaireDesc') }}</p>
@@ -18,7 +18,8 @@
       :submit-text="$t('activity.search')"
       :reset-text="$t('activity.reset')"
       @search="search"
-      @reset="reset" />
+      @reset="reset"
+    />
     <UniDataTable
       ref="tableRef"
       row-key="id"
@@ -31,20 +32,23 @@
       :actions="actions"
       :action-column="{ width: 140, fixed: 'right' }"
       @load-success="handleLoadSuccess"
-      @selection-change="onSelectionChange">
+      @selection-change="onSelectionChange"
+    >
       <template #toolbar>
         <el-button
           v-uni-permission="'busdriver_edit'"
           plain
           :disabled="!selectedIds.length"
-          @click="openBatchStatus">
+          @click="openBatchStatus"
+        >
           {{ $t('activity.qBatchChangeStatus') }}
         </el-button>
         <el-button
           v-uni-permission="'busdriver_edit'"
           plain
           :disabled="!selectedIds.length"
-          @click="openBatchFrozen">
+          @click="openBatchFrozen"
+        >
           {{ $t('activity.qBatchChangeFrozen') }}
         </el-button>
         <el-button
@@ -52,7 +56,8 @@
           type="danger"
           plain
           :disabled="!selectedIds.length"
-          @click="deleteSelected">
+          @click="deleteSelected"
+        >
           {{ $t('activity.delBatch') }}
         </el-button>
       </template>
@@ -73,6 +78,17 @@ import QuestionnaireCopyDialog from '@/views/activity/questionnaire/components/c
 import MetaFormDialog from '@/views/activity/questionnaire/components/meta-form-dialog.vue'
 
 import { useQuestionnaireList } from './use-list'
+
+const props = withDefaults(
+  defineProps<{
+    embedded?: boolean
+    activityId?: string | number
+  }>(),
+  {
+    embedded: false,
+    activityId: undefined
+  }
+)
 
 const metaDlg = ref<InstanceType<typeof MetaFormDialog> | null>(null)
 const copyDlg = ref<InstanceType<typeof QuestionnaireCopyDialog> | null>(null)
@@ -96,5 +112,5 @@ const {
   searchCfg,
   selectedIds,
   tableRef
-} = useQuestionnaireList({ metaDlg, copyDlg, batchDlg })
+} = useQuestionnaireList({ metaDlg, copyDlg, batchDlg }, { activityId: props.activityId })
 </script>

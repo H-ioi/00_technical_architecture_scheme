@@ -3,7 +3,7 @@ import { toUniOptions, useUniI18n, useUniListState } from 'uni-ui-lib'
 import dayjs from 'dayjs'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { computed, onMounted, ref } from 'vue'
-import { useRouter } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 
 import { activityApi, activityQuestionnaireApi, membershipApi } from '@/api'
 import type { Translate } from '@/types/i18n'
@@ -58,9 +58,13 @@ function useMembershipSchoolOptions() {
 
 type QuestionnaireListRow = Record<string, unknown>
 
-export function useQuestionnaireList(refs: QuestionnaireListDialogRefs) {
+export function useQuestionnaireList(
+  refs: QuestionnaireListDialogRefs,
+  options: { activityId?: string | number } = {}
+) {
   const { t, locale } = useUniI18n()
   const tr = t as Translate
+  const route = useRoute()
   const router = useRouter()
 
   const { schoolOptions, loadSchoolOptions } = useMembershipSchoolOptions()
@@ -93,7 +97,12 @@ export function useQuestionnaireList(refs: QuestionnaireListDialogRefs) {
   const initialFilters = {
     name: '',
     schoolIds: undefined,
-    activityId: undefined,
+    activityId:
+      options.activityId != null && options.activityId !== ''
+        ? String(options.activityId)
+        : route.query.activityId != null && route.query.activityId !== ''
+        ? String(route.query.activityId)
+        : undefined,
     status: undefined,
     createStartTime: undefined,
     createEndTime: undefined

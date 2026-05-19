@@ -60,10 +60,12 @@
                 v-model="item.quotaCount"
                 :disabled="bodyLocked"
                 :min="1"
+                :max="getQuotaMax(item)"
                 :step="1"
                 :precision="0"
                 controls-position="right"
                 style="width: 200px"
+                @change="normalizeQuotaRow(item)"
               />
               <span v-else>{{ item.quotaCount }}</span>
             </div>
@@ -87,10 +89,12 @@ const {
   form,
   formModel,
   formConfig,
+  getQuotaMax,
   goBack,
   goEdit,
   loading,
   onCoverBeforeUpload,
+  normalizeQuotaRow,
   pageTitle,
   quotasList,
   saving,
