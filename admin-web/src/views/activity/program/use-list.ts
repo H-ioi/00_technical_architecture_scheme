@@ -8,11 +8,11 @@ import { activityApi, activityProgramApi } from '@/api'
 import { useMembershipSchoolOptions } from '@/composables/use-membership-school-options'
 import type { Translate } from '@/types/i18n'
 import { normalizeEnvelope, normalizePaged } from '@/utils/api-response-normalize'
+import { formatOptionLabels } from '@/utils/form-display'
 import { dateFormat } from '@/utils/tool'
 
 import {
   canEditProgramRow,
-  labelFromOptions,
   programStatusOptionsForRow,
   programTypeOptionsForRow
 } from './edit/program-edit-helpers'
@@ -24,7 +24,7 @@ export function useActivityProgramList(
   copyVisible: { value: boolean },
   options: { activityId?: string | number } = {}
 ) {
-  const { t, locale } = useUniI18n()
+  const { t } = useUniI18n()
   const tr = t as Translate
   const route = useRoute()
   const router = useRouter()
@@ -85,16 +85,12 @@ export function useActivityProgramList(
   )
 
   const decorateRows = (list: Row[]) => {
-    const loc = locale.value
     for (const row of list) {
       row.programStatus = row.programStatus == null ? '' : String(row.programStatus)
       row.programType = row.programType == null ? '' : String(row.programType)
-      row.programStatusLabel = labelFromOptions(
-        row.programStatus,
-        statusOptsRow.value,
-        loc
-      )
-      row.programTypeLabel = labelFromOptions(row.programType, typeOptsRow.value, loc)
+      row.programStatusLabel =
+        formatOptionLabels(statusOptsRow.value, row.programStatus) || '—'
+      row.programTypeLabel = formatOptionLabels(typeOptsRow.value, row.programType) || '—'
       row.operateTime = row.operateTime
         ? dateFormat(String(row.operateTime), 'yyyy-MM-dd hh:mm')
         : '—'

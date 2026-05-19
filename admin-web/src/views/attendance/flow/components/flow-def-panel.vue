@@ -20,10 +20,10 @@
       :toolbar="{ refresh: true, density: true, columnSetting: true }"
       :actions="actions"
       :action-column="{ width: 150, fixed: 'right' }"
-      @load-success="onTableLoadSuccess"
+      @load-success="tableEmpty.onLoadSuccess"
       @request-error="tableEmpty.onRequestError">
       <template #empty>
-        <ListTableEmpty :kind="tableEmpty.kind" @reset="reset" @retry="retryTable" />
+        <ListTableEmpty :kind="tableEmpty.kind" @reset="reset" @retry="tableEmpty.retry" />
       </template>
     </UniDataTable>
   </div>
@@ -56,17 +56,7 @@ const { queryModel, filters, tableRef, handleLoadSuccess, reset, search } = useU
   initialFilters: { key: '' }
 })
 
-const tableEmpty = useListTableEmpty(filters)
-
-const onTableLoadSuccess = (result: UniTableRequestResult) => {
-  tableEmpty.onLoadSuccess(result)
-  handleLoadSuccess(result)
-}
-
-const retryTable = () => {
-  tableEmpty.resetError()
-  tableRef.value?.refresh()
-}
+const tableEmpty = useListTableEmpty(filters, { tableRef, afterLoadSuccess: handleLoadSuccess })
 
 const searchCfg = computed<UniFormConfig>(() => ({
   rowProps: { gutter: 8 },

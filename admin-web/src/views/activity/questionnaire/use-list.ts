@@ -79,6 +79,7 @@ export function useQuestionnaireList(
     queryModel,
     filters,
     handleLoadSuccess,
+    refreshTable,
     reset,
     search,
     tableRef
@@ -227,8 +228,6 @@ export function useQuestionnaireList(
 
   const openMetaAdd = () => refs.metaDlg.value?.open('add')
 
-  const handleSaved = () => tableRef.value?.refresh()
-
   const openBatchStatus = () => refs.batchDlg.value?.open('status', selectedIds.value)
 
   const openBatchFrozen = () => refs.batchDlg.value?.open('frozen', selectedIds.value)
@@ -239,8 +238,8 @@ export function useQuestionnaireList(
     deleteSelected,
     filters,
     handleLoadSuccess,
-    handleSaved,
     loadData,
+    refreshTable,
     onSelectionChange,
     openBatchFrozen,
     openBatchStatus,

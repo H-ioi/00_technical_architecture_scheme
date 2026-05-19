@@ -28,10 +28,10 @@
       :toolbar="{ refresh: true, density: true, columnSetting: true }"
       :actions="actions"
       :action-column="{ width: 100, fixed: 'right' }"
-      @load-success="onTableLoadSuccess"
+      @load-success="tableEmpty.onLoadSuccess"
       @request-error="tableEmpty.onRequestError">
       <template #empty>
-        <ListTableEmpty :kind="tableEmpty.kind" @reset="reset" @retry="retryTable" />
+        <ListTableEmpty :kind="tableEmpty.kind" @reset="reset" @retry="tableEmpty.retry" />
       </template>
     </UniDataTable>
 
@@ -40,8 +40,6 @@
 </template>
 
 <script setup lang="ts">
-import type { UniTableRequestResult } from 'uni-ui-lib'
-
 import ListTableEmpty from '@/components/list-table-empty.vue'
 import { useListTableEmpty } from '@/composables/use-list-table-empty'
 import MDetail from '../components/detail.vue'
@@ -63,15 +61,5 @@ const {
   tableRef
 } = useList()
 
-const tableEmpty = useListTableEmpty(filters)
-
-const onTableLoadSuccess = (result: UniTableRequestResult) => {
-  tableEmpty.onLoadSuccess(result)
-  handleLoadSuccess(result)
-}
-
-const retryTable = () => {
-  tableEmpty.resetError()
-  tableRef.value?.refresh()
-}
+const tableEmpty = useListTableEmpty(filters, { tableRef, afterLoadSuccess: handleLoadSuccess })
 </script>

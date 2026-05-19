@@ -54,6 +54,7 @@ import { computed, reactive, ref } from 'vue'
 import { activityApi } from '@/api'
 import type { Translate } from '@/types/i18n'
 import { normalizePaged } from '@/utils/api-response-normalize'
+import { formatCsvRow } from '@/utils/csv'
 import { downloadBlob } from '@/utils/download'
 
 type Row = Record<string, unknown>
@@ -299,9 +300,6 @@ const resetDialog = () => {
   formRef.value?.clearValidate?.()
 }
 
-const csvLine = (cells: unknown[]) =>
-  cells.map((cell) => `"${String(cell ?? '').replace(/"/g, '""')}"`).join(',')
-
 const exportCsv = async () => {
   if (exporting.value) return
   exporting.value = true
@@ -310,7 +308,22 @@ const exportCsv = async () => {
     const pageSize = 200
     let current = 1
     while (current < 600) {
-      const raw = await activityApi.checkinPage.get(buildListParams(current, pageSize, filters.value as Row))
+      const f = filters.value as Row
+      const range = Array.isArray(f.checkinTimeRange) ? f.checkinTimeRange : []
+      const raw = await activityApi.checkinPage.get({
+        activityId: props.activityId,
+        current,
+        size: pageSize,
+        pageNum: current,
+        pageSize,
+        keyword: f.keyword || undefined,
+        paid: f.paid ?? undefined,
+        participateLottery: f.participateLottery ?? undefined,
+        lottery_validate: f.lottery_validate ?? undefined,
+        checkin: f.checkin ?? undefined,
+        checkinTimeStart: range[0] || undefined,
+        checkinTimeEnd: range[1] || undefined
+      })
       const { list, total } = normalizePaged<Row>(raw)
       rows.push(...list)
       if (!list.length || list.length < pageSize || (total && rows.length >= total)) break
@@ -318,9 +331,9 @@ const exportCsv = async () => {
     }
     decorateRows(rows)
     const csv = [
-      csvLine(['#', tr('activity.checkinCode'), tr('activity.registrationPhone'), tr('activity.registrationName'), tr('activity.registrationEmail'), tr('activity.registrationTicketId'), tr('activity.paidStatus'), tr('activity.checkinStatus'), tr('activity.participateLottery'), tr('activity.lotteryValidate'), tr('activity.checkinTime'), tr('activity.colCreateTime')]),
+      formatCsvRow(['#', tr('activity.checkinCode'), tr('activity.registrationPhone'), tr('activity.registrationName'), tr('activity.registrationEmail'), tr('activity.registrationTicketId'), tr('activity.paidStatus'), tr('activity.checkinStatus'), tr('activity.participateLottery'), tr('activity.lotteryValidate'), tr('activity.checkinTime'), tr('activity.colCreateTime')]),
       ...rows.map((row, index) =>
-        csvLine([
+        formatCsvRow([
           index + 1,
           row.codeStr,
           row.phone,

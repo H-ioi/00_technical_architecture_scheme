@@ -31,11 +31,11 @@
       :toolbar="{ refresh: true, density: true, columnSetting: true }"
       :actions="actions"
       :action-column="{ width: 180, fixed: 'right' }"
-      @load-success="onDictLoadSuccess"
+      @load-success="tableEmpty.onLoadSuccess"
       @request-error="onDictRequestError"
       @switch-change="onStatusSwitch">
       <template #empty>
-        <ListTableEmpty :kind="tableEmpty.kind" @reset="reset" @retry="retryTable" />
+        <ListTableEmpty :kind="tableEmpty.kind" @reset="reset" @retry="tableEmpty.retry" />
       </template>
     </UniDataTable>
 
@@ -210,21 +210,11 @@ const { queryModel, filters, tableRef, search, reset, handleLoadSuccess } = useU
   initialFilters: { keyword: '' }
 })
 
-const tableEmpty = useListTableEmpty(filters)
-
-const onDictLoadSuccess = (result: UniTableRequestResult) => {
-  tableEmpty.onLoadSuccess(result)
-  handleLoadSuccess(result)
-}
+const tableEmpty = useListTableEmpty(filters, { tableRef, afterLoadSuccess: handleLoadSuccess })
 
 const onDictRequestError = (err: unknown) => {
   tableEmpty.onRequestError(err)
   ElMessage.error(mt('messages.loadFail'))
-}
-
-const retryTable = () => {
-  tableEmpty.resetError()
-  tableRef.value?.refresh()
 }
 
 const formVisible = ref(false)
@@ -246,10 +236,6 @@ const columns = computed(() => dictItemColumns(mt))
 const attrColumns = computed(() => dictAttrColumns(mt))
 const formConfig = computed(() => dictItemFormConfig(mt))
 const searchCfg = computed(() => dictSearchForm(mt))
-
-const reloadTable = () => {
-  tableRef.value?.refresh()
-}
 
 const tableRequest: UniTableRequest<BaseDictItemRecord> = async ({ filters: reqFilters }) => {
   const list = await baseDictApi.list.get(props.dictType)
@@ -306,7 +292,7 @@ const submitForm = async () => {
       ElMessage.success(mt('messages.addOk'))
     }
     formVisible.value = false
-    reloadTable()
+    tableRef.value?.refresh()
   } catch {
     ElMessage.error(mt('messages.saveFail'))
   }
@@ -351,7 +337,7 @@ const confirmDelete = async () => {
     ElMessage.success(mt('messages.deleteOk'))
     deleteVisible.value = false
     pendingDeleteId.value = ''
-    reloadTable()
+    tableRef.value?.refresh()
   } catch {
     ElMessage.error(mt('messages.saveFail'))
   }

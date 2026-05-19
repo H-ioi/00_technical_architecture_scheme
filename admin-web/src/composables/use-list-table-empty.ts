@@ -19,11 +19,21 @@ export function hasActiveListFilters(filters: Record<string, unknown>): boolean 
   })
 }
 
+export type UseListTableEmptyOptions = {
+  /** 空态「重试」时刷新表格 */
+  tableRef?: Ref<{ refresh?: () => void } | null | undefined>
+  /** 与 useUniListState.handleLoadSuccess 等并列回调 */
+  afterLoadSuccess?: (result: UniTableRequestResult) => void
+}
+
 /**
  * 列表空态：区分无权限、网络失败、筛选无结果、无数据。
  * 与 UniDataTable 的 #empty、@request-error、@load-success 配合使用。
  */
-export function useListTableEmpty(filters: Ref<Record<string, unknown>>) {
+export function useListTableEmpty(
+  filters: Ref<Record<string, unknown>>,
+  options?: UseListTableEmptyOptions
+) {
   const { t } = useUniI18n()
   const hasLoadedOnce = ref(false)
   const lastTotal = ref(0)
@@ -33,6 +43,12 @@ export function useListTableEmpty(filters: Ref<Record<string, unknown>>) {
     hasLoadedOnce.value = true
     requestError.value = null
     lastTotal.value = result.total ?? 0
+    options?.afterLoadSuccess?.(result)
+  }
+
+  const retry = () => {
+    resetError()
+    options?.tableRef?.value?.refresh?.()
   }
 
   const onRequestError = (err: unknown) => {
@@ -89,6 +105,7 @@ export function useListTableEmpty(filters: Ref<Record<string, unknown>>) {
     kind,
     onLoadSuccess,
     onRequestError,
-    resetError
+    resetError,
+    retry
   }
 }

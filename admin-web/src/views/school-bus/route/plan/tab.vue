@@ -9,7 +9,7 @@
         <el-button v-uni-permission="'busline_import'" @click="downloadRouteTemplate">
           {{ $t('schoolBus.routePlan.downloadRouteTemplate') }}
         </el-button>
-        <el-button v-uni-permission="'busline_import'" @click="pickRouteImport">
+        <el-button v-uni-permission="'busline_import'" @click="routeFileRef?.click()">
           {{ $t('schoolBus.routePlan.importRoute') }}
         </el-button>
         <el-button v-uni-permission="'busline_add'" type="primary" @click="openRouteForm">
@@ -25,7 +25,7 @@
         <el-button v-uni-permission="'busstation_import'" @click="downloadStationTemplate">
           {{ $t('schoolBus.routePlan.downloadStationTemplate') }}
         </el-button>
-        <el-button v-uni-permission="'busstation_import'" @click="pickStationImport">
+        <el-button v-uni-permission="'busstation_import'" @click="stationFileRef?.click()">
           {{ $t('schoolBus.routePlan.importStation') }}
         </el-button>
         <el-button v-uni-permission="'busstation_add'" type="primary" @click="openStationAdd">
@@ -71,7 +71,7 @@
           :actions="routeActions"
           :action-column="{ width: 110, fixed: 'right' }"
           @selection-change="onRouteSelectionChange"
-          @load-success="onRouteTableLoadSuccess"
+          @load-success="routeTableEmpty.onLoadSuccess"
           @request-error="routeTableEmpty.onRequestError">
           <template #toolbar>
             <el-button
@@ -92,7 +92,7 @@
             <ListTableEmpty
               :kind="routeTableEmpty.kind"
               @reset="resetRouteSearch"
-              @retry="retryRouteTable" />
+              @retry="routeTableEmpty.retry" />
           </template>
         </UniDataTable>
       </el-tab-pane>
@@ -119,7 +119,7 @@
           :actions="termActions"
           :action-column="{ width: 110, fixed: 'right' }"
           @selection-change="onTermSelectionChange"
-          @load-success="onTermTableLoadSuccess"
+          @load-success="termTableEmpty.onLoadSuccess"
           @request-error="termTableEmpty.onRequestError">
           <template #toolbar>
             <el-button
@@ -134,7 +134,7 @@
             <ListTableEmpty
               :kind="termTableEmpty.kind"
               @reset="resetTermSearch"
-              @retry="retryTermTable" />
+              @retry="termTableEmpty.retry" />
           </template>
         </UniDataTable>
       </el-tab-pane>
@@ -161,7 +161,7 @@
           :actions="stationActions"
           :action-column="{ width: 110, fixed: 'right' }"
           @selection-change="onStationSelectionChange"
-          @load-success="onStationTableLoadSuccess"
+          @load-success="stationTableEmpty.onLoadSuccess"
           @request-error="stationTableEmpty.onRequestError">
           <template #toolbar>
             <el-button
@@ -176,7 +176,7 @@
             <ListTableEmpty
               :kind="stationTableEmpty.kind"
               @reset="resetStationSearch"
-              @retry="retryStationTable" />
+              @retry="stationTableEmpty.retry" />
           </template>
         </UniDataTable>
       </el-tab-pane>
@@ -186,7 +186,7 @@
       ref="routeFormRef"
       :school-records="schoolRecords"
       :locale="locale()"
-      @saved="refreshRoutes" />
+      @saved="() => routesTableRef?.value?.refresh?.()" />
 
     <TermFormDialog
       v-model="termFormVisible"
@@ -194,7 +194,7 @@
       :school-records="schoolRecords"
       :default-school-id="defaultSchoolId"
       :multi-school="multiSchool"
-      @saved="refreshTerms" />
+      @saved="() => termTableRef?.value?.refresh?.()" />
 
     <StationFormDialog
       v-model="stationFormVisible"
@@ -202,7 +202,7 @@
       :school-records="schoolRecords"
       :default-school-id="defaultSchoolId"
       :multi-school="multiSchool"
-      @saved="refreshStations" />
+      @saved="() => stationTableRef?.value?.refresh?.()" />
 
     <el-dialog v-model="detailVisible" width="900px" :title="$t('schoolBus.look')">
       <el-descriptions v-if="detailRecord" :column="2" border>
@@ -210,7 +210,7 @@
           v-for="col in routeColumns"
           :key="String(col.prop)"
           :label="col.label">
-          {{ routeDetailRowText(col.prop) }}
+          {{ detailCellDisplay(detailRecord, col.prop) }}
         </el-descriptions-item>
       </el-descriptions>
     </el-dialog>
@@ -218,7 +218,7 @@
     <el-dialog v-model="termDetailVisible" width="900px" :title="$t('schoolBus.look')">
       <el-descriptions v-if="termDetailRecord" :column="2" border>
         <el-descriptions-item v-for="col in termColumns" :key="String(col.prop)" :label="col.label">
-          {{ termDetailRowText(col.prop) }}
+          {{ detailCellDisplay(termDetailRecord, col.prop) }}
         </el-descriptions-item>
       </el-descriptions>
     </el-dialog>
@@ -229,7 +229,7 @@
           v-for="col in stationColumns"
           :key="String(col.prop)"
           :label="col.label">
-          {{ stationDetailRowText(col.prop) }}
+          {{ detailCellDisplay(stationDetailRecord, col.prop) }}
         </el-descriptions-item>
       </el-descriptions>
     </el-dialog>
@@ -247,6 +247,7 @@ import ListTableEmpty from '@/components/list-table-empty.vue'
 import { useListTableEmpty } from '@/composables/use-list-table-empty'
 import { useTabQuerySync } from '@/composables/use-tab-query-sync'
 import { normalizeArray } from '@/utils/api-response-normalize'
+import { detailCellDisplay, isSpreadsheetFilename } from '@/utils/school-bus'
 import type { SchoolOptionRecord } from '@/types/modules/membership'
 
 import RouteFormModal from './components/route-form-modal.vue'
@@ -302,17 +303,10 @@ const {
   deleteSelected
 } = useRouteLines(routeFormRef, schoolRecords)
 
-const routeTableEmpty = useListTableEmpty(routeFilters)
-
-const onRouteTableLoadSuccess = (result: UniTableRequestResult) => {
-  routeTableEmpty.onLoadSuccess(result)
-  handleRouteLoadSuccess(result)
-}
-
-const retryRouteTable = () => {
-  routeTableEmpty.resetError()
-  routesTableRef.value?.refresh()
-}
+const routeTableEmpty = useListTableEmpty(routeFilters, {
+  tableRef: routesTableRef,
+  afterLoadSuccess: handleRouteLoadSuccess
+})
 
 const {
   actions: termActions,
@@ -335,17 +329,10 @@ const {
   termFormVisible
 } = useTermSection(schoolRecords)
 
-const termTableEmpty = useListTableEmpty(termFilters)
-
-const onTermTableLoadSuccess = (result: UniTableRequestResult) => {
-  termTableEmpty.onLoadSuccess(result)
-  handleTermLoadSuccess(result)
-}
-
-const retryTermTable = () => {
-  termTableEmpty.resetError()
-  termTableRef.value?.refresh()
-}
+const termTableEmpty = useListTableEmpty(termFilters, {
+  tableRef: termTableRef,
+  afterLoadSuccess: handleTermLoadSuccess
+})
 
 const {
   actions: stationActions,
@@ -368,47 +355,10 @@ const {
   stationFormVisible
 } = useStationSection(schoolRecords)
 
-const stationTableEmpty = useListTableEmpty(stationFilters)
-
-const onStationTableLoadSuccess = (result: UniTableRequestResult) => {
-  stationTableEmpty.onLoadSuccess(result)
-  handleStationLoadSuccess(result)
-}
-
-const retryStationTable = () => {
-  stationTableEmpty.resetError()
-  stationTableRef.value?.refresh()
-}
-
-const routeDetailRowText = (prop: UniTableColumn['prop']) => {
-  if (!detailRecord.value || prop == null) {
-    return ''
-  }
-
-  const val = (detailRecord.value as Record<string, unknown>)[String(prop)]
-
-  return val == null || val === '' ? '--' : String(val)
-}
-
-const termDetailRowText = (prop: UniTableColumn['prop']) => {
-  if (!termDetailRecord.value || prop == null) {
-    return ''
-  }
-
-  const val = (termDetailRecord.value as Record<string, unknown>)[String(prop)]
-
-  return val == null || val === '' ? '--' : String(val)
-}
-
-const stationDetailRowText = (prop: UniTableColumn['prop']) => {
-  if (!stationDetailRecord.value || prop == null) {
-    return ''
-  }
-
-  const val = (stationDetailRecord.value as Record<string, unknown>)[String(prop)]
-
-  return val == null || val === '' ? '--' : String(val)
-}
+const stationTableEmpty = useListTableEmpty(stationFilters, {
+  tableRef: stationTableRef,
+  afterLoadSuccess: handleStationLoadSuccess
+})
 
 onMounted(async () => {
   const raw = await membershipApi.school.get()
@@ -430,18 +380,6 @@ watch(
   }
 )
 
-const refreshRoutes = () => {
-  routesTableRef.value?.refresh()
-}
-
-const refreshTerms = () => {
-  termTableRef.value?.refresh()
-}
-
-const refreshStations = () => {
-  stationTableRef.value?.refresh()
-}
-
 const openRouteForm = () => {
   routeFormRef.value?.showForm('add')
 }
@@ -450,65 +388,41 @@ const downloadRouteTemplate = async () => {
   await schoolBusLineApi.template.download()
 }
 
-const pickRouteImport = () => {
-  routeFileRef.value?.click()
-}
-
 const downloadStationTemplate = async () => {
   await schoolBusStationApi.template.download()
 }
 
-const pickStationImport = () => {
-  stationFileRef.value?.click()
-}
-
 const IMPORT_MAX_BYTES = 10 * 1024 * 1024
 
-const summarizeImportRows = (
-  raw: unknown,
-  translate: (k: string, params?: Record<string, unknown>) => string
-): { previewText: string | null; downloadBody: string | null } => {
+/** 解析导入接口返回并弹窗；含失败行时可下载完整错误报告 */
+const showImportFeedback = async (raw: unknown) => {
   if (raw == null || typeof raw !== 'object') {
-    return { previewText: null, downloadBody: null }
+    return
   }
   const r = raw as Loose
   const data = r.data != null && typeof r.data === 'object' ? (r.data as Loose) : r
+  let previewText: string | null = null
+  let downloadBody: string | null = null
   const msg = data.msg ?? data.message ?? data.errorMsg
   if (typeof msg === 'string' && msg.trim()) {
-    return { previewText: msg.trim(), downloadBody: null }
+    previewText = msg.trim()
+  } else {
+    const failList = data.failList ?? data.errorList ?? data.errors
+    if (Array.isArray(failList) && failList.length > 0) {
+      const lines = failList.map((x) => String(x))
+      previewText =
+        t('schoolBus.importHadRowErrors', { count: failList.length }) +
+        '\n' +
+        lines.slice(0, 10).join('\n')
+      downloadBody = lines.join('\n')
+    }
   }
-  const failList = data.failList ?? data.errorList ?? data.errors
-  if (Array.isArray(failList) && failList.length > 0) {
-    const lines = failList.map((x) => String(x))
-    const preview =
-      translate('schoolBus.importHadRowErrors', { count: failList.length }) +
-      '\n' +
-      lines.slice(0, 10).join('\n')
-    return { previewText: preview, downloadBody: lines.join('\n') }
-  }
-  return { previewText: null, downloadBody: null }
-}
-
-const downloadTextFile = (text: string, filename: string) => {
-  const blob = new Blob([text], { type: 'text/plain;charset=utf-8' })
-  const url = URL.createObjectURL(blob)
-  const a = document.createElement('a')
-  a.href = url
-  a.download = filename
-  a.click()
-  URL.revokeObjectURL(url)
-}
-
-const showImportFeedback = async (summary: {
-  previewText: string | null
-  downloadBody: string | null
-}) => {
-  if (!summary.previewText) {
+  if (!previewText) {
     return
   }
-  if (summary.downloadBody) {
+  if (downloadBody) {
     try {
-      await ElMessageBox.confirm(summary.previewText, t('common.tip'), {
+      await ElMessageBox.confirm(previewText, t('common.tip'), {
         type: 'info',
         distinguishCancelAndClose: true,
         confirmButtonText: t('common.close'),
@@ -516,21 +430,21 @@ const showImportFeedback = async (summary: {
       })
     } catch (action) {
       if (action === 'cancel') {
-        downloadTextFile(summary.downloadBody, `school-bus-import-errors-${Date.now()}.txt`)
+        const blob = new Blob([downloadBody], { type: 'text/plain;charset=utf-8' })
+        const url = URL.createObjectURL(blob)
+        const a = document.createElement('a')
+        a.href = url
+        a.download = `school-bus-import-errors-${Date.now()}.txt`
+        a.click()
+        URL.revokeObjectURL(url)
       }
     }
     return
   }
-  await ElMessageBox.alert(summary.previewText, t('common.tip'), {
+  await ElMessageBox.alert(previewText, t('common.tip'), {
     type: 'info',
     confirmButtonText: t('common.close')
   })
-}
-
-const isSpreadsheetFilename = (name: string) => {
-  const lower = name.toLowerCase()
-
-  return lower.endsWith('.xls') || lower.endsWith('.xlsx')
 }
 
 const onRouteImportFile = async (e: Event) => {
@@ -562,8 +476,8 @@ const onRouteImportFile = async (e: Event) => {
     try {
       const result = await schoolBusLineApi.import.post(file)
       ElMessage.success(t('schoolBus.importSuccess'))
-      refreshRoutes()
-      await showImportFeedback(summarizeImportRows(result, t))
+      routesTableRef.value?.refresh()
+      await showImportFeedback(result)
     } finally {
       loading.close()
     }
@@ -601,8 +515,8 @@ const onStationImportFile = async (e: Event) => {
     try {
       const result = await schoolBusStationApi.import.post(file)
       ElMessage.success(t('schoolBus.importSuccess'))
-      refreshStations()
-      await showImportFeedback(summarizeImportRows(result, t))
+      stationTableRef.value?.refresh()
+      await showImportFeedback(result)
     } finally {
       loading.close()
     }

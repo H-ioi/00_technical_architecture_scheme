@@ -21,9 +21,10 @@ export function useWechatSchoolList(formDlg: DialogRef) {
 
   const { schoolOptions, loadSchoolOptions } = useMembershipSchoolOptions()
 
-  const { queryModel, filters, handleLoadSuccess, reset, search, tableRef } = useUniListState({
-    initialFilters: { schoolId: undefined, keyword: '' }
-  })
+  const { queryModel, filters, handleLoadSuccess, refreshTable, reset, search, tableRef } =
+    useUniListState({
+      initialFilters: { schoolId: undefined, keyword: '' }
+    })
 
   const ynOptions = computed(() => activeOptions(tr))
   const searchCfg = computed(() => searchForm(tr, schoolOptions.value))
@@ -98,8 +99,6 @@ export function useWechatSchoolList(formDlg: DialogRef) {
     tableRef.value?.refresh()
   }
 
-  const handleSaved = () => tableRef.value?.refresh()
-
   onMounted(() => {
     void loadSchoolOptions()
   })
@@ -110,8 +109,8 @@ export function useWechatSchoolList(formDlg: DialogRef) {
     deleteSelected,
     filters,
     handleLoadSuccess,
-    handleSaved,
     loadData,
+    refreshTable,
     onSelectionChange,
     openAdd,
     openDetail,

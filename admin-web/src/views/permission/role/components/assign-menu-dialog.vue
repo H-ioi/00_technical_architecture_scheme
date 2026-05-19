@@ -48,13 +48,6 @@ const checkedKeys = ref<(string | number)[]>([])
 const ready = ref(false)
 let treeKey = 0
 
-const normalizeChecked = (raw: unknown): (string | number)[] => {
-  if (!Array.isArray(raw)) {
-    return []
-  }
-  return raw.filter((id) => id !== null && id !== undefined && id !== '') as (string | number)[]
-}
-
 watch(
   () => [visible.value, props.roleId] as const,
   async ([open, rid]) => {
@@ -71,7 +64,12 @@ watch(
         permissionRoleApi.roleMenuChecked.get(rid)
       ])
       treeData.value = Array.isArray(menus) ? menus : []
-      checkedKeys.value = normalizeChecked(checkedRaw)
+      checkedKeys.value = Array.isArray(checkedRaw)
+        ? (checkedRaw.filter((id) => id !== null && id !== undefined && id !== '') as (
+            | string
+            | number
+          )[])
+        : []
       await nextTick()
       ready.value = true
     } finally {

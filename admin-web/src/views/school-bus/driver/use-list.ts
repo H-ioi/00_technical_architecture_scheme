@@ -16,7 +16,7 @@ export const useList = () => {
     keyword: '',
     status: undefined as string | number | undefined
   }
-  const { queryModel, filters, tableRef, total, search, reset, handleLoadSuccess } =
+  const { queryModel, filters, tableRef, total, search, reset, handleLoadSuccess, refreshTable } =
     useUniListState({
       initialFilters
     })
@@ -105,6 +105,7 @@ export const useList = () => {
     loadData,
     openForm,
     queryModel,
+    refreshTable,
     reset,
     schoolOptions,
     search,

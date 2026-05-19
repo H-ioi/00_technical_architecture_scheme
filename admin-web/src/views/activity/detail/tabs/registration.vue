@@ -67,6 +67,7 @@ import { computed, reactive, ref } from 'vue'
 import { activityApi } from '@/api'
 import type { Translate } from '@/types/i18n'
 import { normalizePaged } from '@/utils/api-response-normalize'
+import { formatCsvRow } from '@/utils/csv'
 import { downloadBlob, downloadResponseBlob } from '@/utils/download'
 
 type Row = Record<string, unknown>
@@ -211,10 +212,10 @@ const decorateRows = (list: Row[], pageNo = 1, pageSize = list.length || 1) => {
   })
 }
 
-const buildListParams = (current: number, size: number, filterModel: Row) => {
-  const f = filterModel as Row
+const fetchTicketPage = async (current: number, size: number, filterModel: Row) => {
+  const f = filterModel
   const range = Array.isArray(f.registerTimeRange) ? f.registerTimeRange : []
-  return {
+  const raw = await activityApi.ticketPage.get({
     activityId: props.activityId,
     current,
     size,
@@ -224,12 +225,12 @@ const buildListParams = (current: number, size: number, filterModel: Row) => {
     paid: f.paid ?? undefined,
     registerStartTime: range[0] || undefined,
     registerEndTime: range[1] || undefined
-  }
+  })
+  return normalizePaged<Row>(raw)
 }
 
 const loadData: UniTableRequest = async ({ pageNo: current, pageSize: size, filters: filterModel }) => {
-  const raw = await activityApi.ticketPage.get(buildListParams(current, size, filterModel as Row))
-  const { list, total } = normalizePaged<Row>(raw)
+  const { list, total } = await fetchTicketPage(current, size, filterModel as Row)
   decorateRows(list, current, size)
   return { data: list, total }
 }
@@ -284,9 +285,6 @@ const importTickets = (file: File) => {
   return false
 }
 
-const csvLine = (cells: unknown[]) =>
-  cells.map((cell) => `"${String(cell ?? '').replace(/"/g, '""')}"`).join(',')
-
 const exportCsv = async () => {
   if (exporting.value) return
   exporting.value = true
@@ -295,17 +293,16 @@ const exportCsv = async () => {
     const pageSize = 200
     let current = 1
     while (current < 600) {
-      const raw = await activityApi.ticketPage.get(buildListParams(current, pageSize, filters.value as Row))
-      const { list, total } = normalizePaged<Row>(raw)
+      const { list, total } = await fetchTicketPage(current, pageSize, filters.value as Row)
       rows.push(...list)
       if (!list.length || list.length < pageSize || (total && rows.length >= total)) break
       current += 1
     }
     decorateRows(rows)
     const csv = [
-      csvLine(['#', tr('activity.colActivityName'), tr('activity.registrationPhone'), tr('activity.registrationEmail'), tr('activity.registrationName'), tr('activity.colTicketPrice'), tr('activity.registrationPaidAmount'), tr('activity.registrationPeopleCount'), tr('activity.registrationId'), tr('activity.paidStatus'), tr('activity.registrationTime')]),
+      formatCsvRow(['#', tr('activity.colActivityName'), tr('activity.registrationPhone'), tr('activity.registrationEmail'), tr('activity.registrationName'), tr('activity.colTicketPrice'), tr('activity.registrationPaidAmount'), tr('activity.registrationPeopleCount'), tr('activity.registrationId'), tr('activity.paidStatus'), tr('activity.registrationTime')]),
       ...rows.map((row) =>
-        csvLine([
+        formatCsvRow([
           row._seq,
           row.activityName,
           row.phone,

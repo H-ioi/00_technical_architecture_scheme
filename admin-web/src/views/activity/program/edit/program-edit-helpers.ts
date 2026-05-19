@@ -40,19 +40,6 @@ export function isPrizeCountOnlyEdit(item: Record<string, unknown>): boolean {
   )
 }
 
-export function labelFromOptions(
-  value: unknown,
-  options: UniOption[],
-  _locale: string
-): string {
-  const v = value == null ? '' : String(value)
-  const hit = options.find((o) => String(o.value) === v)
-  if (!hit) {
-    return v || '—'
-  }
-  return String(hit.label ?? v)
-}
-
 export function programStatusOptionsForRow(t: Translate): UniOption[] {
   return [
     { label: t('activity.programStatusPending'), value: '0' },

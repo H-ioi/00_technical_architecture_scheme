@@ -20,7 +20,8 @@ export function useVoteProgramList({ formDlg }: DialogRefs) {
   const { t } = useUniI18n()
   const tr = t as Translate
 
-  const { queryModel, filters, handleLoadSuccess, reset, search, tableRef } = useUniListState({
+  const { queryModel, filters, handleLoadSuccess, refreshTable, reset, search, tableRef } =
+    useUniListState({
     initialFilters: { keyword: '' }
   })
 
@@ -94,18 +95,14 @@ export function useVoteProgramList({ formDlg }: DialogRefs) {
     }
   }
 
-  const handleSaved = () => {
-    tableRef.value?.refresh()
-  }
-
   return {
     actions,
     columns,
     deleteSelected,
     filters,
     handleLoadSuccess,
-    handleSaved,
     loadData,
+    refreshTable,
     onSelectionChange,
     openAdd,
     queryModel,

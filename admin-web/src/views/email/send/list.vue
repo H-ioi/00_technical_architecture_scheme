@@ -32,7 +32,7 @@
       :toolbar="{ refresh: true, density: true, columnSetting: true }"
       :actions="actions"
       :action-column="{ width: 168, fixed: 'right' }"
-      @load-success="onTableLoadSuccess"
+      @load-success="tableEmpty.onLoadSuccess"
       @request-error="tableEmpty.onRequestError"
       @selection-change="onSelectionChange">
       <template #toolbar>
@@ -47,7 +47,7 @@
         </el-button>
       </template>
       <template #empty>
-        <ListTableEmpty :kind="tableEmpty.kind" @reset="reset" @retry="retryTable" />
+        <ListTableEmpty :kind="tableEmpty.kind" @reset="reset" @retry="tableEmpty.retry" />
       </template>
     </UniDataTable>
 
@@ -86,7 +86,6 @@
 </template>
 
 <script setup lang="ts">
-import type { UniTableRequestResult } from 'uni-ui-lib'
 import { UniDataTable, UniSearchForm } from 'uni-ui-lib'
 
 import ListTableEmpty from '@/components/list-table-empty.vue'
@@ -116,17 +115,7 @@ const {
   viewVisible
 } = useList()
 
-const tableEmpty = useListTableEmpty(filters)
-
-const onTableLoadSuccess = (result: UniTableRequestResult) => {
-  tableEmpty.onLoadSuccess(result)
-  handleLoadSuccess(result)
-}
-
-const retryTable = () => {
-  tableEmpty.resetError()
-  tableRef.value?.refresh()
-}
+const tableEmpty = useListTableEmpty(filters, { tableRef, afterLoadSuccess: handleLoadSuccess })
 </script>
 
 <style scoped lang="scss">

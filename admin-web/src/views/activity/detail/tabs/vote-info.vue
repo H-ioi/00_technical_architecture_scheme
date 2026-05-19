@@ -66,6 +66,7 @@ import { computed, reactive, ref } from 'vue'
 import { activityApi, activityVoteProgramApi } from '@/api'
 import type { Translate } from '@/types/i18n'
 import { normalizeArray, normalizePaged } from '@/utils/api-response-normalize'
+import { formatCsvRow } from '@/utils/csv'
 
 type Row = Record<string, unknown>
 
@@ -282,7 +283,7 @@ const exportCsv = async () => {
       ['#', tr('activity.voteRecordVoter'), tr('activity.registrationPhone'), tr('activity.voteProgramProject'), tr('activity.voteProgramTitle'), tr('activity.colCreateTime')],
       ...rows.map((row) => [row._seq, row.voter, row.phone, row.programName, row.voteName, row.createTimeLabel])
     ]
-      .map((line) => line.map((cell) => `"${String(cell ?? '').replace(/"/g, '""')}"`).join(','))
+      .map((line) => formatCsvRow(line))
       .join('\n')
     const blob = new Blob([`\uFEFF${csv}`], { type: 'text/csv;charset=utf-8' })
     const url = URL.createObjectURL(blob)

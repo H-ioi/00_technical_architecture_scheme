@@ -156,6 +156,7 @@ import { membershipApi, schoolBusOrderApi } from '@/api'
 import type { SchoolOptionRecord } from '@/types/modules/membership'
 import { membershipSchoolLabel } from '@/utils/membership-school'
 
+import { formatOptionLabels } from '@/utils/form-display'
 import { pickLocaleName } from '@/utils/locale-name'
 import {
   approvalStatusOptions,
@@ -166,14 +167,6 @@ import {
 } from '../use-student-order-filters'
 
 type Loose = Record<string, unknown>
-
-const pickLabel = (
-  options: { label: string; value: string | number }[],
-  value: unknown
-): string => {
-  const hit = options.find((o) => String(o.value) === String(value ?? ''))
-  return hit?.label ?? String(value ?? '--')
-}
 
 const props = defineProps<{
   visible: boolean
@@ -247,15 +240,15 @@ const loadDetail = async (id: string | number) => {
       studentGrade: data.studentGrade,
       amountDue: data.amountDue,
       approvalStatus: data.approvalStatus,
-      approvalStatusLabel: pickLabel(approvalOpts, data.approvalStatus),
+      approvalStatusLabel: formatOptionLabels(approvalOpts, data.approvalStatus) || '--',
       denyReason: data.denyReason,
       paymentStatus: data.paymentStatus,
-      paymentStatusLabel: pickLabel(paymentOpts, data.paymentStatus),
+      paymentStatusLabel: formatOptionLabels(paymentOpts, data.paymentStatus) || '--',
       pickupMethod: data.pickupMethod,
-      pickupMethodLabel: pickLabel(pickupOpts, data.pickupMethod),
+      pickupMethodLabel: formatOptionLabels(pickupOpts, data.pickupMethod) || '--',
       createTime: data.createTime ? dayjs(String(data.createTime)).format('YYYY-MM-DD HH:mm') : '',
       paymentAmount: data.paymentAmount,
-      paymentMethodLabel: pickLabel(payMethodOpts, data.paymentMethod),
+      paymentMethodLabel: formatOptionLabels(payMethodOpts, data.paymentMethod) || '--',
       paymentDate: data.paymentDate,
       paymentAccount: data.paymentAccount,
       paymentOrderNo: data.paymentOrderNo,
@@ -289,7 +282,7 @@ const loadDetail = async (id: string | number) => {
           { enName: item.stationEnName, cnName: item.stationCnName },
           locale.value
         ),
-        lineTypeName: pickLabel(lineTypeOpts, item.studentLineType),
+        lineTypeName: formatOptionLabels(lineTypeOpts, item.studentLineType) || '--',
         ridingWeekDay: item.ridingWeekDay,
         carNumber,
         ridingStartDay: item.ridingStartDay,

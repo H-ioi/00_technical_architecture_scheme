@@ -32,13 +32,13 @@
           :toolbar="{ refresh: true, density: true, columnSetting: true }"
           :actions="sentActions"
           :action-column="{ width: 110, fixed: 'right' }"
-          @load-success="onSentTableLoadSuccess"
+          @load-success="sentTableEmpty.onLoadSuccess"
           @request-error="sentTableEmpty.onRequestError">
           <template #empty>
             <ListTableEmpty
               :kind="sentTableEmpty.kind"
               @reset="resetSentSearch"
-              @retry="retrySentTable" />
+              @retry="sentTableEmpty.retry" />
           </template>
         </UniDataTable>
       </el-tab-pane>
@@ -64,13 +64,13 @@
           :toolbar="{ refresh: true, density: true, columnSetting: true }"
           :actions="draftActions"
           :action-column="{ width: 150, fixed: 'right' }"
-          @load-success="onDraftTableLoadSuccess"
+          @load-success="draftTableEmpty.onLoadSuccess"
           @request-error="draftTableEmpty.onRequestError">
           <template #empty>
             <ListTableEmpty
               :kind="draftTableEmpty.kind"
               @reset="resetDraftSearch"
-              @retry="retryDraftTable" />
+              @retry="draftTableEmpty.retry" />
           </template>
         </UniDataTable>
       </el-tab-pane>
@@ -83,7 +83,7 @@
       :mail-sender-options="mailSenderOptions"
       :mail-group-options="mailGroupOptions"
       :submitting="formSubmitting"
-      @submit="onComposeSubmit" />
+      @submit="(status: 0 | 1) => void submitComposeForm(status)" />
 
     <OutboxViewDialog
       v-model="viewVisible"
@@ -127,17 +127,10 @@ const {
   viewVisible
 } = useOutboxSent()
 
-const sentTableEmpty = useListTableEmpty(sentFilters)
-
-const onSentTableLoadSuccess = (result: UniTableRequestResult) => {
-  sentTableEmpty.onLoadSuccess(result)
-  handleSentLoadSuccess(result)
-}
-
-const retrySentTable = () => {
-  sentTableEmpty.resetError()
-  sentTableRef.value?.refresh()
-}
+const sentTableEmpty = useListTableEmpty(sentFilters, {
+  tableRef: sentTableRef,
+  afterLoadSuccess: handleSentLoadSuccess
+})
 
 const {
   actions: draftActions,
@@ -160,21 +153,11 @@ const {
   tableRef: draftTableRef
 } = useOutboxDraft()
 
-const draftTableEmpty = useListTableEmpty(draftFilters)
+const draftTableEmpty = useListTableEmpty(draftFilters, {
+  tableRef: draftTableRef,
+  afterLoadSuccess: handleDraftLoadSuccess
+})
 
-const onDraftTableLoadSuccess = (result: UniTableRequestResult) => {
-  draftTableEmpty.onLoadSuccess(result)
-  handleDraftLoadSuccess(result)
-}
-
-const retryDraftTable = () => {
-  draftTableEmpty.resetError()
-  draftTableRef.value?.refresh()
-}
-
-const onComposeSubmit = (status: 0 | 1) => {
-  void submitComposeForm(status)
-}
 </script>
 
 <style scoped lang="scss">

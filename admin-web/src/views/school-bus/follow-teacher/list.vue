@@ -12,7 +12,7 @@
         <el-button v-uni-permission="'teacheruser_download'" @click="downloadTemplate">
           {{ $t('schoolBus.downloadTemplate') }}
         </el-button>
-        <el-button v-uni-permission="'teacheruser_import'" @click="pickImport">
+        <el-button v-uni-permission="'teacheruser_import'" @click="fileRef?.click()">
           {{ $t('schoolBus.import') }}
         </el-button>
         <el-button v-uni-permission="'teacheruser_add'" type="primary" @click="openForm('add')">
@@ -51,7 +51,7 @@
       :actions="actions"
       :action-column="{ width: 110, fixed: 'right' }"
       @selection-change="onSelectionChange"
-      @load-success="onTableLoadSuccess"
+      @load-success="tableEmpty.onLoadSuccess"
       @request-error="tableEmpty.onRequestError">
       <template #toolbar>
         <!-- 权限标识与旧系统一致，后端为历史拼写 teacheruser_enble -->
@@ -76,7 +76,7 @@
         </el-button>
       </template>
       <template #empty>
-        <ListTableEmpty :kind="tableEmpty.kind" @reset="reset" @retry="retryTable" />
+        <ListTableEmpty :kind="tableEmpty.kind" @reset="reset" @retry="tableEmpty.retry" />
       </template>
     </UniDataTable>
 
@@ -88,13 +88,12 @@
       :school-options="schoolOptions"
       :status-options="statusOptions"
       :multi-school="multiSchool"
-      @saved="reload" />
+      @saved="refreshTable" />
   </section>
 </template>
 
 <script setup lang="ts">
 import { ElMessage, ElMessageBox } from 'element-plus'
-import type { UniTableRequestResult } from 'uni-ui-lib'
 import { useUniI18n } from 'uni-ui-lib'
 import { computed, ref } from 'vue'
 
@@ -104,6 +103,8 @@ import { useListTableEmpty } from '@/composables/use-list-table-empty'
 import type { FollowTeacherRecord } from '@/types/modules/school-bus-follow-teacher'
 import { downloadBlob } from '@/utils/download'
 import TeacherForm from './components/form.vue'
+import { isSpreadsheetFilename } from '@/utils/school-bus'
+
 import { useList } from './use-list'
 
 const { t } = useUniI18n()
@@ -130,23 +131,11 @@ const {
   tableRef
 } = useList()
 
-const tableEmpty = useListTableEmpty(filters)
-
-const onTableLoadSuccess = (result: UniTableRequestResult) => {
-  tableEmpty.onLoadSuccess(result)
-  handleLoadSuccess(result)
-}
-
-const retryTable = () => {
-  tableEmpty.resetError()
-  tableRef.value?.refresh()
-}
+const tableEmpty = useListTableEmpty(filters, { tableRef, afterLoadSuccess: handleLoadSuccess })
 
 const IMPORT_MAX_BYTES = 10 * 1024 * 1024
 const selection = ref<FollowTeacherRecord[]>([])
 const ids = computed(() => selection.value.map((r) => r.id))
-
-const reload = () => tableRef.value?.refresh()
 
 const onSelectionChange = (rows: FollowTeacherRecord[]) => {
   selection.value = rows
@@ -158,13 +147,6 @@ const downloadTemplate = async () => {
   } catch {
     /* request 层已提示 */
   }
-}
-
-const pickImport = () => fileRef.value?.click()
-
-const isSpreadsheetFilename = (name: string) => {
-  const lower = name.toLowerCase()
-  return lower.endsWith('.xls') || lower.endsWith('.xlsx')
 }
 
 const onImportFile = async (e: Event) => {
@@ -185,7 +167,7 @@ const onImportFile = async (e: Event) => {
   try {
     await schoolBusFollowTeacherApi.import.post(file)
     ElMessage.success(t('schoolBus.importSuccess'))
-    reload()
+    void refreshTable()
   } catch {
     /* request 层已提示 */
   }
@@ -221,7 +203,7 @@ const batchEnable = async () => {
     await schoolBusFollowTeacherApi.enable.post(ids.value)
     ElMessage.success(t('schoolBus.operationSuccess'))
     selection.value = []
-    reload()
+    void refreshTable()
   } catch {
     /* request 层已提示 */
   }
@@ -244,7 +226,7 @@ const batchDisable = async () => {
     await schoolBusFollowTeacherApi.disable.post(ids.value)
     ElMessage.success(t('schoolBus.operationSuccess'))
     selection.value = []
-    reload()
+    void refreshTable()
   } catch {
     /* request 层已提示 */
   }
@@ -265,7 +247,7 @@ const del = async () => {
     await schoolBusFollowTeacherApi.delete.delete(ids.value)
     ElMessage.success(t('schoolBus.deleteSuccess'))
     selection.value = []
-    reload()
+    void refreshTable()
   } catch {
     /* request 层已提示 */
   }

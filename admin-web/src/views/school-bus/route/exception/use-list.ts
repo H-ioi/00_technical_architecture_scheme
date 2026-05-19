@@ -69,7 +69,8 @@ export const useList = () => {
     exceptionDateEnd: undefined
   }
 
-  const { queryModel, filters, tableRef, search, reset, handleLoadSuccess } = useUniListState({
+  const { queryModel, filters, tableRef, search, reset, handleLoadSuccess, refreshTable } =
+    useUniListState({
     initialFilters
   })
 
@@ -354,6 +355,7 @@ export const useList = () => {
     openDetail,
     openForm,
     queryModel,
+    refreshTable,
     reset,
     schoolOptions,
     search,

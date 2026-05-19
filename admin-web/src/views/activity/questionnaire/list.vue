@@ -63,9 +63,9 @@
       </template>
     </UniDataTable>
 
-    <MetaFormDialog ref="metaDlg" @saved="handleSaved" />
-    <QuestionnaireCopyDialog ref="copyDlg" @saved="handleSaved" />
-    <BatchFlagDialog ref="batchDlg" @saved="handleSaved" />
+    <MetaFormDialog ref="metaDlg" @saved="refreshTable" />
+    <QuestionnaireCopyDialog ref="copyDlg" @saved="refreshTable" />
+    <BatchFlagDialog ref="batchDlg" @saved="refreshTable" />
   </section>
 </template>
 
@@ -100,8 +100,8 @@ const {
   deleteSelected,
   filters,
   handleLoadSuccess,
-  handleSaved,
   loadData,
+  refreshTable,
   onSelectionChange,
   openBatchFrozen,
   openBatchStatus,

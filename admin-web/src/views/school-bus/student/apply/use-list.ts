@@ -66,7 +66,8 @@ export const useApplyList = () => {
     carInfoId: undefined
   }
 
-  const { queryModel, filters, tableRef, search, reset, handleLoadSuccess } = useUniListState({
+  const { queryModel, filters, tableRef, search, reset, handleLoadSuccess, refreshTable } =
+    useUniListState({
     initialFilters
   })
 
@@ -228,6 +229,7 @@ export const useApplyList = () => {
     loadData,
     multiSchool,
     queryModel,
+    refreshTable,
     reset,
     search,
     searchCfg,

@@ -22,9 +22,10 @@ export function useEmailSchoolList(formDlg: DialogRef) {
   const { schoolOptions, loadSchoolOptions } = useMembershipSchoolOptions()
   const appModuleOptions = ref<UniOption[]>([])
 
-  const { queryModel, filters, handleLoadSuccess, reset, search, tableRef } = useUniListState({
-    initialFilters: { schoolId: undefined, keyword: '' }
-  })
+  const { queryModel, filters, handleLoadSuccess, refreshTable, reset, search, tableRef } =
+    useUniListState({
+      initialFilters: { schoolId: undefined, keyword: '' }
+    })
 
   const searchCfg = computed(() => searchForm(tr, schoolOptions.value))
   const columns = computed(() => tableCols(tr, schoolOptions.value, appModuleOptions.value))
@@ -131,8 +132,6 @@ export function useEmailSchoolList(formDlg: DialogRef) {
     tableRef.value?.refresh()
   }
 
-  const handleSaved = () => tableRef.value?.refresh()
-
   onMounted(() => {
     void Promise.all([loadSchoolOptions(), loadAppModuleOptions()])
   })
@@ -143,8 +142,8 @@ export function useEmailSchoolList(formDlg: DialogRef) {
     deleteSelected,
     filters,
     handleLoadSuccess,
-    handleSaved,
     loadData,
+    refreshTable,
     onSelectionChange,
     openAdd,
     openDetail,

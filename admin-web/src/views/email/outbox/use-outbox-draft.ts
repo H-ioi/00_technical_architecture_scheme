@@ -11,9 +11,6 @@ import { draftTableCols, searchForm } from './list.config'
 
 type Loose = Record<string, unknown>
 
-const joinSemi = (a: unknown): string =>
-  Array.isArray(a) ? (a as string[]).filter((x) => x != null && String(x)).join(';') : ''
-
 /** 草稿箱 Tab（status=0），对齐 `attendance/holiday` 中 `useHolidayReturn`。 */
 export const useOutboxDraft = () => {
   const { t } = useUniI18n()
@@ -88,9 +85,15 @@ export const useOutboxDraft = () => {
           (data.ccGroups as { id: string | number }[] | undefined)?.map((item) => item.id) ?? [],
         bccGroups:
           (data.bccGroups as { id: string | number }[] | undefined)?.map((item) => item.id) ?? [],
-        otherCC: joinSemi(data.ccOthersArray),
-        otherBCC: joinSemi(data.bccOthersArray),
-        otherMails: joinSemi(data.toOthersArray),
+        otherCC: Array.isArray(data.ccOthersArray)
+          ? (data.ccOthersArray as string[]).filter((x) => x != null && String(x)).join(';')
+          : '',
+        otherBCC: Array.isArray(data.bccOthersArray)
+          ? (data.bccOthersArray as string[]).filter((x) => x != null && String(x)).join(';')
+          : '',
+        otherMails: Array.isArray(data.toOthersArray)
+          ? (data.toOthersArray as string[]).filter((x) => x != null && String(x)).join(';')
+          : '',
         subject: String(data.subject ?? ''),
         content: String(data.content ?? ''),
         status: 1,
@@ -137,9 +140,15 @@ export const useOutboxDraft = () => {
       toGroups: (data.toGroups as { id: string | number }[] | undefined)?.map((x) => x.id) ?? [],
       ccGroups: (data.ccGroups as { id: string | number }[] | undefined)?.map((x) => x.id) ?? [],
       bccGroups: (data.bccGroups as { id: string | number }[] | undefined)?.map((x) => x.id) ?? [],
-      otherMails: joinSemi(data.toOthersArray),
-      otherCC: joinSemi(data.ccOthersArray),
-      otherBCC: joinSemi(data.bccOthersArray),
+      otherMails: Array.isArray(data.toOthersArray)
+        ? (data.toOthersArray as string[]).filter((x) => x != null && String(x)).join(';')
+        : '',
+      otherCC: Array.isArray(data.ccOthersArray)
+        ? (data.ccOthersArray as string[]).filter((x) => x != null && String(x)).join(';')
+        : '',
+      otherBCC: Array.isArray(data.bccOthersArray)
+        ? (data.bccOthersArray as string[]).filter((x) => x != null && String(x)).join(';')
+        : '',
       subject: String(data.subject ?? ''),
       content: String(data.content ?? ' '),
       attachments: (data.attachmentUrls as string[]) ?? []

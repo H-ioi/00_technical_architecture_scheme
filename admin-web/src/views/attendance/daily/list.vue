@@ -29,10 +29,10 @@
       :filters="filters"
       :pagination="{ pageSize: 10, pageSizes: [10, 20, 50, 100] }"
       :toolbar="{ refresh: true, density: true, columnSetting: true }"
-      @load-success="onTableLoadSuccess"
+      @load-success="tableEmpty.onLoadSuccess"
       @request-error="tableEmpty.onRequestError">
       <template #empty>
-        <ListTableEmpty :kind="tableEmpty.kind" @reset="reset" @retry="retryTable" />
+        <ListTableEmpty :kind="tableEmpty.kind" @reset="reset" @retry="tableEmpty.retry" />
       </template>
     </UniDataTable>
   </section>
@@ -40,7 +40,6 @@
 
 <script setup lang="ts">
 import { ElMessage } from 'element-plus'
-import type { UniTableRequestResult } from 'uni-ui-lib'
 import { useUniI18n } from 'uni-ui-lib'
 
 import ListTableEmpty from '@/components/list-table-empty.vue'
@@ -63,17 +62,7 @@ const {
   tableRef
 } = useList()
 
-const tableEmpty = useListTableEmpty(filters)
-
-const onTableLoadSuccess = (result: UniTableRequestResult) => {
-  tableEmpty.onLoadSuccess(result)
-  handleLoadSuccess(result)
-}
-
-const retryTable = () => {
-  tableEmpty.resetError()
-  tableRef.value?.refresh()
-}
+const tableEmpty = useListTableEmpty(filters, { tableRef, afterLoadSuccess: handleLoadSuccess })
 
 const exportData = async () => {
   const raw: Record<string, unknown> = { ...filters.value }

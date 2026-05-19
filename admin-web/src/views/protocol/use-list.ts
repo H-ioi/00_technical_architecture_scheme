@@ -20,7 +20,7 @@ export const useList = () => {
     module: undefined,
     status: undefined
   }
-  const { queryModel, filters, tableRef, total, search, reset, handleLoadSuccess } =
+  const { queryModel, filters, tableRef, total, search, reset, handleLoadSuccess, refreshTable } =
     useUniListState({
       initialFilters
     })
@@ -113,6 +113,7 @@ export const useList = () => {
     openForm,
     protocolTypeOptions,
     queryModel,
+    refreshTable,
     reset,
     schoolOptions,
     search,

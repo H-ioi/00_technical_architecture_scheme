@@ -20,9 +20,10 @@ export const useList = () => {
     carTeacher: '',
     status: undefined
   }
-  const { queryModel, filters, tableRef, search, reset, handleLoadSuccess } = useUniListState({
-    initialFilters
-  })
+  const { queryModel, filters, tableRef, search, reset, handleLoadSuccess, refreshTable } =
+    useUniListState({
+      initialFilters
+    })
   const schoolRecords = ref<SchoolOptionRecord[]>([])
   const schoolOptions = computed(() => membershipSchoolToOptions(schoolRecords.value, locale()))
   const multiSchool = computed(() => schoolRecords.value.length > 1)
@@ -118,6 +119,7 @@ export const useList = () => {
     multiSchool,
     openForm,
     queryModel,
+    refreshTable,
     reset,
     schoolOptions,
     search,

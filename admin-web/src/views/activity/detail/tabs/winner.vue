@@ -238,21 +238,20 @@ const decorateRows = (list: Row[]) => {
   }
 }
 
-const pageApi = (params: Record<string, unknown>) =>
-  winnerKind.value === 'competition'
-    ? activityApi.prizeAwardCompetitionPage.get(params)
-    : activityApi.prizeAwardLotteryPage.get(params)
-
 const loadData: UniTableRequest = async ({ pageNo: current, pageSize: size, filters: filterModel }) => {
   const f = filterModel as Row
-  const raw = await pageApi({
+  const params = {
     activityId: props.activityId,
     current,
     size,
     pageNum: current,
     pageSize: size,
     keyword: f.keyword || undefined
-  })
+  }
+  const raw =
+    winnerKind.value === 'competition'
+      ? await activityApi.prizeAwardCompetitionPage.get(params)
+      : await activityApi.prizeAwardLotteryPage.get(params)
   const { list, total } = normalizePaged<Row>(raw)
   decorateRows(list)
   return { data: list, total }
@@ -262,19 +261,18 @@ const onSelectionChange = (rows: Record<string, unknown>[]) => {
   selectedRows.value = rows as Row[]
 }
 
-const programType = () => (winnerKind.value === 'competition' ? 2 : 1)
-
 const loadPrograms = async () => {
+  const pt = winnerKind.value === 'competition' ? 2 : 1
   const raw = await activityProgramApi.listBrief.get({
     activityId: props.activityId,
-    programTypes: [String(programType())]
+    programTypes: [String(pt)]
   })
   const rows = (normalizeArray(raw) as Row[]).filter((row) => row.id != null)
   const detailRows = await Promise.all(
     rows.map(async (row) => normalizeEnvelope(await activityProgramApi.detail.get(row.id as string | number)))
   )
   programOptions.value = detailRows
-    .filter((row) => Number(row.programStatus) === 1 && Number(row.programType) === programType())
+    .filter((row) => Number(row.programStatus) === 1 && Number(row.programType) === pt)
     .map((row) => ({
       label: String(locale.value === 'en' ? (row.enName ?? row.cnName ?? '') : (row.cnName ?? row.enName ?? '')),
       value: row.id as string | number

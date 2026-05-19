@@ -10,10 +10,10 @@
       :toolbar="{ refresh: true, density: true, columnSetting: true }"
       :actions="actions"
       :action-column="{ width: 110, fixed: 'right' }"
-      @load-success="onTableLoadSuccess"
+      @load-success="tableEmpty.onLoadSuccess"
       @request-error="tableEmpty.onRequestError">
       <template #empty>
-        <ListTableEmpty :kind="tableEmpty.kind" @reset="retryTable" @retry="retryTable" />
+        <ListTableEmpty :kind="tableEmpty.kind" @reset="tableEmpty.retry" @retry="tableEmpty.retry" />
       </template>
     </UniDataTable>
 
@@ -59,17 +59,7 @@ const { t } = useUniI18n()
 
 const { filters, tableRef, handleLoadSuccess } = useUniListState({ initialFilters: {} })
 
-const tableEmpty = useListTableEmpty(filters)
-
-const onTableLoadSuccess = (result: UniTableRequestResult) => {
-  tableEmpty.onLoadSuccess(result)
-  handleLoadSuccess(result)
-}
-
-const retryTable = () => {
-  tableEmpty.resetError()
-  tableRef.value?.refresh()
-}
+const tableEmpty = useListTableEmpty(filters, { tableRef, afterLoadSuccess: handleLoadSuccess })
 
 const traceVisible = ref(false)
 const flowImg = ref('')

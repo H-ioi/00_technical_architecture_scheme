@@ -18,9 +18,10 @@ export const useList = () => {
   const schoolRecords = ref<SchoolOptionRecord[]>([])
   const selection = ref<AttendanceLeavePassRecord[]>([])
 
-  const { queryModel, filters, tableRef, handleLoadSuccess, reset, search } = useUniListState({
-    initialFilters: { keyword: '', studentSchool: '', isDormitory: '' }
-  })
+  const { queryModel, filters, tableRef, handleLoadSuccess, refreshTable, reset, search } =
+    useUniListState({
+      initialFilters: { keyword: '', studentSchool: '', isDormitory: '' }
+    })
 
   const schoolOptions = computed(() =>
     toUniOptions(schoolRecords.value, {
@@ -47,8 +48,6 @@ export const useList = () => {
     return { data: list as AttendanceLeavePassRecord[], total }
   }
 
-  const refresh = () => tableRef.value?.refresh()
-
   const updateRowStatus = (row: AttendanceLeavePassRecord, status: number) => {
     ElMessageBox.confirm(t('attendance.holidayPass.actionConfirm'), t('attendance.tipTitle'), {
       type: 'warning',
@@ -63,7 +62,7 @@ export const useList = () => {
           dataFrom: 'admin'
         })
         ElMessage.success(t('attendance.holiday.withdrawSuccess'))
-        refresh()
+        void refreshTable()
       })
       .catch(() => {})
   }
@@ -175,7 +174,7 @@ export const useList = () => {
     openAdd,
     openBatch,
     queryModel,
-    refresh,
+    refreshTable,
     reset,
     search,
     searchCfg,

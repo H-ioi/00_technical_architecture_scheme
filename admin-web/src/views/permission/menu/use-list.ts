@@ -16,16 +16,6 @@ import {
 /** 与上级菜单下拉里「根节点」选项的 value（-1）一致，避免接口给字符串 "-1" 时 el-select 匹配不到标签 */
 const MENU_PARENT_ROOT = -1
 
-const normalizeParentIdForSelect = (raw: string | number | undefined | null) => {
-  if (raw === undefined || raw === null || raw === '') {
-    return MENU_PARENT_ROOT
-  }
-  if (raw === MENU_PARENT_ROOT || raw === '-1' || raw === String(MENU_PARENT_ROOT)) {
-    return MENU_PARENT_ROOT
-  }
-  return raw
-}
-
 const flattenParents = (nodes: PermissionMenuNode[], depth = 0): MenuParentOption[] => {
   const pad = '\u3000'.repeat(depth)
   const acc: MenuParentOption[] = []
@@ -96,10 +86,17 @@ export const useList = () => {
   }
 
   const openEdit = (row: PermissionMenuNode) => {
+    const rawParent = row.parentId
+    const parentIdForSelect =
+      rawParent === undefined || rawParent === null || rawParent === ''
+        ? MENU_PARENT_ROOT
+        : rawParent === MENU_PARENT_ROOT || rawParent === '-1' || rawParent === String(MENU_PARENT_ROOT)
+          ? MENU_PARENT_ROOT
+          : rawParent
     Object.assign(form, {
       ...row,
       menuId: row.menuId ?? row.id,
-      parentId: normalizeParentIdForSelect(row.parentId),
+      parentId: parentIdForSelect,
       sort: typeof row.sort === 'number' ? row.sort : Number(row.sort ?? 0)
     })
     dialogVisible.value = true
@@ -109,9 +106,16 @@ export const useList = () => {
     Object.assign(form, patch)
     submitting.value = true
     try {
+      const rawParent = form.parentId
+      const parentIdForSubmit =
+        rawParent === undefined || rawParent === null || rawParent === ''
+          ? MENU_PARENT_ROOT
+          : rawParent === MENU_PARENT_ROOT || rawParent === '-1' || rawParent === String(MENU_PARENT_ROOT)
+            ? MENU_PARENT_ROOT
+            : rawParent
       const payload = {
         ...form,
-        parentId: normalizeParentIdForSelect(form.parentId)
+        parentId: parentIdForSubmit
       }
       await permissionMenuApi.tenantEdit.post(payload)
       ElMessage.success(t('permission.messages.saveOk'))

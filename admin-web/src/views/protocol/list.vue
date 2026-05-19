@@ -37,7 +37,7 @@
       :actions="actions"
       :action-column="{ width: 110, fixed: 'right' }"
       @selection-change="selection = $event as ProtocolRecord[]"
-      @load-success="onTableLoadSuccess"
+      @load-success="tableEmpty.onLoadSuccess"
       @request-error="tableEmpty.onRequestError">
       <!-- toolbar 插槽放表格勾选后的批量操作，组件内部会和刷新/最大化/列设置工具合并到底部工具栏。 -->
       <template #toolbar>
@@ -52,7 +52,7 @@
         </div>
       </template>
       <template #empty>
-        <ListTableEmpty :kind="tableEmpty.kind" @reset="reset" @retry="retryTable" />
+        <ListTableEmpty :kind="tableEmpty.kind" @reset="reset" @retry="tableEmpty.retry" />
       </template>
     </UniDataTable>
 
@@ -65,13 +65,12 @@
       :module-options="moduleOptions"
       :yes-no-options="yesNoOptions"
       :status-options="statusOptions"
-      @saved="reload" />
+      @saved="refreshTable" />
   </section>
 </template>
 
 <script setup lang="ts">
 import { ElMessage, ElMessageBox } from 'element-plus'
-import type { UniTableRequestResult } from 'uni-ui-lib'
 import { useUniI18n } from 'uni-ui-lib'
 import { computed, ref } from 'vue'
 
@@ -105,24 +104,10 @@ const {
   yesNoOptions
 } = useList()
 
-const tableEmpty = useListTableEmpty(filters)
-
-const onTableLoadSuccess = (result: UniTableRequestResult) => {
-  tableEmpty.onLoadSuccess(result)
-  handleLoadSuccess(result)
-}
-
-const retryTable = () => {
-  tableEmpty.resetError()
-  tableRef.value?.refresh()
-}
+const tableEmpty = useListTableEmpty(filters, { tableRef, afterLoadSuccess: handleLoadSuccess })
 
 const selection = ref<ProtocolRecord[]>([])
 const ids = computed(() => selection.value.map((item) => item.id))
-
-const reload = () => {
-  tableRef.value?.refresh()
-}
 
 const del = async () => {
   if (ids.value.length === 0) {
@@ -138,6 +123,6 @@ const del = async () => {
   await protocolApi.delete.delete(ids.value)
   ElMessage.success(t('protocol.deleteSuccess'))
   selection.value = []
-  reload()
+  void refreshTable()
 }
 </script>

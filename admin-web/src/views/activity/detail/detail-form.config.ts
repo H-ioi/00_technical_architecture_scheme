@@ -1,20 +1,7 @@
 import type { UniFormConfig, UniFormSection, UniOption } from 'uni-ui-lib'
 
 import type { Translate } from '@/types/i18n'
-
-const optionLabels = (options: UniOption[], value: unknown) => {
-  const values = Array.isArray(value) ? value : value == null || value === '' ? [] : [value]
-  return values
-    .map((item) => {
-      const hit = options.find((o) => String(o.value) === String(item))
-      return hit?.label ?? String(item ?? '')
-    })
-    .filter(Boolean)
-    .join(', ')
-}
-
-const rangeLabel = (value: unknown) =>
-  Array.isArray(value) && value.length === 2 ? `${value[0] || ''} - ${value[1] || ''}` : ''
+import { formatOptionLabels, formatRangeLabel } from '@/utils/form-display'
 
 const fullCol = { span: 24 }
 const halfCol = { xs: 24, lg: 12 }
@@ -189,7 +176,7 @@ export function buildActivityDetailFormConfig(
         valueFormat: 'YYYY-MM-DD HH:mm:ss',
         style: { width: '100%' }
       },
-      viewRender: (context) => rangeLabel(context.value),
+      viewRender: (context) => formatRangeLabel(context.value),
       colProps: { span: 8 },
       rules: [
         {
@@ -210,7 +197,7 @@ export function buildActivityDetailFormConfig(
         valueFormat: 'YYYY-MM-DD HH:mm:ss',
         style: { width: '100%' }
       },
-      viewRender: (context) => rangeLabel(context.value),
+      viewRender: (context) => formatRangeLabel(context.value),
       colProps: { span: 8 },
       rules: [
         {
@@ -227,7 +214,7 @@ export function buildActivityDetailFormConfig(
       label: t('activity.colSchool'),
       component: 'ElSelect',
       options: schoolOptions,
-      viewRender: (context) => optionLabels(schoolOptions, context.value),
+      viewRender: (context) => formatOptionLabels(schoolOptions, context.value),
       componentProps: {
         multiple: true,
         filterable: true,
@@ -283,7 +270,7 @@ export function buildActivityDetailFormConfig(
       label: t('activity.emailConfigs'),
       component: 'ElSelect',
       options: emailOptions,
-      viewRender: (context) => optionLabels(emailOptions, context.value),
+      viewRender: (context) => formatOptionLabels(emailOptions, context.value),
       componentProps: {
         multiple: true,
         filterable: true,
@@ -298,7 +285,7 @@ export function buildActivityDetailFormConfig(
       label: t('activity.wechatPushSchools'),
       component: 'ElSelect',
       options: schoolOptions,
-      viewRender: (context) => optionLabels(schoolOptions, context.value),
+      viewRender: (context) => formatOptionLabels(schoolOptions, context.value),
       componentProps: {
         multiple: true,
         filterable: true,

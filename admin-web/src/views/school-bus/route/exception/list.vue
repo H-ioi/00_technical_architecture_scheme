@@ -51,7 +51,7 @@
       :actions="actions"
       :action-column="{ width: 110, fixed: 'right' }"
       @selection-change="onSelectionChange"
-      @load-success="onTableLoadSuccess"
+      @load-success="tableEmpty.onLoadSuccess"
       @request-error="tableEmpty.onRequestError">
       <template #toolbar>
         <el-button
@@ -63,7 +63,7 @@
         </el-button>
       </template>
       <template #empty>
-        <ListTableEmpty :kind="tableEmpty.kind" @reset="reset" @retry="retryTable" />
+        <ListTableEmpty :kind="tableEmpty.kind" @reset="reset" @retry="tableEmpty.retry" />
       </template>
     </UniDataTable>
 
@@ -73,7 +73,7 @@
       :source="activeRow"
       :default-school-id="defaultSchoolId"
       :school-records="schoolRecords"
-      @saved="reload" />
+      @saved="refreshTable" />
 
     <el-dialog v-model="detailVisible" width="900px" :title="$t('schoolBus.look')">
       <el-descriptions v-if="detailRecord" :column="2" border>
@@ -118,6 +118,7 @@ const {
   multiSchool,
   openForm,
   queryModel,
+  refreshTable,
   reset,
   schoolRecords,
   search,
@@ -125,27 +126,13 @@ const {
   tableRef
 } = useList()
 
-const tableEmpty = useListTableEmpty(filters)
-
-const onTableLoadSuccess = (result: UniTableRequestResult) => {
-  tableEmpty.onLoadSuccess(result)
-  handleLoadSuccess(result)
-}
-
-const retryTable = () => {
-  tableEmpty.resetError()
-  tableRef.value?.refresh()
-}
+const tableEmpty = useListTableEmpty(filters, { tableRef, afterLoadSuccess: handleLoadSuccess })
 
 const selection = ref<ExceptionRecord[]>([])
 const ids = computed(() => selection.value.map((item) => item.id))
 
 const onSelectionChange = (rows: ExceptionRecord[]) => {
   selection.value = rows
-}
-
-const reload = () => {
-  tableRef.value?.refresh()
 }
 
 const IMPORT_MAX_BYTES = 10 * 1024 * 1024
@@ -173,7 +160,7 @@ const onImportFile = async (e: Event) => {
   try {
     await schoolBusExceptionApi.import.post(file)
     ElMessage.success(t('schoolBus.importSuccess'))
-    reload()
+    void refreshTable()
   } catch {
     /* request 层已提示 */
   }
@@ -229,7 +216,7 @@ const del = async () => {
   await schoolBusExceptionApi.delete.delete(ids.value)
   ElMessage.success(t('schoolBus.deleteSuccess'))
   selection.value = []
-  reload()
+  void refreshTable()
 }
 </script>
 

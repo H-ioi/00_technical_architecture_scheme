@@ -34,7 +34,7 @@
       :toolbar="{ refresh: true, density: true, columnSetting: true }"
       :actions="actions"
       :action-column="{ width: 150, fixed: 'right' }"
-      @load-success="onTableLoadSuccess"
+      @load-success="tableEmpty.onLoadSuccess"
       @request-error="tableEmpty.onRequestError"
       @selection-change="onSelectionChange">
       <template #toolbar>
@@ -53,7 +53,7 @@
         </el-button>
       </template>
       <template #empty>
-        <ListTableEmpty :kind="tableEmpty.kind" @reset="reset" @retry="retryTable" />
+        <ListTableEmpty :kind="tableEmpty.kind" @reset="reset" @retry="tableEmpty.retry" />
       </template>
     </UniDataTable>
 
@@ -62,12 +62,11 @@
       :edit="dialogEdit"
       :batch-rows="batchPayload"
       :view-only="dialogViewOnly"
-      @success="refresh" />
+      @success="refreshTable" />
   </section>
 </template>
 
 <script setup lang="ts">
-import type { UniTableRequestResult } from 'uni-ui-lib'
 import { UniDataTable, UniSearchForm } from 'uni-ui-lib'
 import { onMounted } from 'vue'
 
@@ -93,7 +92,7 @@ const {
   openAdd,
   openBatch,
   queryModel,
-  refresh,
+  refreshTable,
   reset,
   search,
   searchCfg,
@@ -101,17 +100,7 @@ const {
   tableRef
 } = useList()
 
-const tableEmpty = useListTableEmpty(filters)
-
-const onTableLoadSuccess = (result: UniTableRequestResult) => {
-  tableEmpty.onLoadSuccess(result)
-  handleLoadSuccess(result)
-}
-
-const retryTable = () => {
-  tableEmpty.resetError()
-  tableRef.value?.refresh()
-}
+const tableEmpty = useListTableEmpty(filters, { tableRef, afterLoadSuccess: handleLoadSuccess })
 
 onMounted(() => {
   initSchools()

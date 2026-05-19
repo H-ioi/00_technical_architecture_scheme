@@ -12,7 +12,7 @@
         <el-button v-uni-permission="'busorder_import_order'" @click="downloadOrderTemplate">
           {{ $t('schoolBus.downloadTemplate') }}
         </el-button>
-        <el-button v-uni-permission="'busorder_import_order'" @click="pickImport">
+        <el-button v-uni-permission="'busorder_import_order'" @click="fileRef?.click()">
           {{ $t('schoolBus.import') }}
         </el-button>
         <el-button v-uni-permission="'busorder_add'" type="primary" @click="openFormAdd">
@@ -65,7 +65,7 @@
       :actions="actions"
       :action-column="{ width: 110, fixed: 'right' }"
       @selection-change="onSelectionChange"
-      @load-success="onTableLoadSuccess"
+      @load-success="tableEmpty.onLoadSuccess"
       @request-error="tableEmpty.onRequestError">
       <template #toolbar>
         <el-button
@@ -77,7 +77,7 @@
         </el-button>
       </template>
       <template #empty>
-        <ListTableEmpty :kind="tableEmpty.kind" @reset="reset" @retry="retryTable" />
+        <ListTableEmpty :kind="tableEmpty.kind" @reset="reset" @retry="tableEmpty.retry" />
       </template>
     </UniDataTable>
 
@@ -91,13 +91,12 @@
       :school-options="schoolOptions"
       :default-school-id="defaultSingleSchoolId"
       :multi-school="multiSchool"
-      @saved="reload" />
+      @saved="refreshTable" />
   </section>
 </template>
 
 <script setup lang="ts">
 import { ElMessage, ElMessageBox } from 'element-plus'
-import type { UniTableRequestResult } from 'uni-ui-lib'
 import { useUniI18n } from 'uni-ui-lib'
 import { computed, ref } from 'vue'
 
@@ -108,6 +107,8 @@ import type { BusOrderRecord } from '@/types/modules/school-bus-order'
 import { downloadBlob } from '@/utils/download'
 import BusOrderFormDialog from '../components/bus-order-form-dialog.vue'
 import OrderDetailDialog from '../components/order-detail-dialog.vue'
+import { isSpreadsheetFilename } from '@/utils/school-bus'
+
 import { useOrderList } from './use-list'
 
 const { t } = useUniI18n()
@@ -136,25 +137,13 @@ const {
   tableRef
 } = useOrderList()
 
-const tableEmpty = useListTableEmpty(filters)
-
-const onTableLoadSuccess = (result: UniTableRequestResult) => {
-  tableEmpty.onLoadSuccess(result)
-  handleLoadSuccess(result)
-}
-
-const retryTable = () => {
-  tableEmpty.resetError()
-  tableRef.value?.refresh()
-}
+const tableEmpty = useListTableEmpty(filters, { tableRef, afterLoadSuccess: handleLoadSuccess })
 
 const fileRef = ref<HTMLInputElement | null>(null)
 const selection = ref<BusOrderRecord[]>([])
 const IMPORT_MAX_BYTES = 10 * 1024 * 1024
 
 const selectionIds = computed(() => selection.value.map((r) => r.id))
-
-const reload = () => tableRef.value?.refresh()
 
 const onSelectionChange = (rows: BusOrderRecord[]) => {
   selection.value = rows
@@ -166,13 +155,6 @@ const downloadOrderTemplate = async () => {
   } catch {
     /* request 层已提示 */
   }
-}
-
-const pickImport = () => fileRef.value?.click()
-
-const isSpreadsheetFilename = (name: string) => {
-  const lower = name.toLowerCase()
-  return lower.endsWith('.xls') || lower.endsWith('.xlsx')
 }
 
 const onImportFile = async (e: Event) => {
@@ -193,7 +175,7 @@ const onImportFile = async (e: Event) => {
   try {
     await schoolBusOrderApi.importOrder.post(file)
     ElMessage.success(t('schoolBus.importSuccess'))
-    reload()
+    void refreshTable()
   } catch {
     /* request 层已提示 */
   }
@@ -227,7 +209,7 @@ const del = async () => {
     await schoolBusOrderApi.delOrder.delete(selectionIds.value)
     ElMessage.success(t('schoolBus.operationSuccess'))
     selection.value = []
-    reload()
+    void refreshTable()
   } catch {
     /* request 层已提示 */
   }

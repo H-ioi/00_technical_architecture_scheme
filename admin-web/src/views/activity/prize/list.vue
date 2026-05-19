@@ -47,7 +47,7 @@
       </template>
     </UniDataTable>
 
-    <PrizeFormDialog ref="formDlg" @saved="handleSaved" />
+    <PrizeFormDialog ref="formDlg" @saved="refreshTable" />
   </section>
 </template>
 
@@ -66,8 +66,8 @@ const {
   deleteSelected,
   filters,
   handleLoadSuccess,
-  handleSaved,
   loadData,
+  refreshTable,
   onSelectionChange,
   openAdd,
   queryModel,

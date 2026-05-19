@@ -25,9 +25,10 @@ export function useActivityPrizeList(formDlg: DialogRef) {
     programId: undefined
   } as Record<string, unknown>
 
-  const { queryModel, filters, handleLoadSuccess, reset, search, tableRef } = useUniListState({
-    initialFilters
-  })
+  const { queryModel, filters, handleLoadSuccess, refreshTable, reset, search, tableRef } =
+    useUniListState({
+      initialFilters
+    })
 
   const searchCfg = computed(() => searchForm(tr, programOptions.value))
   const columns = computed(() => tableCols(tr))
@@ -111,8 +112,6 @@ export function useActivityPrizeList(formDlg: DialogRef) {
     tableRef.value?.refresh()
   }
 
-  const handleSaved = () => tableRef.value?.refresh()
-
   onMounted(() => {
     void loadProgramOptions()
   })
@@ -123,8 +122,8 @@ export function useActivityPrizeList(formDlg: DialogRef) {
     deleteSelected,
     filters,
     handleLoadSuccess,
-    handleSaved,
     loadData,
+    refreshTable,
     onSelectionChange,
     openAdd,
     openDetail,

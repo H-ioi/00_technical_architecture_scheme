@@ -11,17 +11,6 @@ import { lockOpts, searchForm, tableCols } from './list.config'
 
 export type PermissionUserTableRow = PermissionUserRecord & { rolesLabel?: string }
 
-const rolesLabel = (row: PermissionUserRecord) => {
-  if (!Array.isArray(row.roleList)) {
-    return '—'
-  }
-  const s = row.roleList
-    .map((x) => x.roleName)
-    .filter(Boolean)
-    .join(', ')
-  return s || '—'
-}
-
 export interface UserListCallbacks {
   onEdit: (row: PermissionUserTableRow) => void
   onDelete: (row: PermissionUserTableRow) => Promise<void>
@@ -33,9 +22,10 @@ export const useList = (
 ) => {
   const { t } = useUniI18n()
   const initialFilters = { username: '', nickname: '' }
-  const { queryModel, filters, tableRef, search, reset, handleLoadSuccess } = useUniListState({
-    initialFilters
-  })
+  const { queryModel, filters, tableRef, search, reset, handleLoadSuccess, refreshTable } =
+    useUniListState({
+      initialFilters
+    })
 
   const lockList = computed(() => lockOpts(t))
   const searchCfg = computed(() => searchForm(t))
@@ -51,10 +41,15 @@ export const useList = (
         : {})
     })
     const { list, total } = normalizePaged<PermissionUserRecord>(raw)
-    const data: PermissionUserTableRow[] = list.map((r) => ({
-      ...r,
-      rolesLabel: rolesLabel(r)
-    }))
+    const data: PermissionUserTableRow[] = list.map((r) => {
+      const roleNames = Array.isArray(r.roleList)
+        ? r.roleList.map((x) => x.roleName).filter(Boolean).join(', ')
+        : ''
+      return {
+        ...r,
+        rolesLabel: roleNames || '—'
+      }
+    })
     return { data, total }
   }
 
@@ -79,6 +74,7 @@ export const useList = (
     handleLoadSuccess,
     loadData,
     queryModel,
+    refreshTable,
     reset,
     search,
     searchCfg,

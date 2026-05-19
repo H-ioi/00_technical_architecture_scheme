@@ -33,17 +33,17 @@
       :toolbar="{ refresh: true, density: true, columnSetting: true }"
       :actions="actions"
       :action-column="{ width: 180, fixed: 'right' }"
-      @load-success="onTableLoadSuccess"
+      @load-success="tableEmpty.onLoadSuccess"
       @request-error="tableEmpty.onRequestError">
       <template #empty>
-        <ListTableEmpty :kind="tableEmpty.kind" @reset="reset" @retry="retryTable" />
+        <ListTableEmpty :kind="tableEmpty.kind" @reset="reset" @retry="tableEmpty.retry" />
       </template>
     </UniDataTable>
 
     <AssignMenuDialog
       v-model:visible="assignVisible"
       :role-id="assignRole?.roleId"
-      @saved="reloadTable" />
+      @saved="refreshTable" />
 
     <el-dialog
       v-model="roleFormVisible"
@@ -243,7 +243,7 @@ async function saveRole() {
     }
     ElMessage.success(t('permission.messages.saveOk'))
     roleFormVisible.value = false
-    reloadTable()
+    void refreshTable()
   } finally {
     roleSaving.value = false
   }
@@ -256,6 +256,7 @@ const {
   handleLoadSuccess,
   loadData,
   queryModel,
+  refreshTable,
   reset,
   search,
   searchCfg,
@@ -269,21 +270,7 @@ const {
   onDelete: deleteRole
 })
 
-const tableEmpty = useListTableEmpty(filters)
-
-const onTableLoadSuccess = (result: UniTableRequestResult) => {
-  tableEmpty.onLoadSuccess(result)
-  handleLoadSuccess(result)
-}
-
-const retryTable = () => {
-  tableEmpty.resetError()
-  tableRef.value?.refresh()
-}
-
-const reloadTable = () => {
-  tableRef.value?.refresh()
-}
+const tableEmpty = useListTableEmpty(filters, { tableRef, afterLoadSuccess: handleLoadSuccess })
 </script>
 
 <style scoped lang="scss">

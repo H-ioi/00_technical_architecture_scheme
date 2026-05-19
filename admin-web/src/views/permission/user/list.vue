@@ -45,10 +45,10 @@
           :actions="actions"
           :action-column="{ width: 110, fixed: 'right' }"
           class="permission-user__table"
-          @load-success="onTableLoadSuccess"
+          @load-success="tableEmpty.onLoadSuccess"
           @request-error="tableEmpty.onRequestError">
           <template #empty>
-            <ListTableEmpty :kind="tableEmpty.kind" @reset="reset" @retry="retryTable" />
+            <ListTableEmpty :kind="tableEmpty.kind" @reset="reset" @retry="tableEmpty.retry" />
           </template>
         </UniDataTable>
       </el-col>
@@ -60,13 +60,12 @@
       :record="formRecord"
       :dept-options="deptFlat"
       :role-options="roleFlat"
-      @saved="reloadTable" />
+      @saved="refreshTable" />
   </section>
 </template>
 
 <script setup lang="ts">
 import { ElMessageBox } from 'element-plus'
-import type { UniTableRequestResult } from 'uni-ui-lib'
 import { UniDataTable, UniSearchForm, useUniI18n } from 'uni-ui-lib'
 import { onMounted, ref } from 'vue'
 
@@ -150,27 +149,14 @@ const {
   reset,
   search,
   searchCfg,
-  tableRef
+  tableRef,
+  refreshTable
 } = useList(selectedDeptId, {
   onEdit: openEdit,
   onDelete: deleteOne
 })
 
-const tableEmpty = useListTableEmpty(filters)
-
-const onTableLoadSuccess = (result: UniTableRequestResult) => {
-  tableEmpty.onLoadSuccess(result)
-  handleLoadSuccess(result)
-}
-
-const retryTable = () => {
-  tableEmpty.resetError()
-  tableRef.value?.refresh()
-}
-
-const reloadTable = () => {
-  tableRef.value?.refresh()
-}
+const tableEmpty = useListTableEmpty(filters, { tableRef, afterLoadSuccess: handleLoadSuccess })
 
 const openAdd = () => {
   formMode.value = 'add'
@@ -182,7 +168,7 @@ const openAdd = () => {
 
 const onDeptNode = (node: PermissionDeptRecord) => {
   selectedDeptId.value = node.id
-  reloadTable()
+  void refreshTable()
 }
 
 onMounted(() => {
