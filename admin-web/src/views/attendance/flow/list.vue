@@ -3,13 +3,7 @@
     <div class="uni-list-page__header">
       <div>
         <h1>{{ $t('attendance.holidayFlow.pageTitle') }}</h1>
-        <p class="attendance-flow-list__desc">
-          {{
-            active === 'def'
-              ? $t('attendance.holidayFlow.flowDef.deployHint')
-              : $t('attendance.holidayFlow.pageDesc')
-          }}
-        </p>
+        <p class="attendance-flow-list__desc">{{ $t('attendance.holidayFlow.pageDesc') }}</p>
       </div>
       <div v-if="active === 'def'" class="uni-list-page__header-actions">
         <el-button type="primary" @click="goCreateFlow">{{

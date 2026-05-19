@@ -7,7 +7,6 @@ import type { Translate } from '@/types/i18n'
 import type {
   ActivityParentInfo,
   ActivityParentStudentActivityRow,
-  ActivityParentStudentLookupResult,
   ActivityParentStudentRow,
   ActivityParentStudentSearchModel
 } from '@/types/modules/activity-parent-student'
@@ -16,30 +15,6 @@ import { normalizeEnvelope } from '@/utils/api-response-normalize'
 import { activityColumns, searchForm, studentColumns } from './list.config'
 
 type Loose = Record<string, unknown>
-
-const asRows = <T extends Loose>(value: unknown): T[] => (Array.isArray(value) ? (value as T[]) : [])
-
-const unwrapLookupPayload = (raw: unknown): ActivityParentStudentLookupResult => {
-  const first = normalizeEnvelope(raw)
-  const nested = first.data
-  const payload = nested && typeof nested === 'object' && !Array.isArray(nested) ? (nested as Loose) : first
-
-  return {
-    parent:
-      payload.parent && typeof payload.parent === 'object' && !Array.isArray(payload.parent)
-        ? (payload.parent as ActivityParentInfo)
-        : {},
-    students: asRows<ActivityParentStudentRow>(payload.students),
-    activities: asRows<ActivityParentStudentActivityRow>(payload.activities)
-  }
-}
-
-const displayValue = (value: unknown) => {
-  if (value === null || value === undefined || value === '') {
-    return '—'
-  }
-  return String(value)
-}
 
 export function useActivityParentStudentList() {
   const { t } = useUniI18n()
@@ -56,8 +31,14 @@ export function useActivityParentStudentList() {
   const studentCols = computed(() => studentColumns(tr))
   const activityCols = computed(() => activityColumns(tr))
 
-  const parentPhone = computed(() => displayValue(parentData.value.phoneNumber))
-  const parentEmail = computed(() => displayValue(parentData.value.email))
+  const parentPhone = computed(() => {
+    const v = parentData.value.phoneNumber
+    return v == null || v === '' ? '—' : String(v)
+  })
+  const parentEmail = computed(() => {
+    const v = parentData.value.email
+    return v == null || v === '' ? '—' : String(v)
+  })
   const isaParentText = computed(() => {
     const value = parentData.value.isIsaParent
     return value === true || value === 1 || value === '1' ? tr('activity.yes') : tr('activity.no')
@@ -79,10 +60,21 @@ export function useActivityParentStudentList() {
 
     loading.value = true
     try {
-      const result = unwrapLookupPayload(await activityParentStudentApi.lookupByPhone.get({ phone }))
-      parentData.value = result.parent
-      studentRows.value = result.students
-      activityRows.value = result.activities
+      const raw = await activityParentStudentApi.lookupByPhone.get({ phone })
+      const first = normalizeEnvelope(raw)
+      const nested = first.data
+      const payload =
+        nested && typeof nested === 'object' && !Array.isArray(nested) ? (nested as Loose) : first
+      parentData.value =
+        payload.parent && typeof payload.parent === 'object' && !Array.isArray(payload.parent)
+          ? (payload.parent as ActivityParentInfo)
+          : {}
+      studentRows.value = Array.isArray(payload.students)
+        ? (payload.students as ActivityParentStudentRow[])
+        : []
+      activityRows.value = Array.isArray(payload.activities)
+        ? (payload.activities as ActivityParentStudentActivityRow[])
+        : []
       hasSearched.value = true
     } finally {
       loading.value = false

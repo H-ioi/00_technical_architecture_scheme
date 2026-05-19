@@ -15,7 +15,7 @@ export default {
 
   menu: {
     title: 'Menus',
-    description: 'Tenant menu tree and allowed field edits (legacy `/admin/menu`).',
+    description: 'View the tenant menu tree and edit icons, sort order, paths, and permission keys.',
     colName: 'Name',
     colIcon: 'Icon',
     colSort: 'Sort',
@@ -40,7 +40,7 @@ export default {
 
   dept: {
     title: 'Departments',
-    description: 'Department tree table with in-page dialog CRUD (legacy `/admin/dept`).',
+    description: 'Manage the department hierarchy with add, edit, and child department actions.',
     parent: 'Parent id',
     code: 'Dept id',
     name: 'Name',
@@ -56,8 +56,7 @@ export default {
 
   role: {
     title: 'Roles',
-    description:
-      'Role CRUD, simplified data scope and menu assignment (legacy `/admin/role`).',
+    description: 'Maintain roles, data scope rules, and menu assignments.',
     colName: 'Role name',
     colCode: 'Role code',
     colDesc: 'Description',
@@ -76,7 +75,7 @@ export default {
 
   user: {
     title: 'Users',
-    description: 'Filter by department, CRUD users (legacy `/admin/isauser`).',
+    description: 'Filter users by department and manage accounts, roles, and profile fields.',
     colUsername: 'Username',
     colNickname: 'Nickname',
     colEmail: 'Email',

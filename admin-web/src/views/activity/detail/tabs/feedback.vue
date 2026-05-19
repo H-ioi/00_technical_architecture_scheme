@@ -221,23 +221,22 @@ const selectedIds = computed(
 )
 const canDelete = computed(() => hasPermission('busdriver_del') || hasPermission('activity_ticket_del'))
 
-const satisfactionLabel = (value: unknown) => {
-  const found = satisfactionOptions.value.find((item) => String(item.value) === String(value))
-  return found?.label ?? ''
-}
-const yesNoLabel = (value: unknown) => (String(value) === '1' || value === true ? tr('activity.yes') : tr('activity.no'))
-const normalizeTime = (value: unknown) => {
-  if (value == null || value === '') return ''
-  const d = dayjs(String(value))
-  return d.isValid() ? d.format('YYYY-MM-DD HH:mm') : String(value)
-}
-
 const decorateRows = (list: Row[], pageNo: number, pageSize: number) => {
   list.forEach((row, index) => {
     row._seq = (pageNo - 1) * pageSize + index + 1
-    row.satisfactionLabel = satisfactionLabel(row.satisfactionRate)
-    row.visibleLabel = yesNoLabel(row.visible)
-    row.createTimeLabel = normalizeTime(row.createTime ?? row.create_time)
+    const satHit = satisfactionOptions.value.find(
+      (item) => String(item.value) === String(row.satisfactionRate)
+    )
+    row.satisfactionLabel = satHit?.label ?? ''
+    row.visibleLabel =
+      String(row.visible) === '1' || row.visible === true ? tr('activity.yes') : tr('activity.no')
+    const timeRaw = row.createTime ?? row.create_time
+    if (timeRaw == null || timeRaw === '') {
+      row.createTimeLabel = ''
+    } else {
+      const d = dayjs(String(timeRaw))
+      row.createTimeLabel = d.isValid() ? d.format('YYYY-MM-DD HH:mm') : String(timeRaw)
+    }
   })
 }
 

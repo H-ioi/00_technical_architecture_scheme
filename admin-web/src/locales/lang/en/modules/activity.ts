@@ -12,7 +12,8 @@ export default {
   timeEnd: 'End time',
 
   questionnaireTitle: 'Questionnaires',
-  questionnaireDesc: 'Legacy questionnaire paging.',
+  questionnaireDesc:
+    'Manage activity questionnaires: basic info, field design, and answer export.',
   questionnaireFrozen: 'Frozen',
   questionnaireNeedStudent: 'Student fields required',
 
@@ -54,6 +55,7 @@ export default {
   qMetaSectionTitle: 'Questionnaire info (read-only)',
 
   questionnaireSubmissions: 'Submissions',
+  qSubmissionsPageDesc: 'View, filter, and export answers for the selected questionnaire.',
   questionnaireSaveQuestions: 'Save questions',
   questionnaireQuestionsSaveOk: 'Question template saved.',
   saveFail: 'Save failed. Try again.',
@@ -149,11 +151,16 @@ export default {
   colUpdateTime: 'Updated at',
 
   eventListTitle: 'Activities',
-  eventListDesc: 'Activity paging aligned with legacy getActivityPage.',
+  eventListDesc:
+    'Search and manage activities, including publish, WeChat push, and related registration data.',
   eventDetailTitle: 'Activity detail',
   eventDetailEditTitle: 'Edit activity',
   eventCreateTitle: 'New activity',
-  eventDetailViewDesc: 'Activity profile and settings.',
+  eventDetailViewDesc:
+    'View activity profile, display content, and related registration and check-in data.',
+  eventDetailEditDesc:
+    'Edit activity profile, display content, and registration or check-in settings.',
+  eventCreateDesc: 'Create an activity and configure schedule, registration rules, and content.',
   eventNameCn: 'Chinese name',
   eventNameEn: 'English name',
   colStatus: 'Status',
@@ -315,10 +322,13 @@ export default {
   tipsEn: 'Tips (EN)',
 
   programListTitle: 'Activity programs',
-  programListDesc: 'Paging aligned with legacy getProgramPage.',
+  programListDesc: 'Manage lottery, competition, and blessing programs and their rules.',
   programDetailTitle: 'Program detail',
+  programDetailDesc: 'View program rules, rounds, and prize settings.',
   programCreateTitle: 'New program',
+  programCreateDesc: 'Create a program for an activity and configure its type and rules.',
   programEditTitle: 'Edit program',
+  programEditDesc: 'Edit program rules, rounds, and prize settings.',
   activityKeyword: 'Activity name',
   programKeyword: 'Program name',
   programType: 'Program type',
@@ -384,7 +394,7 @@ export default {
   prizeCount: 'Prize count',
   prizeQuota: 'Winner slots',
   prizeListTitle: 'Prizes',
-  prizeListDesc: 'Aligned with legacy getPrizePage pagination.',
+  prizeListDesc: 'Maintain prize names, quantities, and display info for activity programs.',
   prizeDetailTitle: 'Prize detail',
   prizeAddTitle: 'New prize',
   prizeEditTitle: 'Edit prize',
@@ -400,7 +410,7 @@ export default {
   prizeImageTypeTip: 'Only JPG/PNG images are allowed.',
   prizeImageSizeTip: 'Image size cannot exceed 20MB.',
   voteProgramTitle: 'Vote programs',
-  voteProgramDesc: 'Aligned with legacy getVoteProgramPage pagination.',
+  voteProgramDesc: 'Maintain vote entries and performers for voting programs.',
   voteProgramDetailTitle: 'Vote program detail',
   voteProgramAddTitle: 'New vote program',
   voteProgramEditTitle: 'Edit vote program',
@@ -410,7 +420,7 @@ export default {
   voteProgramSelRows: 'Select at least one vote program.',
   confirmDeleteVotePrograms: 'Delete selected vote programs?',
   wechatSchoolTitle: 'WeChat config',
-  wechatSchoolDesc: 'Aligned with legacy school WeChat config pagination.',
+  wechatSchoolDesc: 'Configure WeChat AppID, templates, and push settings per campus.',
   wechatSchoolDetailTitle: 'WeChat config detail',
   wechatSchoolAddTitle: 'New WeChat config',
   wechatSchoolEditTitle: 'Edit WeChat config',
@@ -422,7 +432,7 @@ export default {
   wechatSchoolSelRows: 'Select at least one WeChat config.',
   confirmDeleteWechatSchools: 'Delete selected WeChat configs?',
   emailSchoolTitle: 'Email config',
-  emailSchoolDesc: 'Aligned with legacy school email config pagination.',
+  emailSchoolDesc: 'Configure notification mailboxes per campus for activity messages.',
   emailSchoolDetailTitle: 'Email config detail',
   emailSchoolAddTitle: 'New email config',
   emailSchoolEditTitle: 'Edit email config',

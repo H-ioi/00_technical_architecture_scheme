@@ -1,7 +1,7 @@
 export default {
   studentApply: {
     pageTitle: '申请意向管理',
-    pageDesc: '维护校车乘车意向申请、审批与缴费状态（对齐旧版）。',
+    pageDesc: '维护校车乘车意向申请，处理审批与缴费状态。',
     colId: 'ID',
     colApplyTime: '申请时间',
     colApprovalStatus: '申请状态',
@@ -57,7 +57,7 @@ export default {
   },
   studentOrder: {
     pageTitle: '乘车学生管理',
-    pageDesc: '维护正式乘车学生名单（对齐旧版）。',
+    pageDesc: '维护已批准并缴费的正式校车乘车学生名单。',
     colId: 'ID',
     colSchool: '校区',
     colSection: '学期',
@@ -116,7 +116,7 @@ export default {
   },
   car: {
     pageTitle: '车辆管理',
-    pageDesc: '维护校车车辆档案（对齐旧版）。',
+    pageDesc: '维护校车车辆档案，包括车牌、座位、司机及跟车老师等信息。',
     colId: 'ID',
     colSchool: '校区',
     colCarNumber: '车牌号',
@@ -154,7 +154,7 @@ export default {
   },
   followTeacher: {
     pageTitle: '跟车老师',
-    pageDesc: '维护跟车老师账号（对齐旧版 user/teacher）。',
+    pageDesc: '维护跟车老师账号及所属校区、部门与联系方式。',
     colId: 'ID',
     colNickname: '昵称',
     colSchool: '校区',

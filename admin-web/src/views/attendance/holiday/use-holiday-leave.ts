@@ -10,39 +10,16 @@ import {
   tableCols,
   type AttendanceHolidayDetailViewModel
 } from './list.config'
-import { formatMaybeDateTime, normalizeHolidayListRow } from './holiday-utils'
+import { normalizeHolidayListRow } from './holiday-utils'
 
 import { useDialogDetailLoading } from '@/composables/use-dialog-detail-loading'
+import { dateFormat } from '@/utils/tool'
 import { normalizeEnvelope, normalizePaged } from '@/utils/api-response-normalize'
 import { attendanceHolidayApi } from '@/api'
 import type { AttendanceHolidayListParams, AttendanceHolidayRecord } from '@/types/modules/attendance-holiday'
 import type { SchoolOptionRecord } from '@/types/modules/membership'
 
 type Loose = Record<string, unknown>
-
-/**
- * 旧 `cancelFlow(procId, id)` 模板拼接：`${base}/holiday/back/${procId}/${id}`。
- * JSON `procId: null` → 路径段为字面量 **null**（如 `/back/null/70`），后端按请假 id 处理，并非未实现。
- */
-const holidayBackProcPathSegment = (procId: unknown): string | number => {
-  if (procId === undefined || procId === null || procId === '') {
-    return 'null'
-  }
-  return (typeof procId === 'number' || typeof procId === 'string') ? procId : String(procId)
-}
-
-/** 对齐 `test/old-test/.../leaveManage.vue`：撤销为 `1100|1103` 且 `dataFrom !== 'MB'`（勿与 admin-web/old 单页 index 的 `procId/!isEnd` 混淆）。 */
-const withdrawVisible = (row: AttendanceHolidayRecord): boolean => {
-  const r = row as Loose
-  if (r.dataFrom === 'MB' || r.data_from === 'MB') {
-    return false
-  }
-  const st = row.status
-  return st === '1100' || st === 1100 || st === '1103' || st === 1103
-}
-
-const deleteVisible = (row: AttendanceHolidayRecord): boolean =>
-  row.id != null && row.id !== ''
 
 /** 请假 Tab（列表 / 撤回 / 详情）。校区由外层 `tab.vue` 注入。 */
 export const useHolidayLeave = (schoolRecords: Ref<SchoolOptionRecord[]>) => {
@@ -80,7 +57,7 @@ export const useHolidayLeave = (schoolRecords: Ref<SchoolOptionRecord[]>) => {
     const n = normalizeHolidayListRow(raw)
     return {
       ...(n as AttendanceHolidayRecord),
-      createdAt: formatMaybeDateTime(n.createdAt)
+      createdAt: dateFormat(String(n.createdAt ?? ''))
     }
   }
 
@@ -118,7 +95,12 @@ export const useHolidayLeave = (schoolRecords: Ref<SchoolOptionRecord[]>) => {
       ElMessage.warning(t('attendance.holiday.withdrawMissingId'))
       return
     }
-    const procSeg = holidayBackProcPathSegment(procId)
+    const procSeg =
+      procId === undefined || procId === null || procId === ''
+        ? 'null'
+        : typeof procId === 'number' || typeof procId === 'string'
+          ? procId
+          : String(procId)
     ElMessageBox.confirm(
       t('attendance.holiday.withdrawConfirm', {
         procId: String(procSeg),
@@ -167,7 +149,14 @@ export const useHolidayLeave = (schoolRecords: Ref<SchoolOptionRecord[]>) => {
   const actions = computed<UniTableAction[]>(() => [
     {
       label: t('attendance.holiday.withdraw'),
-      visible: (row) => withdrawVisible(row as AttendanceHolidayRecord),
+      visible: (row) => {
+        const r = row as Loose
+        if (r.dataFrom === 'MB' || r.data_from === 'MB') {
+          return false
+        }
+        const st = (row as AttendanceHolidayRecord).status
+        return st === '1100' || st === 1100 || st === '1103' || st === 1103
+      },
       onClick: (row) => withdraw(row as AttendanceHolidayRecord)
     },
     {
@@ -176,7 +165,10 @@ export const useHolidayLeave = (schoolRecords: Ref<SchoolOptionRecord[]>) => {
     },
     {
       label: t('attendance.delete'),
-      visible: (row) => deleteVisible(row as AttendanceHolidayRecord),
+      visible: (row) => {
+        const id = (row as AttendanceHolidayRecord).id
+        return id != null && id !== ''
+      },
       onClick: (row) => removeRow(row as AttendanceHolidayRecord)
     }
   ])

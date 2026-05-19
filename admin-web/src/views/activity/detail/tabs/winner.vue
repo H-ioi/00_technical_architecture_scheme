@@ -212,25 +212,28 @@ const { queryModel, filters, handleLoadSuccess, reset, search } = useUniListStat
   initialFilters: { keyword: '' }
 })
 
-const normalizeTime = (value: unknown) => {
-  if (value == null || value === '') return ''
-  const d = dayjs(String(value))
-  return d.isValid() ? d.format('YYYY-MM-DD HH:mm') : String(value)
-}
-
-const blank = (value: unknown) => (value == null || value === '' ? '-' : String(value))
-
 const decorateRows = (list: Row[]) => {
   for (const row of list) {
-    row.programName = blank(row.programName)
-    row.ticketCode = blank(row.ticketCode)
-    row.name = blank(row.name)
-    row.phone = blank(row.phone)
-    row.createTimeLabel = normalizeTime(row.createTime ?? row.create_time)
+    row.programName = row.programName == null || row.programName === '' ? '-' : String(row.programName)
+    row.ticketCode = row.ticketCode == null || row.ticketCode === '' ? '-' : String(row.ticketCode)
+    row.name = row.name == null || row.name === '' ? '-' : String(row.name)
+    row.phone = row.phone == null || row.phone === '' ? '-' : String(row.phone)
+    const timeRaw = row.createTime ?? row.create_time
+    if (timeRaw == null || timeRaw === '') {
+      row.createTimeLabel = ''
+    } else {
+      const d = dayjs(String(timeRaw))
+      row.createTimeLabel = d.isValid() ? d.format('YYYY-MM-DD HH:mm') : String(timeRaw)
+    }
     if (winnerKind.value === 'competition') {
-      row.voteName = blank(row.voteName)
-      row.awardRank = blank(row.awardRank)
-      row.performer = blank(row.performer || row.name)
+      row.voteName = row.voteName == null || row.voteName === '' ? '-' : String(row.voteName)
+      row.awardRank = row.awardRank == null || row.awardRank === '' ? '-' : String(row.awardRank)
+      row.performer =
+        row.performer == null || row.performer === ''
+          ? row.name == null || row.name === ''
+            ? '-'
+            : String(row.name)
+          : String(row.performer)
     }
   }
 }

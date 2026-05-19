@@ -1,7 +1,7 @@
 export default {
   studentApply: {
     pageTitle: 'Applications',
-    pageDesc: 'Manage school bus ride applications (legacy parity).',
+    pageDesc: 'Manage school bus ride applications, approvals, and payment status.',
     colId: 'ID',
     colApplyTime: 'Applied at',
     colApprovalStatus: 'Approval',
@@ -57,7 +57,7 @@ export default {
   },
   studentOrder: {
     pageTitle: 'Riders',
-    pageDesc: 'Official rider list (legacy parity).',
+    pageDesc: 'Maintain the official list of approved and paid school bus riders.',
     colId: 'ID',
     colSchool: 'Campus',
     colSection: 'Term',
@@ -116,7 +116,7 @@ export default {
   },
   car: {
     pageTitle: 'Vehicles',
-    pageDesc: 'Manage school buses (legacy parity).',
+    pageDesc: 'Maintain vehicle records including plate, seats, driver, and bus teacher.',
     colId: 'ID',
     colSchool: 'Campus',
     colCarNumber: 'Plate',
@@ -154,7 +154,7 @@ export default {
   },
   followTeacher: {
     pageTitle: 'Bus teachers',
-    pageDesc: 'Bus teacher accounts (legacy user/teacher).',
+    pageDesc: 'Maintain bus teacher accounts, campus, department, and contact details.',
     colId: 'ID',
     colNickname: 'Nickname',
     colSchool: 'Campus',

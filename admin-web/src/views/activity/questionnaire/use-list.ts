@@ -1,59 +1,26 @@
 import type { UniOption, UniTableAction, UniTableRequest } from 'uni-ui-lib'
 import { toUniOptions, useUniI18n, useUniListState } from 'uni-ui-lib'
-import dayjs from 'dayjs'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { computed, onMounted, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 
-import { activityApi, activityQuestionnaireApi, membershipApi } from '@/api'
+import { activityApi, activityQuestionnaireApi } from '@/api'
+import { useActivityYesNoOptions } from '@/composables/use-activity-yes-no-options'
+import { useMembershipSchoolOptions } from '@/composables/use-membership-school-options'
 import type { Translate } from '@/types/i18n'
 import type { QuestionnaireListDialogRefs } from '@/types/modules/activity-questionnaire'
 import { normalizeArray, normalizePaged } from '@/utils/api-response-normalize'
+import { dateFormat } from '@/utils/tool'
 
 import { searchForm, tableCols } from './list.config'
 
-function stripTrailingSlash(path: string): string {
-  return path.replace(/\/$/, '')
-}
-
+/** 问卷报名页完整 URL */
 function buildQuestionnaireSignupUrl(questionnaireId: string | number): string {
-  const origin = stripTrailingSlash(String(import.meta.env.VITE_COMMUNITY_WEB_ORIGIN ?? ''))
+  const origin = String(import.meta.env.VITE_COMMUNITY_WEB_ORIGIN ?? '').replace(/\/$/, '')
   if (!origin) {
     return ''
   }
   return `${origin}/#/isacommunity/activity/questionnaire/signup?id=${encodeURIComponent(String(questionnaireId))}`
-}
-
-function yesNoOptions(t: Translate): UniOption[] {
-  return [
-    { label: t('activity.yes'), value: '1' },
-    { label: t('activity.no'), value: '0' }
-  ]
-}
-
-function formatListTimestamp(value: unknown, emptyText = '—') {
-  if (value == null || value === '') {
-    return emptyText
-  }
-  const d = dayjs(String(value))
-  return d.isValid() ? d.format('YYYY-MM-DD HH:mm') : String(value)
-}
-
-function useMembershipSchoolOptions() {
-  const { locale } = useUniI18n()
-  const schoolOptions = ref<UniOption[]>([])
-
-  const loadSchoolOptions = async () => {
-    const raw = await membershipApi.school.get()
-    const list = Array.isArray(raw) ? raw : []
-    schoolOptions.value = toUniOptions(list, {
-      labelKeys:
-        locale.value === 'en' ? ['enName', 'name', 'cnName'] : ['cnName', 'name', 'enName'],
-      valueKey: 'id'
-    })
-  }
-
-  return { schoolOptions, loadSchoolOptions }
 }
 
 type QuestionnaireListRow = Record<string, unknown>
@@ -70,7 +37,7 @@ export function useQuestionnaireList(
   const { schoolOptions, loadSchoolOptions } = useMembershipSchoolOptions()
   const activityOptions = ref<UniOption[]>([])
 
-  const ynDispOptions = computed(() => yesNoOptions(tr))
+  const ynDispOptions = useActivityYesNoOptions()
 
   const loadOpts = async () => {
     try {
@@ -154,8 +121,12 @@ export function useQuestionnaireList(
       row.status = row.status == null ? '' : String(row.status)
       row.frozen = row.frozen == null ? '' : String(row.frozen)
       row.needStudentInfo = row.needStudentInfo == null ? '' : String(row.needStudentInfo)
-      row.createTime = formatListTimestamp(row.createTime)
-      row.updateTime = formatListTimestamp(row.updateTime)
+      row.createTime = row.createTime
+        ? dateFormat(String(row.createTime), 'yyyy-MM-dd hh:mm')
+        : '—'
+      row.updateTime = row.updateTime
+        ? dateFormat(String(row.updateTime), 'yyyy-MM-dd hh:mm')
+        : '—'
     }
   }
 

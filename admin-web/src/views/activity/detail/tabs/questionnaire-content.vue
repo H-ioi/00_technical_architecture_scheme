@@ -102,21 +102,6 @@ const {
   redirectOnMissing: false
 })
 
-const pickQuestionnaireId = (data: Record<string, unknown>) => {
-  const candidates = [
-    data.questionnaireId,
-    data.questionnaire_id,
-    data.activityQuestionnaireId,
-    data.activity_questionnaire_id
-  ]
-  const q = data.activityQuestionnaire
-  if (q && typeof q === 'object') {
-    candidates.push((q as Record<string, unknown>).id)
-  }
-  const found = candidates.find((item) => item != null && item !== '')
-  return found == null ? '' : String(found)
-}
-
 const loadQuestionnaireId = async () => {
   if (!props.activityId) {
     questionnaireId.value = ''
@@ -125,7 +110,18 @@ const loadQuestionnaireId = async () => {
   activityLoading.value = true
   try {
     const detail = normalizeEnvelope(await activityApi.detail.get(props.activityId))
-    questionnaireId.value = pickQuestionnaireId(detail)
+    const candidates = [
+      detail.questionnaireId,
+      detail.questionnaire_id,
+      detail.activityQuestionnaireId,
+      detail.activity_questionnaire_id
+    ]
+    const q = detail.activityQuestionnaire
+    if (q && typeof q === 'object') {
+      candidates.push((q as Record<string, unknown>).id)
+    }
+    const found = candidates.find((item) => item != null && item !== '')
+    questionnaireId.value = found == null ? '' : String(found)
   } finally {
     activityLoading.value = false
   }

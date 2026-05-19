@@ -22,7 +22,7 @@ export default {
   no: 'No',
   send: {
     pageTitle: 'Sender mailboxes',
-    pageDesc: 'Bind Microsoft 365 mailboxes to users and groups; APIs under /isacommunity/mailing/userMailinfo/*.',
+    pageDesc: 'Bind Microsoft 365 mailboxes to users and groups for bulk email sending.',
     keywordPlaceholder: '365 mailbox',
     colEmail365: '365 mailbox',
     colUsers: 'Users',
@@ -35,7 +35,7 @@ export default {
   },
   group: {
     pageTitle: 'Recipient groups',
-    pageDesc: 'Maintain mail groups; APIs under /isacommunity/mailing/group/*.',
+    pageDesc: 'Maintain recipient groups with student, parent, and scope-based membership rules.',
     keywordPlaceholder: 'Group name',
     colName: 'Name',
     colScopes: 'Scopes',
@@ -77,7 +77,7 @@ export default {
   },
   outbox: {
     pageTitle: 'Outbox',
-    pageDesc: 'Sent and draft messages; APIs under /isacommunity/mailing/sendRecord/*.',
+    pageDesc: 'View sent mail and drafts; compose messages and export recipient delivery status.',
     keywordPlaceholder: 'Subject keyword',
     tabSent: 'Sent',
     tabDraft: 'Drafts',

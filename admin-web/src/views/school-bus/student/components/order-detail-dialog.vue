@@ -156,6 +156,7 @@ import { membershipApi, schoolBusOrderApi } from '@/api'
 import type { SchoolOptionRecord } from '@/types/modules/membership'
 import { membershipSchoolLabel } from '@/utils/membership-school'
 
+import { pickLocaleName } from '@/utils/locale-name'
 import {
   approvalStatusOptions,
   paymentMethodOptions,
@@ -201,23 +202,11 @@ const routeTableData = ref<Loose[]>([])
 const personTableData = ref<Loose[]>([])
 const signImageUrl = ref('')
 
-const loc = () => locale()
-
 const canShowPayInfo = computed(
   () =>
     hasPermission('isshow_bus_intentionorder_pay_info') &&
     String(baseInfo.value?.approvalStatus ?? '') === '1'
 )
-
-const lookupCarNumber = (line: Loose, carinfoId: unknown): string => {
-  const dto = line.busLineDTO as Loose | undefined
-  const list = dto?.carList as Loose[] | undefined
-  if (!Array.isArray(list) || carinfoId == null) {
-    return '--'
-  }
-  const hit = list.find((c) => String(c.id) === String(carinfoId))
-  return hit?.carNumber ? String(hit.carNumber) : '--'
-}
 
 const loadDetail = async (id: string | number) => {
   loading.value = true
@@ -238,8 +227,7 @@ const loadDetail = async (id: string | number) => {
         ? ((schoolRaw as Loose).data as unknown as SchoolOptionRecord[])
         : []
     const schoolId = data.schoolId as string | number | undefined
-    const locStr = loc()
-    const schoolMapped = membershipSchoolLabel(schools, schoolId, locStr)
+    const schoolMapped = membershipSchoolLabel(schools, schoolId, locale.value)
     const schoolDisplay = schoolMapped !== '--' ? schoolMapped : String(data.schoolEnName ?? '--')
     const approvalOpts = approvalStatusOptions(t)
     const paymentOpts = paymentStatusOptions(t)
@@ -250,8 +238,10 @@ const loadDetail = async (id: string | number) => {
     baseInfo.value = {
       id,
       schoolEnName: schoolDisplay,
-      showSectionName:
-        loc() === 'en' ? String(data.sectionEnName ?? '') : String(data.sectionCnName ?? ''),
+      showSectionName: pickLocaleName(
+        { enName: data.sectionEnName, cnName: data.sectionCnName },
+        locale.value
+      ),
       admissionNo: data.admissionNo,
       studentName: data.studentName,
       studentGrade: data.studentGrade,
@@ -280,15 +270,32 @@ const loadDetail = async (id: string | number) => {
     }))
 
     const lines = Array.isArray(data.orderLines) ? (data.orderLines as Loose[]) : []
-    routeTableData.value = lines.map((item) => ({
-      lineName: loc() === 'en' ? item.lineEnName : item.lineCnName,
-      stationName: loc() === 'en' ? item.stationEnName : item.stationCnName,
-      lineTypeName: pickLabel(lineTypeOpts, item.studentLineType),
-      ridingWeekDay: item.ridingWeekDay,
-      carNumber: lookupCarNumber(item, item.carinfoId),
-      ridingStartDay: item.ridingStartDay,
-      ridingEndDay: item.ridingEndDay
-    }))
+    routeTableData.value = lines.map((item) => {
+      const carinfoId = item.carinfoId
+      const cars = (item.busLineDTO as Loose | undefined)?.carList as Loose[] | undefined
+      let carNumber = '--'
+      if (Array.isArray(cars) && carinfoId != null) {
+        const hit = cars.find((c) => String(c.id) === String(carinfoId))
+        if (hit?.carNumber) {
+          carNumber = String(hit.carNumber)
+        }
+      }
+      return {
+        lineName: pickLocaleName(
+          { enName: item.lineEnName, cnName: item.lineCnName },
+          locale.value
+        ),
+        stationName: pickLocaleName(
+          { enName: item.stationEnName, cnName: item.stationCnName },
+          locale.value
+        ),
+        lineTypeName: pickLabel(lineTypeOpts, item.studentLineType),
+        ridingWeekDay: item.ridingWeekDay,
+        carNumber,
+        ridingStartDay: item.ridingStartDay,
+        ridingEndDay: item.ridingEndDay
+      }
+    })
 
     signImageUrl.value = data.signImageUrl ? String(data.signImageUrl) : ''
   } finally {

@@ -1,5 +1,4 @@
 import type { UniTableAction, UniTableRequest } from 'uni-ui-lib'
-import dayjs from 'dayjs'
 import { toUniOptions, useUniI18n, useUniListState } from 'uni-ui-lib'
 import { computed, ref } from 'vue'
 
@@ -12,6 +11,7 @@ import {
 
 import { attendanceWechatOpenidApi, membershipApi } from '@/api'
 import { normalizePaged } from '@/utils/api-response-normalize'
+import { dateFormat } from '@/utils/tool'
 import type {
   AttendanceWechatOpenidListParams,
   AttendanceWechatOpenidRecord
@@ -19,14 +19,6 @@ import type {
 import type { SchoolOptionRecord } from '@/types/modules/membership'
 
 type Loose = Record<string, unknown>
-
-const formatMaybeDateTime = (value: unknown) => {
-  if (value == null || value === '') {
-    return ''
-  }
-  const d = dayjs(String(value))
-  return d.isValid() ? d.format('YYYY-MM-DD HH:mm:ss') : String(value)
-}
 
 export const useList = () => {
   const { locale, t } = useUniI18n()
@@ -71,17 +63,17 @@ export const useList = () => {
     selection.value = rows as AttendanceWechatOpenidRecord[]
   }
 
-  const statusLabel = (raw: unknown) => {
-    const row = statusSearchOptions.value.find((o) => String(o.value) === String(raw ?? ''))
-    return row?.label ?? String(raw ?? '--')
-  }
-
-  const decorateRow = (raw: Loose): AttendanceWechatOpenidRecord => ({
+  const decorateRow = (raw: Loose): AttendanceWechatOpenidRecord => {
+    const statusHit = statusSearchOptions.value.find(
+      (o) => String(o.value) === String(raw.status ?? '')
+    )
+    return {
     ...(raw as AttendanceWechatOpenidRecord),
-    status: statusLabel(raw.status),
-    updateTime: formatMaybeDateTime(raw.updateTime),
-    createTime: formatMaybeDateTime(raw.createTime)
-  })
+    status: statusHit?.label ?? String(raw.status ?? '--'),
+    updateTime: dateFormat(String(raw.updateTime ?? '')),
+    createTime: dateFormat(String(raw.createTime ?? ''))
+    }
+  }
 
   const loadData: UniTableRequest = async ({ pageNo, pageSize, filters: f }) => {
     const params: AttendanceWechatOpenidListParams = {

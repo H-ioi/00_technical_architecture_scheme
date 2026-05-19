@@ -1,5 +1,4 @@
 import type { UniTableAction, UniTableRequest } from 'uni-ui-lib'
-import dayjs from 'dayjs'
 import { toUniOptions, useUniI18n, useUniListState } from 'uni-ui-lib'
 import { computed, ref } from 'vue'
 
@@ -15,6 +14,7 @@ import { attendanceOpenTypeOpts } from '../school/list.config'
 
 import { attendanceAccessApi, attendanceSchoolApi, membershipApi } from '@/api'
 import { normalizePaged } from '@/utils/api-response-normalize'
+import { dateFormat } from '@/utils/tool'
 import type {
   AttendanceAccessListParams,
   AttendanceAccessRecord
@@ -22,22 +22,6 @@ import type {
 import type { SchoolOptionRecord } from '@/types/modules/membership'
 
 type Loose = Record<string, unknown>
-
-const formatMaybeDateTime = (value: unknown) => {
-  if (value == null || value === '') {
-    return ''
-  }
-  const d = dayjs(String(value))
-  return d.isValid() ? d.format('YYYY-MM-DD HH:mm:ss') : String(value)
-}
-
-const formatDateOnly = (value: unknown) => {
-  if (value == null || value === '') {
-    return ''
-  }
-  const d = dayjs(String(value))
-  return d.isValid() ? d.format('YYYY-MM-DD') : String(value)
-}
 
 export const useList = () => {
   const { locale, t } = useUniI18n()
@@ -87,30 +71,21 @@ export const useList = () => {
   const enterExitOptions = computed(() => accessEnterExitOpts(t))
   const openResultOptions = computed(() => accessOpenResultOpts(t))
 
-  const openTypeLabel = (raw: unknown) => {
-    const row = openTypeOptions.value.find((o) => String(o.value) === String(raw ?? ''))
-    return row?.label ?? String(raw ?? '--')
-  }
-
-  const enterExitLabel = (raw: unknown) => {
-    const row = enterExitOptions.value.find((o) => String(o.value) === String(raw ?? ''))
-    return row?.label ?? String(raw ?? '--')
-  }
-
-  const openResultLabel = (raw: unknown) => {
-    const row = openResultOptions.value.find((o) => String(o.value) === String(raw ?? ''))
-    return row?.label ?? String(raw ?? '--')
-  }
-
   const decorateRow = (raw: Loose): AttendanceAccessRecord => {
     const row: AttendanceAccessRecord = {
       ...(raw as AttendanceAccessRecord),
-      openType: openTypeLabel(raw.openType),
-      openResult: openResultLabel(raw.openResult),
-      enterOrExit: enterExitLabel(raw.enterOrExit),
-      attendanceDate: formatDateOnly(raw.attendanceDate),
-      swingTime: formatMaybeDateTime(raw.swingTime),
-      createTime: formatMaybeDateTime(raw.createTime)
+      openType:
+        openTypeOptions.value.find((o) => String(o.value) === String(raw.openType ?? ''))?.label ??
+        String(raw.openType ?? '--'),
+      openResult:
+        openResultOptions.value.find((o) => String(o.value) === String(raw.openResult ?? ''))
+          ?.label ?? String(raw.openResult ?? '--'),
+      enterOrExit:
+        enterExitOptions.value.find((o) => String(o.value) === String(raw.enterOrExit ?? ''))
+          ?.label ?? String(raw.enterOrExit ?? '--'),
+      attendanceDate: dateFormat(String(raw.attendanceDate ?? ''), 'yyyy-MM-dd'),
+      swingTime: dateFormat(String(raw.swingTime ?? '')),
+      createTime: dateFormat(String(raw.createTime ?? ''))
     }
     return row
   }

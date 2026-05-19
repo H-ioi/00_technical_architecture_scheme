@@ -207,33 +207,35 @@ const { queryModel, filters, handleLoadSuccess, reset, search } = useUniListStat
   }
 })
 
-const boolLike = (value: unknown) => value === true || value === 1 || value === '1'
-const pick = (row: Row, camel: string, snake: string) => row[camel] ?? row[snake]
-const yesNoLabel = (value: unknown) => (boolLike(value) ? tr('activity.yes') : tr('activity.no'))
-const normalizeTime = (value: unknown) => {
-  if (value == null || value === '') return ''
-  const d = dayjs(String(value))
-  return d.isValid() ? d.format('YYYY-MM-DD HH:mm') : String(value)
-}
-
 const decorateRows = (list: Row[]) => {
+  const yesNo = (value: unknown) =>
+    value === true || value === 1 || value === '1' ? tr('activity.yes') : tr('activity.no')
+  const fmtTime = (value: unknown) => {
+    if (value == null || value === '') {
+      return ''
+    }
+    const d = dayjs(String(value))
+    return d.isValid() ? d.format('YYYY-MM-DD HH:mm') : String(value)
+  }
+
   for (const row of list) {
     row.codeStr = row.code == null ? '' : String(row.code)
-    row.ticketIdStr = pick(row, 'ticketId', 'ticket_id') == null ? '' : String(pick(row, 'ticketId', 'ticket_id'))
+    const ticketId = row.ticketId ?? row.ticket_id
+    row.ticketIdStr = ticketId == null ? '' : String(ticketId)
     row.paidLabel = String(row.paid) === '1' || row.paid === true ? tr('activity.paidYes') : tr('activity.paidNo')
-    row.checkinLabel = yesNoLabel(pick(row, 'checkin', 'checked_in'))
-    row.participateLotteryLabel = yesNoLabel(pick(row, 'participateLottery', 'participate_lottery'))
-    row.lotteryValidateLabel = yesNoLabel(row.lottery_validate)
-    row.allowLotteryLabel = yesNoLabel(pick(row, 'allowLottery', 'allow_lottery'))
-    row.checkinTimeLabel = normalizeTime(pick(row, 'checkinTime', 'checkin_time'))
-    row.createdAtLabel = normalizeTime(pick(row, 'createdAt', 'created_at'))
+    row.checkinLabel = yesNo(row.checkin ?? row.checked_in)
+    row.participateLotteryLabel = yesNo(row.participateLottery ?? row.participate_lottery)
+    row.lotteryValidateLabel = yesNo(row.lottery_validate)
+    row.allowLotteryLabel = yesNo(row.allowLottery ?? row.allow_lottery)
+    row.checkinTimeLabel = fmtTime(row.checkinTime ?? row.checkin_time)
+    row.createdAtLabel = fmtTime(row.createdAt ?? row.created_at)
   }
 }
 
-const buildListParams = (current: number, size: number, filterModel: Row) => {
+const loadData: UniTableRequest = async ({ pageNo: current, pageSize: size, filters: filterModel }) => {
   const f = filterModel as Row
   const range = Array.isArray(f.checkinTimeRange) ? f.checkinTimeRange : []
-  return {
+  const raw = await activityApi.checkinPage.get({
     activityId: props.activityId,
     current,
     size,
@@ -246,17 +248,16 @@ const buildListParams = (current: number, size: number, filterModel: Row) => {
     checkin: f.checkin ?? undefined,
     checkinTimeStart: range[0] || undefined,
     checkinTimeEnd: range[1] || undefined
-  }
-}
-
-const loadData: UniTableRequest = async ({ pageNo: current, pageSize: size, filters: filterModel }) => {
-  const raw = await activityApi.checkinPage.get(buildListParams(current, size, filterModel as Row))
+  })
   const { list, total } = normalizePaged<Row>(raw)
   decorateRows(list)
   return { data: list, total }
 }
 
 const openEdit = (row: Row) => {
+  const checkinVal = row.checkin ?? row.checked_in
+  const participateVal = row.participateLottery ?? row.participate_lottery
+  const allowVal = row.allowLottery ?? row.allow_lottery
   snapshot.value = {
     id: row.id,
     code: row.code,
@@ -264,17 +265,24 @@ const openEdit = (row: Row) => {
     name: row.name,
     phone: row.phone,
     paid: row.paid !== undefined && row.paid !== null ? Number(row.paid) : undefined,
-    ticketId: pick(row, 'ticketId', 'ticket_id'),
-    checkin_time: pick(row, 'checkinTime', 'checkin_time'),
-    created_at: pick(row, 'createdAt', 'created_at'),
-    win_item: pick(row, 'winItem', 'win_item')
+    ticketId: row.ticketId ?? row.ticket_id,
+    checkin_time: row.checkinTime ?? row.checkin_time,
+    created_at: row.createdAt ?? row.created_at,
+    win_item: row.winItem ?? row.win_item
   }
   Object.assign(form, {
     id: row.id,
-    checkin: boolLike(pick(row, 'checkin', 'checked_in')) ? 1 : 0,
-    participateLottery: boolLike(pick(row, 'participateLottery', 'participate_lottery')) ? 1 : 0,
-    lottery_validate: boolLike(row.lottery_validate) ? 1 : 0,
-    allow_lottery: boolLike(pick(row, 'allowLottery', 'allow_lottery')) ? 1 : 0
+    checkin:
+      checkinVal === true || checkinVal === 1 || checkinVal === '1' ? 1 : 0,
+    participateLottery:
+      participateVal === true || participateVal === 1 || participateVal === '1' ? 1 : 0,
+    lottery_validate:
+      row.lottery_validate === true ||
+      row.lottery_validate === 1 ||
+      row.lottery_validate === '1'
+        ? 1
+        : 0,
+    allow_lottery: allowVal === true || allowVal === 1 || allowVal === '1' ? 1 : 0
   })
   dialogVisible.value = true
 }

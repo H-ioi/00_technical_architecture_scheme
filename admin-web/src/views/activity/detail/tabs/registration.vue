@@ -197,17 +197,17 @@ const canDeleteRegistration = computed(
   () => hasPermission('busdriver_del') || hasPermission('activity_ticket_del')
 )
 
-const normalizeTime = (value: unknown) => {
-  if (value == null || value === '') return ''
-  const d = dayjs(String(value))
-  return d.isValid() ? d.format('YYYY-MM-DD HH:mm') : String(value)
-}
-
 const decorateRows = (list: Row[], pageNo = 1, pageSize = list.length || 1) => {
   list.forEach((row, index) => {
     row._seq = (pageNo - 1) * pageSize + index + 1
     row.paidLabel = String(row.paid) === '1' || row.paid === true ? tr('activity.paidYes') : tr('activity.paidNo')
-    row.registerTime = normalizeTime(row.registerTime)
+    const timeRaw = row.registerTime
+    if (timeRaw == null || timeRaw === '') {
+      row.registerTime = ''
+    } else {
+      const d = dayjs(String(timeRaw))
+      row.registerTime = d.isValid() ? d.format('YYYY-MM-DD HH:mm') : String(timeRaw)
+    }
   })
 }
 

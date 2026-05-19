@@ -83,7 +83,9 @@
 </template>
 
 <script setup lang="ts">
-import { activityApi, activityQuestionnaireApi, membershipApi } from '@/api'
+import { activityApi, activityQuestionnaireApi } from '@/api'
+import { useActivityYesNoOptions } from '@/composables/use-activity-yes-no-options'
+import { useMembershipSchoolOptions } from '@/composables/use-membership-school-options'
 import templateDynamicApi, {
   ISA_COMMUNITY_QUESTIONNAIRE_SCENE as Q_SCENE
 } from '@/api/modules/template-dynamic'
@@ -335,73 +337,12 @@ function serializeTemplateBundle(
   return body
 }
 
-function stripSlash(s: string): string {
-  return s.replace(/\/$/, '')
-}
-
 function buildQuestionnaireSignupUrl(questionnaireId: string | number): string {
-  const origin = stripSlash(String(import.meta.env.VITE_COMMUNITY_WEB_ORIGIN ?? ''))
+  const origin = String(import.meta.env.VITE_COMMUNITY_WEB_ORIGIN ?? '').replace(/\/$/, '')
   if (!origin) {
     return ''
   }
   return `${origin}/#/isacommunity/activity/questionnaire/signup?id=${encodeURIComponent(String(questionnaireId))}`
-}
-
-function labelForValue(opts: UniOption[], v: unknown) {
-  const s = v == null || v === '' ? '' : String(v)
-  return opts.find((o) => String(o.value) === s)?.label ?? '—'
-}
-
-function yesNoOptions(t: Translate): UniOption[] {
-  return [
-    { label: t('activity.yes'), value: '1' },
-    { label: t('activity.no'), value: '0' }
-  ]
-}
-
-function useMembershipSchoolOptions() {
-  const { locale } = useUniI18n()
-  const schoolOptions = ref<UniOption[]>([])
-
-  const loadSchoolOptions = async () => {
-    const raw = await membershipApi.school.get()
-    const list = Array.isArray(raw) ? raw : []
-    schoolOptions.value = toUniOptions(list, {
-      labelKeys:
-        locale.value === 'en' ? ['enName', 'name', 'cnName'] : ['cnName', 'name', 'enName'],
-      valueKey: 'id'
-    })
-  }
-
-  const optionBySchoolId = computed(() => {
-    const m = new Map<string, string>()
-    for (const o of schoolOptions.value) {
-      m.set(String(o.value), String(o.label))
-    }
-    return m
-  })
-
-  const schoolIdsCsv = (raw: unknown): string => {
-    let ids: string[] = []
-    if (Array.isArray(raw)) {
-      ids = raw.map(String)
-    } else if (typeof raw === 'string' && raw.trim()) {
-      ids = raw
-        .split(/[,;\s]+/)
-        .map((s) => s.trim())
-        .filter(Boolean)
-    } else if (raw != null && raw !== '') {
-      ids = [String(raw)]
-    }
-    if (!ids.length) {
-      return '—'
-    }
-    const map = optionBySchoolId.value
-    const parts = ids.map((id) => map.get(id) ?? id)
-    return parts.length ? parts.join('; ') : '—'
-  }
-
-  return { schoolOptions, loadSchoolOptions, schoolIdsCsv }
 }
 
 type Row = Record<string, unknown>
@@ -461,9 +402,9 @@ const pageDesc = computed(() =>
   isViewMode.value ? tr('activity.qDetailPageDesc') : tr('activity.questionnaireDesignPageDesc')
 )
 
-const { loadSchoolOptions, schoolIdsCsv } = useMembershipSchoolOptions()
+const { loadSchoolOptions, formatSchoolIdsCsv } = useMembershipSchoolOptions()
 
-const ynSel = computed(() => yesNoOptions(tr))
+const ynSel = useActivityYesNoOptions()
 
 const activityPool = ref<Row[]>([])
 
@@ -481,7 +422,7 @@ const metaNameDisplay = computed(() => {
   return s || '—'
 })
 
-const metaSchoolDisplay = computed(() => schoolIdsCsv(form.schoolIds))
+const metaSchoolDisplay = computed(() => formatSchoolIdsCsv(form.schoolIds))
 
 const metaActivityDisplay = computed(() => {
   const aid = form.activityId
@@ -514,7 +455,10 @@ const metaStatusDisplay = computed(() => {
   return '—'
 })
 
-const metaNeedStudentDisplay = computed(() => labelForValue(ynSel.value, form.needStudentInfo))
+const metaNeedStudentDisplay = computed(() => {
+  const v = form.needStudentInfo == null || form.needStudentInfo === '' ? '' : String(form.needStudentInfo)
+  return ynSel.value.find((o) => String(o.value) === v)?.label ?? '—'
+})
 
 const metaInstructionsDisplay = computed(() => {
   const s = String(form.instructions ?? '').trim()

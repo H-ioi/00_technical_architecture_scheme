@@ -4,7 +4,8 @@
     <div class="activity-event-detail__header uni-list-page__header">
       <div>
         <h1>{{ pageTitle }}</h1>
-        <p v-if="form.magicNo" class="uni-list-page__description">
+        <p class="uni-list-page__description">{{ pageDesc }}</p>
+        <p v-if="form.magicNo" class="uni-list-page__description activity-event-detail__magic-no">
           {{ $t('activity.colMagicNo') }}：{{ form.magicNo }}
         </p>
       </div>
@@ -21,7 +22,7 @@
               v-uni-permission="'busdriver_edit'"
               accept=".xlsx,.xls"
               :show-file-list="false"
-              :before-upload="uploadRegistrationTickets">
+              :before-upload="(file) => registrationTabRef?.importTickets?.(file) ?? false">
               <el-button type="primary">{{ $t('activity.import') }}</el-button>
             </el-upload>
             <el-button
@@ -389,6 +390,7 @@ const {
   visibleScopeDrawerVisible,
   openVisibleScopeDrawer,
   pageTitle,
+  pageDesc,
   saving,
   submit,
   uniFormRef,
@@ -402,9 +404,6 @@ const winnerTabRef = ref<DetailTabActions | null>(null)
 const voteInfoTabRef = ref<DetailTabActions | null>(null)
 const blessingTabRef = ref<DetailTabActions | null>(null)
 const feedbackTabRef = ref<DetailTabActions | null>(null)
-
-const uploadRegistrationTickets = (file: File) =>
-  registrationTabRef.value?.importTickets?.(file) ?? false
 
 const hasDetailTabHeaderActions = computed(() => {
   const status = String(form.activityStatus)

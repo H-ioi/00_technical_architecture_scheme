@@ -3,6 +3,7 @@
     <div class="activity-program-edit__header uni-list-page__header">
       <div>
         <h1>{{ pageTitle }}</h1>
+        <p class="uni-list-page__description">{{ pageDesc }}</p>
       </div>
       <div class="uni-list-page__header-actions activity-program-edit__actions">
         <template v-if="canSubmit">
@@ -96,6 +97,7 @@ const {
   onCoverBeforeUpload,
   normalizeQuotaRow,
   pageTitle,
+  pageDesc,
   quotasList,
   saving,
   submit,

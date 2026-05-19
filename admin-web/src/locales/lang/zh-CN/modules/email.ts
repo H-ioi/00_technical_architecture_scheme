@@ -23,7 +23,7 @@ export default {
   no: '否',
   send: {
     pageTitle: '发件箱配置',
-    pageDesc: '365 邮箱与系统用户、群组的绑定；接口对齐 `/isacommunity/mailing/userMailinfo/*`（旧 `email/send/index.vue`）。',
+    pageDesc: '将 Microsoft 365 邮箱与系统用户、群发群组绑定，作为群发邮件的发件账号。',
     keywordPlaceholder: '365 邮箱',
     colEmail365: '365 邮箱',
     colUsers: '用户',
@@ -36,7 +36,7 @@ export default {
   },
   group: {
     pageTitle: '群组配置',
-    pageDesc: '收件群组维护；接口对齐 `/isacommunity/mailing/group/*`（旧 `email/group.vue`）。',
+    pageDesc: '维护群发邮件收件人群组，可按学生、家长邮箱及范围筛选成员。',
     keywordPlaceholder: '群组名称',
     colName: '群组名称',
     colScopes: '范围',
@@ -79,7 +79,7 @@ export default {
   },
   outbox: {
     pageTitle: '发件列表',
-    pageDesc: '发件箱 / 草稿；接口对齐 `/isacommunity/mailing/sendRecord/*`（旧 `email/outgo/index.vue`）。',
+    pageDesc: '查看已发送邮件与草稿，支持新建、编辑及导出收件状态。',
     keywordPlaceholder: '主题关键词',
     tabSent: '发件箱',
     tabDraft: '草稿箱',

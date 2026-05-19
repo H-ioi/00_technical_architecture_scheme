@@ -30,16 +30,10 @@ import { ElMessage } from 'element-plus'
 import { computed, reactive, ref } from 'vue'
 
 import { activityQuestionnaireApi } from '@/api'
+import { useActivityYesNoOptions } from '@/composables/use-activity-yes-no-options'
 import type { Translate } from '@/types/i18n'
 import type { UniFormConfig } from 'uni-ui-lib'
 import { UniForm, useUniI18n } from 'uni-ui-lib'
-
-function yesNoOptions(t: Translate): Array<{ label: string; value: string }> {
-  return [
-    { label: t('activity.yes'), value: '1' },
-    { label: t('activity.no'), value: '0' }
-  ]
-}
 
 const emit = defineEmits<{ saved: [] }>()
 
@@ -72,7 +66,7 @@ const flagLabel = computed(() =>
     : tr('activity.questionnaireFrozen')
 )
 
-const opts = computed(() => yesNoOptions(tr))
+const opts = useActivityYesNoOptions()
 
 const formConfig = computed<UniFormConfig>(() => ({
   formProps: { labelPosition: 'top' },

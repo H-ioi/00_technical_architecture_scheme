@@ -1,6 +1,5 @@
 import type { UniOption, UniTableAction, UniTableRequest } from 'uni-ui-lib'
 import { useUniI18n, useUniListState } from 'uni-ui-lib'
-import dayjs from 'dayjs'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { computed, onMounted, ref } from 'vue'
 
@@ -8,19 +7,12 @@ import { activityPrizeApi, activityProgramApi } from '@/api'
 import type { ActivityPrizeRow } from '@/types/modules/activity-prize'
 import type { Translate } from '@/types/i18n'
 import { normalizeArray, normalizePaged } from '@/utils/api-response-normalize'
+import { dateFormat } from '@/utils/tool'
 
 import { searchForm, tableCols } from './list.config'
 import type PrizeFormDialog from './components/prize-form-dialog.vue'
 
 type DialogRef = { value: InstanceType<typeof PrizeFormDialog> | null }
-
-function formatListTimestamp(value: unknown, emptyText = '—') {
-  if (value == null || value === '') {
-    return emptyText
-  }
-  const d = dayjs(String(value))
-  return d.isValid() ? d.format('YYYY-MM-DD HH:mm') : String(value)
-}
 
 export function useActivityPrizeList(formDlg: DialogRef) {
   const { t, locale } = useUniI18n()
@@ -56,8 +48,12 @@ export function useActivityPrizeList(formDlg: DialogRef) {
 
   const decorateRows = (list: ActivityPrizeRow[]) => {
     for (const row of list) {
-      row.createTime = formatListTimestamp(row.createTime)
-      row.updateTime = formatListTimestamp(row.updateTime)
+      row.createTime = row.createTime
+        ? dateFormat(String(row.createTime), 'yyyy-MM-dd hh:mm')
+        : '—'
+      row.updateTime = row.updateTime
+        ? dateFormat(String(row.updateTime), 'yyyy-MM-dd hh:mm')
+        : '—'
     }
   }
 

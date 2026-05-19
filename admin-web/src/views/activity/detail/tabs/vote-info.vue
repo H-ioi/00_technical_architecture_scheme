@@ -148,12 +148,6 @@ const selectedIds = computed(
 )
 const canDelete = computed(() => hasPermission('busdriver_del') || hasPermission('activity_ticket_del'))
 
-const normalizeTime = (value: unknown) => {
-  if (value == null || value === '') return ''
-  const d = dayjs(String(value))
-  return d.isValid() ? d.format('YYYY-MM-DD HH:mm') : String(value)
-}
-
 const decorateRows = (list: Row[], pageNo: number, pageSize: number) => {
   list.forEach((row, index) => {
     row._seq = (pageNo - 1) * pageSize + index + 1
@@ -161,7 +155,13 @@ const decorateRows = (list: Row[], pageNo: number, pageSize: number) => {
     row.phone = row.phone == null || row.phone === '' ? '-' : String(row.phone)
     row.programName = row.programName == null || row.programName === '' ? '-' : String(row.programName)
     row.voteName = row.voteName == null || row.voteName === '' ? '-' : String(row.voteName)
-    row.createTimeLabel = normalizeTime(row.createTime ?? row.create_time)
+    const timeRaw = row.createTime ?? row.create_time
+    if (timeRaw == null || timeRaw === '') {
+      row.createTimeLabel = ''
+    } else {
+      const d = dayjs(String(timeRaw))
+      row.createTimeLabel = d.isValid() ? d.format('YYYY-MM-DD HH:mm') : String(timeRaw)
+    }
   })
 }
 

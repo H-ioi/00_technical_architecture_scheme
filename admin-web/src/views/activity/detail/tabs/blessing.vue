@@ -232,25 +232,25 @@ const selectedIds = computed(
 )
 const canDelete = computed(() => hasPermission('busdriver_del') || hasPermission('activity_ticket_del'))
 
-const yesNoLabel = (value: unknown) => {
-  if (value == null || value === '') return '-'
-  return String(value) === '1' || value === true ? tr('activity.yes') : tr('activity.no')
-}
-const pickTicketId = (row: Row) => row.ticketId ?? row.ticket_id
-const normalizeTime = (value: unknown) => {
-  if (value == null || value === '') return ''
-  const d = dayjs(String(value))
-  return d.isValid() ? d.format('YYYY-MM-DD HH:mm') : String(value)
-}
-
 const decorateRows = (list: Row[], pageNo: number, pageSize: number) => {
   list.forEach((row, index) => {
-    const ticketId = pickTicketId(row)
+    const ticketId = row.ticketId ?? row.ticket_id
     row._seq = (pageNo - 1) * pageSize + index + 1
     row.ticketIdLabel = ticketId == null || ticketId === '' ? '-' : String(ticketId)
     row.content = row.content == null || row.content === '' ? '-' : String(row.content)
-    row.visibleLabel = yesNoLabel(row.visible)
-    row.createTimeLabel = normalizeTime(row.createTime ?? row.create_time)
+    if (row.visible == null || row.visible === '') {
+      row.visibleLabel = '-'
+    } else {
+      row.visibleLabel =
+        String(row.visible) === '1' || row.visible === true ? tr('activity.yes') : tr('activity.no')
+    }
+    const timeRaw = row.createTime ?? row.create_time
+    if (timeRaw == null || timeRaw === '') {
+      row.createTimeLabel = ''
+    } else {
+      const d = dayjs(String(timeRaw))
+      row.createTimeLabel = d.isValid() ? d.format('YYYY-MM-DD HH:mm') : String(timeRaw)
+    }
   })
 }
 

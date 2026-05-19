@@ -41,13 +41,11 @@ export default {
 
   school: {
     pageTitle: 'Campus configuration',
-    pageDesc:
-      'Maintain campus labels, sort order, and enabled status. Same APIs as the legacy Basic settings → Campus screen (dict type order_school).'
+    pageDesc: 'Maintain campus labels, sort order, and enabled status used across the system.'
   },
 
   grade: {
     pageTitle: 'Grade configuration',
-    pageDesc:
-      'Maintain grade labels, sort order, and enabled status. Same APIs as the legacy Basic settings → Grade screen (dict type isacommunity_enroll_level).'
+    pageDesc: 'Maintain grade labels, sort order, and enabled status for enrollment and filters.'
   }
 }

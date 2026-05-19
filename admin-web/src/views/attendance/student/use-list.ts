@@ -1,5 +1,4 @@
 import type { UniTableAction, UniTableRequest } from 'uni-ui-lib'
-import dayjs from 'dayjs'
 import { toUniOptions, useUniI18n, useUniListState } from 'uni-ui-lib'
 import { computed, ref } from 'vue'
 
@@ -13,6 +12,7 @@ import {
 
 import { attendanceStudentApi, membershipApi } from '@/api'
 import { normalizePaged } from '@/utils/api-response-normalize'
+import { dateFormat } from '@/utils/tool'
 import type {
   AttendanceStudentListParams,
   AttendanceStudentRecord
@@ -20,22 +20,6 @@ import type {
 import type { SchoolOptionRecord } from '@/types/modules/membership'
 
 type Loose = Record<string, unknown>
-
-const formatMaybeDateTime = (value: unknown) => {
-  if (value == null || value === '') {
-    return ''
-  }
-  const d = dayjs(String(value))
-  return d.isValid() ? d.format('YYYY-MM-DD HH:mm:ss') : String(value)
-}
-
-const formatDateOnly = (value: unknown) => {
-  if (value == null || value === '') {
-    return ''
-  }
-  const d = dayjs(String(value))
-  return d.isValid() ? d.format('YYYY-MM-DD') : String(value)
-}
 
 export const useList = () => {
   const { locale, t } = useUniI18n()
@@ -90,33 +74,32 @@ export const useList = () => {
   const detailVisible = ref(false)
   const activeRow = ref<AttendanceStudentRecord | null>(null)
 
-  const ynLabel = (raw: unknown) => {
-    const s = String(raw ?? '')
-    if (s === '1') {
-      return t('attendance.yes')
-    }
-    if (s === '0') {
-      return t('attendance.no')
-    }
-    return '--'
-  }
-
-  const statusLabel = (raw: unknown) => {
-    const row = statusSearchOptions.value.find((o) => String(o.value) === String(raw ?? ''))
-    return row?.label ?? String(raw ?? '--')
-  }
-
   const decorateRow = (raw: Loose): AttendanceStudentRecord => {
+    const boardingStr = String(raw.boarding ?? '')
+    const schoolBusStr = String(raw.schoolBus ?? '')
+    const statusHit = statusSearchOptions.value.find(
+      (o) => String(o.value) === String(raw.schoolStatus ?? '')
+    )
     const row: AttendanceStudentRecord = {
       ...(raw as AttendanceStudentRecord),
-      boarding: ynLabel(raw.boarding),
-      schoolBus: ynLabel(raw.schoolBus),
-      schoolStatus: statusLabel(raw.schoolStatus),
-      attendanceDate: formatDateOnly(raw.attendanceDate),
-      entryTime: formatMaybeDateTime(raw.entryTime),
-      leavingTime: formatMaybeDateTime(raw.leavingTime),
-      updatedAt: formatMaybeDateTime(raw.updatedAt),
-      createdAt: formatMaybeDateTime(raw.createdAt)
+      boarding:
+        boardingStr === '1'
+          ? t('attendance.yes')
+          : boardingStr === '0'
+            ? t('attendance.no')
+            : '--',
+      schoolBus:
+        schoolBusStr === '1'
+          ? t('attendance.yes')
+          : schoolBusStr === '0'
+            ? t('attendance.no')
+            : '--',
+      schoolStatus: statusHit?.label ?? String(raw.schoolStatus ?? '--'),
+      attendanceDate: dateFormat(String(raw.attendanceDate ?? ''), 'yyyy-MM-dd'),
+      entryTime: dateFormat(String(raw.entryTime ?? '')),
+      leavingTime: dateFormat(String(raw.leavingTime ?? '')),
+      updatedAt: dateFormat(String(raw.updatedAt ?? '')),
+      createdAt: dateFormat(String(raw.createdAt ?? ''))
     }
     return row
   }

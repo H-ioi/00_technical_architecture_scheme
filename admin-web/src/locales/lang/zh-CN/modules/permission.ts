@@ -15,7 +15,7 @@ export default {
 
   menu: {
     title: '菜单管理',
-    description: '租户菜单树查看与租户侧允许的字段编辑（对齐旧 `/admin/menu`）。',
+    description: '查看租户菜单树，维护图标、排序、路径及权限标识等配置。',
     colName: '菜单名称',
     colIcon: '图标',
     colSort: '排序',
@@ -40,7 +40,7 @@ export default {
 
   dept: {
     title: '部门管理',
-    description: '部门树状表格与同页弹窗新增/编辑（对齐旧 `/admin/dept`）。',
+    description: '以树形结构管理部门层级，支持新增、编辑与子部门维护。',
     parent: '上级节点 id',
     code: '部门编码',
     name: '部门名称',
@@ -56,8 +56,7 @@ export default {
 
   role: {
     title: '角色管理',
-    description:
-      '角色分页 CRUD、数据权限简明配置与菜单分配（对齐旧 `/admin/role`；字典级授权后续迭代补强）。',
+    description: '维护系统角色、数据权限范围及菜单分配。',
     colName: '角色名称',
     colCode: '角色标识',
     colDesc: '描述',
@@ -76,7 +75,7 @@ export default {
 
   user: {
     title: '用户管理',
-    description: '按部门筛选系统用户列表，支持新增编辑删除（对齐旧 `/admin/isauser`）。',
+    description: '按部门筛选并维护系统用户账号、角色与基本信息。',
     colUsername: '用户名',
     colNickname: '昵称',
     colEmail: '邮箱',

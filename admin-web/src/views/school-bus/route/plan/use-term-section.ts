@@ -7,60 +7,12 @@ import { computed, ref, watch } from 'vue'
 
 import { schoolBusSectionApi } from '@/api'
 import { normalizePaged } from '@/utils/api-response-normalize'
+import { normalizeSchoolIdsOnRow, stripEmptyQueryParams } from '@/utils/school-bus'
 import type { SchoolOptionRecord } from '@/types/modules/membership'
 import type { SectionListParams } from '@/types/modules/school-bus-section'
 
 type Loose = Record<string, unknown>
 type SchoolRecordsRef = Ref<SchoolOptionRecord[]>
-
-const normalizeSchoolIdsField = (row: Loose): void => {
-  if (row.schoolIds == null && row.schoolId != null) {
-    row.schoolIds = [row.schoolId as string | number]
-  }
-
-  const raw = row.schoolIds
-
-  if (Array.isArray(raw)) {
-    row.schoolIds = raw.filter((x) => x !== '' && x != null) as Array<string | number>
-
-    return
-  }
-
-  if (raw == null || raw === '') {
-    row.schoolIds = []
-
-    return
-  }
-
-  if (typeof raw === 'string' && raw.includes(',')) {
-    row.schoolIds = raw
-      .split(',')
-      .map((s) => s.trim())
-      .filter((x) => x !== '')
-
-    return
-  }
-
-  row.schoolIds = [raw as string | number]
-}
-
-const stripEmptyParams = (p: Record<string, unknown>): Record<string, unknown> => {
-  const o: Record<string, unknown> = {}
-
-  for (const [k, v] of Object.entries(p)) {
-    if (v === '' || v === undefined || v === null) {
-      continue
-    }
-
-    if (Array.isArray(v) && v.length === 0) {
-      continue
-    }
-
-    o[k] = v
-  }
-
-  return o
-}
 
 export const useTermSection = (schoolRecords: SchoolRecordsRef) => {
   const { locale, t } = useUniI18n()
@@ -138,7 +90,7 @@ export const useTermSection = (schoolRecords: SchoolRecordsRef) => {
   })
 
   const fmtRowTerm = (row: Loose) => {
-    normalizeSchoolIdsField(row)
+    normalizeSchoolIdsOnRow(row)
     const loc = locale()
     row.showTermName = loc === 'en' ? row.enName : row.cnName
     row.intentStartDate = row.intentStartDate
@@ -195,7 +147,7 @@ export const useTermSection = (schoolRecords: SchoolRecordsRef) => {
       base.schoolIds = defaultSchoolId.value
     }
 
-    const params = stripEmptyParams(base)
+    const params = stripEmptyQueryParams(base)
     const result = await schoolBusSectionApi.page.get(params)
     const { list, total } = normalizePaged<Loose>(result)
 

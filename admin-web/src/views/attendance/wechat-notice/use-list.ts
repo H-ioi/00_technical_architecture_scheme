@@ -1,5 +1,4 @@
 import type { UniTableAction, UniTableRequest } from 'uni-ui-lib'
-import dayjs from 'dayjs'
 import { toUniOptions, useUniI18n, useUniListState } from 'uni-ui-lib'
 import { computed, ref } from 'vue'
 
@@ -12,6 +11,7 @@ import {
 
 import { attendanceWechatNoticeApi, membershipApi } from '@/api'
 import { normalizePaged } from '@/utils/api-response-normalize'
+import { dateFormat } from '@/utils/tool'
 import type {
   AttendanceWechatNoticeListParams,
   AttendanceWechatNoticeRecord
@@ -19,14 +19,6 @@ import type {
 import type { SchoolOptionRecord } from '@/types/modules/membership'
 
 type Loose = Record<string, unknown>
-
-const formatMaybeDateTime = (value: unknown) => {
-  if (value == null || value === '') {
-    return ''
-  }
-  const d = dayjs(String(value))
-  return d.isValid() ? d.format('YYYY-MM-DD HH:mm:ss') : String(value)
-}
 
 export const useList = () => {
   const { locale, t } = useUniI18n()
@@ -65,18 +57,16 @@ export const useList = () => {
   const detailVisible = ref(false)
   const activeRow = ref<AttendanceWechatNoticeRecord | null>(null)
 
-  const sendStatusLabel = (raw: unknown) => {
-    const s = String(raw ?? '')
-    const row = sendStatusSearchOptions.value.find((o) => String(o.value) === s)
-    return row?.label ?? (s === '' ? '--' : s)
+  const decorateRow = (raw: Loose): AttendanceWechatNoticeRecord => {
+    const s = String(raw.sendStatus ?? '')
+    const statusHit = sendStatusSearchOptions.value.find((o) => String(o.value) === s)
+    return {
+      ...(raw as AttendanceWechatNoticeRecord),
+      sendStatus: statusHit?.label ?? (s === '' ? '--' : s),
+      updateTime: dateFormat(String(raw.updateTime ?? '')),
+      createTime: dateFormat(String(raw.createTime ?? ''))
+    }
   }
-
-  const decorateRow = (raw: Loose): AttendanceWechatNoticeRecord => ({
-    ...(raw as AttendanceWechatNoticeRecord),
-    sendStatus: sendStatusLabel(raw.sendStatus),
-    updateTime: formatMaybeDateTime(raw.updateTime),
-    createTime: formatMaybeDateTime(raw.createTime)
-  })
 
   const loadData: UniTableRequest = async ({ pageNo, pageSize, filters: f }) => {
     const params: AttendanceWechatNoticeListParams = {

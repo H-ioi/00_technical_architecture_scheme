@@ -1,13 +1,15 @@
 import type { UniOption, UniTableAction, UniTableRequest } from 'uni-ui-lib'
 import { toUniOptions, useUniI18n, useUniListState } from 'uni-ui-lib'
-import dayjs from 'dayjs'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { computed, onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
 
-import { activityApi, activityQuestionnaireApi, membershipApi } from '@/api'
+import { activityApi, activityQuestionnaireApi } from '@/api'
 import type { Translate } from '@/types/i18n'
+import { useActivityYesNoOptions } from '@/composables/use-activity-yes-no-options'
+import { useMembershipSchoolOptions } from '@/composables/use-membership-school-options'
 import { normalizePaged } from '@/utils/api-response-normalize'
+import { dateFormat } from '@/utils/tool'
 import { downloadBlob, downloadResponseBlob } from '@/utils/download'
 
 import {
@@ -19,47 +21,6 @@ import {
 
 type ActivityRow = Record<string, unknown>
 
-function formatListTimestamp(value: unknown, emptyText = '—') {
-  if (value == null || value === '') {
-    return emptyText
-  }
-  const d = dayjs(String(value))
-  return d.isValid() ? d.format('YYYY-MM-DD HH:mm') : String(value)
-}
-
-function useMembershipSchoolOptions() {
-  const { locale } = useUniI18n()
-  const schoolOptionsRef = ref<UniOption[]>([])
-
-  const loadSchoolOptions = async () => {
-    const raw = await membershipApi.school.get()
-    const list = Array.isArray(raw) ? raw : []
-    schoolOptionsRef.value = toUniOptions(list as Record<string, unknown>[], {
-      labelKeys:
-        locale.value === 'en' ? ['enName', 'name', 'cnName'] : ['cnName', 'name', 'enName'],
-      valueKey: 'id'
-    })
-  }
-
-  return { schoolOptions: schoolOptionsRef, loadSchoolOptions }
-}
-
-function normalizeSchoolIdsForTable(raw: unknown): unknown {
-  if (Array.isArray(raw)) {
-    return raw
-  }
-  if (raw == null || raw === '') {
-    return []
-  }
-  if (typeof raw === 'string') {
-    return raw
-      .split(/[,;\s]+/)
-      .map((segment) => segment.trim())
-      .filter(Boolean)
-  }
-  return [raw]
-}
-
 export function useActivityEventList() {
   const { t } = useUniI18n()
   const tr = t as Translate
@@ -70,10 +31,7 @@ export function useActivityEventList() {
 
   const statusOpts = computed(() => activityStatusOptions(tr))
   const checkinOpts = computed(() => checkinMethodOptions(tr))
-  const ynOpts = computed(() => [
-    { label: tr('activity.yes'), value: '1' },
-    { label: tr('activity.no'), value: '0' }
-  ])
+  const ynOpts = useActivityYesNoOptions()
   const showSchoolFilter = computed(() => schoolOptions.value.length > 1)
 
   onMounted(async () => {
@@ -117,15 +75,33 @@ export function useActivityEventList() {
 
   const formatRows = (list: ActivityRow[]) => {
     for (const row of list) {
-      row.schoolIds = normalizeSchoolIdsForTable(row.schoolIds)
+      const schoolIdsRaw = row.schoolIds
+      if (!Array.isArray(schoolIdsRaw)) {
+        if (schoolIdsRaw == null || schoolIdsRaw === '') {
+          row.schoolIds = []
+        } else if (typeof schoolIdsRaw === 'string') {
+          row.schoolIds = schoolIdsRaw
+            .split(/[,;\s]+/)
+            .map((segment) => segment.trim())
+            .filter(Boolean)
+        } else {
+          row.schoolIds = [schoolIdsRaw]
+        }
+      }
       row.activityStatus = row.activityStatus == null ? '' : String(row.activityStatus)
       row.recommended = row.recommended == null ? '' : String(row.recommended)
       const bannerRaw = row.banner ?? row.isBanner
       row.banner = bannerRaw == null ? '' : String(bannerRaw)
       row.checkinMethod = row.checkinMethod == null ? '' : String(row.checkinMethod)
-      row.createTime = formatListTimestamp(row.createTime)
-      row.activityStartTime = formatListTimestamp(row.activityStartTime)
-      row.activityEndTime = formatListTimestamp(row.activityEndTime)
+      row.createTime = row.createTime
+        ? dateFormat(String(row.createTime), 'yyyy-MM-dd hh:mm')
+        : '—'
+      row.activityStartTime = row.activityStartTime
+        ? dateFormat(String(row.activityStartTime), 'yyyy-MM-dd hh:mm')
+        : '—'
+      row.activityEndTime = row.activityEndTime
+        ? dateFormat(String(row.activityEndTime), 'yyyy-MM-dd hh:mm')
+        : '—'
     }
   }
 

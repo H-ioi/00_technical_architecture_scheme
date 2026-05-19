@@ -52,7 +52,7 @@ export default {
   },
   routePlan: {
     pageTitle: 'Route planning',
-    pageDesc: 'Manage routes, terms and stops (same tabs as legacy).',
+    pageDesc: 'Manage routes, terms, stops, schedules, and fare settings for school buses.',
     tabRoutes: 'All routes',
     tabTerm: 'Terms',
     tabStation: 'Stations',

@@ -3,7 +3,10 @@
     <div class="proto-view__head">
       <div>
         <h1>{{ $t('protocol.detailTitle') }}</h1>
-        <p>{{ detail?.cnName || detail?.enName || pid }}</p>
+        <p class="uni-list-page__description">{{ $t('protocol.detailPageDesc') }}</p>
+        <p v-if="detail?.cnName || detail?.enName" class="proto-view__name">
+          {{ detail?.cnName || detail?.enName }}
+        </p>
       </div>
       <el-button @click="back">{{ $t('protocol.back') }}</el-button>
     </div>

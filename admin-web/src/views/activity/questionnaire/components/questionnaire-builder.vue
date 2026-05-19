@@ -103,7 +103,7 @@
                           <!-- 单行文本 -->
                           <template v-if="fk.type === 'input'">
                             <div class="qb__pv-field">
-                              <div class="qb__pv-label">{{ previewLabel(fk) }}</div>
+                              <div class="qb__pv-label">{{ fieldPreview(fk).label }}</div>
                               <div class="qb__pv-control">
                                 <el-input
                                   :placeholder="fk.properties.placeholder || undefined"
@@ -115,13 +115,13 @@
                           <!-- 多行文本 -->
                           <template v-else-if="fk.type === 'textarea'">
                             <div class="qb__pv-field">
-                              <div class="qb__pv-label">{{ previewLabel(fk) }}</div>
+                              <div class="qb__pv-label">{{ fieldPreview(fk).label }}</div>
                               <div class="qb__pv-control">
                                 <el-input
                                   type="textarea"
                                   :autosize="{
-                                    minRows: textareaRows(fk),
-                                    maxRows: textareaRows(fk)
+                                    minRows: fieldPreview(fk).textareaRows,
+                                    maxRows: fieldPreview(fk).textareaRows
                                   }"
                                   :placeholder="fk.properties.placeholder || undefined"
                                   disabled />
@@ -132,13 +132,13 @@
                           <!-- 单选 -->
                           <template v-else-if="fk.type === 'radio'">
                             <div class="qb__pv-field">
-                              <div class="qb__pv-label">{{ previewLabel(fk) }}</div>
+                              <div class="qb__pv-label">{{ fieldPreview(fk).label }}</div>
                               <div class="qb__pv-control">
-                                <template v-if="previewOptionList(fk).length">
-                                  <el-radio-group :model-value="previewRadioVal(fk)" disabled>
+                                <template v-if="fieldPreview(fk).options.length">
+                                  <el-radio-group :model-value="fieldPreview(fk).radioVal" disabled>
                                     <div class="qb__pv-stack">
                                       <el-radio
-                                        v-for="opt in previewOptionList(fk)"
+                                        v-for="opt in fieldPreview(fk).options"
                                         :key="opt.id"
                                         :label="String(opt.id)">
                                         {{ opt.label }}
@@ -156,13 +156,13 @@
                           <!-- 多选 -->
                           <template v-else-if="fk.type === 'checkbox'">
                             <div class="qb__pv-field">
-                              <div class="qb__pv-label">{{ previewLabel(fk) }}</div>
+                              <div class="qb__pv-label">{{ fieldPreview(fk).label }}</div>
                               <div class="qb__pv-control">
-                                <template v-if="previewOptionList(fk).length">
-                                  <el-checkbox-group :model-value="previewMultiVals(fk)" disabled>
+                                <template v-if="fieldPreview(fk).options.length">
+                                  <el-checkbox-group :model-value="fieldPreview(fk).multiVals" disabled>
                                     <div class="qb__pv-stack">
                                       <el-checkbox
-                                        v-for="opt in previewOptionList(fk)"
+                                        v-for="opt in fieldPreview(fk).options"
                                         :key="opt.id"
                                         :label="Number(opt.id)">
                                         {{ opt.label }}
@@ -180,26 +180,26 @@
                           <!-- 下拉 -->
                           <template v-else-if="fk.type === 'select'">
                             <div class="qb__pv-field">
-                              <div class="qb__pv-label">{{ previewLabel(fk) }}</div>
+                              <div class="qb__pv-label">{{ fieldPreview(fk).label }}</div>
                               <div class="qb__pv-control">
-                                <template v-if="previewOptionList(fk).length">
+                                <template v-if="fieldPreview(fk).options.length">
                                   <el-select
                                     :model-value="
-                                      previewSelectMulti(fk)
-                                        ? previewMultiVals(fk)
-                                        : previewRadioVal(fk)
+                                      fieldPreview(fk).selectMulti
+                                        ? fieldPreview(fk).multiVals
+                                        : fieldPreview(fk).radioVal
                                     "
-                                    :multiple="previewSelectMulti(fk)"
+                                    :multiple="fieldPreview(fk).selectMulti"
                                     collapse-tags
                                     collapse-tags-tooltip
                                     disabled
                                     style="width: 100%">
                                     <el-option
-                                      v-for="opt in previewOptionList(fk)"
+                                      v-for="opt in fieldPreview(fk).options"
                                       :key="opt.id"
                                       :label="opt.label"
                                       :value="
-                                        previewSelectMulti(fk) ? Number(opt.id) : String(opt.id)
+                                        fieldPreview(fk).selectMulti ? Number(opt.id) : String(opt.id)
                                       " />
                                   </el-select>
                                 </template>
@@ -213,14 +213,14 @@
                           <!-- 日期时间 -->
                           <template v-else-if="fk.type === 'datetimepicker'">
                             <div class="qb__pv-field">
-                              <div class="qb__pv-label">{{ previewLabel(fk) }}</div>
+                              <div class="qb__pv-label">{{ fieldPreview(fk).label }}</div>
                               <div class="qb__pv-control">
                                 <el-date-picker
                                   :teleported="false"
                                   disabled
                                   class="qb__pv-dp"
                                   style="width: 100%"
-                                  :type="previewDateType(fk)"
+                                  :type="fieldPreview(fk).dateType"
                                   :placeholder="t('activity.qbPreviewDatePh')" />
                                 <p
                                   v-if="fk.properties.datetime_pattern"
@@ -432,13 +432,7 @@
 </template>
 
 <script setup lang="ts">
-import type { Translate } from '@/types/i18n'
-import type {
-  DesignerField,
-  DesignerFieldKnown,
-  DesignerFieldRaw,
-  DesignerOption
-} from '@/types/modules/activity-questionnaire'
+import type { DesignerField, DesignerFieldRaw } from '@/types/modules/activity-questionnaire'
 import {
   Aim,
   Calendar,
@@ -449,191 +443,12 @@ import {
   Rank,
   Select as SelectIcon
 } from '@element-plus/icons-vue'
-
-import type { UniFormConfig } from 'uni-ui-lib'
-import { UniForm, useUniI18n } from 'uni-ui-lib'
+import { UniForm } from 'uni-ui-lib'
 import type { Component } from 'vue'
-import { computed, onUnmounted, ref, watch } from 'vue'
 import draggable from 'vuedraggable'
 
-function createFontId(): string {
-  if (typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function') {
-    return `f_${crypto.randomUUID()}`
-  }
-  return `f_${Date.now()}_${Math.random().toString(36).slice(2, 9)}`
-}
-
-function newTemplateFieldId(): string {
-  return `-${Math.random().toString(36).slice(2, 11)}`
-}
-
-const BUILDER_PALETTE_TYPES = [
-  'input',
-  'textarea',
-  'radio',
-  'checkbox',
-  'select',
-  'datetimepicker'
-] as const
-
-type PaletteType = (typeof BUILDER_PALETTE_TYPES)[number]
-
-function nextSeqOptionId(opts: DesignerOption[]): number {
-  const nums = opts.map((o) => Number(o.id)).filter((n) => Number.isFinite(n))
-  let m = nums.length ? Math.max(...nums, 0) : 0
-  m++
-  while (nums.includes(m)) {
-    m++
-  }
-  return m
-}
-
-function defaultOptions(kind: 'radio' | 'checkbox' | 'select'): DesignerOption[] {
-  return [
-    { label: kind === 'select' ? '选项一' : '选项1', id: 1, value: '', isHide: 0 },
-    { label: kind === 'select' ? '选项二' : '选项2', id: 2, value: '', isHide: 0 }
-  ]
-}
-
-function radioProps(): DesignerFieldKnown['properties'] {
-  const option = defaultOptions('radio')
-  return {
-    option,
-    option_default: String(option[0].id),
-    searchable: false
-  }
-}
-
-function presetField(type: PaletteType): DesignerFieldKnown {
-  const id = newTemplateFieldId()
-  switch (type) {
-    case 'input':
-      return {
-        kind: 'known',
-        fontId: createFontId(),
-        id,
-        type: 'input',
-        label: '单行文本',
-        required: false,
-        readonly: false,
-        disabled: false,
-        isHide: false,
-        regex: '',
-        regexHint: '',
-        datetimeTypeKey: '',
-        properties: { placeholder: '' }
-      }
-    case 'textarea':
-      return {
-        kind: 'known',
-        fontId: createFontId(),
-        id,
-        type: 'textarea',
-        label: '多行文本',
-        required: false,
-        readonly: false,
-        disabled: false,
-        isHide: false,
-        regex: '',
-        regexHint: '',
-        datetimeTypeKey: '',
-        properties: {
-          placeholder: '',
-          text_num_line: 3,
-          text_num_column: 40
-        }
-      }
-    case 'radio':
-      return {
-        kind: 'known',
-        fontId: createFontId(),
-        id,
-        type: 'radio',
-        label: '单选题',
-        required: false,
-        readonly: false,
-        disabled: false,
-        isHide: false,
-        regex: '',
-        regexHint: '',
-        datetimeTypeKey: '',
-        properties: radioProps()
-      }
-    case 'checkbox':
-      return {
-        kind: 'known',
-        fontId: createFontId(),
-        id,
-        type: 'checkbox',
-        label: '多选题',
-        required: false,
-        readonly: false,
-        disabled: false,
-        isHide: false,
-        regex: '',
-        regexHint: '',
-        datetimeTypeKey: '',
-        properties: {
-          option: defaultOptions('checkbox'),
-          option_default: [],
-          searchable: false
-        }
-      }
-    case 'select':
-      return {
-        kind: 'known',
-        fontId: createFontId(),
-        id,
-        type: 'select',
-        label: '下拉',
-        required: false,
-        readonly: false,
-        disabled: false,
-        isHide: false,
-        regex: '',
-        regexHint: '',
-        datetimeTypeKey: '',
-        properties: {
-          option: defaultOptions('select'),
-          option_default: [],
-          option_multi: false,
-          searchable: true
-        }
-      }
-    case 'datetimepicker':
-      return {
-        kind: 'known',
-        fontId: createFontId(),
-        id,
-        type: 'datetimepicker',
-        label: '日期时间',
-        required: false,
-        readonly: false,
-        disabled: false,
-        isHide: false,
-        regex: '',
-        regexHint: '',
-        datetimeTypeKey: 'date',
-        properties: {
-          datetime_type: 'date',
-          datetime_pattern: 'yyyy-MM-dd'
-        }
-      }
-    default: {
-      const _x: never = type
-      throw new Error(`unknown palette type ${_x}`)
-    }
-  }
-}
-
-function builderAddOptionRow(f: DesignerFieldKnown): DesignerFieldKnown {
-  const p = { ...f.properties }
-  const list = [...(Array.isArray(p.option) ? p.option : [])]
-  const nid = nextSeqOptionId(list)
-  list.push({ label: `选项${nid}`, id: nid, value: '', isHide: 0 })
-  p.option = list
-  return { ...f, properties: p }
-}
+import { BUILDER_PALETTE_TYPES, type PaletteType } from './questionnaire-builder-utils'
+import { useQuestionnaireBuilder } from './use-questionnaire-builder'
 
 const PALETTE_ICON: Record<PaletteType, Component> = {
   input: EditPen,
@@ -653,534 +468,35 @@ const props = withDefaults(
 )
 const emit = defineEmits<{ 'update:modelValue': [DesignerField[]] }>()
 
-const { t } = useUniI18n()
-const tr = t as Translate
-
-const qbSideFormConfig = computed<UniFormConfig>(() => ({
-  formProps: { labelPosition: 'top' },
-  colProps: { span: 24 },
-  schema: [
-    {
-      field: 'label',
-      label: t('activity.qbFieldLabel'),
-      component: 'ElInput',
-      componentProps: {
-        type: 'textarea',
-        autosize: { minRows: 3, maxRows: 10 },
-        maxlength: 255,
-        showWordLimit: true
-      }
-    },
-    {
-      field: '_qbEditor',
-      label: '',
-      component: 'ElInput',
-      componentProps: { style: { display: 'none' } }
-    }
-  ]
-}))
-
-const selFontId = ref<string | null>(null)
-
-const sel = computed(() => props.modelValue.find((r) => r.fontId === selFontId.value) ?? null)
-
-const selectedOrdinal = computed(() => {
-  if (!selFontId.value) {
-    return 0
-  }
-
-  const i = props.modelValue.findIndex((r) => r.fontId === selFontId.value)
-
-  return i >= 0 ? i + 1 : 0
-})
-
-const orderedFields = computed({
-  get: () => props.modelValue,
-  set: (v: DesignerField[]) => emit('update:modelValue', v)
-})
-
-const draft = ref<DesignerFieldKnown | null>(null)
-const syncingDraft = ref(false)
-let debTimer: ReturnType<typeof setTimeout> | null = null
-const DEB_MS = 160
-
-watch(
-  () => [props.readonly, props.modelValue.length] as const,
-  () => {
-    if (props.readonly) {
-      if (debTimer) {
-        clearTimeout(debTimer)
-        debTimer = null
-      }
-      selFontId.value = null
-      draft.value = null
-
-      return
-    }
-
-    if (props.modelValue.length && selFontId.value == null) {
-      selFontId.value = props.modelValue[0].fontId
-    }
-
-    if (selFontId.value && !props.modelValue.some((r) => r.fontId === selFontId.value)) {
-      selFontId.value = props.modelValue[0]?.fontId ?? null
-    }
-  },
-
-  { immediate: true }
-)
-
-function cloneKnown(row: DesignerFieldKnown): DesignerFieldKnown {
-  return JSON.parse(JSON.stringify(row)) as DesignerFieldKnown
-}
-
-function ensureOpts(): void {
-  const d = draft.value
-  if (!d || (d.type !== 'radio' && d.type !== 'checkbox' && d.type !== 'select')) {
-    return
-  }
-
-  if (!Array.isArray(d.properties.option)) {
-    d.properties.option = []
-  }
-}
-
-function flushDraftFor(fontId: string | null): void {
-  const d = draft.value
-  if (!fontId || !d || d.fontId !== fontId) {
-    return
-  }
-
-  if (d.type === 'datetimepicker') {
-    syncDt()
-  }
-
-  const i = props.modelValue.findIndex((r) => r.fontId === d.fontId)
-  if (i < 0) {
-    return
-  }
-
-  const next = cloneKnown(d)
-  const cur = props.modelValue[i]
-  if (JSON.stringify(cur) === JSON.stringify(next)) {
-    return
-  }
-
-  const copy = [...props.modelValue]
-  copy[i] = next
-  emit('update:modelValue', copy)
-}
-
-function flushDraftPending(): void {
-  flushDraftFor(selFontId.value)
-}
-
-function scheduleFlush(): void {
-  if (syncingDraft.value) {
-    return
-  }
-
-  if (debTimer) {
-    clearTimeout(debTimer)
-  }
-
-  debTimer = setTimeout(() => {
-    debTimer = null
-    flushDraftPending()
-  }, DEB_MS)
-}
-
-/** 折叠头栏开关：与 draft 同源或并入 props */
-function mergeKnownIntoList(ix: number, nextKnown: DesignerFieldKnown): void {
-  const copy = [...props.modelValue]
-  copy[ix] = nextKnown
-  emit('update:modelValue', copy)
-}
-
-function setHeaderRequired(fontId: string, val: boolean | string | number): void {
-  const on = val === true
-  const i = props.modelValue.findIndex((r) => r.fontId === fontId)
-  if (i < 0) return
-  const row = props.modelValue[i]
-  if (row.kind !== 'known') return
-
-  if (draft.value?.fontId === fontId) {
-    draft.value.required = on
-    scheduleFlush()
-    return
-  }
-
-  const nextKnown = cloneKnown(row)
-  nextKnown.required = on
-  mergeKnownIntoList(i, nextKnown)
-}
-
-function setHeaderHide(fontId: string, val: boolean | string | number): void {
-  const on = val === true
-  const i = props.modelValue.findIndex((r) => r.fontId === fontId)
-  if (i < 0) return
-  const row = props.modelValue[i]
-  if (row.kind !== 'known') return
-
-  if (draft.value?.fontId === fontId) {
-    draft.value.isHide = on
-    scheduleFlush()
-    return
-  }
-
-  const nextKnown = cloneKnown(row)
-  nextKnown.isHide = on
-  mergeKnownIntoList(i, nextKnown)
-}
-
-function knownHeaderProp(fontId: string): { required: boolean; isHide: boolean } {
-  if (draft.value?.fontId === fontId) {
-    return { required: !!draft.value.required, isHide: !!draft.value.isHide }
-  }
-  const row = props.modelValue.find((r) => r.fontId === fontId && r.kind === 'known') as
-    | DesignerFieldKnown
-    | undefined
-  if (!row) return { required: false, isHide: false }
-
-  return { required: !!row.required, isHide: !!row.isHide }
-}
-
-function onRowClick(fontId: string): void {
-  if (props.readonly) {
-    return
-  }
-
-  selectRow(fontId)
-}
-
-function selectRow(fontId: string): void {
-  if (props.readonly) {
-    return
-  }
-
-  if (debTimer) {
-    clearTimeout(debTimer)
-    debTimer = null
-  }
-
-  selFontId.value = fontId
-}
-
-watch(
-  selFontId,
-  (n, o) => {
-    if (debTimer) {
-      clearTimeout(debTimer)
-      debTimer = null
-    }
-
-    if (o != null && o !== n) {
-      flushDraftFor(o)
-    }
-
-    syncingDraft.value = true
-    try {
-      if (n == null) {
-        draft.value = null
-
-        return
-      }
-
-      const cur = props.modelValue.find((r) => r.fontId === n) ?? null
-
-      if (cur?.kind !== 'known') {
-        draft.value = null
-
-        return
-      }
-
-      draft.value = cloneKnown(cur)
-
-      ensureOpts()
-    } finally {
-      syncingDraft.value = false
-    }
-  },
-  { immediate: true }
-)
-
-watch(
+const {
+  t,
+  qbSideFormConfig,
+  sel,
   draft,
-  () => {
-    scheduleFlush()
-  },
-  { deep: true }
-)
-
-onUnmounted(() => {
-  if (debTimer) {
-    clearTimeout(debTimer)
-  }
-})
-
-function rowBadge(row: DesignerField): string {
-  return row.kind === 'raw'
-    ? `${tr('activity.qbRawPrefix')} (${rawType(row as DesignerFieldRaw)})`
-    : tr(`activity.qbTypes.${(row as DesignerFieldKnown).type}`)
-}
-
-function rawType(row: DesignerFieldRaw): string {
-  return String(row.backendRow.type ?? '?')
-}
-
-/** 中间「答题视图」预览：选中行用 draft，其它行用列表快照。 */
-function effectiveKnown(row: DesignerField): DesignerFieldKnown | null {
-  if (row.kind !== 'known') {
-    return null
-  }
-
-  if (draft.value?.fontId === row.fontId) {
-    return draft.value
-  }
-
-  return row
-}
-
-function previewSlice(row: DesignerField): DesignerFieldKnown[] {
-  const k = effectiveKnown(row)
-
-  return k ? [k] : []
-}
-
-function previewLabel(k: DesignerFieldKnown): string {
-  return k.required ? `${k.label} *` : k.label
-}
-
-function previewOptionList(k: DesignerFieldKnown): DesignerOption[] {
-  const list = Array.isArray(k.properties.option) ? k.properties.option : []
-
-  return list.filter((o) => !o.isHide)
-}
-
-function previewSelectMulti(k: DesignerFieldKnown): boolean {
-  return k.properties.option_multi === true || k.properties.option_multi === 'true'
-}
-
-function previewMultiVals(k: DesignerFieldKnown): number[] {
-  const raw = k.properties.option_default
-
-  return Array.isArray(raw) ? raw.map((x) => Number(x)) : []
-}
-
-function previewRadioVal(k: DesignerFieldKnown): string {
-  return String(k.properties.option_default ?? '')
-}
-
-function previewDateType(k: DesignerFieldKnown): 'date' | 'datetime' | 'month' {
-  const dt = String(k.datetimeTypeKey || k.properties.datetime_type || 'date')
-
-  if (dt === 'datetime') {
-    return 'datetime'
-  }
-
-  if (dt === 'month') {
-    return 'month'
-  }
-
-  return 'date'
-}
-
-function textareaRows(k: DesignerFieldKnown): number {
-  const n = Number(k.properties.text_num_line)
-
-  if (Number.isFinite(n) && n > 0) {
-    return Math.min(8, Math.max(2, n))
-  }
-
-  return 3
-}
-
-const opts = computed({
-  get(): DesignerOption[] {
-    ensureOpts()
-
-    return draft.value?.properties.option ?? []
-  },
-  set(v: DesignerOption[]) {
-    if (draft.value) {
-      draft.value.properties.option = v
-    }
-  }
-})
-
-const selMultiToggle = computed({
-  get() {
-    const d = draft.value
-
-    if (!d || d.type !== 'select') {
-      return false
-    }
-
-    return d.properties.option_multi === true || d.properties.option_multi === 'true'
-  },
-  set(v: boolean) {
-    if (!draft.value || draft.value.type !== 'select') {
-      return
-    }
-
-    draft.value.properties.option_multi = v
-    draft.value.properties.option_default = v ? ([] as number[]) : ''
-  }
-})
-
-const useSingleDefaultPicker = computed(() => {
-  const d = draft.value
-  if (!d) return false
-  if (d.type === 'radio') return true
-  if (d.type === 'select') return !selMultiToggle.value
-  return false
-})
-
-const useMultiDefaultPicker = computed(() => {
-  const d = draft.value
-  if (!d) return false
-  if (d.type === 'checkbox') return true
-  if (d.type === 'select') return selMultiToggle.value
-  return false
-})
-
-function multiDefaultHas(id: number): boolean {
-  return multiDefaultNum.value.includes(id)
-}
-
-function onMultiDefaultChange(id: number, checked: unknown): void {
-  if (!draft.value) return
-  const on = checked === true
-  const next = new Set(multiDefaultNum.value)
-  if (on) next.add(id)
-  else next.delete(id)
-  draft.value.properties.option_default = Array.from(next)
-}
-
-const radioDefault = computed({
-  get() {
-    return String(draft.value?.properties.option_default ?? '')
-  },
-  set(v: string) {
-    if (!draft.value) {
-      return
-    }
-
-    draft.value.properties.option_default = v
-  }
-})
-
-const multiDefaultNum = computed({
-  get() {
-    const d = draft.value?.properties.option_default
-
-    return Array.isArray(d) ? d.map((x) => Number(x)) : []
-  },
-  set(v: number[]) {
-    if (!draft.value) {
-      return
-    }
-
-    draft.value.properties.option_default = v
-  }
-})
-
-function syncDt(): void {
-  const d = draft.value
-
-  if (!d || d.type !== 'datetimepicker') {
-    return
-  }
-
-  d.properties.datetime_type = d.datetimeTypeKey ?? 'date'
-}
-
-function add(bt: PaletteType): void {
-  if (props.readonly) {
-    return
-  }
-
-  const row = presetField(bt)
-  emit('update:modelValue', [...props.modelValue, row])
-
-  selFontId.value = row.fontId
-}
-
-function remove(ix: number): void {
-  if (props.readonly) {
-    return
-  }
-
-  const fid = props.modelValue[ix]?.fontId
-  if (debTimer) {
-    clearTimeout(debTimer)
-    debTimer = null
-  }
-
-  if (fid != null && selFontId.value === fid) {
-    flushDraftFor(fid)
-  }
-
-  const list = [...props.modelValue]
-  list.splice(ix, 1)
-  emit('update:modelValue', list)
-
-  selFontId.value =
-    fid != null && selFontId.value === fid
-      ? (list[0]?.fontId ?? null)
-      : list.some((r) => r.fontId === selFontId.value)
-        ? selFontId.value
-        : (list[0]?.fontId ?? null)
-}
-
-function addOptionRow(): void {
-  if (props.readonly) {
-    return
-  }
-
-  const d = draft.value
-
-  if (!d || (d.type !== 'radio' && d.type !== 'checkbox' && d.type !== 'select')) {
-    return
-  }
-
-  Object.assign(d, builderAddOptionRow(d))
-}
-
-function rmOption(oi: number): void {
-  if (props.readonly) {
-    return
-  }
-
-  ensureOpts()
-  const list = [...opts.value]
-  const removed = list[oi]
-  if (removed == null || !draft.value) {
-    return
-  }
-
-  const removedId = Number(removed.id)
-  list.splice(oi, 1)
-
-  if (!list.length) {
-    return
-  }
-
-  opts.value = list
-  const d = draft.value
-
-  if (d.type === 'radio' || (d.type === 'select' && !selMultiToggle.value)) {
-    const ids = new Set(list.map((o) => String(o.id)))
-    const cur = String(d.properties.option_default ?? '')
-    if (!ids.has(cur)) {
-      d.properties.option_default = String(list[0].id)
-    }
-  } else if (d.type === 'checkbox' || (d.type === 'select' && selMultiToggle.value)) {
-    const raw = d.properties.option_default
-    const cur = (Array.isArray(raw) ? raw : []).map((x) => Number(x)).filter((x) => x !== removedId)
-    d.properties.option_default = cur
-  }
-}
+  selectedOrdinal,
+  orderedFields,
+  rowBadge,
+  rawType,
+  effectiveKnown,
+  previewSlice,
+  fieldPreview,
+  onRowClick,
+  add,
+  remove,
+  knownHeaderProp,
+  setHeaderRequired,
+  setHeaderHide,
+  selMultiToggle,
+  opts,
+  useSingleDefaultPicker,
+  useMultiDefaultPicker,
+  radioDefault,
+  multiDefaultHas,
+  onMultiDefaultChange,
+  syncDt,
+  addOptionRow,
+  rmOption
+} = useQuestionnaireBuilder(props, emit)
 </script>
 
 <style scoped lang="scss">

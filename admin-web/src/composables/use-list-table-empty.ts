@@ -8,28 +8,15 @@ export type { ListTableEmptyKind } from '@/types/list-table-empty'
 
 /** 与 useUniListState 中 filters 语义一致：无任何有效筛选条件视为未筛选 */
 export function hasActiveListFilters(filters: Record<string, unknown>): boolean {
-  return Object.values(filters).some((v) => !isBlankFilterValue(v))
-}
-
-function isBlankFilterValue(v: unknown): boolean {
-  if (v === undefined || v === null) {
+  return Object.values(filters).some((v) => {
+    if (v === undefined || v === null || v === '') {
+      return false
+    }
+    if (Array.isArray(v) && v.length === 0) {
+      return false
+    }
     return true
-  }
-  if (v === '') {
-    return true
-  }
-  if (Array.isArray(v) && v.length === 0) {
-    return true
-  }
-  return false
-}
-
-function getAxiosStatus(err: unknown): number | undefined {
-  if (err && typeof err === 'object' && 'response' in err) {
-    const r = (err as { response?: { status?: number } }).response
-    return r?.status
-  }
-  return undefined
+  })
 }
 
 /**
@@ -50,8 +37,11 @@ export function useListTableEmpty(filters: Ref<Record<string, unknown>>) {
 
   const onRequestError = (err: unknown) => {
     hasLoadedOnce.value = true
-    const s = getAxiosStatus(err)
-    requestError.value = s === 403 ? 'forbidden' : 'network'
+    let status: number | undefined
+    if (err && typeof err === 'object' && 'response' in err) {
+      status = (err as { response?: { status?: number } }).response?.status
+    }
+    requestError.value = status === 403 ? 'forbidden' : 'network'
   }
 
   const resetError = () => {

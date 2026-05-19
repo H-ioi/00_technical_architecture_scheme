@@ -8,7 +8,8 @@ import { computed, onMounted, ref, watch } from 'vue'
 import RouteFormModal from './components/route-form-modal.vue'
 
 import { schoolBusCommonApi, schoolBusLineApi } from '@/api'
-import { normalizePaged } from '@/utils/api-response-normalize'
+import { normalizeArray, normalizePaged } from '@/utils/api-response-normalize'
+import { normalizeSchoolIdsOnRow, stripEmptyQueryParams } from '@/utils/school-bus'
 import type { SchoolOptionRecord } from '@/types/modules/membership'
 import type { LineListParams } from '@/types/modules/school-bus-line'
 
@@ -22,71 +23,6 @@ interface NamedEntity {
   enName?: string
   schoolIds?: number[] | number | string
   name?: string
-}
-
-const pickNamedList = (payload: unknown): NamedEntity[] => {
-  if (Array.isArray(payload)) {
-    return payload as NamedEntity[]
-  }
-
-  if (payload && typeof payload === 'object') {
-    const data = (payload as Loose).data
-
-    if (Array.isArray(data)) {
-      return data as NamedEntity[]
-    }
-  }
-
-  return []
-}
-
-const normalizeSchoolIdsField = (row: Loose): void => {
-  if (row.schoolIds == null && row.schoolId != null) {
-    row.schoolIds = [row.schoolId as string | number]
-  }
-
-  const raw = row.schoolIds
-
-  if (Array.isArray(raw)) {
-    row.schoolIds = raw.filter((x) => x !== '' && x != null) as Array<string | number>
-
-    return
-  }
-
-  if (raw == null || raw === '') {
-    row.schoolIds = []
-
-    return
-  }
-
-  if (typeof raw === 'string' && raw.includes(',')) {
-    row.schoolIds = raw
-      .split(',')
-      .map((s) => s.trim())
-      .filter((x) => x !== '')
-
-    return
-  }
-
-  row.schoolIds = [raw as string | number]
-}
-
-const stripEmptyParams = (p: Record<string, unknown>): Record<string, unknown> => {
-  const o: Record<string, unknown> = {}
-
-  for (const [k, v] of Object.entries(p)) {
-    if (v === '' || v === undefined || v === null) {
-      continue
-    }
-
-    if (Array.isArray(v) && v.length === 0) {
-      continue
-    }
-
-    o[k] = v
-  }
-
-  return o
 }
 
 export const useRouteLines = (
@@ -265,7 +201,7 @@ export const useRouteLines = (
   })
 
   const fmtRowRoute = (row: Loose) => {
-    normalizeSchoolIdsField(row)
+    normalizeSchoolIdsOnRow(row)
     const loc = locale()
     row.showLineName = loc === 'en' ? row.enName : row.cnName
     row.showSectionName = loc === 'en' ? row.sectionEnName : row.sectionCnName
@@ -322,7 +258,7 @@ export const useRouteLines = (
       base.schoolIds = defaultSchoolId.value
     }
 
-    const params = stripEmptyParams(base)
+    const params = stripEmptyQueryParams(base)
     const result = await schoolBusLineApi.page.get(params)
     const { list, total } = normalizePaged<Loose>(result)
 
@@ -409,8 +345,8 @@ export const useRouteLines = (
       schoolBusCommonApi.stationList.get()
     ])
 
-    sectionSource.value = pickNamedList(sectionsRaw)
-    stationSource.value = pickNamedList(stationsRaw)
+    sectionSource.value = normalizeArray(sectionsRaw) as NamedEntity[]
+    stationSource.value = normalizeArray(stationsRaw) as NamedEntity[]
   })
 
   watch(

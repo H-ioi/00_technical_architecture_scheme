@@ -42,13 +42,11 @@ export default {
 
   school: {
     pageTitle: '校区配置',
-    pageDesc:
-      '维护校区名称、排序与启用状态；接口与旧系统「基础设置 / 校区配置」一致（字典类型 order_school）。'
+    pageDesc: '维护校区名称、排序及启用状态，供全系统校区下拉引用。'
   },
 
   grade: {
     pageTitle: '年级配置',
-    pageDesc:
-      '维护年级名称、排序与启用状态；接口与旧系统「基础设置 / 年级配置」一致（字典类型 isacommunity_enroll_level）。'
+    pageDesc: '维护年级名称、排序及启用状态，供报名与筛选等场景引用。'
   }
 }

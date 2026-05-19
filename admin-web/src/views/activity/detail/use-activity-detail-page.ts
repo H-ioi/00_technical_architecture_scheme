@@ -5,6 +5,7 @@ import { computed, onMounted, reactive, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 
 import { activityApi, membershipApi, protocolApi, schoolEmailConfigApi } from '@/api'
+import { useActivityYesNoOptions } from '@/composables/use-activity-yes-no-options'
 import { normalizeSchoolEmailConfigList } from '@/api/modules/school-email-config'
 import type { Translate } from '@/types/i18n'
 import type { ActivityDetailFormModel } from '@/types/modules/activity-detail-form'
@@ -15,23 +16,6 @@ import { activityStatusOptions, checkinMethodOptions } from '../list/list.config
 import { buildActivityDetailFormConfig } from './detail-form.config'
 
 type Loose = Record<string, unknown>
-
-function yesNo(t: Translate): UniOption[] {
-  return [
-    { label: t('activity.yes'), value: '1' },
-    { label: t('activity.no'), value: '0' }
-  ]
-}
-
-function normalizeIdArray(raw: unknown): Array<string | number> {
-  if (!Array.isArray(raw)) {
-    if (raw == null || raw === '') {
-      return []
-    }
-    return [raw as string | number]
-  }
-  return raw.filter((x) => x != null && x !== '') as Array<string | number>
-}
 
 function emptyModel(defaultSchool?: string | number): ActivityDetailFormModel {
   return {
@@ -86,6 +70,17 @@ function rowToModel(d: Loose, ticketNotifyDisabledText: string): ActivityDetailF
   const regRaw = Number(d.registrationLimit)
   const reg = Number.isFinite(regRaw) ? regRaw : 0
   const vf = d.visibleScopeFile as Record<string, unknown> | undefined
+
+  const toIdList = (raw: unknown): Array<string | number> => {
+    if (!Array.isArray(raw)) {
+      if (raw == null || raw === '') {
+        return []
+      }
+      return [raw as string | number]
+    }
+    return raw.filter((x) => x != null && x !== '') as Array<string | number>
+  }
+
   return {
     id: d.id as string | number | undefined,
     publisher: String(d.publisher ?? ''),
@@ -106,7 +101,7 @@ function rowToModel(d: Loose, ticketNotifyDisabledText: string): ActivityDetailF
       d.registrationStartTime && d.registrationEndTime
         ? [String(d.registrationStartTime), String(d.registrationEndTime)]
         : [],
-    schoolIds: normalizeIdArray(d.schoolIds),
+    schoolIds: toIdList(d.schoolIds),
     checkinMethod: d.checkinMethod != null ? String(d.checkinMethod) : '0',
     ticketPrice: d.ticketPrice ?? 0,
     recommended: d.recommended != null ? String(d.recommended) : '0',
@@ -117,12 +112,12 @@ function rowToModel(d: Loose, ticketNotifyDisabledText: string): ActivityDetailF
     registrationLimit: reg === 0 ? 1 : reg,
     visibleScope: d.visibleScope != null && d.visibleScope !== '' ? Number(d.visibleScope) : 0,
     visibleScopeFileName: vf?.fileName != null ? String(vf.fileName) : '',
-    emailConfigIds: normalizeIdArray(d.emailConfigIds),
+    emailConfigIds: toIdList(d.emailConfigIds),
     ticketNotifyEmailEnabled:
       d.ticketNotifyEmailEnabled != null ? String(d.ticketNotifyEmailEnabled) : '0',
     ticketNotifyEmails: d.ticketNotifyEmails,
     ticketNotifyEmailsLabel: formatTicketNotifyEmails(d, ticketNotifyDisabledText),
-    wechatPushSchoolIds: normalizeIdArray(d.wechatPushSchoolIds),
+    wechatPushSchoolIds: toIdList(d.wechatPushSchoolIds),
     wechatPushContent: String(d.wechatPushContent ?? ''),
     wechatPushRemark: String(d.wechatPushRemark ?? ''),
     activityStatus:
@@ -214,7 +209,7 @@ export function useActivityDetailPage() {
 
   const isEditRoute = computed(() => route.query.mode === 'edit')
   const isCreate = computed(() => !detailId.value)
-  const ynOpts = computed(() => yesNo(t))
+  const ynOpts = useActivityYesNoOptions()
   const statusOpts = computed(() => activityStatusOptions(t))
   const checkinOpts = computed(() => checkinMethodOptions(t))
   const visibleScopeOpts = computed<UniOption[]>(() => [
@@ -285,6 +280,14 @@ export function useActivityDetailPage() {
       : canSubmit.value
         ? t('activity.eventDetailEditTitle')
         : t('activity.eventDetailTitle')
+  )
+
+  const pageDesc = computed(() =>
+    isCreate.value
+      ? t('activity.eventCreateDesc')
+      : canSubmit.value
+        ? t('activity.eventDetailEditDesc')
+        : t('activity.eventDetailViewDesc')
   )
 
   const uniMode = computed<'view' | 'edit'>(() => (canSubmit.value ? 'edit' : 'view'))
@@ -544,6 +547,7 @@ export function useActivityDetailPage() {
     saving,
     uniMode,
     pageTitle,
+    pageDesc,
     detailId,
     isCreate,
     isEditRoute,

@@ -168,22 +168,18 @@ function ensureAppModuleOption(value: unknown) {
   }
 }
 
-function normalizeSchoolIdForSelect(schoolId: unknown) {
-  if (schoolId == null || schoolId === '') {
-    return undefined
-  }
-  const hit = schoolOptions.value.find((item) => String(item.value) === String(schoolId))
-  return hit?.value as string | number | undefined
-}
-
 async function fillFromDetail(id: string | number) {
   const raw = await schoolEmailConfigApi.detail.get(id)
   const d = normalizeEnvelope(raw) as SchoolEmailConfigRow
   const appModule = String(d.appModule ?? '1')
   ensureAppModuleOption(appModule)
+  const schoolHit =
+    d.schoolId == null || d.schoolId === ''
+      ? undefined
+      : schoolOptions.value.find((item) => String(item.value) === String(d.schoolId))?.value
   form.value = {
     id,
-    schoolId: normalizeSchoolIdForSelect(d.schoolId),
+    schoolId: schoolHit as string | number | undefined,
     email: String(d.email ?? ''),
     appModule
   }

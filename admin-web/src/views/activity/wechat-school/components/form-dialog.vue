@@ -149,20 +149,16 @@ async function loadSchoolOptions() {
   })
 }
 
-function normalizeSchoolIdForSelect(schoolId: unknown) {
-  if (schoolId == null || schoolId === '') {
-    return undefined
-  }
-  const hit = schoolOptions.value.find((item) => String(item.value) === String(schoolId))
-  return hit?.value as string | number | undefined
-}
-
 async function fillFromDetail(id: string | number) {
   const raw = await wechatSchoolInfoApi.detail.get(id)
   const d = normalizeEnvelope(raw) as WechatSchoolInfoRow
+  const schoolHit =
+    d.schoolId == null || d.schoolId === ''
+      ? undefined
+      : schoolOptions.value.find((item) => String(item.value) === String(d.schoolId))?.value
   form.value = {
     id,
-    schoolId: normalizeSchoolIdForSelect(d.schoolId),
+    schoolId: schoolHit as string | number | undefined,
     wechatAppid: String(d.wechatAppid ?? ''),
     wechatSecret: String(d.wechatSecret ?? ''),
     msgTemplateId: String(d.msgTemplateId ?? ''),

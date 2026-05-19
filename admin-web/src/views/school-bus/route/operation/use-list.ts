@@ -6,43 +6,12 @@ import { computed, nextTick, onMounted, ref, watch } from 'vue'
 import { operationStatusMeta, tableCols } from './list.config'
 
 import { membershipApi, schoolBusCommonApi, schoolBusOperationApi } from '@/api'
-import { normalizePaged } from '@/utils/api-response-normalize'
+import { normalizeArray, normalizePaged } from '@/utils/api-response-normalize'
+import { normalizeSchoolIdsOnRow } from '@/utils/school-bus'
 import type { SchoolOptionRecord } from '@/types/modules/membership'
 import type { OperationListParams, OperationRecord } from '@/types/modules/school-bus-operation'
 
 type Loose = Record<string, unknown>
-
-const pickSchoolRecords = (payload: unknown): SchoolOptionRecord[] => {
-  if (Array.isArray(payload)) {
-    return payload as SchoolOptionRecord[]
-  }
-
-  if (payload && typeof payload === 'object') {
-    const data = (payload as Loose).data
-
-    if (Array.isArray(data)) {
-      return data as SchoolOptionRecord[]
-    }
-  }
-
-  return []
-}
-
-const pickNamedList = (payload: unknown): NamedEntity[] => {
-  if (Array.isArray(payload)) {
-    return payload as NamedEntity[]
-  }
-
-  if (payload && typeof payload === 'object') {
-    const data = (payload as Loose).data
-
-    if (Array.isArray(data)) {
-      return data as NamedEntity[]
-    }
-  }
-
-  return []
-}
 
 interface NamedEntity {
   id: string | number
@@ -52,40 +21,6 @@ interface NamedEntity {
   stationName?: string
   schoolIds?: number[] | number | string
   name?: string
-}
-
-const labelOf = (options: { value: string; label: string }[], value: unknown): string =>
-  options.find((x) => String(x.value) === String(value))?.label ?? String(value ?? '--')
-
-const normalizeSchoolIdsField = (row: Loose): void => {
-  if (row.schoolIds == null && row.schoolId != null) {
-    row.schoolIds = [row.schoolId as string | number]
-  }
-
-  const raw = row.schoolIds
-
-  if (Array.isArray(raw)) {
-    row.schoolIds = raw.filter((x) => x !== '' && x != null) as Array<string | number>
-
-    return
-  }
-
-  if (raw == null || raw === '') {
-    row.schoolIds = []
-
-    return
-  }
-
-  if (typeof raw === 'string' && raw.includes(',')) {
-    row.schoolIds = raw
-      .split(',')
-      .map((s) => s.trim())
-      .filter((x) => x !== '')
-
-    return
-  }
-
-  row.schoolIds = [raw as string | number]
 }
 
 const formatOperationRow = (
@@ -100,11 +35,15 @@ const formatOperationRow = (
 
   const next: OperationRecord = { ...row }
 
-  normalizeSchoolIdsField(next as Loose)
+  normalizeSchoolIdsOnRow(next as Loose)
 
   next.sectionName = sectionName || '--'
-  next.statusLabel = labelOf(statusOptions, row.status)
-  next.arrivalStatusLabel = labelOf(statusOptions, row.arrivalStatus)
+  next.statusLabel =
+    statusOptions.find((x) => String(x.value) === String(row.status))?.label ??
+    String(row.status ?? '--')
+  next.arrivalStatusLabel =
+    statusOptions.find((x) => String(x.value) === String(row.arrivalStatus))?.label ??
+    String(row.arrivalStatus ?? '--')
   next.rideDate = row.rideDate ? dayjs(String(row.rideDate)).format('YYYY-MM-DD') : '--'
   next.arrivalTime = row.arrivalTime
     ? dayjs(String(row.arrivalTime)).format('YYYY-MM-DD HH:mm')
@@ -338,15 +277,15 @@ export const useList = () => {
 
   onMounted(async () => {
     const rawSchools = await membershipApi.school.get()
-    schoolRecords.value = pickSchoolRecords(rawSchools)
+    schoolRecords.value = normalizeArray(rawSchools) as SchoolOptionRecord[]
 
     const [linesRaw, stationsRaw] = await Promise.all([
       schoolBusCommonApi.lineList.get(),
       schoolBusCommonApi.stationList.get()
     ])
 
-    lineSource.value = pickNamedList(linesRaw)
-    stationSource.value = pickNamedList(stationsRaw)
+    lineSource.value = normalizeArray(linesRaw) as NamedEntity[]
+    stationSource.value = normalizeArray(stationsRaw) as NamedEntity[]
   })
 
   watch(

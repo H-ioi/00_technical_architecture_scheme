@@ -1,13 +1,14 @@
 import type { UniOption, UniTableAction, UniTableRequest } from 'uni-ui-lib'
 import { toUniOptions, useUniI18n, useUniListState } from 'uni-ui-lib'
-import dayjs from 'dayjs'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { computed, onMounted, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 
-import { activityApi, activityProgramApi, membershipApi } from '@/api'
+import { activityApi, activityProgramApi } from '@/api'
+import { useMembershipSchoolOptions } from '@/composables/use-membership-school-options'
 import type { Translate } from '@/types/i18n'
 import { normalizeEnvelope, normalizePaged } from '@/utils/api-response-normalize'
+import { dateFormat } from '@/utils/tool'
 
 import {
   canEditProgramRow,
@@ -18,31 +19,6 @@ import {
 import { programStatusOptions, programTypeOptions, searchForm, tableCols } from './list.config'
 
 type Row = Record<string, unknown>
-
-function formatOperateTime(value: unknown, emptyText = '—') {
-  if (value == null || value === '') {
-    return emptyText
-  }
-  const d = dayjs(String(value))
-  return d.isValid() ? d.format('YYYY-MM-DD HH:mm') : String(value)
-}
-
-function useMembershipSchoolOptions() {
-  const { locale } = useUniI18n()
-  const schoolOptionsRef = ref<UniOption[]>([])
-
-  const loadSchoolOptions = async () => {
-    const raw = await membershipApi.school.get()
-    const list = Array.isArray(raw) ? raw : []
-    schoolOptionsRef.value = toUniOptions(list as Record<string, unknown>[], {
-      labelKeys:
-        locale.value === 'en' ? ['enName', 'name', 'cnName'] : ['cnName', 'name', 'enName'],
-      valueKey: 'id'
-    })
-  }
-
-  return { schoolOptions: schoolOptionsRef, loadSchoolOptions }
-}
 
 export function useActivityProgramList(
   copyVisible: { value: boolean },
@@ -119,7 +95,9 @@ export function useActivityProgramList(
         loc
       )
       row.programTypeLabel = labelFromOptions(row.programType, typeOptsRow.value, loc)
-      row.operateTime = formatOperateTime(row.operateTime)
+      row.operateTime = row.operateTime
+        ? dateFormat(String(row.operateTime), 'yyyy-MM-dd hh:mm')
+        : '—'
     }
   }
 

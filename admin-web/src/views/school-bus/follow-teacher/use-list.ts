@@ -6,28 +6,13 @@ import { computed, nextTick, onMounted, ref, watch } from 'vue'
 import { searchForm, statusOpts, tableCols } from './list.config'
 
 import { membershipApi, schoolBusFollowTeacherApi } from '@/api'
-import { normalizePaged } from '@/utils/api-response-normalize'
+import { normalizeArray, normalizePaged } from '@/utils/api-response-normalize'
 import type { SchoolOptionRecord } from '@/types/modules/membership'
 import type {
   FollowTeacherListParams,
   FollowTeacherRecord
 } from '@/types/modules/school-bus-follow-teacher'
 import { membershipSchoolLabel, membershipSchoolToOptions } from '@/utils/membership-school'
-
-type Loose = Record<string, unknown>
-
-const pickSchoolRecords = (payload: unknown): SchoolOptionRecord[] => {
-  if (Array.isArray(payload)) {
-    return payload as SchoolOptionRecord[]
-  }
-  if (payload && typeof payload === 'object') {
-    const data = (payload as Loose).data
-    if (Array.isArray(data)) {
-      return data as SchoolOptionRecord[]
-    }
-  }
-  return []
-}
 
 export const useList = () => {
   const { locale, t } = useUniI18n()
@@ -54,11 +39,9 @@ export const useList = () => {
   const formMode = ref<'add' | 'edit' | 'look'>('add')
   const activeRow = ref<FollowTeacherRecord | null>(null)
 
-  const schoolLabel = (id: unknown) => membershipSchoolLabel(schoolRecords.value, id, locale())
-
   const decorate = (row: FollowTeacherRecord): FollowTeacherRecord => ({
     ...row,
-    schoolLabel: schoolLabel(row.school),
+    schoolLabel: membershipSchoolLabel(schoolRecords.value, row.school, locale()),
     lastLoginTime: row.lastLoginTime
       ? dayjs(String(row.lastLoginTime)).format('YYYY-MM-DD HH:mm')
       : '--'
@@ -94,7 +77,7 @@ export const useList = () => {
 
   onMounted(async () => {
     const raw = await membershipApi.school.get()
-    schoolRecords.value = pickSchoolRecords(raw)
+    schoolRecords.value = normalizeArray(raw) as SchoolOptionRecord[]
   })
 
   watch(

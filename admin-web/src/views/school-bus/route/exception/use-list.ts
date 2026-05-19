@@ -6,43 +6,12 @@ import { computed, nextTick, onMounted, ref, watch } from 'vue'
 import { exceptionTypeMeta, tableCols, yesNoMeta } from './list.config'
 
 import { membershipApi, schoolBusCommonApi, schoolBusExceptionApi } from '@/api'
-import { normalizePaged } from '@/utils/api-response-normalize'
+import { normalizeArray, normalizePaged } from '@/utils/api-response-normalize'
+import { normalizeSchoolIdsOnRow } from '@/utils/school-bus'
 import type { SchoolOptionRecord } from '@/types/modules/membership'
 import type { ExceptionListParams, ExceptionRecord } from '@/types/modules/school-bus-exception'
 
 type Loose = Record<string, unknown>
-
-const pickSchoolRecords = (payload: unknown): SchoolOptionRecord[] => {
-  if (Array.isArray(payload)) {
-    return payload as SchoolOptionRecord[]
-  }
-
-  if (payload && typeof payload === 'object') {
-    const data = (payload as Loose).data
-
-    if (Array.isArray(data)) {
-      return data as SchoolOptionRecord[]
-    }
-  }
-
-  return []
-}
-
-const pickNamedList = (payload: unknown): NamedEntity[] => {
-  if (Array.isArray(payload)) {
-    return payload as NamedEntity[]
-  }
-
-  if (payload && typeof payload === 'object') {
-    const data = (payload as Loose).data
-
-    if (Array.isArray(data)) {
-      return data as NamedEntity[]
-    }
-  }
-
-  return []
-}
 
 interface NamedEntity {
   id: string | number
@@ -54,41 +23,6 @@ interface NamedEntity {
 interface CarEntity {
   id: string | number
   carNumber?: string
-}
-
-const labelOf = (options: { value: string; label: string }[], value: unknown): string =>
-  options.find((x) => String(x.value) === String(value))?.label ?? String(value ?? '--')
-
-/** 将接口里的 schoolIds（或单 id / 逗号串）规范为数组。 */
-const normalizeSchoolIdsField = (row: Loose): void => {
-  if (row.schoolIds == null && row.schoolId != null) {
-    row.schoolIds = [row.schoolId as string | number]
-  }
-
-  const raw = row.schoolIds
-
-  if (Array.isArray(raw)) {
-    row.schoolIds = raw.filter((x) => x !== '' && x != null) as Array<string | number>
-
-    return
-  }
-
-  if (raw == null || raw === '') {
-    row.schoolIds = []
-
-    return
-  }
-
-  if (typeof raw === 'string' && raw.includes(',')) {
-    row.schoolIds = raw
-      .split(',')
-      .map((s) => s.trim())
-      .filter((x) => x !== '')
-
-    return
-  }
-
-  row.schoolIds = [raw as string | number]
 }
 
 const formatExceptionRow = (
@@ -104,11 +38,15 @@ const formatExceptionRow = (
 
   const next: ExceptionRecord = { ...row }
 
-  normalizeSchoolIdsField(next as Loose)
+  normalizeSchoolIdsOnRow(next as Loose)
 
   next.sectionName = sectionName || '--'
-  next.exceptionTypeLabel = labelOf(exceptionOpts, row.exceptionType)
-  next.needDispatchLabel = labelOf(yesNoOpts, row.needDispatch)
+  next.exceptionTypeLabel =
+    exceptionOpts.find((x) => String(x.value) === String(row.exceptionType))?.label ??
+    String(row.exceptionType ?? '--')
+  next.needDispatchLabel =
+    yesNoOpts.find((x) => String(x.value) === String(row.needDispatch))?.label ??
+    String(row.needDispatch ?? '--')
   next.exceptionDate = row.exceptionDate
     ? dayjs(String(row.exceptionDate)).format('YYYY-MM-DD')
     : '--'
@@ -374,7 +312,7 @@ export const useList = () => {
 
   onMounted(async () => {
     const rawSchools = await membershipApi.school.get()
-    schoolRecords.value = pickSchoolRecords(rawSchools)
+    schoolRecords.value = normalizeArray(rawSchools) as SchoolOptionRecord[]
 
     const [sectionsRaw, linesRaw, carsRaw] = await Promise.all([
       schoolBusCommonApi.sectionList.get(),
@@ -382,9 +320,9 @@ export const useList = () => {
       schoolBusCommonApi.carinfoList.get()
     ])
 
-    sectionSource.value = pickNamedList(sectionsRaw)
-    lineSource.value = pickNamedList(linesRaw)
-    carSource.value = pickNamedList(carsRaw) as CarEntity[]
+    sectionSource.value = normalizeArray(sectionsRaw) as NamedEntity[]
+    lineSource.value = normalizeArray(linesRaw) as NamedEntity[]
+    carSource.value = normalizeArray(carsRaw) as CarEntity[]
   })
 
   watch(

@@ -24,10 +24,6 @@ async function fetchPagedTotal(getter: () => Promise<unknown>): Promise<number> 
   }
 }
 
-function dayStr(d: dayjs.Dayjs) {
-  return d.format('YYYY-MM-DD')
-}
-
 async function fetchDayAttendanceTotal(dateYmd: string): Promise<number> {
   return fetchPagedTotal(() =>
     attendanceDailyApi.dailyPage.get({
@@ -41,11 +37,13 @@ async function fetchDayAttendanceTotal(dateYmd: string): Promise<number> {
 
 /** 与各列表页同源接口：仅取分页 total，不打满列表。 */
 export async function fetchDashboardStats(): Promise<DashboardStatsPayload> {
-  const today = dayStr(dayjs())
-  const yesterday = dayStr(dayjs().subtract(1, 'day'))
+  const today = dayjs().format('YYYY-MM-DD')
+  const yesterday = dayjs().subtract(1, 'day').format('YYYY-MM-DD')
 
   const trendDates = Array.from({ length: TREND_DAYS }, (_, i) =>
-    dayStr(dayjs().subtract(TREND_DAYS - 1 - i, 'day'))
+    dayjs()
+      .subtract(TREND_DAYS - 1 - i, 'day')
+      .format('YYYY-MM-DD')
   )
 
   const coreAndExtra = await Promise.all([

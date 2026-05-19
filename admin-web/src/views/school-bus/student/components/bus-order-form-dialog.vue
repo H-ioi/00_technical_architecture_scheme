@@ -427,6 +427,7 @@ import {
 import { protocolApi, schoolBusCommonApi, schoolBusOrderApi } from '@/api'
 import type { BusOrderFormModel } from '@/types/modules/school-bus-order'
 import { normalizeEnvelope } from '@/utils/api-response-normalize'
+import { pickLocaleName } from '@/utils/locale-name'
 
 type Loose = Record<string, unknown>
 
@@ -525,19 +526,10 @@ const paymentMethodOpts = computed(() => paymentMethodOptions(t))
 
 const sectionUniOptions = computed<UniOption[]>(() =>
   selectSectionList.value.map((s) => ({
-    label: sectionLabel(s),
+    label: pickLocaleName(s, locale.value),
     value: s.id
   }))
 )
-
-const loc = () => locale()
-
-const sectionLabel = (s: SectionRow) =>
-  loc() === 'en' ? String(s.enName ?? s.cnName ?? '') : String(s.cnName ?? s.enName ?? '')
-const lineLabel = (l: LineRow) =>
-  loc() === 'en' ? String(l.enName ?? l.cnName ?? '') : String(l.cnName ?? l.enName ?? '')
-const stationOptLabel = (s: { enName?: string; cnName?: string }) =>
-  loc() === 'en' ? String(s.enName ?? s.cnName ?? '') : String(s.cnName ?? s.enName ?? '')
 
 const dialogTitle = computed(() =>
   props.mode === 'add' ? t('schoolBus.add') : t('schoolBus.edit')
@@ -800,7 +792,7 @@ const loadDetail = async (id: string | number) => {
     if (weekRow?.stationPrices) {
       const sp = weekRow.stationPrices.find((x) => String(x.id) === String(stPriceId))
       const dto = sp?.busStationDTO
-      stationName = loc() === 'en' ? String(dto?.enName ?? '') : String(dto?.cnName ?? '')
+      stationName = pickLocaleName((dto ?? {}) as Record<string, unknown>, locale.value)
     }
     const lineTypeLabel =
       lineTypeOpts.value.find((o) => String(o.value) === String(item.studentLineType))?.label ?? ''
@@ -813,7 +805,10 @@ const loadDetail = async (id: string | number) => {
     }
     return {
       lineId: item.lineId,
-      lineName: loc() === 'en' ? String(item.lineEnName ?? '') : String(item.lineCnName ?? ''),
+      lineName: pickLocaleName(
+        { enName: item.lineEnName, cnName: item.lineCnName },
+        locale.value
+      ),
       stationId: item.stationId,
       stationPriceId: stPriceId,
       stationName,
@@ -1113,7 +1108,7 @@ const onRouteLineChange = async (lineId: string | number | undefined) => {
   }
   selectLineList.value.forEach((item) => {
     if (String(item.id) === String(lineId)) {
-      routeForm.value.lineName = lineLabel(item)
+      routeForm.value.lineName = pickLocaleName(item, locale.value)
     }
   })
   carList.value = pickArray(
@@ -1159,7 +1154,7 @@ const onStationChange = (priceId: string | number | undefined) => {
   const hit = routeStationSelectList.value.find((s) => String(s.id) === String(priceId))
   if (hit) {
     routeForm.value.stationId = hit.stationId
-    routeForm.value.stationName = stationOptLabel(hit)
+    routeForm.value.stationName = pickLocaleName(hit, locale.value)
   }
 }
 
@@ -1175,7 +1170,7 @@ const onRidingRangeChange = (val: string[] | null) => {
 
 const lineSelectOptions = computed<UniOption[]>(() =>
   selectLineList.value.map((l) => ({
-    label: lineLabel(l),
+    label: pickLocaleName(l, locale.value),
     value: l.id
   }))
 )
@@ -1196,7 +1191,7 @@ const weekSelectOptions = computed<UniOption[]>(() =>
 
 const stationPriceSelectOptions = computed<UniOption[]>(() =>
   routeStationSelectList.value.map((s) => ({
-    label: stationOptLabel(s),
+    label: pickLocaleName(s, locale.value),
     value: s.id
   }))
 )
@@ -1313,7 +1308,7 @@ const submitRoute = async () => {
   const weekHit = weekDaysList.value.find((w) => String(w.id) === String(rf.weekDaysId))
   const row: RouteRow = {
     ...rf,
-    lineName: rf.lineName ?? (lineHit ? lineLabel(lineHit) : ''),
+    lineName: rf.lineName ?? (lineHit ? pickLocaleName(lineHit, locale.value) : ''),
     weekDaysLabel: rf.weekDaysLabel ?? (weekHit ? String(weekHit.weekDays ?? '') : ''),
     ridingWeekDay: ridingWeekDayStr,
     ridingRange:

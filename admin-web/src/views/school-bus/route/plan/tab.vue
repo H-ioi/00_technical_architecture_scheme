@@ -246,6 +246,7 @@ import { membershipApi, schoolBusLineApi, schoolBusStationApi } from '@/api'
 import ListTableEmpty from '@/components/list-table-empty.vue'
 import { useListTableEmpty } from '@/composables/use-list-table-empty'
 import { useTabQuerySync } from '@/composables/use-tab-query-sync'
+import { normalizeArray } from '@/utils/api-response-normalize'
 import type { SchoolOptionRecord } from '@/types/modules/membership'
 
 import RouteFormModal from './components/route-form-modal.vue'
@@ -256,22 +257,6 @@ import { useStationSection } from './use-station-section'
 import { useTermSection } from './use-term-section'
 
 type Loose = Record<string, unknown>
-
-const pickSchoolRecords = (payload: unknown): SchoolOptionRecord[] => {
-  if (Array.isArray(payload)) {
-    return payload as SchoolOptionRecord[]
-  }
-
-  if (payload && typeof payload === 'object') {
-    const data = (payload as Loose).data
-
-    if (Array.isArray(data)) {
-      return data as SchoolOptionRecord[]
-    }
-  }
-
-  return []
-}
 
 const { locale, t } = useUniI18n()
 
@@ -427,7 +412,7 @@ const stationDetailRowText = (prop: UniTableColumn['prop']) => {
 
 onMounted(async () => {
   const raw = await membershipApi.school.get()
-  schoolRecords.value = pickSchoolRecords(raw)
+  schoolRecords.value = normalizeArray(raw) as SchoolOptionRecord[]
 })
 
 watch(

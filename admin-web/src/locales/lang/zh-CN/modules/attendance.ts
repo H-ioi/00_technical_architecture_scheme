@@ -80,7 +80,7 @@ export default {
 
   student: {
     pageTitle: '学生考勤',
-    pageDesc: '按校区、学号、年级与日期区间查询学生入校离校记录；导出与旧系统权限一致。',
+    pageDesc: '按校区、学号、年级与日期区间查询学生入校、离校记录，支持导出。',
     statusNoRecord: '无记录',
     statusOnSite: '入校',
     statusOffSite: '离校',
@@ -91,7 +91,7 @@ export default {
   daily: {
     pageTitle: '学生每日考勤',
     pageDesc:
-      '按校区、学号、校巴/住宿、日期区间、来源与状态查询每日考勤；接口与旧 `holiday.js` 一致（导出无单独权限码）。',
+      '按校区、学号、校巴/住宿、日期区间、来源与状态查询学生每日考勤汇总，支持导出。',
     date: '出勤日期',
     attendanceTime: '考勤时间',
     mbLesson: '第{period}节课',
@@ -109,7 +109,7 @@ export default {
 
   schoolAtt: {
     pageTitle: '校园考勤',
-    pageDesc: '按校区、部门、人员与通道筛选教职员工考勤记录；导出权限与旧系统一致。',
+    pageDesc: '按校区、部门、人员与通道筛选教职员工考勤记录，支持导出。',
     entryOpenType: '入校类型',
     leavingOpenType: '离校类型',
     entryChannel: '入校通道',
@@ -122,8 +122,7 @@ export default {
 
   access: {
     pageTitle: '门禁记录',
-    pageDesc:
-      '按校区、部门、人员与通道查询门禁刷卡记录；旧版列表未开放导出按钮，此处保持一致。',
+    pageDesc: '按校区、部门、人员与通道查询门禁刷卡与开门结果记录。',
     enterOrExit: '状态',
     openType: '开门类型',
     openResult: '开门结果',
@@ -135,8 +134,7 @@ export default {
 
   wechatOpenid: {
     pageTitle: '微信 OpenID',
-    pageDesc:
-      '绑定账号与微信公众号身份的状态维护；批量归档/使用接口与旧系统一致（导出按钮旧版未开放）。',
+    pageDesc: '维护账号与微信公众号 OpenID 的绑定关系及归档、启用状态。',
     archive: '归档',
     activate: '使用中',
     activeOption: '使用中',
@@ -147,8 +145,7 @@ export default {
 
   wechatNotice: {
     pageTitle: '微信通知',
-    pageDesc:
-      '查看推送微信通知的记录；筛选「状态」与旧页一致（成功=0、失败=1）；列表未开放导出。',
+    pageDesc: '查看向家长推送的微信通知记录及发送成功、失败状态。',
     sendOk: '成功',
     sendFail: '失败',
     personName: '姓名'
@@ -156,8 +153,7 @@ export default {
 
   holiday: {
     pageTitle: '请假管理',
-    pageDesc:
-      '分为「请假」「销假」两个 Tab：请假列表对齐 `GET /attendance/holiday/page`，销假列表对齐 `GET /attendance/holiday-return/return-page`（旧 `listHolidayEnd`）；页面结构参考校车「路线规划」聚合 Tab。',
+    pageDesc: '管理学生请假与销假申请，支持撤销流程并查看审批状态。',
     tabLeave: '请假',
     tabReturn: '销假',
     withdraw: '撤销',
@@ -229,8 +225,7 @@ export default {
 
   holidayConfig: {
     pageTitle: '请假模块配置',
-    pageDesc:
-      '维护学校、部门、年级与通知邮箱；接口对齐 `GET/POST /attendance/sys/config/*`（旧 `config.vue`）。',
+    pageDesc: '按学校、部门维护请假审批相关的通知邮箱与适用年级范围。',
     school: '学校',
     grades: '年级',
     department: '部门',
@@ -251,7 +246,7 @@ export default {
 
   holidayPass: {
     title: '放行条管理',
-    pageDesc: '对齐旧 `pass.vue`：`GET /attendance/leave/pass/page`，权限码 `pass-add` 等。',
+    pageDesc: '管理学生离校放行条，支持新增、批量生成与作废。',
     phDorm: '是否住宿',
     colStudentNo: '学号',
     releasedBy: '放行人',
@@ -284,7 +279,7 @@ export default {
 
   holidayFlow: {
     pageTitle: '流程设计',
-    pageDesc: '流程定义建模与已部署流程；对齐旧 `flow.vue` / `flowdef.vue` / `procdef.vue`。',
+    pageDesc: '配置请假与销假审批流程的定义、部署及版本管理。',
 
     tabModel: '流程定义',
     tabDeployed: '流程部署',
@@ -346,7 +341,7 @@ export default {
 
   holidayTask: {
     pageTitle: '任务处理',
-    pageDesc: '待办 / 已办 / 我的发起；对齐旧 `task.vue` 与 `flow/instance/*`。',
+    pageDesc: '处理请假相关待办、已办任务，并查看本人发起的流程实例。',
 
     tabTodo: '我的待办',
     tabDone: '我的已办',

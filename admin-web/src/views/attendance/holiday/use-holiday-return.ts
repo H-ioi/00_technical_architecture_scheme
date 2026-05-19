@@ -9,9 +9,10 @@ import {
   returnTableCols,
   type AttendanceHolidayDetailViewModel
 } from './list.config'
-import { formatMaybeDateTime, normalizeHolidayReturnRow } from './holiday-utils'
+import { normalizeHolidayReturnRow } from './holiday-utils'
 
 import { useDialogDetailLoading } from '@/composables/use-dialog-detail-loading'
+import { dateFormat } from '@/utils/tool'
 import { normalizeEnvelope, normalizePaged } from '@/utils/api-response-normalize'
 import { attendanceHolidayApi } from '@/api'
 import type {
@@ -21,16 +22,6 @@ import type {
 import type { SchoolOptionRecord } from '@/types/modules/membership'
 
 type Loose = Record<string, unknown>
-
-/** 打开请假详情：销假行优先带 `holidayId`，否则用列表 `id`。 */
-const resolveHolidayDetailId = (row: AttendanceHolidayRecord): string | number | undefined => {
-  const r = row as Loose
-  const hid = r.holidayId ?? r.holiday_id ?? r.leaveId ?? r.leave_id
-  if (hid !== undefined && hid !== null && hid !== '') {
-    return hid as string | number
-  }
-  return row.id
-}
 
 /** 销假 Tab：`GET /attendance/holiday-return/return-page`（旧「销假管理」）；筛选项仅学校 + 学号/姓名。 */
 export const useHolidayReturn = (schoolRecords: Ref<SchoolOptionRecord[]>) => {
@@ -62,7 +53,7 @@ export const useHolidayReturn = (schoolRecords: Ref<SchoolOptionRecord[]>) => {
 
   const decorateRow = (raw: Loose): AttendanceHolidayRecord => ({
     ...(raw as AttendanceHolidayRecord),
-    createdAt: formatMaybeDateTime(raw.createdAt)
+    createdAt: dateFormat(String(raw.createdAt ?? ''))
   })
 
   const loadData: UniTableRequest = async ({ pageNo, pageSize, filters: f }) => {
@@ -85,7 +76,10 @@ export const useHolidayReturn = (schoolRecords: Ref<SchoolOptionRecord[]>) => {
   }
 
   const openDetail = async (row: AttendanceHolidayRecord) => {
-    const detailId = resolveHolidayDetailId(row)
+    const r = row as Loose
+    const hid = r.holidayId ?? r.holiday_id ?? r.leaveId ?? r.leave_id
+    const detailId =
+      hid !== undefined && hid !== null && hid !== '' ? (hid as string | number) : row.id
     if (detailId == null || detailId === '') {
       return
     }
@@ -102,7 +96,12 @@ export const useHolidayReturn = (schoolRecords: Ref<SchoolOptionRecord[]>) => {
     {
       label: t('attendance.detail'),
       visible: (row) => {
-        const id = resolveHolidayDetailId(row as AttendanceHolidayRecord)
+        const r = row as Loose
+        const hid = r.holidayId ?? r.holiday_id ?? r.leaveId ?? r.leave_id
+        const id =
+          hid !== undefined && hid !== null && hid !== ''
+            ? (hid as string | number)
+            : (row as AttendanceHolidayRecord).id
         return id != null && id !== ''
       },
       onClick: (row) => openDetail(row as AttendanceHolidayRecord)

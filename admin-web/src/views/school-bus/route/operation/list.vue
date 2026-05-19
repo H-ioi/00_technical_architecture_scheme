@@ -12,7 +12,7 @@
         <el-button v-uni-permission="'busoperation_import'" @click="downloadImportTemplate">
           {{ $t('schoolBus.downloadTemplate') }}
         </el-button>
-        <el-button v-uni-permission="'busoperation_import'" @click="pickImport">
+        <el-button v-uni-permission="'busoperation_import'" @click="fileRef?.click()">
           {{ $t('schoolBus.import') }}
         </el-button>
         <el-button v-uni-permission="'busoperation_add'" type="primary" @click="openForm('add')">
@@ -80,7 +80,7 @@
     <el-dialog v-model="detailVisible" width="900px" :title="$t('schoolBus.look')">
       <el-descriptions v-if="detailRecord" :column="2" border>
         <el-descriptions-item v-for="col in columns" :key="String(col.prop)" :label="col.label">
-          {{ detailRowText(col.prop) }}
+          {{ detailCellDisplay(detailRecord, col.prop) }}
         </el-descriptions-item>
       </el-descriptions>
     </el-dialog>
@@ -98,6 +98,8 @@ import ListTableEmpty from '@/components/list-table-empty.vue'
 import { useListTableEmpty } from '@/composables/use-list-table-empty'
 import type { OperationRecord } from '@/types/modules/school-bus-operation'
 import OperationForm from './components/form.vue'
+import { detailCellDisplay, isSpreadsheetFilename } from '@/utils/school-bus'
+
 import { useList } from './use-list'
 
 const { t } = useUniI18n()

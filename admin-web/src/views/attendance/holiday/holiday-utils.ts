@@ -1,5 +1,3 @@
-import dayjs from 'dayjs'
-
 type Loose = Record<string, unknown>
 
 /** 请假分页行：后端可能仅返回 snake_case，操作列依赖 `procId` / `id`。 */
@@ -25,14 +23,6 @@ export const normalizeHolidayListRow = (raw: Loose): Loose => {
     out.dataFrom = out.data_from
   }
   return out
-}
-
-export const formatMaybeDateTime = (value: unknown) => {
-  if (value == null || value === '') {
-    return ''
-  }
-  const d = dayjs(String(value))
-  return d.isValid() ? d.format('YYYY-MM-DD HH:mm:ss') : String(value)
 }
 
 /** 嵌套 VO：销假分页常与请假字段拆开，需要摊平后再走请假同款表格列。 */
@@ -66,6 +56,22 @@ const normalizeScopeLikeToArray = (scope: unknown): unknown => {
     return s.split(/[,，]/).map((x) => x.trim()).filter(Boolean)
   }
   return scope
+}
+
+/** 在 row 上按 key 顺序取第一个非空字段（销假/请假行归一化共用） */
+const firstNonEmptyField = (row: Loose, ...keys: string[]): unknown => {
+  for (const k of keys) {
+    const v = row[k]
+    if (v !== undefined && v !== null && v !== '') {
+      return v
+    }
+  }
+  return undefined
+}
+
+const firstNonEmptyString = (row: Loose, ...keys: string[]): string | undefined => {
+  const v = firstNonEmptyField(row, ...keys)
+  return v === undefined ? undefined : String(v)
 }
 
 const normalizeDateLimitLike = (dateLimit: unknown): unknown => {
@@ -106,23 +112,8 @@ export const normalizeHolidayReturnRow = (raw: Loose): Loose => {
     }
   }
 
-  const pickScalar = (...keys: string[]): unknown => {
-    for (const k of keys) {
-      const v = merged[k]
-      if (v === undefined || v === null || v === '') {
-        continue
-      }
-      return v
-    }
-    return undefined
-  }
-
-  const pickStr = (...keys: string[]): string | undefined => {
-    const v = pickScalar(...keys)
-    return v === undefined ? undefined : String(v)
-  }
-
-  const admisson = pickStr(
+  const admisson = firstNonEmptyString(
+    merged,
     'admissonNo',
     'admissionNo',
     'studentAdmissionNo',
@@ -134,9 +125,17 @@ export const normalizeHolidayReturnRow = (raw: Loose): Loose => {
     'student_no'
   )
 
-  const type = pickStr('type', 'holidayType', 'leaveType', 'holiday_type', 'leave_type')
+  const type = firstNonEmptyString(
+    merged,
+    'type',
+    'holidayType',
+    'leaveType',
+    'holiday_type',
+    'leave_type'
+  )
 
-  const reason = pickStr(
+  const reason = firstNonEmptyString(
+    merged,
     'reason',
     'holidayReason',
     'leaveReason',
@@ -146,37 +145,65 @@ export const normalizeHolidayReturnRow = (raw: Loose): Loose => {
     'reason_desc'
   )
 
-  let scope = pickScalar('scope', 'holidayScope', 'scopeList', 'scopes')
+  let scope = firstNonEmptyField(merged, 'scope', 'holidayScope', 'scopeList', 'scopes')
   scope = normalizeScopeLikeToArray(scope)
 
-  let weekDays = pickScalar('weekDays', 'week_days', 'weekDayList')
+  let weekDays = firstNonEmptyField(merged, 'weekDays', 'week_days', 'weekDayList')
   weekDays = normalizeScopeLikeToArray(weekDays)
 
-  let dateLimit = pickScalar('dateLimit', 'date_limit', 'timeSlot', 'time_slot')
+  let dateLimit = firstNonEmptyField(merged, 'dateLimit', 'date_limit', 'timeSlot', 'time_slot')
   dateLimit = normalizeDateLimitLike(dateLimit)
 
-  const bt = pickStr('beginTime', 'startDate', 'begin_time', 'start_date', 'leaveBeginTime')
-  const et = pickStr('endTime', 'endDate', 'end_time', 'end_date', 'leaveEndTime')
+  const bt = firstNonEmptyString(
+    merged,
+    'beginTime',
+    'startDate',
+    'begin_time',
+    'start_date',
+    'leaveBeginTime'
+  )
+  const et = firstNonEmptyString(
+    merged,
+    'endTime',
+    'endDate',
+    'end_time',
+    'end_date',
+    'leaveEndTime'
+  )
   const dateString =
-    pickStr(
+    firstNonEmptyString(
+      merged,
       'dateString',
       'date_range_text',
       'leaveDateRange',
       'dateRangeText',
       'leave_date_range'
-    ) ??
-    (bt && et ? `${bt} ~ ${et}` : undefined)
+    ) ?? (bt && et ? `${bt} ~ ${et}` : undefined)
 
-  const isInfectious = pickStr('isInfectious', 'is_infectious', 'infectious')
-  const fixed = pickStr('fixed', 'isFixed', 'fixed_leave', 'fixedLeave')
+  const isInfectious = firstNonEmptyString(merged, 'isInfectious', 'is_infectious', 'infectious')
+  const fixed = firstNonEmptyString(merged, 'fixed', 'isFixed', 'fixed_leave', 'fixedLeave')
 
-  const status = pickStr('status', 'holidayStatus', 'approvalStatus', 'holiday_status')
+  const status = firstNonEmptyString(
+    merged,
+    'status',
+    'holidayStatus',
+    'approvalStatus',
+    'holiday_status'
+  )
 
-  const createdAt =
-    pickScalar('createdAt', 'created_at', 'createTime', 'create_time', 'gmtCreate', 'gmt_create')
+  const createdAt = firstNonEmptyField(
+    merged,
+    'createdAt',
+    'created_at',
+    'createTime',
+    'create_time',
+    'gmtCreate',
+    'gmt_create'
+  )
 
   const holidayId =
-    pickScalar('holidayId', 'holiday_id', 'leaveId', 'leave_id', 'holidayBizId') ?? merged.holidayId
+    firstNonEmptyField(merged, 'holidayId', 'holiday_id', 'leaveId', 'leave_id', 'holidayBizId') ??
+    merged.holidayId
 
   return {
     ...merged,

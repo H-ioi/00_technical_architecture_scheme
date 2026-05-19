@@ -1,14 +1,14 @@
-import type { UniFormConfig, UniFormContext, UniFormSection, UniOption } from 'uni-ui-lib'
+import type { UniFormConfig, UniFormSection, UniOption } from 'uni-ui-lib'
 
 import type { Translate } from '@/types/i18n'
-
-const optionLabel = (options: UniOption[], value: unknown) =>
-  options.find((item) => String(item.value) === String(value))?.label ?? String(value ?? '')
 
 const optionLabels = (options: UniOption[], value: unknown) => {
   const values = Array.isArray(value) ? value : value == null || value === '' ? [] : [value]
   return values
-    .map((item) => optionLabel(options, item))
+    .map((item) => {
+      const hit = options.find((o) => String(o.value) === String(item))
+      return hit?.label ?? String(item ?? '')
+    })
     .filter(Boolean)
     .join(', ')
 }
@@ -16,7 +16,6 @@ const optionLabels = (options: UniOption[], value: unknown) => {
 const rangeLabel = (value: unknown) =>
   Array.isArray(value) && value.length === 2 ? `${value[0] || ''} - ${value[1] || ''}` : ''
 
-const modelValue = (context: UniFormContext, key: string) => context.model[key]
 const fullCol = { span: 24 }
 const halfCol = { xs: 24, lg: 12 }
 const thirdCol = { xs: 24, sm: 12, lg: 8 }

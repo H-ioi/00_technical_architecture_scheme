@@ -81,7 +81,7 @@ export default {
   student: {
     pageTitle: 'Student attendance',
     pageDesc:
-      'Filter by campus, admission number, grade and date range; export aligns with legacy permission.',
+      'Filter student entry and exit records by campus, ID, grade, and date range; export supported.',
     statusNoRecord: 'No record',
     statusOnSite: 'On site',
     statusOffSite: 'Off site',
@@ -92,7 +92,7 @@ export default {
   daily: {
     pageTitle: 'Daily student attendance',
     pageDesc:
-      'Filter by campus, admission No., bus/boarding, date range, source and status; APIs match legacy `holiday.js` (export had no separate permission).',
+      'View daily student attendance by campus, ID, bus/boarding, date range, source, and status; export supported.',
     date: 'Date',
     attendanceTime: 'Time',
     mbLesson: 'Period {period}',
@@ -111,7 +111,7 @@ export default {
   schoolAtt: {
     pageTitle: 'Campus attendance',
     pageDesc:
-      'Filter staff attendance by campus, department, person and channels; export matches legacy permission.',
+      'Filter staff attendance by campus, department, person, and channels; export supported.',
     entryOpenType: 'Entry type',
     leavingOpenType: 'Exit type',
     entryChannel: 'Entry channel',
@@ -124,8 +124,7 @@ export default {
 
   access: {
     pageTitle: 'Access records',
-    pageDesc:
-      'Filter door access by campus, department, person and channel; legacy UI had export commented out — same here.',
+    pageDesc: 'Search door access swipes by campus, department, person, channel, and result.',
     enterOrExit: 'Direction',
     openType: 'Open type',
     openResult: 'Result',
@@ -137,8 +136,7 @@ export default {
 
   wechatOpenid: {
     pageTitle: 'WeChat OpenID',
-    pageDesc:
-      'Campus member binding state for WeChat OpenID; batch archive/activate matches legacy (export was disabled in legacy UI).',
+    pageDesc: 'Maintain WeChat OpenID bindings and archive or activate linked accounts.',
     archive: 'Archive',
     activate: 'Activate',
     activeOption: 'Active',
@@ -149,8 +147,7 @@ export default {
 
   wechatNotice: {
     pageTitle: 'WeChat notifications',
-    pageDesc:
-      'Notification delivery log; send status filter matches legacy (success=0, fail=1); export disabled like legacy UI.',
+    pageDesc: 'Review WeChat notification delivery logs and success or failure status.',
     sendOk: 'Success',
     sendFail: 'Fail',
     personName: 'Name'
@@ -158,8 +155,7 @@ export default {
 
   holiday: {
     pageTitle: 'Leave requests',
-    pageDesc:
-      'Two tabs — leave list (`GET /attendance/holiday/page`) and return/cancel list (`GET /attendance/holiday-return/return-page`, legacy `listHolidayEnd`). Layout follows the school-bus route planning tab page.',
+    pageDesc: 'Manage student leave and return requests, revoke workflows, and track approval status.',
     tabLeave: 'Leave',
     tabReturn: 'Return',
     withdraw: 'Revoke',
@@ -231,8 +227,7 @@ export default {
 
   holidayConfig: {
     pageTitle: 'Leave module config',
-    pageDesc:
-      'School, department, grades and notification emails; `GET/POST /attendance/sys/config/*` (legacy `config.vue`).',
+    pageDesc: 'Configure notification emails and grade scope for leave approval by school and department.',
     school: 'School',
     grades: 'Grades',
     department: 'Department',
@@ -253,8 +248,7 @@ export default {
 
   holidayPass: {
     title: 'Gate pass',
-    pageDesc:
-      'Legacy `pass.vue`; `GET /attendance/leave/pass/page`; permissions `pass-add`, etc.',
+    pageDesc: 'Manage campus exit passes: create, batch generate, and void student gate passes.',
     phDorm: 'Boarding',
     colStudentNo: 'Admission No.',
     releasedBy: 'Released by',
@@ -287,7 +281,7 @@ export default {
 
   holidayFlow: {
     pageTitle: 'Workflow',
-    pageDesc: 'Definitions and deployments; legacy `flow.vue` / `flowdef.vue` / `procdef.vue`.',
+    pageDesc: 'Design, deploy, and version leave and return approval workflow definitions.',
 
     tabModel: 'Definitions',
     tabDeployed: 'Deployments',
@@ -350,7 +344,7 @@ export default {
 
   holidayTask: {
     pageTitle: 'Tasks',
-    pageDesc: 'Todo / done / started; legacy `task.vue` and `flow/instance/*`.',
+    pageDesc: 'Handle leave-related todo and completed tasks, and view processes you started.',
 
     tabTodo: 'My todo',
     tabDone: 'My done',

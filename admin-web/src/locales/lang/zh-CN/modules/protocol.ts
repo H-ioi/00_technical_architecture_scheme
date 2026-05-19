@@ -47,5 +47,6 @@ export default {
   phStatus: '请选择状态',
 
   detailTitle: '协议详情',
+  detailPageDesc: '查看协议正文、签署要求与当前启停状态。',
   signRecords: '签署记录'
 }

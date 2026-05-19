@@ -46,5 +46,6 @@ export default {
   phStatus: 'Select status',
 
   detailTitle: 'Protocol Detail',
+  detailPageDesc: 'View protocol content, signing rules, and current enabled status.',
   signRecords: 'Signature Records'
 }

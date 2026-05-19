@@ -1,0 +1,63 @@
+type Loose = Record<string, unknown>
+
+/** 列表行 schoolIds：兼容 schoolId、逗号分隔串、单值 */
+export function normalizeSchoolIdsOnRow(row: Loose): void {
+  if (row.schoolIds == null && row.schoolId != null) {
+    row.schoolIds = [row.schoolId as string | number]
+  }
+
+  const raw = row.schoolIds
+
+  if (Array.isArray(raw)) {
+    row.schoolIds = raw.filter((x) => x !== '' && x != null) as Array<string | number>
+    return
+  }
+
+  if (raw == null || raw === '') {
+    row.schoolIds = []
+    return
+  }
+
+  if (typeof raw === 'string' && raw.includes(',')) {
+    row.schoolIds = raw
+      .split(',')
+      .map((s) => s.trim())
+      .filter((x) => x !== '')
+    return
+  }
+
+  row.schoolIds = [raw as string | number]
+}
+
+/** 校车模块 Excel 导入文件名 */
+export function isSpreadsheetFilename(name: string): boolean {
+  const lower = name.toLowerCase()
+  return lower.endsWith('.xls') || lower.endsWith('.xlsx')
+}
+
+/** 请求参数去掉空串 / 空数组 */
+export function stripEmptyQueryParams(p: Record<string, unknown>): Record<string, unknown> {
+  const o: Record<string, unknown> = {}
+  for (const [k, v] of Object.entries(p)) {
+    if (v === '' || v === undefined || v === null) {
+      continue
+    }
+    if (Array.isArray(v) && v.length === 0) {
+      continue
+    }
+    o[k] = v
+  }
+  return o
+}
+
+/** 详情 descriptions 单元格：空值显示 -- */
+export function detailCellDisplay(
+  record: Loose | null | undefined,
+  prop: string | number | symbol | null | undefined
+): string {
+  if (!record || prop == null) {
+    return ''
+  }
+  const val = record[String(prop)]
+  return val == null || val === '' ? '--' : String(val)
+}

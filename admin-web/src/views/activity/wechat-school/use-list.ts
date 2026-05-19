@@ -1,32 +1,25 @@
 import type { UniOption, UniTableAction, UniTableRequest } from 'uni-ui-lib'
 import { toUniOptions, useUniI18n, useUniListState } from 'uni-ui-lib'
-import dayjs from 'dayjs'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { computed, onMounted, ref } from 'vue'
 
-import { membershipApi, wechatSchoolInfoApi } from '@/api'
+import { useMembershipSchoolOptions } from '@/composables/use-membership-school-options'
+import { wechatSchoolInfoApi } from '@/api'
 import type { Translate } from '@/types/i18n'
 import type { WechatSchoolInfoRow } from '@/types/modules/wechat-school-info'
 import { normalizePaged } from '@/utils/api-response-normalize'
+import { dateFormat } from '@/utils/tool'
 
 import type FormDialog from './components/form-dialog.vue'
 import { activeOptions, searchForm, tableCols } from './list.config'
 
 type DialogRef = { value: InstanceType<typeof FormDialog> | null }
 
-function formatTimestamp(value: unknown, emptyText = '—') {
-  if (value == null || value === '') {
-    return emptyText
-  }
-  const d = dayjs(String(value))
-  return d.isValid() ? d.format('YYYY-MM-DD HH:mm') : String(value)
-}
-
 export function useWechatSchoolList(formDlg: DialogRef) {
   const { t, locale } = useUniI18n()
   const tr = t as Translate
 
-  const schoolOptions = ref<UniOption[]>([])
+  const { schoolOptions, loadSchoolOptions } = useMembershipSchoolOptions()
 
   const { queryModel, filters, handleLoadSuccess, reset, search, tableRef } = useUniListState({
     initialFilters: { schoolId: undefined, keyword: '' }
@@ -41,21 +34,15 @@ export function useWechatSchoolList(formDlg: DialogRef) {
       selectedRows.value.map((row) => row.id).filter((id) => id != null) as Array<string | number>
   )
 
-  const loadSchoolOptions = async () => {
-    const raw = await membershipApi.school.get()
-    const list = Array.isArray(raw) ? raw : []
-    schoolOptions.value = toUniOptions(list as Record<string, unknown>[], {
-      labelKeys:
-        locale.value === 'en' ? ['enName', 'name', 'cnName'] : ['cnName', 'name', 'enName'],
-      valueKey: 'id'
-    })
-  }
-
   const decorateRows = (list: WechatSchoolInfoRow[]) => {
     for (const row of list) {
       row.active = String(row.active ?? '')
-      row.createdAt = formatTimestamp(row.createdAt)
-      row.updatedAt = formatTimestamp(row.updatedAt)
+      row.createdAt = row.createdAt
+        ? dateFormat(String(row.createdAt), 'yyyy-MM-dd hh:mm')
+        : '—'
+      row.updatedAt = row.updatedAt
+        ? dateFormat(String(row.updatedAt), 'yyyy-MM-dd hh:mm')
+        : '—'
     }
   }
 

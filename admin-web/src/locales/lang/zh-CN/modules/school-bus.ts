@@ -51,7 +51,7 @@ export default {
 
   routePlan: {
     pageTitle: '路线规划',
-    pageDesc: '维护路线、学期与站点基础数据（与旧版三 Tab 一致）。',
+    pageDesc: '维护校车路线、学期与站点基础数据，含路线排班与票价配置。',
     tabRoutes: '全部路线',
     tabTerm: '学期配置',
     tabStation: '站点配置',
@@ -121,7 +121,7 @@ export default {
 
   routeOperation: {
     pageTitle: '路线运营',
-    pageDesc: '查询与维护校车运营记录；字段与权限与旧系统一致。',
+    pageDesc: '查询与维护校车每日运营到站记录。',
     colId: 'ID',
     colStatus: '状态',
     colArrivalStatusLabel: '实际状态',

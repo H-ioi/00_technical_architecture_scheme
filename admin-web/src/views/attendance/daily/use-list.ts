@@ -1,5 +1,4 @@
 import type { UniTableRequest } from 'uni-ui-lib'
-import dayjs from 'dayjs'
 import { toUniOptions, useUniI18n, useUniListState } from 'uni-ui-lib'
 import { computed, ref } from 'vue'
 
@@ -13,56 +12,13 @@ import {
 
 import { attendanceDailyApi } from '@/api'
 import { normalizeArray, normalizePaged } from '@/utils/api-response-normalize'
-import type { Translate } from '@/types/i18n'
+import { dateFormat } from '@/utils/tool'
 import type { AttendanceDailyListParams, AttendanceDailyRecord } from '@/types/modules/attendance-daily'
 
 type Loose = Record<string, unknown>
 
-const formatMaybeDateTime = (value: unknown) => {
-  if (value == null || value === '') {
-    return ''
-  }
-  const d = dayjs(String(value))
-  return d.isValid() ? d.format('YYYY-MM-DD HH:mm:ss') : String(value)
-}
-
-const ynLabel = (raw: unknown, t: Translate) => {
-  const n = Number(raw)
-  if (n === 1) {
-    return t('attendance.yes')
-  }
-  if (n === 0) {
-    return t('attendance.no')
-  }
-  return '--'
-}
-
-const statusLabel = (raw: unknown, t: Translate) => {
-  const key = String(raw ?? '')
-  const map: Record<string, string> = {
-    Late: t('attendance.daily.statusLate'),
-    Present: t('attendance.daily.statusPresent'),
-    Leave: t('attendance.daily.statusLeave'),
-    Absent: t('attendance.daily.statusAbsent'),
-    Exit: t('attendance.daily.statusExit'),
-    Enter: t('attendance.daily.statusEnter')
-  }
-  return map[key] || (key ? key : '--')
-}
-
-const dataFromLabel = (raw: unknown, t: Translate) => {
-  const key = String(raw ?? '')
-  const map: Record<string, string> = {
-    MB: t('attendance.daily.dataFromMb'),
-    schoolBus: t('attendance.daily.dataFromSchoolBus'),
-    gate: t('attendance.daily.dataFromGate'),
-    community: t('attendance.daily.dataFromCommunity')
-  }
-  return map[key] || key || '--'
-}
-
 /** 对齐旧页 `renderSection`：`MB` 来源展示「第 n 节课」，否则展示 `date2`。 */
-const attendanceTimeText = (row: Loose, t: Translate) => {
+const attendanceTimeText = (row: Loose, tr: (key: string, params?: Record<string, unknown>) => string) => {
   const df = row.dataFrom
   const d2 = row.date2
   if (df !== 'MB') {
@@ -77,7 +33,7 @@ const attendanceTimeText = (row: Loose, t: Translate) => {
   if (d2 == null || d2 === '') {
     return '-'
   }
-  return t('attendance.daily.mbLesson', { period: String(d2) })
+  return tr('attendance.daily.mbLesson', { period: String(d2) })
 }
 
 export const useList = () => {
@@ -125,12 +81,36 @@ export const useList = () => {
   const decorateRow = (raw: Loose): AttendanceDailyRecord => {
     const row: AttendanceDailyRecord = { ...(raw as AttendanceDailyRecord) }
     row._key = String(raw.id ?? `${raw.admissionNo ?? ''}-${raw.date ?? ''}-${raw.createdAt ?? ''}`)
-    row.busStatusLabel = ynLabel(raw.busStatus, t)
-    row.dormitoryStatusLabel = ynLabel(raw.dormitoryStatus, t)
-    row.statusLabel = statusLabel(raw.status, t)
-    row.dataFromLabel = dataFromLabel(raw.dataFrom, t)
+
+    const busN = Number(raw.busStatus)
+    const dormN = Number(raw.dormitoryStatus)
+    row.busStatusLabel =
+      busN === 1 ? t('attendance.yes') : busN === 0 ? t('attendance.no') : '--'
+    row.dormitoryStatusLabel =
+      dormN === 1 ? t('attendance.yes') : dormN === 0 ? t('attendance.no') : '--'
+
+    const statusKey = String(raw.status ?? '')
+    const statusMap: Record<string, string> = {
+      Late: t('attendance.daily.statusLate'),
+      Present: t('attendance.daily.statusPresent'),
+      Leave: t('attendance.daily.statusLeave'),
+      Absent: t('attendance.daily.statusAbsent'),
+      Exit: t('attendance.daily.statusExit'),
+      Enter: t('attendance.daily.statusEnter')
+    }
+    row.statusLabel = statusMap[statusKey] || (statusKey ? statusKey : '--')
+
+    const dataFromKey = String(raw.dataFrom ?? '')
+    const dataFromMap: Record<string, string> = {
+      MB: t('attendance.daily.dataFromMb'),
+      schoolBus: t('attendance.daily.dataFromSchoolBus'),
+      gate: t('attendance.daily.dataFromGate'),
+      community: t('attendance.daily.dataFromCommunity')
+    }
+    row.dataFromLabel = dataFromMap[dataFromKey] || dataFromKey || '--'
+
     row.attendanceTimeLabel = attendanceTimeText(raw, t)
-    row.createdAt = formatMaybeDateTime(raw.createdAt)
+    row.createdAt = dateFormat(String(raw.createdAt ?? ''))
     row.form = raw.form != null && raw.form !== '' ? String(raw.form) : '-'
     return row
   }

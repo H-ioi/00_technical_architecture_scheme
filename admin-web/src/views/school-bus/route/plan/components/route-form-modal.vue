@@ -189,22 +189,6 @@ import {
 
 type Loose = Record<string, unknown>
 
-function deepClone<T>(value: T): T {
-  return JSON.parse(JSON.stringify(value)) as T
-}
-
-async function fetchSectionList(params: Record<string, unknown>) {
-  return normalizeArray(await schoolBusCommonApi.sectionList.get(params)) as Loose[]
-}
-
-async function fetchStationList(params: Record<string, unknown>) {
-  return normalizeArray(await schoolBusCommonApi.stationList.get(params)) as Loose[]
-}
-
-async function fetchCarinfoList(params: Record<string, unknown>) {
-  return normalizeArray(await schoolBusCommonApi.carinfoList.get(params)) as Loose[]
-}
-
 export default {
   name: 'RouteFormModal',
 
@@ -358,6 +342,22 @@ export default {
   },
 
   methods: {
+    /** 按学校拉取学期/站点/车辆下拉数据 */
+    async loadSchoolDependencies(
+      schoolIds: Array<string | number>,
+      carExtra: Record<string, unknown> = {}
+    ) {
+      const base = { schoolIds }
+      const [sections, stations, cars] = await Promise.all([
+        schoolBusCommonApi.sectionList.get(base),
+        schoolBusCommonApi.stationList.get(base),
+        schoolBusCommonApi.carinfoList.get({ ...base, isAll: 0, ...carExtra })
+      ])
+      this.selectSectionList = normalizeArray(sections) as Loose[]
+      this.selectStationList = normalizeArray(stations) as Loose[]
+      this.carList = normalizeArray(cars) as Loose[]
+    },
+
     async showForm(type: 'add' | 'edit' = 'add', item: Loose = {}) {
       this.modalType = type
       this.showModal = true
@@ -381,9 +381,7 @@ export default {
           ...this.ruleForm,
           schoolIds: [schoolId]
         }
-        this.selectSectionList = await fetchSectionList({ schoolIds: [schoolId] })
-        this.selectStationList = await fetchStationList({ schoolIds: [schoolId] })
-        this.carList = await fetchCarinfoList({ schoolIds: [schoolId], isAll: 0 })
+        await this.loadSchoolDependencies([schoolId])
       }
     },
 
@@ -414,13 +412,7 @@ export default {
       const carIds = Array.isArray(carIdList) ? carIdList : []
       const sid = schoolIds as Array<string | number>
 
-      this.selectSectionList = await fetchSectionList({ schoolIds: sid })
-      this.selectStationList = await fetchStationList({ schoolIds: sid })
-      this.carList = await fetchCarinfoList({
-        schoolIds: sid,
-        isAll: 0,
-        carId: carIds
-      })
+      await this.loadSchoolDependencies(sid, { carId: carIds })
 
       this.$nextTick(() => {
         this.ruleForm = {
@@ -435,7 +427,9 @@ export default {
           carIdList: carIds
         }
 
-        const clone = weekDays ? deepClone(weekDays) : [{ weekDays: [], stationPrices: [] }]
+        const clone = weekDays
+          ? (JSON.parse(JSON.stringify(weekDays)) as typeof weekDays)
+          : [{ weekDays: [], stationPrices: [] }]
 
         if (!Array.isArray(clone) || clone.length === 0) {
           this.weekDays = [{ weekDays: [], stationPrices: [] }]
@@ -516,7 +510,7 @@ export default {
         lineType: this.ruleForm.lineType,
         visible: this.ruleForm.visible,
         carIdList: this.ruleForm.carIdList,
-        weekDays: deepClone(this.weekDays)
+        weekDays: JSON.parse(JSON.stringify(this.weekDays))
       }
 
       payload.weekDays = (payload.weekDays as Loose[]).map((item) => {
@@ -601,9 +595,7 @@ export default {
       this.resetWeekDays()
       delete this.ruleForm.sectionId
       delete this.ruleForm.carIdList
-      this.selectSectionList = await fetchSectionList({ schoolIds: e })
-      this.selectStationList = await fetchStationList({ schoolIds: e })
-      this.carList = await fetchCarinfoList({ schoolIds: e, isAll: 0 })
+      await this.loadSchoolDependencies(e)
     },
 
     isOptionDisabled(value: string, currentIndex: number) {
