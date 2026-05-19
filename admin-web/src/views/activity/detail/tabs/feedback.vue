@@ -124,7 +124,7 @@ import { computed, reactive, ref } from 'vue'
 import { activityApi } from '@/api'
 import type { Translate } from '@/types/i18n'
 import { normalizeEnvelope, normalizePaged } from '@/utils/api-response-normalize'
-import { downloadBlob } from '@/utils/download'
+import { downloadResponseBlob } from '@/utils/download'
 
 type Row = Record<string, unknown>
 
@@ -341,8 +341,8 @@ const submit = async () => {
 const exportFeedback = async () => {
   exporting.value = true
   try {
-    const blob = await activityApi.feedbackExport.get(props.activityId)
-    downloadBlob(blob, `activity-feedback-${props.activityId}.xlsx`)
+    const response = await activityApi.feedbackExport.get(props.activityId)
+    downloadResponseBlob(response, `activity-feedback-${props.activityId}.xlsx`)
   } finally {
     exporting.value = false
   }

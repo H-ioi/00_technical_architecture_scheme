@@ -89,7 +89,7 @@ import { computed, nextTick, reactive, ref } from 'vue'
 import { activityApi, activityProgramApi } from '@/api'
 import type { Translate } from '@/types/i18n'
 import { normalizeArray, normalizeEnvelope, normalizePaged, normalizePayload } from '@/utils/api-response-normalize'
-import { downloadBlob } from '@/utils/download'
+import { downloadResponseBlob } from '@/utils/download'
 
 type Row = Record<string, unknown>
 type WinnerKind = 'lottery' | 'competition'
@@ -428,11 +428,11 @@ const exportWinners = async () => {
   try {
     const f = filters.value as Row
     const params = { activityId: props.activityId, keyword: f.keyword || undefined }
-    const blob =
+    const response =
       winnerKind.value === 'competition'
         ? await activityApi.prizeAwardCompetitionExport.get(params)
         : await activityApi.prizeAwardLotteryExport.get(params)
-    downloadBlob(blob, `activity-winners-${winnerKind.value}-${props.activityId}.xlsx`)
+    downloadResponseBlob(response, `activity-winners-${winnerKind.value}-${props.activityId}.xlsx`)
   } finally {
     exporting.value = false
   }

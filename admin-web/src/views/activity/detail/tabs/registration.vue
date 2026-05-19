@@ -100,7 +100,7 @@ import { computed, reactive, ref } from 'vue'
 import { activityApi } from '@/api'
 import type { Translate } from '@/types/i18n'
 import { normalizePaged } from '@/utils/api-response-normalize'
-import { downloadBlob } from '@/utils/download'
+import { downloadBlob, downloadResponseBlob } from '@/utils/download'
 
 type Row = Record<string, unknown>
 
@@ -294,8 +294,8 @@ const deleteSelected = async () => {
 
 const downloadTemplate = async () => {
   try {
-    const blob = await activityApi.ticketTemplate.get()
-    downloadBlob(blob, 'ticket-import-template.xlsx')
+    const response = await activityApi.ticketTemplate.get()
+    downloadResponseBlob(response, 'ticket-import-template.xlsx')
   } catch {
     ElMessage.error(tr('activity.exportFail'))
   }

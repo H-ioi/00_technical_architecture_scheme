@@ -15,7 +15,6 @@ export type { UniRequestOptions, UniRequestProgress } from '@/types/uni-request'
 
 type UniInternalRequestConfig = InternalAxiosRequestConfig & {
   __uniRequestKey?: string
-  /** Per-request escape hatch for download APIs that need response headers. */
   rawResponse?: boolean
 }
 

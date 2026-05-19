@@ -9,7 +9,7 @@ import { normalizeSchoolEmailConfigList } from '@/api/modules/school-email-confi
 import type { Translate } from '@/types/i18n'
 import type { ActivityDetailFormModel } from '@/types/modules/activity-detail-form'
 import { normalizeEnvelope, normalizePayload } from '@/utils/api-response-normalize'
-import { downloadBlob } from '@/utils/download'
+import { downloadResponseBlob } from '@/utils/download'
 
 import { activityStatusOptions, checkinMethodOptions } from '../list/list.config'
 import { buildActivityDetailFormConfig } from './detail-form.config'
@@ -404,8 +404,8 @@ export function useActivityDetailPage() {
 
   const downloadVisibleTpl = async () => {
     try {
-      const blob = await activityApi.visibleScopeTemplate.get()
-      downloadBlob(blob as Blob, 'visible-scope-template.xlsx')
+      const response = await activityApi.visibleScopeTemplate.get()
+      downloadResponseBlob(response, 'visible-scope-template.xlsx')
     } catch {
       ElMessage.error(tr('activity.exportFail'))
     }

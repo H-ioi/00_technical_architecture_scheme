@@ -1,7 +1,8 @@
 import { API_PATHS } from '@/api/constants'
 import type { PageResult } from '@/types/api'
 import type { ActivityListParams } from '@/types/modules/activity-list'
-import { request } from 'uni-ui-lib'
+import type { AxiosResponse } from 'axios'
+import { request, type UniRawResponseRequestConfig } from 'uni-ui-lib'
 
 const path = API_PATHS.activity
 const feedbackPath = API_PATHS.activityFeedback
@@ -10,6 +11,12 @@ const prizeAwardPath = `${API_PATHS.activityPrize}/award`
 
 const repeatQuery = (key: string, values: Array<string | number>) =>
   values.map((v) => `${key}=${encodeURIComponent(String(v))}`).join('&')
+
+const blobResponseConfig = (params?: Record<string, unknown>): UniRawResponseRequestConfig => ({
+  params,
+  responseType: 'blob',
+  rawResponse: true
+})
 
 /** 问卷等下拉：`GET /list`（旧 `getActivityList`） */
 export default {
@@ -61,14 +68,18 @@ export default {
   feedbackExport: {
     name: '按活动导出反馈',
     get: async (activityId: string | number) =>
-      await request.get<Blob, Blob>(`${feedbackPath}/exportFeedback/${activityId}`, {
-        responseType: 'blob'
-      })
+      await request.get<Blob, AxiosResponse<Blob>>(
+        `${feedbackPath}/exportFeedback/${activityId}`,
+        blobResponseConfig()
+      )
   },
   visibleScopeTemplate: {
     name: '下载活动可见范围导入模板',
     get: async () =>
-      await request.get<Blob, Blob>(`${path}/visibleScopeFile/download`, { responseType: 'blob' })
+      await request.get<Blob, AxiosResponse<Blob>>(
+        `${path}/visibleScopeFile/download`,
+        blobResponseConfig()
+      )
   },
   visibleScopeImport: {
     name: '导入活动可见范围名单',
@@ -92,7 +103,7 @@ export default {
   ticketTemplate: {
     name: '下载活动报名导入模板',
     get: async () =>
-      await request.get<Blob, Blob>(`${path}/ticket/download`, { responseType: 'blob' })
+      await request.get<Blob, AxiosResponse<Blob>>(`${path}/ticket/download`, blobResponseConfig())
   },
   ticketImport: {
     name: '导入活动报名',
@@ -193,17 +204,17 @@ export default {
   prizeAwardLotteryExport: {
     name: '导出抽奖获奖',
     get: async (params: Record<string, unknown>) =>
-      await request.get<Blob, Blob>(`${prizeAwardPath}/exportLottery`, {
-        params,
-        responseType: 'blob'
-      })
+      await request.get<Blob, AxiosResponse<Blob>>(
+        `${prizeAwardPath}/exportLottery`,
+        blobResponseConfig(params)
+      )
   },
   prizeAwardCompetitionExport: {
     name: '导出比赛获奖',
     get: async (params: Record<string, unknown>) =>
-      await request.get<Blob, Blob>(`${prizeAwardPath}/exportCompetition`, {
-        params,
-        responseType: 'blob'
-      })
+      await request.get<Blob, AxiosResponse<Blob>>(
+        `${prizeAwardPath}/exportCompetition`,
+        blobResponseConfig(params)
+      )
   }
 }
