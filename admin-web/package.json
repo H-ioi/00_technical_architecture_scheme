@@ -18,7 +18,12 @@
     "locale:dup-scan": "node scripts/scan-locale-duplicate-values.mjs --all",
     "uni-lib:build": "npm run build --prefix ../uni-lib",
     "extract:legacy-isacommunity-base": "node scripts/extract-isacommunity-base-api.mjs",
-    "prepare": "husky"
+    "prepare": "husky",
+    "test": "vitest",
+    "test:run": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage",
+    "test:ui": "vitest --ui"
   },
   "dependencies": {
     "@element-plus/icons-vue": "^2.3.2",
