@@ -1,3 +1,6 @@
+/// <reference types="vite/client" />
+/// <reference types="vite-plugin-pwa/client" />
+
 interface ImportMetaEnv {
   readonly VITE_APP_TITLE: string
   readonly VITE_APP_BASE?: string
@@ -14,6 +17,8 @@ interface ImportMetaEnv {
   readonly VITE_COMMUNITY_WEB_ORIGIN?: string
   /** 含问卷题目设计的旧 SPA 根 URL（无则回退到 VITE_COMMUNITY_WEB_ORIGIN） */
   readonly VITE_QUESTIONNAIRE_EDITOR_ORIGIN?: string
+  /** 开发环境是否启用 PWA Service Worker 注册 */
+  readonly VITE_PWA_DEV?: string
 }
 
 interface ImportMeta {
