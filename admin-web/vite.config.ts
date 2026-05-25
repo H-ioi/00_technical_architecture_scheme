@@ -120,7 +120,7 @@ export default defineConfig(({ mode }) => {
       preprocessorOptions: {
         scss: {
           silenceDeprecations: ['legacy-js-api'],
-          additionalData: `@import "@/assets/scss/styles/_variables.scss";`
+          additionalData: `@use "@/assets/styles/variables" as *;`
         }
       }
     }
