@@ -4,19 +4,69 @@ import { fileURLToPath, URL } from 'node:url'
 
 import { defineConfig, loadEnv } from 'vite'
 import vue from '@vitejs/plugin-vue'
+import { VitePWA } from 'vite-plugin-pwa'
 
 const require = createRequire(import.meta.url)
 // exports 未导出 package.json，不能用 resolve('uni-ui-lib/package.json')
 const uniLibEntry = require.resolve('uni-ui-lib')
 const uniLibCss = path.join(path.dirname(uniLibEntry), 'index.css')
 
+const isEnvEnabled = (value?: string) => {
+  const normalized = value?.trim().split(/\s+/)[0]?.toLowerCase()
+  return normalized === 'true' || normalized === '1' || normalized === 'yes'
+}
+
 // https://vite.dev/config/
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), '')
+  const pwaDevEnabled = isEnvEnabled(env.VITE_PWA_DEV)
 
   return {
     base: env.VITE_APP_BASE || '/',
-    plugins: [vue()],
+    plugins: [
+      vue(),
+      VitePWA({
+        registerType: 'prompt',
+        // dev 默认不注册 SW；设置 VITE_PWA_DEV=true 可在 npm run dev 下联调 PWA
+        devOptions: {
+          enabled: pwaDevEnabled,
+          navigateFallback: 'index.html'
+        },
+        includeAssets: ['pwa-192x192.png', 'pwa-512x512.png'],
+        manifest: {
+          name: env.VITE_APP_TITLE || 'Admin Web',
+          short_name: 'Admin',
+          description: 'Admin Web PWA',
+          theme_color: '#409EFF',
+          background_color: '#ffffff',
+          display: 'standalone',
+          scope: env.VITE_APP_BASE || '/',
+          start_url: env.VITE_APP_BASE || '/',
+          icons: [
+            {
+              src: 'pwa-192x192.png',
+              sizes: '192x192',
+              type: 'image/png'
+            },
+            {
+              src: 'pwa-512x512.png',
+              sizes: '512x512',
+              type: 'image/png'
+            },
+            {
+              src: 'pwa-512x512.png',
+              sizes: '512x512',
+              type: 'image/png',
+              purpose: 'any maskable'
+            }
+          ]
+        },
+        workbox: {
+          globPatterns: ['**/*.{js,css,html,ico,png,svg,woff2}'],
+          navigateFallback: 'index.html'
+        }
+      })
+    ],
     /** 与 file:../uni-lib 联调：避免把组件库打进 optimize 缓存，否则 rebuild uni-lib 后仍可能读到旧的 deps 缓存 */
     optimizeDeps: {
       exclude: ['uni-ui-lib']

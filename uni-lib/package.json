@@ -1,6 +1,6 @@
 {
   "name": "uni-ui-lib",
-  "version": "0.1.25",
+  "version": "0.1.28",
   "description": "Vue 3 + Element Plus business component library for admin systems.",
   "license": "UNLICENSED",
   "type": "module",
@@ -21,131 +21,64 @@
       "import": "./dist/index.mjs",
       "require": "./dist/index.cjs"
     },
-    "./components/uni-config-provider": {
-      "types": "./dist/src/components/uni-config-provider/index.d.ts",
-      "import": "./dist/index.mjs",
-      "require": "./dist/index.cjs"
-    },
-    "./components/uni-data-table": {
-      "types": "./dist/src/components/uni-data-table/index.d.ts",
-      "import": "./dist/index.mjs",
-      "require": "./dist/index.cjs"
-    },
-    "./components/uni-form": {
-      "types": "./dist/src/components/uni-form/index.d.ts",
-      "import": "./dist/index.mjs",
-      "require": "./dist/index.cjs"
-    },
-    "./components/uni-icon": {
-      "types": "./dist/src/components/uni-icon/index.d.ts",
-      "import": "./dist/index.mjs",
-      "require": "./dist/index.cjs"
-    },
-    "./components/uni-layout": {
-      "types": "./dist/src/components/uni-layout/index.d.ts",
-      "import": "./dist/index.mjs",
-      "require": "./dist/index.cjs"
-    },
-    "./components/uni-search-form": {
-      "types": "./dist/src/components/uni-search-form/index.d.ts",
-      "import": "./dist/index.mjs",
-      "require": "./dist/index.cjs"
-    },
-    "./components/uni-theme-settings": {
-      "types": "./dist/src/components/uni-theme-settings/index.d.ts",
-      "import": "./dist/index.mjs",
-      "require": "./dist/index.cjs"
-    },
-    "./components/uni-upload": {
-      "types": "./dist/src/components/uni-upload/index.d.ts",
-      "import": "./dist/index.mjs",
-      "require": "./dist/index.cjs"
-    },
-    "./components/uni-login-page": {
-      "types": "./dist/components/uni-login-page/index.vue.d.ts",
-      "import": "./dist/index.mjs",
-      "require": "./dist/index.cjs"
-    },
-    "./plugins/request": {
-      "types": "./dist/src/plugins/request.d.ts",
-      "import": "./dist/index.mjs",
-      "require": "./dist/index.cjs"
-    },
-    "./locales/i18n": {
-      "types": "./dist/locales/use-uni-i18n.d.ts",
-      "import": "./dist/index.mjs",
-      "require": "./dist/index.cjs"
-    },
-    "./directives/copy": {
-      "types": "./dist/src/directives/copy.d.ts",
-      "import": "./dist/index.mjs",
-      "require": "./dist/index.cjs"
-    },
-    "./directives/debounce-click": {
-      "types": "./dist/src/directives/debounce-click.d.ts",
-      "import": "./dist/index.mjs",
-      "require": "./dist/index.cjs"
-    },
-    "./directives/permission": {
-      "types": "./dist/src/directives/permission.d.ts",
-      "import": "./dist/index.mjs",
-      "require": "./dist/index.cjs"
-    },
-    "./composables/use-uni-list-state": {
-      "types": "./dist/src/composables/use-uni-list-state.d.ts",
-      "import": "./dist/index.mjs",
-      "require": "./dist/index.cjs"
-    },
-    "./theme": {
-      "types": "./dist/src/components/uni-theme-settings/runtime.d.ts",
-      "import": "./dist/index.mjs",
-      "require": "./dist/index.cjs"
-    },
-    "./icons": {
-      "types": "./dist/src/icons/index.d.ts",
-      "import": "./dist/index.mjs",
-      "require": "./dist/index.cjs"
-    },
-    "./utils/format": {
-      "types": "./dist/src/utils/format.d.ts",
-      "import": "./dist/index.mjs",
-      "require": "./dist/index.cjs"
-    },
-    "./utils/copy": {
-      "types": "./dist/src/utils/copy.d.ts",
-      "import": "./dist/index.mjs",
-      "require": "./dist/index.cjs"
-    },
-    "./utils/options": {
-      "types": "./dist/src/utils/options.d.ts",
-      "import": "./dist/index.mjs",
-      "require": "./dist/index.cjs"
-    },
     "./style.css": {
       "import": "./dist/index.css",
       "require": "./dist/index.css",
       "default": "./dist/index.css"
+    },
+    "./dist/index.css": "./dist/index.css",
+    "./*": {
+      "types": "./dist/src/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.cjs"
+    },
+    "./components/*": {
+      "types": "./dist/src/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.cjs"
     },
     "./components/*/style.css": {
       "import": "./dist/index.css",
       "require": "./dist/index.css",
       "default": "./dist/index.css"
     },
-    "./dist/index.css": "./dist/index.css"
+    "./utils/*": {
+      "types": "./dist/src/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.cjs"
+    },
+    "./plugins/*": {
+      "types": "./dist/src/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.cjs"
+    },
+    "./directives/*": {
+      "types": "./dist/src/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.cjs"
+    },
+    "./composables/*": {
+      "types": "./dist/src/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.cjs"
+    },
+    "./locales/*": {
+      "types": "./dist/src/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.cjs"
+    }
   },
   "scripts": {
     "dev": "vite --host 0.0.0.0",
     "icons:generate": "node scripts/generate-icons.mjs",
     "build": "vite build",
     "type-check": "vue-tsc --noEmit -p tsconfig.json",
-    "prepack": "npm run build",
-    "prepublishOnly": "npm run format:check && npm run type-check && npm run build && npm run docs:build",
     "docs:dev": "vitepress dev docs --host 0.0.0.0",
     "docs:build": "vitepress build docs",
     "docs:preview": "vitepress preview docs --host 0.0.0.0",
     "format": "prettier --write \"src/**/*.{ts,vue,scss,md}\" \"docs/**/*.md\" \"docs/.vitepress/**/*.{ts,vue,css}\" \"playground/**/*.{ts,vue,scss,md,json}\" \"scripts/**/*.{ts,js,mjs,md}\" \"*.{json,ts,mjs,md}\"",
     "format:check": "prettier --check \"src/**/*.{ts,vue,scss,md}\" \"docs/**/*.md\" \"docs/.vitepress/**/*.{ts,vue,css}\" \"playground/**/*.{ts,vue,scss,md,json}\" \"scripts/**/*.{ts,js,mjs,md}\" \"*.{json,ts,mjs,md}\"",
-    "release": "node scripts/publish.mjs"
+    "release": "node scripts/release.mjs"
   },
   "keywords": [
     "vue",

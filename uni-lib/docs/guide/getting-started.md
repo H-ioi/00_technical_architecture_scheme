@@ -31,12 +31,14 @@ createApp(App)
 
 ## 按需导入
 
+推荐从主入口按需解构，与 `app.use(UniLib)` 共用同一 bundle：
+
 ```ts
-import { UniDataTable } from 'uni-ui-lib/components/uni-data-table'
-import 'uni-ui-lib/components/uni-data-table/style.css'
+import UniLib, { UniDataTable, UniForm, registerServiceWorker } from 'uni-ui-lib'
+import 'uni-ui-lib/style.css'
 ```
 
-当前组件样式会复用全量样式出口；按需路径用于稳定类型和组件导入。
+子路径（如 `uni-ui-lib/components/uni-data-table`）仍兼容，类型与实现均来自主入口。
 
 ## 内置指令
 

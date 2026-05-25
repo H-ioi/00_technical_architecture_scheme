@@ -24,18 +24,13 @@ createApp(App)
   .mount('#app')
 ```
 
-也可以按需使用命名导出：
+也可以按需使用命名导出（推荐，与全量安装共用同一入口）：
 
 ```ts
-import { UniDataTable, UniForm, UniSearchForm, UniUpload } from 'uni-ui-lib'
+import UniLib, { UniDataTable, UniForm, registerServiceWorker } from 'uni-ui-lib'
 ```
 
-或使用组件子路径：
-
-```ts
-import { UniDataTable } from 'uni-ui-lib/components/uni-data-table'
-import 'uni-ui-lib/components/uni-data-table/style.css'
-```
+旧版子路径（如 `uni-ui-lib/components/uni-data-table`）仍兼容，但均指向主入口 bundle。
 
 ## Scripts
 
