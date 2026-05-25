@@ -1,13 +1,7 @@
 import { describe, it, expect, vi } from 'vitest'
 
-const SCHOOL_DATA = [
-  { id: '1', name: '深圳校区', cnName: '深圳校区', enName: 'Shenzhen' },
-  { id: '2', name: '广州校区', cnName: '广州校区', enName: 'Guangzhou' }
-]
-
-// Mock uni-ui-lib: toUniOptions, useUniI18n, and request (让真实 membershipApi 通过 mock request 工作)
-vi.mock('uni-ui-lib', () => ({
-  toUniOptions: (rows: Record<string, unknown>[], opts: Record<string, unknown>) =>
+vi.mock('uni-ui-lib', () => {
+  const toUniOptions = (rows: Record<string, unknown>[], opts: Record<string, unknown>) =>
     rows.map((row) => {
       const labelKeys = (opts.labelKeys as string[]) || ['name', 'cnName', 'enName']
       let label = ''
@@ -19,18 +13,26 @@ vi.mock('uni-ui-lib', () => ({
         }
       }
       return { label, value: row.value ?? row[opts.valueKey as string] ?? row.id }
-    }),
-  useUniI18n: () => ({
-    locale: { value: 'zh' },
-    t: (key: string) => key
-  }),
-  request: {
-    get: vi.fn().mockResolvedValue([
-      { id: '1', name: '深圳校区', cnName: '深圳校区', enName: 'Shenzhen' },
-      { id: '2', name: '广州校区', cnName: '广州校区', enName: 'Guangzhou' }
-    ]),
-    post: vi.fn(),
-    delete: vi.fn()
+    })
+
+  return {
+    toUniOptions,
+    useUniI18n: () => ({
+      locale: { value: 'zh' },
+      t: (key: string) => key
+    })
+  }
+})
+
+// 用 plain async function 而非 vi.fn()，避免 setup.ts 中 afterEach → vi.restoreAllMocks() 清除 mock 实现
+vi.mock('@/api', () => ({
+  membershipApi: {
+    school: {
+      get: async () => [
+        { id: '1', name: '深圳校区', cnName: '深圳校区', enName: 'Shenzhen' },
+        { id: '2', name: '广州校区', cnName: '广州校区', enName: 'Guangzhou' }
+      ]
+    }
   }
 }))
 
