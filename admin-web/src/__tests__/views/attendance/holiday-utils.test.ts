@@ -5,7 +5,6 @@ import {
 } from '../../../views/attendance/holiday/holiday-utils'
 
 describe('holiday-utils.ts', () => {
-
   // ==================== normalizeHolidayListRow ====================
   describe('normalizeHolidayListRow', () => {
     it('camelCase procId 应直接保留', () => {
