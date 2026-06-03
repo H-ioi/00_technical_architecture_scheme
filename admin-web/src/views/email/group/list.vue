@@ -19,7 +19,8 @@
       :submit-text="$t('member.search')"
       :reset-text="$t('member.reset')"
       @search="search"
-      @reset="reset" />
+      @reset="reset"
+    />
 
     <UniDataTable
       ref="tableRef"
@@ -34,25 +35,29 @@
       :action-column="{ width: 115, fixed: 'right' }"
       @load-success="tableEmpty.onLoadSuccess"
       @request-error="tableEmpty.onRequestError"
-      @selection-change="onSelectionChange">
+      @selection-change="onSelectionChange"
+    >
       <template #toolbar>
         <el-button
           v-if="hasPermission('mailgroup-gd')"
           :disabled="batchDisabled"
-          @click="batchStatus(0)">
+          @click="batchStatus(0)"
+        >
           {{ $t('email.archive') }}
         </el-button>
         <el-button
           v-if="hasPermission('mailgroup-sy')"
           :disabled="batchDisabled"
-          @click="batchStatus(1)">
+          @click="batchStatus(1)"
+        >
           {{ $t('email.markActive') }}
         </el-button>
         <el-button
           v-if="hasPermission('mailgroup-delete')"
           type="danger"
           :disabled="batchDisabled"
-          @click="batchStatus(-1)">
+          @click="batchStatus(-1)"
+        >
           {{ $t('email.deleteBatch') }}
         </el-button>
       </template>
@@ -65,7 +70,8 @@
       ref="dialogRef"
       v-model="dialogVisible"
       :mode="dialogMode"
-      @success="tableRef?.refresh()" />
+      @success="tableRef?.refresh()"
+    />
 
     <el-dialog v-model="viewVisible" :title="$t('email.view')" width="560px" destroy-on-close>
       <div class="email-grp-view">
@@ -100,43 +106,144 @@
 </template>
 
 <script setup lang="ts">
-import { nextTick, ref } from 'vue'
-
-import { UniDataTable, UniSearchForm } from 'uni-ui-lib'
-
+import { formatMailGroupScopeDisplay } from '../mail-page-utils'
+import GroupDialog from './components/group-dialog.vue'
+import { searchForm, statusOpts as statusOptsFn, tableCols, yesNoOpts as yesNoOptsFn } from './list.config'
+import { bulkEmailApi } from '@/api'
 import ListTableEmpty from '@/components/list-table-empty.vue'
 import { useListTableEmpty } from '@/composables/use-list-table-empty'
-import GroupDialog from './components/group-dialog.vue'
-import { useList } from './use-list'
+import type { Translate } from '@/types/i18n'
+import { normalizePaged } from '@/utils/api-response-normalize'
+import { ElMessage, ElMessageBox } from 'element-plus'
+import { UniDataTable, UniSearchForm, useUniI18n, useUniListState, useUniPermission } from 'uni-ui-lib'
+import type { UniTableAction, UniTableRequest } from 'uni-ui-lib'
+import { nextTick, ref, computed } from 'vue'
+
+
+
+const { t } = useUniI18n()
 
 const dialogVisible = ref(false)
 const dialogMode = ref<'add' | 'edit'>('add')
 const dialogRef = ref<InstanceType<typeof GroupDialog> | null>(null)
 
-const {
-  actions,
-  batchDisabled,
-  batchStatus,
-  columns,
-  filters,
-  handleLoadSuccess,
-  hasPermission,
-  loadData,
-  onSelectionChange,
-  queryModel,
-  reset,
-  search,
-  searchCfg,
-  tableRef,
-  viewLabels,
-  viewMeta,
-  viewVisible
-} = useList({
-  onEditRow: (row) => {
+
+type Loose = Record<string, unknown>
+
+const onEditRow = (row) => {
     dialogMode.value = 'edit'
     dialogVisible.value = true
     void nextTick(() => dialogRef.value?.openEdit(row))
   }
+
+const tr = t as Translate
+const { hasPermission } = useUniPermission()
+const { queryModel, filters, tableRef, handleLoadSuccess, reset, search } = useUniListState({
+  initialFilters: { keyword: '', status: '', includeParentMails: '', includeStudentMails: '' }
+})
+const ynOpts = computed(() => yesNoOptsFn(tr))
+const stOpts = computed(() => statusOptsFn(tr))
+const searchCfg = computed(() => searchForm(tr, ynOpts.value, stOpts.value))
+const columns = computed(() => tableCols(tr))
+
+const selection = ref<Loose[]>([])
+const batchDisabled = computed(() => selection.value.length === 0)
+const onSelectionChange = (rows: Record<string, unknown>[]) => {
+  selection.value = rows as Loose[]
+}
+
+const viewVisible = ref(false)
+const viewLabels = ref<string[]>([])
+const viewMeta = ref({ name: '', parent: '', student: '', status: '', createdAt: '' })
+
+const loadData: UniTableRequest = async ({ pageNo, pageSize, filters: f }) => {
+  const fl = f as Loose
+  const raw = await bulkEmailApi.groupPage.get({
+    current: pageNo,
+    size: pageSize,
+    keyword: String(fl.keyword ?? ''),
+    status: fl.status === '' || fl.status == null ? undefined : String(fl.status),
+    includeParentMails:
+      fl.includeParentMails === '' || fl.includeParentMails == null
+        ? undefined
+        : String(fl.includeParentMails),
+    includeStudentMails:
+      fl.includeStudentMails === '' || fl.includeStudentMails == null
+        ? undefined
+        : String(fl.includeStudentMails)
+  })
+  const { list, total } = normalizePaged(raw)
+  return { data: list, total }
+}
+
+const openView = (row: Loose) => {
+  viewMeta.value = {
+    name: String(row.name ?? ''),
+    parent: Number(row.includeParentMails) === 1 || row.includeParentMails === true ? tr('email.yes') : tr('email.no'),
+    student:
+      Number(row.includeStudentMails) === 1 || row.includeStudentMails === true ? tr('email.yes') : tr('email.no'),
+    status: String(row.status) === '1' ? tr('email.statusActive') : tr('email.statusArchived'),
+    createdAt: String(row.createdAt ?? '—')
+  }
+  const sc = String(row.scopes ?? '')
+  viewLabels.value = sc
+    ? sc
+        .split(';')
+        .filter((x) => x.trim())
+        .map(formatMailGroupScopeDisplay)
+    : []
+  viewVisible.value = true
+}
+
+const removeRow = (row: Loose) => {
+  ElMessageBox.confirm(tr('email.confirmDelete'), tr('common.tip'), {
+    type: 'warning',
+    confirmButtonText: tr('common.submit'),
+    cancelButtonText: tr('common.cancel')
+  })
+    .then(async () => {
+      await bulkEmailApi.groupDelete.post({ id: row.id as string | number })
+      ElMessage.success(tr('email.opOk'))
+      tableRef.value?.refresh()
+    })
+    .catch(() => {})
+}
+
+const batchStatus = (status: number) => {
+  const rows = selection.value
+  if (rows.length === 0) {
+    ElMessage.warning(tr('email.selectRows'))
+    return
+  }
+  ElMessageBox.confirm(tr('email.confirmBatch'), tr('common.tip'), {
+    type: 'warning',
+    confirmButtonText: tr('common.submit'),
+    cancelButtonText: tr('common.cancel')
+  })
+    .then(async () => {
+      const ids = rows.map((r) => String(r.id)).join(',')
+      await bulkEmailApi.groupBatchStatus.post({ ids, status })
+      ElMessage.success(tr('email.opOk'))
+      tableRef.value?.refresh()
+    })
+    .catch(() => {})
+}
+
+const actions = computed<UniTableAction[]>(() => {
+  const list: UniTableAction[] = []
+  if (hasPermission('mailgroup-edit')) {
+    list.push({
+      label: tr('email.edit'),
+      onClick: (row) => onEditRow(row as Loose)
+    })
+  }
+  if (hasPermission('mailgroup-view')) {
+    list.push({ label: tr('email.view'), onClick: (row) => openView(row as Loose) })
+  }
+  if (hasPermission('mailgroup-delete')) {
+    list.push({ label: tr('email.delete'), onClick: (row) => removeRow(row as Loose) })
+  }
+  return list
 })
 
 const tableEmpty = useListTableEmpty(filters, { tableRef, afterLoadSuccess: handleLoadSuccess })
@@ -145,8 +252,7 @@ const openAdd = () => {
   dialogMode.value = 'add'
   dialogVisible.value = true
   void nextTick(() => dialogRef.value?.openAdd())
-}
-</script>
+}</script>
 
 <style scoped lang="scss">
 .email-grp-view {

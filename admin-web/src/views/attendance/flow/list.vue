@@ -8,9 +8,12 @@
       <div v-if="active === 'def'" class="uni-list-page__header-actions">
         <el-button
           type="primary"
-          @click="router.push({ name: 'AttendanceHolidayFlowDesignCreate' })">{{
-          $t('attendance.holidayFlow.flowDef.add')
-        }}</el-button>
+          @click="router.push({ name: 'AttendanceHolidayFlowDesignCreate' })"
+        >
+          {{
+            $t('attendance.holidayFlow.flowDef.add')
+          }}
+        </el-button>
       </div>
     </div>
     <el-tabs v-model="active" class="attendance-flow-list__tabs">
@@ -25,6 +28,7 @@
 </template>
 
 <script setup lang="ts">
+
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 
@@ -33,7 +37,6 @@ import ProcDefPanel from './components/proc-def-panel.vue'
 
 const router = useRouter()
 const active = ref<'def' | 'proc'>('def')
-
 </script>
 
 <style scoped lang="scss">

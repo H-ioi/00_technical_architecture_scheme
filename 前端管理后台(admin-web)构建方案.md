@@ -182,11 +182,10 @@ views/
 └── protocol/
     ├── components/
     ├── list.config.ts
-    ├── list.vue
-    └── use-list.ts
+    └── list.vue
 ```
 
-后续新增页面应保持当前模式：页面入口、列表配置、组合式逻辑、页面私有组件分开；跨页面复用进入 `src/components` 或 `uni-ui-lib`，不要在单个 `.vue` 中堆叠过多业务逻辑。
+后续新增页面应保持当前模式：页面入口（含 `<script setup>` 业务逻辑）、列表配置、页面私有组件分开；跨页面复用进入 `src/components`、`composables` 或 `uni-ui-lib`。**不新建** `use-list.ts`；单页逻辑写在对应 `.vue`。超 800 行时拆页内子组件，而非再抽页面级 `use-*.ts`。
 
 ---
 
@@ -334,7 +333,7 @@ npm run build
 ## 十五、后续建设优先级
 
 1. 稳定 `src/uni.ts` 接入协议，避免业务页面直接绕过组件库请求与认证能力。
-2. 将列表页继续迁移为 `UniSearchForm + UniDataTable + use-list.ts + list.config.ts` 的组合模式。
+2. 将列表页继续迁移为 `UniSearchForm + UniDataTable + list.vue + list.config.ts` 组合（逻辑在 `list.vue`，不拆 `use-list.ts`）。
 3. 复用 `uni-ui-lib` 的权限、主题、布局和 tags-view store，项目侧只补充业务状态。
 4. 为登录、菜单权限、列表页、请求错误处理补齐测试。
 5. 当 `uni-ui-lib` 从本地 `file:../uni-lib` 改为 npm/私服版本时，同步去掉仅服务本地 file 依赖的临时兼容逻辑。

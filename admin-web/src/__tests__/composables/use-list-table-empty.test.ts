@@ -18,35 +18,9 @@ vi.mock('uni-ui-lib', () => ({
   })
 }))
 
-import { hasActiveListFilters, useListTableEmpty } from '../../composables/use-list-table-empty'
+import { useListTableEmpty } from '../../composables/use-list-table-empty'
 
 describe('use-list-table-empty.ts', () => {
-  describe('hasActiveListFilters', () => {
-    it('有非空值时返回 true', () => {
-      expect(hasActiveListFilters({ name: 'test' })).toBe(true)
-    })
-
-    it('有数字 0 也应视为有效值', () => {
-      expect(hasActiveListFilters({ count: 0 })).toBe(true)
-    })
-
-    it('有非空数组时返回 true', () => {
-      expect(hasActiveListFilters({ ids: [1, 2] })).toBe(true)
-    })
-
-    it('所有值为 null/undefined/空字符串返回 false', () => {
-      expect(hasActiveListFilters({ a: null, b: undefined, c: '' })).toBe(false)
-    })
-
-    it('空数组视为无效', () => {
-      expect(hasActiveListFilters({ ids: [] })).toBe(false)
-    })
-
-    it('空对象返回 false', () => {
-      expect(hasActiveListFilters({})).toBe(false)
-    })
-  })
-
   describe('useListTableEmpty', () => {
     let filters: ReturnType<typeof ref<Record<string, unknown>>>
 

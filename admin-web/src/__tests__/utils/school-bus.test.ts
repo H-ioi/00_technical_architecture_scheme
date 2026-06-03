@@ -1,9 +1,7 @@
 import { describe, it, expect } from 'vitest'
 import {
   normalizeSchoolIdsOnRow,
-  isSpreadsheetFilename,
   stripEmptyQueryParams,
-  detailCellDisplay,
   schoolIdsForCascadeApi
 } from '../../utils/school-bus'
 
@@ -59,16 +57,6 @@ describe('school-bus.ts', () => {
     })
   })
 
-  // ==================== isSpreadsheetFilename ====================
-  describe('isSpreadsheetFilename', () => {
-    it.each(['test.xls', 'data.xlsx', 'REPORT.XLS', 'FILE.XLSX'])('%s 返回 true', (name) => {
-      expect(isSpreadsheetFilename(name)).toBe(true)
-    })
-
-    it.each(['doc.pdf', 'image.png', 'data.csv', ''])('%s 返回 false', (name) => {
-      expect(isSpreadsheetFilename(name)).toBe(false)
-    })
-  })
 
   // ==================== stripEmptyQueryParams ====================
   describe('stripEmptyQueryParams', () => {
@@ -97,32 +85,6 @@ describe('school-bus.ts', () => {
     })
   })
 
-  // ==================== detailCellDisplay ====================
-  describe('detailCellDisplay', () => {
-    it('正常值返回字符串', () => {
-      expect(detailCellDisplay({ name: '张三' }, 'name')).toBe('张三')
-    })
-
-    it('null 值返回 --', () => {
-      expect(detailCellDisplay({ name: null }, 'name')).toBe('--')
-    })
-
-    it('空字符串返回 --', () => {
-      expect(detailCellDisplay({ name: '' }, 'name')).toBe('--')
-    })
-
-    it('record 为 null 返回空字符串', () => {
-      expect(detailCellDisplay(null, 'name')).toBe('')
-    })
-
-    it('record 为 undefined 返回空字符串', () => {
-      expect(detailCellDisplay(undefined, 'name')).toBe('')
-    })
-
-    it('prop 为 null 返回空字符串', () => {
-      expect(detailCellDisplay({ name: 'test' }, null)).toBe('')
-    })
-  })
 
   // ==================== schoolIdsForCascadeApi ====================
   describe('schoolIdsForCascadeApi', () => {

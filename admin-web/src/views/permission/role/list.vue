@@ -21,7 +21,8 @@
       :submit-text="t('permission.search')"
       :reset-text="t('permission.reset')"
       @search="search"
-      @reset="reset" />
+      @reset="reset"
+    />
 
     <UniDataTable
       ref="tableRef"
@@ -34,7 +35,8 @@
       :actions="actions"
       :action-column="{ width: 180, fixed: 'right' }"
       @load-success="tableEmpty.onLoadSuccess"
-      @request-error="tableEmpty.onRequestError">
+      @request-error="tableEmpty.onRequestError"
+    >
       <template #empty>
         <ListTableEmpty :kind="tableEmpty.kind" @reset="reset" @retry="tableEmpty.retry" />
       </template>
@@ -43,7 +45,8 @@
     <AssignMenuDialog
       v-model:visible="assignVisible"
       :role-id="assignRole?.roleId"
-      @saved="refreshTable" />
+      @saved="refreshTable"
+    />
 
     <el-dialog
       v-model="roleFormVisible"
@@ -51,7 +54,8 @@
       width="640px"
       :title="
         roleFormMode === 'add' ? t('permission.role.formAdd') : t('permission.role.formEdit')
-      ">
+      "
+    >
       <UniForm ref="uniFormRef" v-model="roleForm" mode="edit" :config="roleFormConfig">
         <template #field-deptIds>
           <p class="perm-role-scope-hint">{{ t('permission.messages.deptScopeHint') }}</p>
@@ -63,36 +67,37 @@
             highlight-current
             default-expand-all
             check-strictly
-            :props="{ label: 'name', children: 'children' }" />
+            :props="{ label: 'name', children: 'children' }"
+          />
         </template>
       </UniForm>
       <template #footer>
         <el-button @click="roleFormVisible = false">{{ t('permission.cancel') }}</el-button>
-        <el-button type="primary" :loading="roleSaving" @click="saveRole">{{
-          t('permission.save')
-        }}</el-button>
+        <el-button type="primary" :loading="roleSaving" @click="saveRole">
+          {{
+            t('permission.save')
+          }}
+        </el-button>
       </template>
     </el-dialog>
   </section>
 </template>
 
 <script setup lang="ts">
-import type { ElTree } from 'element-plus'
-import { ElMessage, ElMessageBox } from 'element-plus'
-import type { UniFormConfig, UniTableRequestResult } from 'uni-ui-lib'
-import { UniDataTable, UniForm, UniSearchForm, useUniI18n } from 'uni-ui-lib'
-import { computed, nextTick, reactive, ref } from 'vue'
-
+import AssignMenuDialog from './components/assign-menu-dialog.vue'
+import { dpTypeOptions, searchForm, tableCols } from './list.config'
+import { permissionDeptApi, permissionRoleApi } from '@/api'
 import ListTableEmpty from '@/components/list-table-empty.vue'
 import { useListTableEmpty } from '@/composables/use-list-table-empty'
-
-import { permissionDeptApi, permissionRoleApi } from '@/api'
 import type { PermissionDeptRecord } from '@/types/modules/permission-dept'
 import type { PermissionRoleRecord as Row } from '@/types/modules/permission-role'
+import { normalizePaged } from '@/utils/api-response-normalize'
+import type { ElTree } from 'element-plus'
+import { ElMessage, ElMessageBox } from 'element-plus'
+import type { UniFormConfig, UniTableAction, UniTableRequest } from 'uni-ui-lib'
+import { UniDataTable, UniForm, UniSearchForm, useUniI18n, useUniListState } from 'uni-ui-lib'
+import { computed, nextTick, reactive, ref } from 'vue'
 
-import AssignMenuDialog from './components/assign-menu-dialog.vue'
-import { dpTypeOptions } from './list.config'
-import { useList } from './use-list'
 
 const { t } = useUniI18n()
 
@@ -249,29 +254,51 @@ async function saveRole() {
   }
 }
 
-const {
-  actions,
-  columns,
-  filters,
-  handleLoadSuccess,
-  loadData,
-  queryModel,
-  refreshTable,
-  reset,
-  search,
-  searchCfg,
-  tableRef
-} = useList({
-  onEdit: openForm,
-  onAssign: (row) => {
+
+const onAssign = (row) => {
     assignRole.value = row
     assignVisible.value = true
-  },
-  onDelete: deleteRole
-})
+  }
 
-const tableEmpty = useListTableEmpty(filters, { tableRef, afterLoadSuccess: handleLoadSuccess })
-</script>
+const initialFilters = { roleName: '', roleCode: '', dpType: undefined as number | undefined }
+const { queryModel, filters, tableRef, search, reset, handleLoadSuccess, refreshTable } =
+  useUniListState({
+    initialFilters
+  })
+
+const dpOpts = computed(() => dpTypeOptions(t))
+const searchCfg = computed(() => searchForm(t, dpOpts.value))
+const columns = computed(() => tableCols(t))
+
+const loadData: UniTableRequest = async ({ pageNo, pageSize, filters: f }) => {
+  const raw = await permissionRoleApi.page.get({
+    current: pageNo,
+    size: pageSize,
+    ...f
+  })
+  const { list, total } = normalizePaged<Row>(raw)
+  return { data: list, total }
+}
+
+const actions = computed<UniTableAction[]>(() => [
+  {
+    label: t('permission.edit'),
+    onClick: (row) => openForm('edit', row as Row)
+  },
+  {
+    label: t('permission.assignMenu'),
+    onClick: (row) => onAssign(row as Row)
+  },
+  {
+    label: t('permission.delete'),
+    onClick: async (row) => {
+      await deleteRole(row as Row)
+      tableRef.value?.refresh()
+    }
+  }
+])
+
+const tableEmpty = useListTableEmpty(filters, { tableRef, afterLoadSuccess: handleLoadSuccess })</script>
 
 <style scoped lang="scss">
 .perm-role-scope-select {

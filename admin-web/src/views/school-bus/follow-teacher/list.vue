@@ -26,7 +26,8 @@
       type="file"
       accept=".xlsx,.xls"
       class="school-bus-follow-teacher__file"
-      @change="onImportFile" />
+      @change="onImportFile"
+    >
 
     <UniSearchForm
       v-model="queryModel"
@@ -37,7 +38,8 @@
       :submit-text="$t('schoolBus.search')"
       :reset-text="$t('schoolBus.reset')"
       @search="search"
-      @reset="reset" />
+      @reset="reset"
+    />
 
     <UniDataTable
       ref="tableRef"
@@ -52,26 +54,30 @@
       :action-column="{ width: 110, fixed: 'right' }"
       @selection-change="onSelectionChange"
       @load-success="tableEmpty.onLoadSuccess"
-      @request-error="tableEmpty.onRequestError">
+      @request-error="tableEmpty.onRequestError"
+    >
       <template #toolbar>
         <!-- 权限标识与旧系统一致，后端为历史拼写 teacheruser_enble -->
         <el-button
           v-uni-permission="'teacheruser_enble'"
           :disabled="ids.length === 0"
-          @click="batchEnable">
+          @click="batchEnable"
+        >
           {{ $t('schoolBus.followTeacher.enable') }}
         </el-button>
         <el-button
           v-uni-permission="'teacheruser_disable'"
           :disabled="ids.length === 0"
-          @click="batchDisable">
+          @click="batchDisable"
+        >
           {{ $t('schoolBus.followTeacher.disable') }}
         </el-button>
         <el-button
           v-uni-permission="'teacheruser_del'"
           type="danger"
           :disabled="ids.length === 0"
-          @click="del">
+          @click="del"
+        >
           {{ $t('schoolBus.delete') }}
         </el-button>
       </template>
@@ -88,48 +94,111 @@
       :school-options="schoolOptions"
       :status-options="statusOptions"
       :multi-school="multiSchool"
-      @saved="refreshTable" />
+      @saved="refreshTable"
+    />
   </section>
 </template>
 
 <script setup lang="ts">
-import { ElMessage, ElMessageBox } from 'element-plus'
-import { useUniI18n } from 'uni-ui-lib'
-import { computed, ref } from 'vue'
-
-import { schoolBusFollowTeacherApi } from '@/api'
+import TeacherForm from './components/form.vue'
+import { searchForm, statusOpts, tableCols } from './list.config'
+import { schoolBusFollowTeacherApi, membershipApi } from '@/api'
 import ListTableEmpty from '@/components/list-table-empty.vue'
 import { useListTableEmpty } from '@/composables/use-list-table-empty'
-import type { FollowTeacherRecord } from '@/types/modules/school-bus-follow-teacher'
+import type { SchoolOptionRecord } from '@/types/modules/membership'
+import type { FollowTeacherRecord, FollowTeacherListParams } from '@/types/modules/school-bus-follow-teacher'
+import { normalizeArray, normalizePaged } from '@/utils/api-response-normalize'
 import { downloadBlob } from '@/utils/download'
-import TeacherForm from './components/form.vue'
+import { membershipSchoolLabel, membershipSchoolToOptions } from '@/utils/membership-school'
 import { isSpreadsheetFilename } from '@/utils/school-bus'
+import dayjs from 'dayjs'
+import { ElMessage, ElMessageBox } from 'element-plus'
+import { useUniI18n, useUniListState } from 'uni-ui-lib'
+import type { UniTableAction, UniTableRequest } from 'uni-ui-lib'
+import { computed, ref, nextTick, onMounted, watch } from 'vue'
 
-import { useList } from './use-list'
 
-const { t } = useUniI18n()
+const { locale, t } = useUniI18n()
+
 const fileRef = ref<HTMLInputElement | null>(null)
 
-const {
-  actions,
-  columns,
-  activeRow,
-  defaultSchoolId,
-  filters,
-  formMode,
-  formVisible,
-  handleLoadSuccess,
-  loadData,
-  multiSchool,
-  openForm,
-  queryModel,
-  reset,
-  schoolOptions,
-  search,
-  searchCfg,
-  statusOptions,
-  tableRef
-} = useList()
+
+const initialFilters: Record<string, unknown> = {
+  keyword: '',
+  schoolIds: undefined
+}
+const { queryModel, filters, tableRef, search, reset, handleLoadSuccess, refreshTable } =
+  useUniListState({
+  initialFilters
+})
+
+const schoolRecords = ref<SchoolOptionRecord[]>([])
+const schoolOptions = computed(() => membershipSchoolToOptions(schoolRecords.value, locale()))
+const multiSchool = computed(() => schoolRecords.value.length > 1)
+const defaultSchoolId = computed(() =>
+  schoolRecords.value.length === 1 ? schoolRecords.value[0].id : null
+)
+
+const statusOptions = computed(() => statusOpts(t))
+const searchCfg = computed(() => searchForm(t, schoolOptions.value, multiSchool.value))
+const columns = computed(() => tableCols(t, statusOptions.value))
+
+const formVisible = ref(false)
+const formMode = ref<'add' | 'edit' | 'look'>('add')
+const activeRow = ref<FollowTeacherRecord | null>(null)
+
+const decorate = (row: FollowTeacherRecord): FollowTeacherRecord => ({
+  ...row,
+  schoolLabel: membershipSchoolLabel(schoolRecords.value, row.school, locale()),
+  lastLoginTime: row.lastLoginTime
+    ? dayjs(String(row.lastLoginTime)).format('YYYY-MM-DD HH:mm')
+    : '--'
+})
+
+const loadData: UniTableRequest = async ({ pageNo: current, pageSize: size, filters: f }) => {
+  const raw: FollowTeacherListParams = { current, size, ...f } as FollowTeacherListParams
+  if (!multiSchool.value && defaultSchoolId.value != null && raw.schoolIds == null) {
+    raw.schoolIds = defaultSchoolId.value
+  }
+  const result = await schoolBusFollowTeacherApi.page.get(raw)
+  const { list, total } = normalizePaged<FollowTeacherRecord>(result)
+  return { data: list.map(decorate), total }
+}
+
+const openForm = (mode: 'add' | 'edit' | 'look', row?: FollowTeacherRecord) => {
+  formMode.value = mode
+  activeRow.value = row ?? null
+  formVisible.value = true
+}
+
+const actions = computed<UniTableAction[]>(() => [
+  {
+    label: t('schoolBus.look'),
+    onClick: (row) => openForm('look', row as FollowTeacherRecord)
+  },
+  {
+    label: t('schoolBus.edit'),
+    code: 'teacheruser_edit',
+    onClick: (row) => openForm('edit', row as FollowTeacherRecord)
+  }
+])
+
+onMounted(async () => {
+  const raw = await membershipApi.school.get()
+  schoolRecords.value = normalizeArray(raw) as SchoolOptionRecord[]
+})
+
+watch(
+  () => schoolRecords.value,
+  (records) => {
+    if (records.length === 1) {
+      queryModel.schoolIds = [records[0].id]
+    }
+    if (records.length > 0) {
+      nextTick(() => tableRef.value?.refresh())
+    }
+  }
+)
 
 const tableEmpty = useListTableEmpty(filters, { tableRef, afterLoadSuccess: handleLoadSuccess })
 
@@ -251,8 +320,7 @@ const del = async () => {
   } catch {
     /* request 层已提示 */
   }
-}
-</script>
+}</script>
 
 <style scoped lang="scss">
 .school-bus-follow-teacher {

@@ -7,7 +7,7 @@ import type { ListTableEmptyKind } from '@/types/list-table-empty'
 export type { ListTableEmptyKind } from '@/types/list-table-empty'
 
 /** 与 useUniListState 中 filters 语义一致：无任何有效筛选条件视为未筛选 */
-export function hasActiveListFilters(filters: Record<string, unknown>): boolean {
+function hasActiveListFilters(filters: Record<string, unknown>): boolean {
   return Object.values(filters).some((v) => {
     if (v === undefined || v === null || v === '') {
       return false

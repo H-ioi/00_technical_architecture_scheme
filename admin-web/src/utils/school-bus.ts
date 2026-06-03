@@ -29,12 +29,6 @@ export function normalizeSchoolIdsOnRow(row: Loose): void {
   row.schoolIds = [raw as string | number]
 }
 
-/** 校车模块 Excel 导入文件名 */
-export function isSpreadsheetFilename(name: string): boolean {
-  const lower = name.toLowerCase()
-  return lower.endsWith('.xls') || lower.endsWith('.xlsx')
-}
-
 /** 请求参数去掉空串 / 空数组 */
 export function stripEmptyQueryParams(p: Record<string, unknown>): Record<string, unknown> {
   const o: Record<string, unknown> = {}
@@ -48,18 +42,6 @@ export function stripEmptyQueryParams(p: Record<string, unknown>): Record<string
     o[k] = v
   }
   return o
-}
-
-/** 详情 descriptions 单元格：空值显示 -- */
-export function detailCellDisplay(
-  record: Loose | null | undefined,
-  prop: string | number | symbol | null | undefined
-): string {
-  if (!record || prop == null) {
-    return ''
-  }
-  const val = record[String(prop)]
-  return val == null || val === '' ? '--' : String(val)
 }
 
 /** 校车级联接口 schoolIds：表单 school 字段 + 单校默认 id */

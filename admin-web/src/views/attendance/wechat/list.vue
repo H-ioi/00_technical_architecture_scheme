@@ -16,7 +16,8 @@
       :submit-text="$t('member.search')"
       :reset-text="$t('member.reset')"
       @search="search"
-      @reset="reset" />
+      @reset="reset"
+    />
 
     <UniDataTable
       ref="tableRef"
@@ -31,18 +32,21 @@
       :action-column="{ width: 60, fixed: 'right' }"
       @selection-change="onSelectionChange"
       @load-success="tableEmpty.onLoadSuccess"
-      @request-error="tableEmpty.onRequestError">
+      @request-error="tableEmpty.onRequestError"
+    >
       <template #toolbar>
         <el-button
           v-uni-permission="'archive_wx_openid'"
           :disabled="selection.length === 0"
-          @click="batchStatus(1)">
+          @click="batchStatus(1)"
+        >
           {{ $t('attendance.wechatOpenid.archive') }}
         </el-button>
         <el-button
           v-uni-permission="'archive_wx_openid'"
           :disabled="selection.length === 0"
-          @click="batchStatus(0)">
+          @click="batchStatus(0)"
+        >
           {{ $t('attendance.wechatOpenid.activate') }}
         </el-button>
       </template>
@@ -56,35 +60,107 @@
 </template>
 
 <script setup lang="ts">
-import { ElMessage } from 'element-plus'
-import { useUniI18n } from 'uni-ui-lib'
-
-import { attendanceWechatOpenidApi } from '@/api'
+import DetailDialog from './components/detail-dialog.vue'
+import { detailForm, searchForm, tableCols, wechatOpenidStatusOpts } from './list.config'
+import { attendanceWechatOpenidApi, membershipApi } from '@/api'
 import ListTableEmpty from '@/components/list-table-empty.vue'
 import { useListTableEmpty } from '@/composables/use-list-table-empty'
-import DetailDialog from './components/detail-dialog.vue'
-import { useList } from './use-list'
+import type { AttendanceWechatOpenidListParams, AttendanceWechatOpenidRecord } from '@/types/modules/attendance-wechat-openid'
+import type { SchoolOptionRecord } from '@/types/modules/membership'
+import { normalizePaged } from '@/utils/api-response-normalize'
+import { dateFormat } from '@/utils/tool'
+import { ElMessage } from 'element-plus'
+import { useUniI18n, toUniOptions, useUniListState } from 'uni-ui-lib'
+import type { UniTableAction, UniTableRequest } from 'uni-ui-lib'
+import { computed, ref } from 'vue'
 
-const { t } = useUniI18n()
 
-const {
-  actions,
-  columns,
-  activeRow,
-  detailConfig,
-  detailVisible,
-  filters,
-  handleLoadSuccess,
-  loadData,
-  onSelectionChange,
-  selection,
-  queryModel,
-  refreshTable,
-  reset,
-  search,
-  searchCfg,
-  tableRef
-} = useList()
+const { locale, t } = useUniI18n()
+
+type Loose = Record<string, unknown>
+
+const initialFilters: Record<string, unknown> = {
+  schoolId: undefined,
+  admissionNo: '',
+  nickname: '',
+  openId: '',
+  status: undefined,
+  beginDate: undefined,
+  endDate: undefined
+}
+
+const { queryModel, filters, tableRef, handleLoadSuccess, reset, search, refreshTable } =
+  useUniListState({
+    initialFilters
+  })
+
+const schoolRecords = ref<SchoolOptionRecord[]>([])
+const schoolOptions = computed(() =>
+  toUniOptions(schoolRecords.value, {
+    labelKeys: locale() === 'en' ? ['enName', 'name'] : ['name', 'cnName', 'enName'],
+    valueKey: 'id'
+  })
+)
+
+const statusSearchOptions = computed(() => wechatOpenidStatusOpts(t))
+
+const searchCfg = computed(() =>
+  searchForm(t, schoolOptions.value, statusSearchOptions.value)
+)
+
+const columns = computed(() => tableCols(t, schoolOptions.value))
+
+const detailConfig = computed(() => detailForm(t, schoolOptions.value))
+
+const detailVisible = ref(false)
+const activeRow = ref<AttendanceWechatOpenidRecord | null>(null)
+
+const selection = ref<AttendanceWechatOpenidRecord[]>([])
+const onSelectionChange = (rows: unknown[]) => {
+  selection.value = rows as AttendanceWechatOpenidRecord[]
+}
+
+const decorateRow = (raw: Loose): AttendanceWechatOpenidRecord => {
+  const statusHit = statusSearchOptions.value.find(
+    (o) => String(o.value) === String(raw.status ?? '')
+  )
+  return {
+  ...(raw as AttendanceWechatOpenidRecord),
+  status: statusHit?.label ?? String(raw.status ?? '--'),
+  updateTime: dateFormat(String(raw.updateTime ?? '')),
+  createTime: dateFormat(String(raw.createTime ?? ''))
+  }
+}
+
+const loadData: UniTableRequest = async ({ pageNo, pageSize, filters: f }) => {
+  const params: AttendanceWechatOpenidListParams = {
+    current: pageNo,
+    size: pageSize,
+    ...(f as Record<string, unknown>)
+  }
+  const raw = await attendanceWechatOpenidApi.openidPage.get(params)
+  const { list, total } = normalizePaged<Loose>(raw)
+  return {
+    data: list.map(decorateRow),
+    total
+  }
+}
+
+const actions = computed<UniTableAction[]>(() => [
+  {
+    label: t('attendance.detail'),
+    onClick: (row) => {
+      activeRow.value = row as AttendanceWechatOpenidRecord
+      detailVisible.value = true
+    }
+  }
+])
+
+const loadOpts = async () => {
+  schoolRecords.value = await membershipApi.school.get()
+}
+
+loadOpts()
 
 const tableEmpty = useListTableEmpty(filters, { tableRef, afterLoadSuccess: handleLoadSuccess })
 
@@ -102,5 +178,4 @@ const batchStatus = async (status: number) => {
   } catch {
     /* request 层已提示 */
   }
-}
-</script>
+}</script>

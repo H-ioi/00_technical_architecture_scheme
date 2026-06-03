@@ -23,7 +23,8 @@
       type="file"
       accept=".xlsx,.xls"
       class="school-bus-car-page__file"
-      @change="onImportFile" />
+      @change="onImportFile"
+    >
 
     <UniSearchForm
       v-model="queryModel"
@@ -34,7 +35,8 @@
       :submit-text="$t('schoolBus.search')"
       :reset-text="$t('schoolBus.reset')"
       @search="search"
-      @reset="reset" />
+      @reset="reset"
+    />
 
     <UniDataTable
       ref="tableRef"
@@ -49,13 +51,15 @@
       :action-column="{ width: 110, fixed: 'right' }"
       @selection-change="onSelectionChange"
       @load-success="tableEmpty.onLoadSuccess"
-      @request-error="tableEmpty.onRequestError">
+      @request-error="tableEmpty.onRequestError"
+    >
       <template #toolbar>
         <el-button
           v-uni-permission="'buscarinfo_del'"
           type="danger"
           :disabled="ids.length === 0"
-          @click="del">
+          @click="del"
+        >
           {{ $t('schoolBus.delete') }}
         </el-button>
       </template>
@@ -72,48 +76,126 @@
       :school-options="schoolOptions"
       :status-options="statusOptions"
       :multi-school="multiSchool"
-      @saved="refreshTable" />
+      @saved="refreshTable"
+    />
   </section>
 </template>
 
 <script setup lang="ts">
-import { ElMessage, ElMessageBox } from 'element-plus'
-import { useUniI18n } from 'uni-ui-lib'
-import { computed, ref } from 'vue'
-
-import { schoolBusCarApi } from '@/api'
+import CarForm from './components/form.vue'
+import { searchForm, tableCols, carStatusOpts } from './list.config'
+import { schoolBusCarApi, membershipApi } from '@/api'
 import ListTableEmpty from '@/components/list-table-empty.vue'
 import { useListTableEmpty } from '@/composables/use-list-table-empty'
-import type { CarRecord } from '@/types/modules/school-bus-car'
-import CarForm from './components/form.vue'
+import type { SchoolOptionRecord } from '@/types/modules/membership'
+import type { CarRecord, CarListParams } from '@/types/modules/school-bus-car'
+import { normalizeArray, normalizePaged } from '@/utils/api-response-normalize'
+import { membershipSchoolLabelsJoined, membershipSchoolToOptions } from '@/utils/membership-school'
 import { isSpreadsheetFilename } from '@/utils/school-bus'
+import dayjs from 'dayjs'
+import { ElMessage, ElMessageBox } from 'element-plus'
+import { useUniI18n, useUniListState } from 'uni-ui-lib'
+import type { UniTableAction, UniTableRequest } from 'uni-ui-lib'
+import { computed, ref, nextTick, onMounted, watch } from 'vue'
 
-import { useList } from './use-list'
 
-const { t } = useUniI18n()
+const { locale, t } = useUniI18n()
+
 const fileRef = ref<HTMLInputElement | null>(null)
 
-const {
-  actions,
-  columns,
-  activeRow,
-  defaultSchoolId,
-  filters,
-  formMode,
-  formVisible,
-  handleLoadSuccess,
-  loadData,
-  multiSchool,
-  openForm,
-  queryModel,
-  refreshTable,
-  reset,
-  schoolOptions,
-  search,
-  searchCfg,
-  statusOptions,
-  tableRef
-} = useList()
+
+const initialFilters: Record<string, unknown> = {
+  schoolIds: undefined,
+  carNumber: '',
+  driver: '',
+  carTeacher: '',
+  status: undefined
+}
+const { queryModel, filters, tableRef, search, reset, handleLoadSuccess, refreshTable } =
+  useUniListState({
+    initialFilters
+  })
+const schoolRecords = ref<SchoolOptionRecord[]>([])
+const schoolOptions = computed(() => membershipSchoolToOptions(schoolRecords.value, locale()))
+const multiSchool = computed(() => schoolRecords.value.length > 1)
+const defaultSchoolId = computed(() =>
+  schoolRecords.value.length === 1 ? schoolRecords.value[0].id : null
+)
+
+const statusOptions = computed(() => carStatusOpts(t))
+const searchCfg = computed(() =>
+  searchForm(t, schoolOptions.value, statusOptions.value, multiSchool.value)
+)
+const columns = computed(() => tableCols(t, statusOptions.value))
+
+const formVisible = ref(false)
+const formMode = ref<'add' | 'edit' | 'look'>('add')
+const activeRow = ref<CarRecord | null>(null)
+
+const decorate = (row: CarRecord): CarRecord => {
+  const loc = locale()
+  const showSchoolNames = membershipSchoolLabelsJoined(
+    schoolRecords.value,
+    row.schoolIds,
+    loc,
+    row.schoolEnNames != null ? String(row.schoolEnNames) : undefined
+  )
+  return {
+    ...row,
+    showSchoolNames,
+    driverName:
+      row.driverInfo && typeof row.driverInfo === 'object'
+        ? (row.driverInfo as { name?: string }).name
+        : row.driverName,
+    createTime: row.createTime ? dayjs(String(row.createTime)).format('YYYY-MM-DD HH:mm') : '',
+    updateTime: row.updateTime ? dayjs(String(row.updateTime)).format('YYYY-MM-DD HH:mm') : ''
+  }
+}
+
+const loadData: UniTableRequest = async ({ pageNo: current, pageSize: size, filters: f }) => {
+  const raw: CarListParams = { current, size, ...f } as CarListParams
+  if (!multiSchool.value && defaultSchoolId.value != null && raw.schoolIds == null) {
+    raw.schoolIds = defaultSchoolId.value
+  }
+  const result = await schoolBusCarApi.page.get(raw)
+  const { list, total } = normalizePaged<CarRecord>(result)
+  return { data: list.map(decorate), total }
+}
+
+const openForm = (mode: 'add' | 'edit' | 'look', row?: CarRecord) => {
+  formMode.value = mode
+  activeRow.value = row ?? null
+  formVisible.value = true
+}
+
+const actions = computed<UniTableAction[]>(() => [
+  {
+    label: t('schoolBus.look'),
+    onClick: (row) => openForm('look', row as CarRecord)
+  },
+  {
+    label: t('schoolBus.edit'),
+    code: 'buscarinfo_edit',
+    onClick: (row) => openForm('edit', row as CarRecord)
+  }
+])
+
+onMounted(async () => {
+  const raw = await membershipApi.school.get()
+  schoolRecords.value = normalizeArray(raw) as SchoolOptionRecord[]
+})
+
+watch(
+  () => schoolRecords.value,
+  (records) => {
+    if (records.length === 1) {
+      queryModel.schoolIds = records[0].id
+    }
+    if (records.length > 0) {
+      nextTick(() => tableRef.value?.refresh())
+    }
+  }
+)
 
 const tableEmpty = useListTableEmpty(filters, { tableRef, afterLoadSuccess: handleLoadSuccess })
 
@@ -176,8 +258,7 @@ const del = async () => {
   } catch {
     /* request 层已提示 */
   }
-}
-</script>
+}</script>
 
 <style scoped lang="scss">
 .school-bus-car-page {

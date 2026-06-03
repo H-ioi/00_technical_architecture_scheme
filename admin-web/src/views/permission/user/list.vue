@@ -21,7 +21,8 @@
           default-expand-all
           :props="{ label: 'name', children: 'children' }"
           class="permission-user__tree"
-          @node-click="onDeptNode" />
+          @node-click="onDeptNode"
+        />
       </el-col>
       <el-col :xs="24" :sm="17" :md="18">
         <UniSearchForm
@@ -33,7 +34,8 @@
           :submit-text="t('permission.search')"
           :reset-text="t('permission.reset')"
           @search="search"
-          @reset="reset" />
+          @reset="reset"
+        />
         <UniDataTable
           ref="tableRef"
           row-key="userId"
@@ -46,7 +48,8 @@
           :action-column="{ width: 110, fixed: 'right' }"
           class="permission-user__table"
           @load-success="tableEmpty.onLoadSuccess"
-          @request-error="tableEmpty.onRequestError">
+          @request-error="tableEmpty.onRequestError"
+        >
           <template #empty>
             <ListTableEmpty :kind="tableEmpty.kind" @reset="reset" @retry="tableEmpty.retry" />
           </template>
@@ -60,26 +63,25 @@
       :record="formRecord"
       :dept-options="deptFlat"
       :role-options="roleFlat"
-      @saved="refreshTable" />
+      @saved="refreshTable"
+    />
   </section>
 </template>
 
 <script setup lang="ts">
-import { ElMessageBox } from 'element-plus'
-import { UniDataTable, UniSearchForm, useUniI18n } from 'uni-ui-lib'
-import { onMounted, ref } from 'vue'
-
+import UserFormDialog from './components/form-dialog.vue'
+import { lockOpts, searchForm, tableCols } from './list.config'
+import { permissionDeptApi, permissionRoleApi, permissionUserApi } from '@/api'
 import ListTableEmpty from '@/components/list-table-empty.vue'
 import { useListTableEmpty } from '@/composables/use-list-table-empty'
-
-import { permissionDeptApi, permissionRoleApi, permissionUserApi } from '@/api'
 import type { PermissionDeptRecord } from '@/types/modules/permission-dept'
 import type { PermissionUserRecord } from '@/types/modules/permission-user'
-import { normalizeArray } from '@/utils/api-response-normalize'
+import { normalizeArray, normalizePaged } from '@/utils/api-response-normalize'
+import { ElMessageBox } from 'element-plus'
+import { UniDataTable, UniSearchForm, useUniI18n, useUniListState } from 'uni-ui-lib'
+import type { UniTableAction, UniTableRequest } from 'uni-ui-lib'
+import { onMounted, ref, computed } from 'vue'
 
-import UserFormDialog from './components/form-dialog.vue'
-import type { PermissionUserTableRow } from './use-list'
-import { useList } from './use-list'
 
 const { t } = useUniI18n()
 
@@ -139,22 +141,54 @@ function openEdit(row: PermissionUserTableRow) {
   formVisible.value = true
 }
 
-const {
-  actions,
-  columns,
-  filters,
-  handleLoadSuccess,
-  loadData,
-  queryModel,
-  reset,
-  search,
-  searchCfg,
-  tableRef,
-  refreshTable
-} = useList(selectedDeptId, {
-  onEdit: openEdit,
-  onDelete: deleteOne
-})
+
+type PermissionUserTableRow = PermissionUserRecord & { rolesLabel?: string }
+
+const initialFilters = { username: '', nickname: '' }
+const { queryModel, filters, tableRef, search, reset, handleLoadSuccess, refreshTable } =
+  useUniListState({
+    initialFilters
+  })
+
+const lockList = computed(() => lockOpts(t))
+const searchCfg = computed(() => searchForm(t))
+const columns = computed(() => tableCols(t, lockList.value))
+
+const loadData: UniTableRequest = async ({ pageNo, pageSize, filters: f }) => {
+  const raw = await permissionUserApi.page.get({
+    current: pageNo,
+    size: pageSize,
+    ...f,
+    ...(selectedDeptId.value !== undefined && selectedDeptId.value !== null
+      ? { deptId: selectedDeptId.value }
+      : {})
+  })
+  const { list, total } = normalizePaged<PermissionUserRecord>(raw)
+  const data: PermissionUserTableRow[] = list.map((r) => {
+    const roleNames = Array.isArray(r.roleList)
+      ? r.roleList.map((x) => x.roleName).filter(Boolean).join(', ')
+      : ''
+    return {
+      ...r,
+      rolesLabel: roleNames || '—'
+    }
+  })
+  return { data, total }
+}
+
+const actions = computed<UniTableAction[]>(() => [
+  {
+    label: t('permission.edit'),
+    onClick: (row) => openEdit(row as PermissionUserTableRow)
+  },
+  {
+    label: t('permission.delete'),
+    onClick: async (row) => {
+      await deleteOne(row as PermissionUserTableRow)
+      tableRef.value?.refresh()
+    }
+  }
+])
 
 const tableEmpty = useListTableEmpty(filters, { tableRef, afterLoadSuccess: handleLoadSuccess })
 
@@ -173,8 +207,7 @@ const onDeptNode = (node: PermissionDeptRecord) => {
 
 onMounted(() => {
   void loadDeptAndRoles()
-})
-</script>
+})</script>
 
 <style scoped lang="scss">
 .permission-user {

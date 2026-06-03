@@ -52,28 +52,89 @@
 </template>
 
 <script setup lang="ts">
-import { UniDataTable, UniSearchForm } from 'uni-ui-lib'
-import { ref } from 'vue'
-
 import FormDialog from './components/form-dialog.vue'
-import { useVoteProgramList } from './use-list'
+import { searchForm, tableCols } from './list.config'
+import { activityVoteProgramApi } from '@/api'
+import type { Translate } from '@/types/i18n'
+import { normalizePaged } from '@/utils/api-response-normalize'
+import { ElMessage, ElMessageBox } from 'element-plus'
+import { UniDataTable, UniSearchForm, useUniI18n, useUniListState } from 'uni-ui-lib'
+import type { UniTableAction, UniTableRequest } from 'uni-ui-lib'
+import { ref, computed } from 'vue'
+
+
+
+const { t } = useUniI18n()
 
 const formDlg = ref<InstanceType<typeof FormDialog> | null>(null)
 
-const {
-  actions,
-  columns,
-  deleteSelected,
-  filters,
-  handleLoadSuccess,
-  loadData,
-  refreshTable,
-  onSelectionChange,
-  queryModel,
-  reset,
-  search,
-  searchCfg,
-  selectedIds,
-  tableRef
-} = useVoteProgramList({ formDlg })
-</script>
+
+type Row = Record<string, unknown>
+
+const tr = t as Translate
+
+const { queryModel, filters, handleLoadSuccess, refreshTable, reset, search, tableRef } =
+  useUniListState({
+  initialFilters: { keyword: '' }
+})
+
+const selectedRows = ref<Row[]>([])
+const selectedIds = computed(
+  () =>
+    selectedRows.value.map((row) => row.id).filter((id) => id != null) as Array<string | number>
+)
+
+const searchCfg = computed(() => searchForm(tr))
+const columns = computed(() => tableCols(tr))
+
+const loadData: UniTableRequest = async ({
+  pageNo: current,
+  pageSize: size,
+  filters: filterModel
+}) => {
+  const f = filterModel as Row
+  const raw = await activityVoteProgramApi.page.get({
+    current,
+    size,
+    keyword: (f.keyword as string) || undefined
+  })
+  const { list, total } = normalizePaged<Row>(raw)
+  return { data: list, total }
+}
+
+const actions = computed<UniTableAction[]>(() => [
+  {
+    label: tr('activity.lookDetail'),
+    onClick: (row) => void formDlg.value?.open('view', row as Row)
+  },
+  {
+    label: tr('activity.entryEdit'),
+    code: 'busdriver_edit',
+    onClick: (row) => void formDlg.value?.open('edit', row as Row)
+  }
+])
+
+const onSelectionChange = (rows: Record<string, unknown>[]) => {
+  selectedRows.value = rows as Row[]
+}
+
+const deleteSelected = async () => {
+  if (!selectedIds.value.length) {
+    ElMessage.warning(tr('activity.voteProgramSelRows'))
+    return
+  }
+  try {
+    await ElMessageBox.confirm(tr('activity.confirmDeleteVotePrograms'), tr('common.tip'), {
+      type: 'warning'
+    })
+  } catch {
+    return
+  }
+  try {
+    await activityVoteProgramApi.remove.delete(selectedIds.value)
+    ElMessage.success(tr('activity.deleteOk'))
+    tableRef.value?.refresh()
+  } catch {
+    ElMessage.error(tr('activity.saveFail'))
+  }
+}</script>

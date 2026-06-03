@@ -19,7 +19,8 @@
       :submit-text="$t('member.search')"
       :reset-text="$t('member.reset')"
       @search="search"
-      @reset="reset" />
+      @reset="reset"
+    />
 
     <UniDataTable
       ref="tableRef"
@@ -34,14 +35,19 @@
       :action-column="{ width: 168, fixed: 'right' }"
       @load-success="tableEmpty.onLoadSuccess"
       @request-error="tableEmpty.onRequestError"
-      @selection-change="onSelectionChange">
+      @selection-change="onSelectionChange"
+    >
       <template #toolbar>
-        <el-button :disabled="batchDisabled" @click="batchStatus(0)">{{
-          $t('email.archive')
-        }}</el-button>
-        <el-button :disabled="batchDisabled" @click="batchStatus(1)">{{
-          $t('email.markActive')
-        }}</el-button>
+        <el-button :disabled="batchDisabled" @click="batchStatus(0)">
+          {{
+            $t('email.archive')
+          }}
+        </el-button>
+        <el-button :disabled="batchDisabled" @click="batchStatus(1)">
+          {{
+            $t('email.markActive')
+          }}
+        </el-button>
         <el-button type="danger" :disabled="batchDisabled" @click="batchStatus(-1)">
           {{ $t('email.deleteBatch') }}
         </el-button>
@@ -55,7 +61,8 @@
       v-model="dialogVisible"
       v-model:form="formModel"
       :mode="dialogMode"
-      @success="tableRef?.refresh()" />
+      @success="tableRef?.refresh()"
+    />
 
     <el-dialog v-model="viewVisible" :title="$t('email.view')" width="520px" destroy-on-close>
       <div class="email-send-view">
@@ -86,37 +93,163 @@
 </template>
 
 <script setup lang="ts">
-import { UniDataTable, UniSearchForm } from 'uni-ui-lib'
-
+import SendMailDialog from './components/send-mail-dialog.vue'
+import { searchForm, statusOpts as statusOptsFn, tableCols } from './list.config'
+import { bulkEmailApi } from '@/api'
 import ListTableEmpty from '@/components/list-table-empty.vue'
 import { useListTableEmpty } from '@/composables/use-list-table-empty'
-import SendMailDialog from './components/send-mail-dialog.vue'
-import { useList } from './use-list'
+import type { Translate } from '@/types/i18n'
+import { normalizePaged } from '@/utils/api-response-normalize'
+import { ElMessage, ElMessageBox } from 'element-plus'
+import { UniDataTable, UniSearchForm, useUniI18n, useUniListState } from 'uni-ui-lib'
+import type { UniTableAction, UniTableRequest } from 'uni-ui-lib'
+import { computed, ref } from 'vue'
 
-const {
-  actions,
-  batchDisabled,
-  batchStatus,
-  columns,
-  dialogMode,
-  dialogVisible,
-  filters,
-  formModel,
-  handleLoadSuccess,
-  loadData,
-  onSelectionChange,
-  openAdd,
-  queryModel,
-  reset,
-  search,
-  searchCfg,
-  tableRef,
-  viewModel,
-  viewVisible
-} = useList()
 
-const tableEmpty = useListTableEmpty(filters, { tableRef, afterLoadSuccess: handleLoadSuccess })
-</script>
+
+
+const { t } = useUniI18n()
+
+type Loose = Record<string, unknown>
+const pickDetail = async (id: string | number) => {
+  const raw = await bulkEmailApi.userMailinfoDetail.get({ id })
+  return (raw && typeof raw === 'object' ? (raw as Loose) : {}) as Loose
+}
+
+const tr = t as Translate
+const { queryModel, filters, tableRef, handleLoadSuccess, reset, search } = useUniListState({
+  initialFilters: { keyword: '', status: '' }
+})
+const statusOpts = computed(() => statusOptsFn(tr))
+const searchCfg = computed(() => searchForm(tr, statusOpts.value))
+const columns = computed(() => tableCols(tr))
+
+const dialogVisible = ref(false)
+const viewVisible = ref(false)
+const dialogMode = ref<'add' | 'edit'>('add')
+const selection = ref<Loose[]>([])
+const batchDisabled = computed(() => selection.value.length === 0)
+
+const onSelectionChange = (rows: Record<string, unknown>[]) => {
+  selection.value = rows as Loose[]
+}
+
+const viewModel = ref<{
+  userLines: string[]
+  email: string
+  groups: string
+  statusLabel: string
+}>({ userLines: [], email: '', groups: '', statusLabel: '' })
+
+const formModel = ref({
+  userMailinfoId: '' as string | number,
+  userIds: [] as string[],
+  email: '',
+  mailgroupIds: [] as (string | number)[],
+  status: '1'
+})
+
+const loadData: UniTableRequest = async ({ pageNo, pageSize, filters: f }) => {
+  const raw = await bulkEmailApi.userMailinfoPage.get({
+    current: pageNo,
+    size: pageSize,
+    keyword: String((f as Loose).keyword ?? ''),
+    status: (f as Loose).status === '' || (f as Loose).status == null ? undefined : String((f as Loose).status)
+  })
+  const { list, total } = normalizePaged(raw)
+  return { data: list, total }
+}
+
+const openAdd = () => {
+  dialogMode.value = 'add'
+  formModel.value = {
+    userMailinfoId: '',
+    userIds: [],
+    email: '',
+    mailgroupIds: [],
+    status: '1'
+  }
+  dialogVisible.value = true
+}
+
+const openEdit = async (row: Loose) => {
+  dialogMode.value = 'edit'
+  const id = row.id
+  const data = await pickDetail(id as string | number)
+  const mailinfo = (data.mailinfo as Loose) ?? {}
+  formModel.value = {
+    userMailinfoId: mailinfo.id ?? '',
+    userIds: (data.userIdRelations as unknown[] | undefined)?.map((x) => String(x)) ?? [],
+    email: String(mailinfo.email ?? ''),
+    mailgroupIds: (data.mailgroupIdRelations as unknown[] | undefined)?.map((x) => x as string | number) ?? [],
+    status: mailinfo.status != null ? String(mailinfo.status) : '1'
+  }
+  dialogVisible.value = true
+}
+
+const openView = async (row: Loose) => {
+  const data = await pickDetail(row.id as string | number)
+  const mailinfo = (data.mailinfo as Loose) ?? {}
+  const userRelations = (data.userRelations as { username?: string }[] | undefined) ?? []
+  const groupRels = data.mailgroupRelations as { mailgroupName?: string }[] | undefined
+  const groups =
+    Array.isArray(groupRels) && groupRels.length
+      ? groupRels
+          .map((g) => g.mailgroupName ?? '')
+          .filter(Boolean)
+          .join('，')
+              : '—'
+  viewModel.value = {
+    userLines: userRelations.map((u) => u.username ?? '').filter(Boolean),
+    email: String(mailinfo.email ?? ''),
+    groups,
+    statusLabel:
+      Number(mailinfo.status) === 1 ? tr('email.statusActive') : tr('email.statusArchived')
+  }
+  viewVisible.value = true
+}
+
+const removeRow = (row: Loose) => {
+  ElMessageBox.confirm(tr('email.confirmDelete'), tr('common.tip'), {
+    type: 'warning',
+    confirmButtonText: tr('common.submit'),
+    cancelButtonText: tr('common.cancel')
+  })
+    .then(async () => {
+      await bulkEmailApi.userMailinfoRemove.post({ id: row.id as string | number })
+      ElMessage.success(tr('email.opOk'))
+      tableRef.value?.refresh()
+    })
+    .catch(() => {})
+}
+
+const batchStatus = (status: number) => {
+  const rows = selection.value
+  if (rows.length === 0) {
+    ElMessage.warning(tr('email.selectRows'))
+    return
+  }
+  ElMessageBox.confirm(tr('email.confirmBatch'), tr('common.tip'), {
+    type: 'warning',
+    confirmButtonText: tr('common.submit'),
+    cancelButtonText: tr('common.cancel')
+  })
+    .then(async () => {
+      const ids = rows.map((r) => String(r.id)).join(',')
+      await bulkEmailApi.userMailinfoBatchStatus.post({ ids, status })
+      ElMessage.success(tr('email.opOk'))
+      tableRef.value?.refresh()
+    })
+    .catch(() => {})
+}
+
+const actions = computed<UniTableAction[]>(() => [
+  { label: tr('email.edit'), onClick: (row) => void openEdit(row as Loose) },
+  { label: tr('email.view'), onClick: (row) => void openView(row as Loose) },
+  { label: tr('email.delete'), onClick: (row) => removeRow(row as Loose) }
+])
+
+const tableEmpty = useListTableEmpty(filters, { tableRef, afterLoadSuccess: handleLoadSuccess })</script>
 
 <style scoped lang="scss">
 .email-send-view {

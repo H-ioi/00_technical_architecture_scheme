@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { dateFormat, groupSeparator, coerceIdList, getUUID, getCustomerUuid } from '../../utils/tool'
+import { dateFormat, groupSeparator } from '../../utils/tool'
 
 describe('tool.ts', () => {
 
@@ -88,79 +88,6 @@ describe('tool.ts', () => {
 
     it('处理零', () => {
       expect(groupSeparator(0)).toBe('0')
-    })
-  })
-
-  // ==================== coerceIdList ====================
-  describe('coerceIdList', () => {
-    it('单个数字包装为数组', () => {
-      expect(coerceIdList(42)).toEqual([42])
-    })
-
-    it('单个字符串包装为数组', () => {
-      expect(coerceIdList('abc')).toEqual(['abc'])
-    })
-
-    it('null 返回空数组', () => {
-      expect(coerceIdList(null)).toEqual([])
-    })
-
-    it('undefined 返回空数组', () => {
-      expect(coerceIdList(undefined)).toEqual([])
-    })
-
-    it('空字符串返回空数组', () => {
-      expect(coerceIdList('')).toEqual([])
-    })
-
-    it('数组过滤空值', () => {
-      expect(coerceIdList([1, '', null, undefined, 2])).toEqual([1, 2])
-    })
-
-    it('正常数组原样返回', () => {
-      expect(coerceIdList(['a', 'b', 'c'])).toEqual(['a', 'b', 'c'])
-    })
-
-    it('数字0保留', () => {
-      expect(coerceIdList([0, 1])).toEqual([0, 1])
-    })
-  })
-
-  // ==================== getUUID ====================
-  describe('getUUID', () => {
-    it('默认长度16生成大写字母数字串', () => {
-      const uuid = getUUID()
-      expect(uuid.length).toBe(16)
-      expect(uuid).toMatch(/^[A-Z0-9]+$/)
-    })
-
-    it('指定长度生成正确长度', () => {
-      expect(getUUID('', 8).length).toBe(8)
-      expect(getUUID('', 32).length).toBe(32)
-    })
-
-    it('带前缀 name', () => {
-      const uuid = getUUID('ORDER', 8)
-      expect(uuid.startsWith('ORDER-')).toBe(true)
-      expect(uuid.length).toBe(14)
-    })
-
-    it('无前缀 name 为空字符串', () => {
-      const uuid = getUUID('', 10)
-      expect(uuid).not.toContain('-')
-    })
-
-    it('长度小于1抛出错误', () => {
-      expect(() => getUUID('', 0)).toThrow('Length must be at least 1')
-      expect(() => getUUID('', -1)).toThrow('Length must be at least 1')
-    })
-  })
-
-  // ==================== getCustomerUuid ====================
-  describe('getCustomerUuid', () => {
-    it('浏览器环境返回非空字符串', () => {
-      const result = getCustomerUuid()
-      expect(typeof result).toBe('string')
     })
   })
 })

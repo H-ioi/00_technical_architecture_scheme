@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { formatOptionLabels, formatRangeLabel } from '../../utils/form-display'
+import { formatOptionLabels } from '../../utils/form-display'
 import type { UniOption } from 'uni-ui-lib'
 
 describe('form-display.ts', () => {
@@ -43,36 +43,6 @@ describe('form-display.ts', () => {
 
     it('部分匹配部分不匹配', () => {
       expect(formatOptionLabels(sampleOptions, ['a', 'x'])).toBe('选项A, x')
-    })
-  })
-
-  // ==================== formatRangeLabel ====================
-  describe('formatRangeLabel', () => {
-    it('两个元素的数组', () => {
-      expect(formatRangeLabel(['2024-01-01', '2024-06-30'])).toBe('2024-01-01 - 2024-06-30')
-    })
-
-    it('空数组返回空字符串', () => {
-      expect(formatRangeLabel([])).toBe('')
-    })
-
-    it('单元素数组返回空字符串', () => {
-      expect(formatRangeLabel(['only-one'])).toBe('')
-    })
-
-    it('三元素数组返回空字符串', () => {
-      expect(formatRangeLabel(['a', 'b', 'c'])).toBe('')
-    })
-
-    it('非数组返回空字符串', () => {
-      expect(formatRangeLabel('not-array')).toBe('')
-      expect(formatRangeLabel(null)).toBe('')
-      expect(formatRangeLabel(undefined)).toBe('')
-    })
-
-    it('包含空值的数组', () => {
-      expect(formatRangeLabel(['', 'end'])).toBe(' - end')
-      expect(formatRangeLabel(['start', ''])).toBe('start - ')
     })
   })
 })

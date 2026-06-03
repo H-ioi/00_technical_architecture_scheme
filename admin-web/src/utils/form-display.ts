@@ -12,7 +12,3 @@ export function formatOptionLabels(options: UniOption[], value: unknown): string
     .join(', ')
 }
 
-/** 日期范围字段只读展示 */
-export function formatRangeLabel(value: unknown): string {
-  return Array.isArray(value) && value.length === 2 ? `${value[0] || ''} - ${value[1] || ''}` : ''
-}
