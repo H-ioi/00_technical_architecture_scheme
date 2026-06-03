@@ -24,6 +24,8 @@ npm run build
 
 `src/` 顶层目录按模板保持稳定：`api`、`assets`、`components`、`composables`、`directives`、`layouts`、`plugins`、`router`、`stores`、`types`、`utils`、`views`。
 
+路由按业务域拆在 `src/router/modules/`（如 `member.ts`、`activity.ts`），由 `src/router/routes.ts` 聚合后供 `router/index.ts` 注册；新增页面时在对应模块文件追加路由，勿再堆进单文件。
+
 ## 组件库示例
 
 模板已接入发布包 `uni-ui-lib`，可通过侧边栏“组件库示例”查看：

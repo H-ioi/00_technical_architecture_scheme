@@ -6,3 +6,4 @@
 .agents/
 uni-lib/.npmrc
 test/demo
+uni-lib-cli/templates/

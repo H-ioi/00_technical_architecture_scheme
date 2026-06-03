@@ -159,7 +159,7 @@ src/
 ├── layouts/             # 业务布局入口
 ├── locales/             # zh-CN / en 语言包
 ├── plugins/             # 插件入口与业务 UI 预留
-├── router/              # 路由、常量路由、守卫
+├── router/              # index（守卫）、routes.ts（聚合）、modules/（按业务域）
 ├── stores/              # 组件库 store 再导出 + 项目 store
 ├── types/               # API、路由、模块类型
 ├── utils/               # 下载、工具函数
@@ -206,6 +206,8 @@ views/
 - 拉取权限失败时按 401 或其他错误分别处理。
 
 建议保持“后端菜单权限 + 前端路由表”的模式：后端负责返回菜单、路径和权限码；前端负责路由映射、侧栏展示、按钮权限和 403/404 体验。
+
+静态路由按业务域维护在 `src/router/modules/`（如 `member.ts`、`activity.ts`），由 `src/router/routes.ts` 聚合为 `routes` 数组；`index.ts` 仅负责 `createRouter` 与 `beforeEach` 守卫。
 
 权限控制统一使用：
 

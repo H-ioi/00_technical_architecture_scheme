@@ -223,12 +223,20 @@ admin-web/src/
 │       ├── sidebar.vue
 │       └── tags-view.vue
 ├── router/
-│   ├── guards/
-│   ├── modules/
-│   │   ├── constant.ts
-│   │   ├── dashboard.ts
-│   │   └── member.ts
-│   └── index.ts
+│   ├── index.ts          # createRouter、导航守卫
+│   ├── routes.ts         # 聚合导出 routes
+│   └── modules/          # 按业务域拆分（与 views 域对应）
+│       ├── constant.ts   # 登录、403、404
+│       ├── layout.ts     # 主布局及 children 聚合
+│       ├── dashboard.ts
+│       ├── member.ts
+│       ├── activity.ts
+│       ├── base.ts
+│       ├── school-bus.ts
+│       ├── permission.ts
+│       ├── attendance.ts
+│       ├── email.ts
+│       └── protocol.ts
 ├── stores/
 │   └── modules/
 │       ├── app.ts
@@ -759,7 +767,7 @@ if (status === 401) {
 - 菜单标题可按接口返回覆盖。
 - 菜单节点中的 `permission`、`permissions`、`authority` 可补充按钮/业务权限码。
 
-本地路由 `constantRoutes` / `router.getRoutes()` 决定：
+本地路由 `src/router/routes.ts`（由 `router/modules/*` 聚合）/ `router.getRoutes()` 决定：
 
 - 页面组件注册。
 - `meta.titleKey`、`meta.activeMenu`、`meta.hidden` 等前端行为。
@@ -780,7 +788,7 @@ if (status === 401) {
 当前实现位置：
 
 - `src/api/modules/menu.ts`：请求旧菜单接口，做路径兼容和菜单标准化。
-- `src/router/guards/index.ts`：调用 `fetchMenuPermissions(router.getRoutes())`，避免 `menu.ts` 直接导入 `constantRoutes` 造成循环依赖。
+- `src/router/index.ts`：`beforeEach` 中调用 `menuApi.user.get(router.getRoutes())` 拉取菜单与可访问路径，避免 `menu.ts` 直接导入路由表造成循环依赖。
 - `src/stores/modules/permission.ts`：保存 `menus`、`allowedPaths`、`permissionCodes`。
 
 ### 14.2.1 旧路径到新路径映射
