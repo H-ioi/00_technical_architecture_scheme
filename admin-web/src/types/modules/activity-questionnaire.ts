@@ -24,7 +24,9 @@ export type SubmissionRowMap = Record<string, unknown> & {
 // --- 问卷列表 composable（弹窗 ref）---
 
 export type QuestionnaireListDialogRefs = {
-  metaDlg: Ref<{ open: (mode: 'add' | 'edit', row?: Record<string, unknown>) => void | Promise<void> } | null>
+  metaDlg: Ref<{
+    open: (mode: 'add' | 'edit', row?: Record<string, unknown>) => void | Promise<void>
+  } | null>
   copyDlg: Ref<{ open: (row: Record<string, unknown>) => void | Promise<void> } | null>
   batchDlg: Ref<{ open: (kind: 'status' | 'frozen', ids: Array<string | number>) => void } | null>
 }

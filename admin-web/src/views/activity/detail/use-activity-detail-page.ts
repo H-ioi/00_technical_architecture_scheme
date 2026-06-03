@@ -62,7 +62,10 @@ function formatTicketNotifyEmails(d: Loose, disabledText: string): string {
   }
   const raw = d.ticketNotifyEmails
   if (Array.isArray(raw)) {
-    return raw.map((x) => String(x ?? '').trim()).filter(Boolean).join(', ')
+    return raw
+      .map((x) => String(x ?? '').trim())
+      .filter(Boolean)
+      .join(', ')
   }
   return String(raw ?? '').trim()
 }
@@ -288,7 +291,9 @@ export function useActivityDetailPage() {
     if (raw == null || raw === '') {
       return ''
     }
-    const text = String(raw).replace(/<[^>]+>/g, '').trim()
+    const text = String(raw)
+      .replace(/<[^>]+>/g, '')
+      .trim()
     if (!text) {
       return ''
     }
@@ -300,7 +305,9 @@ export function useActivityDetailPage() {
     if (raw == null || raw === '') {
       return ''
     }
-    const text = String(raw).replace(/<[^>]+>/g, '').trim()
+    const text = String(raw)
+      .replace(/<[^>]+>/g, '')
+      .trim()
     if (!text) {
       return ''
     }

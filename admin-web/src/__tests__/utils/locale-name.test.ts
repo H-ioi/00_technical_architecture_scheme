@@ -2,7 +2,6 @@ import { describe, it, expect } from 'vitest'
 import { pickLocaleName } from '../../utils/locale-name'
 
 describe('locale-name.ts', () => {
-
   describe('pickLocaleName', () => {
     it('英文 locale 优先取 enName', () => {
       const row = { enName: 'Test School', cnName: '测试学校', name: 'default' }

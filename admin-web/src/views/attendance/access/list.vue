@@ -16,8 +16,7 @@
       :submit-text="$t('member.search')"
       :reset-text="$t('member.reset')"
       @search="search"
-      @reset="reset"
-    />
+      @reset="reset" />
 
     <UniDataTable
       ref="tableRef"
@@ -30,8 +29,7 @@
       :actions="actions"
       :action-column="{ width: 60, fixed: 'right' }"
       @load-success="tableEmpty.onLoadSuccess"
-      @request-error="tableEmpty.onRequestError"
-    >
+      @request-error="tableEmpty.onRequestError">
       <template #empty>
         <ListTableEmpty :kind="tableEmpty.kind" @reset="reset" @retry="tableEmpty.retry" />
       </template>
@@ -44,20 +42,26 @@
 <script setup lang="ts">
 import { attendanceOpenTypeOpts } from '../school/list.config'
 import DetailDialog from './components/detail-dialog.vue'
-import { accessEnterExitOpts, accessOpenResultOpts, detailForm, searchForm, tableCols } from './list.config'
+import {
+  accessEnterExitOpts,
+  accessOpenResultOpts,
+  detailForm,
+  searchForm,
+  tableCols
+} from './list.config'
 import { attendanceAccessApi, attendanceSchoolApi, membershipApi } from '@/api'
 import ListTableEmpty from '@/components/list-table-empty.vue'
 import { useListTableEmpty } from '@/composables/use-list-table-empty'
-import type { AttendanceAccessListParams, AttendanceAccessRecord } from '@/types/modules/attendance-access'
+import type {
+  AttendanceAccessListParams,
+  AttendanceAccessRecord
+} from '@/types/modules/attendance-access'
 import type { SchoolOptionRecord } from '@/types/modules/membership'
 import { normalizePaged } from '@/utils/api-response-normalize'
 import { dateFormat } from '@/utils/tool'
 import type { UniTableAction, UniTableRequest } from 'uni-ui-lib'
 import { toUniOptions, useUniI18n, useUniListState } from 'uni-ui-lib'
 import { computed, ref } from 'vue'
-
-
-
 
 const { locale, t } = useUniI18n()
 
@@ -93,9 +97,7 @@ const deptOptions = computed(() =>
   )
 )
 
-const searchCfg = computed(() =>
-  searchForm(t, schoolOptions.value, deptOptions.value)
-)
+const searchCfg = computed(() => searchForm(t, schoolOptions.value, deptOptions.value))
 
 const columns = computed(() => tableCols(t, schoolOptions.value))
 
@@ -162,4 +164,5 @@ const loadOpts = async () => {
 
 loadOpts()
 
-const tableEmpty = useListTableEmpty(filters, { tableRef, afterLoadSuccess: handleLoadSuccess })</script>
+const tableEmpty = useListTableEmpty(filters, { tableRef, afterLoadSuccess: handleLoadSuccess })
+</script>

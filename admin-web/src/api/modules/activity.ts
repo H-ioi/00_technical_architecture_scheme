@@ -199,7 +199,8 @@ export default {
   },
   prizeAwardEdit: {
     name: '编辑获奖记录',
-    post: async (data: Record<string, unknown>) => await request.post(`${prizeAwardPath}/edit`, data)
+    post: async (data: Record<string, unknown>) =>
+      await request.post(`${prizeAwardPath}/edit`, data)
   },
   prizeAwardRemove: {
     name: '删除获奖记录',

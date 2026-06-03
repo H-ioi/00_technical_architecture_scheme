@@ -206,10 +206,7 @@
                           {{ $t('activity.visibleScopeUpload') }}
                         </el-button>
                       </el-upload>
-                      <el-button
-                        v-if="hasVisibleScopeFile"
-                        plain
-                        @click="openVisibleScopeDrawer">
+                      <el-button v-if="hasVisibleScopeFile" plain @click="openVisibleScopeDrawer">
                         {{ $t('activity.visibleScopeView') }}
                       </el-button>
                     </div>
@@ -220,9 +217,7 @@
                       {{ $t('activity.visibleScopeHint') }}
                     </p>
                   </template>
-                  <div
-                    v-else-if="hasVisibleScopeFile"
-                    class="activity-event-detail__scope-actions">
+                  <div v-else-if="hasVisibleScopeFile" class="activity-event-detail__scope-actions">
                     <el-button plain @click="openVisibleScopeDrawer">
                       {{ $t('activity.visibleScopeView') }}
                     </el-button>
@@ -335,9 +330,7 @@
       </el-tab-pane>
     </el-tabs>
 
-    <VisibleScopeDrawer
-      v-model:visible="visibleScopeDrawerVisible"
-      :file-id="visibleScopeFileId" />
+    <VisibleScopeDrawer v-model:visible="visibleScopeDrawerVisible" :file-id="visibleScopeFileId" />
   </section>
 </template>
 

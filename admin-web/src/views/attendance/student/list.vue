@@ -21,8 +21,7 @@
       :submit-text="$t('member.search')"
       :reset-text="$t('member.reset')"
       @search="search"
-      @reset="reset"
-    />
+      @reset="reset" />
 
     <UniDataTable
       ref="tableRef"
@@ -35,8 +34,7 @@
       :actions="actions"
       :action-column="{ width: 60, fixed: 'right' }"
       @load-success="tableEmpty.onLoadSuccess"
-      @request-error="tableEmpty.onRequestError"
-    >
+      @request-error="tableEmpty.onRequestError">
       <template #empty>
         <ListTableEmpty :kind="tableEmpty.kind" @reset="reset" @retry="tableEmpty.retry" />
       </template>
@@ -48,11 +46,20 @@
 
 <script setup lang="ts">
 import DetailDialog from './components/detail-dialog.vue'
-import { attendanceSchoolStatusOpts, detailForm, searchForm, tableCols, ynOpts } from './list.config'
+import {
+  attendanceSchoolStatusOpts,
+  detailForm,
+  searchForm,
+  tableCols,
+  ynOpts
+} from './list.config'
 import { attendanceStudentApi, membershipApi } from '@/api'
 import ListTableEmpty from '@/components/list-table-empty.vue'
 import { useListTableEmpty } from '@/composables/use-list-table-empty'
-import type { AttendanceStudentListParams, AttendanceStudentRecord } from '@/types/modules/attendance-student'
+import type {
+  AttendanceStudentListParams,
+  AttendanceStudentRecord
+} from '@/types/modules/attendance-student'
 import type { SchoolOptionRecord } from '@/types/modules/membership'
 import { normalizePaged } from '@/utils/api-response-normalize'
 import { downloadBlob } from '@/utils/download'
@@ -61,7 +68,6 @@ import { ElMessage } from 'element-plus'
 import { useUniI18n, toUniOptions, useUniListState } from 'uni-ui-lib'
 import type { UniTableAction, UniTableRequest } from 'uni-ui-lib'
 import { computed, ref } from 'vue'
-
 
 const { locale, t } = useUniI18n()
 
@@ -127,17 +133,9 @@ const decorateRow = (raw: Loose): AttendanceStudentRecord => {
   const row: AttendanceStudentRecord = {
     ...(raw as AttendanceStudentRecord),
     boarding:
-      boardingStr === '1'
-        ? t('attendance.yes')
-        : boardingStr === '0'
-          ? t('attendance.no')
-          : '--',
+      boardingStr === '1' ? t('attendance.yes') : boardingStr === '0' ? t('attendance.no') : '--',
     schoolBus:
-      schoolBusStr === '1'
-        ? t('attendance.yes')
-        : schoolBusStr === '0'
-          ? t('attendance.no')
-          : '--',
+      schoolBusStr === '1' ? t('attendance.yes') : schoolBusStr === '0' ? t('attendance.no') : '--',
     schoolStatus: statusHit?.label ?? String(raw.schoolStatus ?? '--'),
     attendanceDate: dateFormat(String(raw.attendanceDate ?? ''), 'yyyy-MM-dd'),
     entryTime: dateFormat(String(raw.entryTime ?? '')),
@@ -197,4 +195,5 @@ const exportData = async () => {
   } catch {
     /* request 层已提示 */
   }
-}</script>
+}
+</script>

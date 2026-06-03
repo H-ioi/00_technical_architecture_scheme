@@ -18,8 +18,7 @@
       :submit-text="$t('activity.search')"
       :reset-text="$t('activity.reset')"
       @search="search"
-      @reset="reset"
-    />
+      @reset="reset" />
     <UniDataTable
       ref="tableRef"
       row-key="id"
@@ -32,16 +31,14 @@
       :actions="actions"
       :action-column="{ width: 110, fixed: 'right' }"
       @load-success="handleLoadSuccess"
-      @selection-change="onSelectionChange"
-    >
+      @selection-change="onSelectionChange">
       <template #toolbar>
         <el-button
           v-uni-permission="'busdriver_del'"
           type="danger"
           plain
           :disabled="!selectedIds.length"
-          @click="deleteSelected"
-        >
+          @click="deleteSelected">
           {{ $t('activity.delBatch') }}
         </el-button>
       </template>
@@ -62,12 +59,9 @@ import { UniDataTable, UniSearchForm, useUniI18n, useUniListState } from 'uni-ui
 import type { UniTableAction, UniTableRequest } from 'uni-ui-lib'
 import { ref, computed } from 'vue'
 
-
-
 const { t } = useUniI18n()
 
 const formDlg = ref<InstanceType<typeof FormDialog> | null>(null)
-
 
 type Row = Record<string, unknown>
 
@@ -75,13 +69,12 @@ const tr = t as Translate
 
 const { queryModel, filters, handleLoadSuccess, refreshTable, reset, search, tableRef } =
   useUniListState({
-  initialFilters: { keyword: '' }
-})
+    initialFilters: { keyword: '' }
+  })
 
 const selectedRows = ref<Row[]>([])
 const selectedIds = computed(
-  () =>
-    selectedRows.value.map((row) => row.id).filter((id) => id != null) as Array<string | number>
+  () => selectedRows.value.map((row) => row.id).filter((id) => id != null) as Array<string | number>
 )
 
 const searchCfg = computed(() => searchForm(tr))
@@ -137,4 +130,5 @@ const deleteSelected = async () => {
   } catch {
     ElMessage.error(tr('activity.saveFail'))
   }
-}</script>
+}
+</script>

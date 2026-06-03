@@ -9,11 +9,13 @@ export const ISA_COMMUNITY_QUESTIONNAIRE_SCENE = 'isa_community_questionnaire'
 export default {
   templateAdd: {
     name: '新增动态表单模板',
-    post: async (body: Record<string, unknown>) => await request.post(`${pub}/template/dynamic/form/add`, body)
+    post: async (body: Record<string, unknown>) =>
+      await request.post(`${pub}/template/dynamic/form/add`, body)
   },
   templateEdit: {
     name: '编辑动态表单模板',
-    post: async (body: Record<string, unknown>) => await request.post(`${pub}/template/dynamic/form/edit`, body)
+    post: async (body: Record<string, unknown>) =>
+      await request.post(`${pub}/template/dynamic/form/edit`, body)
   },
   templateDetail: {
     name: '动态表单模板详情',

@@ -126,23 +126,13 @@ export const termDialogFormConfig = (
 export const termDialogRules = (t: Translate, multiSchool: boolean): FormRules => ({
   ...(multiSchool
     ? {
-        schoolIds: [
-          { required: true, message: t('schoolBus.pleaseSelect'), trigger: 'change' }
-        ]
+        schoolIds: [{ required: true, message: t('schoolBus.pleaseSelect'), trigger: 'change' }]
       }
     : {}),
-  cnName: [
-    { required: true, message: t('schoolBus.pleaseSelect'), trigger: 'blur' }
-  ],
-  enName: [
-    { required: true, message: t('schoolBus.pleaseSelect'), trigger: 'blur' }
-  ],
-  intentDate: [
-    { required: true, message: t('schoolBus.pleaseSelect'), trigger: 'change' }
-  ],
-  serviceDate: [
-    { required: true, message: t('schoolBus.pleaseSelect'), trigger: 'change' }
-  ]
+  cnName: [{ required: true, message: t('schoolBus.pleaseSelect'), trigger: 'blur' }],
+  enName: [{ required: true, message: t('schoolBus.pleaseSelect'), trigger: 'blur' }],
+  intentDate: [{ required: true, message: t('schoolBus.pleaseSelect'), trigger: 'change' }],
+  serviceDate: [{ required: true, message: t('schoolBus.pleaseSelect'), trigger: 'change' }]
 })
 
 /** 站点新增弹窗 */
@@ -209,14 +199,10 @@ export const stationDialogFormConfig = (
 export const stationDialogRules = (t: Translate, multiSchool: boolean): FormRules => ({
   ...(multiSchool
     ? {
-        schoolIds: [
-          { required: true, message: t('schoolBus.pleaseSelect'), trigger: 'change' }
-        ]
+        schoolIds: [{ required: true, message: t('schoolBus.pleaseSelect'), trigger: 'change' }]
       }
     : {}),
-  cnName: [
-    { required: true, message: t('schoolBus.pleaseSelect'), trigger: 'blur' }
-  ],
+  cnName: [{ required: true, message: t('schoolBus.pleaseSelect'), trigger: 'blur' }],
   enName: [{ required: true, message: t('schoolBus.pleaseSelect'), trigger: 'blur' }]
 })
 
@@ -253,27 +239,13 @@ export const routePlanMainFormConfig = (
 }
 
 export const routePlanMainRules = (t: Translate): FormRules => ({
-  schoolIds: [
-    { required: true, message: t('schoolBus.pleaseSelect'), trigger: 'change' }
-  ],
-  sectionId: [
-    { required: true, message: t('schoolBus.pleaseSelect'), trigger: 'change' }
-  ],
-  cnName: [
-    { required: true, message: t('schoolBus.pleaseSelect'), trigger: 'blur' }
-  ],
-  enName: [
-    { required: true, message: t('schoolBus.pleaseSelect'), trigger: 'blur' }
-  ],
-  lineType: [
-    { required: true, message: t('schoolBus.pleaseSelect'), trigger: 'change' }
-  ],
-  carIdList: [
-    { required: true, message: t('schoolBus.pleaseSelect'), trigger: 'change' }
-  ],
-  visible: [
-    { required: true, message: t('schoolBus.pleaseSelect'), trigger: 'change' }
-  ]
+  schoolIds: [{ required: true, message: t('schoolBus.pleaseSelect'), trigger: 'change' }],
+  sectionId: [{ required: true, message: t('schoolBus.pleaseSelect'), trigger: 'change' }],
+  cnName: [{ required: true, message: t('schoolBus.pleaseSelect'), trigger: 'blur' }],
+  enName: [{ required: true, message: t('schoolBus.pleaseSelect'), trigger: 'blur' }],
+  lineType: [{ required: true, message: t('schoolBus.pleaseSelect'), trigger: 'change' }],
+  carIdList: [{ required: true, message: t('schoolBus.pleaseSelect'), trigger: 'change' }],
+  visible: [{ required: true, message: t('schoolBus.pleaseSelect'), trigger: 'change' }]
 })
 
 function routePlanMainFormSchema(t: Translate, deps: RoutePlanMainFormDeps): UniFormField[] {
@@ -447,13 +419,7 @@ export const routePlanNestedStationFormConfig = (t: Translate): UniFormConfig =>
 })
 
 export const routePlanNestedStationRules = (t: Translate): FormRules => ({
-  stationId: [
-    { required: true, message: t('schoolBus.pleaseSelect'), trigger: 'change' }
-  ],
-  price: [
-    { required: true, message: t('schoolBus.pleaseSelect'), trigger: 'change' }
-  ],
-  weekPrice: [
-    { required: true, message: t('schoolBus.pleaseSelect'), trigger: 'change' }
-  ]
+  stationId: [{ required: true, message: t('schoolBus.pleaseSelect'), trigger: 'change' }],
+  price: [{ required: true, message: t('schoolBus.pleaseSelect'), trigger: 'change' }],
+  weekPrice: [{ required: true, message: t('schoolBus.pleaseSelect'), trigger: 'change' }]
 })

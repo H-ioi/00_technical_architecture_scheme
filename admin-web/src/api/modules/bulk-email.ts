@@ -102,11 +102,13 @@ export default {
   },
   sendRecordCreate: {
     name: '新建发件记录',
-    post: async (data: Record<string, unknown>) => await request.post(`${m}/sendRecord/create`, data)
+    post: async (data: Record<string, unknown>) =>
+      await request.post(`${m}/sendRecord/create`, data)
   },
   sendRecordUpdate: {
     name: '更新发件记录',
-    post: async (data: Record<string, unknown>) => await request.post(`${m}/sendRecord/update`, data)
+    post: async (data: Record<string, unknown>) =>
+      await request.post(`${m}/sendRecord/update`, data)
   },
   sendRecordRemove: {
     name: '删除发件记录',

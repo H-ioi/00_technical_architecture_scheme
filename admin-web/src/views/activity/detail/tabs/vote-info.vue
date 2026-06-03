@@ -9,8 +9,7 @@
       :submit-text="$t('activity.search')"
       :reset-text="$t('activity.reset')"
       @search="search"
-      @reset="reset"
-    />
+      @reset="reset" />
     <UniDataTable
       ref="tableRef"
       row-key="id"
@@ -22,15 +21,9 @@
       :toolbar="{ refresh: true, columnSetting: true }"
       :actions="[]"
       @load-success="handleLoadSuccess"
-      @selection-change="onSelectionChange"
-    >
+      @selection-change="onSelectionChange">
       <template v-if="!readOnly && canDelete" #toolbar>
-        <el-button
-          type="danger"
-          plain
-          :disabled="!selectedIds.length"
-          @click="deleteSelected"
-        >
+        <el-button type="danger" plain :disabled="!selectedIds.length" @click="deleteSelected">
           {{ $t('activity.delBatch') }}
         </el-button>
       </template>
@@ -43,8 +36,7 @@
       append-to-body
       destroy-on-close
       :close-on-click-modal="false"
-      @closed="resetDialog"
-    >
+      @closed="resetDialog">
       <UniForm ref="formRef" v-model="formModel" mode="edit" :config="formCfg" />
       <template #footer>
         <el-button @click="dialogVisible = false">{{ $t('common.cancel') }}</el-button>
@@ -58,7 +50,14 @@
 
 <script setup lang="ts">
 import type { UniFormConfig, UniOption, UniTableColumn, UniTableRequest } from 'uni-ui-lib'
-import { UniDataTable, UniForm, UniSearchForm, useUniI18n, useUniListState, useUniPermission } from 'uni-ui-lib'
+import {
+  UniDataTable,
+  UniForm,
+  UniSearchForm,
+  useUniI18n,
+  useUniListState,
+  useUniPermission
+} from 'uni-ui-lib'
 import dayjs from 'dayjs'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { computed, reactive, ref } from 'vue'
@@ -147,14 +146,17 @@ const { queryModel, filters, handleLoadSuccess, reset, search } = useUniListStat
 const selectedIds = computed(
   () => selectedRows.value.map((row) => row.id).filter((id) => id != null) as Array<string | number>
 )
-const canDelete = computed(() => hasPermission('busdriver_del') || hasPermission('activity_ticket_del'))
+const canDelete = computed(
+  () => hasPermission('busdriver_del') || hasPermission('activity_ticket_del')
+)
 
 const decorateRows = (list: Row[], pageNo: number, pageSize: number) => {
   list.forEach((row, index) => {
     row._seq = (pageNo - 1) * pageSize + index + 1
     row.voter = row.voter == null || row.voter === '' ? '-' : String(row.voter)
     row.phone = row.phone == null || row.phone === '' ? '-' : String(row.phone)
-    row.programName = row.programName == null || row.programName === '' ? '-' : String(row.programName)
+    row.programName =
+      row.programName == null || row.programName === '' ? '-' : String(row.programName)
     row.voteName = row.voteName == null || row.voteName === '' ? '-' : String(row.voteName)
     const timeRaw = row.createTime ?? row.create_time
     if (timeRaw == null || timeRaw === '') {
@@ -166,7 +168,11 @@ const decorateRows = (list: Row[], pageNo: number, pageSize: number) => {
   })
 }
 
-const loadData: UniTableRequest = async ({ pageNo: current, pageSize: size, filters: filterModel }) => {
+const loadData: UniTableRequest = async ({
+  pageNo: current,
+  pageSize: size,
+  filters: filterModel
+}) => {
   const f = filterModel as Row
   const raw = await activityVoteProgramApi.recordPage.get({
     activityId: props.activityId,
@@ -210,7 +216,10 @@ const loadVotePrograms = async () => {
     const name = row.cnName ?? row.voteName ?? row.name ?? ''
     const project = row.programName ?? ''
     return {
-      label: name && project ? `${String(name)} · ${String(project)}` : String(name || project || row.id),
+      label:
+        name && project
+          ? `${String(name)} · ${String(project)}`
+          : String(name || project || row.id),
       value: row.id as string | number
     }
   })
@@ -234,7 +243,9 @@ const submit = async () => {
   saving.value = true
   try {
     await activityVoteProgramApi.recordAdd.post({
-      activityId: Number.isFinite(Number(props.activityId)) ? Number(props.activityId) : props.activityId,
+      activityId: Number.isFinite(Number(props.activityId))
+        ? Number(props.activityId)
+        : props.activityId,
       codeId: form.codeId == null || form.codeId === '' ? 0 : Number(form.codeId),
       voteId: Number(form.voteId),
       voter: form.voter,
@@ -250,7 +261,9 @@ const submit = async () => {
 
 const deleteSelected = async () => {
   if (!selectedIds.value.length) return
-  await ElMessageBox.confirm(tr('activity.confirmDeleteVoteRecords'), tr('common.tip'), { type: 'warning' })
+  await ElMessageBox.confirm(tr('activity.confirmDeleteVoteRecords'), tr('common.tip'), {
+    type: 'warning'
+  })
   await activityVoteProgramApi.recordRemove.delete(selectedIds.value)
   ElMessage.success(tr('activity.deleteOk'))
   selectedRows.value = []
@@ -280,8 +293,22 @@ const exportCsv = async () => {
       current += 1
     }
     const csv = [
-      ['#', tr('activity.voteRecordVoter'), tr('activity.registrationPhone'), tr('activity.voteProgramProject'), tr('activity.voteProgramTitle'), tr('activity.colCreateTime')],
-      ...rows.map((row) => [row._seq, row.voter, row.phone, row.programName, row.voteName, row.createTimeLabel])
+      [
+        '#',
+        tr('activity.voteRecordVoter'),
+        tr('activity.registrationPhone'),
+        tr('activity.voteProgramProject'),
+        tr('activity.voteProgramTitle'),
+        tr('activity.colCreateTime')
+      ],
+      ...rows.map((row) => [
+        row._seq,
+        row.voter,
+        row.phone,
+        row.programName,
+        row.voteName,
+        row.createTimeLabel
+      ])
     ]
       .map((line) => formatCsvRow(line))
       .join('\n')

@@ -13,7 +13,10 @@ vi.mock('uni-ui-lib', () => ({
       let label = ''
       for (const key of labelKeys) {
         const val = row[key]
-        if (val != null && String(val) !== '') { label = String(val); break }
+        if (val != null && String(val) !== '') {
+          label = String(val)
+          break
+        }
       }
       return { label, value: row.value ?? row[opts.valueKey as string] ?? row.id }
     })
@@ -59,7 +62,6 @@ import {
 const t = (key: string) => key
 
 describe('use-student-order-filters.ts', () => {
-
   // ==================== Option Builders ====================
   describe('option builders', () => {
     it('defaultStudentOrderSearchCascade 默认所有字段为 false', () => {

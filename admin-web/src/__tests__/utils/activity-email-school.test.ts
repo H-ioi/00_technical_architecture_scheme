@@ -13,7 +13,6 @@ vi.mock('uni-ui-lib', () => ({
 import { appModuleOptionsFromRows } from '../../utils/activity-email-school'
 
 describe('activity-email-school.ts', () => {
-
   describe('appModuleOptionsFromRows', () => {
     const activityLabel = '活动模块'
 

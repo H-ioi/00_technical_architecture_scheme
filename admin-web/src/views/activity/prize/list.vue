@@ -18,8 +18,7 @@
       :submit-text="$t('activity.search')"
       :reset-text="$t('activity.reset')"
       @search="search"
-      @reset="reset"
-    />
+      @reset="reset" />
     <UniDataTable
       ref="tableRef"
       row-key="id"
@@ -32,16 +31,14 @@
       :actions="actions"
       :action-column="{ width: 110, fixed: 'right' }"
       @load-success="handleLoadSuccess"
-      @selection-change="onSelectionChange"
-    >
+      @selection-change="onSelectionChange">
       <template #toolbar>
         <el-button
           v-uni-permission="'busdriver_del'"
           type="danger"
           plain
           :disabled="!selectedIds.length"
-          @click="deleteSelected"
-        >
+          @click="deleteSelected">
           {{ $t('activity.delBatch') }}
         </el-button>
       </template>
@@ -66,7 +63,6 @@ import { ref, computed, onMounted } from 'vue'
 
 const formDlg = ref<InstanceType<typeof PrizeFormDialog> | null>(null)
 
-
 const { locale, t } = useUniI18n()
 const tr = t as Translate
 
@@ -86,27 +82,24 @@ const searchCfg = computed(() => searchForm(tr, programOptions.value))
 const columns = computed(() => tableCols(tr))
 const selectedRows = ref<ActivityPrizeRow[]>([])
 const selectedIds = computed(
-  () =>
-    selectedRows.value.map((row) => row.id).filter((id) => id != null) as Array<string | number>
+  () => selectedRows.value.map((row) => row.id).filter((id) => id != null) as Array<string | number>
 )
 
 const loadProgramOptions = async () => {
   const raw = await activityProgramApi.listBrief.get({ programTypes: ['1'] })
   const rows = normalizeArray(raw) as ActivityPrizeRow[]
   programOptions.value = rows.map((row) => ({
-    label: String(locale.value === 'en' ? (row.enName ?? row.cnName ?? '') : (row.cnName ?? row.enName ?? '')),
+    label: String(
+      locale.value === 'en' ? (row.enName ?? row.cnName ?? '') : (row.cnName ?? row.enName ?? '')
+    ),
     value: row.id as string | number
   }))
 }
 
 const decorateRows = (list: ActivityPrizeRow[]) => {
   for (const row of list) {
-    row.createTime = row.createTime
-      ? dateFormat(String(row.createTime), 'yyyy-MM-dd hh:mm')
-      : '—'
-    row.updateTime = row.updateTime
-      ? dateFormat(String(row.updateTime), 'yyyy-MM-dd hh:mm')
-      : '—'
+    row.createTime = row.createTime ? dateFormat(String(row.createTime), 'yyyy-MM-dd hh:mm') : '—'
+    row.updateTime = row.updateTime ? dateFormat(String(row.updateTime), 'yyyy-MM-dd hh:mm') : '—'
   }
 }
 
@@ -163,4 +156,5 @@ const deleteSelected = async () => {
 
 onMounted(() => {
   void loadProgramOptions()
-})</script>
+})
+</script>

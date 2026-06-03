@@ -20,8 +20,7 @@ export default {
   questionnaireActivity: '活动',
   questionnaireValid: '是否有效',
 
-  qDetailPageDesc:
-    '以下为问卷档案与已绑定题目结构（只读）。修改题目请点顶部「问卷设计」。',
+  qDetailPageDesc: '以下为问卷档案与已绑定题目结构（只读）。修改题目请点顶部「问卷设计」。',
   qDetailMetaSection: '问卷信息',
   qDetailQuestionsSection: '题目信息（只读）',
   qDetailNoTemplate: '尚未绑定动态表单或题目为空。',
@@ -202,7 +201,8 @@ export default {
   visibleScopePublic: '公开',
   visibleScopeRestricted: '指定名单',
   visibleScopeBlock: '可见范围名单',
-  visibleScopeHint: '选择「指定名单」并保存活动后，可下载模板、上传 Excel；名单与您在旧后台维护的规则一致。',
+  visibleScopeHint:
+    '选择「指定名单」并保存活动后，可下载模板、上传 Excel；名单与您在旧后台维护的规则一致。',
   visibleScopeTpl: '下载模板',
   visibleScopeUpload: '上传名单',
   visibleScopeView: '查看名单',

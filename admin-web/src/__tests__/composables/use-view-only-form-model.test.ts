@@ -5,7 +5,6 @@ import { ref } from 'vue'
 import { useViewOnlyFormModel } from '../../composables/use-view-only-form-model'
 
 describe('use-view-only-form-model.ts', () => {
-
   describe('useViewOnlyFormModel', () => {
     it('getter 返回值通过 computed 访问', () => {
       const source = ref({ name: 'test', age: 25 })

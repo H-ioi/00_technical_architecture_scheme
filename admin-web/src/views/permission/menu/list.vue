@@ -17,30 +17,23 @@
       :toolbar="menuTableToolbar"
       :actions="actions"
       :action-column="{ width: 70, fixed: 'right' }"
-      @refresh="loadTree"
-    >
+      @refresh="loadTree">
       <template #column-icon="{ row }">
         <IconDisplay :name="row.icon" />
       </template>
       <template #column-type="{ row }">
         <el-tag v-if="row.type === '0'" type="success">{{ t('permission.menu.typeLeft') }}</el-tag>
         <el-tag v-else-if="row.type === '2'" type="success">
-          {{
-            t('permission.menu.typeTop')
-          }}
+          {{ t('permission.menu.typeTop') }}
         </el-tag>
         <el-tag v-else-if="row.type === '1'" type="info">
-          {{
-            t('permission.menu.typeButton')
-          }}
+          {{ t('permission.menu.typeButton') }}
         </el-tag>
         <span v-else>{{ t('permission.menu.typeUnknown') }}</span>
       </template>
       <template #column-keepAlive="{ row }">
         <el-tag v-if="row.keepAlive === '1'" type="success">
-          {{
-            t('permission.menu.cacheOn')
-          }}
+          {{ t('permission.menu.cacheOn') }}
         </el-tag>
         <el-tag v-else type="info">{{ t('permission.menu.cacheOff') }}</el-tag>
       </template>
@@ -51,8 +44,7 @@
       :snapshot="form"
       :parent-options="parentOptions"
       :submitting="submitting"
-      @save="submitFromDraft"
-    />
+      @save="submitFromDraft" />
   </section>
 </template>
 
@@ -66,9 +58,6 @@ import { ElMessage } from 'element-plus'
 import { UniDataTable, useUniI18n } from 'uni-ui-lib'
 import type { UniTableAction } from 'uni-ui-lib'
 import { computed, onMounted, reactive, ref } from 'vue'
-
-
-
 
 const { t } = useUniI18n()
 
@@ -144,7 +133,9 @@ const openEdit = (row: PermissionMenuNode) => {
   const parentIdForSelect =
     rawParent === undefined || rawParent === null || rawParent === ''
       ? MENU_PARENT_ROOT
-      : rawParent === MENU_PARENT_ROOT || rawParent === '-1' || rawParent === String(MENU_PARENT_ROOT)
+      : rawParent === MENU_PARENT_ROOT ||
+          rawParent === '-1' ||
+          rawParent === String(MENU_PARENT_ROOT)
         ? MENU_PARENT_ROOT
         : rawParent
   Object.assign(form, {
@@ -164,7 +155,9 @@ const submitFromDraft = async (patch: PermissionMenuNode & { menuId?: string | n
     const parentIdForSubmit =
       rawParent === undefined || rawParent === null || rawParent === ''
         ? MENU_PARENT_ROOT
-        : rawParent === MENU_PARENT_ROOT || rawParent === '-1' || rawParent === String(MENU_PARENT_ROOT)
+        : rawParent === MENU_PARENT_ROOT ||
+            rawParent === '-1' ||
+            rawParent === String(MENU_PARENT_ROOT)
           ? MENU_PARENT_ROOT
           : rawParent
     const payload = {
@@ -182,4 +175,5 @@ const submitFromDraft = async (patch: PermissionMenuNode & { menuId?: string | n
 
 onMounted(() => {
   void loadTree()
-})</script>
+})
+</script>

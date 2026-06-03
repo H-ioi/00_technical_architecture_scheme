@@ -8,7 +8,6 @@ import {
 } from '../../utils/api-response-normalize'
 
 describe('api-response-normalize.ts', () => {
-
   // ==================== normalizePaged ====================
   describe('normalizePaged', () => {
     it('非对象返回空 { list: [], total: 0 }', () => {

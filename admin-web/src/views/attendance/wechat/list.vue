@@ -16,8 +16,7 @@
       :submit-text="$t('member.search')"
       :reset-text="$t('member.reset')"
       @search="search"
-      @reset="reset"
-    />
+      @reset="reset" />
 
     <UniDataTable
       ref="tableRef"
@@ -32,21 +31,18 @@
       :action-column="{ width: 60, fixed: 'right' }"
       @selection-change="onSelectionChange"
       @load-success="tableEmpty.onLoadSuccess"
-      @request-error="tableEmpty.onRequestError"
-    >
+      @request-error="tableEmpty.onRequestError">
       <template #toolbar>
         <el-button
           v-uni-permission="'archive_wx_openid'"
           :disabled="selection.length === 0"
-          @click="batchStatus(1)"
-        >
+          @click="batchStatus(1)">
           {{ $t('attendance.wechatOpenid.archive') }}
         </el-button>
         <el-button
           v-uni-permission="'archive_wx_openid'"
           :disabled="selection.length === 0"
-          @click="batchStatus(0)"
-        >
+          @click="batchStatus(0)">
           {{ $t('attendance.wechatOpenid.activate') }}
         </el-button>
       </template>
@@ -65,7 +61,10 @@ import { detailForm, searchForm, tableCols, wechatOpenidStatusOpts } from './lis
 import { attendanceWechatOpenidApi, membershipApi } from '@/api'
 import ListTableEmpty from '@/components/list-table-empty.vue'
 import { useListTableEmpty } from '@/composables/use-list-table-empty'
-import type { AttendanceWechatOpenidListParams, AttendanceWechatOpenidRecord } from '@/types/modules/attendance-wechat-openid'
+import type {
+  AttendanceWechatOpenidListParams,
+  AttendanceWechatOpenidRecord
+} from '@/types/modules/attendance-wechat-openid'
 import type { SchoolOptionRecord } from '@/types/modules/membership'
 import { normalizePaged } from '@/utils/api-response-normalize'
 import { dateFormat } from '@/utils/tool'
@@ -73,7 +72,6 @@ import { ElMessage } from 'element-plus'
 import { useUniI18n, toUniOptions, useUniListState } from 'uni-ui-lib'
 import type { UniTableAction, UniTableRequest } from 'uni-ui-lib'
 import { computed, ref } from 'vue'
-
 
 const { locale, t } = useUniI18n()
 
@@ -104,9 +102,7 @@ const schoolOptions = computed(() =>
 
 const statusSearchOptions = computed(() => wechatOpenidStatusOpts(t))
 
-const searchCfg = computed(() =>
-  searchForm(t, schoolOptions.value, statusSearchOptions.value)
-)
+const searchCfg = computed(() => searchForm(t, schoolOptions.value, statusSearchOptions.value))
 
 const columns = computed(() => tableCols(t, schoolOptions.value))
 
@@ -125,10 +121,10 @@ const decorateRow = (raw: Loose): AttendanceWechatOpenidRecord => {
     (o) => String(o.value) === String(raw.status ?? '')
   )
   return {
-  ...(raw as AttendanceWechatOpenidRecord),
-  status: statusHit?.label ?? String(raw.status ?? '--'),
-  updateTime: dateFormat(String(raw.updateTime ?? '')),
-  createTime: dateFormat(String(raw.createTime ?? ''))
+    ...(raw as AttendanceWechatOpenidRecord),
+    status: statusHit?.label ?? String(raw.status ?? '--'),
+    updateTime: dateFormat(String(raw.updateTime ?? '')),
+    createTime: dateFormat(String(raw.createTime ?? ''))
   }
 }
 
@@ -178,4 +174,5 @@ const batchStatus = async (status: number) => {
   } catch {
     /* request 层已提示 */
   }
-}</script>
+}
+</script>

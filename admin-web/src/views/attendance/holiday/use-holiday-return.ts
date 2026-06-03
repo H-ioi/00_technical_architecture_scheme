@@ -35,8 +35,8 @@ export const useHolidayReturn = (schoolRecords: Ref<SchoolOptionRecord[]>) => {
 
   const { queryModel, filters, tableRef, handleLoadSuccess, refreshTable, reset, search } =
     useUniListState({
-    initialFilters
-  })
+      initialFilters
+    })
 
   const schoolOptions = computed(() =>
     toUniOptions(schoolRecords.value, {

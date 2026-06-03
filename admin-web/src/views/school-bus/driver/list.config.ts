@@ -110,13 +110,9 @@ export const tableCols = (
 ]
 
 export const formRules = (t: Translate): FormRules<DriverFormModel> => ({
-  schoolIds: [
-    { required: true, message: t('schoolBus.driver.ruleSchoolIds'), trigger: 'change' }
-  ],
+  schoolIds: [{ required: true, message: t('schoolBus.driver.ruleSchoolIds'), trigger: 'change' }],
   name: [{ required: true, message: t('schoolBus.driver.phName'), trigger: 'blur' }],
-  employeeNo: [
-    { required: true, message: t('schoolBus.driver.phEmployeeNo'), trigger: 'blur' }
-  ],
+  employeeNo: [{ required: true, message: t('schoolBus.driver.phEmployeeNo'), trigger: 'blur' }],
   contact: [{ required: true, message: t('schoolBus.driver.phContact'), trigger: 'blur' }],
   age: [
     { required: true, message: t('schoolBus.driver.ruleAge'), trigger: 'change' },

@@ -26,8 +26,7 @@
       type="file"
       accept=".xlsx,.xls"
       class="school-bus-follow-teacher__file"
-      @change="onImportFile"
-    >
+      @change="onImportFile" />
 
     <UniSearchForm
       v-model="queryModel"
@@ -38,8 +37,7 @@
       :submit-text="$t('schoolBus.search')"
       :reset-text="$t('schoolBus.reset')"
       @search="search"
-      @reset="reset"
-    />
+      @reset="reset" />
 
     <UniDataTable
       ref="tableRef"
@@ -54,30 +52,26 @@
       :action-column="{ width: 110, fixed: 'right' }"
       @selection-change="onSelectionChange"
       @load-success="tableEmpty.onLoadSuccess"
-      @request-error="tableEmpty.onRequestError"
-    >
+      @request-error="tableEmpty.onRequestError">
       <template #toolbar>
         <!-- 权限标识与旧系统一致，后端为历史拼写 teacheruser_enble -->
         <el-button
           v-uni-permission="'teacheruser_enble'"
           :disabled="ids.length === 0"
-          @click="batchEnable"
-        >
+          @click="batchEnable">
           {{ $t('schoolBus.followTeacher.enable') }}
         </el-button>
         <el-button
           v-uni-permission="'teacheruser_disable'"
           :disabled="ids.length === 0"
-          @click="batchDisable"
-        >
+          @click="batchDisable">
           {{ $t('schoolBus.followTeacher.disable') }}
         </el-button>
         <el-button
           v-uni-permission="'teacheruser_del'"
           type="danger"
           :disabled="ids.length === 0"
-          @click="del"
-        >
+          @click="del">
           {{ $t('schoolBus.delete') }}
         </el-button>
       </template>
@@ -94,8 +88,7 @@
       :school-options="schoolOptions"
       :status-options="statusOptions"
       :multi-school="multiSchool"
-      @saved="refreshTable"
-    />
+      @saved="refreshTable" />
   </section>
 </template>
 
@@ -106,7 +99,10 @@ import { schoolBusFollowTeacherApi, membershipApi } from '@/api'
 import ListTableEmpty from '@/components/list-table-empty.vue'
 import { useListTableEmpty } from '@/composables/use-list-table-empty'
 import type { SchoolOptionRecord } from '@/types/modules/membership'
-import type { FollowTeacherRecord, FollowTeacherListParams } from '@/types/modules/school-bus-follow-teacher'
+import type {
+  FollowTeacherRecord,
+  FollowTeacherListParams
+} from '@/types/modules/school-bus-follow-teacher'
 import { normalizeArray, normalizePaged } from '@/utils/api-response-normalize'
 import { downloadBlob } from '@/utils/download'
 import { membershipSchoolLabel, membershipSchoolToOptions } from '@/utils/membership-school'
@@ -117,11 +113,9 @@ import { useUniI18n, useUniListState } from 'uni-ui-lib'
 import type { UniTableAction, UniTableRequest } from 'uni-ui-lib'
 import { computed, ref, nextTick, onMounted, watch } from 'vue'
 
-
 const { locale, t } = useUniI18n()
 
 const fileRef = ref<HTMLInputElement | null>(null)
-
 
 const initialFilters: Record<string, unknown> = {
   keyword: '',
@@ -129,8 +123,8 @@ const initialFilters: Record<string, unknown> = {
 }
 const { queryModel, filters, tableRef, search, reset, handleLoadSuccess, refreshTable } =
   useUniListState({
-  initialFilters
-})
+    initialFilters
+  })
 
 const schoolRecords = ref<SchoolOptionRecord[]>([])
 const schoolOptions = computed(() => membershipSchoolToOptions(schoolRecords.value, locale()))
@@ -320,7 +314,8 @@ const del = async () => {
   } catch {
     /* request 层已提示 */
   }
-}</script>
+}
+</script>
 
 <style scoped lang="scss">
 .school-bus-follow-teacher {

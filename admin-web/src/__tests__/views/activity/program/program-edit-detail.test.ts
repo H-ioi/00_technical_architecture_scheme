@@ -2,7 +2,10 @@ import { describe, it, expect } from 'vitest'
 import { ref } from 'vue'
 import type { Ref } from 'vue'
 import type { ActivityProgramQuotaRow } from '@/types/modules/activity-program-form'
-import { fillQuotasFromDetail, applyProgramDetailToForm } from '../../../../views/activity/program/edit/program-edit-detail'
+import {
+  fillQuotasFromDetail,
+  applyProgramDetailToForm
+} from '../../../../views/activity/program/edit/program-edit-detail'
 import type { ActivityProgramFormModel } from '@/types/modules/activity-program-form'
 
 const emptyForm = (): ActivityProgramFormModel => ({
@@ -34,10 +37,14 @@ describe('program-edit-detail.ts', () => {
   describe('fillQuotasFromDetail', () => {
     it('数组配额应正确填充', () => {
       const quotasList: Ref<ActivityProgramQuotaRow[]> = ref([])
-      fillQuotasFromDetail(quotasList, [
-        { roundNo: 1, quotaCount: 10 },
-        { roundNo: 2, quotaCount: 20 }
-      ], 0)
+      fillQuotasFromDetail(
+        quotasList,
+        [
+          { roundNo: 1, quotaCount: 10 },
+          { roundNo: 2, quotaCount: 20 }
+        ],
+        0
+      )
       expect(quotasList.value).toHaveLength(2)
       expect(quotasList.value[0]).toMatchObject({ roundNo: 1, quotaCount: 10 })
       expect(quotasList.value[1]).toMatchObject({ roundNo: 2, quotaCount: 20 })
@@ -59,9 +66,7 @@ describe('program-edit-detail.ts', () => {
 
     it('roundNo 和 quotaCount 应转为整数', () => {
       const quotasList: Ref<ActivityProgramQuotaRow[]> = ref([])
-      fillQuotasFromDetail(quotasList, [
-        { roundNo: '1', quotaCount: '10.9' }
-      ], 0)
+      fillQuotasFromDetail(quotasList, [{ roundNo: '1', quotaCount: '10.9' }], 0)
       expect(quotasList.value[0].roundNo).toBe(1)
       expect(quotasList.value[0].quotaCount).toBe(10)
     })

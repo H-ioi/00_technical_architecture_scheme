@@ -12,8 +12,7 @@ export default {
   timeEnd: 'End time',
 
   questionnaireTitle: 'Questionnaires',
-  questionnaireDesc:
-    'Manage activity questionnaires: basic info, field design, and answer export.',
+  questionnaireDesc: 'Manage activity questionnaires: basic info, field design, and answer export.',
   questionnaireFrozen: 'Frozen',
   questionnaireNeedStudent: 'Student fields required',
 
@@ -75,8 +74,7 @@ export default {
   qbPropsTitle: 'Properties',
   qbEmpty: 'No questions yet — pick a field type on the left.',
   qbPickFirst: 'Pick a question in the center list first.',
-  qbPreviewLegacy:
-    'This is a legacy field (`{type}`); the signup page renders it at runtime.',
+  qbPreviewLegacy: 'This is a legacy field (`{type}`); the signup page renders it at runtime.',
   qbPreviewNoOptions: 'No options yet — add them under Properties on the right.',
   qbPreviewDatePh: 'Select',
   qbRawHint: 'This field has backend type `{type}` and is preserved as opaque JSON.',
@@ -100,8 +98,7 @@ export default {
   qbDatetime: 'Datetime',
   qbYearMonth: 'Year-month',
   qbPattern: 'Pattern string',
-  qbPaletteHint:
-    'Do not delete unfamiliar legacy stubs without understanding downstream impact.',
+  qbPaletteHint: 'Do not delete unfamiliar legacy stubs without understanding downstream impact.',
   qbTypes: {
     input: 'Single line',
     textarea: 'Paragraph',
@@ -184,8 +181,7 @@ export default {
   publishBatch: 'Publish',
   confirmDeleteEvents: 'Delete selected activities?',
   confirmSendWechat: 'Run "{title}" now?',
-  batchPublishSkip:
-    'Publish {n} pending activities ({m} non-pending skipped). Continue?',
+  batchPublishSkip: 'Publish {n} pending activities ({m} non-pending skipped). Continue?',
   batchPublishConfirm: 'Publish {n} pending activities?',
   noPendingInSelection: 'No pending activities in selection',
   partialWechatFail: 'Some activities failed to send',
@@ -299,7 +295,8 @@ export default {
   winnerAddTitle: 'New winner record',
   winnerEditTitle: 'Edit winner record',
   winnerTicketCode: 'Winning ticket code',
-  winnerTicketHint: 'Enter a ticket code to fill name, phone, email and match the activity program.',
+  winnerTicketHint:
+    'Enter a ticket code to fill name, phone, email and match the activity program.',
   winnerTicketNotFound: 'No ticket information found.',
   winnerAwardRank: 'Rank',
   winnerVoteName: 'Entry name',

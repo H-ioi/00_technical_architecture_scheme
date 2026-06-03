@@ -98,9 +98,7 @@ export function useProgramEditPage() {
     totalRounds: serverTotalRounds.value
   }))
 
-  const bodyLocked = computed(
-    () => isEditRoute.value && isPrizeCountOnlyEdit(prizeOnlyRow.value)
-  )
+  const bodyLocked = computed(() => isEditRoute.value && isPrizeCountOnlyEdit(prizeOnlyRow.value))
 
   const typeChoiceLocked = computed(() => !isCreate.value || bodyLocked.value)
   const quotaTotal = computed(() =>
@@ -178,14 +176,7 @@ export function useProgramEditPage() {
   }
 
   const applyDetail = (d: Loose) => {
-    applyProgramDetailToForm(
-      form,
-      quotasList,
-      serverStatus,
-      serverType,
-      serverTotalRounds,
-      d
-    )
+    applyProgramDetailToForm(form, quotasList, serverStatus, serverType, serverTotalRounds, d)
   }
 
   const loadDetail = async () => {
@@ -276,8 +267,7 @@ export function useProgramEditPage() {
         const act = findActivityRow(activityRows.value, form.activityId)
         form.voteStartTime =
           act && act.activityStartTime != null ? String(act.activityStartTime) : ''
-        form.voteEndTime =
-          act && act.activityEndTime != null ? String(act.activityEndTime) : ''
+        form.voteEndTime = act && act.activityEndTime != null ? String(act.activityEndTime) : ''
       } else if (p === '3') {
         form.blessingDisplayRule = '1'
         quotasList.value = []
@@ -293,8 +283,7 @@ export function useProgramEditPage() {
       }
       const act = findActivityRow(activityRows.value, aid)
       if (act) {
-        form.voteStartTime =
-          act.activityStartTime != null ? String(act.activityStartTime) : ''
+        form.voteStartTime = act.activityStartTime != null ? String(act.activityStartTime) : ''
         form.voteEndTime = act.activityEndTime != null ? String(act.activityEndTime) : ''
       }
     }

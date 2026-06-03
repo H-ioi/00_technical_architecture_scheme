@@ -9,8 +9,7 @@
       :submit-text="$t('activity.search')"
       :reset-text="$t('activity.reset')"
       @search="search"
-      @reset="reset"
-    />
+      @reset="reset" />
     <UniDataTable
       ref="tableRef"
       row-key="id"
@@ -23,15 +22,9 @@
       :actions="actions"
       :action-column="{ width: 100, fixed: 'right' }"
       @load-success="handleLoadSuccess"
-      @selection-change="onSelectionChange"
-    >
+      @selection-change="onSelectionChange">
       <template v-if="!readOnly && canDeleteRegistration" #toolbar>
-        <el-button
-          type="danger"
-          plain
-          :disabled="!selectedIds.length"
-          @click="deleteSelected"
-        >
+        <el-button type="danger" plain :disabled="!selectedIds.length" @click="deleteSelected">
           {{ $t('activity.delBatch') }}
         </el-button>
       </template>
@@ -44,8 +37,7 @@
       append-to-body
       destroy-on-close
       :close-on-click-modal="false"
-      @closed="resetDialog"
-    >
+      @closed="resetDialog">
       <UniForm ref="formRef" v-model="formModel" mode="edit" :config="formCfg" />
       <template #footer>
         <el-button @click="dialogVisible = false">{{ $t('common.cancel') }}</el-button>
@@ -59,7 +51,14 @@
 
 <script setup lang="ts">
 import type { UniFormConfig, UniTableAction, UniTableColumn, UniTableRequest } from 'uni-ui-lib'
-import { UniDataTable, UniForm, UniSearchForm, useUniI18n, useUniListState, useUniPermission } from 'uni-ui-lib'
+import {
+  UniDataTable,
+  UniForm,
+  UniSearchForm,
+  useUniI18n,
+  useUniListState,
+  useUniPermission
+} from 'uni-ui-lib'
 import dayjs from 'dayjs'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { computed, reactive, ref } from 'vue'
@@ -138,7 +137,12 @@ const searchCfg = computed<UniFormConfig>(() => ({
 
 const columns = computed<UniTableColumn[]>(() => [
   { prop: '_seq', label: '#', width: 72 },
-  { prop: 'activityName', label: tr('activity.colActivityName'), minWidth: 160, showOverflowTooltip: true },
+  {
+    prop: 'activityName',
+    label: tr('activity.colActivityName'),
+    minWidth: 160,
+    showOverflowTooltip: true
+  },
   { prop: 'phone', label: tr('activity.registrationPhone'), minWidth: 120 },
   { prop: 'email', label: tr('activity.registrationEmail'), minWidth: 160 },
   { prop: 'name', label: tr('activity.registrationName'), minWidth: 120 },
@@ -183,7 +187,12 @@ const formCfg = computed<UniFormConfig>(() => ({
       options: paidOptions.value,
       componentProps: { style: { width: '100%' } }
     },
-    { field: 'orderNo', label: tr('activity.registrationOrderNo'), component: 'ElInput', colProps: { span: 24 } }
+    {
+      field: 'orderNo',
+      label: tr('activity.registrationOrderNo'),
+      component: 'ElInput',
+      colProps: { span: 24 }
+    }
   ]
 }))
 
@@ -201,7 +210,8 @@ const canDeleteRegistration = computed(
 const decorateRows = (list: Row[], pageNo = 1, pageSize = list.length || 1) => {
   list.forEach((row, index) => {
     row._seq = (pageNo - 1) * pageSize + index + 1
-    row.paidLabel = String(row.paid) === '1' || row.paid === true ? tr('activity.paidYes') : tr('activity.paidNo')
+    row.paidLabel =
+      String(row.paid) === '1' || row.paid === true ? tr('activity.paidYes') : tr('activity.paidNo')
     const timeRaw = row.registerTime
     if (timeRaw == null || timeRaw === '') {
       row.registerTime = ''
@@ -229,7 +239,11 @@ const fetchTicketPage = async (current: number, size: number, filterModel: Row) 
   return normalizePaged<Row>(raw)
 }
 
-const loadData: UniTableRequest = async ({ pageNo: current, pageSize: size, filters: filterModel }) => {
+const loadData: UniTableRequest = async ({
+  pageNo: current,
+  pageSize: size,
+  filters: filterModel
+}) => {
   const { list, total } = await fetchTicketPage(current, size, filterModel as Row)
   decorateRows(list, current, size)
   return { data: list, total }
@@ -257,7 +271,9 @@ const actions = computed<UniTableAction[]>(() =>
 
 const deleteSelected = async () => {
   if (!selectedIds.value.length) return
-  await ElMessageBox.confirm(tr('activity.confirmDeleteRegistration'), tr('common.tip'), { type: 'warning' })
+  await ElMessageBox.confirm(tr('activity.confirmDeleteRegistration'), tr('common.tip'), {
+    type: 'warning'
+  })
   await activityApi.ticketRemove.delete(selectedIds.value)
   ElMessage.success(tr('activity.deleteOk'))
   selectedRows.value = []
@@ -304,7 +320,19 @@ const exportCsv = async () => {
     }
     decorateRows(rows)
     const csv = [
-      formatCsvRow(['#', tr('activity.colActivityName'), tr('activity.registrationPhone'), tr('activity.registrationEmail'), tr('activity.registrationName'), tr('activity.colTicketPrice'), tr('activity.registrationPaidAmount'), tr('activity.registrationPeopleCount'), tr('activity.registrationId'), tr('activity.paidStatus'), tr('activity.registrationTime')]),
+      formatCsvRow([
+        '#',
+        tr('activity.colActivityName'),
+        tr('activity.registrationPhone'),
+        tr('activity.registrationEmail'),
+        tr('activity.registrationName'),
+        tr('activity.colTicketPrice'),
+        tr('activity.registrationPaidAmount'),
+        tr('activity.registrationPeopleCount'),
+        tr('activity.registrationId'),
+        tr('activity.paidStatus'),
+        tr('activity.registrationTime')
+      ]),
       ...rows.map((row) =>
         formatCsvRow([
           row._seq,
@@ -321,7 +349,10 @@ const exportCsv = async () => {
         ])
       )
     ].join('\n')
-    downloadBlob(new Blob([`\uFEFF${csv}`], { type: 'text/csv;charset=utf-8' }), `activity-tickets-${props.activityId}.csv`)
+    downloadBlob(
+      new Blob([`\uFEFF${csv}`], { type: 'text/csv;charset=utf-8' }),
+      `activity-tickets-${props.activityId}.csv`
+    )
   } finally {
     exporting.value = false
   }

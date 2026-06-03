@@ -16,7 +16,10 @@ import { useDialogDetailLoading } from '@/composables/use-dialog-detail-loading'
 import { dateFormat } from '@/utils/tool'
 import { normalizeEnvelope, normalizePaged } from '@/utils/api-response-normalize'
 import { attendanceHolidayApi } from '@/api'
-import type { AttendanceHolidayListParams, AttendanceHolidayRecord } from '@/types/modules/attendance-holiday'
+import type {
+  AttendanceHolidayListParams,
+  AttendanceHolidayRecord
+} from '@/types/modules/attendance-holiday'
 import type { SchoolOptionRecord } from '@/types/modules/membership'
 
 type Loose = Record<string, unknown>
@@ -37,8 +40,8 @@ export const useHolidayLeave = (schoolRecords: Ref<SchoolOptionRecord[]>) => {
 
   const { queryModel, filters, tableRef, handleLoadSuccess, refreshTable, reset, search } =
     useUniListState({
-    initialFilters
-  })
+      initialFilters
+    })
 
   const schoolOptions = computed(() =>
     toUniOptions(schoolRecords.value, {

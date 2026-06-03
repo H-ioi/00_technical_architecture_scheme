@@ -14,10 +14,7 @@ export const yesNoMeta = (t: Translate): UniOption[] => [
   { label: t('schoolBus.routeException.optNo'), value: '0' }
 ]
 
-export const tableCols = (
-  t: Translate,
-  schoolOptions: UniOption[]
-): UniTableColumn[] => [
+export const tableCols = (t: Translate, schoolOptions: UniOption[]): UniTableColumn[] => [
   { prop: 'id', label: t('schoolBus.routeException.colId'), width: 88, fixed: 'left' },
   {
     prop: 'schoolIds',

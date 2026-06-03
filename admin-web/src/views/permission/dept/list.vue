@@ -24,8 +24,7 @@
       :actions="actions"
       :action-column="{ width: 200, fixed: 'right' }"
       @refresh="loadTree"
-      @selection-change="onSelectionChange"
-    />
+      @selection-change="onSelectionChange" />
 
     <DeptFormDialog
       v-model:visible="dialogVisible"
@@ -33,23 +32,24 @@
       :snapshot="form"
       :parent-options="parentOptions"
       :submitting="submitting"
-      @save="submitFromDraft"
-    />
+      @save="submitFromDraft" />
   </section>
 </template>
 
 <script setup lang="ts">
 import DeptFormDialog from './components/dept-form-dialog.vue'
-import { deptTableCols, deptTableToolbar, deptTableTree, type DeptParentOption } from './list.config'
+import {
+  deptTableCols,
+  deptTableToolbar,
+  deptTableTree,
+  type DeptParentOption
+} from './list.config'
 import { permissionDeptApi } from '@/api'
 import type { PermissionDeptRecord } from '@/types/modules/permission-dept'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { UniDataTable, useUniI18n } from 'uni-ui-lib'
 import type { UniTableAction } from 'uni-ui-lib'
 import { computed, onMounted, reactive, ref } from 'vue'
-
-
-
 
 const { t } = useUniI18n()
 
@@ -85,9 +85,7 @@ const form = reactive<PermissionDeptRecord>(emptyForm())
 
 const columns = computed(() => deptTableCols(t))
 
-const parentOptions = computed<DeptParentOption[]>(() =>
-  flattenDeptParents(treeData.value)
-)
+const parentOptions = computed<DeptParentOption[]>(() => flattenDeptParents(treeData.value))
 
 const actions = computed<UniTableAction<PermissionDeptRecord>[]>(() => [
   {
@@ -215,4 +213,5 @@ const submitFromDraft = async (patch: PermissionDeptRecord) => {
 
 onMounted(() => {
   void loadTree()
-})</script>
+})
+</script>

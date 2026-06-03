@@ -6,7 +6,6 @@ import {
 } from '../../utils/school-bus'
 
 describe('school-bus.ts', () => {
-
   // ==================== normalizeSchoolIdsOnRow ====================
   describe('normalizeSchoolIdsOnRow', () => {
     it('schoolId 存在时转为 schoolIds 数组', () => {
@@ -57,7 +56,6 @@ describe('school-bus.ts', () => {
     })
   })
 
-
   // ==================== stripEmptyQueryParams ====================
   describe('stripEmptyQueryParams', () => {
     it('移除空字符串', () => {
@@ -85,32 +83,32 @@ describe('school-bus.ts', () => {
     })
   })
 
-
   // ==================== schoolIdsForCascadeApi ====================
   describe('schoolIdsForCascadeApi', () => {
     it('数组 schoolField 原样返回', () => {
-      expect(schoolIdsForCascadeApi([1, 2], { multiSchool: true, defaultSchoolId: null }))
-        .toEqual([1, 2])
+      expect(schoolIdsForCascadeApi([1, 2], { multiSchool: true, defaultSchoolId: null })).toEqual([
+        1, 2
+      ])
     })
 
     it('单值 schoolField 包装为数组', () => {
-      expect(schoolIdsForCascadeApi(42, { multiSchool: false, defaultSchoolId: null }))
-        .toEqual([42])
+      expect(schoolIdsForCascadeApi(42, { multiSchool: false, defaultSchoolId: null })).toEqual([
+        42
+      ])
     })
 
     it('空且单校时使用默认 schoolId', () => {
-      expect(schoolIdsForCascadeApi(null, { multiSchool: false, defaultSchoolId: 99 }))
-        .toEqual([99])
+      expect(schoolIdsForCascadeApi(null, { multiSchool: false, defaultSchoolId: 99 })).toEqual([
+        99
+      ])
     })
 
     it('空且多校时不使用默认 schoolId', () => {
-      expect(schoolIdsForCascadeApi(null, { multiSchool: true, defaultSchoolId: 99 }))
-        .toEqual([])
+      expect(schoolIdsForCascadeApi(null, { multiSchool: true, defaultSchoolId: 99 })).toEqual([])
     })
 
     it('空字符串 schoolField 视为空', () => {
-      expect(schoolIdsForCascadeApi('', { multiSchool: false, defaultSchoolId: 50 }))
-        .toEqual([50])
+      expect(schoolIdsForCascadeApi('', { multiSchool: false, defaultSchoolId: 50 })).toEqual([50])
     })
   })
 })

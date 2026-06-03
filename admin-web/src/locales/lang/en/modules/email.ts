@@ -107,7 +107,8 @@ export default {
     attachHint: 'Separate with semicolons',
     ruleSubject: 'Enter subject',
     ruleMailInfo: 'Select sender mailbox',
-    ruleRecipients: 'Select at least one recipient group or enter To addresses (semicolon-separated)',
+    ruleRecipients:
+      'Select at least one recipient group or enter To addresses (semicolon-separated)',
     exportRecipients: 'Export recipient status'
   }
 }

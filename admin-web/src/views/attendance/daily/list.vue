@@ -19,8 +19,7 @@
       :submit-text="$t('member.search')"
       :reset-text="$t('member.reset')"
       @search="search"
-      @reset="reset"
-    />
+      @reset="reset" />
 
     <UniDataTable
       ref="tableRef"
@@ -31,8 +30,7 @@
       :pagination="{ pageSize: 10, pageSizes: [10, 20, 50, 100] }"
       :toolbar="{ refresh: true, density: true, columnSetting: true }"
       @load-success="tableEmpty.onLoadSuccess"
-      @request-error="tableEmpty.onRequestError"
-    >
+      @request-error="tableEmpty.onRequestError">
       <template #empty>
         <ListTableEmpty :kind="tableEmpty.kind" @reset="reset" @retry="tableEmpty.retry" />
       </template>
@@ -45,7 +43,10 @@ import { dailyStatusOpts, dataFromOpts, searchForm, tableCols, ynOpts } from './
 import { attendanceDailyApi } from '@/api'
 import ListTableEmpty from '@/components/list-table-empty.vue'
 import { useListTableEmpty } from '@/composables/use-list-table-empty'
-import type { AttendanceDailyListParams, AttendanceDailyRecord } from '@/types/modules/attendance-daily'
+import type {
+  AttendanceDailyListParams,
+  AttendanceDailyRecord
+} from '@/types/modules/attendance-daily'
 import { normalizeArray, normalizePaged } from '@/utils/api-response-normalize'
 import { downloadBlob } from '@/utils/download'
 import { dateFormat } from '@/utils/tool'
@@ -54,12 +55,14 @@ import { useUniI18n, toUniOptions, useUniListState } from 'uni-ui-lib'
 import type { UniTableRequest } from 'uni-ui-lib'
 import { computed, ref } from 'vue'
 
-
 const { locale, t } = useUniI18n()
 
 type Loose = Record<string, unknown>
 /** 对齐旧页 `renderSection`：`MB` 来源展示「第 n 节课」，否则展示 `date2`。 */
-const attendanceTimeText = (row: Loose, tr: (key: string, params?: Record<string, unknown>) => string) => {
+const attendanceTimeText = (
+  row: Loose,
+  tr: (key: string, params?: Record<string, unknown>) => string
+) => {
   const df = row.dataFrom
   const d2 = row.date2
   if (df !== 'MB') {
@@ -122,8 +125,7 @@ const decorateRow = (raw: Loose): AttendanceDailyRecord => {
 
   const busN = Number(raw.busStatus)
   const dormN = Number(raw.dormitoryStatus)
-  row.busStatusLabel =
-    busN === 1 ? t('attendance.yes') : busN === 0 ? t('attendance.no') : '--'
+  row.busStatusLabel = busN === 1 ? t('attendance.yes') : busN === 0 ? t('attendance.no') : '--'
   row.dormitoryStatusLabel =
     dormN === 1 ? t('attendance.yes') : dormN === 0 ? t('attendance.no') : '--'
 
@@ -198,4 +200,5 @@ const exportData = async () => {
   } catch {
     /* request 层已提示 */
   }
-}</script>
+}
+</script>

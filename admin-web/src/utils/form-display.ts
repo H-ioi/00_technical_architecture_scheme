@@ -11,4 +11,3 @@ export function formatOptionLabels(options: UniOption[], value: unknown): string
     .filter(Boolean)
     .join(', ')
 }
-

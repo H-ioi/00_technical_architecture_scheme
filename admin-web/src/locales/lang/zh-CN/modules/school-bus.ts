@@ -61,8 +61,7 @@ export default {
     phCarNumber: '输入车牌号',
     phTermKeyword: '输入学期',
     phStationNameKeyword: '输入站点名称',
-    msgNeedWeekdaysAndStops:
-      '请至少选择一条「路线日期」，并为该日期添加站点后再保存。',
+    msgNeedWeekdaysAndStops: '请至少选择一条「路线日期」，并为该日期添加站点后再保存。',
     msgSelectRowsFirst: '请先勾选路线',
     msgCopySuccess: '复制成功',
     msgConfirmDeleteLines: '确定删除所选路线？删除后不可恢复。',

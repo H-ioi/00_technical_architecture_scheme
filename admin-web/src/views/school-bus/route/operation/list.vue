@@ -26,8 +26,7 @@
       type="file"
       accept=".xlsx,.xls"
       class="school-bus-route-operation__file"
-      @change="onImportFile"
-    >
+      @change="onImportFile" />
 
     <UniSearchForm
       v-model="queryModel"
@@ -38,8 +37,7 @@
       :submit-text="$t('schoolBus.search')"
       :reset-text="$t('schoolBus.reset')"
       @search="search"
-      @reset="reset"
-    />
+      @reset="reset" />
 
     <UniDataTable
       ref="tableRef"
@@ -54,15 +52,13 @@
       :action-column="{ width: 110, fixed: 'right' }"
       @selection-change="onSelectionChange"
       @load-success="tableEmpty.onLoadSuccess"
-      @request-error="tableEmpty.onRequestError"
-    >
+      @request-error="tableEmpty.onRequestError">
       <template #toolbar>
         <el-button
           v-uni-permission="'busoperation_del'"
           type="danger"
           :disabled="ids.length === 0"
-          @click="del"
-        >
+          @click="del">
           {{ $t('schoolBus.delete') }}
         </el-button>
       </template>
@@ -79,8 +75,7 @@
       :school-records="schoolRecords"
       :line-source="lineSource"
       :station-source="stationSource"
-      @saved="refreshTable"
-    />
+      @saved="refreshTable" />
 
     <el-dialog v-model="detailVisible" width="900px" :title="$t('schoolBus.look')">
       <el-descriptions v-if="detailRecord" :column="2" border>
@@ -101,18 +96,20 @@ import { useListTableEmpty } from '@/composables/use-list-table-empty'
 import type { SchoolOptionRecord } from '@/types/modules/membership'
 import type { OperationRecord, OperationListParams } from '@/types/modules/school-bus-operation'
 import { normalizeArray, normalizePaged } from '@/utils/api-response-normalize'
-import { detailCellDisplay, isSpreadsheetFilename, normalizeSchoolIdsOnRow } from '@/utils/school-bus'
+import {
+  detailCellDisplay,
+  isSpreadsheetFilename,
+  normalizeSchoolIdsOnRow
+} from '@/utils/school-bus'
 import dayjs from 'dayjs'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import type { UniFormConfig, UniTableAction, UniTableRequest } from 'uni-ui-lib'
 import { UniDataTable, UniSearchForm, useUniI18n, toUniOptions, useUniListState } from 'uni-ui-lib'
 import { computed, ref, nextTick, onMounted, watch } from 'vue'
 
-
 const { locale, t } = useUniI18n()
 
 const fileRef = ref<HTMLInputElement | null>(null)
-
 
 type Loose = Record<string, unknown>
 interface NamedEntity {
@@ -162,8 +159,8 @@ const initialFilters: Record<string, unknown> = {
 
 const { queryModel, filters, tableRef, search, reset, handleLoadSuccess, refreshTable } =
   useUniListState({
-  initialFilters
-})
+    initialFilters
+  })
 
 const schoolRecords = ref<SchoolOptionRecord[]>([])
 const lineSource = ref<NamedEntity[]>([])
@@ -216,8 +213,7 @@ const filterBySchools = (list: NamedEntity[]) => {
 
 const lineOptions = computed(() =>
   toUniOptions(filterBySchools(lineSource.value), {
-    labelKeys:
-      locale() === 'en' ? ['enName', 'lineName', 'name'] : ['cnName', 'lineName', 'name'],
+    labelKeys: locale() === 'en' ? ['enName', 'lineName', 'name'] : ['cnName', 'lineName', 'name'],
     valueKey: 'id'
   })
 )
@@ -485,7 +481,8 @@ const del = async () => {
   ElMessage.success(t('schoolBus.deleteSuccess'))
   selection.value = []
   void refreshTable()
-}</script>
+}
+</script>
 
 <style scoped lang="scss">
 .school-bus-route-operation {

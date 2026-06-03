@@ -22,8 +22,7 @@
       :submit-text="$t('protocol.search')"
       :reset-text="$t('protocol.reset')"
       @search="search"
-      @reset="reset"
-    />
+      @reset="reset" />
 
     <!-- UniDataTable 负责远程分页、选择列、操作列和表格工具栏；业务只提供列配置、请求和行操作。 -->
     <UniDataTable
@@ -39,8 +38,7 @@
       :action-column="{ width: 110, fixed: 'right' }"
       @selection-change="selection = $event as ProtocolRecord[]"
       @load-success="tableEmpty.onLoadSuccess"
-      @request-error="tableEmpty.onRequestError"
-    >
+      @request-error="tableEmpty.onRequestError">
       <!-- toolbar 插槽放表格勾选后的批量操作，组件内部会和刷新/最大化/列设置工具合并到底部工具栏。 -->
       <template #toolbar>
         <div class="protocol-page__toolbar">
@@ -48,8 +46,7 @@
             v-uni-permission="'protocol_del'"
             type="danger"
             :disabled="ids.length === 0"
-            @click="del"
-          >
+            @click="del">
             {{ $t('protocol.delete') }}
           </el-button>
         </div>
@@ -68,8 +65,7 @@
       :module-options="moduleOptions"
       :yes-no-options="yesNoOptions"
       :status-options="statusOptions"
-      @saved="refreshTable"
-    />
+      @saved="refreshTable" />
   </section>
 </template>
 
@@ -86,7 +82,6 @@ import { useUniI18n, toUniOptions, useUniListState } from 'uni-ui-lib'
 import type { UniOption, UniTableAction, UniTableRequest } from 'uni-ui-lib'
 import { computed, ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
-
 
 const { locale, t } = useUniI18n()
 
@@ -195,4 +190,5 @@ const del = async () => {
   ElMessage.success(t('protocol.deleteSuccess'))
   selection.value = []
   void refreshTable()
-}</script>
+}
+</script>

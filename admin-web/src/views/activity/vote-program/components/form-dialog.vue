@@ -6,15 +6,13 @@
     destroy-on-close
     append-to-body
     :close-on-click-modal="false"
-    @closed="onClosed"
-  >
+    @closed="onClosed">
     <UniForm
       ref="uniFormRef"
       v-model="form"
       :mode="formMode"
       class="activity-vote-program-form"
-      :config="formConfig"
-    />
+      :config="formConfig" />
     <template v-if="mode !== 'view'" #footer>
       <el-button @click="visible = false">{{ $t('common.cancel') }}</el-button>
       <el-button type="primary" :loading="saving" @click="submit">
@@ -125,7 +123,10 @@ async function loadProgramOptions() {
   const raw = await activityProgramApi.listBrief.get({ programTypes: ['2'] })
   const rows = normalizeArray(raw) as Row[]
   programOptions.value = toUniOptions(rows, {
-    labelKeys: locale.value === 'en' ? ['enName', 'cnName', 'programName'] : ['cnName', 'enName', 'programName'],
+    labelKeys:
+      locale.value === 'en'
+        ? ['enName', 'cnName', 'programName']
+        : ['cnName', 'enName', 'programName'],
     valueKey: 'id'
   })
 }

@@ -29,7 +29,13 @@ export const searchForm = (t: Translate): UniFormConfig => ({
 })
 
 export const tableCols = (t: Translate): UniTableColumn[] => [
-  { prop: 'subject', label: t('email.outbox.colSubject'), type: 'text', minWidth: 160, showOverflowTooltip: true },
+  {
+    prop: 'subject',
+    label: t('email.outbox.colSubject'),
+    type: 'text',
+    minWidth: 160,
+    showOverflowTooltip: true
+  },
   { prop: 'username', label: t('email.outbox.colUser'), type: 'text', width: 110 },
   { prop: 'email', label: t('email.outbox.colFrom'), type: 'text', minWidth: 160 },
   {
@@ -53,7 +59,13 @@ export const tableCols = (t: Translate): UniTableColumn[] => [
 ]
 
 export const draftTableCols = (t: Translate): UniTableColumn[] => [
-  { prop: 'subject', label: t('email.outbox.colSubject'), type: 'text', minWidth: 160, showOverflowTooltip: true },
+  {
+    prop: 'subject',
+    label: t('email.outbox.colSubject'),
+    type: 'text',
+    minWidth: 160,
+    showOverflowTooltip: true
+  },
   { prop: 'username', label: t('email.outbox.colUser'), type: 'text', width: 110 },
   { prop: 'email', label: t('email.outbox.colFrom'), type: 'text', minWidth: 160 }
 ]

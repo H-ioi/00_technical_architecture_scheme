@@ -35,8 +35,20 @@ export const searchForm = (_t: Translate, statusOptsList: UniOption[]): UniFormC
 
 export const tableCols = (t: Translate): UniTableColumn[] => [
   { prop: 'id', label: 'ID', type: 'text', width: 72 },
-  { prop: 'email', label: t('email.send.colEmail365'), type: 'text', minWidth: 200, showOverflowTooltip: true },
-  { prop: 'usernames', label: t('email.send.colUsers'), type: 'text', minWidth: 160, showOverflowTooltip: true },
+  {
+    prop: 'email',
+    label: t('email.send.colEmail365'),
+    type: 'text',
+    minWidth: 200,
+    showOverflowTooltip: true
+  },
+  {
+    prop: 'usernames',
+    label: t('email.send.colUsers'),
+    type: 'text',
+    minWidth: 160,
+    showOverflowTooltip: true
+  },
   {
     prop: 'status',
     label: t('email.status'),

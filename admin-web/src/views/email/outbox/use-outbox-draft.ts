@@ -183,15 +183,24 @@ export const useOutboxDraft = () => {
       }
       const om = String(m.otherMails ?? '').trim()
       if (om) {
-        payload.otherMails = om.split(';').map((s) => s.trim()).filter(Boolean)
+        payload.otherMails = om
+          .split(';')
+          .map((s) => s.trim())
+          .filter(Boolean)
       }
       const occ = String(m.otherCC ?? '').trim()
       if (occ) {
-        payload.otherCC = occ.split(';').map((s) => s.trim()).filter(Boolean)
+        payload.otherCC = occ
+          .split(';')
+          .map((s) => s.trim())
+          .filter(Boolean)
       }
       const obcc = String(m.otherBCC ?? '').trim()
       if (obcc) {
-        payload.otherBCC = obcc.split(';').map((s) => s.trim()).filter(Boolean)
+        payload.otherBCC = obcc
+          .split(';')
+          .map((s) => s.trim())
+          .filter(Boolean)
       }
       if (dialogMode.value === 'edit' && m.id) {
         payload.id = m.id

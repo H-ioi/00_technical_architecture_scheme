@@ -157,7 +157,6 @@ const draftTableEmpty = useListTableEmpty(draftFilters, {
   tableRef: draftTableRef,
   afterLoadSuccess: handleDraftLoadSuccess
 })
-
 </script>
 
 <style scoped lang="scss">

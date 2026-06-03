@@ -50,7 +50,6 @@ beforeAll(() => {
 })
 
 describe('build-chart-options.ts', () => {
-
   describe('buildAttendanceTrendOption', () => {
     it('应生成折线图配置', () => {
       const trend = [
@@ -71,10 +70,9 @@ describe('build-chart-options.ts', () => {
     })
 
     it('series 类型为 line', () => {
-      const option = buildAttendanceTrendOption(
-        [{ date: '2024-06-01', total: 100 }],
-        { chart: '测试' }
-      )
+      const option = buildAttendanceTrendOption([{ date: '2024-06-01', total: 100 }], {
+        chart: '测试'
+      })
       expect((option.series![0] as Record<string, unknown>).type).toBe('line')
     })
   })
@@ -83,20 +81,26 @@ describe('build-chart-options.ts', () => {
     it('应生成饼图配置', () => {
       const stats = { studentTotal: 1500, teacherTotal: 80, memberTotal: 1580 } as any
       const option = buildMemberMixOption(stats, {
-        student: '学生', teacher: '教师', chart: '成员构成'
+        student: '学生',
+        teacher: '教师',
+        chart: '成员构成'
       })
 
       const series = option.series![0] as Record<string, unknown>
       expect(series.type).toBe('pie')
-      expect((series.data as unknown[])).toHaveLength(2)
+      expect(series.data as unknown[]).toHaveLength(2)
     })
 
     it('饼图数据包含学生和教师', () => {
       const stats = { studentTotal: 100, teacherTotal: 10, memberTotal: 110 } as any
       const option = buildMemberMixOption(stats, {
-        student: '学生', teacher: '教师', chart: '成员'
+        student: '学生',
+        teacher: '教师',
+        chart: '成员'
       })
-      const data = (option.series![0] as Record<string, unknown>).data as Array<Record<string, unknown>>
+      const data = (option.series![0] as Record<string, unknown>).data as Array<
+        Record<string, unknown>
+      >
       expect(data[0]?.value).toBe(100)
       expect(data[1]?.value).toBe(10)
     })
@@ -113,10 +117,15 @@ describe('build-chart-options.ts', () => {
   describe('buildWorkflowLoadOption', () => {
     it('应生成柱状图配置', () => {
       const stats = {
-        pendingTasks: 5, workflowMyStarted: 10, workflowMyCompleted: 20
+        pendingTasks: 5,
+        workflowMyStarted: 10,
+        workflowMyCompleted: 20
       } as any
       const option = buildWorkflowLoadOption(stats, {
-        chart: '流程负载', todo: '待办', started: '发起', done: '已办'
+        chart: '流程负载',
+        todo: '待办',
+        started: '发起',
+        done: '已办'
       })
 
       expect((option.series![0] as Record<string, unknown>).type).toBe('bar')
@@ -125,7 +134,10 @@ describe('build-chart-options.ts', () => {
     it('x 轴包含待办/发起/已办', () => {
       const stats = { pendingTasks: 1, workflowMyStarted: 2, workflowMyCompleted: 3 } as any
       const option = buildWorkflowLoadOption(stats, {
-        chart: '负载', todo: '待', started: '始', done: '完'
+        chart: '负载',
+        todo: '待',
+        started: '始',
+        done: '完'
       })
       const xAxis = (option as Record<string, unknown>).xAxis as Record<string, unknown>
       expect(xAxis.data).toHaveLength(3)
@@ -135,10 +147,15 @@ describe('build-chart-options.ts', () => {
   describe('buildLeaveDomainOption', () => {
     it('应生成柱状图配置', () => {
       const stats = {
-        holidayLeaveTotal: 30, holidayReturnTotal: 15, leavePassTotal: 5
+        holidayLeaveTotal: 30,
+        holidayReturnTotal: 15,
+        leavePassTotal: 5
       } as any
       const option = buildLeaveDomainOption(stats, {
-        chart: '请假域', leaveList: '请假', returnList: '销假', pass: '放行条'
+        chart: '请假域',
+        leaveList: '请假',
+        returnList: '销假',
+        pass: '放行条'
       })
 
       expect((option.series![0] as Record<string, unknown>).type).toBe('bar')
@@ -147,10 +164,13 @@ describe('build-chart-options.ts', () => {
     it('包含三个分类', () => {
       const stats = { holidayLeaveTotal: 1, holidayReturnTotal: 2, leavePassTotal: 3 } as any
       const option = buildLeaveDomainOption(stats, {
-        chart: '域', leaveList: 'L', returnList: 'R', pass: 'P'
+        chart: '域',
+        leaveList: 'L',
+        returnList: 'R',
+        pass: 'P'
       })
       const xAxis = (option as Record<string, unknown>).xAxis as Record<string, unknown>
-      expect((xAxis.data as unknown[])).toHaveLength(3)
+      expect(xAxis.data as unknown[]).toHaveLength(3)
     })
   })
 
@@ -158,7 +178,9 @@ describe('build-chart-options.ts', () => {
     it('应生成横向柱状图配置', () => {
       const stats = { pendingTasks: 8, pendingBusIntentions: 3 } as any
       const option = buildBacklogOption(stats, {
-        chart: '待办事项', leave: '请假', bus: '校车'
+        chart: '待办事项',
+        leave: '请假',
+        bus: '校车'
       })
 
       expect((option.series![0] as Record<string, unknown>).type).toBe('bar')
@@ -172,7 +194,7 @@ describe('build-chart-options.ts', () => {
       const stats = { pendingTasks: 10, pendingBusIntentions: 5 } as any
       const option = buildBacklogOption(stats, { chart: '待办', leave: '请假', bus: '校车' })
       const yAxis = (option as Record<string, unknown>).yAxis as Record<string, unknown>
-      expect((yAxis.data as unknown[])).toHaveLength(2)
+      expect(yAxis.data as unknown[]).toHaveLength(2)
     })
   })
 })

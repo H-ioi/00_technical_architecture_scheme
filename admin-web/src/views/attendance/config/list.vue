@@ -19,8 +19,7 @@
       :submit-text="$t('member.search')"
       :reset-text="$t('member.reset')"
       @search="search"
-      @reset="reset"
-    />
+      @reset="reset" />
 
     <UniDataTable
       ref="tableRef"
@@ -33,8 +32,7 @@
       :actions="actions"
       :action-column="{ width: 110, fixed: 'right' }"
       @load-success="tableEmpty.onLoadSuccess"
-      @request-error="tableEmpty.onRequestError"
-    >
+      @request-error="tableEmpty.onRequestError">
       <template #empty>
         <ListTableEmpty :kind="tableEmpty.kind" @reset="reset" @retry="tableEmpty.retry" />
       </template>
@@ -47,8 +45,7 @@
       :school-options="schoolOptions"
       :department-options="departmentOptions"
       :grade-options="gradeOptions"
-      @success="onFormSuccess"
-    />
+      @success="onFormSuccess" />
   </section>
 </template>
 
@@ -65,9 +62,6 @@ import { ElMessageBox } from 'element-plus'
 import { UniDataTable, UniSearchForm, toUniOptions, useUniI18n, useUniListState } from 'uni-ui-lib'
 import type { UniTableAction, UniTableRequest } from 'uni-ui-lib'
 import { onMounted, computed, ref } from 'vue'
-
-
-
 
 const { locale, t } = useUniI18n()
 
@@ -143,8 +137,14 @@ const remove = (row: AttendanceHolidaySysConfigRecord) => {
 }
 
 const actions = computed<UniTableAction[]>(() => [
-  { label: t('attendance.edit'), onClick: (row) => openEdit(row as AttendanceHolidaySysConfigRecord) },
-  { label: t('attendance.delete'), onClick: (row) => remove(row as AttendanceHolidaySysConfigRecord) }
+  {
+    label: t('attendance.edit'),
+    onClick: (row) => openEdit(row as AttendanceHolidaySysConfigRecord)
+  },
+  {
+    label: t('attendance.delete'),
+    onClick: (row) => remove(row as AttendanceHolidaySysConfigRecord)
+  }
 ])
 
 const onFormSuccess = () => {
@@ -160,4 +160,5 @@ const tableEmpty = useListTableEmpty(filters, { tableRef, afterLoadSuccess: hand
 
 onMounted(() => {
   initSchools()
-})</script>
+})
+</script>

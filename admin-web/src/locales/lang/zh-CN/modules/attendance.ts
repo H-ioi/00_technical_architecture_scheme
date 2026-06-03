@@ -90,8 +90,7 @@ export default {
 
   daily: {
     pageTitle: '学生每日考勤',
-    pageDesc:
-      '按校区、学号、校巴/住宿、日期区间、来源与状态查询学生每日考勤汇总，支持导出。',
+    pageDesc: '按校区、学号、校巴/住宿、日期区间、来源与状态查询学生每日考勤汇总，支持导出。',
     date: '出勤日期',
     attendanceTime: '考勤时间',
     mbLesson: '第{period}节课',

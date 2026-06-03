@@ -34,7 +34,9 @@ export const useTermSection = (schoolRecords: SchoolRecordsRef) => {
 
   const selection = ref<Loose[]>([])
   const selectedIds = computed(() =>
-    selection.value.map((item) => item.id as string | number).filter((id) => id != null && id !== '')
+    selection.value
+      .map((item) => item.id as string | number)
+      .filter((id) => id != null && id !== '')
   )
 
   const schoolOptions = computed(() =>

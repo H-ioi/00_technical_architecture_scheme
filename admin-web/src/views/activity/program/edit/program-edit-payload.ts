@@ -83,7 +83,8 @@ export function buildProgramSubmitPayload(
     backgroundImage: m.backgroundImage,
     programType: m.programType,
     rule: {},
-    sortOrder: m.sortOrder != null && m.sortOrder !== ('' as unknown as number) ? Number(m.sortOrder) : 0
+    sortOrder:
+      m.sortOrder != null && m.sortOrder !== ('' as unknown as number) ? Number(m.sortOrder) : 0
   }
 
   switch (m.programType) {

@@ -1,4 +1,9 @@
-import type { UniDataTableTree, UniFormConfig, UniTableColumn, UniTableToolbarConfig } from 'uni-ui-lib'
+import type {
+  UniDataTableTree,
+  UniFormConfig,
+  UniTableColumn,
+  UniTableToolbarConfig
+} from 'uni-ui-lib'
 
 import type { Translate } from '@/types/i18n'
 

@@ -8,8 +8,7 @@
       <div class="uni-list-page__header-actions">
         <el-button
           v-uni-permission="'busorder_import_intention_order'"
-          @click="downloadIntentionTemplate"
-        >
+          @click="downloadIntentionTemplate">
           {{ $t('schoolBus.downloadTemplate') }}
         </el-button>
         <el-button v-uni-permission="'busorder_import_intention_order'" @click="fileRef?.click()">
@@ -26,22 +25,18 @@
       type="file"
       accept=".xlsx,.xls"
       class="school-bus-student-apply__file"
-      @change="onImportFile"
-    >
+      @change="onImportFile" />
 
     <el-alert
       v-if="commonDataError"
       class="school-bus-student-apply__cascade-alert"
       type="warning"
       :closable="false"
-      show-icon
-    >
+      show-icon>
       <template #default>
         <span>{{ $t('schoolBus.cascadeOptionsLoadFail') }}</span>
         <el-button type="primary" link @click="reloadCommonData">
-          {{
-            $t('common.retry')
-          }}
+          {{ $t('common.retry') }}
         </el-button>
       </template>
     </el-alert>
@@ -55,8 +50,7 @@
       :submit-text="$t('schoolBus.search')"
       :reset-text="$t('schoolBus.reset')"
       @search="search"
-      @reset="reset"
-    />
+      @reset="reset" />
 
     <UniDataTable
       ref="tableRef"
@@ -71,36 +65,31 @@
       :action-column="{ width: 110, fixed: 'right' }"
       @selection-change="onSelectionChange"
       @load-success="tableEmpty.onLoadSuccess"
-      @request-error="tableEmpty.onRequestError"
-    >
+      @request-error="tableEmpty.onRequestError">
       <template #toolbar>
         <el-button
           v-uni-permission="'busorder_batch_approve'"
           :disabled="selection.length === 0"
-          @click="batchApprove"
-        >
+          @click="batchApprove">
           {{ $t('schoolBus.studentApply.batchApprove') }}
         </el-button>
         <el-button
           v-uni-permission="'busorder_batch_deny'"
           :disabled="selection.length === 0"
-          @click="openReject"
-        >
+          @click="openReject">
           {{ $t('schoolBus.studentApply.batchReject') }}
         </el-button>
         <el-button
           v-uni-permission="'busorder_batch_update_payment_status'"
           :disabled="selection.length === 0"
-          @click="batchPayment"
-        >
+          @click="batchPayment">
           {{ $t('schoolBus.studentApply.batchPayment') }}
         </el-button>
         <el-button
           v-uni-permission="'busintentionorder_del'"
           type="danger"
           :disabled="selection.length === 0"
-          @click="del"
-        >
+          @click="del">
           {{ $t('schoolBus.delete') }}
         </el-button>
       </template>
@@ -119,15 +108,13 @@
       :school-options="schoolOptions"
       :default-school-id="defaultSingleSchoolId"
       :multi-school="multiSchool"
-      @saved="refreshTable"
-    />
+      @saved="refreshTable" />
 
     <el-dialog
       v-model="rejectVisible"
       width="520px"
       :title="$t('schoolBus.studentApply.batchReject')"
-      destroy-on-close
-    >
+      destroy-on-close>
       <UniForm ref="rejectUniFormRef" v-model="rejectForm" mode="edit" :config="rejectFormConfig" />
       <template #footer>
         <el-button @click="rejectVisible = false">
@@ -145,7 +132,12 @@
 import BusOrderFormDialog from '../components/bus-order-form-dialog.vue'
 import OrderDetailDialog from '../components/order-detail-dialog.vue'
 import { useBusOrderFormDialog } from '../components/use-bus-order-form-dialog'
-import { approvalStatusOptions, paymentStatusOptions, pickupMethodOptions, useStudentOrderFilters } from '../use-student-order-filters'
+import {
+  approvalStatusOptions,
+  paymentStatusOptions,
+  pickupMethodOptions,
+  useStudentOrderFilters
+} from '../use-student-order-filters'
 import { searchForm, tableCols } from './list.config'
 import { schoolBusOrderApi } from '@/api'
 import ListTableEmpty from '@/components/list-table-empty.vue'
@@ -160,7 +152,6 @@ import { ElMessage, ElMessageBox } from 'element-plus'
 import type { UniFormConfig, UniTableAction, UniTableRequest } from 'uni-ui-lib'
 import { UniForm, useUniI18n, useUniListState } from 'uni-ui-lib'
 import { computed, ref, nextTick, onMounted, watch } from 'vue'
-
 
 const { locale, t } = useUniI18n()
 
@@ -210,8 +201,8 @@ const initialFilters: Record<string, unknown> = {
 
 const { queryModel, filters, tableRef, search, reset, handleLoadSuccess, refreshTable } =
   useUniListState({
-  initialFilters
-})
+    initialFilters
+  })
 
 const multiSchool = computed(() => schoolRecords.value.length > 1)
 const approvalOpts = computed(() => approvalStatusOptions(t))
@@ -232,10 +223,7 @@ const searchCascade = computed(() => {
   return {
     sectionDisabled: !hasSchool,
     lineDisabled:
-      !hasSchool ||
-      q.sectionId === undefined ||
-      q.sectionId === null ||
-      q.sectionId === '',
+      !hasSchool || q.sectionId === undefined || q.sectionId === null || q.sectionId === '',
     stationDisabled: !hasSchool || !Array.isArray(q.lineIds) || q.lineIds.length === 0,
     optionsLoading: commonDataLoading.value,
     optionsFailed: commonDataError.value
@@ -276,8 +264,7 @@ const loadData: UniTableRequest = async ({ pageNo: _p, pageSize: _s, filters: f 
   }
 }
 
-const { formVisible, formMode, editingOrderId, openFormAdd, openFormEdit } =
-  useBusOrderFormDialog()
+const { formVisible, formMode, editingOrderId, openFormAdd, openFormEdit } = useBusOrderFormDialog()
 
 const detailVisible = ref(false)
 const detailOrderId = ref<string | number | null>(null)
@@ -543,7 +530,8 @@ const del = async () => {
   } catch {
     /* request 层已提示 */
   }
-}</script>
+}
+</script>
 
 <style scoped lang="scss">
 .school-bus-student-apply {

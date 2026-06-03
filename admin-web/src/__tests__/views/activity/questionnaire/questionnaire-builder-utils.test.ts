@@ -33,7 +33,12 @@ describe('questionnaire-builder-utils.ts', () => {
   describe('BUILDER_PALETTE_TYPES', () => {
     it('应包含 6 种题型', () => {
       expect(BUILDER_PALETTE_TYPES).toEqual([
-        'input', 'textarea', 'radio', 'checkbox', 'select', 'datetimepicker'
+        'input',
+        'textarea',
+        'radio',
+        'checkbox',
+        'select',
+        'datetimepicker'
       ])
     })
   })

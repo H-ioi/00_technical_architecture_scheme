@@ -23,8 +23,7 @@
       type="file"
       accept=".xlsx,.xls"
       class="school-bus-driver-page__file"
-      @change="onImportFile"
-    >
+      @change="onImportFile" />
 
     <UniSearchForm
       v-model="queryModel"
@@ -35,8 +34,7 @@
       :submit-text="$t('schoolBus.search')"
       :reset-text="$t('schoolBus.reset')"
       @search="search"
-      @reset="reset"
-    />
+      @reset="reset" />
 
     <UniDataTable
       ref="tableRef"
@@ -51,15 +49,13 @@
       :action-column="{ width: 110, fixed: 'right' }"
       @selection-change="onSelectionChange"
       @load-success="tableEmpty.onLoadSuccess"
-      @request-error="tableEmpty.onRequestError"
-    >
+      @request-error="tableEmpty.onRequestError">
       <template #toolbar>
         <el-button
           v-uni-permission="'busdriver_del'"
           type="danger"
           :disabled="ids.length === 0"
-          @click="del"
-        >
+          @click="del">
           {{ $t('schoolBus.delete') }}
         </el-button>
       </template>
@@ -75,8 +71,7 @@
       :default-school-id="defaultSchoolId"
       :school-options="schoolOptions"
       :status-options="statusOptions"
-      @saved="refreshTable"
-    />
+      @saved="refreshTable" />
   </section>
 </template>
 
@@ -87,7 +82,10 @@ import { schoolBusDriverApi, membershipApi } from '@/api'
 import ListTableEmpty from '@/components/list-table-empty.vue'
 import { useListTableEmpty } from '@/composables/use-list-table-empty'
 import type { SchoolOptionRecord } from '@/types/modules/membership'
-import type { DriverRecord as DriverRow, DriverRecord as Row } from '@/types/modules/school-bus-driver'
+import type {
+  DriverRecord as DriverRow,
+  DriverRecord as Row
+} from '@/types/modules/school-bus-driver'
 import { normalizeArray, normalizePaged } from '@/utils/api-response-normalize'
 import { isSpreadsheetFilename } from '@/utils/school-bus'
 import { ElMessage, ElMessageBox } from 'element-plus'
@@ -95,11 +93,9 @@ import { useUniI18n, toUniOptions, useUniListState } from 'uni-ui-lib'
 import type { UniTableAction, UniTableRequest } from 'uni-ui-lib'
 import { computed, ref, nextTick, onMounted, watch } from 'vue'
 
-
 const { locale, t } = useUniI18n()
 
 const fileRef = ref<HTMLInputElement | null>(null)
-
 
 const initialFilters = {
   schoolIds: undefined as string | number | undefined,
@@ -241,7 +237,8 @@ const del = async () => {
   ElMessage.success(t('schoolBus.deleteSuccess'))
   selection.value = []
   void refreshTable()
-}</script>
+}
+</script>
 
 <style scoped lang="scss">
 .school-bus-driver-page {

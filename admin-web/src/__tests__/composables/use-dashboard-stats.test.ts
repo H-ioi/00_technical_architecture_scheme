@@ -55,7 +55,6 @@ vi.mock('@/api', () => {
 import { fetchDashboardStats, useDashboardStats } from '../../composables/use-dashboard-stats'
 
 describe('use-dashboard-stats.ts', () => {
-
   describe('fetchDashboardStats', () => {
     it('应返回完整的 DashboardStatsPayload 结构', async () => {
       const stats = await fetchDashboardStats()

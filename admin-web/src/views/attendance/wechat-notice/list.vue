@@ -16,8 +16,7 @@
       :submit-text="$t('member.search')"
       :reset-text="$t('member.reset')"
       @search="search"
-      @reset="reset"
-    />
+      @reset="reset" />
 
     <UniDataTable
       ref="tableRef"
@@ -30,8 +29,7 @@
       :actions="actions"
       :action-column="{ width: 60, fixed: 'right' }"
       @load-success="tableEmpty.onLoadSuccess"
-      @request-error="tableEmpty.onRequestError"
-    >
+      @request-error="tableEmpty.onRequestError">
       <template #empty>
         <ListTableEmpty :kind="tableEmpty.kind" @reset="reset" @retry="tableEmpty.retry" />
       </template>
@@ -47,16 +45,16 @@ import { detailForm, searchForm, tableCols, wechatNoticeSendStatusOpts } from '.
 import { attendanceWechatNoticeApi, membershipApi } from '@/api'
 import ListTableEmpty from '@/components/list-table-empty.vue'
 import { useListTableEmpty } from '@/composables/use-list-table-empty'
-import type { AttendanceWechatNoticeListParams, AttendanceWechatNoticeRecord } from '@/types/modules/attendance-wechat-notice'
+import type {
+  AttendanceWechatNoticeListParams,
+  AttendanceWechatNoticeRecord
+} from '@/types/modules/attendance-wechat-notice'
 import type { SchoolOptionRecord } from '@/types/modules/membership'
 import { normalizePaged } from '@/utils/api-response-normalize'
 import { dateFormat } from '@/utils/tool'
 import type { UniTableAction, UniTableRequest } from 'uni-ui-lib'
 import { toUniOptions, useUniI18n, useUniListState } from 'uni-ui-lib'
 import { computed, ref } from 'vue'
-
-
-
 
 const { locale, t } = useUniI18n()
 
@@ -85,9 +83,7 @@ const schoolOptions = computed(() =>
 
 const sendStatusSearchOptions = computed(() => wechatNoticeSendStatusOpts(t))
 
-const searchCfg = computed(() =>
-  searchForm(t, schoolOptions.value, sendStatusSearchOptions.value)
-)
+const searchCfg = computed(() => searchForm(t, schoolOptions.value, sendStatusSearchOptions.value))
 
 const columns = computed(() => tableCols(t, schoolOptions.value))
 
@@ -137,4 +133,5 @@ const loadOpts = async () => {
 
 loadOpts()
 
-const tableEmpty = useListTableEmpty(filters, { tableRef, afterLoadSuccess: handleLoadSuccess })</script>
+const tableEmpty = useListTableEmpty(filters, { tableRef, afterLoadSuccess: handleLoadSuccess })
+</script>

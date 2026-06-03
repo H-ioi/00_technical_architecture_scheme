@@ -16,8 +16,7 @@
       :submit-text="$t('member.search')"
       :reset-text="$t('member.reset')"
       @search="search"
-      @reset="reset"
-    />
+      @reset="reset" />
 
     <UniDataTable
       ref="tableRef"
@@ -30,8 +29,7 @@
       :actions="actions"
       :action-column="{ width: 100, fixed: 'right' }"
       @load-success="tableEmpty.onLoadSuccess"
-      @request-error="tableEmpty.onRequestError"
-    >
+      @request-error="tableEmpty.onRequestError">
       <template #empty>
         <ListTableEmpty :kind="tableEmpty.kind" @reset="reset" @retry="tableEmpty.retry" />
       </template>
@@ -43,7 +41,16 @@
 
 <script setup lang="ts">
 import MDetail from '../components/detail.vue'
-import { busOpts, detailForm, dormOpts, searchForm, stDispOpts, statusOpts, tableCols, ynDispOpts } from './list.config'
+import {
+  busOpts,
+  detailForm,
+  dormOpts,
+  searchForm,
+  stDispOpts,
+  statusOpts,
+  tableCols,
+  ynDispOpts
+} from './list.config'
 import { membershipApi, studentApi } from '@/api'
 import ListTableEmpty from '@/components/list-table-empty.vue'
 import { useListTableEmpty } from '@/composables/use-list-table-empty'
@@ -51,7 +58,6 @@ import type { StudentRecord as Row } from '@/types/modules/member-student'
 import type { UniOption, UniTableAction, UniTableRequest } from 'uni-ui-lib'
 import { toUniOptions, useUniI18n, useUniListState } from 'uni-ui-lib'
 import { computed, ref } from 'vue'
-
 
 const { locale, t } = useUniI18n()
 
@@ -64,10 +70,9 @@ const initialFilters = {
   busStatus: undefined,
   studentStatus: undefined
 }
-const { queryModel, filters, tableRef, search, reset, handleLoadSuccess } =
-  useUniListState({
-    initialFilters
-  })
+const { queryModel, filters, tableRef, search, reset, handleLoadSuccess } = useUniListState({
+  initialFilters
+})
 const schoolOptions = ref<UniOption[]>([])
 const yearGroupOptions = ref<UniOption[]>([])
 const formOptions = ref<UniOption[]>([])
@@ -140,4 +145,5 @@ const loadOpts = async () => {
 
 loadOpts()
 
-const tableEmpty = useListTableEmpty(filters, { tableRef, afterLoadSuccess: handleLoadSuccess })</script>
+const tableEmpty = useListTableEmpty(filters, { tableRef, afterLoadSuccess: handleLoadSuccess })
+</script>

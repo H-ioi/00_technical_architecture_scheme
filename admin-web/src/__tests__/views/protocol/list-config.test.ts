@@ -54,7 +54,6 @@ const statusOptsArr: UniOption[] = [
 ]
 
 describe('list.config.ts', () => {
-
   describe('yesNoOpts', () => {
     it('应生成是/否选项', () => {
       const opts = yesNoOpts(t)
@@ -122,7 +121,15 @@ describe('list.config.ts', () => {
   })
 
   describe('tableCols', () => {
-    const cols = tableCols(t, locale, schoolOpts, protocolTypeOpts, moduleOpts, yesNoOptsArr, statusOptsArr)
+    const cols = tableCols(
+      t,
+      locale,
+      schoolOpts,
+      protocolTypeOpts,
+      moduleOpts,
+      yesNoOptsArr,
+      statusOptsArr
+    )
 
     it('应包含至少 10 列', () => {
       expect(cols.length).toBeGreaterThanOrEqual(10)
@@ -235,7 +242,14 @@ describe('list.config.ts', () => {
   })
 
   describe('protocolDialogFormConfig', () => {
-    const config = protocolDialogFormConfig(t, schoolOpts, protocolTypeOpts, moduleOpts, yesNoOptsArr, statusOptsArr)
+    const config = protocolDialogFormConfig(
+      t,
+      schoolOpts,
+      protocolTypeOpts,
+      moduleOpts,
+      yesNoOptsArr,
+      statusOptsArr
+    )
 
     it('formProps 应为 labelPosition=top', () => {
       expect(config.formProps).toMatchObject({ labelPosition: 'top' })

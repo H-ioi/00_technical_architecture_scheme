@@ -4,7 +4,9 @@
       <div>
         <h1>{{ $t('route.activityQuestionnaireSubmissions') }}</h1>
         <p class="uni-list-page__description">{{ $t('activity.qSubmissionsPageDesc') }}</p>
-        <p v-if="subtitle" class="uni-list-page__description q-submissions__subtitle">{{ subtitle }}</p>
+        <p v-if="subtitle" class="uni-list-page__description q-submissions__subtitle">
+          {{ subtitle }}
+        </p>
       </div>
       <div class="uni-list-page__header-actions q-submissions__header-actions">
         <el-button :loading="exporting" @click="exportAnswers">{{
@@ -42,7 +44,10 @@
       </template>
     </UniDataTable>
 
-    <el-dialog v-model="fileDialogVisible" :title="$t('activity.qSubmissionAttachTitle')" width="520px">
+    <el-dialog
+      v-model="fileDialogVisible"
+      :title="$t('activity.qSubmissionAttachTitle')"
+      width="520px">
       <div class="q-sub-files">
         <el-button
           v-for="f in fileRows"

@@ -97,7 +97,6 @@ describe('holiday-utils.ts', () => {
 
   // ==================== normalizeHolidayReturnRow ====================
   describe('normalizeHolidayReturnRow', () => {
-
     describe('嵌套对象摊平', () => {
       it('应将 holiday 对象摊平到顶层', () => {
         const row = normalizeHolidayReturnRow({
@@ -110,7 +109,15 @@ describe('holiday-utils.ts', () => {
         expect(row.otherField).toBe('keep')
       })
 
-      const nestedKeys = ['holiday', 'holidayInfo', 'isaHoliday', 'leaveHoliday', 'holidayVo', 'holidayDTO', 'holidayEntity']
+      const nestedKeys = [
+        'holiday',
+        'holidayInfo',
+        'isaHoliday',
+        'leaveHoliday',
+        'holidayVo',
+        'holidayDTO',
+        'holidayEntity'
+      ]
       nestedKeys.forEach((key) => {
         it(`摊平 ${key} 嵌套对象`, () => {
           const raw = { [key]: { admissionNo: `TEST-${key}` } }
@@ -126,7 +133,17 @@ describe('holiday-utils.ts', () => {
     })
 
     describe('学号字段归一化', () => {
-      const admissionKeys = ['admissonNo', 'admissionNo', 'studentAdmissionNo', 'admissionNumber', 'student_admission_no', 'admission_no', 'stuNo', 'studentNo', 'student_no']
+      const admissionKeys = [
+        'admissonNo',
+        'admissionNo',
+        'studentAdmissionNo',
+        'admissionNumber',
+        'student_admission_no',
+        'admission_no',
+        'stuNo',
+        'studentNo',
+        'student_no'
+      ]
       admissionKeys.forEach((key) => {
         it(`应从 ${key} 取学号`, () => {
           const result = normalizeHolidayReturnRow({ [key]: 'STU-123' })
@@ -149,12 +166,18 @@ describe('holiday-utils.ts', () => {
     })
 
     describe('原因字段归一化', () => {
-      it.each(['reason', 'holidayReason', 'leaveReason', 'remark', 'leave_reason', 'reasonDesc', 'reason_desc'])(
-        '应从 %s 取原因', (key) => {
-          const result = normalizeHolidayReturnRow({ [key]: 'TestReason' })
-          expect(result.reason).toBe('TestReason')
-        }
-      )
+      it.each([
+        'reason',
+        'holidayReason',
+        'leaveReason',
+        'remark',
+        'leave_reason',
+        'reasonDesc',
+        'reason_desc'
+      ])('应从 %s 取原因', (key) => {
+        const result = normalizeHolidayReturnRow({ [key]: 'TestReason' })
+        expect(result.reason).toBe('TestReason')
+      })
     })
 
     describe('scope 数组化', () => {
@@ -235,7 +258,10 @@ describe('holiday-utils.ts', () => {
       })
 
       it('从 startDate + endDate 拼合', () => {
-        const result = normalizeHolidayReturnRow({ startDate: '2024-03-01', end_date: '2024-03-10' })
+        const result = normalizeHolidayReturnRow({
+          startDate: '2024-03-01',
+          end_date: '2024-03-10'
+        })
         expect(result.dateString).toBe('2024-03-01 ~ 2024-03-10')
       })
     })
@@ -255,15 +281,19 @@ describe('holiday-utils.ts', () => {
     })
 
     describe('status 归一化', () => {
-      it.each(['status', 'holidayStatus', 'approvalStatus', 'holiday_status'])('从 %s 取', (key) => {
-        const result = normalizeHolidayReturnRow({ [key]: 'approved' })
-        expect(result.status).toBe('approved')
-      })
+      it.each(['status', 'holidayStatus', 'approvalStatus', 'holiday_status'])(
+        '从 %s 取',
+        (key) => {
+          const result = normalizeHolidayReturnRow({ [key]: 'approved' })
+          expect(result.status).toBe('approved')
+        }
+      )
     })
 
     describe('createdAt 归一化', () => {
       it.each(['createdAt', 'created_at', 'createTime', 'create_time', 'gmtCreate', 'gmt_create'])(
-        '从 %s 取', (key) => {
+        '从 %s 取',
+        (key) => {
           const result = normalizeHolidayReturnRow({ [key]: '2024-05-01' })
           expect(result.createdAt).toBe('2024-05-01')
         }

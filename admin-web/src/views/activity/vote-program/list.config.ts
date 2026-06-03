@@ -21,5 +21,10 @@ export const tableCols = (t: Translate): UniTableColumn[] => [
   { prop: 'programName', label: t('activity.voteProgramProject'), minWidth: 150 },
   { prop: 'cnName', label: t('activity.eventNameCn'), minWidth: 130 },
   { prop: 'enName', label: t('activity.eventNameEn'), minWidth: 130 },
-  { prop: 'performer', label: t('activity.votePerformer'), minWidth: 180, showOverflowTooltip: true }
+  {
+    prop: 'performer',
+    label: t('activity.votePerformer'),
+    minWidth: 180,
+    showOverflowTooltip: true
+  }
 ]

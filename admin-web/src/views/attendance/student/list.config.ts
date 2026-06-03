@@ -121,10 +121,7 @@ export const searchForm = (
   colProps: { span: 6 }
 })
 
-export const tableCols = (
-  t: Translate,
-  schoolOptions: UniOption[]
-): UniTableColumn[] => [
+export const tableCols = (t: Translate, schoolOptions: UniOption[]): UniTableColumn[] => [
   { prop: 'id', label: t('attendance.id'), type: 'text', width: 90, fixed: 'left' },
   {
     prop: 'schoolId',
@@ -204,10 +201,7 @@ export const tableCols = (
   }
 ]
 
-export const detailForm = (
-  t: Translate,
-  schoolOptions: UniOption[]
-): UniFormConfig => ({
+export const detailForm = (t: Translate, schoolOptions: UniOption[]): UniFormConfig => ({
   mode: 'view',
   formProps: { labelWidth: '110px' },
   rowProps: { gutter: 16 },

@@ -16,10 +16,7 @@ import type {
 import { normalizeArray, normalizeEnvelope, normalizePaged } from '@/utils/api-response-normalize'
 import { downloadBlob } from '@/utils/download'
 
-import {
-  submissionDisplayProp,
-  submissionTableCols
-} from './submissions.config'
+import { submissionDisplayProp, submissionTableCols } from './submissions.config'
 
 function submissionColumnsFromFields(
   fields: Record<string, unknown>[],
@@ -40,7 +37,9 @@ function submissionColumnsFromFields(
   const base: SubmissionColumnMeta[] = rows.map((item) => {
     const hid = Boolean(item.isHide)
     const label = `${String(item.label ?? '')}${hid ? labels.submissionColHiddenSuffix : ''}`
-    const propsRaw = Array.isArray(item.properties) ? (item.properties as Record<string, unknown>[]) : []
+    const propsRaw = Array.isArray(item.properties)
+      ? (item.properties as Record<string, unknown>[])
+      : []
     return {
       prop: String(item.id ?? ''),
       label,
@@ -104,7 +103,9 @@ function parseJsonMaybe(value: unknown): unknown {
   }
 }
 
-function propsOptions(meta: SubmissionColumnMeta): { id: number; label?: string; value?: unknown }[] {
+function propsOptions(
+  meta: SubmissionColumnMeta
+): { id: number; label?: string; value?: unknown }[] {
   const out: { id: number; label?: string; value?: unknown }[] = []
   for (const p of meta.properties) {
     if (String(p.key ?? '') !== 'option') {
@@ -119,7 +120,11 @@ function propsOptions(meta: SubmissionColumnMeta): { id: number; label?: string;
   return out
 }
 
-function formatSubmissionStudentGender(raw: unknown, labelMale: string, labelFemale: string): string {
+function formatSubmissionStudentGender(
+  raw: unknown,
+  labelMale: string,
+  labelFemale: string
+): string {
   if (raw === true || raw === 'true' || raw === 1 || raw === '1') {
     return labelMale
   }
@@ -129,7 +134,11 @@ function formatSubmissionStudentGender(raw: unknown, labelMale: string, labelFem
   return raw == null || raw === '' ? '—' : String(raw)
 }
 
-function formatSubmissionCellValue(meta: SubmissionColumnMeta, rawValue: unknown, uploadIds?: number[]): unknown {
+function formatSubmissionCellValue(
+  meta: SubmissionColumnMeta,
+  rawValue: unknown,
+  uploadIds?: number[]
+): unknown {
   const v = rawValue
   switch (meta.kind) {
     case '__student__':
@@ -245,9 +254,9 @@ export function useQuestionnaireSubmissions(options?: {
   }
 
   function composeSubmissionRow(apiRow: SubmissionApiRow): SubmissionRowMap {
-    const formFields = (Array.isArray(apiRow.fields)
-      ? (apiRow.fields as SubmissionAnswerField[])
-      : []) as SubmissionAnswerField[]
+    const formFields = (
+      Array.isArray(apiRow.fields) ? (apiRow.fields as SubmissionAnswerField[]) : []
+    ) as SubmissionAnswerField[]
     const mapped: SubmissionRowMap = { ...apiRow, fields: formFields }
 
     const attach: number[] = []

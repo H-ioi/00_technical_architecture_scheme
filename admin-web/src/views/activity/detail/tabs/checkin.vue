@@ -9,8 +9,7 @@
       :submit-text="$t('activity.search')"
       :reset-text="$t('activity.reset')"
       @search="search"
-      @reset="reset"
-    />
+      @reset="reset" />
     <UniDataTable
       ref="tableRef"
       row-key="id"
@@ -21,8 +20,7 @@
       :toolbar="{ refresh: true, columnSetting: true }"
       :actions="actions"
       :action-column="{ width: 100, fixed: 'right' }"
-      @load-success="handleLoadSuccess"
-    />
+      @load-success="handleLoadSuccess" />
 
     <el-dialog
       v-model="dialogVisible"
@@ -31,8 +29,7 @@
       append-to-body
       destroy-on-close
       :close-on-click-modal="false"
-      @closed="resetDialog"
-    >
+      @closed="resetDialog">
       <UniForm ref="formRef" v-model="formModel" mode="edit" :config="formCfg" />
       <template #footer>
         <el-button @click="dialogVisible = false">{{ $t('common.cancel') }}</el-button>
@@ -213,7 +210,8 @@ const decorateRows = (list: Row[]) => {
     row.codeStr = row.code == null ? '' : String(row.code)
     const ticketId = row.ticketId ?? row.ticket_id
     row.ticketIdStr = ticketId == null ? '' : String(ticketId)
-    row.paidLabel = String(row.paid) === '1' || row.paid === true ? tr('activity.paidYes') : tr('activity.paidNo')
+    row.paidLabel =
+      String(row.paid) === '1' || row.paid === true ? tr('activity.paidYes') : tr('activity.paidNo')
     const checkinVal = row.checkin ?? row.checked_in
     row.checkinLabel =
       checkinVal === true || checkinVal === 1 || checkinVal === '1'
@@ -230,7 +228,9 @@ const decorateRows = (list: Row[]) => {
         : tr('activity.no')
     const allowVal = row.allowLottery ?? row.allow_lottery
     row.allowLotteryLabel =
-      allowVal === true || allowVal === 1 || allowVal === '1' ? tr('activity.yes') : tr('activity.no')
+      allowVal === true || allowVal === 1 || allowVal === '1'
+        ? tr('activity.yes')
+        : tr('activity.no')
     const checkinRaw = row.checkinTime ?? row.checkin_time
     if (checkinRaw == null || checkinRaw === '') {
       row.checkinTimeLabel = ''
@@ -252,7 +252,11 @@ const decorateRows = (list: Row[]) => {
   }
 }
 
-const loadData: UniTableRequest = async ({ pageNo: current, pageSize: size, filters: filterModel }) => {
+const loadData: UniTableRequest = async ({
+  pageNo: current,
+  pageSize: size,
+  filters: filterModel
+}) => {
   const f = filterModel as Row
   const range = Array.isArray(f.checkinTimeRange) ? f.checkinTimeRange : []
   const raw = await activityApi.checkinPage.get({
@@ -292,14 +296,11 @@ const openEdit = (row: Row) => {
   }
   Object.assign(form, {
     id: row.id,
-    checkin:
-      checkinVal === true || checkinVal === 1 || checkinVal === '1' ? 1 : 0,
+    checkin: checkinVal === true || checkinVal === 1 || checkinVal === '1' ? 1 : 0,
     participateLottery:
       participateVal === true || participateVal === 1 || participateVal === '1' ? 1 : 0,
     lottery_validate:
-      row.lottery_validate === true ||
-      row.lottery_validate === 1 ||
-      row.lottery_validate === '1'
+      row.lottery_validate === true || row.lottery_validate === 1 || row.lottery_validate === '1'
         ? 1
         : 0,
     allow_lottery: allowVal === true || allowVal === 1 || allowVal === '1' ? 1 : 0
@@ -310,7 +311,13 @@ const openEdit = (row: Row) => {
 const actions = computed<UniTableAction[]>(() =>
   props.readOnly
     ? []
-    : [{ label: tr('activity.entryEdit'), code: 'busdriver_edit', onClick: (row) => openEdit(row as Row) }]
+    : [
+        {
+          label: tr('activity.entryEdit'),
+          code: 'busdriver_edit',
+          onClick: (row) => openEdit(row as Row)
+        }
+      ]
 )
 
 const resetDialog = () => {
@@ -350,7 +357,20 @@ const exportCsv = async () => {
     }
     decorateRows(rows)
     const csv = [
-      formatCsvRow(['#', tr('activity.checkinCode'), tr('activity.registrationPhone'), tr('activity.registrationName'), tr('activity.registrationEmail'), tr('activity.registrationTicketId'), tr('activity.paidStatus'), tr('activity.checkinStatus'), tr('activity.participateLottery'), tr('activity.lotteryValidate'), tr('activity.checkinTime'), tr('activity.colCreateTime')]),
+      formatCsvRow([
+        '#',
+        tr('activity.checkinCode'),
+        tr('activity.registrationPhone'),
+        tr('activity.registrationName'),
+        tr('activity.registrationEmail'),
+        tr('activity.registrationTicketId'),
+        tr('activity.paidStatus'),
+        tr('activity.checkinStatus'),
+        tr('activity.participateLottery'),
+        tr('activity.lotteryValidate'),
+        tr('activity.checkinTime'),
+        tr('activity.colCreateTime')
+      ]),
       ...rows.map((row, index) =>
         formatCsvRow([
           index + 1,
@@ -368,7 +388,10 @@ const exportCsv = async () => {
         ])
       )
     ].join('\n')
-    downloadBlob(new Blob([`\uFEFF${csv}`], { type: 'text/csv;charset=utf-8' }), `activity-checkin-${props.activityId}.csv`)
+    downloadBlob(
+      new Blob([`\uFEFF${csv}`], { type: 'text/csv;charset=utf-8' }),
+      `activity-checkin-${props.activityId}.csv`
+    )
   } finally {
     exporting.value = false
   }

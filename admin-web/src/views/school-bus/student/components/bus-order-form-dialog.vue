@@ -805,10 +805,7 @@ const loadDetail = async (id: string | number) => {
     }
     return {
       lineId: item.lineId,
-      lineName: pickLocaleName(
-        { enName: item.lineEnName, cnName: item.lineCnName },
-        locale.value
-      ),
+      lineName: pickLocaleName({ enName: item.lineEnName, cnName: item.lineCnName }, locale.value),
       stationId: item.stationId,
       stationPriceId: stPriceId,
       stationName,

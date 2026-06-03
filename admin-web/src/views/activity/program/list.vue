@@ -18,8 +18,7 @@
       :submit-text="$t('activity.search')"
       :reset-text="$t('activity.reset')"
       @search="search"
-      @reset="reset"
-    />
+      @reset="reset" />
     <UniDataTable
       ref="tableRef"
       row-key="id"
@@ -32,15 +31,13 @@
       :actions="actions"
       :action-column="{ width: 180, fixed: 'right' }"
       @load-success="handleLoadSuccess"
-      @selection-change="onSelectionChange"
-    >
+      @selection-change="onSelectionChange">
       <template #toolbar>
         <el-button
           v-uni-permission="'busdriver_edit'"
           plain
           :disabled="!selectedIds.length"
-          @click="openCopy"
-        >
+          @click="openCopy">
           {{ $t('activity.programCopy') }}
         </el-button>
         <el-button
@@ -48,23 +45,22 @@
           type="danger"
           plain
           :disabled="!selectedIds.length"
-          @click="deleteBatch"
-        >
+          @click="deleteBatch">
           {{ $t('activity.delBatch') }}
         </el-button>
       </template>
     </UniDataTable>
-    <ProgramCopyDialog
-      v-model="copyOpen"
-      :program-ids="selectedIds"
-      @success="onCopySuccess"
-    />
+    <ProgramCopyDialog v-model="copyOpen" :program-ids="selectedIds" @success="onCopySuccess" />
   </section>
 </template>
 
 <script setup lang="ts">
 import ProgramCopyDialog from './components/program-copy-dialog.vue'
-import { canEditProgramRow, programStatusOptionsForRow, programTypeOptionsForRow } from './edit/program-edit-helpers'
+import {
+  canEditProgramRow,
+  programStatusOptionsForRow,
+  programTypeOptionsForRow
+} from './edit/program-edit-helpers'
 import { programStatusOptions, programTypeOptions, searchForm, tableCols } from './list.config'
 import { activityApi, activityProgramApi } from '@/api'
 import { useMembershipSchoolOptions } from '@/composables/use-membership-school-options'
@@ -77,8 +73,6 @@ import { UniDataTable, UniSearchForm, useUniI18n, useUniListState } from 'uni-ui
 import type { UniTableAction, UniTableRequest } from 'uni-ui-lib'
 import { ref, computed, onMounted } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
-
-
 
 const { t } = useUniI18n()
 
@@ -109,7 +103,6 @@ const goProgramCreate = () => {
 
 const copyOpen = ref(false)
 
-
 type Row = Record<string, unknown>
 
 const tr = t as Translate
@@ -139,8 +132,8 @@ const initialFilters = {
     props.activityId != null && props.activityId !== ''
       ? String(props.activityId)
       : route.query.activityId != null && route.query.activityId !== ''
-      ? String(route.query.activityId)
-      : undefined,
+        ? String(route.query.activityId)
+        : undefined,
   activityKeyword: '',
   programKeyword: '',
   schoolIds: undefined,
@@ -153,29 +146,21 @@ const { queryModel, filters, handleLoadSuccess, reset, search, tableRef } = useU
 })
 
 const searchCfg = computed(() =>
-  searchForm(
-    tr,
-    schoolOptions.value,
-    statusOpts.value,
-    typeOpts.value,
-    showSchoolFilter.value
-  )
+  searchForm(tr, schoolOptions.value, statusOpts.value, typeOpts.value, showSchoolFilter.value)
 )
 
 const columns = computed(() => tableCols(tr))
 
 const selectedRows = ref<Row[]>([])
 const selectedIds = computed(
-  () =>
-    selectedRows.value.map((row) => row.id).filter((id) => id != null) as Array<string | number>
+  () => selectedRows.value.map((row) => row.id).filter((id) => id != null) as Array<string | number>
 )
 
 const decorateRows = (list: Row[]) => {
   for (const row of list) {
     row.programStatus = row.programStatus == null ? '' : String(row.programStatus)
     row.programType = row.programType == null ? '' : String(row.programType)
-    row.programStatusLabel =
-      formatOptionLabels(statusOptsRow.value, row.programStatus) || '—'
+    row.programStatusLabel = formatOptionLabels(statusOptsRow.value, row.programStatus) || '—'
     row.programTypeLabel = formatOptionLabels(typeOptsRow.value, row.programType) || '—'
     row.operateTime = row.operateTime
       ? dateFormat(String(row.operateTime), 'yyyy-MM-dd hh:mm')
@@ -274,10 +259,7 @@ const actions = computed<UniTableAction[]>(() => [
         ElMessage.warning(tr('activity.programEditLimited'))
         return
       }
-      goDetail(
-        r,
-        'edit'
-      )
+      goDetail(r, 'edit')
     }
   },
   {
@@ -325,4 +307,5 @@ const openCopy = () => {
 
 const onCopySuccess = () => {
   tableRef.value?.refresh()
-}</script>
+}
+</script>

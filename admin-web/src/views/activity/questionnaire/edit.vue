@@ -449,7 +449,8 @@ const metaStatusDisplay = computed(() => {
 })
 
 const metaNeedStudentDisplay = computed(() => {
-  const v = form.needStudentInfo == null || form.needStudentInfo === '' ? '' : String(form.needStudentInfo)
+  const v =
+    form.needStudentInfo == null || form.needStudentInfo === '' ? '' : String(form.needStudentInfo)
   return ynSel.value.find((o) => String(o.value) === v)?.label ?? '—'
 })
 

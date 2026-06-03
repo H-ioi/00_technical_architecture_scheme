@@ -8,11 +8,8 @@
       <div v-if="active === 'def'" class="uni-list-page__header-actions">
         <el-button
           type="primary"
-          @click="router.push({ name: 'AttendanceHolidayFlowDesignCreate' })"
-        >
-          {{
-            $t('attendance.holidayFlow.flowDef.add')
-          }}
+          @click="router.push({ name: 'AttendanceHolidayFlowDesignCreate' })">
+          {{ $t('attendance.holidayFlow.flowDef.add') }}
         </el-button>
       </div>
     </div>
@@ -28,7 +25,6 @@
 </template>
 
 <script setup lang="ts">
-
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 

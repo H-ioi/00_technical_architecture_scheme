@@ -27,8 +27,7 @@ export default {
 
   driver: {
     pageTitle: 'Drivers',
-    pageDesc:
-      'Manage school bus drivers: filter by campus or keyword, import and batch delete.',
+    pageDesc: 'Manage school bus drivers: filter by campus or keyword, import and batch delete.',
     fieldSchool: 'Campus',
     fieldName: 'Name',
     fieldEmployeeNo: 'Employee No.',
@@ -62,8 +61,7 @@ export default {
     phCarNumber: 'Plate number',
     phTermKeyword: 'Term name',
     phStationNameKeyword: 'Stop name',
-    msgNeedWeekdaysAndStops:
-      'Pick at least one weekday row and add stops before saving.',
+    msgNeedWeekdaysAndStops: 'Pick at least one weekday row and add stops before saving.',
     msgSelectRowsFirst: 'Select at least one route first',
     msgCopySuccess: 'Routes copied',
     msgConfirmDeleteLines: 'Delete selected routes? This cannot be undone.',

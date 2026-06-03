@@ -206,15 +206,11 @@ export const formRules = (t: Translate): FormRules<ProtocolFormModel> => ({
   schoolIds: [{ required: true, message: t('protocol.phSchool'), trigger: 'change' }],
   cnName: [{ required: true, message: t('protocol.phCnName'), trigger: 'blur' }],
   enName: [{ required: true, message: t('protocol.phEnName'), trigger: 'blur' }],
-  protocolType: [
-    { required: true, message: t('protocol.phProtocolType'), trigger: 'change' }
-  ],
+  protocolType: [{ required: true, message: t('protocol.phProtocolType'), trigger: 'change' }],
   module: [{ required: true, message: t('protocol.phModule'), trigger: 'change' }],
   needSign: [{ required: true, message: t('protocol.phNeedSign'), trigger: 'change' }],
   status: [{ required: true, message: t('protocol.phStatus'), trigger: 'change' }],
-  documentUrl: [
-    { required: true, message: t('protocol.uploadRequired'), trigger: 'change' }
-  ]
+  documentUrl: [{ required: true, message: t('protocol.uploadRequired'), trigger: 'change' }]
 })
 
 /** 协议新增/编辑弹窗（UniForm + 附件槽位） */

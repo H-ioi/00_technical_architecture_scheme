@@ -16,8 +16,7 @@
       :submit-text="$t('activity.search')"
       :reset-text="$t('activity.reset')"
       @search="search"
-      @reset="reset"
-    />
+      @reset="reset" />
 
     <el-card v-loading="loading" shadow="never" class="activity-parent-student__card">
       <template #header>
@@ -47,8 +46,7 @@
         :data="studentRows"
         :loading="loading"
         :pagination="false"
-        :toolbar="{ refresh: false, columnSetting: true }"
-      />
+        :toolbar="{ refresh: false, columnSetting: true }" />
     </el-card>
 
     <el-card shadow="never" class="activity-parent-student__card">
@@ -61,8 +59,7 @@
         :data="activityRows"
         :loading="loading"
         :pagination="false"
-        :toolbar="{ refresh: false, columnSetting: true }"
-      />
+        :toolbar="{ refresh: false, columnSetting: true }" />
     </el-card>
   </section>
 </template>
@@ -71,14 +68,16 @@
 import { activityColumns, searchForm, studentColumns } from './list.config'
 import { activityParentStudentApi } from '@/api'
 import type { Translate } from '@/types/i18n'
-import type { ActivityParentInfo, ActivityParentStudentActivityRow, ActivityParentStudentRow, ActivityParentStudentSearchModel } from '@/types/modules/activity-parent-student'
+import type {
+  ActivityParentInfo,
+  ActivityParentStudentActivityRow,
+  ActivityParentStudentRow,
+  ActivityParentStudentSearchModel
+} from '@/types/modules/activity-parent-student'
 import { normalizeEnvelope } from '@/utils/api-response-normalize'
 import { ElMessage } from 'element-plus'
 import { UniDataTable, UniSearchForm, useUniI18n } from 'uni-ui-lib'
 import { computed, ref } from 'vue'
-
-
-
 
 const { t } = useUniI18n()
 
@@ -150,7 +149,8 @@ const search = async () => {
 const reset = () => {
   queryModel.value = { phone: '' }
   clearResult()
-}</script>
+}
+</script>
 
 <style scoped lang="scss">
 .activity-parent-student {

@@ -18,8 +18,7 @@
       :submit-text="$t('activity.search')"
       :reset-text="$t('activity.reset')"
       @search="search"
-      @reset="reset"
-    />
+      @reset="reset" />
     <UniDataTable
       ref="tableRef"
       row-key="id"
@@ -32,23 +31,20 @@
       :actions="actions"
       :action-column="{ width: 140, fixed: 'right' }"
       @load-success="handleLoadSuccess"
-      @selection-change="onSelectionChange"
-    >
+      @selection-change="onSelectionChange">
       <template #toolbar>
         <el-button
           v-uni-permission="'busdriver_edit'"
           plain
           :disabled="!selectedIds.length"
-          @click="openBatchStatus"
-        >
+          @click="openBatchStatus">
           {{ $t('activity.qBatchChangeStatus') }}
         </el-button>
         <el-button
           v-uni-permission="'busdriver_edit'"
           plain
           :disabled="!selectedIds.length"
-          @click="batchDlg?.open('frozen', selectedIds)"
-        >
+          @click="batchDlg?.open('frozen', selectedIds)">
           {{ $t('activity.qBatchChangeFrozen') }}
         </el-button>
         <el-button
@@ -56,8 +52,7 @@
           type="danger"
           plain
           :disabled="!selectedIds.length"
-          @click="deleteSelected"
-        >
+          @click="deleteSelected">
           {{ $t('activity.delBatch') }}
         </el-button>
       </template>
@@ -102,7 +97,6 @@ const metaDlg = ref<InstanceType<typeof MetaFormDialog> | null>(null)
 const copyDlg = ref<InstanceType<typeof QuestionnaireCopyDialog> | null>(null)
 const batchDlg = ref<InstanceType<typeof BatchFlagDialog> | null>(null)
 
-
 type QuestionnaireListRow = Record<string, unknown>
 
 const { locale, t } = useUniI18n()
@@ -122,8 +116,18 @@ const loadOpts = async () => {
     activityOptions.value = rows.map((row) => ({
       label: String(
         locale.value === 'en'
-          ? (row.activityEnName ?? row.activityCnName ?? row.activityName ?? row.name ?? row.id ?? '')
-          : (row.activityCnName ?? row.activityEnName ?? row.activityName ?? row.name ?? row.id ?? '')
+          ? (row.activityEnName ??
+              row.activityCnName ??
+              row.activityName ??
+              row.name ??
+              row.id ??
+              '')
+          : (row.activityCnName ??
+              row.activityEnName ??
+              row.activityName ??
+              row.name ??
+              row.id ??
+              '')
       ),
       value: row.id as string | number
     }))
@@ -144,24 +148,17 @@ const initialFilters = {
     props.activityId != null && props.activityId !== ''
       ? String(props.activityId)
       : route.query.activityId != null && route.query.activityId !== ''
-      ? String(route.query.activityId)
-      : undefined,
+        ? String(route.query.activityId)
+        : undefined,
   status: undefined,
   createStartTime: undefined,
   createEndTime: undefined
 } as Record<string, unknown>
 
-const {
-  queryModel,
-  filters,
-  handleLoadSuccess,
-  refreshTable,
-  reset,
-  search,
-  tableRef
-} = useUniListState({
-  initialFilters
-})
+const { queryModel, filters, handleLoadSuccess, refreshTable, reset, search, tableRef } =
+  useUniListState({
+    initialFilters
+  })
 
 const searchCfg = computed(() =>
   searchForm(tr, schoolOptions.value, activityOptions.value, ynDispOptions.value)
@@ -171,8 +168,7 @@ const columns = computed(() => tableCols(tr, schoolOptions.value, ynDispOptions.
 
 const selectedRows = ref<QuestionnaireListRow[]>([])
 const selectedIds = computed(
-  () =>
-    selectedRows.value.map((row) => row.id).filter((id) => id != null) as Array<string | number>
+  () => selectedRows.value.map((row) => row.id).filter((id) => id != null) as Array<string | number>
 )
 
 const applyRowDisplayFormat = (list: QuestionnaireListRow[]) => {
@@ -193,12 +189,8 @@ const applyRowDisplayFormat = (list: QuestionnaireListRow[]) => {
     row.status = row.status == null ? '' : String(row.status)
     row.frozen = row.frozen == null ? '' : String(row.frozen)
     row.needStudentInfo = row.needStudentInfo == null ? '' : String(row.needStudentInfo)
-    row.createTime = row.createTime
-      ? dateFormat(String(row.createTime), 'yyyy-MM-dd hh:mm')
-      : '—'
-    row.updateTime = row.updateTime
-      ? dateFormat(String(row.updateTime), 'yyyy-MM-dd hh:mm')
-      : '—'
+    row.createTime = row.createTime ? dateFormat(String(row.createTime), 'yyyy-MM-dd hh:mm') : '—'
+    row.updateTime = row.updateTime ? dateFormat(String(row.updateTime), 'yyyy-MM-dd hh:mm') : '—'
   }
 }
 
@@ -274,7 +266,10 @@ const actions = computed<UniTableAction[]>(() => [
     code: 'busdriver_edit',
     onClick: (row) => void copyDlg.value?.open(row as QuestionnaireListRow)
   },
-  { label: tr('activity.copySignupLink'), onClick: (row) => void copySignupLink(row as QuestionnaireListRow) }
+  {
+    label: tr('activity.copySignupLink'),
+    onClick: (row) => void copySignupLink(row as QuestionnaireListRow)
+  }
 ])
 
 const deleteSelected = async () => {
@@ -288,4 +283,5 @@ const deleteSelected = async () => {
   ElMessage.success(tr('activity.deleteOk'))
   selectedRows.value = []
   tableRef.value?.refresh()
-}</script>
+}
+</script>

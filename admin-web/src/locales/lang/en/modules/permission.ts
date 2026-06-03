@@ -15,7 +15,8 @@ export default {
 
   menu: {
     title: 'Menus',
-    description: 'View the tenant menu tree and edit icons, sort order, paths, and permission keys.',
+    description:
+      'View the tenant menu tree and edit icons, sort order, paths, and permission keys.',
     colName: 'Name',
     colIcon: 'Icon',
     colSort: 'Sort',

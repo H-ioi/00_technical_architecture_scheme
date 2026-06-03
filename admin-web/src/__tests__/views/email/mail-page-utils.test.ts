@@ -17,7 +17,9 @@ describe('mail-page-utils.ts', () => {
     })
 
     it('乘坐校巴(true)应正确展示', () => {
-      expect(formatMailGroupScopeDisplay('All,All,All,All,true,All,All,All,All')).toBe('乘坐校巴(是)')
+      expect(formatMailGroupScopeDisplay('All,All,All,All,true,All,All,All,All')).toBe(
+        '乘坐校巴(是)'
+      )
     })
 
     it('乘坐校巴(是)应正确展示', () => {
@@ -25,7 +27,9 @@ describe('mail-page-utils.ts', () => {
     })
 
     it('乘坐校巴(false/否)应正确展示', () => {
-      expect(formatMailGroupScopeDisplay('All,All,All,All,false,All,All,All,All')).toBe('乘坐校巴(否)')
+      expect(formatMailGroupScopeDisplay('All,All,All,All,false,All,All,All,All')).toBe(
+        '乘坐校巴(否)'
+      )
     })
 
     it('住宿(true)应正确展示', () => {

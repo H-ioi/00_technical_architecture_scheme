@@ -38,9 +38,7 @@ export default {
   holidayCancelFlow: {
     name: '撤回请假流程',
     get: async (procId: string | number, id: string | number) => {
-      return await request.get(
-        `${API_PATHS.attendanceHolidayRest}/holiday/back/${procId}/${id}`
-      )
+      return await request.get(`${API_PATHS.attendanceHolidayRest}/holiday/back/${procId}/${id}`)
     }
   },
   /** 新建请假（旧 `saveHoliday` POST `/holiday/save`）。 */
@@ -187,19 +185,25 @@ export default {
   flowProcessImgDownload: {
     name: '流程定义图',
     getBlob: async (defId: string | number) => {
-      return await request.get<Blob, Blob>(`${attendanceBase}/file/fileController/downloadFlowImg`, {
-        params: { defId },
-        responseType: 'blob'
-      })
+      return await request.get<Blob, Blob>(
+        `${attendanceBase}/file/fileController/downloadFlowImg`,
+        {
+          params: { defId },
+          responseType: 'blob'
+        }
+      )
     }
   },
   flowActiveImgDownload: {
     name: '流程实例活动图',
     getBlob: async (procId: string | number) => {
-      return await request.get<Blob, Blob>(`${attendanceBase}/file/fileController/downloadFlowActiveImg`, {
-        params: { procId },
-        responseType: 'blob'
-      })
+      return await request.get<Blob, Blob>(
+        `${attendanceBase}/file/fileController/downloadFlowActiveImg`,
+        {
+          params: { procId },
+          responseType: 'blob'
+        }
+      )
     }
   },
 

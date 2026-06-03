@@ -16,8 +16,7 @@
       :submit-text="$t('member.search')"
       :reset-text="$t('member.reset')"
       @search="search"
-      @reset="reset"
-    />
+      @reset="reset" />
 
     <UniDataTable
       ref="tableRef"
@@ -30,8 +29,7 @@
       :actions="actions"
       :action-column="{ width: 100, fixed: 'right' }"
       @load-success="tableEmpty.onLoadSuccess"
-      @request-error="tableEmpty.onRequestError"
-    >
+      @request-error="tableEmpty.onRequestError">
       <template #empty>
         <ListTableEmpty :kind="tableEmpty.kind" @reset="reset" @retry="tableEmpty.retry" />
       </template>
@@ -52,7 +50,6 @@ import type { UniOption, UniTableAction, UniTableRequest } from 'uni-ui-lib'
 import { toUniOptions, useUniI18n, useUniListState } from 'uni-ui-lib'
 import { computed, onMounted, ref } from 'vue'
 
-
 const { locale, t } = useUniI18n()
 
 const initialFilters = {
@@ -61,10 +58,9 @@ const initialFilters = {
   role: undefined,
   archived: undefined
 }
-const { queryModel, filters, tableRef, search, reset, handleLoadSuccess } =
-  useUniListState({
-    initialFilters
-  })
+const { queryModel, filters, tableRef, search, reset, handleLoadSuccess } = useUniListState({
+  initialFilters
+})
 const detailVisible = ref(false)
 const activeRow = ref<Row | null>(null)
 const schoolOptions = ref<UniOption[]>([])
@@ -103,4 +99,5 @@ onMounted(async () => {
   roleOptions.value = roleOpts(roles)
 })
 
-const tableEmpty = useListTableEmpty(filters, { tableRef, afterLoadSuccess: handleLoadSuccess })</script>
+const tableEmpty = useListTableEmpty(filters, { tableRef, afterLoadSuccess: handleLoadSuccess })
+</script>

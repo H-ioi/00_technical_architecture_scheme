@@ -5,7 +5,12 @@
 <script setup lang="ts">
 import 'aieditor/dist/style.css'
 
-import { AiEditor, type AiEditorOptions, type AiGlobalConfig, type SparkAiModelConfig } from 'aieditor'
+import {
+  AiEditor,
+  type AiEditorOptions,
+  type AiGlobalConfig,
+  type SparkAiModelConfig
+} from 'aieditor'
 import { computed, nextTick, onBeforeUnmount, onMounted, ref, shallowRef, watch } from 'vue'
 
 import { protocolApi } from '@/api'
@@ -82,8 +87,7 @@ const toolbarKeys = computed(() => {
 
 const showAiToolbar = computed(() =>
   Boolean(
-    props.editorAi ||
-      (props.sparkAi?.appId && props.sparkAi?.apiKey && props.sparkAi?.apiSecret)
+    props.editorAi || (props.sparkAi?.appId && props.sparkAi?.apiKey && props.sparkAi?.apiSecret)
   )
 )
 

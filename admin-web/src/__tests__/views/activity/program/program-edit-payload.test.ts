@@ -1,6 +1,9 @@
 import { describe, it, expect } from 'vitest'
 import type { Translate } from '@/types/i18n'
-import type { ActivityProgramFormModel, ActivityProgramQuotaRow } from '@/types/modules/activity-program-form'
+import type {
+  ActivityProgramFormModel,
+  ActivityProgramQuotaRow
+} from '@/types/modules/activity-program-form'
 import {
   emptyProgramForm,
   applyLotteryDefaults,
@@ -118,9 +121,7 @@ describe('program-edit-payload.ts', () => {
     })
 
     it('prizeCount 为 0 时不校验超额', () => {
-      const quotas: ActivityProgramQuotaRow[] = [
-        { roundNo: 1, quotaCount: 100 }
-      ]
+      const quotas: ActivityProgramQuotaRow[] = [{ roundNo: 1, quotaCount: 100 }]
       expect(validateProgramQuotas(quotas, 0, t)).toBeNull()
     })
   })

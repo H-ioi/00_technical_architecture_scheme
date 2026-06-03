@@ -12,15 +12,21 @@ function axisTextColor(): string {
   if (typeof document === 'undefined') {
     return MUTED
   }
-  return getComputedStyle(document.documentElement).getPropertyValue('--app-text-color-secondary').trim() ||
-    MUTED
+  return (
+    getComputedStyle(document.documentElement)
+      .getPropertyValue('--app-text-color-secondary')
+      .trim() || MUTED
+  )
 }
 
 function strongTextColor(): string {
   if (typeof document === 'undefined') {
     return '#1f2937'
   }
-  return getComputedStyle(document.documentElement).getPropertyValue('--app-text-color').trim() || '#1f2937'
+  return (
+    getComputedStyle(document.documentElement).getPropertyValue('--app-text-color').trim() ||
+    '#1f2937'
+  )
 }
 
 export function buildAttendanceTrendOption(

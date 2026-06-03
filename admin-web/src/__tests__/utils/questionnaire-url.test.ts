@@ -14,19 +14,25 @@ describe('questionnaire-url.ts', () => {
     it('有效 origin 时构建完整 URL', () => {
       vi.stubEnv('VITE_COMMUNITY_WEB_ORIGIN', 'https://community.example.com')
       const url = buildQuestionnaireSignupUrl('abc123')
-      expect(url).toBe('https://community.example.com/#/isacommunity/activity/questionnaire/signup?id=abc123')
+      expect(url).toBe(
+        'https://community.example.com/#/isacommunity/activity/questionnaire/signup?id=abc123'
+      )
     })
 
     it('origin 尾部斜杠应被移除', () => {
       vi.stubEnv('VITE_COMMUNITY_WEB_ORIGIN', 'https://community.example.com/')
       const url = buildQuestionnaireSignupUrl('abc123')
-      expect(url).toBe('https://community.example.com/#/isacommunity/activity/questionnaire/signup?id=abc123')
+      expect(url).toBe(
+        'https://community.example.com/#/isacommunity/activity/questionnaire/signup?id=abc123'
+      )
     })
 
     it('id 应进行 encodeURIComponent', () => {
       vi.stubEnv('VITE_COMMUNITY_WEB_ORIGIN', 'https://example.com')
       const url = buildQuestionnaireSignupUrl('a&b=c')
-      expect(url).toBe('https://example.com/#/isacommunity/activity/questionnaire/signup?id=a%26b%3Dc')
+      expect(url).toBe(
+        'https://example.com/#/isacommunity/activity/questionnaire/signup?id=a%26b%3Dc'
+      )
     })
 
     it('number 类型 id 也能正确处理', () => {

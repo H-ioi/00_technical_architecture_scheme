@@ -155,7 +155,8 @@ export default {
 
   holiday: {
     pageTitle: 'Leave requests',
-    pageDesc: 'Manage student leave and return requests, revoke workflows, and track approval status.',
+    pageDesc:
+      'Manage student leave and return requests, revoke workflows, and track approval status.',
     tabLeave: 'Leave',
     tabReturn: 'Return',
     withdraw: 'Revoke',
@@ -227,7 +228,8 @@ export default {
 
   holidayConfig: {
     pageTitle: 'Leave module config',
-    pageDesc: 'Configure notification emails and grade scope for leave approval by school and department.',
+    pageDesc:
+      'Configure notification emails and grade scope for leave approval by school and department.',
     school: 'School',
     grades: 'Grades',
     department: 'Department',

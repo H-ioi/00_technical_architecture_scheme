@@ -21,8 +21,7 @@
           default-expand-all
           :props="{ label: 'name', children: 'children' }"
           class="permission-user__tree"
-          @node-click="onDeptNode"
-        />
+          @node-click="onDeptNode" />
       </el-col>
       <el-col :xs="24" :sm="17" :md="18">
         <UniSearchForm
@@ -34,8 +33,7 @@
           :submit-text="t('permission.search')"
           :reset-text="t('permission.reset')"
           @search="search"
-          @reset="reset"
-        />
+          @reset="reset" />
         <UniDataTable
           ref="tableRef"
           row-key="userId"
@@ -48,8 +46,7 @@
           :action-column="{ width: 110, fixed: 'right' }"
           class="permission-user__table"
           @load-success="tableEmpty.onLoadSuccess"
-          @request-error="tableEmpty.onRequestError"
-        >
+          @request-error="tableEmpty.onRequestError">
           <template #empty>
             <ListTableEmpty :kind="tableEmpty.kind" @reset="reset" @retry="tableEmpty.retry" />
           </template>
@@ -63,8 +60,7 @@
       :record="formRecord"
       :dept-options="deptFlat"
       :role-options="roleFlat"
-      @saved="refreshTable"
-    />
+      @saved="refreshTable" />
   </section>
 </template>
 
@@ -81,7 +77,6 @@ import { ElMessageBox } from 'element-plus'
 import { UniDataTable, UniSearchForm, useUniI18n, useUniListState } from 'uni-ui-lib'
 import type { UniTableAction, UniTableRequest } from 'uni-ui-lib'
 import { onMounted, ref, computed } from 'vue'
-
 
 const { t } = useUniI18n()
 
@@ -141,7 +136,6 @@ function openEdit(row: PermissionUserTableRow) {
   formVisible.value = true
 }
 
-
 type PermissionUserTableRow = PermissionUserRecord & { rolesLabel?: string }
 
 const initialFilters = { username: '', nickname: '' }
@@ -166,7 +160,10 @@ const loadData: UniTableRequest = async ({ pageNo, pageSize, filters: f }) => {
   const { list, total } = normalizePaged<PermissionUserRecord>(raw)
   const data: PermissionUserTableRow[] = list.map((r) => {
     const roleNames = Array.isArray(r.roleList)
-      ? r.roleList.map((x) => x.roleName).filter(Boolean).join(', ')
+      ? r.roleList
+          .map((x) => x.roleName)
+          .filter(Boolean)
+          .join(', ')
       : ''
     return {
       ...r,
@@ -207,7 +204,8 @@ const onDeptNode = (node: PermissionDeptRecord) => {
 
 onMounted(() => {
   void loadDeptAndRoles()
-})</script>
+})
+</script>
 
 <style scoped lang="scss">
 .permission-user {

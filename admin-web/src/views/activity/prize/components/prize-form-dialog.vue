@@ -6,8 +6,7 @@
     destroy-on-close
     append-to-body
     :close-on-click-modal="false"
-    @closed="onClosed"
-  >
+    @closed="onClosed">
     <UniForm ref="uniFormRef" v-model="form" :mode="uniMode" :config="formConfig">
       <template #field-imageUrl>
         <div class="activity-prize-form__image">
@@ -15,14 +14,13 @@
             v-if="uniMode === 'edit'"
             accept="image/jpeg,image/png"
             :show-file-list="false"
-            :before-upload="beforeUploadImage"
-          >
+            :before-upload="beforeUploadImage">
             <el-button :loading="uploading" type="primary" plain>
               {{ $t('activity.pickCover') }}
             </el-button>
           </el-upload>
           <div v-if="form.imageUrl" class="activity-prize-form__preview">
-            <img :src="form.imageUrl" alt="">
+            <img :src="form.imageUrl" alt="" />
           </div>
         </div>
       </template>
@@ -154,7 +152,9 @@ async function loadProgramOptions() {
   const raw = await activityProgramApi.listBrief.get({ programTypes: ['1'] })
   const rows = normalizeArray(raw) as ActivityPrizeRow[]
   programOptions.value = rows.map((row) => ({
-    label: String(locale.value === 'en' ? (row.enName ?? row.cnName ?? '') : (row.cnName ?? row.enName ?? '')),
+    label: String(
+      locale.value === 'en' ? (row.enName ?? row.cnName ?? '') : (row.cnName ?? row.enName ?? '')
+    ),
     value: row.id as string | number
   }))
 }

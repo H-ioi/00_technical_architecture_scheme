@@ -21,8 +21,7 @@
       :submit-text="$t('member.search')"
       :reset-text="$t('member.reset')"
       @search="search"
-      @reset="reset"
-    />
+      @reset="reset" />
 
     <UniDataTable
       ref="tableRef"
@@ -35,8 +34,7 @@
       :actions="actions"
       :action-column="{ width: 60, fixed: 'right' }"
       @load-success="tableEmpty.onLoadSuccess"
-      @request-error="tableEmpty.onRequestError"
-    >
+      @request-error="tableEmpty.onRequestError">
       <template #empty>
         <ListTableEmpty :kind="tableEmpty.kind" @reset="reset" @retry="tableEmpty.retry" />
       </template>
@@ -53,7 +51,10 @@ import { attendanceOpenTypeOpts, detailForm, searchForm, tableCols } from './lis
 import { attendanceSchoolApi, membershipApi } from '@/api'
 import ListTableEmpty from '@/components/list-table-empty.vue'
 import { useListTableEmpty } from '@/composables/use-list-table-empty'
-import type { AttendanceSchoolListParams, AttendanceSchoolRecord } from '@/types/modules/attendance-school'
+import type {
+  AttendanceSchoolListParams,
+  AttendanceSchoolRecord
+} from '@/types/modules/attendance-school'
 import type { SchoolOptionRecord } from '@/types/modules/membership'
 import { normalizePaged } from '@/utils/api-response-normalize'
 import { downloadBlob } from '@/utils/download'
@@ -62,7 +63,6 @@ import { ElMessage } from 'element-plus'
 import { useUniI18n, toUniOptions, useUniListState } from 'uni-ui-lib'
 import type { UniTableAction, UniTableRequest } from 'uni-ui-lib'
 import { computed, ref } from 'vue'
-
 
 const { locale, t } = useUniI18n()
 
@@ -124,13 +124,11 @@ const decorateRow = (raw: Loose): AttendanceSchoolRecord => {
       statusSearchOptions.value.find((o) => String(o.value) === String(raw.schoolStatus ?? ''))
         ?.label ?? String(raw.schoolStatus ?? '--'),
     entryOpenType:
-      openTypeSearchOptions.value.find(
-        (o) => String(o.value) === String(raw.entryOpenType ?? '')
-      )?.label ?? String(raw.entryOpenType ?? '--'),
+      openTypeSearchOptions.value.find((o) => String(o.value) === String(raw.entryOpenType ?? ''))
+        ?.label ?? String(raw.entryOpenType ?? '--'),
     leavingOpenType:
-      openTypeSearchOptions.value.find(
-        (o) => String(o.value) === String(raw.leavingOpenType ?? '')
-      )?.label ?? String(raw.leavingOpenType ?? '--'),
+      openTypeSearchOptions.value.find((o) => String(o.value) === String(raw.leavingOpenType ?? ''))
+        ?.label ?? String(raw.leavingOpenType ?? '--'),
     entryTime: dateFormat(String(raw.entryTime ?? '')),
     leavingTime: dateFormat(String(raw.leavingTime ?? '')),
     attendanceDate: dateFormat(String(raw.attendanceDate ?? ''), 'yyyy-MM-dd'),
@@ -189,4 +187,5 @@ const exportData = async () => {
   } catch {
     /* request 层已提示 */
   }
-}</script>
+}
+</script>

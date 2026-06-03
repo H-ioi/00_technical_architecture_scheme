@@ -13,7 +13,10 @@
       @load-success="tableEmpty.onLoadSuccess"
       @request-error="tableEmpty.onRequestError">
       <template #empty>
-        <ListTableEmpty :kind="tableEmpty.kind" @reset="tableEmpty.retry" @retry="tableEmpty.retry" />
+        <ListTableEmpty
+          :kind="tableEmpty.kind"
+          @reset="tableEmpty.retry"
+          @retry="tableEmpty.retry" />
       </template>
     </UniDataTable>
 

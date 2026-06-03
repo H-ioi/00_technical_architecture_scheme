@@ -26,22 +26,18 @@
       type="file"
       accept=".xlsx,.xls"
       class="school-bus-student-order__file"
-      @change="onImportFile"
-    >
+      @change="onImportFile" />
 
     <el-alert
       v-if="commonDataError"
       class="school-bus-student-order__cascade-alert"
       type="warning"
       :closable="false"
-      show-icon
-    >
+      show-icon>
       <template #default>
         <span>{{ $t('schoolBus.cascadeOptionsLoadFail') }}</span>
         <el-button type="primary" link @click="reloadCommonData">
-          {{
-            $t('common.retry')
-          }}
+          {{ $t('common.retry') }}
         </el-button>
       </template>
     </el-alert>
@@ -55,8 +51,7 @@
       :submit-text="$t('schoolBus.search')"
       :reset-text="$t('schoolBus.reset')"
       @search="search"
-      @reset="reset"
-    />
+      @reset="reset" />
 
     <UniDataTable
       ref="tableRef"
@@ -71,15 +66,13 @@
       :action-column="{ width: 110, fixed: 'right' }"
       @selection-change="onSelectionChange"
       @load-success="tableEmpty.onLoadSuccess"
-      @request-error="tableEmpty.onRequestError"
-    >
+      @request-error="tableEmpty.onRequestError">
       <template #toolbar>
         <el-button
           v-uni-permission="'busorder_del'"
           type="danger"
           :disabled="selection.length === 0"
-          @click="del"
-        >
+          @click="del">
           {{ $t('schoolBus.delete') }}
         </el-button>
       </template>
@@ -98,8 +91,7 @@
       :school-options="schoolOptions"
       :default-school-id="defaultSingleSchoolId"
       :multi-school="multiSchool"
-      @saved="refreshTable"
-    />
+      @saved="refreshTable" />
   </section>
 </template>
 
@@ -123,7 +115,6 @@ import { ElMessage, ElMessageBox } from 'element-plus'
 import { useUniI18n, useUniListState } from 'uni-ui-lib'
 import type { UniTableAction, UniTableRequest } from 'uni-ui-lib'
 import { computed, ref, nextTick, onMounted, watch } from 'vue'
-
 
 const { locale, t } = useUniI18n()
 
@@ -172,8 +163,8 @@ const initialFilters: Record<string, unknown> = {
 
 const { queryModel, filters, tableRef, search, reset, handleLoadSuccess, refreshTable } =
   useUniListState({
-  initialFilters
-})
+    initialFilters
+  })
 
 const multiSchool = computed(() => schoolRecords.value.length > 1)
 const pickupOpts = computed(() => pickupMethodOptions(t))
@@ -192,10 +183,7 @@ const searchCascade = computed(() => {
   return {
     sectionDisabled: !hasSchool,
     lineDisabled:
-      !hasSchool ||
-      q.sectionId === undefined ||
-      q.sectionId === null ||
-      q.sectionId === '',
+      !hasSchool || q.sectionId === undefined || q.sectionId === null || q.sectionId === '',
     stationDisabled: !hasSchool || !Array.isArray(q.lineIds) || q.lineIds.length === 0,
     optionsLoading: commonDataLoading.value,
     optionsFailed: commonDataError.value
@@ -217,8 +205,7 @@ const searchCfg = computed(() =>
 
 const columns = computed(() => tableCols(t, pickupOpts.value))
 
-const { formVisible, formMode, editingOrderId, openFormAdd, openFormEdit } =
-  useBusOrderFormDialog()
+const { formVisible, formMode, editingOrderId, openFormAdd, openFormEdit } = useBusOrderFormDialog()
 
 const detailVisible = ref(false)
 const detailOrderId = ref<string | number | null>(null)
@@ -390,7 +377,8 @@ const del = async () => {
   } catch {
     /* request 层已提示 */
   }
-}</script>
+}
+</script>
 
 <style scoped lang="scss">
 .school-bus-student-order {

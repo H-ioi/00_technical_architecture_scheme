@@ -19,8 +19,7 @@
       :submit-text="$t('member.search')"
       :reset-text="$t('member.reset')"
       @search="search"
-      @reset="reset"
-    />
+      @reset="reset" />
 
     <UniDataTable
       ref="tableRef"
@@ -35,29 +34,25 @@
       :action-column="{ width: 115, fixed: 'right' }"
       @load-success="tableEmpty.onLoadSuccess"
       @request-error="tableEmpty.onRequestError"
-      @selection-change="onSelectionChange"
-    >
+      @selection-change="onSelectionChange">
       <template #toolbar>
         <el-button
           v-if="hasPermission('mailgroup-gd')"
           :disabled="batchDisabled"
-          @click="batchStatus(0)"
-        >
+          @click="batchStatus(0)">
           {{ $t('email.archive') }}
         </el-button>
         <el-button
           v-if="hasPermission('mailgroup-sy')"
           :disabled="batchDisabled"
-          @click="batchStatus(1)"
-        >
+          @click="batchStatus(1)">
           {{ $t('email.markActive') }}
         </el-button>
         <el-button
           v-if="hasPermission('mailgroup-delete')"
           type="danger"
           :disabled="batchDisabled"
-          @click="batchStatus(-1)"
-        >
+          @click="batchStatus(-1)">
           {{ $t('email.deleteBatch') }}
         </el-button>
       </template>
@@ -70,8 +65,7 @@
       ref="dialogRef"
       v-model="dialogVisible"
       :mode="dialogMode"
-      @success="tableRef?.refresh()"
-    />
+      @success="tableRef?.refresh()" />
 
     <el-dialog v-model="viewVisible" :title="$t('email.view')" width="560px" destroy-on-close>
       <div class="email-grp-view">
@@ -108,18 +102,27 @@
 <script setup lang="ts">
 import { formatMailGroupScopeDisplay } from '../mail-page-utils'
 import GroupDialog from './components/group-dialog.vue'
-import { searchForm, statusOpts as statusOptsFn, tableCols, yesNoOpts as yesNoOptsFn } from './list.config'
+import {
+  searchForm,
+  statusOpts as statusOptsFn,
+  tableCols,
+  yesNoOpts as yesNoOptsFn
+} from './list.config'
 import { bulkEmailApi } from '@/api'
 import ListTableEmpty from '@/components/list-table-empty.vue'
 import { useListTableEmpty } from '@/composables/use-list-table-empty'
 import type { Translate } from '@/types/i18n'
 import { normalizePaged } from '@/utils/api-response-normalize'
 import { ElMessage, ElMessageBox } from 'element-plus'
-import { UniDataTable, UniSearchForm, useUniI18n, useUniListState, useUniPermission } from 'uni-ui-lib'
+import {
+  UniDataTable,
+  UniSearchForm,
+  useUniI18n,
+  useUniListState,
+  useUniPermission
+} from 'uni-ui-lib'
 import type { UniTableAction, UniTableRequest } from 'uni-ui-lib'
 import { nextTick, ref, computed } from 'vue'
-
-
 
 const { t } = useUniI18n()
 
@@ -127,14 +130,13 @@ const dialogVisible = ref(false)
 const dialogMode = ref<'add' | 'edit'>('add')
 const dialogRef = ref<InstanceType<typeof GroupDialog> | null>(null)
 
-
 type Loose = Record<string, unknown>
 
 const onEditRow = (row) => {
-    dialogMode.value = 'edit'
-    dialogVisible.value = true
-    void nextTick(() => dialogRef.value?.openEdit(row))
-  }
+  dialogMode.value = 'edit'
+  dialogVisible.value = true
+  void nextTick(() => dialogRef.value?.openEdit(row))
+}
 
 const tr = t as Translate
 const { hasPermission } = useUniPermission()
@@ -179,9 +181,14 @@ const loadData: UniTableRequest = async ({ pageNo, pageSize, filters: f }) => {
 const openView = (row: Loose) => {
   viewMeta.value = {
     name: String(row.name ?? ''),
-    parent: Number(row.includeParentMails) === 1 || row.includeParentMails === true ? tr('email.yes') : tr('email.no'),
+    parent:
+      Number(row.includeParentMails) === 1 || row.includeParentMails === true
+        ? tr('email.yes')
+        : tr('email.no'),
     student:
-      Number(row.includeStudentMails) === 1 || row.includeStudentMails === true ? tr('email.yes') : tr('email.no'),
+      Number(row.includeStudentMails) === 1 || row.includeStudentMails === true
+        ? tr('email.yes')
+        : tr('email.no'),
     status: String(row.status) === '1' ? tr('email.statusActive') : tr('email.statusArchived'),
     createdAt: String(row.createdAt ?? '—')
   }
@@ -252,7 +259,8 @@ const openAdd = () => {
   dialogMode.value = 'add'
   dialogVisible.value = true
   void nextTick(() => dialogRef.value?.openAdd())
-}</script>
+}
+</script>
 
 <style scoped lang="scss">
 .email-grp-view {

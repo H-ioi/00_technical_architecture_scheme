@@ -48,12 +48,9 @@ export const downloadResponseBlob = (
   if (headers && typeof headers === 'object') {
     const h = headers as Record<string, unknown> & { get?: (name: string) => unknown }
     const value =
-      h.get?.('content-disposition') ??
-      h['content-disposition'] ??
-      h['Content-Disposition']
+      h.get?.('content-disposition') ?? h['content-disposition'] ?? h['Content-Disposition']
     disposition = typeof value === 'string' ? value : ''
   }
-  const filename =
-    parseFilenameFromContentDisposition(disposition) || fallbackFilename
+  const filename = parseFilenameFromContentDisposition(disposition) || fallbackFilename
   downloadBlob(response.data, filename)
 }

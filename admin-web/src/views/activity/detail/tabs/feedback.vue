@@ -9,8 +9,7 @@
       :submit-text="$t('activity.search')"
       :reset-text="$t('activity.reset')"
       @search="search"
-      @reset="reset"
-    />
+      @reset="reset" />
     <UniDataTable
       ref="tableRef"
       row-key="id"
@@ -23,8 +22,7 @@
       :actions="actions"
       :action-column="{ width: 120, fixed: 'right' }"
       @load-success="handleLoadSuccess"
-      @selection-change="onSelectionChange"
-    >
+      @selection-change="onSelectionChange">
       <template #toolbar>
         <template v-if="!readOnly">
           <el-button
@@ -32,24 +30,21 @@
             type="danger"
             plain
             :disabled="!selectedIds.length"
-            @click="deleteSelected"
-          >
+            @click="deleteSelected">
             {{ $t('activity.delBatch') }}
           </el-button>
           <el-button
             v-uni-permission="'busdriver_edit'"
             plain
             :disabled="!selectedIds.length"
-            @click="batchVisible(1)"
-          >
+            @click="batchVisible(1)">
             {{ $t('activity.visibleYes') }}
           </el-button>
           <el-button
             v-uni-permission="'busdriver_edit'"
             plain
             :disabled="!selectedIds.length"
-            @click="batchVisible(0)"
-          >
+            @click="batchVisible(0)">
             {{ $t('activity.visibleNo') }}
           </el-button>
         </template>
@@ -60,8 +55,7 @@
       v-model="detailVisible"
       :title="$t('activity.feedbackDetailTitle')"
       width="560px"
-      append-to-body
-    >
+      append-to-body>
       <el-descriptions :column="1" border>
         <el-descriptions-item :label="$t('activity.feedbackContent')">
           {{ detail.content || '-' }}
@@ -80,7 +74,9 @@
         </el-descriptions-item>
       </el-descriptions>
       <template #footer>
-        <el-button type="primary" @click="detailVisible = false">{{ $t('common.close') }}</el-button>
+        <el-button type="primary" @click="detailVisible = false">{{
+          $t('common.close')
+        }}</el-button>
       </template>
     </el-dialog>
 
@@ -91,8 +87,7 @@
       append-to-body
       destroy-on-close
       :close-on-click-modal="false"
-      @closed="resetEdit"
-    >
+      @closed="resetEdit">
       <UniForm ref="formRef" v-model="formModel" mode="edit" :config="formCfg" />
       <template #footer>
         <el-button @click="editVisible = false">{{ $t('common.cancel') }}</el-button>
@@ -106,7 +101,14 @@
 
 <script setup lang="ts">
 import type { UniFormConfig, UniTableAction, UniTableColumn, UniTableRequest } from 'uni-ui-lib'
-import { UniDataTable, UniForm, UniSearchForm, useUniI18n, useUniListState, useUniPermission } from 'uni-ui-lib'
+import {
+  UniDataTable,
+  UniForm,
+  UniSearchForm,
+  useUniI18n,
+  useUniListState,
+  useUniPermission
+} from 'uni-ui-lib'
 import dayjs from 'dayjs'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { computed, reactive, ref } from 'vue'
@@ -175,7 +177,12 @@ const searchCfg = computed<UniFormConfig>(() => ({
 
 const columns = computed<UniTableColumn[]>(() => [
   { prop: '_seq', label: '#', width: 72 },
-  { prop: 'content', label: tr('activity.feedbackContent'), minWidth: 220, showOverflowTooltip: true },
+  {
+    prop: 'content',
+    label: tr('activity.feedbackContent'),
+    minWidth: 220,
+    showOverflowTooltip: true
+  },
   { prop: 'satisfactionLabel', label: tr('activity.feedbackSatisfaction'), minWidth: 110 },
   { prop: 'phone', label: tr('activity.registrationPhone'), minWidth: 120 },
   { prop: 'visibleLabel', label: tr('activity.visibleStatus'), minWidth: 100 },
@@ -219,7 +226,9 @@ const { queryModel, filters, handleLoadSuccess, reset, search } = useUniListStat
 const selectedIds = computed(
   () => selectedRows.value.map((row) => row.id).filter((id) => id != null) as Array<string | number>
 )
-const canDelete = computed(() => hasPermission('busdriver_del') || hasPermission('activity_ticket_del'))
+const canDelete = computed(
+  () => hasPermission('busdriver_del') || hasPermission('activity_ticket_del')
+)
 
 const decorateRows = (list: Row[], pageNo: number, pageSize: number) => {
   list.forEach((row, index) => {
@@ -240,7 +249,11 @@ const decorateRows = (list: Row[], pageNo: number, pageSize: number) => {
   })
 }
 
-const loadData: UniTableRequest = async ({ pageNo: current, pageSize: size, filters: filterModel }) => {
+const loadData: UniTableRequest = async ({
+  pageNo: current,
+  pageSize: size,
+  filters: filterModel
+}) => {
   const f = filterModel as Row
   const raw = await activityApi.feedbackPage.get({
     activityId: props.activityId,
@@ -278,7 +291,11 @@ const openEdit = async (row: Row) => {
 
 const actions = computed<UniTableAction[]>(() => {
   const base: UniTableAction[] = [
-    { label: tr('activity.lookDetail'), code: 'busdriver_edit', onClick: (row) => void openDetail(row as Row) }
+    {
+      label: tr('activity.lookDetail'),
+      code: 'busdriver_edit',
+      onClick: (row) => void openDetail(row as Row)
+    }
   ]
   if (!props.readOnly) {
     base.push({
@@ -292,7 +309,9 @@ const actions = computed<UniTableAction[]>(() => {
 
 const deleteSelected = async () => {
   if (!selectedIds.value.length) return
-  await ElMessageBox.confirm(tr('activity.confirmDeleteFeedback'), tr('common.tip'), { type: 'warning' })
+  await ElMessageBox.confirm(tr('activity.confirmDeleteFeedback'), tr('common.tip'), {
+    type: 'warning'
+  })
   await activityApi.feedbackRemove.delete(selectedIds.value)
   ElMessage.success(tr('activity.deleteOk'))
   selectedRows.value = []
@@ -301,8 +320,12 @@ const deleteSelected = async () => {
 
 const batchVisible = async (visible: 0 | 1) => {
   if (!selectedRows.value.length) return
-  await ElMessageBox.confirm(tr('activity.confirmBatchVisible'), tr('common.tip'), { type: 'warning' })
-  await Promise.all(selectedRows.value.map((row) => activityApi.feedbackEdit.post({ id: row.id, visible })))
+  await ElMessageBox.confirm(tr('activity.confirmBatchVisible'), tr('common.tip'), {
+    type: 'warning'
+  })
+  await Promise.all(
+    selectedRows.value.map((row) => activityApi.feedbackEdit.post({ id: row.id, visible }))
+  )
   ElMessage.success(tr('activity.saveOk'))
   selectedRows.value = []
   tableRef.value?.refresh()

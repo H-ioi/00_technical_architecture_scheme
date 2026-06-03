@@ -424,7 +424,9 @@ export function useQuestionnaireBuilder(
       }
     } else if (d.type === 'checkbox' || (d.type === 'select' && selMultiToggle.value)) {
       const raw = d.properties.option_default
-      const cur = (Array.isArray(raw) ? raw : []).map((x) => Number(x)).filter((x) => x !== removedId)
+      const cur = (Array.isArray(raw) ? raw : [])
+        .map((x) => Number(x))
+        .filter((x) => x !== removedId)
       d.properties.option_default = cur
     }
   }

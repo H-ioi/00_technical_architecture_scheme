@@ -52,7 +52,13 @@ export const searchForm = (t: Translate, yn: UniOption[], st: UniOption[]): UniF
 
 export const tableCols = (t: Translate): UniTableColumn[] => [
   { prop: 'id', label: 'ID', type: 'text', width: 72 },
-  { prop: 'name', label: t('email.group.colName'), type: 'text', minWidth: 140, showOverflowTooltip: true },
+  {
+    prop: 'name',
+    label: t('email.group.colName'),
+    type: 'text',
+    minWidth: 140,
+    showOverflowTooltip: true
+  },
   {
     prop: 'scopes',
     label: t('email.group.colScopes'),
@@ -88,7 +94,8 @@ export const tableCols = (t: Translate): UniTableColumn[] => [
     label: t('email.status'),
     type: 'text',
     width: 100,
-    formatter: (_r, _c, v) => (String(v) === '1' ? t('email.statusActive') : t('email.statusArchived'))
+    formatter: (_r, _c, v) =>
+      String(v) === '1' ? t('email.statusActive') : t('email.statusArchived')
   },
   {
     prop: 'createdAt',

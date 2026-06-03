@@ -51,9 +51,7 @@ describe('program-edit-helpers.ts', () => {
     })
 
     it('待开始(0) 抽奖节目单轮 可编辑', () => {
-      expect(
-        canEditProgramRow({ programStatus: '0', programType: '1', totalRounds: 1 })
-      ).toBe(true)
+      expect(canEditProgramRow({ programStatus: '0', programType: '1', totalRounds: 1 })).toBe(true)
     })
 
     it('已结束(2) 不可编辑', () => {
@@ -65,15 +63,13 @@ describe('program-edit-helpers.ts', () => {
     })
 
     it('进行中(1) 多轮抽奖 不可编辑', () => {
-      expect(
-        canEditProgramRow({ programStatus: '1', programType: '1', totalRounds: 3 })
-      ).toBe(false)
+      expect(canEditProgramRow({ programStatus: '1', programType: '1', totalRounds: 3 })).toBe(
+        false
+      )
     })
 
     it('进行中(1) 单轮抽奖 可编辑', () => {
-      expect(
-        canEditProgramRow({ programStatus: '1', programType: '1', totalRounds: 1 })
-      ).toBe(true)
+      expect(canEditProgramRow({ programStatus: '1', programType: '1', totalRounds: 1 })).toBe(true)
     })
 
     it('无 programStatus 字段默认为待开始', () => {
@@ -83,15 +79,15 @@ describe('program-edit-helpers.ts', () => {
 
   describe('isPrizeCountOnlyEdit', () => {
     it('进行中 单轮抽奖返回 true', () => {
-      expect(
-        isPrizeCountOnlyEdit({ programStatus: '1', programType: '1', totalRounds: 1 })
-      ).toBe(true)
+      expect(isPrizeCountOnlyEdit({ programStatus: '1', programType: '1', totalRounds: 1 })).toBe(
+        true
+      )
     })
 
     it('待开始 单轮抽奖返回 false', () => {
-      expect(
-        isPrizeCountOnlyEdit({ programStatus: '0', programType: '1', totalRounds: 1 })
-      ).toBe(false)
+      expect(isPrizeCountOnlyEdit({ programStatus: '0', programType: '1', totalRounds: 1 })).toBe(
+        false
+      )
     })
 
     it('进行中 非抽奖返回 false', () => {

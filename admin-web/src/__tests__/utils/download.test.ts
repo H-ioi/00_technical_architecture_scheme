@@ -1,6 +1,10 @@
 // @vitest-environment jsdom
 import { describe, it, expect, vi, beforeEach, beforeAll } from 'vitest'
-import { parseFilenameFromContentDisposition, downloadBlob, downloadResponseBlob } from '../../utils/download'
+import {
+  parseFilenameFromContentDisposition,
+  downloadBlob,
+  downloadResponseBlob
+} from '../../utils/download'
 
 // Mock URL APIs
 beforeAll(() => {
@@ -15,7 +19,6 @@ beforeAll(() => {
 })
 
 describe('download.ts', () => {
-
   // ==================== parseFilenameFromContentDisposition ====================
   describe('parseFilenameFromContentDisposition', () => {
     it('空/undefined header 返回空字符串', () => {
@@ -60,7 +63,9 @@ describe('download.ts', () => {
     it('创建下载链接并触发点击', () => {
       const clickSpy = vi.fn()
       const createElementSpy = vi.spyOn(document, 'createElement').mockReturnValue({
-        href: '', download: '', click: clickSpy
+        href: '',
+        download: '',
+        click: clickSpy
       } as unknown as HTMLAnchorElement)
 
       downloadBlob(new Blob(['test']), 'test.txt')
@@ -84,18 +89,25 @@ describe('download.ts', () => {
       const clickSpy = vi.fn()
       vi.spyOn(document, 'createElement').mockReturnValue({
         href: '',
-        get download() { return anchorDownload },
-        set download(v: string) { anchorDownload = v },
+        get download() {
+          return anchorDownload
+        },
+        set download(v: string) {
+          anchorDownload = v
+        },
         click: clickSpy
       } as unknown as HTMLAnchorElement)
 
-      downloadResponseBlob({
-        data: new Blob(['content']),
-        headers: {
-          get: (name: string) =>
-            name === 'content-disposition' ? 'attachment; filename="download.zip"' : null
-        }
-      }, 'fallback.zip')
+      downloadResponseBlob(
+        {
+          data: new Blob(['content']),
+          headers: {
+            get: (name: string) =>
+              name === 'content-disposition' ? 'attachment; filename="download.zip"' : null
+          }
+        },
+        'fallback.zip'
+      )
 
       expect(anchorDownload).toBe('download.zip')
     })
@@ -105,15 +117,22 @@ describe('download.ts', () => {
       const clickSpy = vi.fn()
       vi.spyOn(document, 'createElement').mockReturnValue({
         href: '',
-        get download() { return anchorDownload },
-        set download(v: string) { anchorDownload = v },
+        get download() {
+          return anchorDownload
+        },
+        set download(v: string) {
+          anchorDownload = v
+        },
         click: clickSpy
       } as unknown as HTMLAnchorElement)
 
-      downloadResponseBlob({
-        data: new Blob(['x']),
-        headers: { 'content-disposition': 'attachment; filename=prop.pdf' }
-      }, 'fallback.pdf')
+      downloadResponseBlob(
+        {
+          data: new Blob(['x']),
+          headers: { 'content-disposition': 'attachment; filename=prop.pdf' }
+        },
+        'fallback.pdf'
+      )
 
       expect(anchorDownload).toBe('prop.pdf')
     })
@@ -123,15 +142,22 @@ describe('download.ts', () => {
       const clickSpy = vi.fn()
       vi.spyOn(document, 'createElement').mockReturnValue({
         href: '',
-        get download() { return anchorDownload },
-        set download(v: string) { anchorDownload = v },
+        get download() {
+          return anchorDownload
+        },
+        set download(v: string) {
+          anchorDownload = v
+        },
         click: clickSpy
       } as unknown as HTMLAnchorElement)
 
-      downloadResponseBlob({
-        data: new Blob(['content']),
-        headers: {}
-      }, 'fallback.csv')
+      downloadResponseBlob(
+        {
+          data: new Blob(['content']),
+          headers: {}
+        },
+        'fallback.csv'
+      )
 
       expect(anchorDownload).toBe('fallback.csv')
     })

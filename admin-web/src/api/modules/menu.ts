@@ -144,9 +144,7 @@ const dedupeMenuSiblingsByPath = (menus: AppMenuRecord[]): AppMenuRecord[] => {
     const children = m.children?.length ? dedupeMenuSiblingsByPath(m.children) : undefined
 
     const node: AppMenuRecord =
-      children?.length ?? m.children?.length
-        ? { ...m, children }
-        : { ...m, children: undefined }
+      (children?.length ?? m.children?.length) ? { ...m, children } : { ...m, children: undefined }
 
     if (seen.has(node.path)) {
       continue

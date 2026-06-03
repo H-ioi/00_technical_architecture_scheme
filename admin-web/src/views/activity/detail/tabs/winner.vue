@@ -22,8 +22,7 @@
       :submit-text="$t('activity.search')"
       :reset-text="$t('activity.reset')"
       @search="search"
-      @reset="reset"
-    />
+      @reset="reset" />
     <UniDataTable
       ref="tableRef"
       row-key="id"
@@ -36,15 +35,9 @@
       :actions="actions"
       :action-column="{ width: 100, fixed: 'right' }"
       @load-success="handleLoadSuccess"
-      @selection-change="onSelectionChange"
-    >
+      @selection-change="onSelectionChange">
       <template v-if="!readOnly && canDelete" #toolbar>
-        <el-button
-          type="danger"
-          plain
-          :disabled="!selectedIds.length"
-          @click="deleteSelected"
-        >
+        <el-button type="danger" plain :disabled="!selectedIds.length" @click="deleteSelected">
           {{ $t('activity.delBatch') }}
         </el-button>
       </template>
@@ -57,8 +50,7 @@
       append-to-body
       destroy-on-close
       :close-on-click-modal="false"
-      @closed="resetDialog"
-    >
+      @closed="resetDialog">
       <UniForm ref="formRef" v-model="formModel" mode="edit" :config="formCfg" />
       <p class="activity-winner-tab__hint">{{ $t('activity.winnerTicketHint') }}</p>
       <template #footer>
@@ -72,15 +64,33 @@
 </template>
 
 <script setup lang="ts">
-import type { UniFormConfig, UniOption, UniTableAction, UniTableColumn, UniTableRequest } from 'uni-ui-lib'
-import { UniDataTable, UniForm, UniSearchForm, useUniI18n, useUniListState, useUniPermission } from 'uni-ui-lib'
+import type {
+  UniFormConfig,
+  UniOption,
+  UniTableAction,
+  UniTableColumn,
+  UniTableRequest
+} from 'uni-ui-lib'
+import {
+  UniDataTable,
+  UniForm,
+  UniSearchForm,
+  useUniI18n,
+  useUniListState,
+  useUniPermission
+} from 'uni-ui-lib'
 import dayjs from 'dayjs'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { computed, nextTick, reactive, ref } from 'vue'
 
 import { activityApi, activityProgramApi } from '@/api'
 import type { Translate } from '@/types/i18n'
-import { normalizeArray, normalizeEnvelope, normalizePaged, normalizePayload } from '@/utils/api-response-normalize'
+import {
+  normalizeArray,
+  normalizeEnvelope,
+  normalizePaged,
+  normalizePayload
+} from '@/utils/api-response-normalize'
 import { downloadResponseBlob } from '@/utils/download'
 
 type Row = Record<string, unknown>
@@ -114,7 +124,9 @@ const formModel = computed({
 const selectedIds = computed(
   () => selectedRows.value.map((row) => row.id).filter((id) => id != null) as Array<string | number>
 )
-const canDelete = computed(() => hasPermission('busdriver_del') || hasPermission('activity_ticket_del'))
+const canDelete = computed(
+  () => hasPermission('busdriver_del') || hasPermission('activity_ticket_del')
+)
 
 const searchCfg = computed<UniFormConfig>(() => ({
   schema: [
@@ -216,7 +228,12 @@ const formCfg = computed<UniFormConfig>(() => {
       colProps: { xs: 24, sm: 12 }
     }
   )
-  return { formProps: { labelPosition: 'top' }, rowProps: { gutter: 16 }, colProps: { span: 12 }, schema }
+  return {
+    formProps: { labelPosition: 'top' },
+    rowProps: { gutter: 16 },
+    colProps: { span: 12 },
+    schema
+  }
 })
 
 const { queryModel, filters, handleLoadSuccess, reset, search } = useUniListState({
@@ -225,7 +242,8 @@ const { queryModel, filters, handleLoadSuccess, reset, search } = useUniListStat
 
 const decorateRows = (list: Row[]) => {
   for (const row of list) {
-    row.programName = row.programName == null || row.programName === '' ? '-' : String(row.programName)
+    row.programName =
+      row.programName == null || row.programName === '' ? '-' : String(row.programName)
     row.ticketCode = row.ticketCode == null || row.ticketCode === '' ? '-' : String(row.ticketCode)
     row.name = row.name == null || row.name === '' ? '-' : String(row.name)
     row.phone = row.phone == null || row.phone === '' ? '-' : String(row.phone)
@@ -249,7 +267,11 @@ const decorateRows = (list: Row[]) => {
   }
 }
 
-const loadData: UniTableRequest = async ({ pageNo: current, pageSize: size, filters: filterModel }) => {
+const loadData: UniTableRequest = async ({
+  pageNo: current,
+  pageSize: size,
+  filters: filterModel
+}) => {
   const f = filterModel as Row
   const params = {
     activityId: props.activityId,
@@ -280,12 +302,16 @@ const loadPrograms = async () => {
   })
   const rows = (normalizeArray(raw) as Row[]).filter((row) => row.id != null)
   const detailRows = await Promise.all(
-    rows.map(async (row) => normalizeEnvelope(await activityProgramApi.detail.get(row.id as string | number)))
+    rows.map(async (row) =>
+      normalizeEnvelope(await activityProgramApi.detail.get(row.id as string | number))
+    )
   )
   programOptions.value = detailRows
     .filter((row) => Number(row.programStatus) === 1 && Number(row.programType) === pt)
     .map((row) => ({
-      label: String(locale.value === 'en' ? (row.enName ?? row.cnName ?? '') : (row.cnName ?? row.enName ?? '')),
+      label: String(
+        locale.value === 'en' ? (row.enName ?? row.cnName ?? '') : (row.cnName ?? row.enName ?? '')
+      ),
       value: row.id as string | number
     }))
 }
@@ -334,9 +360,7 @@ const openEdit = async (row: Row) => {
   })
   await loadPrograms()
   if (form.programId != null) {
-    const found = programOptions.value.find(
-      (item) => String(item.value) === String(form.programId)
-    )
+    const found = programOptions.value.find((item) => String(item.value) === String(form.programId))
     form.programName = found?.label
   }
   dialogVisible.value = true
@@ -345,7 +369,13 @@ const openEdit = async (row: Row) => {
 const actions = computed<UniTableAction[]>(() =>
   props.readOnly
     ? []
-    : [{ label: tr('activity.entryEdit'), code: 'busdriver_edit', onClick: (row) => void openEdit(row as Row) }]
+    : [
+        {
+          label: tr('activity.entryEdit'),
+          code: 'busdriver_edit',
+          onClick: (row) => void openEdit(row as Row)
+        }
+      ]
 )
 
 const fetchByTicketCode = async () => {
@@ -376,7 +406,9 @@ const resetDialog = () => {
 
 const buildPayload = () => {
   const payload: Row = {
-    activityId: Number.isFinite(Number(props.activityId)) ? Number(props.activityId) : props.activityId,
+    activityId: Number.isFinite(Number(props.activityId))
+      ? Number(props.activityId)
+      : props.activityId,
     programId: form.programId,
     programName: form.programName || undefined,
     ticketCode: form.ticketCode || undefined,
@@ -417,7 +449,9 @@ const submit = async () => {
 
 const deleteSelected = async () => {
   if (!selectedIds.value.length) return
-  await ElMessageBox.confirm(tr('activity.confirmDeleteWinners'), tr('common.tip'), { type: 'warning' })
+  await ElMessageBox.confirm(tr('activity.confirmDeleteWinners'), tr('common.tip'), {
+    type: 'warning'
+  })
   await activityApi.prizeAwardRemove.delete(selectedIds.value)
   ElMessage.success(tr('activity.deleteOk'))
   selectedRows.value = []

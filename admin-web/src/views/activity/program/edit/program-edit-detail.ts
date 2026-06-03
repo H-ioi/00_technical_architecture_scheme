@@ -72,8 +72,7 @@ export function applyProgramDetailToForm(
       form.needCheckin = String(rule.needCheckin ?? '0')
       form.needPayment = String(rule.needPayment ?? '0')
       form.prizeCount = parseInt(String(rule.prizeCount ?? 0), 10) || 0
-      form.checkinEndOffsetMinutes =
-        parseInt(String(rule.checkinEndOffsetMinutes ?? 0), 10) || 0
+      form.checkinEndOffsetMinutes = parseInt(String(rule.checkinEndOffsetMinutes ?? 0), 10) || 0
       form.checkinStartOffsetMinutes =
         parseInt(String(rule.checkinStartOffsetMinutes ?? 0), 10) || 0
       fillQuotasFromDetail(quotasList, d.quotas, totalRounds)

@@ -84,10 +84,7 @@ export const formatDateLimitCell = (row: Loose) => {
   return '--'
 }
 
-export const searchForm = (
-  t: Translate,
-  schoolOptions: UniOption[]
-): UniFormConfig => ({
+export const searchForm = (t: Translate, schoolOptions: UniOption[]): UniFormConfig => ({
   schema: [
     {
       field: 'type',
@@ -163,10 +160,7 @@ export const searchForm = (
 })
 
 /** 销假 Tab 检索（对齐旧页）：仅「学校」「学号/姓名」。 */
-export const returnSearchForm = (
-  t: Translate,
-  schoolOptions: UniOption[]
-): UniFormConfig => ({
+export const returnSearchForm = (t: Translate, schoolOptions: UniOption[]): UniFormConfig => ({
   schema: [
     {
       field: 'studentSchool',

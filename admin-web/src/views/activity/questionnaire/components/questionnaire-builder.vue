@@ -159,7 +159,9 @@
                               <div class="qb__pv-label">{{ fieldPreview(fk).label }}</div>
                               <div class="qb__pv-control">
                                 <template v-if="fieldPreview(fk).options.length">
-                                  <el-checkbox-group :model-value="fieldPreview(fk).multiVals" disabled>
+                                  <el-checkbox-group
+                                    :model-value="fieldPreview(fk).multiVals"
+                                    disabled>
                                     <div class="qb__pv-stack">
                                       <el-checkbox
                                         v-for="opt in fieldPreview(fk).options"
@@ -199,7 +201,9 @@
                                       :key="opt.id"
                                       :label="opt.label"
                                       :value="
-                                        fieldPreview(fk).selectMulti ? Number(opt.id) : String(opt.id)
+                                        fieldPreview(fk).selectMulti
+                                          ? Number(opt.id)
+                                          : String(opt.id)
                                       " />
                                   </el-select>
                                 </template>

@@ -53,7 +53,10 @@ const normalizeScopeLikeToArray = (scope: unknown): unknown => {
         /* 按分隔符拆 */
       }
     }
-    return s.split(/[,，]/).map((x) => x.trim()).filter(Boolean)
+    return s
+      .split(/[,，]/)
+      .map((x) => x.trim())
+      .filter(Boolean)
   }
   return scope
 }
@@ -91,7 +94,10 @@ const normalizeDateLimitLike = (dateLimit: unknown): unknown => {
         /* ignore */
       }
     }
-    const parts = s.split(/[-–~]/).map((x) => x.trim()).filter(Boolean)
+    const parts = s
+      .split(/[-–~]/)
+      .map((x) => x.trim())
+      .filter(Boolean)
     if (parts.length === 2) {
       return parts
     }

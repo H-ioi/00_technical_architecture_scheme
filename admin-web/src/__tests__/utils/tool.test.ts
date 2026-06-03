@@ -2,7 +2,6 @@ import { describe, it, expect } from 'vitest'
 import { dateFormat, groupSeparator } from '../../utils/tool'
 
 describe('tool.ts', () => {
-
   // ==================== dateFormat ====================
   describe('dateFormat', () => {
     it('默认格式 yyyy-MM-dd hh:mm:ss', () => {

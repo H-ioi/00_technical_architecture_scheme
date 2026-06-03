@@ -23,8 +23,7 @@
       type="file"
       accept=".xlsx,.xls"
       class="school-bus-car-page__file"
-      @change="onImportFile"
-    >
+      @change="onImportFile" />
 
     <UniSearchForm
       v-model="queryModel"
@@ -35,8 +34,7 @@
       :submit-text="$t('schoolBus.search')"
       :reset-text="$t('schoolBus.reset')"
       @search="search"
-      @reset="reset"
-    />
+      @reset="reset" />
 
     <UniDataTable
       ref="tableRef"
@@ -51,15 +49,13 @@
       :action-column="{ width: 110, fixed: 'right' }"
       @selection-change="onSelectionChange"
       @load-success="tableEmpty.onLoadSuccess"
-      @request-error="tableEmpty.onRequestError"
-    >
+      @request-error="tableEmpty.onRequestError">
       <template #toolbar>
         <el-button
           v-uni-permission="'buscarinfo_del'"
           type="danger"
           :disabled="ids.length === 0"
-          @click="del"
-        >
+          @click="del">
           {{ $t('schoolBus.delete') }}
         </el-button>
       </template>
@@ -76,8 +72,7 @@
       :school-options="schoolOptions"
       :status-options="statusOptions"
       :multi-school="multiSchool"
-      @saved="refreshTable"
-    />
+      @saved="refreshTable" />
   </section>
 </template>
 
@@ -98,11 +93,9 @@ import { useUniI18n, useUniListState } from 'uni-ui-lib'
 import type { UniTableAction, UniTableRequest } from 'uni-ui-lib'
 import { computed, ref, nextTick, onMounted, watch } from 'vue'
 
-
 const { locale, t } = useUniI18n()
 
 const fileRef = ref<HTMLInputElement | null>(null)
-
 
 const initialFilters: Record<string, unknown> = {
   schoolIds: undefined,
@@ -258,7 +251,8 @@ const del = async () => {
   } catch {
     /* request 层已提示 */
   }
-}</script>
+}
+</script>
 
 <style scoped lang="scss">
 .school-bus-car-page {

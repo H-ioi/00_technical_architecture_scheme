@@ -19,8 +19,7 @@
       :submit-text="$t('member.search')"
       :reset-text="$t('member.reset')"
       @search="search"
-      @reset="reset"
-    />
+      @reset="reset" />
 
     <UniDataTable
       ref="tableRef"
@@ -35,18 +34,13 @@
       :action-column="{ width: 168, fixed: 'right' }"
       @load-success="tableEmpty.onLoadSuccess"
       @request-error="tableEmpty.onRequestError"
-      @selection-change="onSelectionChange"
-    >
+      @selection-change="onSelectionChange">
       <template #toolbar>
         <el-button :disabled="batchDisabled" @click="batchStatus(0)">
-          {{
-            $t('email.archive')
-          }}
+          {{ $t('email.archive') }}
         </el-button>
         <el-button :disabled="batchDisabled" @click="batchStatus(1)">
-          {{
-            $t('email.markActive')
-          }}
+          {{ $t('email.markActive') }}
         </el-button>
         <el-button type="danger" :disabled="batchDisabled" @click="batchStatus(-1)">
           {{ $t('email.deleteBatch') }}
@@ -61,8 +55,7 @@
       v-model="dialogVisible"
       v-model:form="formModel"
       :mode="dialogMode"
-      @success="tableRef?.refresh()"
-    />
+      @success="tableRef?.refresh()" />
 
     <el-dialog v-model="viewVisible" :title="$t('email.view')" width="520px" destroy-on-close>
       <div class="email-send-view">
@@ -104,9 +97,6 @@ import { ElMessage, ElMessageBox } from 'element-plus'
 import { UniDataTable, UniSearchForm, useUniI18n, useUniListState } from 'uni-ui-lib'
 import type { UniTableAction, UniTableRequest } from 'uni-ui-lib'
 import { computed, ref } from 'vue'
-
-
-
 
 const { t } = useUniI18n()
 
@@ -154,7 +144,10 @@ const loadData: UniTableRequest = async ({ pageNo, pageSize, filters: f }) => {
     current: pageNo,
     size: pageSize,
     keyword: String((f as Loose).keyword ?? ''),
-    status: (f as Loose).status === '' || (f as Loose).status == null ? undefined : String((f as Loose).status)
+    status:
+      (f as Loose).status === '' || (f as Loose).status == null
+        ? undefined
+        : String((f as Loose).status)
   })
   const { list, total } = normalizePaged(raw)
   return { data: list, total }
@@ -181,7 +174,8 @@ const openEdit = async (row: Loose) => {
     userMailinfoId: mailinfo.id ?? '',
     userIds: (data.userIdRelations as unknown[] | undefined)?.map((x) => String(x)) ?? [],
     email: String(mailinfo.email ?? ''),
-    mailgroupIds: (data.mailgroupIdRelations as unknown[] | undefined)?.map((x) => x as string | number) ?? [],
+    mailgroupIds:
+      (data.mailgroupIdRelations as unknown[] | undefined)?.map((x) => x as string | number) ?? [],
     status: mailinfo.status != null ? String(mailinfo.status) : '1'
   }
   dialogVisible.value = true
@@ -198,7 +192,7 @@ const openView = async (row: Loose) => {
           .map((g) => g.mailgroupName ?? '')
           .filter(Boolean)
           .join('，')
-              : '—'
+      : '—'
   viewModel.value = {
     userLines: userRelations.map((u) => u.username ?? '').filter(Boolean),
     email: String(mailinfo.email ?? ''),
@@ -249,7 +243,8 @@ const actions = computed<UniTableAction[]>(() => [
   { label: tr('email.delete'), onClick: (row) => removeRow(row as Loose) }
 ])
 
-const tableEmpty = useListTableEmpty(filters, { tableRef, afterLoadSuccess: handleLoadSuccess })</script>
+const tableEmpty = useListTableEmpty(filters, { tableRef, afterLoadSuccess: handleLoadSuccess })
+</script>
 
 <style scoped lang="scss">
 .email-send-view {

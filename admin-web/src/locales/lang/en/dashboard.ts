@@ -21,7 +21,8 @@ export default {
   enter: 'Enter',
   refresh: 'Refresh metrics',
   healthAlertTitle: '{n} open items may need your attention',
-  healthAlertBody: '{leave} leave approvals pending · {bus} bus intentions pending — clear them to avoid backlog.',
+  healthAlertBody:
+    '{leave} leave approvals pending · {bus} bus intentions pending — clear them to avoid backlog.',
   kpiVsYesterday: 'vs prior day {pct}',
   kpiVsYesterdayNew: 'No prior-day baseline yet',
   kpiNoCompare: 'No attendance rows on both days',

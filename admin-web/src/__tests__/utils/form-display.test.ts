@@ -3,7 +3,6 @@ import { formatOptionLabels } from '../../utils/form-display'
 import type { UniOption } from 'uni-ui-lib'
 
 describe('form-display.ts', () => {
-
   const sampleOptions: UniOption[] = [
     { label: '选项A', value: 'a' },
     { label: '选项B', value: 'b' },

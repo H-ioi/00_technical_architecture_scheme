@@ -18,8 +18,7 @@
       :submit-text="$t('activity.search')"
       :reset-text="$t('activity.reset')"
       @search="search"
-      @reset="reset"
-    />
+      @reset="reset" />
     <UniDataTable
       ref="tableRef"
       row-key="id"
@@ -32,16 +31,14 @@
       :actions="actions"
       :action-column="{ width: 110, fixed: 'right' }"
       @load-success="handleLoadSuccess"
-      @selection-change="onSelectionChange"
-    >
+      @selection-change="onSelectionChange">
       <template #toolbar>
         <el-button
           v-uni-permission="'busdriver_del'"
           type="danger"
           plain
           :disabled="!selectedIds.length"
-          @click="deleteSelected"
-        >
+          @click="deleteSelected">
           {{ $t('activity.delBatch') }}
         </el-button>
       </template>
@@ -68,8 +65,6 @@ import { ref, computed, onMounted } from 'vue'
 
 const formDlg = ref<InstanceType<typeof EmailSchoolFormDialog> | null>(null)
 
-
-
 const { t } = useUniI18n()
 const tr = t as Translate
 
@@ -85,8 +80,7 @@ const searchCfg = computed(() => searchForm(tr, schoolOptions.value))
 const columns = computed(() => tableCols(tr, schoolOptions.value, appModuleOptions.value))
 const selectedRows = ref<SchoolEmailConfigRow[]>([])
 const selectedIds = computed(
-  () =>
-    selectedRows.value.map((row) => row.id).filter((id) => id != null) as Array<string | number>
+  () => selectedRows.value.map((row) => row.id).filter((id) => id != null) as Array<string | number>
 )
 
 const loadAppModuleOptions = async () => {
@@ -104,12 +98,8 @@ const loadAppModuleOptions = async () => {
 const decorateRows = (list: SchoolEmailConfigRow[]) => {
   for (const row of list) {
     row.appModule = row.appModule == null || row.appModule === '' ? '' : String(row.appModule)
-    row.createdAt = row.createdAt
-      ? dateFormat(String(row.createdAt), 'yyyy-MM-dd hh:mm')
-      : '—'
-    row.updatedAt = row.updatedAt
-      ? dateFormat(String(row.updatedAt), 'yyyy-MM-dd hh:mm')
-      : '—'
+    row.createdAt = row.createdAt ? dateFormat(String(row.createdAt), 'yyyy-MM-dd hh:mm') : '—'
+    row.updatedAt = row.updatedAt ? dateFormat(String(row.updatedAt), 'yyyy-MM-dd hh:mm') : '—'
   }
 }
 
@@ -166,4 +156,5 @@ const deleteSelected = async () => {
 
 onMounted(() => {
   void Promise.all([loadSchoolOptions(), loadAppModuleOptions()])
-})</script>
+})
+</script>
