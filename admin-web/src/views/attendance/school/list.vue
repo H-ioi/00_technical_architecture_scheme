@@ -49,7 +49,7 @@ import { attendanceSchoolStatusOpts } from '../student/list.config'
 import DetailDialog from './components/detail-dialog.vue'
 import { attendanceOpenTypeOpts, detailForm, searchForm, tableCols } from './list.config'
 import { attendanceSchoolApi, membershipApi } from '@/api'
-import ListTableEmpty from '@/components/list-table-empty.vue'
+import ListTableEmpty from '@/components/list-table-empty/index.vue'
 import { useListTableEmpty } from '@/composables/use-list-table-empty'
 import type {
   AttendanceSchoolListParams,

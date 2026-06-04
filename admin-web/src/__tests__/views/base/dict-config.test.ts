@@ -102,20 +102,20 @@ describe('dict.config.ts', () => {
     })
 
     it('点击编辑应调用 onEdit', () => {
-      const mockRow = { label: 'test', sort: 1, status: true } as any
-      actions[0].onClick?.(mockRow, 0, undefined as any)
+      const mockRow = { label: 'test', sort: 1, status: true }
+      actions[0].onClick?.(mockRow, 0, undefined as never)
       expect(onEdit).toHaveBeenCalledWith(mockRow)
     })
 
     it('点击属性应调用 onAttrs', () => {
-      const mockRow = { label: 'test', sort: 1, status: true } as any
-      actions[1].onClick?.(mockRow, 0, undefined as any)
+      const mockRow = { label: 'test', sort: 1, status: true }
+      actions[1].onClick?.(mockRow, 0, undefined as never)
       expect(onAttrs).toHaveBeenCalledWith(mockRow)
     })
 
     it('点击删除应调用 onDelete', () => {
-      const mockRow = { label: 'test', sort: 1, status: true } as any
-      actions[2].onClick?.(mockRow, 0, undefined as any)
+      const mockRow = { label: 'test', sort: 1, status: true }
+      actions[2].onClick?.(mockRow, 0, undefined as never)
       expect(onDelete).toHaveBeenCalledWith(mockRow)
     })
   })

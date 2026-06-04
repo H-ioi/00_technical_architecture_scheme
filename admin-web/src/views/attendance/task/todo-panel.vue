@@ -79,12 +79,12 @@
       </div>
       <template #footer>
         <el-button @click="approveVisible = false">{{ $t('common.cancel') }}</el-button>
-        <el-button type="danger" :loading="submitting" @click="reject">{{
-          $t('attendance.holidayTask.reject')
-        }}</el-button>
-        <el-button type="primary" :loading="submitting" @click="approve">{{
-          $t('attendance.holidayTask.approve')
-        }}</el-button>
+        <el-button type="danger" :loading="submitting" @click="reject">
+          {{ $t('attendance.holidayTask.reject') }}
+        </el-button>
+        <el-button type="primary" :loading="submitting" @click="approve">
+          {{ $t('attendance.holidayTask.approve') }}
+        </el-button>
       </template>
     </el-dialog>
 
@@ -107,17 +107,12 @@
 </template>
 
 <script setup lang="ts">
-import type {
-  UniTableAction,
-  UniTableColumn,
-  UniTableRequest,
-  UniTableRequestResult
-} from 'uni-ui-lib'
+import type { UniTableAction, UniTableColumn, UniTableRequest } from 'uni-ui-lib'
 import { UniDataTable, useUniI18n, useUniListState } from 'uni-ui-lib'
 import { ElMessage } from 'element-plus'
 import { computed, reactive, ref } from 'vue'
 
-import ListTableEmpty from '@/components/list-table-empty.vue'
+import ListTableEmpty from '@/components/list-table-empty/index.vue'
 import { useListTableEmpty } from '@/composables/use-list-table-empty'
 import { attendanceHolidayApi } from '@/api'
 import { normalizeEnvelope, normalizePaged } from '@/utils/api-response-normalize'

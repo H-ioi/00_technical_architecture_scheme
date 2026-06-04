@@ -1,7 +1,7 @@
 import type { Translate } from '@/types/i18n'
 import type { UniFormConfig, UniOption, UniTableColumn } from 'uni-ui-lib'
 
-import { formatMailGroupScopeDisplay } from '../mail-page-utils'
+import { formatMailGroupScopeDisplay } from '@/utils/mail-page-utils'
 
 export const yesNoOpts = (t: Translate): UniOption[] => [
   { label: t('email.yes'), value: '1' },

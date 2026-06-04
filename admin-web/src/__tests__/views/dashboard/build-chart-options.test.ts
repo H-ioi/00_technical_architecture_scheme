@@ -27,6 +27,7 @@ import {
   buildLeaveDomainOption,
   buildBacklogOption
 } from '../../../views/dashboard/build-chart-options'
+import type { DashboardStatsPayload } from '@/types/modules/dashboard'
 
 // Setup CSS variable mocks
 beforeAll(() => {
@@ -79,7 +80,11 @@ describe('build-chart-options.ts', () => {
 
   describe('buildMemberMixOption', () => {
     it('应生成饼图配置', () => {
-      const stats = { studentTotal: 1500, teacherTotal: 80, memberTotal: 1580 } as any
+      const stats = {
+        studentTotal: 1500,
+        teacherTotal: 80,
+        memberTotal: 1580
+      } as DashboardStatsPayload
       const option = buildMemberMixOption(stats, {
         student: '学生',
         teacher: '教师',
@@ -92,7 +97,11 @@ describe('build-chart-options.ts', () => {
     })
 
     it('饼图数据包含学生和教师', () => {
-      const stats = { studentTotal: 100, teacherTotal: 10, memberTotal: 110 } as any
+      const stats = {
+        studentTotal: 100,
+        teacherTotal: 10,
+        memberTotal: 110
+      } as DashboardStatsPayload
       const option = buildMemberMixOption(stats, {
         student: '学生',
         teacher: '教师',
@@ -106,7 +115,7 @@ describe('build-chart-options.ts', () => {
     })
 
     it('pie 配置有 radius 和 center', () => {
-      const stats = { studentTotal: 1, teacherTotal: 0, memberTotal: 1 } as any
+      const stats = { studentTotal: 1, teacherTotal: 0, memberTotal: 1 } as DashboardStatsPayload
       const option = buildMemberMixOption(stats, { student: '生', teacher: '师', chart: '图' })
       const series = option.series![0] as Record<string, unknown>
       expect(series.radius).toBeDefined()
@@ -120,7 +129,7 @@ describe('build-chart-options.ts', () => {
         pendingTasks: 5,
         workflowMyStarted: 10,
         workflowMyCompleted: 20
-      } as any
+      } as DashboardStatsPayload
       const option = buildWorkflowLoadOption(stats, {
         chart: '流程负载',
         todo: '待办',
@@ -132,7 +141,11 @@ describe('build-chart-options.ts', () => {
     })
 
     it('x 轴包含待办/发起/已办', () => {
-      const stats = { pendingTasks: 1, workflowMyStarted: 2, workflowMyCompleted: 3 } as any
+      const stats = {
+        pendingTasks: 1,
+        workflowMyStarted: 2,
+        workflowMyCompleted: 3
+      } as DashboardStatsPayload
       const option = buildWorkflowLoadOption(stats, {
         chart: '负载',
         todo: '待',
@@ -150,7 +163,7 @@ describe('build-chart-options.ts', () => {
         holidayLeaveTotal: 30,
         holidayReturnTotal: 15,
         leavePassTotal: 5
-      } as any
+      } as DashboardStatsPayload
       const option = buildLeaveDomainOption(stats, {
         chart: '请假域',
         leaveList: '请假',
@@ -162,7 +175,11 @@ describe('build-chart-options.ts', () => {
     })
 
     it('包含三个分类', () => {
-      const stats = { holidayLeaveTotal: 1, holidayReturnTotal: 2, leavePassTotal: 3 } as any
+      const stats = {
+        holidayLeaveTotal: 1,
+        holidayReturnTotal: 2,
+        leavePassTotal: 3
+      } as DashboardStatsPayload
       const option = buildLeaveDomainOption(stats, {
         chart: '域',
         leaveList: 'L',
@@ -176,7 +193,7 @@ describe('build-chart-options.ts', () => {
 
   describe('buildBacklogOption', () => {
     it('应生成横向柱状图配置', () => {
-      const stats = { pendingTasks: 8, pendingBusIntentions: 3 } as any
+      const stats = { pendingTasks: 8, pendingBusIntentions: 3 } as DashboardStatsPayload
       const option = buildBacklogOption(stats, {
         chart: '待办事项',
         leave: '请假',
@@ -191,7 +208,7 @@ describe('build-chart-options.ts', () => {
     })
 
     it('包含请假和校车两项', () => {
-      const stats = { pendingTasks: 10, pendingBusIntentions: 5 } as any
+      const stats = { pendingTasks: 10, pendingBusIntentions: 5 } as DashboardStatsPayload
       const option = buildBacklogOption(stats, { chart: '待办', leave: '请假', bus: '校车' })
       const yAxis = (option as Record<string, unknown>).yAxis as Record<string, unknown>
       expect(yAxis.data as unknown[]).toHaveLength(2)

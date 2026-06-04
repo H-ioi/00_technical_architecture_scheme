@@ -1,0 +1,857 @@
+﻿
+> admin-web@0.0.0 lint
+> eslint "src/**/*.{ts,vue}" "*.{ts,mjs,cjs}" --max-warnings 0
+
+
+D:\01_code\00_technical_architecture_scheme\admin-web\src\__tests__\composables\use-view-only-form-model.test.ts
+  31:18  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+D:\01_code\00_technical_architecture_scheme\admin-web\src\__tests__\utils\questionnaire-url.test.ts
+  3:7  error  'ORIGINAL_IMPORT_META' is assigned a value but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+D:\01_code\00_technical_architecture_scheme\admin-web\src\__tests__\views\activity\program\program-edit-detail.test.ts
+  76:11  error  'makeRef' is assigned a value but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+D:\01_code\00_technical_architecture_scheme\admin-web\src\__tests__\views\activity\questionnaire\questionnaire-builder-utils.test.ts
+  1:36  error  'beforeEach' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+D:\01_code\00_technical_architecture_scheme\admin-web\src\__tests__\views\base\dict-config.test.ts
+  105:67  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  106:53  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  111:67  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  112:53  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  117:67  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  118:53  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+D:\01_code\00_technical_architecture_scheme\admin-web\src\__tests__\views\dashboard\build-chart-options.test.ts
+   82:84  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   95:82  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  109:77  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  123:12  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  135:90  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  153:12  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  165:91  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  179:69  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  194:70  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+D:\01_code\00_technical_architecture_scheme\admin-web\src\components\sidebar-icon\icon-picker.vue
+   9:23  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+  29:35  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+  34:46  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+  44:32  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+
+D:\01_code\00_technical_architecture_scheme\admin-web\src\views\activity\detail\components\visible-scope-drawer.vue
+   9:23  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+  16:25  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+  21:32  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+  26:32  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+  36:43  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+
+D:\01_code\00_technical_architecture_scheme\admin-web\src\views\activity\detail\detail-form.config.ts
+   8:7  error  'thirdCol' is assigned a value but never used. Allowed unused vars must match /^_/u             @typescript-eslint/no-unused-vars
+  58:5  error  'visibleScopeOptions' is assigned a value but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+D:\01_code\00_technical_architecture_scheme\admin-web\src\views\activity\detail\index.vue
+   25:92  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+   33:64  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+   41:57  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+   50:50  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+   58:49  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+   66:55  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+   75:51  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+   83:53  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+   92:51  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+  100:53  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+  107:1   warning  Expected indentation of 16 spaces but found 14 spaces                   vue/html-indent
+  112:56  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+  119:49  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+  127:42  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+  135:33  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+  143:55  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+  147:52  warning  Disallow self-closing on HTML void elements (<img/>)                    vue/html-self-closing
+  171:57  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+  179:62  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+  204:26  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+  234:57  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+  238:38  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+  247:57  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+  251:38  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+  262:59  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+  268:34  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+  277:67  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+  286:67  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+  295:67  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+  304:67  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+  313:67  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+  322:67  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+  328:27  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+
+D:\01_code\00_technical_architecture_scheme\admin-web\src\views\activity\detail\tabs\blessing.vue
+   12:21  warning  Expected 1 line break before closing bracket, but no line breaks found               vue/html-closing-bracket-newline
+   25:44  warning  Expected 1 line break before closing bracket, but no line breaks found               vue/html-closing-bracket-newline
+   33:36  warning  Expected 1 line break before closing bracket, but no line breaks found               vue/html-closing-bracket-newline
+   40:37  warning  Expected 1 line break before closing bracket, but no line breaks found               vue/html-closing-bracket-newline
+   47:37  warning  Expected 1 line break before closing bracket, but no line breaks found               vue/html-closing-bracket-newline
+   58:21  warning  Expected 1 line break before closing bracket, but no line breaks found               vue/html-closing-bracket-newline
+   74:66  warning  Expected 1 line break after opening tag (`<el-button>`), but no line breaks found    vue/multiline-html-element-content-newline
+   76:11  warning  Expected 1 line break before closing tag (`</el-button>`), but no line breaks found  vue/multiline-html-element-content-newline
+   89:26  warning  Expected 1 line break before closing bracket, but no line breaks found               vue/html-closing-bracket-newline
+  332:26  error    'pickTicketId' is not defined                                                        no-undef
+  332:70  error    'pickTicketId' is not defined                                                        no-undef
+  333:25  error    'yesNoLabel' is not defined                                                          no-undef
+  334:28  error    'normalizeTime' is not defined                                                       no-undef
+
+D:\01_code\00_technical_architecture_scheme\admin-web\src\views\activity\detail\tabs\checkin.vue
+  12:21  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+  23:40  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+  32:28  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+
+D:\01_code\00_technical_architecture_scheme\admin-web\src\views\activity\detail\tabs\feedback.vue
+   12:21  warning  Expected 1 line break before closing bracket, but no line breaks found               vue/html-closing-bracket-newline
+   25:44  warning  Expected 1 line break before closing bracket, but no line breaks found               vue/html-closing-bracket-newline
+   33:36  warning  Expected 1 line break before closing bracket, but no line breaks found               vue/html-closing-bracket-newline
+   40:37  warning  Expected 1 line break before closing bracket, but no line breaks found               vue/html-closing-bracket-newline
+   47:37  warning  Expected 1 line break before closing bracket, but no line breaks found               vue/html-closing-bracket-newline
+   58:21  warning  Expected 1 line break before closing bracket, but no line breaks found               vue/html-closing-bracket-newline
+   77:66  warning  Expected 1 line break after opening tag (`<el-button>`), but no line breaks found    vue/multiline-html-element-content-newline
+   79:11  warning  Expected 1 line break before closing tag (`</el-button>`), but no line breaks found  vue/multiline-html-element-content-newline
+   90:26  warning  Expected 1 line break before closing bracket, but no line breaks found               vue/html-closing-bracket-newline
+  280:30  error    'satisfactionLabel' is not defined                                                   no-undef
+  281:25  error    'yesNoLabel' is not defined                                                          no-undef
+  282:28  error    'normalizeTime' is not defined                                                       no-undef
+
+D:\01_code\00_technical_architecture_scheme\admin-web\src\views\activity\detail\tabs\program-cards.vue
+   11:16  warning  Expected 1 line break before closing bracket, but no line breaks found                   vue/html-closing-bracket-newline
+   22:1   warning  Expected indentation of 18 spaces but found 16 spaces                                    vue/html-indent
+   24:58  warning  Expected 1 line break before closing bracket, but no line breaks found                   vue/html-closing-bracket-newline
+   33:59  warning  Expected 1 line break before closing bracket, but no line breaks found                   vue/html-closing-bracket-newline
+   48:50  warning  Expected 1 line break before closing bracket, but no line breaks found                   vue/html-closing-bracket-newline
+   52:86  warning  Expected 1 line break before closing bracket, but no line breaks found                   vue/html-closing-bracket-newline
+   63:49  warning  Expected 1 line break before closing bracket, but no line breaks found                   vue/html-closing-bracket-newline
+   70:50  warning  Expected 1 line break before closing bracket, but no line breaks found                   vue/html-closing-bracket-newline
+   77:50  warning  Expected 1 line break before closing bracket, but no line breaks found                   vue/html-closing-bracket-newline
+   83:75  warning  Expected 1 line break before closing bracket, but no line breaks found                   vue/html-closing-bracket-newline
+   91:50  warning  Expected 1 line break before closing bracket, but no line breaks found                   vue/html-closing-bracket-newline
+  107:33  warning  Expected 1 line break before closing bracket, but no line breaks found                   vue/html-closing-bracket-newline
+  112:50  warning  Expected 1 line break before closing bracket, but no line breaks found                   vue/html-closing-bracket-newline
+  118:54  warning  Expected 1 line break before closing bracket, but no line breaks found                   vue/html-closing-bracket-newline
+  126:39  warning  Expected 1 line break before closing bracket, but no line breaks found                   vue/html-closing-bracket-newline
+  145:51  warning  Expected 1 line break before closing bracket, but no line breaks found                   vue/html-closing-bracket-newline
+  151:60  warning  Expected 1 line break before closing bracket, but no line breaks found                   vue/html-closing-bracket-newline
+  163:61  warning  Expected 1 line break before closing bracket, but no line breaks found                   vue/html-closing-bracket-newline
+  220:7   error    'cardSubtitle' is assigned a value but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+D:\01_code\00_technical_architecture_scheme\admin-web\src\views\activity\detail\tabs\questionnaire-content.vue
+   5:62  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+  17:42  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+  24:35  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+  33:56  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+  37:1   warning  Expected indentation of 18 spaces but found 20 spaces                   vue/html-indent
+  38:1   warning  Expected indentation of 16 spaces but found 18 spaces                   vue/html-indent
+  49:20  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+  56:69  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+
+D:\01_code\00_technical_architecture_scheme\admin-web\src\views\activity\detail\tabs\registration.vue
+  12:21  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+  25:44  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+  40:28  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+
+D:\01_code\00_technical_architecture_scheme\admin-web\src\views\activity\detail\tabs\vote-info.vue
+  12:21  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+  24:44  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+  39:28  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+
+D:\01_code\00_technical_architecture_scheme\admin-web\src\views\activity\detail\tabs\winner.vue
+  11:8   warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+  25:21  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+  38:44  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+  53:28  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+
+D:\01_code\00_technical_architecture_scheme\admin-web\src\views\activity\detail\use-activity-detail-page.ts
+  10:15  error  'Translate' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+D:\01_code\00_technical_architecture_scheme\admin-web\src\views\activity\email-school\components\form-dialog.vue
+  9:23  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+
+D:\01_code\00_technical_architecture_scheme\admin-web\src\views\activity\email-school\list.vue
+  21:21  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+  34:44  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+  41:34  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+
+D:\01_code\00_technical_architecture_scheme\admin-web\src\views\activity\list\list.vue
+  11:89  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+  25:21  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+  38:44  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+  44:57  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+  51:56  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+  58:39  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+  65:54  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+  72:32  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+  80:31  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+
+D:\01_code\00_technical_architecture_scheme\admin-web\src\views\activity\parent-student\list.vue
+  19:21  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+  49:59  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+  62:59  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+
+D:\01_code\00_technical_architecture_scheme\admin-web\src\views\activity\prize\components\prize-form-dialog.vue
+   9:23  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+  17:47  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+  23:46  warning  Disallow self-closing on HTML void elements (<img/>)                    vue/html-self-closing
+
+D:\01_code\00_technical_architecture_scheme\admin-web\src\views\activity\prize\list.vue
+  21:21  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+  34:44  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+  41:34  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+
+D:\01_code\00_technical_architecture_scheme\admin-web\src\views\activity\program\components\program-copy-dialog.vue
+  9:23  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+
+D:\01_code\00_technical_architecture_scheme\admin-web\src\views\activity\program\edit\index.vue
+  19:26  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+  32:29  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+  40:51  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+  44:55  warning  Disallow self-closing on HTML void elements (<img/>)                    vue/html-self-closing
+  53:55  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+  65:50  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+
+D:\01_code\00_technical_architecture_scheme\admin-web\src\views\activity\program\list.vue
+  21:21  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+  34:44  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+  40:28  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+  48:31  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+
+D:\01_code\00_technical_architecture_scheme\admin-web\src\views\activity\questionnaire\components\batch-flag-dialog.vue
+   9:23  warning  Expected 1 line break before closing bracket, but no line breaks found               vue/html-closing-bracket-newline
+  18:27  warning  Expected 1 line break before closing bracket, but no line breaks found               vue/html-closing-bracket-newline
+  21:67  warning  Expected 1 line break after opening tag (`<el-button>`), but no line breaks found    vue/multiline-html-element-content-newline
+  23:9   warning  Expected 1 line break before closing tag (`</el-button>`), but no line breaks found  vue/multiline-html-element-content-newline
+
+D:\01_code\00_technical_architecture_scheme\admin-web\src\views\activity\questionnaire\components\copy-dialog.vue
+   9:23  warning  Expected 1 line break before closing bracket, but no line breaks found               vue/html-closing-bracket-newline
+  13:67  warning  Expected 1 line break after opening tag (`<el-button>`), but no line breaks found    vue/multiline-html-element-content-newline
+  15:9   warning  Expected 1 line break before closing tag (`</el-button>`), but no line breaks found  vue/multiline-html-element-content-newline
+
+D:\01_code\00_technical_architecture_scheme\admin-web\src\views\activity\questionnaire\components\meta-form-dialog.vue
+    9:23  warning  Expected 1 line break before closing bracket, but no line breaks found               vue/html-closing-bracket-newline
+   18:27  warning  Expected 1 line break before closing bracket, but no line breaks found               vue/html-closing-bracket-newline
+   21:67  warning  Expected 1 line break after opening tag (`<el-button>`), but no line breaks found    vue/multiline-html-element-content-newline
+   23:9   warning  Expected 1 line break before closing tag (`</el-button>`), but no line breaks found  vue/multiline-html-element-content-newline
+  161:39  error    'UniOption' is not defined                                                           no-undef
+
+D:\01_code\00_technical_architecture_scheme\admin-web\src\views\activity\questionnaire\components\questionnaire-builder.vue
+   20:32  warning  Expected 1 line break before closing bracket, but no line breaks found                           vue/html-closing-bracket-newline
+   41:57  warning  Expected 1 line break before closing bracket, but no line breaks found                           vue/html-closing-bracket-newline
+   51:24  warning  Expected 1 line break before closing bracket, but no line breaks found                           vue/html-closing-bracket-newline
+   63:66  warning  Expected 1 line break before closing bracket, but no line breaks found                           vue/html-closing-bracket-newline
+   69:34  warning  Expected 1 line break before closing bracket, but no line breaks found                           vue/html-closing-bracket-newline
+   81:43  warning  Expected 1 line break before closing bracket, but no line breaks found                           vue/html-closing-bracket-newline
+   90:48  warning  Expected 1 line break before closing bracket, but no line breaks found                           vue/html-closing-bracket-newline
+   95:75  warning  Expected 1 line break before closing bracket, but no line breaks found                           vue/html-closing-bracket-newline
+  100:63  error    Expected 'v-bind:key' directive to use the variables which are defined by the 'v-for' directive  vue/valid-v-for
+  110:43  warning  Expected 1 line break before closing bracket, but no line breaks found                           vue/html-closing-bracket-newline
+  127:43  warning  Expected 1 line break before closing bracket, but no line breaks found                           vue/html-closing-bracket-newline
+  143:64  warning  Expected 1 line break before closing bracket, but no line breaks found                           vue/html-closing-bracket-newline
+  164:45  warning  Expected 1 line break before closing bracket, but no line breaks found                           vue/html-closing-bracket-newline
+  169:64  warning  Expected 1 line break before closing bracket, but no line breaks found                           vue/html-closing-bracket-newline
+  198:56  warning  Expected 1 line break before closing bracket, but no line breaks found                           vue/html-closing-bracket-newline
+  207:40  warning  Expected 1 line break before closing bracket, but no line breaks found                           vue/html-closing-bracket-newline
+  228:79  warning  Expected 1 line break before closing bracket, but no line breaks found                           vue/html-closing-bracket-newline
+  231:67  warning  Expected 1 line break before closing bracket, but no line breaks found                           vue/html-closing-bracket-newline
+  265:68  warning  Expected 1 line break before closing bracket, but no line breaks found                           vue/html-closing-bracket-newline
+  272:64  warning  Expected 1 line break before closing bracket, but no line breaks found                           vue/html-closing-bracket-newline
+  283:41  warning  Expected 1 line break before closing bracket, but no line breaks found                           vue/html-closing-bracket-newline
+  317:46  warning  Expected 1 line break before closing bracket, but no line breaks found                           vue/html-closing-bracket-newline
+  324:1   warning  Expected indentation of 26 spaces but found 24 spaces                                            vue/html-indent
+  325:1   warning  Expected indentation of 26 spaces but found 24 spaces                                            vue/html-indent
+  326:24  warning  Expected 1 line break before closing bracket, but no line breaks found                           vue/html-closing-bracket-newline
+  329:68  warning  Expected 1 line break before closing bracket, but no line breaks found                           vue/html-closing-bracket-newline
+  341:56  warning  Expected 1 line break before closing bracket, but no line breaks found                           vue/html-closing-bracket-newline
+  346:52  warning  Expected 1 line break before closing bracket, but no line breaks found                           vue/html-closing-bracket-newline
+  350:70  warning  Expected 1 line break before closing bracket, but no line breaks found                           vue/html-closing-bracket-newline
+  354:74  warning  Expected 1 line break before closing bracket, but no line breaks found                           vue/html-closing-bracket-newline
+  358:61  warning  Expected 1 line break before closing bracket, but no line breaks found                           vue/html-closing-bracket-newline
+  366:56  warning  Expected 1 line break before closing bracket, but no line breaks found                           vue/html-closing-bracket-newline
+  374:70  warning  Expected 1 line break before closing bracket, but no line breaks found                           vue/html-closing-bracket-newline
+  378:74  warning  Expected 1 line break before closing bracket, but no line breaks found                           vue/html-closing-bracket-newline
+  383:89  warning  Expected 1 line break before closing bracket, but no line breaks found                           vue/html-closing-bracket-newline
+  391:56  warning  Expected 1 line break before closing bracket, but no line breaks found                           vue/html-closing-bracket-newline
+  401:48  warning  Expected 1 line break before closing bracket, but no line breaks found                           vue/html-closing-bracket-newline
+  413:43  warning  Expected 1 line break before closing bracket, but no line breaks found                           vue/html-closing-bracket-newline
+  424:42  warning  Expected 1 line break before closing bracket, but no line breaks found                           vue/html-closing-bracket-newline
+
+D:\01_code\00_technical_architecture_scheme\admin-web\src\views\activity\questionnaire\components\use-questionnaire-builder.ts
+  5:3  error  'DesignerFieldRaw' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+D:\01_code\00_technical_architecture_scheme\admin-web\src\views\activity\questionnaire\edit.vue
+   10:73  warning  Expected 1 line break after opening tag (`<el-button>`), but no line breaks found    vue/multiline-html-element-content-newline
+   12:13  warning  Expected 1 line break before closing tag (`</el-button>`), but no line breaks found  vue/multiline-html-element-content-newline
+   16:34  warning  Expected 1 line break before closing bracket, but no line breaks found               vue/html-closing-bracket-newline
+   19:71  warning  Expected 1 line break after opening tag (`<el-button>`), but no line breaks found    vue/multiline-html-element-content-newline
+   21:13  warning  Expected 1 line break before closing tag (`</el-button>`), but no line breaks found  vue/multiline-html-element-content-newline
+   22:85  warning  Expected 1 line break after opening tag (`<el-button>`), but no line breaks found    vue/multiline-html-element-content-newline
+   24:13  warning  Expected 1 line break before closing tag (`</el-button>`), but no line breaks found  vue/multiline-html-element-content-newline
+   32:35  warning  Expected 1 line break before closing bracket, but no line breaks found               vue/html-closing-bracket-newline
+   80:31  warning  Expected 1 line break before closing bracket, but no line breaks found               vue/html-closing-bracket-newline
+  108:15  error    'UniOption' is defined but never used. Allowed unused vars must match /^_/u          @typescript-eslint/no-unused-vars
+  109:10  error    'toUniOptions' is defined but never used. Allowed unused vars must match /^_/u       @typescript-eslint/no-unused-vars
+
+D:\01_code\00_technical_architecture_scheme\admin-web\src\views\activity\questionnaire\list.vue
+  21:21  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+  34:44  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+  40:35  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+  47:57  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+  55:34  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+
+D:\01_code\00_technical_architecture_scheme\admin-web\src\views\activity\questionnaire\submissions.vue
+  12:64  warning  Expected 1 line break after opening tag (`<el-button>`), but no line breaks found    vue/multiline-html-element-content-newline
+  14:11  warning  Expected 1 line break before closing tag (`</el-button>`), but no line breaks found  vue/multiline-html-element-content-newline
+  29:40  warning  Expected 1 line break before closing bracket, but no line breaks found               vue/html-closing-bracket-newline
+  35:54  warning  Expected 1 line break before closing bracket, but no line breaks found               vue/html-closing-bracket-newline
+  39:1   warning  Expected indentation of 16 spaces but found 18 spaces                                vue/html-indent
+  40:1   warning  Expected indentation of 14 spaces but found 16 spaces                                vue/html-indent
+  50:20  warning  Expected 1 line break before closing bracket, but no line breaks found               vue/html-closing-bracket-newline
+  58:69  warning  Expected 1 line break before closing bracket, but no line breaks found               vue/html-closing-bracket-newline
+
+D:\01_code\00_technical_architecture_scheme\admin-web\src\views\activity\vote-program\components\form-dialog.vue
+   9:23  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+  15:27  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+
+D:\01_code\00_technical_architecture_scheme\admin-web\src\views\activity\vote-program\list.vue
+  21:21  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+  34:44  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+  41:34  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+
+D:\01_code\00_technical_architecture_scheme\admin-web\src\views\activity\wechat-school\components\form-dialog.vue
+  9:23  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+
+D:\01_code\00_technical_architecture_scheme\admin-web\src\views\activity\wechat-school\list.vue
+  21:21  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+  34:44  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+  41:34  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+
+D:\01_code\00_technical_architecture_scheme\admin-web\src\views\attendance\access\list.vue
+  19:21  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+  32:49  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+
+D:\01_code\00_technical_architecture_scheme\admin-web\src\views\attendance\config\components\config-form-dialog.vue
+   7:23  warning  Expected 1 line break before closing bracket, but no line breaks found               vue/html-closing-bracket-newline
+  11:71  warning  Expected 1 line break after opening tag (`<el-button>`), but no line breaks found    vue/multiline-html-element-content-newline
+  13:9   warning  Expected 1 line break before closing tag (`</el-button>`), but no line breaks found  vue/multiline-html-element-content-newline
+
+D:\01_code\00_technical_architecture_scheme\admin-web\src\views\attendance\config\list.vue
+  22:21  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+  35:49  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+  48:31  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+
+D:\01_code\00_technical_architecture_scheme\admin-web\src\views\attendance\daily\list.vue
+  22:21  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+  33:49  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+
+D:\01_code\00_technical_architecture_scheme\admin-web\src\views\attendance\flow\components\flow-def-panel.vue
+  12:21  warning  Expected 1 line break before closing bracket, but no line breaks found                   vue/html-closing-bracket-newline
+  24:49  warning  Expected 1 line break before closing bracket, but no line breaks found                   vue/html-closing-bracket-newline
+  39:3   error    'UniTableRequestResult' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+D:\01_code\00_technical_architecture_scheme\admin-web\src\views\attendance\flow\components\proc-def-panel.vue
+  14:49  warning  Expected 1 line break before closing bracket, but no line breaks found                   vue/html-closing-bracket-newline
+  19:36  warning  Expected 1 line break before closing bracket, but no line breaks found                   vue/html-closing-bracket-newline
+  27:23  warning  Expected 1 line break before closing bracket, but no line breaks found                   vue/html-closing-bracket-newline
+  28:87  warning  Disallow self-closing on HTML void elements (<img/>)                                     vue/html-self-closing
+  35:23  warning  Expected 1 line break before closing bracket, but no line breaks found                   vue/html-closing-bracket-newline
+  52:3   error    'UniTableRequestResult' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+D:\01_code\00_technical_architecture_scheme\admin-web\src\views\attendance\flow\edit.vue
+  35:22  warning  Expected 1 line break before closing bracket, but no line breaks found               vue/html-closing-bracket-newline
+  38:70  warning  Require self-closing on HTML elements (<div>)                                        vue/html-self-closing
+  39:88  warning  Require self-closing on HTML elements (<aside>)                                      vue/html-self-closing
+  49:23  warning  Expected 1 line break before closing bracket, but no line breaks found               vue/html-closing-bracket-newline
+  55:41  warning  Expected 1 line break before closing bracket, but no line breaks found               vue/html-closing-bracket-newline
+  58:52  warning  Expected 1 line break after opening tag (`<el-button>`), but no line breaks found    vue/multiline-html-element-content-newline
+  60:11  warning  Expected 1 line break before closing tag (`</el-button>`), but no line breaks found  vue/multiline-html-element-content-newline
+  68:23  warning  Expected 1 line break before closing bracket, but no line breaks found               vue/html-closing-bracket-newline
+  73:68  warning  Expected 1 line break before closing bracket, but no line breaks found               vue/html-closing-bracket-newline
+
+D:\01_code\00_technical_architecture_scheme\admin-web\src\views\attendance\flow\list.vue
+  11:78  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+
+D:\01_code\00_technical_architecture_scheme\admin-web\src\views\attendance\holiday\components\detail-drawer.vue
+   7:21  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+  11:51  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+
+D:\01_code\00_technical_architecture_scheme\admin-web\src\views\attendance\holiday\components\holiday-form-drawer.vue
+    9:23  warning  Expected 1 line break before closing bracket, but no line breaks found                 vue/html-closing-bracket-newline
+   15:40  warning  Expected 1 line break before closing bracket, but no line breaks found                 vue/html-closing-bracket-newline
+   25:34  warning  Expected 1 line break before closing bracket, but no line breaks found                 vue/html-closing-bracket-newline
+   28:74  warning  Expected no line breaks before closing bracket, but 1 line break found                 vue/html-closing-bracket-newline
+   32:69  warning  Expected no line breaks before closing bracket, but 1 line break found                 vue/html-closing-bracket-newline
+   36:68  warning  Expected no line breaks before closing bracket, but 1 line break found                 vue/html-closing-bracket-newline
+   40:72  warning  Expected no line breaks before closing bracket, but 1 line break found                 vue/html-closing-bracket-newline
+   62:30  warning  Expected 1 line break before closing bracket, but no line breaks found                 vue/html-closing-bracket-newline
+   72:30  warning  Expected 1 line break before closing bracket, but no line breaks found                 vue/html-closing-bracket-newline
+   76:78  warning  Expected 1 line break after opening tag (`<el-checkbox>`), but no line breaks found    vue/multiline-html-element-content-newline
+   78:13  warning  Expected 1 line break before closing tag (`</el-checkbox>`), but no line breaks found  vue/multiline-html-element-content-newline
+   90:30  warning  Expected 1 line break before closing bracket, but no line breaks found                 vue/html-closing-bracket-newline
+   99:34  warning  Expected 1 line break before closing bracket, but no line breaks found                 vue/html-closing-bracket-newline
+  118:75  warning  Disallow self-closing on HTML void elements (<img/>)                                   vue/html-self-closing
+
+D:\01_code\00_technical_architecture_scheme\admin-web\src\views\attendance\holiday\tab.vue
+   9:67  warning  Expected 1 line break after opening tag (`<el-button>`), but no line breaks found    vue/multiline-html-element-content-newline
+  11:11  warning  Expected 1 line break before closing tag (`</el-button>`), but no line breaks found  vue/multiline-html-element-content-newline
+  26:36  warning  Expected 1 line break before closing bracket, but no line breaks found               vue/html-closing-bracket-newline
+  38:58  warning  Expected 1 line break before closing bracket, but no line breaks found               vue/html-closing-bracket-newline
+  43:45  warning  Expected 1 line break before closing bracket, but no line breaks found               vue/html-closing-bracket-newline
+  58:37  warning  Expected 1 line break before closing bracket, but no line breaks found               vue/html-closing-bracket-newline
+  70:59  warning  Expected 1 line break before closing bracket, but no line breaks found               vue/html-closing-bracket-newline
+  75:46  warning  Expected 1 line break before closing bracket, but no line breaks found               vue/html-closing-bracket-newline
+  87:36  warning  Expected 1 line break before closing bracket, but no line breaks found               vue/html-closing-bracket-newline
+  93:37  warning  Expected 1 line break before closing bracket, but no line breaks found               vue/html-closing-bracket-newline
+
+D:\01_code\00_technical_architecture_scheme\admin-web\src\views\attendance\pass\components\pass-form-dialog.vue
+   8:22  warning  Expected 1 line break before closing bracket, but no line breaks found               vue/html-closing-bracket-newline
+  15:22  warning  Expected 1 line break before closing bracket, but no line breaks found               vue/html-closing-bracket-newline
+  21:40  warning  Expected 1 line break after opening tag (`<template>`), but no line breaks found     vue/multiline-html-element-content-newline
+  23:13  warning  Expected 1 line break before closing tag (`</template>`), but no line breaks found   vue/multiline-html-element-content-newline
+  33:31  warning  Expected 1 line break before closing bracket, but no line breaks found               vue/html-closing-bracket-newline
+  45:36  warning  Expected 1 line break before closing bracket, but no line breaks found               vue/html-closing-bracket-newline
+  58:62  warning  Expected 1 line break before closing bracket, but no line breaks found               vue/html-closing-bracket-newline
+  64:68  warning  Expected 1 line break after opening tag (`<el-button>`), but no line breaks found    vue/multiline-html-element-content-newline
+  66:9   warning  Expected 1 line break before closing tag (`</el-button>`), but no line breaks found  vue/multiline-html-element-content-newline
+
+D:\01_code\00_technical_architecture_scheme\admin-web\src\views\attendance\pass\list.vue
+  24:21  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+  39:44  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+  44:29  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+  51:31  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+  65:30  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+
+D:\01_code\00_technical_architecture_scheme\admin-web\src\views\attendance\school\list.vue
+  24:21  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+  37:49  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+
+D:\01_code\00_technical_architecture_scheme\admin-web\src\views\attendance\student\list.vue
+  24:21  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+  37:49  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+
+D:\01_code\00_technical_architecture_scheme\admin-web\src\views\attendance\task\history-panel.vue
+  14:49  warning  Expected 1 line break before closing bracket, but no line breaks found                   vue/html-closing-bracket-newline
+  19:36  warning  Expected 1 line break before closing bracket, but no line breaks found                   vue/html-closing-bracket-newline
+  27:23  warning  Expected 1 line break before closing bracket, but no line breaks found                   vue/html-closing-bracket-newline
+  28:73  warning  Disallow self-closing on HTML void elements (<img/>)                                     vue/html-self-closing
+  34:51  warning  Expected 1 line break before closing bracket, but no line breaks found                   vue/html-closing-bracket-newline
+  45:3   error    'UniTableRequestResult' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+D:\01_code\00_technical_architecture_scheme\admin-web\src\views\attendance\task\todo-panel.vue
+   14:49  warning  Expected 1 line break before closing bracket, but no line breaks found                   vue/html-closing-bracket-newline
+   19:36  warning  Expected 1 line break before closing bracket, but no line breaks found                   vue/html-closing-bracket-newline
+   27:23  warning  Expected 1 line break before closing bracket, but no line breaks found                   vue/html-closing-bracket-newline
+   30:62  warning  Expected no line breaks before closing bracket, but 1 line break found                   vue/html-closing-bracket-newline
+   46:74  warning  Expected no line breaks before closing bracket, but 1 line break found                   vue/html-closing-bracket-newline
+   65:45  warning  Expected 1 line break before closing bracket, but no line breaks found                   vue/html-closing-bracket-newline
+   72:32  warning  Expected 1 line break before closing bracket, but no line breaks found                   vue/html-closing-bracket-newline
+   78:66  warning  Expected 1 line break before closing bracket, but no line breaks found                   vue/html-closing-bracket-newline
+   82:72  warning  Expected 1 line break after opening tag (`<el-button>`), but no line breaks found        vue/multiline-html-element-content-newline
+   84:11  warning  Expected 1 line break before closing tag (`</el-button>`), but no line breaks found      vue/multiline-html-element-content-newline
+   85:74  warning  Expected 1 line break after opening tag (`<el-button>`), but no line breaks found        vue/multiline-html-element-content-newline
+   87:11  warning  Expected 1 line break before closing tag (`</el-button>`), but no line breaks found      vue/multiline-html-element-content-newline
+   95:23  warning  Expected 1 line break before closing bracket, but no line breaks found                   vue/html-closing-bracket-newline
+   96:73  warning  Disallow self-closing on HTML void elements (<img/>)                                     vue/html-self-closing
+  103:32  warning  Expected 1 line break before closing bracket, but no line breaks found                   vue/html-closing-bracket-newline
+  114:3   error    'UniTableRequestResult' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+D:\01_code\00_technical_architecture_scheme\admin-web\src\views\attendance\wechat-notice\list.vue
+  19:21  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+  32:49  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+
+D:\01_code\00_technical_architecture_scheme\admin-web\src\views\attendance\wechat\list.vue
+  19:21  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+  34:49  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+  39:34  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+  45:34  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+
+D:\01_code\00_technical_architecture_scheme\admin-web\src\views\base\components\dict.vue
+  22:21  warning  Expected 1 line break before closing bracket, but no line breaks found                   vue/html-closing-bracket-newline
+  36:38  warning  Expected 1 line break before closing bracket, but no line breaks found                   vue/html-closing-bracket-newline
+  46:20  warning  Expected 1 line break before closing bracket, but no line breaks found                   vue/html-closing-bracket-newline
+  58:20  warning  Expected 1 line break before closing bracket, but no line breaks found                   vue/html-closing-bracket-newline
+  70:20  warning  Expected 1 line break before closing bracket, but no line breaks found                   vue/html-closing-bracket-newline
+  78:89  warning  Expected 1 line break before closing bracket, but no line breaks found                   vue/html-closing-bracket-newline
+  95:60  error    'UniTableRequestResult' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+D:\01_code\00_technical_architecture_scheme\admin-web\src\views\dashboard\components\dashboard-chart-panels.vue
+  180:60  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+  188:54  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+  196:52  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+  206:57  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+  213:56  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+
+D:\01_code\00_technical_architecture_scheme\admin-web\src\views\dashboard\index.vue
+  16:27  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+  25:16  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+  93:28  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+
+D:\01_code\00_technical_architecture_scheme\admin-web\src\views\email\group\components\group-dialog.vue
+    9:19  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+   52:82  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+   57:52  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+   64:43  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+   69:37  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+   83:31  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+   87:32  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+   91:28  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+   95:32  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+  117:61  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+  122:52  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+  132:52  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+  137:46  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+  145:52  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+  154:52  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+  161:52  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+  169:52  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+  179:88  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+  206:37  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+
+D:\01_code\00_technical_architecture_scheme\admin-web\src\views\email\group\list.vue
+  22:21  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+  37:44  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+  42:34  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+  48:34  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+  55:35  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+  68:37  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+
+D:\01_code\00_technical_architecture_scheme\admin-web\src\views\email\outbox\components\outbox-compose-drawer.vue
+  10:29  warning  Expected 1 line break before closing bracket, but no line breaks found               vue/html-closing-bracket-newline
+  17:36  warning  Expected 1 line break before closing bracket, but no line breaks found               vue/html-closing-bracket-newline
+  23:44  warning  Expected 1 line break before closing bracket, but no line breaks found               vue/html-closing-bracket-newline
+  30:63  warning  Expected 1 line break after opening tag (`<el-button>`), but no line breaks found    vue/multiline-html-element-content-newline
+  32:11  warning  Expected 1 line break before closing tag (`</el-button>`), but no line breaks found  vue/multiline-html-element-content-newline
+
+D:\01_code\00_technical_architecture_scheme\admin-web\src\views\email\outbox\tab.vue
+  24:35  warning  Expected 1 line break before closing bracket, but no line breaks found                   vue/html-closing-bracket-newline
+  36:57  warning  Expected 1 line break before closing bracket, but no line breaks found                   vue/html-closing-bracket-newline
+  41:44  warning  Expected 1 line break before closing bracket, but no line breaks found                   vue/html-closing-bracket-newline
+  56:36  warning  Expected 1 line break before closing bracket, but no line breaks found                   vue/html-closing-bracket-newline
+  68:58  warning  Expected 1 line break before closing bracket, but no line breaks found                   vue/html-closing-bracket-newline
+  73:45  warning  Expected 1 line break before closing bracket, but no line breaks found                   vue/html-closing-bracket-newline
+  86:66  warning  Expected 1 line break before closing bracket, but no line breaks found                   vue/html-closing-bracket-newline
+  92:37  warning  Expected 1 line break before closing bracket, but no line breaks found                   vue/html-closing-bracket-newline
+  97:15  error    'UniTableRequestResult' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+D:\01_code\00_technical_architecture_scheme\admin-web\src\views\email\send\list.vue
+  22:21  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+  37:44  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+  58:37  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+
+D:\01_code\00_technical_architecture_scheme\admin-web\src\views\login\index.vue
+  5:29  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+
+D:\01_code\00_technical_architecture_scheme\admin-web\src\views\member\student\list.vue
+  19:21  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+  32:49  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+
+D:\01_code\00_technical_architecture_scheme\admin-web\src\views\member\teacher\list.vue
+  19:21  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+  32:49  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+
+D:\01_code\00_technical_architecture_scheme\admin-web\src\views\permission\dept\components\dept-form-dialog.vue
+   6:91  warning  Expected 1 line break before closing bracket, but no line breaks found               vue/html-closing-bracket-newline
+  10:76  warning  Expected 1 line break after opening tag (`<el-button>`), but no line breaks found    vue/multiline-html-element-content-newline
+  12:9   warning  Expected 1 line break before closing tag (`</el-button>`), but no line breaks found  vue/multiline-html-element-content-newline
+
+D:\01_code\00_technical_architecture_scheme\admin-web\src\views\permission\dept\list.vue
+  27:44  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+  35:30  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+
+D:\01_code\00_technical_architecture_scheme\admin-web\src\views\permission\menu\components\edit-dialog.vue
+   6:44  warning  Expected 1 line break before closing bracket, but no line breaks found               vue/html-closing-bracket-newline
+  14:76  warning  Expected 1 line break after opening tag (`<el-button>`), but no line breaks found    vue/multiline-html-element-content-newline
+  16:9   warning  Expected 1 line break before closing tag (`</el-button>`), but no line breaks found  vue/multiline-html-element-content-newline
+
+D:\01_code\00_technical_architecture_scheme\admin-web\src\views\permission\menu\list.config.ts
+  4:3  error  'UniTableActionColumnConfig' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+D:\01_code\00_technical_architecture_scheme\admin-web\src\views\permission\menu\list.vue
+  20:26  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+  47:30  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+
+D:\01_code\00_technical_architecture_scheme\admin-web\src\views\permission\role\components\assign-menu-dialog.vue
+   6:50  warning  Expected 1 line break before closing bracket, but no line breaks found               vue/html-closing-bracket-newline
+  17:44  warning  Expected 1 line break before closing bracket, but no line breaks found               vue/html-closing-bracket-newline
+  21:67  warning  Expected 1 line break after opening tag (`<el-button>`), but no line breaks found    vue/multiline-html-element-content-newline
+  23:9   warning  Expected 1 line break before closing tag (`</el-button>`), but no line breaks found  vue/multiline-html-element-content-newline
+
+D:\01_code\00_technical_architecture_scheme\admin-web\src\views\permission\role\list.vue
+  24:21  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+  37:49  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+  46:28  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+  54:8   warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+  66:61  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+
+D:\01_code\00_technical_architecture_scheme\admin-web\src\views\permission\user\components\form-dialog.vue
+   6:91  warning  Expected 1 line break before closing bracket, but no line breaks found               vue/html-closing-bracket-newline
+  10:67  warning  Expected 1 line break after opening tag (`<el-button>`), but no line breaks found    vue/multiline-html-element-content-newline
+  12:9   warning  Expected 1 line break before closing tag (`</el-button>`), but no line breaks found  vue/multiline-html-element-content-newline
+
+D:\01_code\00_technical_architecture_scheme\admin-web\src\views\permission\user\list.vue
+  24:35  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+  36:25  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+  49:53  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+  63:28  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+
+D:\01_code\00_technical_architecture_scheme\admin-web\src\views\protocol\components\form.vue
+   6:51  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+  17:31  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+
+D:\01_code\00_technical_architecture_scheme\admin-web\src\views\protocol\components\panel.vue
+   6:51  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+  17:30  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+  36:59  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+  41:46  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+
+D:\01_code\00_technical_architecture_scheme\admin-web\src\views\protocol\detail.vue
+  30:59  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+  35:46  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+
+D:\01_code\00_technical_architecture_scheme\admin-web\src\views\protocol\list.vue
+  25:21  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+  41:49  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+  49:25  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+  68:28  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+
+D:\01_code\00_technical_architecture_scheme\admin-web\src\views\school-bus\car\components\form.vue
+   6:51  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+  11:35  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+
+D:\01_code\00_technical_architecture_scheme\admin-web\src\views\school-bus\car\list.vue
+  26:29  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+  26:30  warning  Disallow self-closing on HTML void elements (<input/>)                  vue/html-self-closing
+  37:21  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+  52:49  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+  58:23  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+  75:28  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+
+D:\01_code\00_technical_architecture_scheme\admin-web\src\views\school-bus\driver\components\form.vue
+   6:51  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+  11:35  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+
+D:\01_code\00_technical_architecture_scheme\admin-web\src\views\school-bus\driver\list.vue
+  26:29  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+  26:30  warning  Disallow self-closing on HTML void elements (<input/>)                  vue/html-self-closing
+  37:21  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+  52:49  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+  58:23  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+  74:28  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+
+D:\01_code\00_technical_architecture_scheme\admin-web\src\views\school-bus\follow-teacher\components\form.vue
+   6:51  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+  11:35  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+
+D:\01_code\00_technical_architecture_scheme\admin-web\src\views\school-bus\follow-teacher\list.vue
+  29:29  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+  29:30  warning  Disallow self-closing on HTML void elements (<input/>)                  vue/html-self-closing
+  40:21  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+  55:49  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+  61:31  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+  67:32  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+  74:23  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+  91:28  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+
+D:\01_code\00_technical_architecture_scheme\admin-web\src\views\school-bus\route\exception\components\form.vue
+   6:51  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+  11:35  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+
+D:\01_code\00_technical_architecture_scheme\admin-web\src\views\school-bus\route\exception\list.vue
+  29:29  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+  29:30  warning  Disallow self-closing on HTML void elements (<input/>)                  vue/html-self-closing
+  40:21  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+  55:49  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+  61:23  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+  76:28  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+
+D:\01_code\00_technical_architecture_scheme\admin-web\src\views\school-bus\route\operation\components\form.vue
+   6:51  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+  11:35  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+
+D:\01_code\00_technical_architecture_scheme\admin-web\src\views\school-bus\route\operation\list.vue
+  29:29  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+  29:30  warning  Disallow self-closing on HTML void elements (<input/>)                  vue/html-self-closing
+  40:21  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+  55:49  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+  61:23  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+  78:28  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+
+D:\01_code\00_technical_architecture_scheme\admin-web\src\views\school-bus\route\plan\components\route-form-modal.vue
+   10:32  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+   15:53  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+   22:48  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+   32:55  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+   36:44  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+   48:61  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+   57:1   warning  Expected indentation of 26 spaces but found 28 spaces                   vue/html-indent
+   57:86  warning  Expected no line breaks before closing bracket, but 1 line break found  vue/html-closing-bracket-newline
+   65:72  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+   71:75  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+   76:55  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+   88:88  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+   96:50  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+  102:43  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+  109:94  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+  116:82  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+  131:39  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+  154:38  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+  159:44  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+
+D:\01_code\00_technical_architecture_scheme\admin-web\src\views\school-bus\route\plan\components\station-form-dialog.vue
+   7:32  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+  11:51  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+
+D:\01_code\00_technical_architecture_scheme\admin-web\src\views\school-bus\route\plan\components\term-form-dialog.vue
+   7:29  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+  11:51  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+
+D:\01_code\00_technical_architecture_scheme\admin-web\src\views\school-bus\route\plan\tab.vue
+   23:70  warning  Expected 1 line break before closing bracket, but no line breaks found                   vue/html-closing-bracket-newline
+   37:76  warning  Expected 1 line break before closing bracket, but no line breaks found                   vue/html-closing-bracket-newline
+   48:34  warning  Expected 1 line break before closing bracket, but no line breaks found                   vue/html-closing-bracket-newline
+   48:35  warning  Disallow self-closing on HTML void elements (<input/>)                                   vue/html-self-closing
+   54:36  warning  Expected 1 line break before closing bracket, but no line breaks found                   vue/html-closing-bracket-newline
+   54:37  warning  Disallow self-closing on HTML void elements (<input/>)                                   vue/html-self-closing
+   67:36  warning  Expected 1 line break before closing bracket, but no line breaks found                   vue/html-closing-bracket-newline
+   81:58  warning  Expected 1 line break before closing bracket, but no line breaks found                   vue/html-closing-bracket-newline
+   86:36  warning  Expected 1 line break before closing bracket, but no line breaks found                   vue/html-closing-bracket-newline
+   93:38  warning  Expected 1 line break before closing bracket, but no line breaks found                   vue/html-closing-bracket-newline
+  101:45  warning  Expected 1 line break before closing bracket, but no line breaks found                   vue/html-closing-bracket-newline
+  115:35  warning  Expected 1 line break before closing bracket, but no line breaks found                   vue/html-closing-bracket-newline
+  129:57  warning  Expected 1 line break before closing bracket, but no line breaks found                   vue/html-closing-bracket-newline
+  135:43  warning  Expected 1 line break before closing bracket, but no line breaks found                   vue/html-closing-bracket-newline
+  143:44  warning  Expected 1 line break before closing bracket, but no line breaks found                   vue/html-closing-bracket-newline
+  157:38  warning  Expected 1 line break before closing bracket, but no line breaks found                   vue/html-closing-bracket-newline
+  171:60  warning  Expected 1 line break before closing bracket, but no line breaks found                   vue/html-closing-bracket-newline
+  177:46  warning  Expected 1 line break before closing bracket, but no line breaks found                   vue/html-closing-bracket-newline
+  185:47  warning  Expected 1 line break before closing bracket, but no line breaks found                   vue/html-closing-bracket-newline
+  195:56  warning  Expected 1 line break before closing bracket, but no line breaks found                   vue/html-closing-bracket-newline
+  203:54  warning  Expected 1 line break before closing bracket, but no line breaks found                   vue/html-closing-bracket-newline
+  211:57  warning  Expected 1 line break before closing bracket, but no line breaks found                   vue/html-closing-bracket-newline
+  218:29  warning  Expected 1 line break before closing bracket, but no line breaks found                   vue/html-closing-bracket-newline
+  237:29  warning  Expected 1 line break before closing bracket, but no line breaks found                   vue/html-closing-bracket-newline
+  247:15  error    'UniTableColumn' is defined but never used. Allowed unused vars must match /^_/u         @typescript-eslint/no-unused-vars
+  247:31  error    'UniTableRequestResult' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+D:\01_code\00_technical_architecture_scheme\admin-web\src\views\school-bus\student\apply\list.vue
+   11:45  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+   28:29  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+   28:30  warning  Disallow self-closing on HTML void elements (<input/>)                  vue/html-self-closing
+   35:16  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+   53:21  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+   68:49  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+   73:32  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+   79:30  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+   85:32  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+   92:23  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+  111:28  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+  117:23  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+
+D:\01_code\00_technical_architecture_scheme\admin-web\src\views\school-bus\student\components\bus-order-form-dialog.vue
+   11:23  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+   16:51  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+   22:35  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+   28:47  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+   36:42  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+   43:44  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+   56:51  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+   62:41  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+   69:55  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+   94:34  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+  104:37  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+
+D:\01_code\00_technical_architecture_scheme\admin-web\src\views\school-bus\student\components\bus-order-form-sections\admission-field.vue
+   3:14  error    Unexpected mutation of "ruleForm" prop                                  vue/no-mutating-props
+  12:28  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+
+D:\01_code\00_technical_architecture_scheme\admin-web\src\views\school-bus\student\components\bus-order-form-sections\approval-payment.vue
+   5:74  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+  12:20  error    Unexpected mutation of "ruleForm" prop                                  vue/no-mutating-props
+  14:37  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+  21:20  error    Unexpected mutation of "ruleForm" prop                                  vue/no-mutating-props
+  23:37  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+  35:20  error    Unexpected mutation of "ruleForm" prop                                  vue/no-mutating-props
+  37:36  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+  43:1   warning  Expected indentation of 18 spaces but found 16 spaces                   vue/html-indent
+  44:1   warning  Expected indentation of 18 spaces but found 16 spaces                   vue/html-indent
+  46:24  error    Unexpected mutation of "ruleForm" prop                                  vue/no-mutating-props
+  51:58  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+  56:20  error    Unexpected mutation of "ruleForm" prop                                  vue/no-mutating-props
+  58:36  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+  63:24  error    Unexpected mutation of "ruleForm" prop                                  vue/no-mutating-props
+  68:58  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+
+D:\01_code\00_technical_architecture_scheme\admin-web\src\views\school-bus\student\components\bus-order-form-sections\payment-detail.vue
+   9:20  error    Unexpected mutation of "ruleForm" prop                                  vue/no-mutating-props
+  11:54  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+  16:29  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+  26:20  error    Unexpected mutation of "ruleForm" prop                                  vue/no-mutating-props
+  31:54  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+  39:28  error    Unexpected mutation of "ruleForm" prop                                  vue/no-mutating-props
+  49:28  error    Unexpected mutation of "ruleForm" prop                                  vue/no-mutating-props
+  57:28  error    Unexpected mutation of "ruleForm" prop                                  vue/no-mutating-props
+
+D:\01_code\00_technical_architecture_scheme\admin-web\src\views\school-bus\student\components\bus-order-form-sections\person-dialog.vue
+   8:30  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+  22:33  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+  22:34  warning  Disallow self-closing on HTML void elements (<input/>)                  vue/html-self-closing
+
+D:\01_code\00_technical_architecture_scheme\admin-web\src\views\school-bus\student\components\bus-order-form-sections\person-table.vue
+  13:63  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+  17:22  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+  23:44  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+
+D:\01_code\00_technical_architecture_scheme\admin-web\src\views\school-bus\student\components\bus-order-form-sections\route-dialog.vue
+   8:29  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+  16:35  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+  28:40  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+
+D:\01_code\00_technical_architecture_scheme\admin-web\src\views\school-bus\student\components\bus-order-form-sections\route-table.vue
+   9:30  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+  18:26  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+  22:26  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+  26:22  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+  30:22  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+  34:26  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+  38:22  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+  42:22  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+
+D:\01_code\00_technical_architecture_scheme\admin-web\src\views\school-bus\student\components\bus-order-form-sections\sign-field.vue
+  14:25  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+  21:25  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+  21:26  warning  Disallow self-closing on HTML void elements (<input/>)                  vue/html-self-closing
+
+D:\01_code\00_technical_architecture_scheme\admin-web\src\views\school-bus\student\components\order-detail-dialog.vue
+    7:28  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+   49:20  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+   84:41  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+   94:32  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+   99:32  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+  103:22  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+  107:22  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+  111:22  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+  115:22  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+  119:22  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+  130:28  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+  134:24  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+  140:44  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+
+D:\01_code\00_technical_architecture_scheme\admin-web\src\views\school-bus\student\order\list.vue
+  29:29  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+  29:30  warning  Disallow self-closing on HTML void elements (<input/>)                  vue/html-self-closing
+  36:16  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+  54:21  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+  69:49  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+  75:23  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+  94:28  warning  Expected 1 line break before closing bracket, but no line breaks found  vue/html-closing-bracket-newline
+
+D:\01_code\00_technical_architecture_scheme\admin-web\vitest.config.ts
+  4:25  error  'URL' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+鉁?629 problems (57 errors, 572 warnings)
+  0 errors and 572 warnings potentially fixable with the `--fix` option.
+

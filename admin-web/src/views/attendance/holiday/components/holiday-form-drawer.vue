@@ -73,9 +73,9 @@
       </template>
       <template #field-weekDays>
         <el-checkbox-group v-model="form.weekDays">
-          <el-checkbox v-for="d in weekOpts" :key="d.value" :label="d.value">{{
-            d.label
-          }}</el-checkbox>
+          <el-checkbox v-for="d in weekOpts" :key="d.value" :label="d.value">
+            {{ d.label }}
+          </el-checkbox>
         </el-checkbox-group>
       </template>
       <template #field-dateLimit>

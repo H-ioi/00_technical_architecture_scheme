@@ -74,9 +74,9 @@
         </el-descriptions-item>
       </el-descriptions>
       <template #footer>
-        <el-button type="primary" @click="detailVisible = false">{{
-          $t('common.close')
-        }}</el-button>
+        <el-button type="primary" @click="detailVisible = false">
+          {{ $t('common.close') }}
+        </el-button>
       </template>
     </el-dialog>
 
@@ -277,9 +277,21 @@ const openDetail = async (row: Row) => {
   const raw = await activityApi.feedbackDetail.get(row.id as string | number)
   const data = normalizeEnvelope(raw)
   Object.assign(detail, { ...row, ...data })
-  detail.satisfactionLabel = satisfactionLabel(detail.satisfactionRate)
-  detail.visibleLabel = yesNoLabel(detail.visible)
-  detail.createTimeLabel = normalizeTime(detail.createTime ?? detail.create_time)
+  const satHit = satisfactionOptions.value.find(
+    (item) => String(item.value) === String(detail.satisfactionRate)
+  )
+  detail.satisfactionLabel = satHit?.label ?? ''
+  detail.visibleLabel =
+    String(detail.visible) === '1' || detail.visible === true
+      ? tr('activity.yes')
+      : tr('activity.no')
+  const timeRaw = detail.createTime ?? detail.create_time
+  if (timeRaw == null || timeRaw === '') {
+    detail.createTimeLabel = ''
+  } else {
+    const d = dayjs(String(timeRaw))
+    detail.createTimeLabel = d.isValid() ? d.format('YYYY-MM-DD HH:mm') : String(timeRaw)
+  }
   detailVisible.value = true
 }
 

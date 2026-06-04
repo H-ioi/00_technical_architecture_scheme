@@ -96,7 +96,7 @@
 import TeacherForm from './components/form.vue'
 import { searchForm, statusOpts, tableCols } from './list.config'
 import { schoolBusFollowTeacherApi, membershipApi } from '@/api'
-import ListTableEmpty from '@/components/list-table-empty.vue'
+import ListTableEmpty from '@/components/list-table-empty/index.vue'
 import { useListTableEmpty } from '@/composables/use-list-table-empty'
 import type { SchoolOptionRecord } from '@/types/modules/membership'
 import type {
@@ -106,7 +106,6 @@ import type {
 import { normalizeArray, normalizePaged } from '@/utils/api-response-normalize'
 import { downloadBlob } from '@/utils/download'
 import { membershipSchoolLabel, membershipSchoolToOptions } from '@/utils/membership-school'
-import { isSpreadsheetFilename } from '@/utils/school-bus'
 import dayjs from 'dayjs'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { useUniI18n, useUniListState } from 'uni-ui-lib'
@@ -219,7 +218,8 @@ const onImportFile = async (e: Event) => {
   if (!file) {
     return
   }
-  if (!isSpreadsheetFilename(file.name)) {
+  const importExt = file.name.toLowerCase()
+  if (!importExt.endsWith('.xls') && !importExt.endsWith('.xlsx')) {
     ElMessage.warning(t('schoolBus.importInvalidType'))
     return
   }

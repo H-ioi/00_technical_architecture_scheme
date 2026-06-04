@@ -38,16 +38,11 @@
 </template>
 
 <script setup lang="ts">
-import type {
-  UniTableAction,
-  UniTableColumn,
-  UniTableRequest,
-  UniTableRequestResult
-} from 'uni-ui-lib'
+import type { UniTableAction, UniTableColumn, UniTableRequest } from 'uni-ui-lib'
 import { UniDataTable, useUniI18n, useUniListState } from 'uni-ui-lib'
 import { computed, ref } from 'vue'
 
-import ListTableEmpty from '@/components/list-table-empty.vue'
+import ListTableEmpty from '@/components/list-table-empty/index.vue'
 import { useListTableEmpty } from '@/composables/use-list-table-empty'
 import { attendanceHolidayApi } from '@/api'
 import { normalizePaged } from '@/utils/api-response-normalize'

@@ -5,7 +5,6 @@ import { formatOptionLabels, formatRangeLabel } from '@/utils/form-display'
 
 const fullCol = { span: 24 }
 const halfCol = { xs: 24, lg: 12 }
-const thirdCol = { xs: 24, sm: 12, lg: 8 }
 
 /** 是/否字段：与表单 model 中 `'0'` / `'1'` 字符串一致，避免 Switch 与 boolean 比较触发误改值 */
 const ynSwitchProps = (t: Translate) => ({
@@ -55,7 +54,6 @@ export function buildActivityDetailFormConfig(
     ynOptions,
     statusOptions,
     checkinOptions,
-    visibleScopeOptions,
     showActivityStatus
   } = opts
 

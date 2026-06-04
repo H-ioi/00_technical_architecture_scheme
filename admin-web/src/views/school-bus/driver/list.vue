@@ -79,7 +79,7 @@
 import DriverForm from './components/form.vue'
 import { searchForm, statusOpts, tableCols } from './list.config'
 import { schoolBusDriverApi, membershipApi } from '@/api'
-import ListTableEmpty from '@/components/list-table-empty.vue'
+import ListTableEmpty from '@/components/list-table-empty/index.vue'
 import { useListTableEmpty } from '@/composables/use-list-table-empty'
 import type { SchoolOptionRecord } from '@/types/modules/membership'
 import type {
@@ -87,7 +87,6 @@ import type {
   DriverRecord as Row
 } from '@/types/modules/school-bus-driver'
 import { normalizeArray, normalizePaged } from '@/utils/api-response-normalize'
-import { isSpreadsheetFilename } from '@/utils/school-bus'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { useUniI18n, toUniOptions, useUniListState } from 'uni-ui-lib'
 import type { UniTableAction, UniTableRequest } from 'uni-ui-lib'
@@ -199,7 +198,8 @@ const onImportFile = async (e: Event) => {
     return
   }
 
-  if (!isSpreadsheetFilename(file.name)) {
+  const importExt = file.name.toLowerCase()
+  if (!importExt.endsWith('.xls') && !importExt.endsWith('.xlsx')) {
     ElMessage.warning(t('schoolBus.importInvalidType'))
     return
   }

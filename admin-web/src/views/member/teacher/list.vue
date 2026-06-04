@@ -43,7 +43,7 @@
 import MDetail from '../components/detail.vue'
 import { detailForm, roleOpts, searchForm, statusOpts, tableCols } from './list.config'
 import { membershipApi, teacherApi } from '@/api'
-import ListTableEmpty from '@/components/list-table-empty.vue'
+import ListTableEmpty from '@/components/list-table-empty/index.vue'
 import { useListTableEmpty } from '@/composables/use-list-table-empty'
 import type { TeacherRecord as Row } from '@/types/modules/member-teacher'
 import type { UniOption, UniTableAction, UniTableRequest } from 'uni-ui-lib'

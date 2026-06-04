@@ -41,7 +41,7 @@
 <script setup lang="ts">
 import { dailyStatusOpts, dataFromOpts, searchForm, tableCols, ynOpts } from './list.config'
 import { attendanceDailyApi } from '@/api'
-import ListTableEmpty from '@/components/list-table-empty.vue'
+import ListTableEmpty from '@/components/list-table-empty/index.vue'
 import { useListTableEmpty } from '@/composables/use-list-table-empty'
 import type {
   AttendanceDailyListParams,

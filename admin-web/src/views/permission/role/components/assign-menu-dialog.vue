@@ -18,9 +18,9 @@
     </div>
     <template #footer>
       <el-button @click="visible = false">{{ t('permission.cancel') }}</el-button>
-      <el-button type="primary" :loading="saving" @click="submit">{{
-        t('permission.save')
-      }}</el-button>
+      <el-button type="primary" :loading="saving" @click="submit">
+        {{ t('permission.save') }}
+      </el-button>
     </template>
   </el-dialog>
 </template>

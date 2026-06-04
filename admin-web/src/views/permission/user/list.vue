@@ -68,7 +68,7 @@
 import UserFormDialog from './components/form-dialog.vue'
 import { lockOpts, searchForm, tableCols } from './list.config'
 import { permissionDeptApi, permissionRoleApi, permissionUserApi } from '@/api'
-import ListTableEmpty from '@/components/list-table-empty.vue'
+import ListTableEmpty from '@/components/list-table-empty/index.vue'
 import { useListTableEmpty } from '@/composables/use-list-table-empty'
 import type { PermissionDeptRecord } from '@/types/modules/permission-dept'
 import type { PermissionUserRecord } from '@/types/modules/permission-user'

@@ -71,9 +71,9 @@
         </el-descriptions-item>
       </el-descriptions>
       <template #footer>
-        <el-button type="primary" @click="detailVisible = false">{{
-          $t('common.close')
-        }}</el-button>
+        <el-button type="primary" @click="detailVisible = false">
+          {{ $t('common.close') }}
+        </el-button>
       </template>
     </el-dialog>
 
@@ -329,9 +329,23 @@ const openDetail = async (row: Row) => {
   const raw = await activityApi.blessingDetail.get(row.id as string | number)
   const data = normalizeEnvelope(raw)
   Object.assign(detail, { ...row, ...data })
-  detail.ticketIdLabel = pickTicketId(detail) == null ? '-' : String(pickTicketId(detail))
-  detail.visibleLabel = yesNoLabel(detail.visible)
-  detail.createTimeLabel = normalizeTime(detail.createTime ?? detail.create_time)
+  const ticketId = detail.ticketId ?? detail.ticket_id
+  detail.ticketIdLabel = ticketId == null || ticketId === '' ? '-' : String(ticketId)
+  if (detail.visible == null || detail.visible === '') {
+    detail.visibleLabel = '-'
+  } else {
+    detail.visibleLabel =
+      String(detail.visible) === '1' || detail.visible === true
+        ? tr('activity.yes')
+        : tr('activity.no')
+  }
+  const timeRaw = detail.createTime ?? detail.create_time
+  if (timeRaw == null || timeRaw === '') {
+    detail.createTimeLabel = ''
+  } else {
+    const d = dayjs(String(timeRaw))
+    detail.createTimeLabel = d.isValid() ? d.format('YYYY-MM-DD HH:mm') : String(timeRaw)
+  }
   detailVisible.value = true
 }
 

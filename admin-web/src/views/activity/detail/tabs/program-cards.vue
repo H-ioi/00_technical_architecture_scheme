@@ -217,9 +217,6 @@ const programTypeText = (value: unknown) => {
   return '-'
 }
 
-const cardSubtitle = (row: Row) =>
-  `${programTypeText(row.programType)}${tr('activity.programCardManageSuffix')}`
-
 const ruleObj = (row: Row): Row =>
   row.rule && typeof row.rule === 'object' ? (row.rule as Row) : {}
 

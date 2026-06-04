@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest'
+import { describe, it, expect, vi } from 'vitest'
 
 // Mock crypto.randomUUID for deterministic createFontId tests
 const mockUuid = '550e8400-e29b-41d4-a716-446655440000'

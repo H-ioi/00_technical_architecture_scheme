@@ -70,7 +70,7 @@
 import PassFormDialog from './components/pass-form-dialog.vue'
 import { searchForm, tableCols } from './list.config'
 import { attendanceHolidayApi, membershipApi } from '@/api'
-import ListTableEmpty from '@/components/list-table-empty.vue'
+import ListTableEmpty from '@/components/list-table-empty/index.vue'
 import { useListTableEmpty } from '@/composables/use-list-table-empty'
 import type { AttendanceLeavePassRecord } from '@/types/modules/attendance-holiday'
 import type { SchoolOptionRecord } from '@/types/modules/membership'

@@ -10,9 +10,9 @@
     <UniForm ref="uniFormRef" v-model="form" mode="edit" :config="formConfig" />
     <template #footer>
       <el-button @click="visible = false">{{ $t('common.cancel') }}</el-button>
-      <el-button type="primary" :loading="saving" @click="submit">{{
-        $t('common.submit')
-      }}</el-button>
+      <el-button type="primary" :loading="saving" @click="submit">
+        {{ $t('common.submit') }}
+      </el-button>
     </template>
   </el-dialog>
 </template>

@@ -216,7 +216,7 @@
           v-for="col in routeColumns"
           :key="String(col.prop)"
           :label="col.label">
-          {{ detailCellDisplay(detailRecord, col.prop) }}
+          {{ detailCellText(detailRecord, col.prop) }}
         </el-descriptions-item>
       </el-descriptions>
     </el-dialog>
@@ -224,7 +224,7 @@
     <el-dialog v-model="termDetailVisible" width="900px" :title="$t('schoolBus.look')">
       <el-descriptions v-if="termDetailRecord" :column="2" border>
         <el-descriptions-item v-for="col in termColumns" :key="String(col.prop)" :label="col.label">
-          {{ detailCellDisplay(termDetailRecord, col.prop) }}
+          {{ detailCellText(termDetailRecord, col.prop) }}
         </el-descriptions-item>
       </el-descriptions>
     </el-dialog>
@@ -235,7 +235,7 @@
           v-for="col in stationColumns"
           :key="String(col.prop)"
           :label="col.label">
-          {{ detailCellDisplay(stationDetailRecord, col.prop) }}
+          {{ detailCellText(stationDetailRecord, col.prop) }}
         </el-descriptions-item>
       </el-descriptions>
     </el-dialog>
@@ -244,16 +244,14 @@
 
 <script setup lang="ts">
 import { ElLoading, ElMessage, ElMessageBox } from 'element-plus'
-import type { UniTableColumn, UniTableRequestResult } from 'uni-ui-lib'
 import { UniDataTable, UniSearchForm, useUniI18n } from 'uni-ui-lib'
 import { computed, nextTick, onMounted, ref, watch } from 'vue'
 
 import { membershipApi, schoolBusLineApi, schoolBusStationApi } from '@/api'
-import ListTableEmpty from '@/components/list-table-empty.vue'
+import ListTableEmpty from '@/components/list-table-empty/index.vue'
 import { useListTableEmpty } from '@/composables/use-list-table-empty'
 import { useTabQuerySync } from '@/composables/use-tab-query-sync'
 import { normalizeArray } from '@/utils/api-response-normalize'
-import { detailCellDisplay, isSpreadsheetFilename } from '@/utils/school-bus'
 import type { SchoolOptionRecord } from '@/types/modules/membership'
 
 import RouteFormModal from './components/route-form-modal.vue'
@@ -264,6 +262,12 @@ import { useStationSection } from './use-station-section'
 import { useTermSection } from './use-term-section'
 
 type Loose = Record<string, unknown>
+/** 详情 descriptions 空值显示 -- */
+const detailCellText = (record: Loose | null | undefined, prop: unknown) => {
+  if (!record || prop == null) return ''
+  const val = record[String(prop)]
+  return val == null || val === '' ? '--' : String(val)
+}
 
 const { locale, t } = useUniI18n()
 
@@ -461,7 +465,8 @@ const onRouteImportFile = async (e: Event) => {
     return
   }
 
-  if (!isSpreadsheetFilename(file.name)) {
+  const importExt = file.name.toLowerCase()
+  if (!importExt.endsWith('.xls') && !importExt.endsWith('.xlsx')) {
     ElMessage.warning(t('schoolBus.importInvalidType'))
     return
   }
@@ -500,7 +505,8 @@ const onStationImportFile = async (e: Event) => {
     return
   }
 
-  if (!isSpreadsheetFilename(file.name)) {
+  const importExt = file.name.toLowerCase()
+  if (!importExt.endsWith('.xls') && !importExt.endsWith('.xlsx')) {
     ElMessage.warning(t('schoolBus.importInvalidType'))
     return
   }

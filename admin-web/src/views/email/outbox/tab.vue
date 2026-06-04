@@ -94,11 +94,10 @@
 </template>
 
 <script setup lang="ts">
-import type { UniTableRequestResult } from 'uni-ui-lib'
 import { UniDataTable, UniSearchForm } from 'uni-ui-lib'
 import { ref } from 'vue'
 
-import ListTableEmpty from '@/components/list-table-empty.vue'
+import ListTableEmpty from '@/components/list-table-empty/index.vue'
 import { useListTableEmpty } from '@/composables/use-list-table-empty'
 import { useTabQuerySync } from '@/composables/use-tab-query-sync'
 import OutboxComposeDialog from './components/outbox-compose-drawer.vue'

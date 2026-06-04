@@ -47,7 +47,7 @@ import { toUniOptions, useUniI18n } from 'uni-ui-lib'
 import { computed, onMounted, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 
-import ListTableEmpty from '@/components/list-table-empty.vue'
+import ListTableEmpty from '@/components/list-table-empty/index.vue'
 import { useListTableEmpty } from '@/composables/use-list-table-empty'
 import { membershipApi, protocolApi } from '@/api'
 import type { ProtocolDict, ProtocolRecord } from '@/types/modules/protocol'

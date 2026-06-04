@@ -100,7 +100,7 @@
 </template>
 
 <script setup lang="ts">
-import { formatMailGroupScopeDisplay } from '../mail-page-utils'
+import { formatMailGroupScopeDisplay } from '@/utils/mail-page-utils'
 import GroupDialog from './components/group-dialog.vue'
 import {
   searchForm,
@@ -109,7 +109,7 @@ import {
   yesNoOpts as yesNoOptsFn
 } from './list.config'
 import { bulkEmailApi } from '@/api'
-import ListTableEmpty from '@/components/list-table-empty.vue'
+import ListTableEmpty from '@/components/list-table-empty/index.vue'
 import { useListTableEmpty } from '@/composables/use-list-table-empty'
 import type { Translate } from '@/types/i18n'
 import { normalizePaged } from '@/utils/api-response-normalize'

@@ -1,32 +1,10 @@
 <template>
   <section class="uni-list-page">
-    <div class="uni-list-page__header">
-      <div>
-        <h1>{{ $t('schoolBus.routeException.pageTitle') }}</h1>
-        <p>{{ $t('schoolBus.routeException.pageDesc') }}</p>
-      </div>
-      <div class="uni-list-page__header-actions">
-        <el-button v-uni-permission="'busexception_export'" @click="exportData">
-          {{ $t('schoolBus.export') }}
-        </el-button>
-        <el-button v-uni-permission="'busexception_import'" @click="downloadImportTemplate">
-          {{ $t('schoolBus.downloadTemplate') }}
-        </el-button>
-        <el-button v-uni-permission="'busexception_import'" @click="fileRef?.click()">
-          {{ $t('schoolBus.import') }}
-        </el-button>
-        <el-button v-uni-permission="'busexception_add'" type="primary" @click="openForm('add')">
-          {{ $t('schoolBus.add') }}
-        </el-button>
-      </div>
-    </div>
-
-    <input
-      ref="fileRef"
-      type="file"
-      accept=".xlsx,.xls"
-      class="school-bus-route-exception__file"
-      @change="onImportFile" />
+    <ExceptionPageHeader
+      @export="exportData"
+      @download-template="downloadImportTemplate"
+      @add="openForm('add')"
+      @import-file="onImportFile" />
 
     <UniSearchForm
       v-model="queryModel"
@@ -75,41 +53,33 @@
       :school-records="schoolRecords"
       @saved="refreshTable" />
 
-    <el-dialog v-model="detailVisible" width="900px" :title="$t('schoolBus.look')">
-      <el-descriptions v-if="detailRecord" :column="2" border>
-        <el-descriptions-item v-for="col in columns" :key="String(col.prop)" :label="col.label">
-          {{ detailCellDisplay(detailRecord, col.prop) }}
-        </el-descriptions-item>
-      </el-descriptions>
-    </el-dialog>
+    <ExceptionDetailDialog ref="detailDialogRef" :columns="columns" />
   </section>
 </template>
 
 <script setup lang="ts">
+import ExceptionDetailDialog from './components/detail-dialog.vue'
 import ExceptionForm from './components/form.vue'
+import {
+  buildExceptionSearchForm,
+  exceptionMetaOptions,
+  formatExceptionRow
+} from './components/exception-list-helpers'
+import ExceptionPageHeader from './components/page-header.vue'
 import { exceptionTypeMeta, tableCols, yesNoMeta } from './list.config'
 import { schoolBusExceptionApi, membershipApi, schoolBusCommonApi } from '@/api'
-import ListTableEmpty from '@/components/list-table-empty.vue'
+import ListTableEmpty from '@/components/list-table-empty/index.vue'
 import { useListTableEmpty } from '@/composables/use-list-table-empty'
 import type { SchoolOptionRecord } from '@/types/modules/membership'
 import type { ExceptionRecord, ExceptionListParams } from '@/types/modules/school-bus-exception'
 import { normalizeArray, normalizePaged } from '@/utils/api-response-normalize'
-import {
-  detailCellDisplay,
-  isSpreadsheetFilename,
-  normalizeSchoolIdsOnRow
-} from '@/utils/school-bus'
-import dayjs from 'dayjs'
 import { ElMessage, ElMessageBox } from 'element-plus'
-import type { UniFormConfig, UniTableAction, UniTableRequest } from 'uni-ui-lib'
-import { UniDataTable, UniSearchForm, useUniI18n, toUniOptions, useUniListState } from 'uni-ui-lib'
+import type { UniTableAction, UniTableRequest } from 'uni-ui-lib'
+import { useUniI18n, toUniOptions, useUniListState } from 'uni-ui-lib'
 import { computed, ref, nextTick, onMounted, watch } from 'vue'
 
 const { locale, t } = useUniI18n()
 
-const fileRef = ref<HTMLInputElement | null>(null)
-
-type Loose = Record<string, unknown>
 interface NamedEntity {
   id: string | number
   cnName?: string
@@ -119,31 +89,6 @@ interface NamedEntity {
 interface CarEntity {
   id: string | number
   carNumber?: string
-}
-const formatExceptionRow = (
-  row: ExceptionRecord,
-  locale: string,
-  exceptionOpts: { value: string; label: string }[],
-  yesNoOpts: { value: string; label: string }[]
-): ExceptionRecord => {
-  const sectionName =
-    locale === 'en'
-      ? String(row.sectionEnName ?? row.sectionName ?? '')
-      : String(row.sectionCnName ?? row.sectionName ?? '')
-  const next: ExceptionRecord = { ...row }
-  normalizeSchoolIdsOnRow(next as Loose)
-  next.sectionName = sectionName || '--'
-  next.exceptionTypeLabel =
-    exceptionOpts.find((x) => String(x.value) === String(row.exceptionType))?.label ??
-    String(row.exceptionType ?? '--')
-  next.needDispatchLabel =
-    yesNoOpts.find((x) => String(x.value) === String(row.needDispatch))?.label ??
-    String(row.needDispatch ?? '--')
-  next.exceptionDate = row.exceptionDate
-    ? dayjs(String(row.exceptionDate)).format('YYYY-MM-DD')
-    : '--'
-  next.createTime = row.createTime ? dayjs(String(row.createTime)).format('YYYY-MM-DD HH:mm') : '--'
-  return next
 }
 
 const initialFilters: Record<string, unknown> = {
@@ -170,8 +115,7 @@ const carSource = ref<CarEntity[]>([])
 const formVisible = ref(false)
 const formMode = ref<'add' | 'edit' | 'look'>('add')
 const activeRow = ref<ExceptionRecord | null>(null)
-const detailVisible = ref(false)
-const detailRecord = ref<ExceptionRecord | null>(null)
+const detailDialogRef = ref<InstanceType<typeof ExceptionDetailDialog> | null>(null)
 
 const schoolOptions = computed(() =>
   toUniOptions(schoolRecords.value, {
@@ -237,120 +181,18 @@ const carOptions = computed(() =>
 const exceptionTypeOptions = computed(() => exceptionTypeMeta(t))
 const yesNoOptions = computed(() => yesNoMeta(t))
 
-const searchCfg = computed<UniFormConfig>(() => {
-  const schoolSchema = multiSchool.value
-    ? [
-        {
-          field: 'schoolIds',
-          label: '',
-          component: 'ElSelect' as const,
-          options: schoolOptions.value,
-          componentProps: {
-            placeholder: t('schoolBus.routeException.phSchool'),
-            clearable: true,
-            filterable: true,
-            multiple: true,
-            collapseTags: true,
-            collapseTagsTooltip: true
-          },
-          colProps: { span: 6 }
-        }
-      ]
-    : []
-
-  return {
-    schema: [
-      ...schoolSchema,
-      {
-        field: 'sectionId',
-        label: '',
-        component: 'ElSelect',
-        options: sectionOptions.value,
-        componentProps: {
-          placeholder: t('schoolBus.routeException.phSection'),
-          clearable: true,
-          filterable: true
-        },
-        colProps: { span: 6 }
-      },
-      {
-        field: 'lineIds',
-        label: '',
-        component: 'ElSelect',
-        options: lineOptions.value,
-        componentProps: {
-          placeholder: t('schoolBus.routeException.phLine'),
-          clearable: true,
-          filterable: true,
-          multiple: true,
-          collapseTags: true,
-          collapseTagsTooltip: true
-        },
-        colProps: { span: 6 }
-      },
-      {
-        field: 'carId',
-        label: '',
-        component: 'ElSelect',
-        options: carOptions.value,
-        componentProps: {
-          placeholder: t('schoolBus.routeException.phCar'),
-          clearable: true,
-          filterable: true
-        },
-        colProps: { span: 6 }
-      },
-      {
-        field: 'exceptionType',
-        label: '',
-        component: 'ElSelect',
-        options: exceptionTypeOptions.value,
-        componentProps: {
-          placeholder: t('schoolBus.routeException.phExceptionType'),
-          clearable: true
-        },
-        colProps: { span: 6 }
-      },
-      {
-        field: 'needDispatch',
-        label: '',
-        component: 'ElSelect',
-        options: yesNoOptions.value,
-        componentProps: {
-          placeholder: t('schoolBus.routeException.phNeedDispatch'),
-          clearable: true
-        },
-        colProps: { span: 6 }
-      },
-      {
-        field: 'exceptionDateStart',
-        label: '',
-        component: 'ElDatePicker',
-        componentProps: {
-          type: 'date',
-          placeholder: t('schoolBus.routeException.phExceptionDateStart'),
-          valueFormat: 'YYYY-MM-DD',
-          clearable: true
-        },
-        colProps: { span: 6 }
-      },
-      {
-        field: 'exceptionDateEnd',
-        label: '',
-        component: 'ElDatePicker',
-        componentProps: {
-          type: 'date',
-          placeholder: t('schoolBus.routeException.phExceptionDateEnd'),
-          valueFormat: 'YYYY-MM-DD',
-          clearable: true
-        },
-        colProps: { span: 6 }
-      }
-    ],
-    rowProps: { gutter: 8 },
-    colProps: { span: 6 }
-  }
-})
+const searchCfg = computed(() =>
+  buildExceptionSearchForm({
+    t,
+    multiSchool: multiSchool.value,
+    schoolOptions: schoolOptions.value,
+    sectionOptions: sectionOptions.value,
+    lineOptions: lineOptions.value,
+    carOptions: carOptions.value,
+    exceptionTypeOptions: exceptionTypeOptions.value,
+    yesNoOptions: yesNoOptions.value
+  })
+)
 
 const columns = computed(() => tableCols(t, schoolOptions.value))
 
@@ -367,11 +209,10 @@ const loadData: UniTableRequest = async ({ pageNo, pageSize, filters: f }) => {
 
   const result = await schoolBusExceptionApi.page.get(params)
   const { list, total } = normalizePaged<ExceptionRecord>(result)
-  const exOpts = exceptionTypeMeta(t).map((x) => ({ value: String(x.value), label: x.label }))
-  const ynOpts = yesNoMeta(t).map((x) => ({ value: String(x.value), label: x.label }))
+  const meta = exceptionMetaOptions(t)
 
   return {
-    data: list.map((row) => formatExceptionRow(row, locale(), exOpts, ynOpts)),
+    data: list.map((row) => formatExceptionRow(row, locale(), meta.exception, meta.yesNo)),
     total
   }
 }
@@ -385,10 +226,7 @@ const openForm = (mode: 'add' | 'edit' | 'look', row?: ExceptionRecord) => {
 const actions = computed<UniTableAction[]>(() => [
   {
     label: t('schoolBus.look'),
-    onClick: (row) => {
-      detailRecord.value = row as ExceptionRecord
-      detailVisible.value = true
-    }
+    onClick: (row) => detailDialogRef.value?.open(row as ExceptionRecord)
   },
   {
     label: t('schoolBus.edit'),
@@ -446,7 +284,8 @@ const onImportFile = async (e: Event) => {
     return
   }
 
-  if (!isSpreadsheetFilename(file.name)) {
+  const importExt = file.name.toLowerCase()
+  if (!importExt.endsWith('.xls') && !importExt.endsWith('.xlsx')) {
     ElMessage.warning(t('schoolBus.importInvalidType'))
     return
   }
@@ -518,15 +357,3 @@ const del = async () => {
   void refreshTable()
 }
 </script>
-
-<style scoped lang="scss">
-.school-bus-route-exception {
-  &__file {
-    position: absolute;
-    width: 0;
-    height: 0;
-    opacity: 0;
-    pointer-events: none;
-  }
-}
-</style>

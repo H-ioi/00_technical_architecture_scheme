@@ -18,15 +18,15 @@
       :config="formConfig" />
     <template #footer>
       <el-button @click="visible = false">{{ $t('common.cancel') }}</el-button>
-      <el-button type="primary" :loading="saving" @click="submit">{{
-        $t('common.submit')
-      }}</el-button>
+      <el-button type="primary" :loading="saving" @click="submit">
+        {{ $t('common.submit') }}
+      </el-button>
     </template>
   </el-dialog>
 </template>
 
 <script setup lang="ts">
-import type { UniFormConfig } from 'uni-ui-lib'
+import type { UniFormConfig, UniOption } from 'uni-ui-lib'
 import { UniForm, useUniI18n } from 'uni-ui-lib'
 import { ElMessage } from 'element-plus'
 import { computed, reactive, ref } from 'vue'

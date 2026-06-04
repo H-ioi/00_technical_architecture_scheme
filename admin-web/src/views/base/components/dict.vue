@@ -92,11 +92,11 @@
 
 <script setup lang="ts">
 import { ElMessage } from 'element-plus'
-import type { Recordable, UniTableColumn, UniTableRequest, UniTableRequestResult } from 'uni-ui-lib'
+import type { Recordable, UniTableColumn, UniTableRequest } from 'uni-ui-lib'
 import { UniDataTable, UniForm, UniSearchForm, useUniI18n, useUniListState } from 'uni-ui-lib'
 import { computed, ref } from 'vue'
 
-import ListTableEmpty from '@/components/list-table-empty.vue'
+import ListTableEmpty from '@/components/list-table-empty/index.vue'
 import { useListTableEmpty } from '@/composables/use-list-table-empty'
 import { baseDictApi } from '@/api'
 import type { BaseDictFieldRecord, BaseDictItemRecord } from '@/types/modules/base-dict'

@@ -1,7 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 
-const ORIGINAL_IMPORT_META = { ...import.meta }
-
 beforeEach(() => {
   // 确保测试之间环境变量隔离
   vi.unstubAllEnvs()

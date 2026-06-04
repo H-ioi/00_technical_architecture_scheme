@@ -18,9 +18,9 @@
         <el-table-column prop="studentGrade" :label="$t('attendance.grade')" width="88" />
         <el-table-column prop="studentClass" :label="$t('attendance.className')" width="88" />
         <el-table-column :label="$t('attendance.boarding')" width="88">
-          <template #default="{ row }">{{
-            row.studentDormitoryStatus === 1 ? $t('attendance.yes') : $t('attendance.no')
-          }}</template>
+          <template #default="{ row }">
+            {{ row.studentDormitoryStatus === 1 ? $t('attendance.yes') : $t('attendance.no') }}
+          </template>
         </el-table-column>
       </el-table>
     </div>
@@ -61,9 +61,9 @@
 
     <template v-if="!viewOnly" #footer>
       <el-button @click="open = false">{{ $t('common.cancel') }}</el-button>
-      <el-button type="primary" :loading="loading" @click="submit">{{
-        $t('common.submit')
-      }}</el-button>
+      <el-button type="primary" :loading="loading" @click="submit">
+        {{ $t('common.submit') }}
+      </el-button>
     </template>
   </el-dialog>
 </template>

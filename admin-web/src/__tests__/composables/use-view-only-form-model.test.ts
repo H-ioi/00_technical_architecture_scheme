@@ -28,7 +28,8 @@ describe('use-view-only-form-model.ts', () => {
       const model = useViewOnlyFormModel(() => source.value)
 
       // 尝试写入 model
-      ;(model as any).value = { name: 'modified' }
+      const writable = model as unknown as { value: Record<string, unknown> }
+      writable.value = { name: 'modified' }
 
       // 原值不变
       expect(source.value).toEqual({ name: 'original' })

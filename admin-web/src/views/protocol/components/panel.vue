@@ -56,7 +56,7 @@ import type { UniTableRequest } from 'uni-ui-lib'
 import { useUniI18n } from 'uni-ui-lib'
 import { computed, ref, watch } from 'vue'
 
-import ListTableEmpty from '@/components/list-table-empty.vue'
+import ListTableEmpty from '@/components/list-table-empty/index.vue'
 import { useListTableEmpty } from '@/composables/use-list-table-empty'
 import { useDialogDetailLoading } from '@/composables/use-dialog-detail-loading'
 import { protocolApi } from '@/api'

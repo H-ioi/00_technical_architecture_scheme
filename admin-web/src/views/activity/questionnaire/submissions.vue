@@ -9,9 +9,9 @@
         </p>
       </div>
       <div class="uni-list-page__header-actions q-submissions__header-actions">
-        <el-button :loading="exporting" @click="exportAnswers">{{
-          $t('activity.exportQuestionnaire')
-        }}</el-button>
+        <el-button :loading="exporting" @click="exportAnswers">
+          {{ $t('activity.exportQuestionnaire') }}
+        </el-button>
         <el-divider direction="vertical" class="q-submissions__header-divider" />
         <el-button plain @click="goBack">{{ $t('activity.back') }}</el-button>
       </div>

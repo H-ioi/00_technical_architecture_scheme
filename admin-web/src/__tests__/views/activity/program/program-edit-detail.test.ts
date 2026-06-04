@@ -1,6 +1,5 @@
 import { describe, it, expect } from 'vitest'
 import { ref } from 'vue'
-import type { Ref } from 'vue'
 import type { ActivityProgramQuotaRow } from '@/types/modules/activity-program-form'
 import {
   fillQuotasFromDetail,
@@ -73,8 +72,6 @@ describe('program-edit-detail.ts', () => {
   })
 
   describe('applyProgramDetailToForm', () => {
-    const makeRef = <T>(init: T): Ref<T> => ref(init) as Ref<T>
-
     it('抽奖节目(1)应正确回填所有抽奖字段', () => {
       const form = emptyForm()
       const quotasList = ref<ActivityProgramQuotaRow[]>([])

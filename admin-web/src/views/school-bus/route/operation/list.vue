@@ -80,7 +80,7 @@
     <el-dialog v-model="detailVisible" width="900px" :title="$t('schoolBus.look')">
       <el-descriptions v-if="detailRecord" :column="2" border>
         <el-descriptions-item v-for="col in columns" :key="String(col.prop)" :label="col.label">
-          {{ detailCellDisplay(detailRecord, col.prop) }}
+          {{ detailCellText(detailRecord, col.prop) }}
         </el-descriptions-item>
       </el-descriptions>
     </el-dialog>
@@ -91,16 +91,12 @@
 import OperationForm from './components/form.vue'
 import { operationStatusMeta, tableCols } from './list.config'
 import { schoolBusOperationApi, membershipApi, schoolBusCommonApi } from '@/api'
-import ListTableEmpty from '@/components/list-table-empty.vue'
+import ListTableEmpty from '@/components/list-table-empty/index.vue'
 import { useListTableEmpty } from '@/composables/use-list-table-empty'
 import type { SchoolOptionRecord } from '@/types/modules/membership'
 import type { OperationRecord, OperationListParams } from '@/types/modules/school-bus-operation'
 import { normalizeArray, normalizePaged } from '@/utils/api-response-normalize'
-import {
-  detailCellDisplay,
-  isSpreadsheetFilename,
-  normalizeSchoolIdsOnRow
-} from '@/utils/school-bus'
+import { normalizeSchoolIdsOnRow } from '@/utils/school-bus'
 import dayjs from 'dayjs'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import type { UniFormConfig, UniTableAction, UniTableRequest } from 'uni-ui-lib'
@@ -112,6 +108,13 @@ const { locale, t } = useUniI18n()
 const fileRef = ref<HTMLInputElement | null>(null)
 
 type Loose = Record<string, unknown>
+/** 详情 descriptions 空值显示 -- */
+const detailCellText = (record: Loose | null | undefined, prop: unknown) => {
+  if (!record || prop == null) return ''
+  const val = record[String(prop)]
+  return val == null || val === '' ? '--' : String(val)
+}
+
 interface NamedEntity {
   id: string | number
   cnName?: string
@@ -411,7 +414,8 @@ const onImportFile = async (e: Event) => {
     return
   }
 
-  if (!isSpreadsheetFilename(file.name)) {
+  const importExt = file.name.toLowerCase()
+  if (!importExt.endsWith('.xls') && !importExt.endsWith('.xlsx')) {
     ElMessage.warning(t('schoolBus.importInvalidType'))
     return
   }

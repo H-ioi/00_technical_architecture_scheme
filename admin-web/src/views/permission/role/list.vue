@@ -80,7 +80,7 @@
 import AssignMenuDialog from './components/assign-menu-dialog.vue'
 import { dpTypeOptions, searchForm, tableCols } from './list.config'
 import { permissionDeptApi, permissionRoleApi } from '@/api'
-import ListTableEmpty from '@/components/list-table-empty.vue'
+import ListTableEmpty from '@/components/list-table-empty/index.vue'
 import { useListTableEmpty } from '@/composables/use-list-table-empty'
 import type { PermissionDeptRecord } from '@/types/modules/permission-dept'
 import type { PermissionRoleRecord as Row } from '@/types/modules/permission-role'

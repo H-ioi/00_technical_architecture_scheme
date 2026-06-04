@@ -1,8 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import {
-  normalizeHolidayListRow,
-  normalizeHolidayReturnRow
-} from '../../../views/attendance/holiday/holiday-utils'
+import { normalizeHolidayListRow, normalizeHolidayReturnRow } from '@/utils/attendance-holiday'
 
 describe('holiday-utils.ts', () => {
   // ==================== normalizeHolidayListRow ====================

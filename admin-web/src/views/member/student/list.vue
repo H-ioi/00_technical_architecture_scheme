@@ -52,7 +52,7 @@ import {
   ynDispOpts
 } from './list.config'
 import { membershipApi, studentApi } from '@/api'
-import ListTableEmpty from '@/components/list-table-empty.vue'
+import ListTableEmpty from '@/components/list-table-empty/index.vue'
 import { useListTableEmpty } from '@/composables/use-list-table-empty'
 import type { StudentRecord as Row } from '@/types/modules/member-student'
 import type { UniOption, UniTableAction, UniTableRequest } from 'uni-ui-lib'

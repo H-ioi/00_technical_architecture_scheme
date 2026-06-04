@@ -31,19 +31,13 @@
 
 <script setup lang="ts">
 import { ElMessage, ElMessageBox } from 'element-plus'
-import type {
-  UniFormConfig,
-  UniTableAction,
-  UniTableColumn,
-  UniTableRequest,
-  UniTableRequestResult
-} from 'uni-ui-lib'
+import type { UniFormConfig, UniTableAction, UniTableColumn, UniTableRequest } from 'uni-ui-lib'
 import { UniDataTable, UniSearchForm, useUniI18n, useUniListState } from 'uni-ui-lib'
 import { computed } from 'vue'
 import { useRouter } from 'vue-router'
 
 import { attendanceHolidayApi } from '@/api'
-import ListTableEmpty from '@/components/list-table-empty.vue'
+import ListTableEmpty from '@/components/list-table-empty/index.vue'
 import { useListTableEmpty } from '@/composables/use-list-table-empty'
 import { normalizePaged } from '@/utils/api-response-normalize'
 

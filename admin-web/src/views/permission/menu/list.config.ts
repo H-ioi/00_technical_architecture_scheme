@@ -1,7 +1,6 @@
 import type {
   UniDataTableTree,
   UniFormConfig,
-  UniTableActionColumnConfig,
   UniTableColumn,
   UniTableToolbarConfig
 } from 'uni-ui-lib'

@@ -54,7 +54,7 @@ import {
   ynOpts
 } from './list.config'
 import { attendanceStudentApi, membershipApi } from '@/api'
-import ListTableEmpty from '@/components/list-table-empty.vue'
+import ListTableEmpty from '@/components/list-table-empty/index.vue'
 import { useListTableEmpty } from '@/composables/use-list-table-empty'
 import type {
   AttendanceStudentListParams,

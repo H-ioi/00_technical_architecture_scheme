@@ -2,7 +2,6 @@ import type { Translate } from '@/types/i18n'
 import type {
   DesignerField,
   DesignerFieldKnown,
-  DesignerFieldRaw,
   DesignerOption
 } from '@/types/modules/activity-questionnaire'
 import type { UniFormConfig } from 'uni-ui-lib'

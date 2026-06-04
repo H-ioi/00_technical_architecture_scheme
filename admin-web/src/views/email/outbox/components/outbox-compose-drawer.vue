@@ -27,9 +27,9 @@
     <template #footer>
       <div class="email-compose-drawer__footer">
         <el-button @click="visible = false">{{ $t('common.close') }}</el-button>
-        <el-button :loading="submitting" @click="onSubmit(0)">{{
-          $t('email.outbox.saveDraft')
-        }}</el-button>
+        <el-button :loading="submitting" @click="onSubmit(0)">
+          {{ $t('email.outbox.saveDraft') }}
+        </el-button>
         <el-button type="primary" :loading="submitting" @click="onSubmit(1)">
           {{ $t('email.outbox.sendNow') }}
         </el-button>

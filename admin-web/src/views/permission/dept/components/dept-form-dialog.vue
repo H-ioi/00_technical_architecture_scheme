@@ -7,9 +7,9 @@
     <UniForm ref="uniFormRef" v-model="draft" mode="edit" :config="dialogFormConfig" />
     <template #footer>
       <el-button @click="visible = false">{{ t('permission.cancel') }}</el-button>
-      <el-button type="primary" :loading="submitting" @click="onSaveClick">{{
-        t('permission.save')
-      }}</el-button>
+      <el-button type="primary" :loading="submitting" @click="onSaveClick">
+        {{ t('permission.save') }}
+      </el-button>
     </template>
   </el-dialog>
 </template>

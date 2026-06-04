@@ -229,7 +229,7 @@ import { attendanceStudentApi, bulkEmailApi } from '@/api'
 import { useUniI18n } from 'uni-ui-lib'
 
 import { normalizeEnvelope } from '@/utils/api-response-normalize'
-import { formatMailGroupScopeDisplay } from '../../mail-page-utils'
+import { formatMailGroupScopeDisplay } from '@/utils/mail-page-utils'
 
 type Loose = Record<string, unknown>
 type SchoolRow = { enName?: string; name?: string }

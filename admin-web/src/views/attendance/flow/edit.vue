@@ -35,8 +35,8 @@
         name="design">
         <div class="holiday-flow-design__bpmn-shell">
           <div class="holiday-flow-design__bpmn">
-            <div ref="canvasRef" class="holiday-flow-design__canvas"></div>
-            <aside id="js-properties-panel-holiday" class="holiday-flow-design__panel"></aside>
+            <div ref="canvasRef" class="holiday-flow-design__canvas" />
+            <aside id="js-properties-panel-holiday" class="holiday-flow-design__panel" />
           </div>
         </div>
       </el-tab-pane>
@@ -55,9 +55,9 @@
         class="holiday-flow-design__xml" />
       <template #footer>
         <el-button @click="xmlVisible = false">{{ $t('common.cancel') }}</el-button>
-        <el-button type="primary" @click="copyXml">{{
-          $t('attendance.holidayFlow.design.copyXml')
-        }}</el-button>
+        <el-button type="primary" @click="copyXml">
+          {{ $t('attendance.holidayFlow.design.copyXml') }}
+        </el-button>
       </template>
     </el-dialog>
 

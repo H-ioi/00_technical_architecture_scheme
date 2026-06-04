@@ -89,7 +89,7 @@
 import SendMailDialog from './components/send-mail-dialog.vue'
 import { searchForm, statusOpts as statusOptsFn, tableCols } from './list.config'
 import { bulkEmailApi } from '@/api'
-import ListTableEmpty from '@/components/list-table-empty.vue'
+import ListTableEmpty from '@/components/list-table-empty/index.vue'
 import { useListTableEmpty } from '@/composables/use-list-table-empty'
 import type { Translate } from '@/types/i18n'
 import { normalizePaged } from '@/utils/api-response-normalize'

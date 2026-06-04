@@ -6,9 +6,9 @@
         <p>{{ $t('attendance.holiday.pageDesc') }}</p>
       </div>
       <div v-if="activeTab === 'leave'" class="uni-list-page__header-actions">
-        <el-button type="primary" @click="leaveAddVisible = true">{{
-          $t('attendance.add')
-        }}</el-button>
+        <el-button type="primary" @click="leaveAddVisible = true">
+          {{ $t('attendance.add') }}
+        </el-button>
       </div>
     </div>
 
@@ -95,64 +95,277 @@
 </template>
 
 <script setup lang="ts">
+import type { UniTableAction, UniTableRequest } from 'uni-ui-lib'
 import { UniDataTable, UniSearchForm } from 'uni-ui-lib'
-import { nextTick, onMounted, ref, watch } from 'vue'
+import { ElMessage, ElMessageBox } from 'element-plus'
+import { toUniOptions, useUniI18n, useUniListState } from 'uni-ui-lib'
+import { computed, nextTick, onMounted, ref, watch } from 'vue'
 
-import { membershipApi } from '@/api'
-import ListTableEmpty from '@/components/list-table-empty.vue'
+import { attendanceHolidayApi, membershipApi } from '@/api'
+import ListTableEmpty from '@/components/list-table-empty/index.vue'
+import { useDialogDetailLoading } from '@/composables/use-dialog-detail-loading'
 import { useListTableEmpty } from '@/composables/use-list-table-empty'
 import { useTabQuerySync } from '@/composables/use-tab-query-sync'
+import type {
+  AttendanceHolidayListParams,
+  AttendanceHolidayRecord,
+  AttendanceHolidayReturnListParams
+} from '@/types/modules/attendance-holiday'
 import type { SchoolOptionRecord } from '@/types/modules/membership'
+import { normalizeEnvelope, normalizePaged } from '@/utils/api-response-normalize'
+import { normalizeHolidayListRow, normalizeHolidayReturnRow } from '@/utils/attendance-holiday'
+import { dateFormat } from '@/utils/tool'
 import DetailDrawer from './components/detail-drawer.vue'
 import HolidayFormDrawer from './components/holiday-form-drawer.vue'
-import { useHolidayLeave } from './use-holiday-leave'
-import { useHolidayReturn } from './use-holiday-return'
+import {
+  detailForm,
+  formatHolidayDetailView,
+  returnSearchForm,
+  returnTableCols,
+  searchForm,
+  tableCols,
+  type AttendanceHolidayDetailViewModel
+} from './list.config'
+
+type Loose = Record<string, unknown>
 
 const HOLIDAY_TABS = ['leave', 'return'] as const
 const activeTab = ref<(typeof HOLIDAY_TABS)[number]>('leave')
 useTabQuerySync(activeTab, HOLIDAY_TABS)
 const schoolRecords = ref<SchoolOptionRecord[]>([])
 const leaveAddVisible = ref(false)
+const { locale, t } = useUniI18n()
 
+const schoolOptions = computed(() =>
+  toUniOptions(schoolRecords.value, {
+    labelKeys: locale() === 'en' ? ['enName', 'name'] : ['name', 'cnName', 'enName'],
+    valueKey: 'enName'
+  })
+)
+
+const { detailLoading: leaveDetailLoading, runWithDetailLoading: runLeaveDetailLoading } =
+  useDialogDetailLoading()
+const leaveInitialFilters: Record<string, unknown> = {
+  keyword: '',
+  type: undefined,
+  studentSchool: undefined,
+  scp: undefined,
+  beginTime: undefined,
+  endTime: undefined
+}
 const {
-  actions: leaveActions,
-  columns: leaveColumns,
-  detailConfig: leaveDetailConfig,
-  detailLoading: leaveDetailLoading,
-  detailModel: leaveDetailModel,
-  detailVisible: leaveDetailVisible,
-  filters: leaveFilters,
-  handleLoadSuccess: handleLeaveLoadSuccess,
-  loadData: loadLeaveData,
   queryModel: leaveQueryModel,
+  filters: leaveFilters,
+  tableRef: leaveTableRef,
+  handleLoadSuccess: handleLeaveLoadSuccess,
   refreshTable: refreshLeaveTable,
   reset: resetLeaveSearch,
-  search: searchLeave,
-  searchCfg: leaveSearchConfig,
-  tableRef: leaveTableRef
-} = useHolidayLeave(schoolRecords)
+  search: searchLeave
+} = useUniListState({ initialFilters: leaveInitialFilters })
+const leaveSearchConfig = computed(() => searchForm(t, schoolOptions.value))
+const leaveColumns = computed(() => tableCols(t))
+const leaveDetailConfig = computed(() => detailForm(t))
+const leaveDetailVisible = ref(false)
+const leaveDetailModel = ref<AttendanceHolidayDetailViewModel | null>(null)
+
+const decorateLeaveRow = (raw: Loose): AttendanceHolidayRecord => {
+  const n = normalizeHolidayListRow(raw)
+  return {
+    ...(n as AttendanceHolidayRecord),
+    createdAt: dateFormat(String(n.createdAt ?? ''))
+  }
+}
+
+const loadLeaveData: UniTableRequest = async ({ pageNo, pageSize, filters: f }) => {
+  const params: AttendanceHolidayListParams = {
+    current: pageNo,
+    size: pageSize,
+    ...(f as Record<string, unknown>)
+  }
+  const raw = await attendanceHolidayApi.holidayPage.get(params)
+  const { list, total } = normalizePaged(raw)
+  return { data: list.map(decorateLeaveRow), total }
+}
+
+const openLeaveDetail = async (row: AttendanceHolidayRecord) => {
+  if (row.id == null || row.id === '') {
+    return
+  }
+  leaveDetailVisible.value = true
+  leaveDetailModel.value = null
+  await runLeaveDetailLoading(async () => {
+    const raw = await attendanceHolidayApi.holidayDetail.get(row.id)
+    const body = normalizeEnvelope(raw)
+    leaveDetailModel.value = formatHolidayDetailView(body, t)
+  })
+}
+
+const withdrawLeave = (row: AttendanceHolidayRecord) => {
+  const procId = row.procId
+  const holidayId = row.id
+  if (holidayId == null || holidayId === '') {
+    ElMessage.warning(t('attendance.holiday.withdrawMissingId'))
+    return
+  }
+  const procSeg =
+    procId === undefined || procId === null || procId === ''
+      ? 'null'
+      : typeof procId === 'number' || typeof procId === 'string'
+        ? procId
+        : String(procId)
+  ElMessageBox.confirm(
+    t('attendance.holiday.withdrawConfirm', {
+      procId: String(procSeg),
+      id: String(holidayId ?? '')
+    }),
+    t('attendance.tipTitle'),
+    {
+      type: 'warning',
+      confirmButtonText: t('common.submit'),
+      cancelButtonText: t('common.cancel')
+    }
+  )
+    .then(async () => {
+      try {
+        await attendanceHolidayApi.holidayCancelFlow.get(procSeg, holidayId)
+        ElMessage.success(t('attendance.holiday.withdrawSuccess'))
+        leaveTableRef.value?.refresh()
+      } catch {
+        ElMessage.error(t('attendance.holiday.withdrawFail'))
+      }
+    })
+    .catch(() => {})
+}
+
+const removeLeaveRow = (row: AttendanceHolidayRecord) => {
+  if (row.id == null || row.id === '') {
+    return
+  }
+  ElMessageBox.confirm(
+    t('attendance.holiday.deleteConfirm', { id: String(row.id) }),
+    t('attendance.tipTitle'),
+    {
+      type: 'warning',
+      confirmButtonText: t('common.submit'),
+      cancelButtonText: t('common.cancel')
+    }
+  )
+    .then(async () => {
+      await attendanceHolidayApi.holidayDelete.remove(row.id)
+      ElMessage.success(t('attendance.holiday.deleteSuccess'))
+      leaveTableRef.value?.refresh()
+    })
+    .catch(() => {})
+}
+
+const leaveActions = computed<UniTableAction[]>(() => [
+  {
+    label: t('attendance.holiday.withdraw'),
+    visible: (row) => {
+      const r = row as Loose
+      if (r.dataFrom === 'MB' || r.data_from === 'MB') {
+        return false
+      }
+      const st = (row as AttendanceHolidayRecord).status
+      return st === '1100' || st === 1100 || st === '1103' || st === 1103
+    },
+    onClick: (row) => withdrawLeave(row as AttendanceHolidayRecord)
+  },
+  {
+    label: t('attendance.detail'),
+    onClick: (row) => openLeaveDetail(row as AttendanceHolidayRecord)
+  },
+  {
+    label: t('attendance.delete'),
+    visible: (row) => {
+      const id = (row as AttendanceHolidayRecord).id
+      return id != null && id !== ''
+    },
+    onClick: (row) => removeLeaveRow(row as AttendanceHolidayRecord)
+  }
+])
 
 const leaveTableEmpty = useListTableEmpty(leaveFilters, {
   tableRef: leaveTableRef,
   afterLoadSuccess: handleLeaveLoadSuccess
 })
 
+const { detailLoading: returnDetailLoading, runWithDetailLoading: runReturnDetailLoading } =
+  useDialogDetailLoading()
+const returnInitialFilters: Record<string, unknown> = {
+  keyword: '',
+  studentSchool: undefined
+}
 const {
-  actions: returnActions,
-  columns: returnColumns,
-  detailConfig: returnDetailConfig,
-  detailLoading: returnDetailLoading,
-  detailModel: returnDetailModel,
-  detailVisible: returnDetailVisible,
-  filters: returnFilters,
-  handleLoadSuccess: handleReturnLoadSuccess,
-  loadData: loadReturnData,
   queryModel: returnQueryModel,
+  filters: returnFilters,
+  tableRef: returnTableRef,
+  handleLoadSuccess: handleReturnLoadSuccess,
   reset: resetReturnSearch,
-  search: searchReturn,
-  searchCfg: returnSearchConfig,
-  tableRef: returnTableRef
-} = useHolidayReturn(schoolRecords)
+  search: searchReturn
+} = useUniListState({ initialFilters: returnInitialFilters })
+const returnSearchConfig = computed(() => returnSearchForm(t, schoolOptions.value))
+const returnColumns = computed(() => returnTableCols(t))
+const returnDetailConfig = computed(() => detailForm(t))
+const returnDetailVisible = ref(false)
+const returnDetailModel = ref<AttendanceHolidayDetailViewModel | null>(null)
+
+const decorateReturnRow = (raw: Loose): AttendanceHolidayRecord => ({
+  ...(raw as AttendanceHolidayRecord),
+  createdAt: dateFormat(String(raw.createdAt ?? ''))
+})
+
+const loadReturnData: UniTableRequest = async ({ pageNo, pageSize, filters: f }) => {
+  const fv = f as Record<string, unknown>
+  const params: AttendanceHolidayReturnListParams = {
+    current: pageNo,
+    size: pageSize,
+    keyword: typeof fv.keyword === 'string' ? fv.keyword : undefined,
+    studentSchool:
+      fv.studentSchool !== undefined && fv.studentSchool !== null && fv.studentSchool !== ''
+        ? String(fv.studentSchool)
+        : undefined
+  }
+  const raw = await attendanceHolidayApi.holidayReturnPage.get(params)
+  const { list, total } = normalizePaged(raw)
+  return {
+    data: list.map((row) => decorateReturnRow(normalizeHolidayReturnRow(row))),
+    total
+  }
+}
+
+const openReturnDetail = async (row: AttendanceHolidayRecord) => {
+  const r = row as Loose
+  const hid = r.holidayId ?? r.holiday_id ?? r.leaveId ?? r.leave_id
+  const detailId =
+    hid !== undefined && hid !== null && hid !== '' ? (hid as string | number) : row.id
+  if (detailId == null || detailId === '') {
+    return
+  }
+  returnDetailVisible.value = true
+  returnDetailModel.value = null
+  await runReturnDetailLoading(async () => {
+    const raw = await attendanceHolidayApi.holidayDetail.get(detailId)
+    const body = normalizeEnvelope(raw)
+    returnDetailModel.value = formatHolidayDetailView(body, t)
+  })
+}
+
+const returnActions = computed<UniTableAction[]>(() => [
+  {
+    label: t('attendance.detail'),
+    visible: (row) => {
+      const r = row as Loose
+      const hid = r.holidayId ?? r.holiday_id ?? r.leaveId ?? r.leave_id
+      const id =
+        hid !== undefined && hid !== null && hid !== ''
+          ? (hid as string | number)
+          : (row as AttendanceHolidayRecord).id
+      return id != null && id !== ''
+    },
+    onClick: (row) => openReturnDetail(row as AttendanceHolidayRecord)
+  }
+])
 
 const returnTableEmpty = useListTableEmpty(returnFilters, {
   tableRef: returnTableRef,

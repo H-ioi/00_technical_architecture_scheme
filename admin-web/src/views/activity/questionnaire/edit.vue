@@ -7,21 +7,21 @@
       </div>
       <div class="uni-list-page__header-actions q-design__header-actions">
         <template v-if="isViewMode">
-          <el-button :disabled="!outerReady" @click="copySignupForPage">{{
-            $t('activity.copySignupLink')
-          }}</el-button>
+          <el-button :disabled="!outerReady" @click="copySignupForPage">
+            {{ $t('activity.copySignupLink') }}
+          </el-button>
           <el-button
             v-uni-permission="'busdriver_edit'"
             :disabled="!outerReady"
             @click="goEditDesign">
             {{ $t('activity.questionnaireDesigner') }}
           </el-button>
-          <el-button :disabled="!outerReady" @click="openSubmissions">{{
-            $t('activity.questionnaireSubmissions')
-          }}</el-button>
-          <el-button :loading="exporting" :disabled="!outerReady" @click="doExport">{{
-            $t('activity.exportQuestionnaire')
-          }}</el-button>
+          <el-button :disabled="!outerReady" @click="openSubmissions">
+            {{ $t('activity.questionnaireSubmissions') }}
+          </el-button>
+          <el-button :loading="exporting" :disabled="!outerReady" @click="doExport">
+            {{ $t('activity.exportQuestionnaire') }}
+          </el-button>
         </template>
         <template v-else>
           <el-button
@@ -105,8 +105,7 @@ import type {
 
 import { ElMessage } from 'element-plus'
 
-import type { UniOption } from 'uni-ui-lib'
-import { toUniOptions, useUniI18n } from 'uni-ui-lib'
+import { useUniI18n } from 'uni-ui-lib'
 import { computed, reactive, ref, watch } from 'vue'
 
 import { useRoute, useRouter } from 'vue-router'

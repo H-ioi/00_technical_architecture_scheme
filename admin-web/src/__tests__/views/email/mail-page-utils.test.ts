@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { formatMailGroupScopeDisplay } from '../../../views/email/mail-page-utils'
+import { formatMailGroupScopeDisplay } from '@/utils/mail-page-utils'
 
 describe('mail-page-utils.ts', () => {
   describe('formatMailGroupScopeDisplay', () => {

@@ -43,7 +43,7 @@
 import DetailDialog from './components/detail-dialog.vue'
 import { detailForm, searchForm, tableCols, wechatNoticeSendStatusOpts } from './list.config'
 import { attendanceWechatNoticeApi, membershipApi } from '@/api'
-import ListTableEmpty from '@/components/list-table-empty.vue'
+import ListTableEmpty from '@/components/list-table-empty/index.vue'
 import { useListTableEmpty } from '@/composables/use-list-table-empty'
 import type {
   AttendanceWechatNoticeListParams,

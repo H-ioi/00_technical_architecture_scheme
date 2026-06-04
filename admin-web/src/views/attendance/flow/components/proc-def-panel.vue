@@ -48,14 +48,13 @@ import type {
   UniOption,
   UniTableAction,
   UniTableColumn,
-  UniTableRequest,
-  UniTableRequestResult
+  UniTableRequest
 } from 'uni-ui-lib'
 import { UniDataTable, UniForm, useUniI18n, useUniListState } from 'uni-ui-lib'
 import { computed, ref } from 'vue'
 
 import { attendanceHolidayApi } from '@/api'
-import ListTableEmpty from '@/components/list-table-empty.vue'
+import ListTableEmpty from '@/components/list-table-empty/index.vue'
 import { useListTableEmpty } from '@/composables/use-list-table-empty'
 import { normalizeEnvelope, normalizePaged } from '@/utils/api-response-normalize'
 
