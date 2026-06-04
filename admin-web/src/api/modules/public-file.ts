@@ -1,7 +1,6 @@
-import { API_PATHS } from '@/api/constants'
 import { request } from 'uni-ui-lib'
 
-const pub = API_PATHS.publik
+const pub = '/publik'
 
 export default {
   infoByIds: {

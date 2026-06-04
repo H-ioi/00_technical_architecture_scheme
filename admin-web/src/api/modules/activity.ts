@@ -1,13 +1,12 @@
-import { API_PATHS } from '@/api/constants'
 import type { PageResult } from '@/types/api'
 import type { ActivityListParams } from '@/types/modules/activity-list'
 import type { AxiosResponse } from 'axios'
 import { request, type UniRawResponseRequestConfig } from 'uni-ui-lib'
 
-const path = API_PATHS.activity
-const feedbackPath = API_PATHS.activityFeedback
-const blessingPath = `${API_PATHS.activityProgram}/blessing`
-const prizeAwardPath = `${API_PATHS.activityPrize}/award`
+const path = '/isacommunity/activity'
+const feedbackPath = '/isacommunity/activity/feedback'
+const blessingPath = '/isacommunity/activity/program/blessing'
+const prizeAwardPath = '/isacommunity/activity/program/prize/award'
 
 const repeatQuery = (key: string, values: Array<string | number>) =>
   values.map((v) => `${key}=${encodeURIComponent(String(v))}`).join('&')

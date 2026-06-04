@@ -1,4 +1,3 @@
-import { API_PATHS } from '@/api/constants'
 import type {
   MailGroupListParams,
   MailSendRecordListParams,
@@ -7,8 +6,8 @@ import type {
 } from '@/types/modules/bulk-email'
 import { request } from 'uni-ui-lib'
 
-const m = API_PATHS.mailing
-const c = API_PATHS.attendanceCommon
+const m = '/isacommunity/mailing'
+const c = '/isacommunity/attendance/common'
 
 /**
  * 群发邮件（旧 `test/old-test/src/api/isacommunity/mail.js`）。

@@ -1,10 +1,5 @@
 import { describe, it, expect, vi } from 'vitest'
 
-// Mock module-level dependencies used by school-email-config.ts
-vi.mock('@/api/constants', () => ({
-  API_PATHS: { schoolEmailConfig: '/api/school-email-config' }
-}))
-
 vi.mock('@/utils/api-response-normalize', () => ({
   normalizeArray: (raw: unknown) => {
     if (Array.isArray(raw)) return raw

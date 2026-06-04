@@ -1,4 +1,3 @@
-import { API_PATHS } from '@/api/constants'
 import type { PageResult } from '@/types/api'
 import type {
   DriverFormModel,
@@ -8,9 +7,11 @@ import type {
 import { downloadBlob } from '@/utils/download'
 import { request } from 'uni-ui-lib'
 
+const base = '/isacommunity/busdriver'
+
 export default {
   page: {
-    url: `${API_PATHS.schoolBusDriver}/getDriverPage`,
+    url: `${base}/getDriverPage`,
     name: '司机分页',
     get: async function (this: { url: string }, params: DriverListParams) {
       return await request.get<PageResult<DriverRecord>, PageResult<DriverRecord>>(this.url, {
@@ -20,7 +21,7 @@ export default {
   },
 
   detail: {
-    url: `${API_PATHS.schoolBusDriver}/get`,
+    url: `${base}/get`,
     name: '司机详情',
     get: async function (this: { url: string }, id: string | number) {
       return await request.get<DriverRecord, DriverRecord>(`${this.url}/${id}`)
@@ -28,7 +29,7 @@ export default {
   },
 
   add: {
-    url: `${API_PATHS.schoolBusDriver}/add`,
+    url: `${base}/add`,
     name: '新增司机',
     post: async function (this: { url: string }, data: DriverFormModel) {
       return await request.post(this.url, data)
@@ -36,7 +37,7 @@ export default {
   },
 
   edit: {
-    url: `${API_PATHS.schoolBusDriver}/edit`,
+    url: `${base}/edit`,
     name: '编辑司机',
     post: async function (this: { url: string }, data: DriverFormModel) {
       return await request.post(this.url, data)
@@ -44,7 +45,7 @@ export default {
   },
 
   delete: {
-    url: `${API_PATHS.schoolBusDriver}/del`,
+    url: `${base}/del`,
     name: '删除司机',
     delete: async function (this: { url: string }, ids: Array<string | number>) {
       return await request.delete(this.url, {
@@ -54,7 +55,7 @@ export default {
   },
 
   import: {
-    url: `${API_PATHS.schoolBusDriver}/import`,
+    url: `${base}/import`,
     name: '导入司机',
     post: async function (this: { url: string }, file: File) {
       const formData = new FormData()
@@ -69,7 +70,7 @@ export default {
   },
 
   template: {
-    url: `${API_PATHS.schoolBusDriver}/download`,
+    url: `${base}/download`,
     name: '下载导入模板',
     download: async function (this: { url: string }, filename = 'driver-import-template.xlsx') {
       const blob = await request.get<Blob, Blob>(this.url, {

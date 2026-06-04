@@ -1,8 +1,7 @@
-import { API_PATHS } from '@/api/constants'
 import type { ActivityParentStudentLookupParams } from '@/types/modules/activity-parent-student'
 import { request } from 'uni-ui-lib'
 
-const path = API_PATHS.activity
+const path = '/isacommunity/activity'
 
 export default {
   lookupByPhone: {

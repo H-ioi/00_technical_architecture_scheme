@@ -1,4 +1,3 @@
-import { API_PATHS } from '@/api/constants'
 import type {
   BaseDictFieldRecord,
   BaseDictFieldSavePayload,
@@ -8,7 +7,7 @@ import type {
 } from '@/types/modules/base-dict'
 import { request } from 'uni-ui-lib'
 
-const baseUrl = API_PATHS.publicDictItem
+const baseUrl = '/publik/dict/item'
 
 const unwrapData = <T>(body: unknown): T | undefined => {
   if (body === null || body === undefined) {

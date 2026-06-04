@@ -1,9 +1,8 @@
-import { API_PATHS } from '@/api/constants'
 import type { SchoolEmailConfigListParams } from '@/types/modules/school-email-config'
 import { normalizeArray } from '@/utils/api-response-normalize'
 import { request } from 'uni-ui-lib'
 
-const path = API_PATHS.schoolEmailConfig
+const path = '/isacommunity/schoolEmailConfig'
 const repeatQuery = (key: string, values: Array<string | number>) =>
   values.map((v) => `${key}=${encodeURIComponent(String(v))}`).join('&')
 

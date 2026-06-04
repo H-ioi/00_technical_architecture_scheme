@@ -1,35 +1,36 @@
-import { API_PATHS } from '@/api/constants'
 import { downloadBlob } from '@/utils/download'
 import { request } from 'uni-ui-lib'
+
+const base = '/isacommunity/busline'
 
 /** 路线规划-线路（旧 `api/isacommunity/route.js`，`/isacommunity/busline`）。 */
 export default {
   page: {
-    url: `${API_PATHS.schoolBusLine}/getLinePage`,
+    url: `${base}/getLinePage`,
     get: async function (this: { url: string }, params: Record<string, unknown>) {
       return await request.get(this.url, { params })
     }
   },
   detail: {
-    url: `${API_PATHS.schoolBusLine}/get`,
+    url: `${base}/get`,
     get: async function (this: { url: string }, id: string | number) {
       return await request.get(`${this.url}/${id}`)
     }
   },
   add: {
-    url: `${API_PATHS.schoolBusLine}/add`,
+    url: `${base}/add`,
     post: async function (this: { url: string }, data: Record<string, unknown>) {
       return await request.post(this.url, data)
     }
   },
   edit: {
-    url: `${API_PATHS.schoolBusLine}/edit`,
+    url: `${base}/edit`,
     post: async function (this: { url: string }, data: Record<string, unknown>) {
       return await request.post(this.url, data)
     }
   },
   delete: {
-    url: `${API_PATHS.schoolBusLine}/del`,
+    url: `${base}/del`,
     delete: async function (this: { url: string }, ids: Array<string | number>) {
       return await request.delete(this.url, {
         params: { ids }
@@ -37,13 +38,13 @@ export default {
     }
   },
   batchCopy: {
-    url: `${API_PATHS.schoolBusLine}/batchCopy`,
+    url: `${base}/batchCopy`,
     get: async function (this: { url: string }, params: Record<string, unknown>) {
       return await request.get(this.url, { params })
     }
   },
   import: {
-    url: `${API_PATHS.schoolBusLine}/import`,
+    url: `${base}/import`,
     post: async function (this: { url: string }, file: File) {
       const formData = new FormData()
       formData.append('file', file)
@@ -55,7 +56,7 @@ export default {
     }
   },
   template: {
-    url: `${API_PATHS.schoolBusLine}/download`,
+    url: `${base}/download`,
     download: async function (this: { url: string }, filename = 'route-import-template.xlsx') {
       const blob = await request.get<Blob, Blob>(this.url, {
         responseType: 'blob'

@@ -1,4 +1,3 @@
-import { API_PATHS } from '@/api/constants'
 import { request } from 'uni-ui-lib'
 
 import type {
@@ -6,7 +5,7 @@ import type {
   ActivityPrizeUploadResult
 } from '@/types/modules/activity-prize'
 
-const path = API_PATHS.activityPrize
+const path = '/isacommunity/activity/program/prize'
 const uploadUrl = import.meta.env.VITE_UPLOAD_URL?.trim() || 'https://upload.isagzth.com/upload/'
 
 const repeatQuery = (key: string, values: Array<string | number>) =>

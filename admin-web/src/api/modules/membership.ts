@@ -1,10 +1,11 @@
-import { API_PATHS } from '@/api/constants'
 import type { SchoolOptionRecord } from '@/types/modules/membership'
 import { request } from 'uni-ui-lib'
 
+const membershipBase = '/isacommunity/membership'
+
 export default {
   school: {
-    url: `${API_PATHS.membership}/getSchoolList`,
+    url: `${membershipBase}/getSchoolList`,
     name: '学校列表',
     get: async function (this: { url: string }) {
       return await request.get<SchoolOptionRecord[], SchoolOptionRecord[]>(this.url)
@@ -14,7 +15,7 @@ export default {
   searchStudent: {
     name: '检索学生',
     get: async (student: string) => {
-      return await request.get(`${API_PATHS.membership}/searchList`, {
+      return await request.get(`${membershipBase}/searchList`, {
         params: { student }
       })
     }
@@ -23,7 +24,7 @@ export default {
   studentInfo: {
     name: '学生详情',
     get: async (admissonNo: string) => {
-      return await request.get(`${API_PATHS.membership}/getStudentInfo`, {
+      return await request.get(`${membershipBase}/getStudentInfo`, {
         params: { admissonNo }
       })
     }

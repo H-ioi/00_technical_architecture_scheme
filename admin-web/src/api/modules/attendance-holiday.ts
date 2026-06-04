@@ -1,4 +1,3 @@
-import { API_PATHS } from '@/api/constants'
 import type {
   AttendanceFlowDefListParams,
   AttendanceHolidayListParams,
@@ -8,12 +7,12 @@ import type {
 } from '@/types/modules/attendance-holiday'
 import { request } from 'uni-ui-lib'
 
-const attendanceBase = API_PATHS.attendanceHolidayRest
+const attendanceBase = '/attendance'
 
 /** 请假管理、流程与放行条等（旧 `api/isacommunity/holiday.js`，`baseUrl` `/attendance`）。 */
 export default {
   holidayPage: {
-    url: `${API_PATHS.attendanceHolidayRest}/holiday/page`,
+    url: `${attendanceBase}/holiday/page`,
     name: '请假分页',
     get: async function (this: { url: string }, params: AttendanceHolidayListParams) {
       return await request.get(this.url, { params })
@@ -21,7 +20,7 @@ export default {
   },
   /** 销假分页（旧 `listHolidayEnd`）。 */
   holidayReturnPage: {
-    url: `${API_PATHS.attendanceHolidayRest}/holiday-return/return-page`,
+    url: `${attendanceBase}/holiday-return/return-page`,
     name: '销假分页',
     get: async function (this: { url: string }, params: AttendanceHolidayReturnListParams) {
       return await request.get(this.url, { params })
@@ -31,35 +30,35 @@ export default {
   holidayDetail: {
     name: '请假详情',
     get: async (id: string | number) => {
-      return await request.get(`${API_PATHS.attendanceHolidayRest}/holiday/${id}`)
+      return await request.get(`${attendanceBase}/holiday/${id}`)
     }
   },
   /** 撤回流程（旧 `cancelFlow(procId, id)` → GET `/holiday/back/:procId/:id`；`procId` 缺省时旧前端亦拼出字面段 `null`。 */
   holidayCancelFlow: {
     name: '撤回请假流程',
     get: async (procId: string | number, id: string | number) => {
-      return await request.get(`${API_PATHS.attendanceHolidayRest}/holiday/back/${procId}/${id}`)
+      return await request.get(`${attendanceBase}/holiday/back/${procId}/${id}`)
     }
   },
   /** 新建请假（旧 `saveHoliday` POST `/holiday/save`）。 */
   holidaySave: {
     name: '新建请假',
     post: async (data: unknown) => {
-      return await request.post(`${API_PATHS.attendanceHolidayRest}/holiday/save`, data)
+      return await request.post(`${attendanceBase}/holiday/save`, data)
     }
   },
   /** 更新请假（旧 `updateHoliday` POST `/holiday/update`）。 */
   holidayUpdate: {
     name: '更新请假',
     post: async (data: unknown) => {
-      return await request.post(`${API_PATHS.attendanceHolidayRest}/holiday/update`, data)
+      return await request.post(`${attendanceBase}/holiday/update`, data)
     }
   },
   /** 删除请假记录（旧 `deleteHoliday(id)` DELETE `/holiday/:id`）。 */
   holidayDelete: {
     name: '删除请假',
     remove: async (id: string | number) => {
-      return await request.delete(`${API_PATHS.attendanceHolidayRest}/holiday/${id}`)
+      return await request.delete(`${attendanceBase}/holiday/${id}`)
     }
   },
 

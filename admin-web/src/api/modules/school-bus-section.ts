@@ -1,34 +1,35 @@
-import { API_PATHS } from '@/api/constants'
 import { request } from 'uni-ui-lib'
+
+const base = '/isacommunity/bussection'
 
 /** 学期配置（旧 `api/isacommunity/term.js`，`/isacommunity/bussection`）。 */
 export default {
   page: {
-    url: `${API_PATHS.schoolBusSection}/getSectionPage`,
+    url: `${base}/getSectionPage`,
     get: async function (this: { url: string }, params: Record<string, unknown>) {
       return await request.get(this.url, { params })
     }
   },
   detail: {
-    url: `${API_PATHS.schoolBusSection}/get`,
+    url: `${base}/get`,
     get: async function (this: { url: string }, id: string | number) {
       return await request.get(`${this.url}/${id}`)
     }
   },
   add: {
-    url: `${API_PATHS.schoolBusSection}/add`,
+    url: `${base}/add`,
     post: async function (this: { url: string }, data: Record<string, unknown>) {
       return await request.post(this.url, data)
     }
   },
   edit: {
-    url: `${API_PATHS.schoolBusSection}/edit`,
+    url: `${base}/edit`,
     post: async function (this: { url: string }, data: Record<string, unknown>) {
       return await request.post(this.url, data)
     }
   },
   delete: {
-    url: `${API_PATHS.schoolBusSection}/del`,
+    url: `${base}/del`,
     delete: async function (this: { url: string }, ids: Array<string | number>) {
       return await request.delete(this.url, {
         params: { ids }

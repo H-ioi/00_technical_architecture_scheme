@@ -1,3 +1,5 @@
+// Vite / Vue 单文件组件全局类型（tsconfig include src/**/*.d.ts 自动加载）
+// import.meta.env 与 .env 中的 VITE_* 变量；vue SFC 的 declare module
 /// <reference types="vite/client" />
 
 interface ImportMetaEnv {
@@ -9,7 +11,7 @@ interface ImportMeta {
 }
 
 declare module "*.vue" {
-  import { DefineComponent } from "vue";
+  import type { DefineComponent } from "vue";
   const component: DefineComponent;
   export default component;
 }

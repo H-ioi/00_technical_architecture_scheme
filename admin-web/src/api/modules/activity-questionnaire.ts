@@ -1,8 +1,7 @@
-import { API_PATHS } from '@/api/constants'
 import type { PageResult } from '@/types/api'
 import { request } from 'uni-ui-lib'
 
-const path = API_PATHS.activityQuestionnaire
+const path = '/isacommunity/activity/questionnaire'
 
 export default {
   page: {

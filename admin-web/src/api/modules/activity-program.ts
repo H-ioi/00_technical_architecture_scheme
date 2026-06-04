@@ -1,8 +1,7 @@
-import { API_PATHS } from '@/api/constants'
 import type { ActivityProgramListParams } from '@/types/modules/activity-program-list'
 import { request } from 'uni-ui-lib'
 
-const path = API_PATHS.activityProgram
+const path = '/isacommunity/activity/program'
 
 const repeatQuery = (key: string, values: Array<string | number>) =>
   values.map((v) => `${key}=${encodeURIComponent(String(v))}`).join('&')

@@ -1,52 +1,53 @@
-import { API_PATHS } from '@/api/constants'
 import { request } from 'uni-ui-lib'
+
+const base = '/isacommunity/buscommon'
 
 /** 校车公共接口（旧 `api/isacommunity/buscommon.js`）。 */
 export default {
   driverList: {
-    url: `${API_PATHS.schoolBusCommon}/getDriverList`,
+    url: `${base}/getDriverList`,
     get: async function (this: { url: string }, params?: Record<string, unknown>) {
       return await request.get(this.url, { params })
     }
   },
   teacherList: {
-    url: `${API_PATHS.schoolBusCommon}/getTeacherList`,
+    url: `${base}/getTeacherList`,
     get: async function (this: { url: string }, params?: Record<string, unknown>) {
       return await request.get(this.url, { params })
     }
   },
   carinfoList: {
-    url: `${API_PATHS.schoolBusCommon}/getCarinfoList`,
+    url: `${base}/getCarinfoList`,
     get: async function (this: { url: string }, params?: Record<string, unknown>) {
       return await request.get(this.url, { params })
     }
   },
   lineList: {
-    url: `${API_PATHS.schoolBusCommon}/getLineList`,
+    url: `${base}/getLineList`,
     get: async function (this: { url: string }, params?: Record<string, unknown>) {
       return await request.get(this.url, { params })
     }
   },
   stationList: {
-    url: `${API_PATHS.schoolBusCommon}/getStationList`,
+    url: `${base}/getStationList`,
     get: async function (this: { url: string }, params?: Record<string, unknown>) {
       return await request.get(this.url, { params })
     }
   },
   sectionList: {
-    url: `${API_PATHS.schoolBusCommon}/getSectionList`,
+    url: `${base}/getSectionList`,
     get: async function (this: { url: string }, params?: Record<string, unknown>) {
       return await request.get(this.url, { params })
     }
   },
   pickupMethodList: {
-    url: `${API_PATHS.schoolBusCommon}/getPickupMethodList`,
+    url: `${base}/getPickupMethodList`,
     get: async function (this: { url: string }) {
       return await request.get(this.url)
     }
   },
   orderStationList: {
-    url: `${API_PATHS.schoolBusCommon}/getOrderStationList`,
+    url: `${base}/getOrderStationList`,
     get: async function (this: { url: string }, params?: Record<string, unknown>) {
       return await request.get(this.url, { params })
     }

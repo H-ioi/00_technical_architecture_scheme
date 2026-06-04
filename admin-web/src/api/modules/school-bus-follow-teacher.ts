@@ -1,4 +1,3 @@
-import { API_PATHS } from '@/api/constants'
 import type {
   FollowTeacherFormModel,
   FollowTeacherListParams
@@ -6,38 +5,40 @@ import type {
 import { downloadBlob } from '@/utils/download'
 import { request } from 'uni-ui-lib'
 
+const base = '/isacommunity/teacher/user'
+
 /** 跟车老师账号（旧 `api/isacommunity/user.js`，`/isacommunity/teacher/user`）。 */
 export default {
   page: {
-    url: `${API_PATHS.schoolBusFollowTeacher}/paginate`,
+    url: `${base}/paginate`,
     name: '跟车老师分页',
     get: async function (this: { url: string }, params: FollowTeacherListParams) {
       return await request.get(this.url, { params })
     }
   },
   detail: {
-    url: `${API_PATHS.schoolBusFollowTeacher}/get`,
+    url: `${base}/get`,
     name: '跟车老师详情',
     get: async function (this: { url: string }, id: string | number) {
       return await request.get(`${this.url}/${id}`)
     }
   },
   add: {
-    url: `${API_PATHS.schoolBusFollowTeacher}/add`,
+    url: `${base}/add`,
     name: '新增跟车老师',
     post: async function (this: { url: string }, data: FollowTeacherFormModel) {
       return await request.post(this.url, data)
     }
   },
   edit: {
-    url: `${API_PATHS.schoolBusFollowTeacher}/edit`,
+    url: `${base}/edit`,
     name: '编辑跟车老师',
     post: async function (this: { url: string }, data: FollowTeacherFormModel) {
       return await request.post(this.url, data)
     }
   },
   delete: {
-    url: `${API_PATHS.schoolBusFollowTeacher}/del`,
+    url: `${base}/del`,
     name: '删除跟车老师',
     delete: async function (this: { url: string }, ids: Array<string | number>) {
       return await request.delete(this.url, {
@@ -46,7 +47,7 @@ export default {
     }
   },
   enable: {
-    url: `${API_PATHS.schoolBusFollowTeacher}/enable`,
+    url: `${base}/enable`,
     name: '批量启用跟车老师',
     post: async function (this: { url: string }, ids: Array<string | number>) {
       return await request.post(this.url, null, {
@@ -55,7 +56,7 @@ export default {
     }
   },
   disable: {
-    url: `${API_PATHS.schoolBusFollowTeacher}/disable`,
+    url: `${base}/disable`,
     name: '批量禁用跟车老师',
     post: async function (this: { url: string }, ids: Array<string | number>) {
       return await request.post(this.url, null, {
@@ -64,7 +65,7 @@ export default {
     }
   },
   import: {
-    url: `${API_PATHS.schoolBusFollowTeacher}/import`,
+    url: `${base}/import`,
     name: '导入跟车老师',
     post: async function (this: { url: string }, file: File) {
       const formData = new FormData()
@@ -77,7 +78,7 @@ export default {
     }
   },
   export: {
-    url: `${API_PATHS.schoolBusFollowTeacher}/export`,
+    url: `${base}/export`,
     name: '导出跟车老师',
     get: async function (this: { url: string }, params: Record<string, unknown>) {
       return await request.get<Blob, Blob>(this.url, {
@@ -87,7 +88,7 @@ export default {
     }
   },
   template: {
-    url: `${API_PATHS.schoolBusFollowTeacher}/download`,
+    url: `${base}/download`,
     name: '下载跟车老师导入模板',
     download: async function (this: { url: string }, filename = 'follow-teacher-template.xlsx') {
       const blob = await request.get<Blob, Blob>(this.url, {

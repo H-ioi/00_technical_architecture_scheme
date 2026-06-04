@@ -1,4 +1,3 @@
-import { API_PATHS } from '@/api/constants'
 import type { PageResult } from '@/types/api'
 import type {
   ProtocolDict,
@@ -10,6 +9,9 @@ import type {
   UploadFileResult
 } from '@/types/modules/protocol'
 import { request } from 'uni-ui-lib'
+
+const protocolBase = '/isacommunity/protocol'
+const protocolSignBase = '/isacommunity/protocolsign'
 
 const resolveUploadUrl = (uploadUrl: string) => {
   const baseURL = request.defaults.baseURL
@@ -38,7 +40,7 @@ const toAbsoluteUploadUrlIfNeeded = (uploadUrl: string): string => {
 
 export default {
   page: {
-    url: `${API_PATHS.protocol}/getProtocolPage`,
+    url: `${protocolBase}/getProtocolPage`,
     name: '协议分页',
     get: async function (this: { url: string }, params: ProtocolListParams) {
       return await request.get<PageResult<ProtocolRecord>, PageResult<ProtocolRecord>>(this.url, {
@@ -48,7 +50,7 @@ export default {
   },
 
   dict: {
-    url: `${API_PATHS.protocol}/getDictList`,
+    url: `${protocolBase}/getDictList`,
     name: '协议字典',
     get: async function (this: { url: string }) {
       return await request.get<ProtocolDict, ProtocolDict>(this.url)
@@ -56,7 +58,7 @@ export default {
   },
 
   info: {
-    url: `${API_PATHS.protocol}/get`,
+    url: `${protocolBase}/get`,
     name: '协议详情',
     get: async function (this: { url: string }, id: string | number) {
       return await request.get<ProtocolRecord, ProtocolRecord>(`${this.url}/${id}`)
@@ -64,7 +66,7 @@ export default {
   },
 
   add: {
-    url: `${API_PATHS.protocol}/add`,
+    url: `${protocolBase}/add`,
     name: '新增协议',
     post: async function (this: { url: string }, data: ProtocolFormModel) {
       return await request.post(this.url, data)
@@ -72,7 +74,7 @@ export default {
   },
 
   edit: {
-    url: `${API_PATHS.protocol}/edit`,
+    url: `${protocolBase}/edit`,
     name: '编辑协议',
     post: async function (this: { url: string }, data: ProtocolFormModel) {
       return await request.post(this.url, data)
@@ -80,7 +82,7 @@ export default {
   },
 
   delete: {
-    url: `${API_PATHS.protocol}/del`,
+    url: `${protocolBase}/del`,
     name: '删除协议',
     delete: async function (this: { url: string }, ids: Array<string | number>) {
       return await request.delete(this.url, {
@@ -90,7 +92,7 @@ export default {
   },
 
   signPage: {
-    url: `${API_PATHS.protocolSign}/getProtocolSignPage`,
+    url: `${protocolBaseSign}/getProtocolSignPage`,
     name: '签署分页',
     get: async function (this: { url: string }, params: ProtocolSignListParams) {
       return await request.get<PageResult<ProtocolSignRecord>, PageResult<ProtocolSignRecord>>(

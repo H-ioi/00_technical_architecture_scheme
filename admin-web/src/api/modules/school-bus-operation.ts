@@ -1,36 +1,37 @@
-import { API_PATHS } from '@/api/constants'
 import type { OperationFormModel, OperationListParams } from '@/types/modules/school-bus-operation'
 import { downloadBlob } from '@/utils/download'
 import { request } from 'uni-ui-lib'
 
+const base = '/isacommunity/busoperation'
+
 /** 校车路线运营（旧 `api/isacommunity/busoperation.js`）。 */
 export default {
   page: {
-    url: `${API_PATHS.schoolBusOperation}/getOperationPage`,
+    url: `${base}/getOperationPage`,
     get: async function (this: { url: string }, params: OperationListParams) {
       return await request.get(this.url, { params })
     }
   },
   detail: {
-    url: `${API_PATHS.schoolBusOperation}/get`,
+    url: `${base}/get`,
     get: async function (this: { url: string }, id: string | number) {
       return await request.get(`${this.url}/${id}`)
     }
   },
   add: {
-    url: `${API_PATHS.schoolBusOperation}/add`,
+    url: `${base}/add`,
     post: async function (this: { url: string }, data: OperationFormModel) {
       return await request.post(this.url, data)
     }
   },
   edit: {
-    url: `${API_PATHS.schoolBusOperation}/edit`,
+    url: `${base}/edit`,
     post: async function (this: { url: string }, data: OperationFormModel) {
       return await request.post(this.url, data)
     }
   },
   delete: {
-    url: `${API_PATHS.schoolBusOperation}/del`,
+    url: `${base}/del`,
     delete: async function (this: { url: string }, ids: Array<string | number>) {
       return await request.delete(this.url, {
         params: { ids }
@@ -38,7 +39,7 @@ export default {
     }
   },
   import: {
-    url: `${API_PATHS.schoolBusOperation}/import`,
+    url: `${base}/import`,
     post: async function (this: { url: string }, file: File) {
       const formData = new FormData()
       formData.append('file', file)
@@ -50,7 +51,7 @@ export default {
     }
   },
   export: {
-    url: `${API_PATHS.schoolBusOperation}/export`,
+    url: `${base}/export`,
     get: async function (this: { url: string }, params: Record<string, unknown>) {
       return await request.get<Blob, Blob>(this.url, {
         params,
@@ -59,7 +60,7 @@ export default {
     }
   },
   template: {
-    url: `${API_PATHS.schoolBusOperation}/download`,
+    url: `${base}/download`,
     download: async function (this: { url: string }, filename = 'operation-import-template.xlsx') {
       const blob = await request.get<Blob, Blob>(this.url, {
         responseType: 'blob'

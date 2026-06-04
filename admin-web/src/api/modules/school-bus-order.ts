@@ -1,47 +1,48 @@
-import { API_PATHS } from '@/api/constants'
 import type { BusOrderFormModel, BusOrderListParams } from '@/types/modules/school-bus-order'
 import { downloadBlob } from '@/utils/download'
 import { request } from 'uni-ui-lib'
 
+const base = '/isacommunity/busorder'
+
 /** 校车乘车订单 / 申请意向（旧 `api/isacommunity/busorder.js`）。 */
 export default {
   intentionPage: {
-    url: `${API_PATHS.schoolBusOrder}/getIntentionOrderPage`,
+    url: `${base}/getIntentionOrderPage`,
     name: '申请意向分页',
     get: async function (this: { url: string }, params: BusOrderListParams) {
       return await request.get(this.url, { params })
     }
   },
   orderPage: {
-    url: `${API_PATHS.schoolBusOrder}/getOrderPage`,
+    url: `${base}/getOrderPage`,
     name: '乘车学生分页',
     get: async function (this: { url: string }, params: BusOrderListParams) {
       return await request.get(this.url, { params })
     }
   },
   detail: {
-    url: `${API_PATHS.schoolBusOrder}/get`,
+    url: `${base}/get`,
     name: '订单详情',
     get: async function (this: { url: string }, id: string | number) {
       return await request.get(`${this.url}/${id}`)
     }
   },
   add: {
-    url: `${API_PATHS.schoolBusOrder}/add`,
+    url: `${base}/add`,
     name: '新增订单',
     post: async function (this: { url: string }, data: BusOrderFormModel) {
       return await request.post(this.url, data)
     }
   },
   edit: {
-    url: `${API_PATHS.schoolBusOrder}/edit`,
+    url: `${base}/edit`,
     name: '编辑订单',
     post: async function (this: { url: string }, data: BusOrderFormModel) {
       return await request.post(this.url, data)
     }
   },
   delIntentionOrder: {
-    url: `${API_PATHS.schoolBusOrder}/delIntentionOrder`,
+    url: `${base}/delIntentionOrder`,
     name: '删除意向订单',
     delete: async function (this: { url: string }, ids: Array<string | number>) {
       return await request.delete(this.url, {
@@ -50,7 +51,7 @@ export default {
     }
   },
   delOrder: {
-    url: `${API_PATHS.schoolBusOrder}/delOrder`,
+    url: `${base}/delOrder`,
     name: '删除正式订单',
     delete: async function (this: { url: string }, ids: Array<string | number>) {
       return await request.delete(this.url, {
@@ -59,14 +60,14 @@ export default {
     }
   },
   batchApprove: {
-    url: `${API_PATHS.schoolBusOrder}/batchApprove`,
+    url: `${base}/batchApprove`,
     name: '批量同意意向',
     get: async function (this: { url: string }, params: { ids: Array<string | number> }) {
       return await request.get(this.url, { params })
     }
   },
   batchDeny: {
-    url: `${API_PATHS.schoolBusOrder}/batchDeny`,
+    url: `${base}/batchDeny`,
     name: '批量拒绝意向',
     get: async function (
       this: { url: string },
@@ -76,14 +77,14 @@ export default {
     }
   },
   batchUpdatePaymentStatus: {
-    url: `${API_PATHS.schoolBusOrder}/batchUpdatePaymentStatus`,
+    url: `${base}/batchUpdatePaymentStatus`,
     name: '批量标记已缴费',
     get: async function (this: { url: string }, params: { ids: Array<string | number> }) {
       return await request.get(this.url, { params })
     }
   },
   importIntentionOrder: {
-    url: `${API_PATHS.schoolBusOrder}/importIntentionOrder`,
+    url: `${base}/importIntentionOrder`,
     name: '导入意向订单',
     post: async function (this: { url: string }, file: File) {
       const formData = new FormData()
@@ -96,7 +97,7 @@ export default {
     }
   },
   downloadIntentionOrder: {
-    url: `${API_PATHS.schoolBusOrder}/downloadIntentionOrder`,
+    url: `${base}/downloadIntentionOrder`,
     name: '下载意向导入模板',
     download: async function (this: { url: string }, filename = 'intention-order-template.xlsx') {
       const blob = await request.get<Blob, Blob>(this.url, {
@@ -106,7 +107,7 @@ export default {
     }
   },
   importOrder: {
-    url: `${API_PATHS.schoolBusOrder}/importOrder`,
+    url: `${base}/importOrder`,
     name: '导入乘车学生',
     post: async function (this: { url: string }, file: File) {
       const formData = new FormData()
@@ -119,7 +120,7 @@ export default {
     }
   },
   downloadOrder: {
-    url: `${API_PATHS.schoolBusOrder}/downloadOrder`,
+    url: `${base}/downloadOrder`,
     name: '下载乘车学生导入模板',
     download: async function (this: { url: string }, filename = 'bus-order-template.xlsx') {
       const blob = await request.get<Blob, Blob>(this.url, {
@@ -129,7 +130,7 @@ export default {
     }
   },
   exportOrder: {
-    url: `${API_PATHS.schoolBusOrder}/exportOrder`,
+    url: `${base}/exportOrder`,
     name: '导出乘车学生',
     get: async function (this: { url: string }, params: Record<string, unknown>) {
       return await request.get<Blob, Blob>(this.url, {
@@ -139,21 +140,21 @@ export default {
     }
   },
   getStudentInfo: {
-    url: `${API_PATHS.schoolBusOrder}/getStudentInfo`,
+    url: `${base}/getStudentInfo`,
     name: '学生精确查询',
     get: async function (this: { url: string }, params: Record<string, unknown>) {
       return await request.get(this.url, { params })
     }
   },
   getStudentInfoList: {
-    url: `${API_PATHS.schoolBusOrder}/getStudentInfoList`,
+    url: `${base}/getStudentInfoList`,
     name: '学生模糊查询',
     get: async function (this: { url: string }, params: Record<string, unknown>) {
       return await request.get(this.url, { params })
     }
   },
   getLineStationPrice: {
-    url: `${API_PATHS.schoolBusOrder}/getLineStationPrice`,
+    url: `${base}/getLineStationPrice`,
     name: '线路站点价格',
     post: async function (this: { url: string }, data: Record<string, unknown>) {
       return await request.post(this.url, data)

@@ -42,7 +42,8 @@
 | 样式 | Sass（SCSS） |
 | 状态管理 | Pinia（uni-app 适配方案） |
 | 国际化 | vue-i18n（默认语言包：`zh-CN`、`en-US`、`ja-JP`、`ko-KR`） |
-| 接口层 | `services/` 或 `api/` 二选一并全局统一 |
+| 接口层 | **`api/`**（模板已统一；与 `admin-web` 模块形态一致） |
+| 请求封装 | **`utils/request.ts`**（`uni-request`；拦截器解包业务 `data`） |
 | 质量体系 | ESLint + Prettier + Stylelint + lint-staged + commitlint |
 
 ### 3.2 基础约束
@@ -50,7 +51,8 @@
 - 新模块必须使用 TypeScript，不新增纯 JavaScript 业务文件
 - 样式统一使用 Sass，不引入 Less / Stylus 作为主方案
 - 状态管理统一使用 Pinia，不混用多套全局状态方案
-- 接口目录命名统一为 `services/` 或 `api/`，项目内不得并存
+- 接口目录统一为 **`api/`**；HTTP 实例与拦截器在 **`utils/request.ts`**，不在 `api/` 再建 `request.ts` / `http-helpers.ts`
+- 遵循 **uni-review-mobile** 内联原则：单处引用的 path、常量、薄 composable、单函数 utils 文件禁止抽取
 - 跨页面复用能力优先沉淀 `components/`、`composables/`
 - 文案不直接硬编码在多个页面：可抽成 i18n 词条，词条按模块分文件维护
 
@@ -58,91 +60,60 @@
 
 ## 四、目录结构与分层
 
-以下目录树**与当前仓库 `customer-mobile` 示例工程一致**（在 `src` 下对 `services` / `types` / `utils` 等使用 `modules/` 子目录，按业务域拆文件；`node_modules`、构建产物等不列入）：
+以下目录树**与当前仓库 `customer-mobile` 标准模板一致**（`node_modules`、构建产物不列入）：
 
 ```bash
 customer-mobile/
-├── .env.development
-├── .env.test
-├── .env.production
-├── .gitignore
-├── .husky/
-│   ├── pre-commit                   # lint-staged
-│   └── commit-msg                   # commitlint
-├── .prettierrc.json
-├── .stylelintrc.cjs
-├── commitlint.config.cjs
-├── eslint.config.mjs
-├── index.html                       # H5 入口 HTML（uni-app / Vite）
-├── package.json
-├── package-lock.json                # npm 锁文件（若团队统一只用 yarn/pnpm，可按规范择一）
-├── yarn.lock
-├── shims-uni.d.ts                   # 根目录类型补充（可与 src 内声明收敛为一套）
-├── tsconfig.json
-├── vite.config.ts
+├── .env.development / .env.test / .env.production   # VITE_API_BASE_URL 等
+├── .husky/、eslint、prettier、stylelint、commitlint
+├── package.json、package-lock.json
+├── tsconfig.json、vite.config.ts、index.html
 └── src/
-    ├── main.ts                      # 应用入口：Pinia、vue-i18n 等注册
-    ├── App.vue
-    ├── app.scss                     # 全局样式（在 App.vue 中引入）
-    ├── uni.scss                     # uni-app 内置/主题变量
-    ├── env.d.ts                     # Vite / .vue 等类型
-    ├── shime-uni.d.ts               # vue 页面/应用生命周期类型（可与 shims-uni 合并治理）
-    ├── manifest.json                # 应用与各端配置（勿写 JSON 注释）
-    ├── pages.json                   # 页面路由、tabBar、全局窗口样式
-    ├── pages/
-    │   ├── home/index.vue           # Tab：首页
-    │   ├── mine/index.vue           # Tab：我的（含语言切换示例）
-    │   └── index/index.vue          # 模板遗留页：未注册到 pages.json 时可删除
-    ├── components/
-    │   ├── common/
-    │   │   └── section-title.vue
-    │   └── business/
-    │       └── .gitkeep             # 占位；业务组件在此目录增量添加
+    ├── main.ts                    # Pinia、i18n；side-effect: import '@/utils/request'
+    ├── App.vue、app.scss、uni.scss
+    ├── manifest.json、pages.json   # 当前仅注册 pages/home/index
+    ├── pages/home/index.vue       # 示例首页（onShow + setNavigationBarTitle）
+    ├── components/common/
+    │   ├── locale-toggle.vue      # 全局注册
+    │   └── section-title.vue
     ├── composables/
-    │   ├── index.ts
-    │   ├── use-user-profile.ts
-    │   ├── use-locale.ts            # 切换语言 + TabBar/导航栏同步
-    │   └── use-navigation-title.ts  # onShow 同步导航栏标题
-    ├── locales/
-    │   ├── constants.ts             # 存储键、支持语言列表、展示名等
-    │   ├── index.ts                 # createI18n、持久化、TabBar/标题工具函数
-    │   └── lang/                    # 各语言词条（按文件拆分）
-    │       ├── zh-CN.ts
-    │       ├── en-US.ts
-    │       ├── ja-JP.ts
-    │       └── ko-KR.ts
-    ├── stores/
-    │   ├── index.ts
+    │   ├── use-locale.ts          # 多页语言切换（持久化 + 导航栏同步）
+    │   └── use-app-common.ts      # 登录/跳转/定位等（原 mixin 聚合，勿再拆薄包装）
+    ├── api/
+    │   ├── index.ts               # 导出 authorityApi、commonsApi、homeApi
     │   └── modules/
-    │       └── app.ts
-    ├── services/
-    │   ├── index.ts
-    │   ├── request.ts               # 请求薄封装（含 mock 分支示例）
-    │   └── modules/
-    │       └── user.ts
-    ├── types/
-    │   ├── index.ts
-    │   └── modules/
-    │       ├── http.ts
-    │       └── user.ts
+    │       ├── home.ts            # 标准案例（REST 前缀写文件顶 const）
+    │       ├── authority.ts
+    │       └── commons.ts
     ├── utils/
-    │   ├── index.ts
-    │   └── modules/
-    │       └── platform.ts          # H5 / 小程序等平台判断
-    └── static/
-        └── logo.png
+    │   ├── request.ts             # 唯一 HTTP 入口；拦截器解包 res.data
+    │   ├── index.ts               # UUID、防抖、金额运算等（多页/多处置才保留）
+    │   └── math.ts
+    ├── stores/modules/
+    │   ├── app.ts
+    │   └── user.ts
+    ├── types/
+    │   ├── env.d.ts、shims-uni.d.ts、uni-request.d.ts
+    │   └── modules/               # http、user、authority、home、commons…
+    ├── locales/
+    │   ├── constants.ts、index.ts
+    │   └── lang/{zh-CN,en-US,ja-JP,ko-KR}/
+    │       ├── index.ts           # 聚合 home/nav/common/auth
+    │       ├── home.ts、nav.ts、common.ts、auth.ts
+    └── styles/common/             # _layout.scss、_form-reset.scss
 ```
 
 分层职责：
 
-- `pages/`：页面编排与交互组织，不散落底层请求细节
-- `components/`：项目内复用视图组件
-- `composables/`：跨页面逻辑复用与状态编排
-- `locales/`：国际化词条与 `vue-i18n` 实例；语言文件放在 `locales/lang/` 下按语种拆分
-- `stores/`：跨组件/跨页面共享状态
-- `services/`：按业务域封装接口；域级实现放在 `services/modules/`，入口在 `services/index.ts` 聚合导出
-- `types/`：参数、响应与领域模型类型定义；域级类型放在 `types/modules/`
-- `utils/`：纯工具函数，不依赖页面上下文；端相关判断等放在 `utils/modules/`
+- `pages/`：页面编排；导航标题在页内 `onShow` + `uni.setNavigationBarTitle` + `t('nav.*')`
+- `components/`：跨页 UI（≥2 页再用 `components/`）
+- `composables/`：**仅多页复用**的业务编排；禁止 `use-navigation-title` 类单页薄包装
+- `api/modules/`：按域封装接口（与 admin-web 相同 `{ url, name, get/post }`）；禁止 `api/constants.ts`、`pickData` 辅助文件
+- `utils/request.ts`：鉴权、loading、业务 code、**统一解包 `data`**
+- `utils/`：无 Vue、无接口；**禁止**仅一处引用的单函数文件
+- `stores/modules/`：跨页状态（如 `user`、`app`）
+- `types/modules/`：请求/响应契约；全局声明放 `types/*.d.ts`
+- `locales/lang/<locale>/`：按域拆分词条文件
 
 ---
 
@@ -174,15 +145,15 @@ customer-mobile/
 标准数据流：
 
 ```text
-Page / Component -> composable(use-xxx) -> service(api) -> request client
+Page / Component -> composable（≥2 页）或页内逻辑 -> api/modules -> utils/request
 ```
 
 ### 6.1 实施要求
 
-- 页面层仅消费 composable 暴露的数据与动作
-- 请求实例、鉴权、错误处理在请求层统一处理
-- 同业务域接口统一放在同一个 service 文件（如 `user.ts`、`order.ts`）
-- 类型契约优先定义在 `types/modules/` 并经 `types/index.ts` 导出，避免 any 扩散
+- 页面通过 `import { xxxApi } from '@/api'` 调接口；`const res = await homeApi.xxx.get()`，`return res.data`（已是业务体）
+- 鉴权、loading、业务 code、toast 在 `utils/request.ts` 拦截器统一处理
+- 同业务域一个 `api/modules/<domain>.ts`；路径前缀写在**该文件顶部** `const base = '...'`（禁止 `api/constants.ts`）
+- 类型定义在 `types/modules/<domain>.ts`，按需从 `api/index.ts` 再导出类型
 
 ### 6.2 禁止事项
 
@@ -313,8 +284,8 @@ src/stores/
 
 ### 12.2 配置要求
 
-- 运行时配置统一由环境变量注入，不在业务代码硬编码地址
-- 按端差异（H5 / 小程序）封装在 `src/utils/modules/platform.ts` 等统一入口
+- 运行时配置由 `.env.*` 的 `VITE_API_BASE_URL` 注入，`utils/request.ts` 读取 `import.meta.env`
+- 按端差异（H5 / 小程序）在**需要时**于页面或 composable 内 `#ifdef` / 分支处理，并注释原因；勿为单页预建 `platform.ts`
 - 禁止页面散写端能力判断与兼容逻辑
 
 ---
@@ -333,15 +304,16 @@ npm run dev:h5
 ### 13.2 新增页面标准动作
 
 1. 在 `pages/` 新建页面目录并在 `pages.json` 注册
-2. 页面逻辑优先抽到 `composables/use-xxx.ts`
-3. 若涉及接口，先补 `types/modules/` 下契约，再新增 `services/modules/` 能力并在 `types/index.ts` / `services/index.ts` 汇总导出
-4. 样式变量统一进入 `uni.scss` 或 `_vars.scss`
+2. 单页逻辑写在页面 `<script setup>`；**≥2 页**复用再抽 `composables/use-xxx.ts`
+3. 涉及接口：先 `types/modules/` → `api/modules/` → `api/index.ts` 导出 `xxxApi`
+4. 导航标题：`onShow` 内 `uni.setNavigationBarTitle({ title: t('nav.xxx') })`
+5. 样式变量进 `uni.scss`；跨页 class 进 `styles/common/`
 
 ### 13.3 新增接口标准动作
 
-1. 按业务域在 `services/modules/` 新增能力，并在 `services/index.ts` 统一导出
-2. 完善请求参数与响应类型
-3. 页面只调用 composable / service，不散写请求实现
+1. 在 `api/modules/<domain>.ts` 增加 `{ url, name, get/post }`（参考 `home.ts`）
+2. 在 `api/index.ts` 导出 `xxxApi` 与必要类型
+3. 页面或 composable 调用 `xxxApi`；禁止页面裸拼 `http` URL
 
 ---
 
@@ -396,7 +368,7 @@ npm run dev:h5
 ### 16.2 工程约定
 
 - 依赖：`vue-i18n`（与 Vue 3 配套），在 `main.ts` 中 `app.use(i18n)`，且 **`legacy: false`**，页面内使用 `useI18n()`。
-- 词条文件：按语言拆分在 `src/locales/lang/` 下，例如 `zh-CN.ts`、`en-US.ts`……键名采用 **点分层级**（如 `tab.home`、`mine.refreshProfile`），避免平面大对象难以检索。
+- 词条文件：`src/locales/lang/<locale>/` 下按域拆分（`home.ts`、`nav.ts`、`common.ts`、`auth.ts`），由 `index.ts` 聚合；键名用点分层级（如 `home.title`、`nav.homeTitle`）。
 - 常量：`src/locales/constants.ts` 声明 `LOCALE_STORAGE_KEY`、`SUPPORTED_LOCALES`、`DEFAULT_LOCALE`，避免魔法字符串散落在业务里。
 - 持久化：用户所选语言写入 `uni.setStorageSync`，应用启动时用 `uni.getStorageSync` 恢复到 `createI18n({ locale })`，保证二次打开仍是上次语言。
 
@@ -404,14 +376,14 @@ npm run dev:h5
 
 `pages.json` 里的 **`tabBar.list[].text`、`navigationBarTitleText` 为静态文案**，无法随语言自动切换。约定如下：
 
-1. **Tab 文案**：应用启动与用户切换语言后，调用 `uni.setTabBarItem`，按当前 `t('tab.*')` 写入文本。
-2. **导航栏标题**：各页在展示时调用 `uni.setNavigationBarTitle`（例如在页面 `onShow` 中），标题取自 `t('nav.*')`。
-3. **页面内文案**：模板与脚本统一走 `t('...')`，不在页面写死字符串（少量调试文案除外）。
+1. **Tab 文案**（若配置 tabBar）：启动与切换语言后 `uni.setTabBarItem` + `t('tab.*')`；当前模板无 tabBar，接入后再补。
+2. **导航栏标题**：各页 **`onShow`** 内 `uni.setNavigationBarTitle({ title: t('nav.*') })`，**不要**单独建 `use-navigation-title.ts`。
+3. **页面内文案**：模板与脚本统一 `t('...')`。
 
 ### 16.4 与分层的关系
 
-- 切换语言属于“应用级动作”：封装在 `composables/use-locale.ts`（或等价模块）中，内部完成 `locale` 变更、持久化、`setTabBarItem`、必要时同步当前页导航标题。
-- 接口错误提示等多为后端返回：可在 `services` 层统一映射为 i18n key 或先做轻量映射，避免每个页面散落 `if (code === xxx)`。
+- 语言切换：`composables/use-locale.ts`（多页会用 `LocaleToggle`）；内部 `persistLocale`、`syncNavigationBarForCurrentRoute`。
+- 接口错误：`utils/request.ts` 拦截器统一 toast；业务页不重复处理 code。
 
 ### 16.5 验收补充
 
@@ -420,15 +392,35 @@ npm run dev:h5
 
 ---
 
-## 十七、当前仓库落地建议（customer-mobile）
+## 十七、标准模板现状与扩展方式（customer-mobile）
 
-仓库内示例工程 `customer-mobile` 已可按本方案迭代；新项目或从零初始化时，建议按下列顺序落地：
+当前仓库为**可复制的标准模板**，不是完整业务应用：
 
-1. 使用 `uni-app Vue3 + TypeScript + Vite` 模板初始化项目骨架
-2. 按本文第四章建立标准目录并补齐基础脚本
-3. 先完成首页与个人中心双页面最小闭环（页面 + service + store）
-4. 按第十六章接入 `vue-i18n` 与中英日韩默认语言包
-5. 接入 ESLint / Prettier / Stylelint / Husky / lint-staged
-6. 建立首个多端发布流水线（mp-weixin + h5）
+| 已具备 | 说明 |
+| --- | --- |
+| 单页示例 | `pages/home/index` + i18n + `LocaleToggle` |
+| 接口层 | `api/` + `home` 标准模块；`authority`、`commons` 为登录/定位示例 |
+| 请求 | `utils/request.ts`（`uni-request@1.0.2`） |
+| 跨页能力 | `use-locale`、`use-app-common`（勿再拆碎） |
+| 状态 | `stores/modules/app`、`user` |
+| 工具 | `utils/index.ts`、`math.ts`（仅多处置引用） |
+| 质量门禁 | `lint` / `lint:style` / `type-check` / Husky |
 
-该阶段完成后，再按业务节奏逐步补齐分包策略、监控埋点与测试覆盖。
+| 模板未包含（按业务增量） | 说明 |
+| --- | --- |
+| tabBar / 多 Tab 页 | 在 `pages.json` 注册并同步 i18n |
+| `services/` | **禁止**与 `api/` 并存 |
+| `data/` Mock 目录 | 需要时新建并标注 Mock |
+| `static/` | 按 §2.2 按域建子目录 |
+
+**评审与实现：** 以 Cursor Skill **`uni-review-mobile`** 为准（含内联原则：禁止单处引用的 constants、薄 composable、单函数 utils）。
+
+**复制模板后建议顺序：**
+
+1. 改 `package.json` name、`.env.*` 的 `VITE_API_BASE_URL`
+2. `pages.json` 注册业务页；页内 `onShow` 设置导航标题
+3. 按域增加 `api/modules` + `types/modules`
+4. 仅当逻辑 **≥2 页** 使用时再增 `composables/`
+5. 跑通 `lint` + `type-check` + 目标端 `build`
+
+项目内说明见 [customer-mobile/README.md](./customer-mobile/README.md)。

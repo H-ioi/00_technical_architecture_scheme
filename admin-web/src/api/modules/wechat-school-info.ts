@@ -1,8 +1,7 @@
-import { API_PATHS } from '@/api/constants'
 import type { WechatSchoolInfoListParams } from '@/types/modules/wechat-school-info'
 import { request } from 'uni-ui-lib'
 
-const path = API_PATHS.wechatSchoolInfo
+const path = '/isacommunity/wechatSchoolInfo'
 const repeatQuery = (key: string, values: Array<string | number>) =>
   values.map((v) => `${key}=${encodeURIComponent(String(v))}`).join('&')
 

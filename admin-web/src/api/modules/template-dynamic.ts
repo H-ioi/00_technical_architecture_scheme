@@ -1,7 +1,6 @@
-import { API_PATHS } from '@/api/constants'
 import { request } from 'uni-ui-lib'
 
-const pub = API_PATHS.publik
+const pub = '/publik'
 
 /** 活动问卷绑定动态模板所用 scene */
 export const ISA_COMMUNITY_QUESTIONNAIRE_SCENE = 'isa_community_questionnaire'
