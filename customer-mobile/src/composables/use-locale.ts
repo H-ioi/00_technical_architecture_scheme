@@ -1,14 +1,13 @@
-import {
-  LOCALE_DISPLAY_NAMES,
-  type AppLocale,
-  SUPPORTED_LOCALES,
-} from "@/locales/constants";
-import {
-  applyTabBarTexts,
-  persistLocale,
-  syncNavigationBarForCurrentRoute,
-} from "@/locales";
+import { persistLocale, syncNavigationBarForCurrentRoute } from "@/locales";
+import { LOCALE_SHORT_LABELS, SUPPORTED_LOCALES, type AppLocale } from "@/locales/constants";
+import { computed } from "vue";
 import { useI18n } from "vue-i18n";
+
+export function nextAppLocale(current: AppLocale): AppLocale {
+  const idx = SUPPORTED_LOCALES.indexOf(current);
+  const nextIdx = idx < 0 ? 0 : (idx + 1) % SUPPORTED_LOCALES.length;
+  return SUPPORTED_LOCALES[nextIdx] ?? SUPPORTED_LOCALES[0];
+}
 
 export function useLocaleSwitcher() {
   const { locale } = useI18n();
@@ -16,18 +15,20 @@ export function useLocaleSwitcher() {
   function setLocale(next: AppLocale) {
     locale.value = next;
     persistLocale(next);
-    applyTabBarTexts();
     syncNavigationBarForCurrentRoute();
   }
 
-  const localeOptions = SUPPORTED_LOCALES.map((code) => ({
-    value: code,
-    label: LOCALE_DISPLAY_NAMES[code],
-  }));
+  function cycleLocale() {
+    setLocale(nextAppLocale(locale.value as AppLocale));
+  }
+
+  const nextLocaleShortLabel = computed(() => {
+    const next = nextAppLocale(locale.value as AppLocale);
+    return LOCALE_SHORT_LABELS[next];
+  });
 
   return {
-    localeOptions,
-    setLocale,
-    currentLocale: locale as unknown as typeof locale,
+    cycleLocale,
+    nextLocaleShortLabel,
   };
 }

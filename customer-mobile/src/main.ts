@@ -1,7 +1,8 @@
+import LocaleToggle from "@/components/common/locale-toggle.vue";
+import i18n from "@/locales";
 import { createPinia } from "pinia";
 import { createSSRApp } from "vue";
 import App from "./App.vue";
-import i18n from "@/locales";
 
 export function createApp() {
   const app = createSSRApp(App);
@@ -9,6 +10,7 @@ export function createApp() {
 
   app.use(pinia);
   app.use(i18n);
+  app.component("LocaleToggle", LocaleToggle);
 
   return {
     app,

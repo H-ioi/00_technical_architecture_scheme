@@ -1,18 +1,13 @@
 import { createI18n } from "vue-i18n";
 
-import {
-  DEFAULT_LOCALE,
-  LOCALE_STORAGE_KEY,
-  isAppLocale,
-  type AppLocale,
-} from "./constants";
+import { DEFAULT_LOCALE, LOCALE_STORAGE_KEY, isAppLocale, type AppLocale } from "./constants";
 
 import messagesEnUS from "./lang/en-US";
 import messagesJaJP from "./lang/ja-JP";
 import messagesKoKR from "./lang/ko-KR";
 import messagesZhCN from "./lang/zh-CN";
 
-function readStoredLocale(): AppLocale {
+function readStoredLocale(): AppLocale | null {
   try {
     const raw = uni.getStorageSync(LOCALE_STORAGE_KEY);
     if (typeof raw === "string" && isAppLocale(raw)) {
@@ -22,13 +17,64 @@ function readStoredLocale(): AppLocale {
     // ignore
   }
 
+  return null;
+}
+
+function mapToSupportedLocale(locale: string): AppLocale | null {
+  const normalized = locale.trim().toLowerCase().replace("_", "-");
+
+  if (normalized === "zh-cn" || normalized.startsWith("zh")) {
+    return "zh-CN";
+  }
+  if (normalized === "en-us" || normalized.startsWith("en")) {
+    return "en-US";
+  }
+  if (normalized === "ja-jp" || normalized.startsWith("ja")) {
+    return "ja-JP";
+  }
+  if (normalized === "ko-kr" || normalized.startsWith("ko")) {
+    return "ko-KR";
+  }
+
+  return null;
+}
+
+function detectSystemLocale(): AppLocale {
+  try {
+    const systemLanguage = uni.getSystemInfoSync().language;
+    if (typeof systemLanguage === "string") {
+      const matched = mapToSupportedLocale(systemLanguage);
+      if (matched) {
+        return matched;
+      }
+    }
+  } catch {
+    // ignore
+  }
+
+  if (typeof navigator !== "undefined" && typeof navigator.language === "string") {
+    const matched = mapToSupportedLocale(navigator.language);
+    if (matched) {
+      return matched;
+    }
+  }
+
   return DEFAULT_LOCALE;
+}
+
+function resolveInitialLocale(): AppLocale {
+  const stored = readStoredLocale();
+  if (stored) {
+    return stored;
+  }
+
+  return detectSystemLocale();
 }
 
 export const i18n = createI18n({
   legacy: false,
   globalInjection: true,
-  locale: readStoredLocale(),
+  locale: resolveInitialLocale(),
   fallbackLocale: DEFAULT_LOCALE,
   messages: {
     "zh-CN": messagesZhCN,
@@ -44,27 +90,12 @@ export function persistLocale(locale: AppLocale) {
   uni.setStorageSync(LOCALE_STORAGE_KEY, locale);
 }
 
-export function applyTabBarTexts() {
-  const t = i18n.global.t;
-  uni.setTabBarItem({
-    index: 0,
-    text: String(t("tab.home")),
-  });
-  uni.setTabBarItem({
-    index: 1,
-    text: String(t("tab.mine")),
-  });
-}
-
 export function syncNavigationBarForCurrentRoute() {
   const pages = getCurrentPages();
   const top = pages[pages.length - 1];
   const route = top?.route ?? "";
-  const t = i18n.global.t;
 
   if (route.includes("pages/home/index")) {
-    uni.setNavigationBarTitle({ title: String(t("nav.homeTitle")) });
-  } else if (route.includes("pages/mine/index")) {
-    uni.setNavigationBarTitle({ title: String(t("nav.mineTitle")) });
+    uni.setNavigationBarTitle({ title: String(i18n.global.t("nav.homeTitle")) });
   }
 }

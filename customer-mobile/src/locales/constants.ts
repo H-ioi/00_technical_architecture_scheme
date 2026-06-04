@@ -10,10 +10,10 @@ export function isAppLocale(value: string): value is AppLocale {
   return SUPPORTED_LOCALES.includes(value as AppLocale);
 }
 
-/** 语言选择器展示名（与用户当前界面语言无关，固定本地化名） */
-export const LOCALE_DISPLAY_NAMES: Record<AppLocale, string> = {
-  "zh-CN": "简体中文",
-  "en-US": "English",
-  "ja-JP": "日本語",
-  "ko-KR": "한국어",
+/** 语言切换按钮短标签（展示「将切换到的」语言） */
+export const LOCALE_SHORT_LABELS: Record<AppLocale, string> = {
+  "zh-CN": "中",
+  "en-US": "En",
+  "ja-JP": "日",
+  "ko-KR": "한",
 };

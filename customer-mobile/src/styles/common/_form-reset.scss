@@ -1,0 +1,32 @@
+@use "../../uni.scss" as *;
+
+/** H5：去掉浏览器默认 input 背景 / outline / autofill 色 */
+input,
+textarea,
+.uni-input-input {
+  background: transparent;
+  border: 0;
+  outline: none;
+  box-shadow: none;
+  appearance: none;
+  /* stylelint-disable-next-line property-no-vendor-prefix -- H5 autofill 需 webkit 前缀 */
+  -webkit-appearance: none;
+
+  &:-webkit-autofill,
+  &:-webkit-autofill:hover,
+  &:-webkit-autofill:focus,
+  &:-webkit-autofill:active {
+    background-color: $theme-color-input-bg !important;
+    -webkit-text-fill-color: $theme-color-text-primary !important;
+    caret-color: $theme-color-text-primary;
+    /* stylelint-disable-next-line property-no-vendor-prefix -- 覆盖 Chrome autofill 底色 */
+    -webkit-box-shadow: 0 0 0 1000px $theme-color-input-bg inset !important;
+    box-shadow: 0 0 0 1000px $theme-color-input-bg inset !important;
+    /* stylelint-disable-next-line property-no-vendor-prefix -- 与 -webkit-box-shadow 配套 */
+    -webkit-background-clip: padding-box !important;
+    background-clip: padding-box !important;
+    transition:
+      background-color 9999s ease-out 0s,
+      color 9999s ease-out 0s;
+  }
+}

@@ -1,0 +1,14 @@
+@use "../../uni.scss" as *;
+
+/** 全页壳层：列表/表单页通用最小高度与背景 */
+.app-page {
+  min-height: 100vh;
+  background: $theme-color-page-bg;
+}
+
+/** 白底卡片容器 */
+.app-card {
+  background: $theme-color-card-bg;
+  border-radius: $theme-radius-card;
+  padding: 24rpx;
+}
