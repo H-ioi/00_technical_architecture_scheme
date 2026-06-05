@@ -92,7 +92,7 @@ export default {
   },
 
   signPage: {
-    url: `${protocolBaseSign}/getProtocolSignPage`,
+    url: `${protocolSignBase}/getProtocolSignPage`,
     name: '签署分页',
     get: async function (this: { url: string }, params: ProtocolSignListParams) {
       return await request.get<PageResult<ProtocolSignRecord>, PageResult<ProtocolSignRecord>>(

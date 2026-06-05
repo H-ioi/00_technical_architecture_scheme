@@ -44,6 +44,7 @@
 | 国际化 | vue-i18n（默认语言包：`zh-CN`、`en-US`、`ja-JP`、`ko-KR`） |
 | 接口层 | **`api/`**（模板已统一；与 `admin-web` 模块形态一致） |
 | 请求封装 | **`utils/request.ts`**（`uni-request`；拦截器解包业务 `data`） |
+| UI 组件 | uni-app 内置 + `@dcloudio/uni-components` + 项目 `components/`；**不接入** `uni-ui-lib`（`uni-lib`） |
 | 质量体系 | ESLint + Prettier + Stylelint + lint-staged + commitlint |
 
 ### 3.2 基础约束
@@ -52,6 +53,7 @@
 - 样式统一使用 Sass，不引入 Less / Stylus 作为主方案
 - 状态管理统一使用 Pinia，不混用多套全局状态方案
 - 接口目录统一为 **`api/`**；HTTP 实例与拦截器在 **`utils/request.ts`**，不在 `api/` 再建 `request.ts` / `http-helpers.ts`
+- **不加载 `uni-lib` 组件库**：`uni-ui-lib` 面向管理后台（Element Plus、`UniLayout` 等），与小程序/H5 运行时、包体积不兼容；跨端 UI 复用留在本项目 `components/` 或独立移动端组件包，禁止 `npm i uni-ui-lib` / `app.use(UniLib)`
 - 遵循 **uni-review-mobile** 内联原则：单处引用的 path、常量、薄 composable、单函数 utils 文件禁止抽取
 - 跨页面复用能力优先沉淀 `components/`、`composables/`
 - 文案不直接硬编码在多个页面：可抽成 i18n 词条，词条按模块分文件维护
