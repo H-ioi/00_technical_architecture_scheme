@@ -68,6 +68,12 @@
           </div>
         </template>
       </UniForm>
+
+      <ProgramDetailBindings
+        v-if="detailId"
+        :program-id="detailId"
+        :program-type="String(form.programType || '')"
+        :create-lottery-pool="String(form.createLotteryPool || '')" />
     </div>
   </section>
 </template>
@@ -75,6 +81,7 @@
 <script setup lang="ts">
 import { UniForm } from 'uni-ui-lib'
 
+import ProgramDetailBindings from './components/program-detail-bindings.vue'
 import { useProgramEditPage } from './use-program-edit'
 
 const {

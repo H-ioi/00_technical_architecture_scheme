@@ -3,7 +3,18 @@
     <transition name="fade">
       <span key="0" class="avue-logo_subtitle" @click="goIndex">
         <div>
-          <img class="logoImg" src="/thepool/other/logo-top.png" alt="" />
+          <img
+            v-if="!isCollapse"
+            class="logoImg"
+            src="/thepool/other/logo-top.png"
+            alt=""
+          />
+          <img
+            v-else
+            class="logoImg"
+            src="/thepool/other/icon_pool_logo_small.png"
+            alt=""
+          />
         </div>
       </span>
     </transition>
@@ -19,7 +30,7 @@ export default {
     return {};
   },
   computed: {
-    ...mapGetters(["website", "keyCollapse", "tenantId"]),
+    ...mapGetters(["website", "keyCollapse", "tenantId", "isCollapse"]),
   },
   created() {},
   methods: {

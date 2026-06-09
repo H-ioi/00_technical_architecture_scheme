@@ -51,47 +51,6 @@ export default {
     { label: "Female", value: "0" },
     { label: "Unknow", value: "0" },
   ],
-  // 审批状态
-  approvalStatus: [
-    { label: "待审批", value: "0", enLabel: "Pending" },
-    { label: "同意", value: "1", enLabel: "Agree" },
-    { label: "拒绝", value: "2", enLabel: "Reject" },
-  ],
-  // 缴费状态
-  paymentStatus: [
-    { label: "未缴费", value: "1", enLabel: "Unpaid" },
-    { label: "缴费", value: "2", enLabel: "Paid" },
-    // { label: "退费", value: '3', enLabel: "Refund", },
-  ],
-  // 乘车类型
-  studentLineType: [
-    { label: "日校车(走读生)", value: "0", enLabel: "daily(Day Student)" },
-    { label: "周校车(寄宿生)", value: "1", enLabel: "Stay" },
-  ],
-  // 路线类型
-  routeType: [
-    { label: "日车", value: "1", enLabel: "Daily Bus" },
-    { label: "周车", value: "2", enLabel: "Weekly Bus" },
-  ],
-  // 订单路线类型
-  orderRouteType: [
-    { label: "日车", value: "1", enLabel: "Daily Bus" },
-    { label: "周车", value: "2", enLabel: "Weekly Bus" },
-  ],
-  // 接送方式
-  pickupMethod: [
-    { label: "自行回家", enLabel: "Self Pickup", value: "1" },
-    { label: "接送人接送", enLabel: "Guardian Pickup", value: "2" },
-  ],
-  WeeklyDays: [
-    { label: "Mondays", value: "Mon" },
-    { label: "Tuesdays", value: "Tue" },
-    { label: "Wednesdays", value: "Wed" },
-    { label: "Thursdays", value: "Thu" },
-    { label: "Fridays", value: "Fri" },
-    // { label: "Saturdays", value: 'Sat' },
-    // { label: "Sundays", value: 'Sun' },
-  ],
   // 状态
   statusType: [
     { label: "启用", id: 1, value: 1, enLabel: "Enabled" },
@@ -101,40 +60,6 @@ export default {
   serviceType: [
     { label: "在职", id: 1, value: 1, enLabel: "Employed" },
     { label: "离职", id: 0, value: 0, enLabel: "Resign" },
-  ],
-  // 可见状态
-  visibleType: [
-    { label: "不可见", value: false, enLabel: "Invisible" },
-    { label: "可见", value: true, enLabel: "Visible" },
-  ],
-  paymentMethod: [
-    { label: "支付宝", value: 1, enLabel: "Alipay" },
-    { label: "微信", value: 2, enLabel: "Wechat" },
-    { label: "现金", value: 3, enLabel: "Cash" },
-    { label: "银联", value: 4, enLabel: "UnionPay" },
-  ],
-  // 车辆状态
-  carStatus: [
-    { label: "空闲", id: 0, value: 0, enLabel: "Free" },
-    { label: "使用", id: 1, value: 1, enLabel: "Used" },
-    { label: "维修", id: 2, value: 2, enLabel: "Repair" },
-  ],
-  // 路线运营状态
-  operationStatus: [
-    { label: "早点", id: "0", value: "0", enLabel: "Early" },
-    { label: "准点", id: "1", value: "1", enLabel: "OnTime" },
-    { label: "晚点", id: "2", value: "2", enLabel: "Late" },
-    { label: "到站", id: "3", value: "3", enLabel: "Arrive" },
-  ],
-  // 异常状态
-  exceptionType: [
-    { label: "行为异常", id: "0", value: "0", enLabel: "Behavioral Exception" },
-    { label: "车辆异常", id: "1", value: "1", enLabel: "Vehicle Exception" },
-  ],
-  // 时间类型
-  stationTimeType: [
-    { label: "上学时间", value: "1", enLabel: "School Time" },
-    { label: "放学时间", value: "2", enLabel: "Home Time" },
   ],
   yesOrno: [
     {

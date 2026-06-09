@@ -1,144 +1,129 @@
 <template>
-  <div class="community_page">
-    <el-dialog
-      :title="$t('isagroup.复制路线')"
-      :visible.sync="showModal"
-      width="500px"
-      :before-close="closeModal"
-      :close-on-click-modal="false"
+  <el-dialog
+    :title="$t('schoolbus.复制路线')"
+    :visible.sync="showModal"
+    width="560px"
+    class="schoolbus-dialog"
+    :before-close="closeModal"
+    :close-on-click-modal="false"
+  >
+    <el-form
+      v-if="showModal"
+      ref="ruleForm"
+      class="schoolbus-dialog-form"
+      :label-position="'top'"
+      :model="ruleForm"
+      :rules="rules"
     >
-      <div class="moadlFromBox" v-if="showModal">
-        <el-form
-          :label-position="'top'"
-          :inline="true"
-          :model="ruleForm"
-          :rules="rules"
-          ref="ruleForm"
+      <el-form-item :label="$t('schoolbus.校区')" prop="schoolId">
+        <el-select
+          multiple
+          collapse-tags
+          style="width: 100%"
+          v-model="ruleForm.schoolId"
+          :placeholder="$t('common.请选择')"
+          @change="changeSchool"
         >
-          <div class="df_center_wrap" style="max-height: 600px; overflow-y: auto">
-            <el-form-item
-              :label="$t('isagroup.校区')"
-              prop="schoolId"
-              style="width: 100%"
-            >
-              <el-select
-                multiple
-                collapse-tags
-                style="width: 100%"
-                v-model="ruleForm['schoolId']"
-                :placeholder="$t('common.请选择')"
-                @change="changeSchool"
-              >
-                <el-option
-                  :key="k"
-                  v-for="(i, k) in schoolSelectList"
-                  :label="schoolDropdownLabel(i)"
-                  :value="i.id"
-                ></el-option>
-              </el-select>
-            </el-form-item>
-            <el-form-item style="width: 100%" :label="$t('isagroup.学期')">
-              <el-select
-                style="width: 100%"
-                v-model="ruleForm['sectionId']"
-                :placeholder="$t('isagroup.请选择')"
-              >
-                <el-option
-                  :key="k"
-                  v-for="(i, k) in selectSectionList"
-                  :label="i18nlocel == 'en' ? i.enName : i.cnName"
-                  :value="i.id"
-                ></el-option>
-              </el-select>
-            </el-form-item>
-          </div>
-          <el-form-item class="modalFromBtn">
-            <el-button type="primary" size="medium" @click="submitForm('ruleForm')">{{
-              $t("consult.保存")
-            }}</el-button>
-            <el-button type="default" size="medium" @click="closeModal">{{
-              $t("consult.取消")
-            }}</el-button>
-          </el-form-item>
-        </el-form>
-      </div>
-    </el-dialog>
-  </div>
+          <el-option
+            v-for="(i, k) in schoolSelectList"
+            :key="k"
+            :label="schoolDropdownLabel(i)"
+            :value="i.id"
+          />
+        </el-select>
+      </el-form-item>
+      <el-form-item :label="$t('schoolbus.学期')" prop="sectionId">
+        <el-select
+          style="width: 100%"
+          v-model="ruleForm.sectionId"
+          :placeholder="$t('schoolbus.请选择')"
+        >
+          <el-option
+            v-for="(i, k) in selectSectionList"
+            :key="k"
+            :label="i18nlocel === 'en' ? i.enName : i.cnName"
+            :value="i.id"
+          />
+        </el-select>
+      </el-form-item>
+    </el-form>
+    <div slot="footer" class="dialog-footer">
+      <el-button @click="closeModal">{{ $t("btn.取消") }}</el-button>
+      <el-button type="primary" :loading="isSubmitting" @click="submitForm('ruleForm')">
+        {{ $t("consult.保存") }}
+      </el-button>
+    </div>
+  </el-dialog>
 </template>
 
 <script>
 import { mapGetters } from "vuex";
 import { batchCopy } from "@/api/isacommunity/route.js";
 import schoolListBuscommonMixin from "@/mixins/schoolListBuscommon.js";
+
 export default {
-  name: "operation",
+  name: "BusCopyRoute",
   mixins: [schoolListBuscommonMixin],
-  components: {},
   props: {
-    sectionList: {
-      default: () => {
-        return [];
-      },
-      type: [],
-    },
+    sectionList: { type: Array, default: () => [] },
   },
   data() {
-    let that = this;
+    const that = this;
     return {
       showModal: false,
+      isSubmitting: false,
       ruleForm: {},
       rules: {
         schoolId: [
-          { required: true, message: that.$t("isagroup.请选择"), trigger: "blur" },
+          { required: true, message: that.$t("schoolbus.请选择"), trigger: "change" },
         ],
         sectionId: [
-          { required: true, message: that.$t("isagroup.请选择"), trigger: "blur" },
+          { required: true, message: that.$t("schoolbus.请选择"), trigger: "change" },
         ],
       },
       selectSectionList: [],
       selectionId: [],
     };
   },
-  created() {},
-  mounted() {},
   computed: {
     ...mapGetters(["permissions", "i18nlocel"]),
   },
   methods: {
-    // 打开
     async show(selectionId) {
       await this.fetchSchoolListBuscommon();
       this.selectionId = selectionId;
       this.showModal = true;
     },
     batchCopy(data) {
-      batchCopy(data).then((res) => {
-        if (res.data.success) {
-          this.$message.success(this.$t("isagroup.成功"));
-          this.$emit("getList");
-          this.closeModal();
-        }
-      });
+      this.isSubmitting = true;
+      batchCopy(data)
+        .then((res) => {
+          if (res.data.success) {
+            this.$message.success(this.$t("schoolbus.成功"));
+            this.$emit("getList");
+            this.closeModal();
+          } else {
+            this.$message.error(res.data.msg || this.$t("schoolbus.失败"));
+          }
+        })
+        .finally(() => {
+          this.isSubmitting = false;
+        });
     },
-    // 提交表单
     submitForm(formName) {
       this.$refs[formName].validate((valid) => {
-        if (valid) {
-          let data = {
-            ids: this.selectionId,
-            schoolIds: this.ruleForm.schoolId,
-            sectionId: this.ruleForm.sectionId,
-          };
-          this.batchCopy(data);
-        }
+        if (!valid) return;
+        this.batchCopy({
+          ids: this.selectionId,
+          schoolIds: this.ruleForm.schoolId,
+          sectionId: this.ruleForm.sectionId,
+        });
       });
     },
-    // 关闭
     closeModal() {
       this.showModal = false;
-      this.$refs.ruleForm.resetFields();
+      if (this.$refs.ruleForm) this.$refs.ruleForm.resetFields();
     },
-    // 选择校区
     changeSchool(e) {
       const selectedSchoolIds = new Set(e);
       this.selectSectionList = this.sectionList.filter((item) => {
@@ -151,11 +136,3 @@ export default {
   },
 };
 </script>
-
-<style lang="scss" scoped>
-.el-form-item--small.el-form-item {
-  margin-right: 0px;
-  padding-right: 20px;
-  box-sizing: border-box;
-}
-</style>

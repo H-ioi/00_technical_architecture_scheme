@@ -1,6 +1,6 @@
 <template>
   <div class="space thepool_page">
-    <el-scrollbar class="space_right" ref="space_right">
+    <el-scrollbar class="space_right" ref="space_right" style="width: 100%">
       <!-- <div class="title">线索动态表单</div> -->
       <div class="df_fa" style="height: 100%">
         <el-scrollbar class="scrollList">
@@ -84,7 +84,9 @@ export default {
               this.$refs["FormgeneratorPool"].clearData();
             } else {
               this.$refs["FormgeneratorPool"].templateType = "edit";
-              this.$refs["FormgeneratorPool"].getTemplateDetail(list[0].templateId);
+              this.$refs["FormgeneratorPool"].getTemplateDetail(
+                list[0].templateId
+              );
             }
           });
         }

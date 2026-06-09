@@ -1,208 +1,262 @@
 <template>
   <div class="thepool_page">
-    <StatusItem
-      :statusList="statusList"
-      :currentstatus="currentstatus"
-      @changeStasus="changeStasus"
-    />
-    <div class="requestParam" v-if="requestList.length > 0">
-      <div class="requestParam_title">{{ $t("consult.筛选信息") }}</div>
-      <div class="requestParamlist">
-        <div
-          @click="selectCurrentRequestParam(item)"
-          :class="[
-            'requestParamlist_item',
-            {
-              active_item: item.id == searchRequestParamId,
-            },
-          ]"
-          v-for="(item, index) in requestList"
-          :key="index"
-        >
-          {{ item.description }}
-          <i
-            style="margin-left: 2px"
-            class="el-icon-close"
-            @click="delRequestParam(item.id)"
-          ></i>
+    <div class="pool-search">
+      <div class="pool-search-top">
+        <StatusItem
+          :statusList="statusList"
+          :currentstatus="currentstatus"
+          @changeStasus="changeStasus"
+        />
+        <SearchType />
+      </div>
+      <div class="requestParam" v-if="requestList.length > 0">
+        <div class="requestParamlist">
+          <div
+            @click="selectCurrentRequestParam(item)"
+            :class="[
+              'requestParamlist_item',
+              {
+                active_item: item.id == searchRequestParamId,
+              },
+            ]"
+            v-for="(item, index) in requestList"
+            :key="index"
+          >
+            <i
+              style="margin-left: 2px"
+              class="el-icon-circle-close"
+              @click="delRequestParam(item.id)"
+            ></i>
+            <span>
+              {{ item.description }}
+            </span>
+          </div>
         </div>
       </div>
-    </div>
-    <div class="searchFromBox search" style="padding: 20px">
-      <el-form
-        ref="searchFrom"
-        class="df_align_center searchFrom"
-        :label-position="'top'"
-        :inline="true"
-        :model="searchFrom"
+      <div class="form-page" v-if="searchType == 'checkbox'">
+        <div>
+          <div class="form-item" v-if="pooldictpermissions.length > 1">
+            <label class="form-label">{{ $t("consult.归属校区") }}：</label>
+            <OverflowWrap>
+              <el-checkbox-group v-model="searchFrom.schools">
+                <el-checkbox
+                  v-for="item in pooldictpermissions"
+                  :key="item.value"
+                  :value="item.value"
+                  :label="item.value"
+                >
+                  {{ i18nlocel == "en" ? item.enLabel : item.label }}
+                </el-checkbox>
+              </el-checkbox-group>
+            </OverflowWrap>
+          </div>
+          <div class="form-item-center">
+            <label class="form-label">{{ $t("consult.新增时间") }}：</label>
+            <el-date-picker
+              style="width: 240px"
+              v-model="searchFrom.createdTime"
+              type="daterange"
+              :range-separator="$t('consult.至')"
+              :start-placeholder="$t('consult.开始')"
+              :end-placeholder="$t('consult.结束')"
+              :value-format="'yyyy-MM-dd'"
+              :format="'yyyy-MM-dd'"
+              clearable
+              @clear="search"
+            >
+            </el-date-picker>
+          </div>
+        </div>
+        <div class="form-page_btns">
+          <el-button type="primary" size="small" round @click.stop="search">{{
+            $t("consult.查询")
+          }}</el-button>
+          <img
+            @click.stop="saveRequestParam"
+            src="/thepool/icon/icon_save.png"
+            alt="保存查询条件"
+          />
+          <img
+            @click.stop="clear"
+            src="/thepool/icon/icon_refresh.png"
+            alt="清空"
+          />
+        </div>
+      </div>
+      <div
+        v-if="searchType == 'input'"
+        class="searchFromBox search"
+        style="padding: 15px 0 0"
       >
-        <el-form-item
-          :label="$t('consult.关键词')"
-          prop="keyword"
-          style="width: 214px"
+        <el-form
+          ref="searchFrom"
+          class="df_align_center searchFrom"
+          :label-position="'top'"
+          :inline="true"
+          :model="searchFrom"
         >
-          <el-input
-            v-model="searchFrom.keyword"
-            :placeholder="$t('consult.请输入')"
-            maxlength="20"
-            clearable
-            @clear="search"
-          ></el-input>
-        </el-form-item>
-        <el-form-item
-          v-if="pooldictpermissions.length > 1"
-          :label="$t('consult.归属校区')"
-          style="width: 214px"
-        >
-          <el-select
-            multiple
-            v-model="searchFrom.schools"
-            :placeholder="$t('consult.请选择')"
-            clearable
-            @clear="search"
+          <el-form-item
+            v-if="pooldictpermissions.length > 1"
+            :label="$t('consult.归属校区')"
+            style="width: 214px"
           >
-            <el-option
-              v-for="item in pooldictpermissions"
-              :key="item.value"
-              :label="i18nlocel == 'en' ? item.enLabel : item.label"
-              :value="item.value"
-            ></el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item :label="$t('consult.新增时间')" style="width: 214px">
-          <el-date-picker
-            style="width: 100%"
-            v-model="searchFrom.createdTime"
-            type="daterange"
-            :range-separator="$t('consult.至')"
-            :start-placeholder="$t('consult.开始')"
-            :end-placeholder="$t('consult.结束')"
-            :value-format="'yyyy-MM-dd'"
-            :format="'yyyy-MM-dd'"
-            clearable
-            @clear="search"
-          >
-          </el-date-picker>
-        </el-form-item>
-        <el-form-item style="width: 320px; margin-right: 0">
+            <el-select
+              multiple
+              v-model="searchFrom.schools"
+              :placeholder="$t('consult.请选择')"
+              clearable
+              @clear="search"
+            >
+              <el-option
+                v-for="item in pooldictpermissions"
+                :key="item.value"
+                :label="i18nlocel == 'en' ? item.enLabel : item.label"
+                :value="item.value"
+              ></el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item :label="$t('consult.新增时间')" style="width: 214px">
+            <el-date-picker
+              style="width: 100%"
+              v-model="searchFrom.createdTime"
+              type="daterange"
+              :range-separator="$t('consult.至')"
+              :start-placeholder="$t('consult.开始')"
+              :end-placeholder="$t('consult.结束')"
+              :value-format="'yyyy-MM-dd'"
+              :format="'yyyy-MM-dd'"
+              clearable
+              @clear="search"
+            >
+            </el-date-picker>
+          </el-form-item>
+          <el-form-item style="width: 170px; margin-right: 0">
+            <div class="df_sb">
+              <el-button
+                type="primary"
+                size="small"
+                round
+                @click.stop="search"
+                >{{ $t("consult.查询") }}</el-button
+              >
+              <img
+                style="width: 32px; height: 32px"
+                @click.stop="saveRequestParam"
+                src="/thepool/icon/icon_save.png"
+                alt="保存查询条件"
+              />
+              <img
+                style="width: 32px; height: 32px"
+                @click.stop="clear"
+                src="/thepool/icon/icon_refresh.png"
+                alt="清空"
+              />
+            </div>
+          </el-form-item>
+        </el-form>
+      </div>
+    </div>
+    <div class="pool-tableBox">
+      <div class="df_sb palyTableBox" style="padding-top: 0">
+        <div class="df_sb">
           <div class="df_sb">
             <el-button
+              v-if="permissions['thepool_user_guardian_mine_add']"
+              type="primary"
+              size="small"
+              round
+              @click="addGuardians"
+              >{{ $t("consult.新增") }}</el-button
+            >
+            <el-button
+              v-if="permissions['thepool_user_guardian_mine_downtemplate']"
               type="defult"
               size="small"
               round
-              @click="saveRequestParam"
-              >{{ $t("consult.保存筛选信息") }}</el-button
+              @click="downloadTemplate"
+              >{{ $t("consult.下载模板") }}</el-button
             >
-            <el-button type="defult" size="small" round @click="search">{{
-              $t("consult.搜索")
-            }}</el-button>
-            <el-button type="text" size="small" round @click="clear">
-              <div class="clear_btn">
-                <img src="/thepool/other/clear.png" alt="" />
-                <span> {{ $t("consult.清除") }}</span>
-              </div>
-            </el-button>
+            <el-button
+              v-if="permissions['thepool_user_guardian_mine_import']"
+              type="defult"
+              size="small"
+              round
+              @click.stop="showUpload = true"
+              >{{ $t("consult.导入") }}</el-button
+            >
+            <el-button
+              v-if="
+                tableData.length > 0 &&
+                permissions['thepool_user_guardian_mine_export']
+              "
+              type="defult"
+              size="small"
+              round
+              @click="exportList"
+              >{{ $t("consult.导出") }}</el-button
+            >
+            <el-button
+              v-if="
+                tableData.length > 0 && permissions['guardian_mine_send_email']
+              "
+              type="defult"
+              size="small"
+              round
+              @click="sendEmail"
+              >{{ $t("consult.邮件发送") }}</el-button
+            >
           </div>
-        </el-form-item>
-      </el-form>
-    </div>
-    <div class="df_sb palyTableBox" style="padding-top: 0">
-      <div class="df_sb">
-        <div class="df_sb">
-          <el-button
-            v-if="permissions['thepool_user_guardian_mine_add']"
-            type="primary"
-            size="small"
-            round
-            @click="addGuardians"
-            >{{ $t("consult.新增") }}</el-button
-          >
-          <el-button
-            v-if="permissions['thepool_user_guardian_mine_downtemplate']"
-            type="defult"
-            size="small"
-            round
-            @click="downloadTemplate"
-            >{{ $t("consult.下载模板") }}</el-button
-          >
-          <el-button
-            v-if="permissions['thepool_user_guardian_mine_import']"
-            type="defult"
-            size="small"
-            round
-            @click.stop="showUpload = true"
-            >{{ $t("consult.导入") }}</el-button
-          >
-          <el-button
-            v-if="
-              tableData.length > 0 &&
-              permissions['thepool_user_guardian_mine_export']
-            "
-            type="defult"
-            size="small"
-            round
-            @click="exportList"
-            >{{ $t("consult.导出") }}</el-button
-          >
-          <el-button
-            v-if="
-              tableData.length > 0 && permissions['guardian_mine_send_email']
-            "
-            type="defult"
-            size="small"
-            round
-            @click="sendEmail"
-            >{{ $t("consult.邮件发送") }}</el-button
-          >
         </div>
       </div>
-    </div>
-    <div class="tableBox">
-      <Table
-        ref="Table"
-        :tableTitle="tableTitle"
-        :tableData="tableData"
-        :tableBtn="tableBtn"
-        :showSelection="true"
-        @playTab="playTab"
-        @rowClick="rowClick"
-        @changeSelectedCount="changeSelectedCount"
-      />
-      <div class="df_sb" v-if="paginationTotal > 10">
-        <div class="df_sb">
-          <el-checkbox
-            style="padding: 0 10px"
-            class="checkbox"
-            @change="changeSelectAll"
-            v-model="isSelectAll"
-            >{{ $t("consult.全选") }}</el-checkbox
-          >
-          <span v-if="selectedCount != 0" style="color: #999999"
-            >{{ $t("consult.已选择") }}
-            <span style="color: #ba8e62">{{ selectedCount }}</span>
-            {{ $t("consult.条") }},</span
-          >
-          <span style="color: #999999">{{ $t("consult.最多选择1000条") }}</span>
-          <!-- <el-button type="primary" size="small" round @click="selectAll">{{
+      <div class="tableBox">
+        <Table
+          ref="Table"
+          :tableTitle="tableTitle"
+          :tableData="tableData"
+          :tableBtn="tableBtn"
+          :showSelection="true"
+          @playTab="playTab"
+          @rowClick="rowClick"
+          @changeSelectedCount="changeSelectedCount"
+        />
+        <div class="df_sb" v-if="paginationTotal > 10">
+          <div class="df_sb">
+            <el-checkbox
+              style="padding: 0 10px"
+              class="checkbox"
+              @change="changeSelectAll"
+              v-model="isSelectAll"
+              >{{ $t("consult.全选") }}</el-checkbox
+            >
+            <span v-if="selectedCount != 0" style="color: #999999"
+              >{{ $t("consult.已选择") }}
+              <span style="color: #ba8e62">{{ selectedCount }}</span>
+              {{ $t("consult.条") }},</span
+            >
+            <span style="color: #999999">{{
+              $t("consult.最多选择1000条")
+            }}</span>
+            <!-- <el-button type="primary" size="small" round @click="selectAll">{{
               $t("consult.全选")
             }}</el-button>
             <el-button type="defult" size="small" round @click="cancelSelectAll">{{
               $t("consult.取消全选")
             }}</el-button> -->
-        </div>
-        <div class="palyTableBox df_align_center" style="padding: 0">
-          <PaginationInfo
-            style="margin-right: 20px"
-            :paginationTotal="paginationTotal"
-            :paginationSize="pagination['pageSize']"
-          />
-          <Pagination
-            :showPageSizes="true"
-            :total="paginationTotal"
-            :pagination="pagination"
-            @handleCurrentChange="handleCurrentChange"
-            @handleSizeChange="handleSizeChange"
-          />
+          </div>
+          <div class="palyTableBox df_align_center" style="padding: 0">
+            <PaginationInfo
+              style="margin-right: 20px"
+              :paginationTotal="paginationTotal"
+              :paginationSize="pagination['pageSize']"
+            />
+            <Pagination
+              :showPageSizes="true"
+              :total="paginationTotal"
+              :pagination="pagination"
+              @handleCurrentChange="handleCurrentChange"
+              @handleSizeChange="handleSizeChange"
+            />
+          </div>
         </div>
       </div>
     </div>
@@ -260,7 +314,8 @@ import errorInfo from "@/page/thepool/modal/errorinfo.vue";
 import ErrorTable from "@/page/thepool/modal/errorinfo.vue";
 import sendemail from "@/page/thepool/email/modal/sendemail.vue";
 import SaveRequestParam from "@/page/thepool/modal/saveRequestParam.vue";
-
+import OverflowWrap from "@/components/thepoolcommon/OverflowWrap.vue";
+import SearchType from "@/components/thepoolcommon/searchtype.vue";
 export default {
   name: "TestUniWel",
   components: {
@@ -274,6 +329,8 @@ export default {
     ErrorTable,
     sendemail,
     SaveRequestParam,
+    OverflowWrap,
+    SearchType,
   },
   data() {
     return {
@@ -305,7 +362,7 @@ export default {
         // }
       ],
       pagination: {
-        pageSize: 10,
+        pageSize: 50,
         pageNum: 1,
       },
       paginationTotal: 0,
@@ -331,6 +388,7 @@ export default {
       "dictpermissions",
       "pooldictionary",
       "pooldictpermissions",
+      "searchType",
     ]),
   },
 
@@ -347,9 +405,26 @@ export default {
     i18nlocel() {
       this.resetData();
     },
+    "$store.state.thepool.keyword": {
+      handler(val) {
+        console.log("Vuex keyword changed:", val);
+        this.searchFrom["keyword"] = val;
+      },
+      immediate: true,
+    },
   },
   mounted() {
     this.wathKeyDowm();
+    this.$store.subscribeAction((action) => {
+      console.log("搜索列表", action);
+      if (this.$route.path != "/thepool/user/guardian/mine") {
+        return;
+      }
+      if (action.type === "searchList") {
+        this.searchFrom["keyword"] = action.payload;
+        this.search();
+      }
+    });
   },
   beforeDestroy() {
     this.removeKeyDowm();
@@ -393,7 +468,7 @@ export default {
         console.log("res", res);
         if (res.data.success) {
           let { data, total } = res.data.data;
-          this.tableData = data;
+          this.tableData = data || [];
           this.paginationTotal = Number(total);
           this.resetData();
         }
@@ -545,13 +620,14 @@ export default {
     },
     // 清除搜索
     clear() {
+      this.$store.dispatch("clearKeyword");
       this.searchData = {};
       this.searchFrom = {
         keyword: "",
         createdTime: [],
         schools: [],
       };
-      this.getList();
+      this.search();
     },
     changeStasus(item, index) {
       this.isSelectAll = false;
@@ -563,7 +639,7 @@ export default {
       } else {
         this.pagination["status"] = item.type;
       }
-      this.getList();
+      this.search();
     },
     gettableBtn(data) {
       let tableBtn = data.filter((res) => {
@@ -654,7 +730,7 @@ export default {
     },
     // 获取查询条件
     setRequestParam() {
-      this.getList();
+      this.search();
     },
     async initRequestParam() {
       this.requestList = await getRequestParamList({ type: "4" });
@@ -689,7 +765,7 @@ export default {
               ? [data.createTimeBegin, data.createTimeEnd]
               : [],
         };
-        this.getList();
+        this.search();
       });
     },
   },

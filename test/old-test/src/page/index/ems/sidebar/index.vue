@@ -14,13 +14,8 @@
             <span class="menuItem_icon">
               <img :src="showMenuIcon(item['path'])" />
             </span>
-            <span
-              class="menuItem_label"
-              :title="$t('isagroup')[item.name] ? $t('isagroup')[item.name] : item.name"
-            >
-              {{
-                $t("isagroup")[item.name] ? $t("isagroup")[item.name] : item.name
-              }}</span
+            <span class="menuItem_label" :title="getMenuLabel(item)">
+              {{ getMenuLabel(item) }}</span
             >
             <i
               v-if="item.children.length > 0"
@@ -53,11 +48,8 @@
                   <span class="menuItem_icon">
                     <span class="point"></span>
                   </span>
-                  <span
-                    class="menuItem_label"
-                    :title="$t('isagroup')[i.name] ? $t('isagroup')[i.name] : i.name"
-                  >
-                    {{ $t("isagroup")[i.name] ? $t("isagroup")[i.name] : i.name }}</span
+                  <span class="menuItem_label" :title="getMenuLabel(i)">
+                    {{ getMenuLabel(i) }}</span
                   >
                   <i
                     v-if="i.children.length !== 0"
@@ -83,15 +75,8 @@
                         :class="['menuItem_info', { active: vaildAvtive(c) }]"
                       >
                         <span class="menuItem_icon"> </span>
-                        <span
-                          class="menuItem_label"
-                          :title="
-                            $t('isagroup')[c.name] ? $t('isagroup')[c.name] : c.name
-                          "
-                        >
-                          {{
-                            $t("isagroup")[c.name] ? $t("isagroup")[c.name] : c.name
-                          }}</span
+                        <span class="menuItem_label" :title="getMenuLabel(c)">
+                          {{ getMenuLabel(c) }}</span
                         >
                       </div>
                     </div>
@@ -108,6 +93,7 @@
 <script>
 import { mapGetters } from "vuex";
 import { validatenull } from "@/util/validate";
+import { resolveMenuLabelByLocale } from "@/util/menu-i18n";
 import config from "../../sidebar/config.js";
 export default {
   name: "SidebarItem",
@@ -150,7 +136,7 @@ export default {
     this.initData();
   },
   computed: {
-    ...mapGetters(["roles"]),
+    ...mapGetters(["roles", "i18nlocel"]),
     labelKey() {
       return this.props.label || this.config.propsDefault.label;
     },
@@ -168,6 +154,14 @@ export default {
     },
   },
   methods: {
+    getMenuLabel(item) {
+      return resolveMenuLabelByLocale(
+        item,
+        this.$i18n,
+        this.i18nlocel,
+        this.labelKey
+      );
+    },
     initData() {
       this.$nextTick(() => {
         let path = this.$route.path;

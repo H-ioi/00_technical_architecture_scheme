@@ -7,7 +7,7 @@
 | **旧系统参考代码**   | `test/old-test`（Windows 亦可 `test\old-test`） | 业务行为、接口、权限、页面的**对齐依据**，不作为本期交付产物 |
 | **重构后的管理后台** | `admin-web`                                     | 本期重构的**落地工程**（Vue3 + `uni-lib`/`uni-ui-lib` 等）   |
 
-**当前进度**：重构已推进到 **Phase 8 活动管理**。`admin-web` 已阶段性落地基座、登录/首页/成员、基础设置、校车、协议、权限、考勤、群发邮件；当前正在对齐活动管理，已接入活动列表、活动详情、活动项目、奖品列表、投票节目、问卷管理、问卷设计、答卷页与家长学生关联管理，活动详情内已补齐活动项目、问卷内容、报名人数、签到人数、获奖名单、投票信息、祝福语内容、活动反馈 Tab；后续进入接口联调、导入导出边界和权限码收敛。
+**当前进度**：重构已推进到 **Phase 8 活动管理**（主链路已通，**活动项目详情子能力待补齐**，见 §15.9）。`admin-web` 已阶段性落地基座、登录/首页/成员、基础设置、校车、协议、权限、考勤、群发邮件；活动管理已接入活动列表、活动详情、活动项目列表/编辑、奖品列表、投票节目、问卷管理、问卷设计、答卷页与家长学生关联管理、微信/邮箱配置，活动详情内 Tab 已与旧页对齐（含祝福语，**非独立菜单**）。`test/old-test` 另新增 **宿舍管理**、**校医管理**、**校巴考勤** 三块旧方案未覆盖域，已纳入 **Phase 10～11 与 P3 扩展**（见 §2.7）。后续：Phase 8 收尾 → Phase 9 内容 → Phase 10 宿舍 → Phase 11 校医 → Phase 12 收尾。
 
 ---
 
@@ -24,9 +24,9 @@
    - **未改 `uni-lib` 时**：不要重复 release；仅改 **`admin-web` 业务代码**时按常规划分提交即可。
 
 3. **迭代节奏与当前轮次**
-   - 方案按阶段（P0～P9 / Phase 0～10）推进；**每完成一块可交付切片**（单业务域、单列表/表单闭环）应在 **`admin-web`** 目录执行 **`yarn lint`、`yarn type-check`、`yarn build`**（以 `package.json` 脚本为准），合并前代码评审。
-   - **当前状态**：`admin-web` 中已阶段性落地 **Phase 0～Phase 7**（基座、登录/首页/成员、基础设置、校车、协议、权限、考勤、群发邮件）；**当前进行到 Phase 8 活动管理**。
-   - **当前执行方式**：活动管理继续按旧菜单逐项认领页面 → **先在 `test/old-test` 中定位对应旧页与调用链并完成盘点** → 再在 **`admin-web`** 补齐类型、API、`views`、i18n、路由与映射。已落地的活动列表、活动详情、活动项目、奖品列表、投票节目、家长学生关联管理、微信配置、邮箱配置、问卷管理、问卷设计、答卷页继续联调收敛。**严禁跳步、严禁无旧代码依据的新能力**。
+   - 方案按阶段（P0～P12 / Phase 0～12）推进；**每完成一块可交付切片**（单业务域、单列表/表单闭环）应在 **`admin-web`** 目录执行 **`yarn lint`、`yarn type-check`、`yarn build`**（以 `package.json` 脚本为准），合并前代码评审。
+   - **当前状态**：`admin-web` 中已阶段性落地 **Phase 0～Phase 7**；**当前进行到 Phase 8 活动管理**（活动项目详情内奖品绑定、投票节目绑定、获奖池文件/名单等待补齐）。
+   - **当前执行方式**：继续按旧菜单逐项认领 → **先在 `test/old-test` 定位旧页与调用链并完成盘点** → 再在 **`admin-web`** 补齐类型、API、`views`、i18n、路由与 `MENU_PATH_ALIASES`。Phase 8 收尾后再进入 Phase 9 内容；**宿舍 / 校医 / 校巴考勤** 按 §2.7 排期，不提前臆造接口。**严禁跳步、严禁无旧代码依据的新能力**。
 
 ## 一、重构目标
 
@@ -59,13 +59,16 @@
 | P0   | 项目底座       | 登录、退出、路由、权限、菜单、请求、i18n、布局、标签页                                                           | 建立可持续扩展的模板基础                                                          |
 | P1   | 首页和成员管理 | 首页概览、学生列表、教师列表                                                                                     | 完成首个完整业务闭环                                                              |
 | P2   | 基础设置       | 校区配置、年级配置                                                                                               | 建立成员、校车、考勤等模块的基础数据                                              |
-| P3   | 校车管理       | 路线规划、路线运营、异常上报、申请意向、乘车学生、司机、跟车老师、车辆                                           | 完成校车完整业务链                                                                |
+| P3   | 校车管理       | 路线规划、路线运营、异常上报、申请意向、乘车学生、司机、跟车老师、车辆；**扩展：校巴考勤**（旧 `schoolbus/attendance`，见 §2.7） | 完成校车完整业务链；校巴考勤可在 P3 联调后插单补齐                                |
 | P4   | 协议管理       | 协议列表、协议详情、协议编辑、发布/停用                                                                          | 完成独立低耦合模块                                                                |
 | P5   | 权限管理       | 菜单、角色、部门、用户                                                                                           | 完成后台权限闭环                                                                  |
 | P6   | 考勤管理       | 学生考勤、校园考勤、门禁记录、微信 Openid、微信通知、每日考勤、请假、流程、任务、配置、放行条                    | 完成考勤和流程模块                                                                |
 | P7   | 群发邮件       | 群组配置、发件箱配置、发件列表                                                                                   | 完成邮件触达模块                                                                  |
-| P8   | 活动管理       | 活动列表、活动详情、活动项目、奖品列表、投票节目、家长学生关联管理、微信配置、邮箱配置、问卷管理、问卷设计、答卷 | **当前进行中**：活动详情内嵌 Tab 已按旧业务补齐，继续联调接口、权限与导入导出边界 |
+| P8   | 活动管理       | 活动列表、活动详情、活动项目、奖品列表、投票节目、家长学生关联、微信/邮箱配置、问卷管理/设计/答卷；**活动项目详情：奖品绑定、投票绑定、获奖池** | **当前进行中**：主菜单页与活动详情 Tab 已对齐；**项目详情子能力待补齐**（§15.9） |
 | P9   | 内容管理       | 公告、动态内容、文章、讨论管理                                                                                   | 完成内容运营模块                                                                  |
+| P10  | 宿舍管理       | 住宿生（当前/历史）、楼栋/楼层/房间、属性、分配规则、床位分配（隐藏路由）                                        | 对齐 `test/old-test/src/views/isacommunity/dorm`                                  |
+| P11  | 校医管理       | 学生档案、医疗信息、规章制度、用药申请、就诊记录、疾病设置、传染病、体检报告                                     | 对齐 `schoolDoctor/` 与 `router/schoolDoctor`                                     |
+| P12  | 收尾优化       | 测试、类型补齐、构建优化、遗留样式与路径映射清理                                                                 | 全量稳定交付                                                                      |
 
 ### 2.2 重构节奏
 
@@ -91,7 +94,7 @@
 | P1    | 单模块完整闭环                     | 成员管理作为后续模块模板，必须做到代码结构、命名、权限、接口、i18n 全部规范                                                                 |
 | P2-P4 | 每次一个业务域                     | 基础设置、校车、协议都属于基础业务能力，优先保证结构一致                                                                                    |
 | P5    | 独立评审后实施                     | 权限管理会影响菜单、路由、按钮、数据范围，不能夹在普通页面迁移里顺手做                                                                      |
-| P6-P9 | 按阶段顺序滚动推进（**内容置末**） | 默认依次为考勤、群发邮件、活动；内容运营模块（富文本与多子模块）**排在 P9、收尾 Phase 10 之前**；若上线急需可单列插单，仍以旧代码对齐为前提 |
+| P6-P12 | 按阶段顺序滚动推进（**内容置末、宿舍校医后置**） | 默认：考勤 → 邮件 → 活动 → **内容** → **宿舍** → **校医** → 收尾；校巴考勤可插在 P3 之后；若上线急需可单列插单，仍以旧代码对齐为前提 |
 
 ### 2.4 旧菜单到新模块映射
 
@@ -110,6 +113,7 @@
 | 校车管理 | 司机管理                | `school-bus/driver`            | 对应旧司机管理                                            |
 | 校车管理 | 跟车老师列表            | `school-bus/follow-teacher`    | 旧路径是 `/isacommunity/user/teacher/index`，归属校车管理 |
 | 校车管理 | 车辆管理                | `school-bus/car`               | 对应旧车辆管理                                            |
+| 校车管理 | 校巴考勤                | `school-bus/attendance`        | 旧 `schoolbus/attendance`；API `/isacommunity/busattendance`；**待迁移** |
 | 协议管理 | -                       | `protocol`                     | 独立一级模块                                              |
 | 基础设置 | 校区配置                | `base/school`                  | 基础数据                                                  |
 | 基础设置 | 年级配置                | `base/grade`                   | 基础数据                                                  |
@@ -132,10 +136,25 @@
 | 考勤管理 | 微信通知                | `attendance/wechat-notice`     | 微信通知                                                  |
 | 考勤管理 | 学生每日考勤            | `attendance/daily`             | 每日考勤                                                  |
 | 考勤管理 | 请假管理                | `attendance/holiday`           | 请假流程                                                  |
-| 考勤管理 | 流程设计                | `attendance/holiday/flow`      | 流程设计                                                  |
-| 考勤管理 | 任务处理                | `attendance/holiday/task`      | 任务处理                                                  |
-| 考勤管理 | 配置管理                | `attendance/holiday/config`    | 流程配置                                                  |
-| 考勤管理 | 放行条管理              | `attendance/holiday/pass`      | 放行条                                                    |
+| 考勤管理 | 流程设计                | `attendance/flow`              | 旧 `/isacommunity/attendance/holiday/flow`；新项目**去掉 `holiday` 段**（与 `menu.ts`、路由一致） |
+| 考勤管理 | 任务处理                | `attendance/task`              | 旧 `.../holiday/task`                                     |
+| 考勤管理 | 配置管理                | `attendance/config`            | 旧 `.../holiday/config`                                   |
+| 考勤管理 | 放行条管理              | `attendance/pass`              | 旧 `.../holiday/pass`                                     |
+| 宿舍管理 | 住宿生管理              | `dorm/boarding-student`        | 旧 `dorm/boarding-student`；当前/历史 Tab；**待迁移（P10）** |
+| 宿舍管理 | 楼栋管理                | `dorm/space/building`          | 旧 `dorm/space/building`                                  |
+| 宿舍管理 | 楼层管理                | `dorm/space/floor`             | 旧 `dorm/space/floor`                                     |
+| 宿舍管理 | 房间管理                | `dorm/space/room`              | 旧 `dorm/space/room`                                      |
+| 宿舍管理 | 床位分配（隐藏）        | `dorm/space/room-assign/:id`   | 旧 `dorm/space/room/:id` → `room-assigne.vue`             |
+| 宿舍管理 | 属性管理                | `dorm/space/attribute`         | 旧 `dorm/space/attribute`                                 |
+| 宿舍管理 | 自动分配规则            | `dorm/space/rule`              | 旧 `dorm/space/rule`                                      |
+| 校医管理 | 学生档案                | `school-doctor/student-record` | 旧 `/isacommunity/schoolDoctor/studentRecord`；**待迁移（P11）** |
+| 校医管理 | 医疗信息                | `school-doctor/medical-info`   | 旧 `.../medicalInfo`                                      |
+| 校医管理 | 规章制度                | `school-doctor/regulation`     | 旧 `.../regulation`                                       |
+| 校医管理 | 用药申请                | `school-doctor/medicine-apply` | 旧 `.../medicineApply`                                    |
+| 校医管理 | 就诊记录                | `school-doctor/visit-record`   | 旧 `.../visitRecord`                                      |
+| 校医管理 | 疾病设置                | `school-doctor/disease-setting`| 旧 `.../diseaseSetting`                                   |
+| 校医管理 | 传染病管理              | `school-doctor/infectious-disease` | 旧 `.../infectiousDisease`                            |
+| 校医管理 | 体检报告                | `school-doctor/health-report`  | 旧 `.../healthReport`                                     |
 | 内容管理 | 公告内容                | `content/announcement`         | 公告                                                      |
 | 内容管理 | 动态内容 / 一周食谱     | `content/moment/food-weekly`   | 旧目录 `moent` 统一修正为 `moment`                        |
 | 内容管理 | 动态内容 / 校园生活     | `content/moment/school-life`   | 校园生活                                                  |
@@ -181,7 +200,7 @@
 
 | 类别                       | 说明                                                                                                                                                                                                                                                                                        |
 | -------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------ |
-| **旧代码依据**             | 页面与接口以 `test/old-test/src/views/isacommunity/base/school                                                                                                                                                                                                                              | grade/index.vue`及`api/workorder/order/orderlist.js`（`/publik/dict/item/\*`）为准，不臆测字段与 URL。 |
+| **旧代码依据**             | 页面与接口以 `test/old-test/src/views/isacommunity/base/school/index.vue`、`grade/index.vue` 及 `api/workorder/order/orderlist.js`（`/publik/dict/item/*`）为准，不臆测字段与 URL。 |
 | **新项目落地路径**         | 视图：`views/base/school`、`views/base/grade`；共享逻辑：`views/base/components/dict.vue` + `dict.config.ts`（组件文件名尽量简短）；API：`api/modules/base-dict.ts`；类型：`types/modules/base-dict.ts`；菜单别名：`api/modules/menu.ts` 中 `/isacommunity/base/...` → `/base/...`。        |
 | **列表必须用 uni-lib**     | 主列表使用 `UniSearchForm` + `useUniListState` + `UniDataTable`（`request`、`filters`、`@load-success`），风格与成员/协议列表一致；配置集中在 `*.config.ts`，避免手写整块 `el-table`（弹窗内二层表同样优先 `UniDataTable`）。                                                               |
 | **分页**                   | 旧接口为全量列表、业务上无需分页时：`UniDataTable` 设 `:pagination="false"`，`request` 返回完整 `data`，**不要**为迁就组件再前端切片分页。                                                                                                                                                  |
@@ -191,6 +210,24 @@
 | **i18n**                   | `base.school` / `base.grade` 下补齐 `search`、`actions.search`/`reset` 等与检索条、按钮一致的文案，中英同步注册到 `locales/lang/*/index.ts`。                                                                                                                                               |
 
 后续迁移其它模块时，凡出现 **表格开关列 + 后端非严格布尔**、**无真实分页的全量列表**、**操作列宽度**，可直接套用本节约定。
+
+### 2.7 `test/old-test` 增量盘点（2026-06 校验）
+
+相对方案初稿，`test/old-test/src/views/isacommunity` 顶层除既有模块外，**新增或显著扩充**以下域（须以旧代码为唯一事实来源，不得凭菜单名猜测接口）：
+
+| 旧目录 / 路由 | 说明 | 方案阶段 | `admin-web` 状态 |
+| ------------- | ---- | -------- | ---------------- |
+| `dorm/` | 住宿生、楼栋/楼层/房间、属性、分配规则、床位分配；API `api/isacommunity/dorm.js`（`/isacommunity/dormitory/*`） | P10 | 未迁移 |
+| `schoolDoctor/` | 8 个子模块；独立路由 `router/schoolDoctor/index.js`；需求见 `schoolDoctor/校医需求.md` | P11 | 未迁移 |
+| `schoolbus/attendance/` | 校巴考勤列表与详情；API `busattendance.js`；权限 `busattendance_*`；**无静态路由表项**，依赖菜单下发 | P3 扩展 | 未迁移 |
+
+**活动域澄清（避免误判为独立菜单）：**
+
+- **祝福语**：旧实现为活动详情 Tab（`list/detail/tabs/blessinglist.vue`），`admin-web` 已在 `activity/detail` 内实现；`activity/blessing/index.vue` 等为无效副本，**不作为菜单迁移依据**。
+- **获奖池名单**：旧实现内嵌于 **活动项目详情**（`program/detail/index.vue` + `lotteryPoolFile.js` / `lotteryPoolList`），非一级菜单；`activity/lotteryPoolList/index.vue` 文件内容不可信，以 **项目详情页** 为准。
+- **问卷答卷 / 设计**：管理端以 `questionnaire/edit`、`submissions` 承载；旧 `questionnaire/form`、`templateresult` 多为内嵌或 C 端场景，迁移时对照实际跳转链再定是否保留书签映射。
+
+**旧项目联调注意：** `router/isacommunity/index.js` 中宿舍 building/floor/room 路由**重复注册**，重构时不要照搬；`email/group/index.vue` 近期有大改，Phase 7 联调时以旧页字段与权限码为准逐项核对。
 
 ## 三、新项目目录结构
 
@@ -236,7 +273,10 @@ admin-web/src/
 │       ├── permission.ts
 │       ├── attendance.ts
 │       ├── email.ts
-│       └── protocol.ts
+│       ├── protocol.ts
+│       ├── content.ts          # Phase 9
+│       ├── dorm.ts             # Phase 10
+│       └── school-doctor.ts    # Phase 11
 ├── stores/
 │   └── modules/
 │       ├── app.ts
@@ -578,19 +618,21 @@ export interface TeacherRecord {
 
 第一轮菜单按当前系统截图建立基础结构，但只开放已重构模块。
 
-菜单建议：
+菜单建议（全量规划；**仅已重构模块对接路由与 `MENU_PATH_ALIASES`**）：
 
 ```text
 首页
 成员管理
-校车管理
+校车管理          # 含校巴考勤（待迁移）
 协议管理
 基础设置
 权限管理
 考勤管理
 群发邮件
 活动管理
-内容管理
+内容管理          # Phase 9
+宿舍管理          # Phase 10，旧代码已存在
+校医管理          # Phase 11，旧代码已存在
 ```
 
 第一轮路由：
@@ -814,6 +856,7 @@ if (status === 401) {
 | 校车管理 / 司机管理                | `/isacommunity/schoolbus/driver/index`               | `/school-bus/driver`                                             |
 | 校车管理 / 跟车老师列表            | `/isacommunity/user/teacher/index`                   | `/school-bus/follow-teacher`                                     |
 | 校车管理 / 车辆管理                | `/isacommunity/schoolbus/car/index`                  | `/school-bus/car`                                                |
+| 校车管理 / 校巴考勤                | `/isacommunity/schoolbus/attendance/index`（或菜单实际 path） | `/school-bus/attendance`（**待接入**）                    |
 | 协议管理                           | `/isacommunity/protocol/index`                       | `/protocol`                                                      |
 | 基础设置                           | `/isacommunity/base`                                 | `/base`                                                          |
 | 基础设置 / 校区配置                | `/isacommunity/base/school/index`                    | `/base/school`                                                   |
@@ -840,10 +883,25 @@ if (status === 401) {
 | 考勤管理 / 微信通知                | `/isacommunity/attendance/wechatnotice/index`        | `/attendance/wechat-notice`                                      |
 | 考勤管理 / 学生每日考勤            | `/isacommunity/attendance/index`                     | `/attendance/daily`                                              |
 | 考勤管理 / 请假管理                | `/isacommunity/attendance/holiday/index`             | `/attendance/holiday`                                            |
-| 考勤管理 / 流程设计                | `/isacommunity/attendance/holiday/flow`              | `/attendance/holiday/flow`                                       |
-| 考勤管理 / 任务处理                | `/isacommunity/attendance/holiday/task`              | `/attendance/holiday/task`                                       |
-| 考勤管理 / 配置管理                | `/isacommunity/attendance/holiday/config`            | `/attendance/holiday/config`                                     |
-| 考勤管理 / 放行条管理              | `/isacommunity/attendance/holiday/pass`              | `/attendance/holiday/pass`                                       |
+| 考勤管理 / 流程设计                | `/isacommunity/attendance/holiday/flow`              | `/attendance/flow`（非 `/attendance/holiday/flow`）              |
+| 考勤管理 / 任务处理                | `/isacommunity/attendance/holiday/task`              | `/attendance/task`                                               |
+| 考勤管理 / 配置管理                | `/isacommunity/attendance/holiday/config`            | `/attendance/config`                                             |
+| 考勤管理 / 放行条管理              | `/isacommunity/attendance/holiday/pass`              | `/attendance/pass`                                               |
+| 宿舍管理 / 住宿生管理              | `/isacommunity/dorm/boarding-student/index`（以菜单为准） | `/dorm/boarding-student`（**待接入**）                        |
+| 宿舍管理 / 楼栋管理                | `/isacommunity/dorm/space/building`                  | `/dorm/space/building`（**待接入**）                             |
+| 宿舍管理 / 楼层管理                | `/isacommunity/dorm/space/floor`                     | `/dorm/space/floor`（**待接入**）                                |
+| 宿舍管理 / 房间管理                | `/isacommunity/dorm/space/room`                      | `/dorm/space/room`（**待接入**）                                 |
+| 宿舍管理 / 床位分配（隐藏）        | `/isacommunity/dorm/space/room/:id`                  | `/dorm/space/room-assign/:id`（**待接入**）                      |
+| 宿舍管理 / 属性管理                | `/isacommunity/dorm/space/attribute`                 | `/dorm/space/attribute`（**待接入**）                            |
+| 宿舍管理 / 自动分配规则            | `/isacommunity/dorm/space/rule`                      | `/dorm/space/rule`（**待接入**）                                 |
+| 校医管理 / 学生档案                | `/isacommunity/schoolDoctor/studentRecord`           | `/school-doctor/student-record`（**待接入**）                    |
+| 校医管理 / 医疗信息                | `/isacommunity/schoolDoctor/medicalInfo`             | `/school-doctor/medical-info`（**待接入**）                      |
+| 校医管理 / 规章制度                | `/isacommunity/schoolDoctor/regulation`              | `/school-doctor/regulation`（**待接入**）                        |
+| 校医管理 / 用药申请                | `/isacommunity/schoolDoctor/medicineApply`           | `/school-doctor/medicine-apply`（**待接入**）                    |
+| 校医管理 / 就诊记录                | `/isacommunity/schoolDoctor/visitRecord`             | `/school-doctor/visit-record`（**待接入**）                      |
+| 校医管理 / 疾病设置                | `/isacommunity/schoolDoctor/diseaseSetting`          | `/school-doctor/disease-setting`（**待接入**）                   |
+| 校医管理 / 传染病管理              | `/isacommunity/schoolDoctor/infectiousDisease`       | `/school-doctor/infectious-disease`（**待接入**）                |
+| 校医管理 / 体检报告                | `/isacommunity/schoolDoctor/healthReport`            | `/school-doctor/health-report`（**待接入**）                     |
 | 内容管理                           | `/isacommunity/content`                              | `/content`                                                       |
 | 内容管理 / 公告内容                | `/isacommunity/content/announcement/index`           | `/content/announcement`                                          |
 | 内容管理 / 动态内容                | `/isacommunity/content/moent`                        | `/content/moment`                                                |
@@ -862,7 +920,17 @@ if (status === 401) {
 | 群发邮件 / 发件箱配置              | `/isacommunity/email/send/index`                     | `/email/send`                                                    |
 | 群发邮件 / 发件列表                | `/isacommunity/email/outgo/index`                    | `/email/outbox`                                                  |
 
-当前代码已接入首页、成员、基础设置、校车、协议、权限、考勤、群发邮件和活动管理相关映射。活动管理中活动列表、活动详情、活动项目、奖品列表、投票节目、家长学生关联管理、微信配置、邮箱配置、问卷管理、问卷设计、答卷页已有本地路由；微信配置与邮箱配置已从问卷管理临时承载拆分为独立页面。
+当前代码已接入首页、成员、基础设置、校车（**不含校巴考勤**）、协议、权限、考勤、群发邮件和活动管理相关映射。活动管理主菜单页、活动详情、问卷设计/答卷等已有本地路由；微信/邮箱配置已拆为独立页面。
+
+**`MENU_PATH_ALIASES` 待登记（迁移对应模块时同步写入 `menu.ts`）：**
+
+- **P9 内容管理**：`/isacommunity/content/**` 全表（见上表）。
+- **P10 宿舍管理**：`/isacommunity/dorm/**`。
+- **P11 校医管理**：`/isacommunity/schoolDoctor/**`。
+- **P3 扩展校巴考勤**：`/isacommunity/schoolbus/attendance/**` 或后端实际下发的 busattendance 路径（以菜单接口为准）。
+- **活动可选书签**（若生产仍下发）：`/isacommunity/activity/questionnaire/form`、`.../templateresult` → 映射到现有 `questionnaire/edit` 或 `submissions`，须对照旧跳转链再定。
+
+**考勤路径约定：** 请假列表仍为 `/attendance/holiday`；流程/任务/配置/放行条在 `admin-web` 中为 `/attendance/flow`、`/task`、`/config`、`/pass`。`menu.ts` 已对旧 `.../holiday/flow` 等做映射，并保留 `/attendance/holiday/*` → 新路径的**兼容重定向**（见 `router/modules/attendance.ts`）。
 
 后续每迁移一个旧菜单入口，都必须同步补充：
 
@@ -1017,21 +1085,23 @@ sidebar.vue
 
 ## 十五、全量功能重构顺序和节奏
 
-全量重构按“基座优先、低风险 CRUD 先行、复杂流程后置”的节奏推进。当前已推进到 **Phase 8 活动管理**：Phase 0～Phase 7 按阶段性完成口径进入后续联调和修正，Phase 8 继续补齐活动链路；后续仍为 **Phase 9 内容管理**（富文本与互动子模块较重）→ **Phase 10 收尾**。
+全量重构按“基座优先、低风险 CRUD 先行、复杂流程后置”的节奏推进。当前已推进到 **Phase 8 活动管理**（主链路已通，项目详情子能力待补齐）；Phase 0～7 进入联调修正；后续 **Phase 9 内容** → **Phase 10 宿舍** → **Phase 11 校医** → **Phase 12 收尾**。
 
-| 阶段     | 模块                 | 重构内容                                                                                      | 目标                     |
-| -------- | -------------------- | --------------------------------------------------------------------------------------------- | ------------------------ |
-| Phase 0  | 基座准备             | 路由、菜单、权限、请求、字典、下载、主题、布局                                                | 建立可复制页面范式       |
-| Phase 1  | 登录、首页、成员管理 | 登录认证、首页概览、学生列表、教师列表                                                        | 完成第一条业务闭环       |
-| Phase 2  | 基础设置             | 校区配置、年级配置                                                                            | 先稳定基础字典和筛选来源 |
-| Phase 3  | 校车管理             | 路线规划、路线运营、异常上报、申请意向、乘车学生、司机、跟车老师、车辆                        | 完成校车完整业务链       |
-| Phase 4  | 协议管理             | 协议列表、协议详情、协议配置                                                                  | 独立迁移低耦合模块       |
-| Phase 5  | 权限管理             | 菜单、角色、部门、用户                                                                        | 完成后台权限闭环         |
-| Phase 6  | 考勤管理             | 学生考勤、校园考勤、门禁记录、微信 Openid、微信通知、每日考勤、请假、流程、任务、配置、放行条 | 迁移考勤和流程链路       |
-| Phase 7  | 群发邮件             | 群组配置、发件箱配置、发件列表                                                                | 阶段性完成，进入联调修正 |
-| Phase 8  | 活动管理             | 活动列表、活动详情、活动项目、问卷管理、问卷设计、答卷；其余活动子菜单继续核对拆分            | **当前进行中**           |
-| Phase 9  | 内容管理             | 公告、动态内容、文章、讨论管理                                                                | 迁移内容发布和互动模块   |
-| Phase 10 | 收尾优化             | 测试、类型补齐、构建优化、遗留样式清理                                                        | 进入稳定交付状态         |
+| 阶段      | 模块                 | 重构内容                                                                                      | 目标                     |
+| --------- | -------------------- | --------------------------------------------------------------------------------------------- | ------------------------ |
+| Phase 0   | 基座准备             | 路由、菜单、权限、请求、字典、下载、主题、布局                                                | 建立可复制页面范式       |
+| Phase 1   | 登录、首页、成员管理 | 登录认证、首页概览、学生列表、教师列表                                                        | 完成第一条业务闭环       |
+| Phase 2   | 基础设置             | 校区配置、年级配置                                                                            | 先稳定基础字典和筛选来源 |
+| Phase 3   | 校车管理             | 路线规划、路线运营、异常上报、申请意向、乘车学生、司机、跟车老师、车辆；**校巴考勤（扩展）**  | 完成校车完整业务链       |
+| Phase 4   | 协议管理             | 协议列表、协议详情、协议配置                                                                  | 独立迁移低耦合模块       |
+| Phase 5   | 权限管理             | 菜单、角色、部门、用户                                                                        | 完成后台权限闭环         |
+| Phase 6   | 考勤管理             | 学生考勤、校园考勤、门禁记录、微信 Openid、微信通知、每日考勤、请假、流程、任务、配置、放行条 | 迁移考勤和流程链路       |
+| Phase 7   | 群发邮件             | 群组配置、发件箱配置、发件列表                                                                | 阶段性完成，进入联调修正 |
+| Phase 8   | 活动管理             | 主菜单页与活动详情 Tab 已对齐；**活动项目详情：奖品/投票绑定、获奖池文件与名单待补齐**        | **当前进行中**           |
+| Phase 9   | 内容管理             | 公告、动态内容、文章、讨论管理                                                                | 迁移内容发布和互动模块   |
+| Phase 10  | 宿舍管理             | 住宿生、空间管理、属性与分配规则、床位分配                                                    | 对齐 `dorm/`             |
+| Phase 11  | 校医管理             | 学生档案、医疗信息、就诊、用药、传染病、体检等 8 子模块                                       | 对齐 `schoolDoctor/`     |
+| Phase 12  | 收尾优化             | 测试、类型补齐、构建优化、遗留样式与路径映射清理                                              | 全量稳定交付             |
 
 ### 15.1 Phase 0：基座准备
 
@@ -1073,8 +1143,9 @@ sidebar.vue
 - 司机管理。
 - 跟车老师列表。
 - 车辆管理。
+- **校巴考勤**（扩展）：旧 `schoolbus/attendance/index.vue`，API `api/isacommunity/busattendance.js`；权限 `busattendance_add` / `edit` / `del`；可与 P3 主体联调后插单。
 
-该阶段重点验证多级菜单、多表格、多弹窗、多选项联动。
+该阶段重点验证多级菜单、多表格、多弹窗、多选项联动。乘车意向/订单表单在 `admin-web` 以 **弹窗** 承载，不必复刻旧独立 form 路由（见 §2.5.1）。
 
 ### 15.5 Phase 4：协议管理
 
@@ -1134,12 +1205,12 @@ sidebar.vue
 
 ### 15.9 Phase 8：活动管理
 
-当前状态：**进行中**。已接入活动列表、活动详情、活动项目、奖品列表、投票节目、家长学生关联管理、微信配置、邮箱配置、问卷管理、问卷设计与答卷页；后续继续围绕联调问题、旧权限码命名与细节验收收敛。
+当前状态：**进行中（主链路已通，项目详情子能力未闭合）**。已接入活动列表、活动详情（含全部 Tab）、活动项目列表与编辑页、奖品列表、投票节目、家长学生关联、微信/邮箱配置、问卷管理/设计/答卷。
 
 活动管理按业务链迁移：
 
 1. 活动列表。
-2. 活动详情、新增、编辑。
+2. 活动详情、新增、编辑（含 Tab：项目、问卷、报名、签到、获奖、投票、**祝福语**、反馈）。
 3. 活动项目列表、详情、新增、编辑。
 4. 问卷管理、问卷设计、答卷查看。
 5. 奖品列表。
@@ -1147,8 +1218,15 @@ sidebar.vue
 7. 家长学生关联管理。
 8. 微信配置。
 9. 邮箱配置。
+10. **活动项目详情子能力**（旧 `activity/program/detail/index.vue`，**当前 `admin-web` 缺口**）：
+    - 绑定奖品列表（旧 `PrizForm` + 表格）。
+    - 绑定投票节目（旧 `VoteProgramForm` + 表格，`programType == 2`）。
+    - 获奖池文件：模板下载、导入、文件列表（`lotteryPoolFile.js`）。
+    - 奖池名单抽屉（`lotteryPoolList` + `listByPool`）。
 
-该阶段重点处理详情页、多 tab、问卷动态表单、批量发送微信、导出多个文件等复杂操作。每个剩余子菜单迁移前必须回到旧项目确认真实页面、接口、权限码和与问卷/活动详情的关系。
+**不作为独立菜单迁移：** `activity/blessing/index.vue`、`lotteryPoolList/index.vue` 等孤立文件若与详情页不一致，以 **活动详情 Tab / 项目详情内嵌** 为准（§2.7）。
+
+该阶段重点处理详情页、多 Tab、问卷动态表单、批量发送微信、导出多个文件等复杂操作。Phase 8 宣称完成前，须逐项验收 §15.9 第 10 点与旧项目详情页行为一致。
 
 ### 15.10 Phase 9：内容管理
 
@@ -1159,7 +1237,40 @@ sidebar.vue
 3. 文章管理：文章内容、文章分类。
 4. 讨论管理：内容列表、讨论标签、讨论评论、点赞收藏。
 
-该阶段重点处理富文本、图片上传、详情预览、内容状态和多语言标题。
+该阶段重点处理富文本、图片上传、详情预览、内容状态和多语言标题。须同步补齐 §14.2 内容域 `MENU_PATH_ALIASES` 与 `router/modules/content.ts`。
+
+### 15.11 Phase 10：宿舍管理
+
+旧代码目录：`test/old-test/src/views/isacommunity/dorm/`，API：`api/isacommunity/dorm.js`（前缀 `/isacommunity/dormitory/*`）。
+
+建议迁移顺序：
+
+1. 住宿生管理（当前/历史 Tab，`boarding-student`）。
+2. 楼栋、楼层、房间管理。
+3. 属性管理、自动分配规则。
+4. 床位分配隐藏页（从房间列表跳入，`room-assigne`）。
+
+该阶段注意权限码（如 `building-add`、`attribute-add`、`rule-add`）与学校筛选联动；**不要**复制旧路由文件中重复的 dorm 路由注册。
+
+### 15.12 Phase 11：校医管理
+
+旧代码目录：`schoolDoctor/`，路由：`router/schoolDoctor/index.js`，需求：`schoolDoctor/校医需求.md`。
+
+建议迁移顺序（与旧路由一致）：
+
+1. 学生档案、医疗信息。
+2. 规章制度、疾病设置。
+3. 就诊记录、用药申请。
+4. 传染病管理、体检报告。
+
+该阶段表单体量大、权限细（如家长联系方式、操作记录编辑），详情容器优先 `el-drawer` 或独立详情路由（§2.5.1）。校巴考勤详情若复用 `studentFormMapper.js`，稳定后可评估抽到 `components/business`。
+
+### 15.13 Phase 12：收尾优化
+
+- 全量 `lint`、`type-check`、`build`。
+- 补齐 P9～P11 的 `MENU_PATH_ALIASES` 与隐藏路由。
+- 清理无效样式、重复映射、未使用权限码占位。
+- 跨模块联调回归（邮件群组、活动导入导出、考勤流程书签路径）。
 
 ## 十六、需要抽离到组件库的能力
 
@@ -1233,8 +1344,10 @@ sidebar.vue
 | 业务下载工具   | `utils/download.ts`                     | 文件名解析、导出提示       |
 | 学校字典       | `composables/use-school-options.ts`     | 本项目学校选项和默认学校   |
 | 成员模块逻辑   | `views/member/<sub-module>/use-list.ts` | 只服务对应成员子模块       |
-| 活动详情 tab   | `views/activity/components`             | 只服务活动管理             |
+| 活动详情 tab   | `views/activity/detail/tabs`            | 只服务活动管理             |
+| 活动项目详情子区 | `views/activity/program/edit` 内嵌组件 | 奖品/投票绑定、获奖池（Phase 8 待补齐） |
 | 考勤审批弹窗   | `views/attendance/components`           | 只服务考勤流程             |
+| 校医表单映射   | 迁校巴考勤时评估 `studentFormMapper` 等价逻辑 | 旧 `schoolDoctor/utils` |
 
 业务模块内部推荐保持：
 
@@ -1272,7 +1385,9 @@ views/activity/
 
 ## 十九、第一轮暂不处理事项
 
-第一轮暂不处理：
+> **说明：** 以下为 **历史第一轮（仅登录/首页/成员）** 的边界记录；校车、协议、基础设置、权限、考勤、邮件、活动等已由后续 Phase 承接，**不再表示当前未做**。当前未纳入排期的增量域见 **§2.7**（宿舍、校医、校巴考勤）。
+
+历史第一轮暂不处理：
 
 - 校车管理具体页面。
 - 协议管理具体页面。
@@ -1282,6 +1397,7 @@ views/activity/
 - 群发邮件具体页面。
 - 活动管理具体页面。
 - 内容管理具体页面。
+- 宿舍管理、校医管理、校巴考勤（现分别对应 Phase 10、11 与 P3 扩展）。
 - 微前端改造。
 - 复杂流程设计器、富文本、BPMN 等重型能力。
 

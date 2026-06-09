@@ -14,6 +14,9 @@
   background-size: 100%;
   background-repeat: no-repeat;
 }
+.avue-logo {
+  width: 160px;
+}
 
 .avue-left {
   position: fixed;
@@ -28,16 +31,16 @@
 .avue--collapse {
   .avue-left,
   .avue-logo {
-    width: 160px;
+    width: 60px;
   }
 
   .avue-header {
-    padding-left: 160px;
+    padding-left: 60px;
   }
 
   .avue-main {
-    width: calc(100% - 160px);
-    left: 160px;
+    width: calc(100% - 60px);
+    left: 60px;
     display: flex;
     flex-direction: column;
 
@@ -50,16 +53,38 @@
     width: calc(100% - 204px);
     height: calc(100% - 80px);
   }
+  .thepool-left {
+    // 左侧边导航栏
+    width: 60px;
+    box-shadow: none !important;
+    background: #2a3f54;
+
+    .avue-logo {
+      width: 60px;
+      padding: 0 10px;
+    }
+
+    .avue-sidebar {
+      padding-top: 80px;
+    }
+    .el-menu--collapse {
+      width: 60px;
+    }
+  }
+  .thepool-header {
+    // top顶部样式
+    padding-left: 60px;
+  }
 
   .thepool-main {
-    width: calc(100% - 220px);
+    width: calc(100% - 60px);
     height: calc(100% - 80px);
-    background-color: #edf5f6 !important;
+    background-color: #f1f5fb !important;
   }
 }
 
 .avue-header {
-  padding-left: 240px;
+  padding-left: 160px;
   width: 100%;
   background-color: #fff;
   box-sizing: border-box;
@@ -68,13 +93,18 @@
 
 .avue-main {
   position: absolute;
-  left: 240px;
+  left: 160px;
   padding: 0;
   width: calc(100% - 160px);
   height: calc(100% - 60px);
   box-sizing: border-box;
   overflow: hidden;
   background-color: $theme_back;
+  display: flex;
+  flex-direction: column;
+  #avue-view {
+    flex: 1;
+  }
 }
 
 .avue-view {
@@ -141,6 +171,14 @@
   .community-main {
     width: calc(1440px - 204px) !important;
     height: calc(100% - 80px) !important;
+  }
+  .thepool-main {
+    width: calc(1440px - 220px) !important;
+  }
+  .avue--collapse {
+    .thepool-main {
+      width: calc(1440px - 60px) !important;
+    }
   }
 }
 

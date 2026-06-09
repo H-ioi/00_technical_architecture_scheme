@@ -1,6 +1,9 @@
 <template>
   <div>
-    <div class="community_top_btn" style="text-align: right; margin-bottom: 20px">
+    <div
+      class="community_top_btn"
+      style="text-align: right; margin-bottom: 20px"
+    >
       <el-button
         v-if="permissions['busdriver_add']"
         type="primary"
@@ -18,7 +21,9 @@
               class="orderDetail_baseinfo_item"
             >
               <span>{{ $t("isagroup.ID") }}</span>
-              <span :title="$checkNull(activityId)">{{ $checkNull(activityId) }}</span>
+              <span :title="$checkNull(activityId)">{{
+                $checkNull(activityId)
+              }}</span>
             </div>
             <div
               style="width: 50%; margin-bottom: 15px"
@@ -186,10 +191,11 @@
               style="width: 100%; margin-bottom: 15px"
               class="orderDetail_baseinfo_item"
             >
-              <span>{{ $t("isagroup.推送校区") }}</span>
-              <span :title="$checkNull(detailData['wechatPushSchoolIdsLabel'])">{{
-                $checkNull(detailData["wechatPushSchoolIdsLabel"])
-              }}</span>
+              <span>{{ $t("isagroup.推送微信校区") }}</span>
+              <span
+                :title="$checkNull(detailData['wechatPushSchoolIdsLabel'])"
+                >{{ $checkNull(detailData["wechatPushSchoolIdsLabel"]) }}</span
+              >
             </div>
             <div
               style="width: 100%; margin-bottom: 15px"
@@ -231,11 +237,10 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
 import { getActivityDetail } from "@/api/isacommunity/activity.js";
-import tabletitle from "@/const/isacommunity/tabletitle.js";
 import consts from "@/const/isacommunity/consts.js";
-import dayjs from "dayjs";
+import tabletitle from "@/const/isacommunity/tabletitle.js";
+import { mapGetters } from "vuex";
 export default {
   name: "detail",
   components: {},
@@ -308,10 +313,19 @@ export default {
                   String(checkinMethod)
                 ),
                 ticketPrice,
-                recommended: this.$getListLabel(consts["yesOrno"], String(recommended)),
+                recommended: this.$getListLabel(
+                  consts["yesOrno"],
+                  String(recommended)
+                ),
                 banner: this.$getListLabel(consts["yesOrno"], String(banner)),
-                needFeedback: this.$getListLabel(consts["yesOrno"], String(needFeedback)),
-                wechatNotify: this.$getListLabel(consts["yesOrno"], String(wechatNotify)),
+                needFeedback: this.$getListLabel(
+                  consts["yesOrno"],
+                  String(needFeedback)
+                ),
+                wechatNotify: this.$getListLabel(
+                  consts["yesOrno"],
+                  String(wechatNotify)
+                ),
                 wechatPushContent,
                 wechatPushRemark,
                 activityStatusLabel: this.$getListLabel(

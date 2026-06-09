@@ -1,185 +1,172 @@
 <template>
-  <div class="community_page">
-    <el-dialog
-      :title="$t('isagroup')[typeObj[modalType]]"
-      :visible.sync="showModal"
-      width="1000px"
-      :before-close="closeModal"
-      :close-on-click-modal="false"
+  <el-dialog
+    :title="dialogTitle"
+    :visible.sync="showModal"
+    width="720px"
+    class="schoolbus-dialog"
+    :before-close="closeModal"
+    :close-on-click-modal="false"
+  >
+    <el-form
+      v-if="showModal"
+      ref="ruleForm"
+      class="schoolbus-dialog-form"
+      :label-position="'top'"
+      :model="ruleForm"
+      :rules="rules"
+      v-loading="detailLoading"
     >
-      <div class="moadlFromBox" v-if="showModal">
-        <el-form
-          :label-position="'top'"
-          :inline="true"
-          :model="ruleForm"
-          :rules="rules"
-          ref="ruleForm"
-        >
-          <div class="df_center_wrap" style="max-height: 600px; overflow-y: auto">
-            <el-form-item
-              :label="$t('isagroup.校区')"
-              prop="schoolIds"
-              style="width: 49%"
-              v-if="schoolSelectList.length > 1"
-            >
-              <el-select
-                clearable
-                collapse-tags
-                style="width: 100%"
-                v-model="ruleForm['schoolIds']"
-                :placeholder="$t('common.请选择')"
-                multiple
-                @change="changeSchool"
-              >
-                <el-option
-                  :key="k"
-                  v-for="(i, k) in schoolSelectList"
-                  :label="schoolDropdownLabel(i)"
-                  :value="i.id"
-                ></el-option>
-              </el-select>
-            </el-form-item>
-            <el-form-item
-              :label="$t('isagroup.车牌号')"
-              prop="carNumber"
-              style="width: 49%"
-            >
-              <el-input
-                style="width: 100%"
-                v-model="ruleForm.carNumber"
-                :placeholder="$t('consult.请输入')"
-                maxlength="50"
-              ></el-input>
-            </el-form-item>
-            <el-form-item
-              :label="$t('isagroup.跟车老师')"
-              prop="carTeacherId"
-              style="width: 49%"
-            >
-              <el-select
-                style="width: 100%"
-                v-model="ruleForm['carTeacherId']"
-                :placeholder="$t('common.请选择')"
-              >
-                <el-option
-                  :key="k"
-                  v-for="(i, k) in teacherList"
-                  :label="i.nickname"
-                  :value="i.id"
-                  :disabled="!i.status"
-                ></el-option>
-              </el-select>
-            </el-form-item>
-            <el-form-item
-              :label="$t('isagroup.座位数')"
-              prop="seatNumber"
-              style="width: 49%"
-            >
-              <el-input-number
-                style="width: 100%"
-                v-model="ruleForm.seatNumber"
-                :precision="0"
-                :step="1"
-                :min="1"
-                :max="100"
-                :placeholder="$t('consult.请输入')"
-              ></el-input-number>
-            </el-form-item>
-            <el-form-item :label="$t('isagroup.司机')" prop="driverId" style="width: 49%">
-              <el-select
-                style="width: 100%"
-                v-model="ruleForm['driverId']"
-                :placeholder="$t('common.请选择')"
-              >
-                <el-option
-                  :key="k"
-                  v-for="(i, k) in driverList"
-                  :label="i.name"
-                  :value="i.id"
-                  :disabled="!i.status"
-                ></el-option>
-              </el-select>
-            </el-form-item>
-            <el-form-item :label="$t('isagroup.状态')" prop="status" style="width: 49%">
-              <el-select
-                style="width: 100%"
-                v-model="ruleForm['status']"
-                :placeholder="$t('common.请选择')"
-              >
-                <el-option
-                  :key="k"
-                  v-for="(i, k) in consts['carStatus']"
-                  :label="$t('isagroup.' + i.label)"
-                  :value="i.id"
-                ></el-option>
-              </el-select>
-            </el-form-item>
-            <el-form-item
-              :label="$t('isagroup.车辆照片')"
-              prop="carImageUrl"
+      <el-row :gutter="20">
+        <el-col v-if="schoolSelectList.length > 1" :span="12">
+          <el-form-item :label="$t('schoolbus.校区')" prop="schoolIds">
+            <el-select
+              clearable
               style="width: 100%"
+              v-model="ruleForm.schoolIds"
+              :placeholder="$t('common.请选择')"
+              @change="changeSchool"
             >
-              <upload-file
-                ref="uploadFile"
-                :limit="1"
-                types="image/*"
-                @upload-success="handleUploadSuccess"
-                @upload-error="handleUploadError"
-              ></upload-file>
-            </el-form-item>
-          </div>
-          <el-form-item class="modalFromBtn">
-            <el-button type="primary" size="medium" @click="submitForm('ruleForm')">{{
-              $t("isagroup.确认")
-            }}</el-button>
-            <el-button type="default" size="medium" @click="closeModal">{{
-              $t("isagroup.取消")
-            }}</el-button>
+              <el-option
+                v-for="(i, k) in schoolSelectList"
+                :key="k"
+                :label="schoolDropdownLabel(i)"
+                :value="i.id"
+              />
+            </el-select>
           </el-form-item>
-        </el-form>
-      </div>
-    </el-dialog>
-  </div>
+        </el-col>
+        <el-col :span="schoolSelectList.length > 1 ? 12 : 24">
+          <el-form-item :label="$t('schoolbus.车牌号')" prop="carNumber">
+            <el-input
+              v-model="ruleForm.carNumber"
+              :placeholder="$t('consult.请输入')"
+              maxlength="50"
+            />
+          </el-form-item>
+        </el-col>
+        <el-col :span="12">
+          <el-form-item :label="$t('schoolbus.跟车老师')" prop="carTeacherId">
+            <el-select
+              style="width: 100%"
+              v-model="ruleForm.carTeacherId"
+              :placeholder="$t('common.请选择')"
+            >
+              <el-option
+                v-for="(i, k) in teacherList"
+                :key="k"
+                :label="teacherOptionLabel(i)"
+                :value="i.id"
+                :disabled="isTeacherOptionDisabled(i)"
+              />
+            </el-select>
+          </el-form-item>
+        </el-col>
+        <el-col :span="12">
+          <el-form-item :label="$t('schoolbus.座位数')" prop="seatNumber">
+            <el-input-number
+              style="width: 100%"
+              v-model="ruleForm.seatNumber"
+              :precision="0"
+              :step="1"
+              :min="1"
+              :max="100"
+              :placeholder="$t('consult.请输入')"
+            />
+          </el-form-item>
+        </el-col>
+        <el-col :span="12">
+          <el-form-item :label="$t('schoolbus.司机')" prop="driverId">
+            <el-select
+              style="width: 100%"
+              v-model="ruleForm.driverId"
+              :placeholder="$t('common.请选择')"
+            >
+              <el-option
+                v-for="(i, k) in driverList"
+                :key="k"
+                :label="i.name"
+                :value="i.id"
+                :disabled="!i.status"
+              />
+            </el-select>
+          </el-form-item>
+        </el-col>
+        <el-col :span="12">
+          <el-form-item :label="$t('schoolbus.状态')" prop="status">
+            <el-select
+              style="width: 100%"
+              v-model="ruleForm.status"
+              :placeholder="$t('common.请选择')"
+            >
+              <el-option
+                v-for="(i, k) in carStatusOptions"
+                :key="k"
+                :label="$t('schoolbus.' + i.label)"
+                :value="i.id"
+              />
+            </el-select>
+          </el-form-item>
+        </el-col>
+        <el-col :span="24">
+          <el-form-item :label="$t('schoolbus.车辆照片')" prop="carImageUrl">
+            <upload-file
+              ref="uploadFile"
+              :limit="1"
+              types="image/*"
+              @upload-success="handleUploadSuccess"
+              @upload-error="handleUploadError"
+            />
+          </el-form-item>
+        </el-col>
+      </el-row>
+    </el-form>
+    <div slot="footer" class="dialog-footer">
+      <el-button @click="closeModal">{{ $t("btn.取消") }}</el-button>
+      <el-button type="primary" :loading="isSubmitting" @click="submitForm('ruleForm')">
+        {{ $t("schoolbus.确认") }}
+      </el-button>
+    </div>
+  </el-dialog>
 </template>
 
 <script>
 import { mapGetters } from "vuex";
 import { getCarinfoDetail, addCarinfo, editCarinfo } from "@/api/isacommunity/car.js";
 import { getDriverList, getTeacherList } from "@/api/isacommunity/buscommon.js";
-import consts from "@/const/isacommunity/consts.js";
+import { BUS_CAR_STATUS } from "../../schoolbusConsts.js";
 import uploadFile from "@/components/communitycommon/uploadFile.vue";
 import schoolListBuscommonMixin from "@/mixins/schoolListBuscommon.js";
+
 export default {
-  name: "operation",
+  name: "BusCarForm",
   mixins: [schoolListBuscommonMixin],
   components: { uploadFile },
-  props: {},
   data() {
-    let that = this;
+    const that = this;
     return {
-      consts: consts,
+      carStatusOptions: BUS_CAR_STATUS,
       typeObj: { add: "新增", edit: "编辑", look: "查看" },
       modalType: "add",
       showModal: false,
-      ruleForm: {},
+      detailLoading: false,
+      isSubmitting: false,
+      ruleForm: { schoolIds: null },
+      editingCarId: null,
       rules: {
         schoolIds: [
-          { required: true, message: that.$t("isagroup.请选择"), trigger: "blur" },
+          { required: true, message: that.$t("schoolbus.请选择"), trigger: "change" },
         ],
         carNumber: [
-          { required: true, message: that.$t("isagroup.请输入"), trigger: "blur" },
-        ],
-        carTeacherId: [
-          { required: true, message: that.$t("isagroup.请输入"), trigger: "blur" },
+          { required: true, message: that.$t("schoolbus.请输入"), trigger: "blur" },
         ],
         seatNumber: [
-          { required: true, message: that.$t("isagroup.请输入"), trigger: "blur" },
+          { required: true, message: that.$t("schoolbus.请输入"), trigger: "blur" },
         ],
         driverId: [
-          { required: true, message: that.$t("isagroup.请选择"), trigger: "blur" },
+          { required: true, message: that.$t("schoolbus.请选择"), trigger: "change" },
         ],
         status: [
-          { required: true, message: that.$t("isagroup.请选择"), trigger: "blur" },
+          { required: true, message: that.$t("schoolbus.请选择"), trigger: "change" },
         ],
       },
       driverList: [],
@@ -187,139 +174,147 @@ export default {
       carImageUrl: "",
     };
   },
-  created() {},
-  mounted() {},
   computed: {
     ...mapGetters(["permissions", "i18nlocel"]),
+    dialogTitle() {
+      const key = this.typeObj[this.modalType] || "新增";
+      return this.$t('schoolbus')[key];
+    },
   },
   methods: {
-    // 打开
     async showForm(type = "add", item = {}) {
       await this.fetchSchoolListBuscommon();
       this.modalType = type;
       this.showModal = true;
-      if (type != "add") {
-        this.getDetail(item["id"]);
-      } else {
-        if (this.schoolSelectList.length === 1) {
-          let schoolId = this.schoolSelectList[0].id;
-          this.ruleForm = {
-            ...this.ruleForm,
-            schoolIds: [schoolId],
-          };
+      this.detailLoading = type !== "add";
+      try {
+        if (type !== "add") {
+          await this.getDetail(item.id);
+        } else if (this.schoolSelectList.length === 1) {
+          const schoolId = this.schoolSelectList[0].id;
+          this.editingCarId = null;
+          this.ruleForm = { schoolIds: schoolId };
           this.driverList = await getDriverList({ schoolIds: [schoolId] });
-          this.teacherList = await getTeacherList({ schoolIds: [schoolId] });
+          this.teacherList = await this.loadTeacherOptions([schoolId]);
         }
+      } finally {
+        this.detailLoading = false;
       }
     },
-    // 新增
+    async loadTeacherOptions(schoolIds) {
+      return getTeacherList({ schoolIds, isAll: 1 });
+    },
+    normalizeSchoolIds(value) {
+      if (value == null || value === "") return [];
+      return Array.isArray(value) ? value : [value];
+    },
+    teacherOptionLabel(teacher) {
+      if (!teacher) return "";
+      let label = teacher.nickname || "";
+      if (teacher.boundCarNumber && this.isTeacherOptionDisabled(teacher)) {
+        label += ` (${this.$t("schoolbus.已跟车")}：${teacher.boundCarNumber})`;
+      }
+      return label;
+    },
+    isTeacherOptionDisabled(teacher) {
+      if (!teacher || !teacher.status) return true;
+      if (!teacher.boundCarId) return false;
+      if (this.modalType === "edit" && this.editingCarId) {
+        return Number(teacher.boundCarId) !== Number(this.editingCarId);
+      }
+      return true;
+    },
+    buildSubmitPayload() {
+      const schoolIds = this.normalizeSchoolIds(this.ruleForm.schoolIds);
+      return { ...this.ruleForm, schoolIds, carImageUrl: this.carImageUrl };
+    },
     addData(data) {
-      addCarinfo(data).then((res) => {
-        if (res.data.success) {
-          this.$message.success(this.$t("isagroup.成功"));
-          this.$emit("getList");
-          this.closeModal();
-        }
-      });
+      this.isSubmitting = true;
+      addCarinfo(data)
+        .then((res) => {
+          if (res.data.success) {
+            this.$message.success(this.$t("schoolbus.成功"));
+            this.$emit("getList");
+            this.closeModal();
+          }
+        })
+        .finally(() => {
+          this.isSubmitting = false;
+        });
     },
-    // 编辑
     editData(data) {
-      editCarinfo(data).then((res) => {
-        if (res.data.success) {
-          this.$message.success(this.$t("isagroup.成功"));
-          this.$emit("getList");
-          this.closeModal();
+      this.isSubmitting = true;
+      editCarinfo(data)
+        .then((res) => {
+          if (res.data.success) {
+            this.$message.success(this.$t("schoolbus.成功"));
+            this.$emit("getList");
+            this.closeModal();
+          }
+        })
+        .finally(() => {
+          this.isSubmitting = false;
+        });
+    },
+    async getDetail(id) {
+      const res = await getCarinfoDetail(id);
+      if (!res.data.success) return;
+      const {
+        schoolIds: detailSchoolIds,
+        carNumber,
+        carTeacherId,
+        seatNumber,
+        driverId,
+        status,
+        carImageUrl,
+      } = res.data.data;
+      this.editingCarId = id;
+      const schoolIds = this.normalizeSchoolIds(detailSchoolIds);
+      this.driverList = await getDriverList({ schoolIds, driverId });
+      this.teacherList = await this.loadTeacherOptions(schoolIds);
+      this.$nextTick(() => {
+        this.ruleForm = {
+          id,
+          schoolIds: schoolIds.length === 1 ? schoolIds[0] : schoolIds,
+          carNumber,
+          carTeacherId,
+          seatNumber,
+          driverId,
+          status,
+        };
+        if (carImageUrl) {
+          this.carImageUrl = carImageUrl;
+          this.$refs.uploadFile.imageUrl = carImageUrl;
         }
       });
     },
-    getDetail(id) {
-      getCarinfoDetail(id).then(async (res) => {
-        if (res.data.success) {
-          let {
-            schoolIds,
-            carNumber,
-            carTeacherId,
-            seatNumber,
-            driverId,
-            status,
-            carImageUrl,
-          } = res.data.data;
-
-          this.driverList = await getDriverList({
-            schoolIds: schoolIds,
-            driverId: driverId,
-          });
-          this.teacherList = await getTeacherList({
-            schoolIds: schoolIds,
-            teacherId: carTeacherId,
-          });
-          this.$nextTick(() => {
-            this.ruleForm = {
-              ...this.ruleForm,
-              id,
-              schoolIds,
-              carNumber,
-              carTeacherId,
-              seatNumber,
-              driverId,
-              status,
-            };
-            if (carImageUrl) {
-              this.carImageUrl = carImageUrl;
-              this.$refs.uploadFile.imageUrl = carImageUrl;
-            }
-          });
-        }
-      });
-    },
-    // 提交表单
     submitForm(formName) {
       this.$refs[formName].validate((valid) => {
-        if (valid) {
-          console.log("submitForm", valid, this.modalType);
-          let data = {
-            ...this.ruleForm,
-            carImageUrl: this.carImageUrl,
-          };
-
-          if (this.modalType == "add") {
-            this.addData(data);
-          } else {
-            this.editData(data);
-          }
-        }
+        if (!valid) return;
+        const data = this.buildSubmitPayload();
+        if (this.modalType === "add") this.addData(data);
+        else this.editData(data);
       });
     },
     async changeSchool(e) {
-      delete this.ruleForm["driverId"];
-      delete this.ruleForm["teacherId"];
-      this.driverList = [];
-      this.driverList = await getDriverList({ schoolIds: e });
-      this.teacherList = [];
-      this.teacherList = await getTeacherList({ schoolIds: e });
+      delete this.ruleForm.driverId;
+      delete this.ruleForm.carTeacherId;
+      const schoolIds = this.normalizeSchoolIds(e);
+      this.driverList = await getDriverList({ schoolIds });
+      this.teacherList = await this.loadTeacherOptions(schoolIds);
     },
     handleUploadSuccess(data) {
-      console.log("文件上传成功", data);
       this.carImageUrl = data;
     },
-    handleUploadError(error) {
-      console.error("文件上传失败", error);
-    },
-    // 关闭
+    handleUploadError() {},
     closeModal() {
       this.driverList = [];
       this.teacherList = [];
+      this.editingCarId = null;
+      this.carImageUrl = "";
       this.showModal = false;
-      this.$refs.ruleForm.resetFields();
+      if (this.$refs.ruleForm) this.$refs.ruleForm.resetFields();
     },
   },
 };
 </script>
-
-<style lang="scss" scoped>
-.el-form-item--small.el-form-item {
-  margin-right: 0px;
-  padding-right: 20px;
-  box-sizing: border-box;
-}
-</style>

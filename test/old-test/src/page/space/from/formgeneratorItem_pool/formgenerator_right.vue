@@ -20,13 +20,21 @@
               :placeholder="$t('consult.请输入')"
             ></el-input
           ></el-form-item>
-          <el-form-item :label="$t('consult.英文名')" prop="fieldNameEn">
+          <el-form-item
+            v-if="setform.type != 'title'"
+            :label="$t('consult.英文名')"
+            prop="fieldNameEn"
+          >
             <el-input
               v-model="setform.fieldNameEn"
               :placeholder="$t('consult.请输入')"
             ></el-input
           ></el-form-item>
-          <el-form-item :label="$t('consult.字段编码')" prop="fieldCode">
+          <el-form-item
+            v-if="setform.type != 'title'"
+            :label="$t('consult.字段编码')"
+            prop="fieldCode"
+          >
             <el-input
               v-model="setform.fieldCode"
               :placeholder="$t('consult.请输入')"
@@ -59,11 +67,24 @@
               rows="20"
             ></el-input
           ></el-form-item>
-          <el-form-item label="是否必填" prop="require">
-            <el-switch v-model="setform.required" @change="changeRequired">
+          <el-form-item
+            v-if="setform.type != 'title'"
+            label="是否必填"
+            prop="require"
+          >
+            <el-switch
+              :active-value="1"
+              :inactive-value="0"
+              v-model="setform.required"
+              @change="changeRequired"
+            >
             </el-switch
           ></el-form-item>
-          <el-form-item :label="$t('consult.是否隐藏')" prop="isHidden">
+          <el-form-item
+            v-if="setform.type != 'title'"
+            :label="$t('consult.是否隐藏')"
+            prop="isHidden"
+          >
             <el-switch
               :active-value="1"
               :inactive-value="0"
@@ -71,23 +92,8 @@
             >
             </el-switch
           ></el-form-item>
-          <!-- <el-form-item
-            label="是否只读"
-            prop="readonly"
-            v-if="setform.type != 'upload'"
-          >
-            <el-switch v-model="setform.readonly" @change="changeReadonly">
-            </el-switch
-          ></el-form-item> -->
-          <!-- <el-form-item label="是否禁用" prop="disabled">
-              <el-switch v-model="setform.disabled"> </el-switch
-            ></el-form-item> -->
         </div>
-        <!-- <div v-if="setform.type == 'input'">
-          <el-form-item label="是否密文" prop="ciphertext">
-            <el-switch v-model="setform.properties.ciphertext"> </el-switch
-          ></el-form-item>
-        </div> -->
+
         <div v-if="setform.type == 'textarea'">
           <el-form-item :label="$t('consult.显示行数')" prop="rows">
             <el-input-number
@@ -108,18 +114,7 @@
             </el-input-number
           ></el-form-item>
         </div>
-        <!-- <div v-if="setform.type == 'select'">
-          <el-form-item label="是否多选" prop="option_multi">
-            <el-switch
-              @change="changeSelectMulti"
-              v-model="setform.properties.option_multi"
-            >
-            </el-switch>
-          </el-form-item>
-          <el-form-item label="是否支持搜索" prop="searchable">
-            <el-switch v-model="setform.properties.searchable"> </el-switch>
-          </el-form-item>
-        </div> -->
+
         <div
           v-if="
             setform.type == 'radio' ||
@@ -131,6 +126,7 @@
             <el-select
               style="width: 100%"
               clearable
+              @change="changeOptionDefault"
               :multiple="
                 setform.type == 'radio'
                   ? false
@@ -297,7 +293,8 @@
             setform.type != 'upload' &&
             queryInfo['scene'] == '1' &&
             setform.type != 'protocol' &&
-            setform.type != 'sign'
+            setform.type != 'sign' &&
+            setform.type != 'title'
           "
         >
           <el-form-item label="映射属性" prop="fieldMapping">
@@ -319,7 +316,7 @@
             </el-select>
           </el-form-item>
         </div>
-        <div v-if="queryInfo['scene'] == '8'">
+        <div v-if="queryInfo['scene'] == '8' || setform.type != 'title'">
           <el-form-item label="关联属性" prop="fieldMappings">
             <el-cascader
               ref="cascader"
@@ -356,6 +353,14 @@
             </div>
           </el-upload>
         </div>
+        <el-form-item :label="$t('consult.备注')" prop="placeholder">
+          <el-input
+            v-model="setform.placeholder"
+            :placeholder="$t('consult.请输入')"
+            type="textarea"
+            rows="20"
+          ></el-input
+        ></el-form-item>
       </el-form>
     </el-scrollbar>
   </div>
@@ -614,6 +619,55 @@ export default {
     },
     handlePreview(file) {
       window.open(file.url, "_blank");
+    },
+    changeOptionDefault(e) {
+      switch (this.setform.type) {
+        case "radio":
+          this.setOddOptionDefault(e);
+          break;
+        case "checkbox":
+          this.setMultipleOptionDefault(e);
+          break;
+        case "select":
+          if (this.setform.properties.option_multi) {
+            this.setMultipleOptionDefault(e);
+          } else {
+            this.setOddOptionDefault(e);
+          }
+          break;
+      }
+    },
+    setOddOptionDefault(e) {
+      let id = e || "";
+      this.setform.properties.option.forEach((item, index) => {
+        if (id == item.id) {
+          this.$set(this.setform.properties.option, index, {
+            ...item,
+            optionDefault: 1,
+          });
+        } else {
+          this.$set(this.setform.properties.option, index, {
+            ...item,
+            optionDefault: 0,
+          });
+        }
+      });
+    },
+    setMultipleOptionDefault(e) {
+      let ids = e || [];
+      this.setform.properties.option.forEach((item, index) => {
+        if (ids.includes(item.id)) {
+          this.$set(this.setform.properties.option, index, {
+            ...item,
+            optionDefault: 1,
+          });
+        } else {
+          this.$set(this.setform.properties.option, index, {
+            ...item,
+            optionDefault: 0,
+          });
+        }
+      });
     },
   },
 };

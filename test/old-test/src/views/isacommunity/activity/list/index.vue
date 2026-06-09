@@ -50,41 +50,87 @@
     </div>
     <div class="community_centent">
       <div class="community_searchFrom">
-        <el-form class="df_align_center" :label-position="'top'" :inline="true" :model="searchFrom">
+        <el-form
+          class="df_align_center"
+          :label-position="'top'"
+          :inline="true"
+          :model="searchFrom"
+        >
           <el-form-item style="width: 180px">
-            <el-input clearable style="width: 100%" v-model="searchFrom['activityCnName']"
-              :placeholder="$t('isagroup.中文名')"></el-input>
+            <el-input
+              clearable
+              style="width: 100%"
+              v-model="searchFrom['activityCnName']"
+              :placeholder="$t('isagroup.中文名')"
+            ></el-input>
           </el-form-item>
           <el-form-item style="width: 180px">
-            <el-input clearable style="width: 100%" v-model="searchFrom['activityEnName']"
-              :placeholder="$t('isagroup.英文名')"></el-input>
+            <el-input
+              clearable
+              style="width: 100%"
+              v-model="searchFrom['activityEnName']"
+              :placeholder="$t('isagroup.英文名')"
+            ></el-input>
           </el-form-item>
           <el-form-item style="width: 180px" v-if="schoolSelectList.length > 1">
-            <el-select clearable style="width: 100%" v-model="searchFrom['schoolIds']"
-              :placeholder="$t('isagroup.请选择学校')">
-              <el-option :key="k" v-for="(i, k) in schoolSelectList" :label="schoolDropdownLabel(i)" :value="i.id"></el-option>
+            <el-select
+              clearable
+              style="width: 100%"
+              v-model="searchFrom['schoolIds']"
+              :placeholder="$t('isagroup.请选择学校')"
+            >
+              <el-option
+                :key="k"
+                v-for="(i, k) in schoolSelectList"
+                :label="schoolDropdownLabel(i)"
+                :value="i.id"
+              ></el-option>
             </el-select>
           </el-form-item>
 
           <el-form-item style="width: 180px">
-            <el-select clearable style="width: 100%" v-model="searchFrom['activityStatus']"
-              :placeholder="$t('isagroup.状态')">
-              <el-option :key="k" v-for="(i, k) in consts['activityStatus']"
-                :label="i18nlocel == 'en' ? i.enLabel : i.label" :value="i.id"></el-option>
+            <el-select
+              clearable
+              style="width: 100%"
+              v-model="searchFrom['activityStatus']"
+              :placeholder="$t('isagroup.状态')"
+            >
+              <el-option
+                :key="k"
+                v-for="(i, k) in consts['activityStatus']"
+                :label="i18nlocel == 'en' ? i.enLabel : i.label"
+                :value="i.id"
+              ></el-option>
             </el-select>
           </el-form-item>
           <el-form-item style="width: 180px">
-            <el-select clearable style="width: 100%" v-model="searchFrom['isBanner']"
-              :placeholder="$t('isagroup.是否Banner')">
-              <el-option :key="k" v-for="(i, k) in consts['yesOrno']" :label="i18nlocel == 'en' ? i.enLabel : i.label"
-                :value="i.id"></el-option>
+            <el-select
+              clearable
+              style="width: 100%"
+              v-model="searchFrom['isBanner']"
+              :placeholder="$t('isagroup.是否Banner')"
+            >
+              <el-option
+                :key="k"
+                v-for="(i, k) in consts['yesOrno']"
+                :label="i18nlocel == 'en' ? i.enLabel : i.label"
+                :value="i.id"
+              ></el-option>
             </el-select>
           </el-form-item>
           <el-form-item style="width: 180px">
-            <el-select clearable style="width: 100%" v-model="searchFrom['recommended']"
-              :placeholder="$t('isagroup.是否推荐')">
-              <el-option :key="k" v-for="(i, k) in consts['yesOrno']" :label="i18nlocel == 'en' ? i.enLabel : i.label"
-                :value="i.id"></el-option>
+            <el-select
+              clearable
+              style="width: 100%"
+              v-model="searchFrom['recommended']"
+              :placeholder="$t('isagroup.是否推荐')"
+            >
+              <el-option
+                :key="k"
+                v-for="(i, k) in consts['yesOrno']"
+                :label="i18nlocel == 'en' ? i.enLabel : i.label"
+                :value="i.id"
+              ></el-option>
             </el-select>
           </el-form-item>
           <!-- 微信提醒（筛选）暂时下线
@@ -97,18 +143,34 @@
           </el-form-item>
           -->
           <el-form-item style="width: 180px">
-            <el-date-picker style="width: 100%" v-model="searchFrom['activityStartTime']" type="datetime"
-              :placeholder="$t('isagroup.开始时间')" value-format="yyyy-MM-dd HH:mm:ss">
+            <el-date-picker
+              style="width: 100%"
+              v-model="searchFrom['activityStartTime']"
+              type="datetime"
+              :placeholder="$t('isagroup.开始时间')"
+              value-format="yyyy-MM-dd HH:mm:ss"
+            >
             </el-date-picker>
           </el-form-item>
           <el-form-item style="width: 180px">
-            <el-date-picker style="width: 100%" v-model="searchFrom['activityEndTime']" type="datetime"
-              :placeholder="$t('isagroup.结束时间')" value-format="yyyy-MM-dd HH:mm:ss">
+            <el-date-picker
+              style="width: 100%"
+              v-model="searchFrom['activityEndTime']"
+              type="datetime"
+              :placeholder="$t('isagroup.结束时间')"
+              value-format="yyyy-MM-dd HH:mm:ss"
+            >
             </el-date-picker>
           </el-form-item>
           <el-form-item style="width: auto; margin-right: 0">
-            <el-button class="button_text" size="medium" type="text" icon="el-icon-refresh-right" @click="clear">{{
-              $t("btn.重置") }}</el-button>
+            <el-button
+              class="button_text"
+              size="medium"
+              type="text"
+              icon="el-icon-refresh-right"
+              @click="clear"
+              >{{ $t("btn.重置") }}</el-button
+            >
             <el-button size="medium" type="primary" @click="getList">{{
               $t("btn.查询")
             }}</el-button>
@@ -117,9 +179,17 @@
       </div>
 
       <div class="isa_table">
-        <Table ref="Table" :showSelection="true" :tableTitle="tabletitle['activityTable']" :tableData="tableData"
-          :tableBtn="tableBtn" :tableType="'activity'" @playTab="playTab" @rowClick="rowClick"
-          @selection-change="handleSelectionChange" />
+        <Table
+          ref="Table"
+          :showSelection="true"
+          :tableTitle="tabletitle['activityTable']"
+          :tableData="tableData"
+          :tableBtn="tableBtn"
+          :tableType="'activity'"
+          @playTab="playTab"
+          @rowClick="rowClick"
+          @selection-change="handleSelectionChange"
+        />
         <div class="df_sb isa_table_footer">
           <div>
             <el-button
@@ -132,6 +202,16 @@
               发布
             </el-button>
             <el-button
+              v-if="permissions['busdriver_edit']"
+              size="small"
+              type="warning"
+              plain
+              style="margin-left: 8px"
+              @click="cancelPublishData"
+            >
+              取消发布
+            </el-button>
+            <el-button
               v-if="permissions['busdriver_del']"
               size="small"
               type="danger"
@@ -141,7 +221,11 @@
               >{{ $t("btn.删除") }}</el-button
             >
           </div>
-          <Pagination :total="paginationTotal" :pagination="pagination" @handleCurrentChange="handleCurrentChange" />
+          <Pagination
+            :total="paginationTotal"
+            :pagination="pagination"
+            @handleCurrentChange="handleCurrentChange"
+          />
         </div>
       </div>
     </div>
@@ -151,6 +235,7 @@
 <script>
 import {
   batchPublishActivityStatus,
+  batchResetActivityStatusToPending,
   delActivity,
   getActivityPage,
   sendWechatMessage,
@@ -158,7 +243,6 @@ import {
 } from "@/api/isacommunity/activity.js";
 import { exportActivityFeedback } from "@/api/isacommunity/feedback.js";
 import { exportQuestionnaireByActivity } from "@/api/isacommunity/questionnaire.js";
-import { download, downloadFile } from "@/util/download.js";
 import Pagination from "@/components/communitycommon/Pagination.vue";
 import Table from "@/components/communitycommon/Table.vue";
 import {
@@ -168,9 +252,10 @@ import {
 } from "@/const/isacommunity/activityRoutes.js";
 import consts from "@/const/isacommunity/consts.js";
 import tabletitle from "@/const/isacommunity/tabletitle.js";
+import schoolListBuscommonMixin from "@/mixins/schoolListBuscommon.js";
+import { download, downloadFile } from "@/util/download.js";
 import dayjs from "dayjs";
 import { mapGetters } from "vuex";
-import schoolListBuscommonMixin from "@/mixins/schoolListBuscommon.js";
 export default {
   name: "teacher",
   mixins: [schoolListBuscommonMixin],
@@ -193,7 +278,7 @@ export default {
           name: "查看",
           type: "look",
           icon: "",
-          permissions: "",
+          permissions: "look",
         },
         {
           name: "编辑",
@@ -212,7 +297,7 @@ export default {
     this.getBtn();
     this.initData();
   },
-  mounted() { },
+  mounted() {},
   activated() {
     this.getList();
   },
@@ -337,7 +422,11 @@ export default {
         .then(async () => {
           const list = Array.isArray(items) ? items : [items];
           const results = await Promise.all(
-            list.map((item) => req(item.id).then((res) => !!(res && res.data && res.data.success)))
+            list.map((item) =>
+              req(item.id).then(
+                (res) => !!(res && res.data && res.data.success)
+              )
+            )
           );
           if (results.every(Boolean)) {
             this.$message.success(this.$t("isagroup.成功"));
@@ -399,11 +488,11 @@ export default {
       }
       const idSet = new Set(selectionId.map((id) => String(id)));
       const pendingRows = this.tableData.filter(
-        (row) =>
-          idSet.has(String(row.id)) &&
-          String(row.activityStatus) === "0"
+        (row) => idSet.has(String(row.id)) && String(row.activityStatus) === "0"
       );
-      const ids = pendingRows.map((row) => Number(row.id)).filter((n) => Number.isFinite(n));
+      const ids = pendingRows
+        .map((row) => Number(row.id))
+        .filter((n) => Number.isFinite(n));
       if (ids.length === 0) {
         this.$message.warning("所选活动中没有待发布状态的活动");
         return;
@@ -418,6 +507,39 @@ export default {
       })
         .then(() => {
           batchPublishActivityStatus(ids).then((res) => {
+            if (res.data.success) {
+              this.$message.success(this.$t("isagroup.成功"));
+              this.getList();
+              this.selectionCount = 0;
+            } else if (res.data.msg) {
+              this.$message.warning(res.data.msg);
+            }
+          });
+        })
+        .catch(() => {});
+    },
+    cancelPublishData() {
+      const selectionId = this.$refs.Table.selectionId || [];
+      if (selectionId.length === 0) {
+        this.$message.warning("请选择活动数据");
+        return;
+      }
+      const ids = selectionId
+        .map((id) => Number(id))
+        .filter((n) => Number.isFinite(n));
+      if (ids.length === 0) {
+        this.$message.warning("所选活动ID无效");
+        return;
+      }
+      this.$confirm(
+        `确定将选中的 ${ids.length} 个活动批量取消发布吗？`,
+        this.$t("isagroup.提示"),
+        {
+          type: "warning",
+        }
+      )
+        .then(() => {
+          batchResetActivityStatusToPending(ids).then((res) => {
             if (res.data.success) {
               this.$message.success(this.$t("isagroup.成功"));
               this.getList();

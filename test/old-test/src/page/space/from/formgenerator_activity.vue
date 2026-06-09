@@ -281,7 +281,13 @@ export default {
             properties[res.key] = res.value === "true";
           }
           if (res.key === "option_default") {
-            option_default.push(res.value);
+            // option_default.push(res.value);
+            option_default = [];
+            option.forEach((op) => {
+              if (op.optionDefault) {
+                option_default.push(op.id);
+              }
+            });
           }
           if (res.key === "datetime_type") {
             let date = dateTimeType.filter(
@@ -348,6 +354,7 @@ export default {
               id: res.id,
               isHide: res.isHide || 0,
               fontId: createCode(),
+              optionDefault: res.optionDefault,
             });
           }
         }
@@ -394,6 +401,7 @@ export default {
           id: customId,
           isHide: option.isHide || 0,
           value: mark == "applyschool" ? option.value : option.label,
+          optionDefault: option.optionDefault,
         };
       };
 

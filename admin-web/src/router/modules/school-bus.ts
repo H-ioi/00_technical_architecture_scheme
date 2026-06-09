@@ -104,6 +104,15 @@ export const schoolBusRoute: AppRouteRecord = {
         title: '车辆管理',
         titleKey: 'route.schoolBusCar'
       }
+    },
+    {
+      path: 'attendance',
+      name: 'SchoolBusAttendance',
+      component: () => import('@/views/school-bus/attendance/list.vue'),
+      meta: {
+        title: '校巴考勤',
+        titleKey: 'route.schoolBusAttendance'
+      }
     }
   ]
 }

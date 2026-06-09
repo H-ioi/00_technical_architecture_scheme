@@ -415,4 +415,27 @@ export default {
   line-height: 40px;
   box-sizing: border-box;
 }
+/deep/ .el-table__header th {
+  &:first-child {
+    border-top-left-radius: 6px;
+    border-bottom-left-radius: 6px;
+  }
+  &:last-child {
+    border-top-right-radius: 6px;
+    border-bottom-right-radius: 6px;
+  }
+  background: #e6edff;
+  border: none;
+}
+/deep/ .el-table__row td {
+  &:first-child {
+    border-top-left-radius: 6px;
+    border-bottom-left-radius: 6px;
+  }
+  &:last-child {
+    border-top-right-radius: 6px;
+    border-bottom-right-radius: 6px;
+  }
+  border: none;
+}
 </style>

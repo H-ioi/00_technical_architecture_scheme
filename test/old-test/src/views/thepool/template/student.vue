@@ -1,8 +1,8 @@
 <template>
   <div class="space thepool_page">
-    <el-scrollbar class="space_right" ref="space_right">
+    <el-scrollbar class="space_right" ref="space_right" style="width: 100%">
       <div class="df_fa" style="height: 100%">
-        <el-scrollbar class="scrollList">
+        <el-scrollbar class="scrollList" style="width: 300px; min-width: 300px">
           <div
             @click="changeSchool(i)"
             :class="[
@@ -67,9 +67,12 @@ export default {
         pageSize: 100,
       },
       tableTitle: [
+        { label: "id", prop: "templateId" },
         { label: "中文名", prop: "templateName" },
         { label: "英文名", prop: "templateNameEn" },
         { label: "状态", prop: "statusLabel" },
+        { label: "是否对外显示", prop: "isShowOutsideLabel" },
+        { label: "方向", prop: "directionLabel" },
       ],
       tableData: [],
       tableBtn: [
@@ -113,7 +116,12 @@ export default {
     this.getTemplateList();
   },
   computed: {
-    ...mapGetters(["i18nlocel", "permissions", "dictpermissions"]),
+    ...mapGetters([
+      "i18nlocel",
+      "permissions",
+      "dictpermissions",
+      "pooldictionary",
+    ]),
   },
   methods: {
     // 初始化数据
@@ -130,9 +138,19 @@ export default {
         if (res.data.success) {
           this.tableData = res.data.data.data;
           this.tableData.map((item) => {
+            let direction = item["direction"]
+              ? item["direction"].split(",")
+              : [];
             item["statusLabel"] = item["status"]
               ? this.$t("consult.已启用")
               : this.$t("consult.已禁用");
+            item["isShowOutsideLabel"] = item["isShowOutside"]
+              ? this.$t("consult.是")
+              : this.$t("consult.否");
+            item["directionLabel"] = this.$getListLabels(
+              this.dictpermissions["enquiry_direction"],
+              direction
+            );
           });
         } else {
           this.tableData = [];

@@ -29,14 +29,20 @@
         }`"
         class="formItem"
       >
-        <div class="protocol-content-text" v-html="getplaceholder(item)"></div>
+        <div
+          v-if="item.fieldType == 'protocol'"
+          class="protocol-content-text"
+          v-html="getplaceholder(item)"
+        ></div>
         <span
           v-if="item.fieldType != 'upload' && item.fieldType != 'sign'"
           :class="item.fieldType != 'textarea' ? 'tips' : 'breakAll'"
           style="color: #0d0d0d; line-height: 18px"
           :title="formArrValue[item.fieldId]"
           >{{
-            formArrValue[item.fieldId] == undefined
+            formArrValue[item.fieldId] == undefined ||
+            formArrValue[item.fieldId] == "" ||
+            formArrValue[item.fieldId] == []
               ? "--"
               : formArrValue[item.fieldId]
           }}</span
@@ -90,8 +96,6 @@ export default {
     },
     // 优化后的getDynamicDetail方法
     getDynamicDetail(dynamicInfoItem) {
-      //   console.log("getDynamicDetail", dynamicInfoItem);
-
       if (!dynamicInfoItem || !dynamicInfoItem["fields"]) return;
       let { fields } = dynamicInfoItem;
       let newFields = fields || [];
@@ -243,6 +247,8 @@ export default {
                 item.value == "1" ? "已同意/Agreed" : "--";
               break;
             default:
+              console.log("88888888", item.value);
+
               this.formArrValue[item.fieldId] = item.value;
           }
         } catch (error) {
@@ -253,8 +259,6 @@ export default {
     },
     //获取动态表单模板详情
     getTemplateDetail(template, dynamicInfoItem) {
-      console.log("getTemplateDetail", template, dynamicInfoItem);
-
       let data = template.templateFields;
       this.templateName = {
         zhName: template["templateName"] || "模板表单",
@@ -262,6 +266,9 @@ export default {
       };
       this.formArr = data.sort((a, b) => {
         return a.sort - b.sort;
+      });
+      this.formArr = this.formArr.filter((item) => {
+        return !item.isHidden;
       });
       // this.formArr = this.formArr.filter((item) => {
       //   return item.fieldType !== "sign" && item.fieldType !== "protocol";

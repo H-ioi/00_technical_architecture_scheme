@@ -1,26 +1,26 @@
 <template>
-  <div class="community_page">
-    <el-dialog
-      :title="$t('isagroup')[typeObj[modalType]]"
-      :visible.sync="showModal"
-      width="1000px"
-      :before-close="closeModal"
-      :close-on-click-modal="false"
-    >
-      <div class="moadlFromBox" v-if="showModal">
-        <el-form
-          :label-position="'top'"
-          :inline="true"
-          :model="ruleForm"
-          :rules="rules"
-          ref="ruleForm"
-        >
-          <div class="df_center_wrap" style="max-height: 600px; overflow-y: auto">
+  <el-drawer
+    :title="drawerTitle"
+    :visible.sync="showDialog"
+    size="960px"
+    :before-close="closeModal"
+    :wrapper-closable="false"
+    class="drawer-body bus-exception-drawer"
+  >
+    <div class="drawer-content" v-if="showDialog" v-loading="detailLoading">
+      <el-form
+        class="drawer-form"
+        :label-position="'top'"
+        :model="ruleForm"
+        :rules="rules"
+        ref="ruleForm"
+      >
+        <div class="df_center_wrap">
             <el-form-item
-              :label="$t('isagroup.校区')"
+              v-if="schoolSelectList.length > 1"
+              :label="$t('schoolbus.校区')"
               prop="school"
               style="width: 33.3%"
-              v-if="schoolSelectList.length > 1"
             >
               <el-select
                 style="width: 100%"
@@ -39,7 +39,7 @@
               </el-select>
             </el-form-item>
             <el-form-item
-              :label="$t('isagroup.学期')"
+              :label="$t('schoolbus.学期')"
               prop="sectionId"
               style="width: 33.3%"
             >
@@ -57,7 +57,7 @@
                 ></el-option>
               </el-select>
             </el-form-item>
-            <el-form-item :label="$t('isagroup.路线')" prop="lineId" style="width: 33.3%">
+            <el-form-item :label="$t('schoolbus.路线')" prop="lineId" style="width: 33.3%">
               <el-select
                 style="width: 100%"
                 v-model="ruleForm.lineId"
@@ -73,7 +73,44 @@
               </el-select>
             </el-form-item>
             <el-form-item
-              :label="$t('isagroup.车牌号')"
+              :label="$t('schoolbus.站点')"
+              prop="stationId"
+              style="width: 33.3%"
+            >
+              <el-select
+                style="width: 100%"
+                v-model="ruleForm.stationId"
+                :placeholder="$t('common.请选择')"
+                clearable
+              >
+                <el-option
+                  :key="k"
+                  v-for="(i, k) in stationList"
+                  :label="i18nlocel == 'en' ? i.enName : i.cnName"
+                  :value="i.id"
+                ></el-option>
+              </el-select>
+            </el-form-item>
+            <el-form-item
+              :label="$t('schoolbus.时间类型')"
+              prop="schoolTimeType"
+              style="width: 33.3%"
+            >
+              <el-select
+                style="width: 100%"
+                v-model="ruleForm.schoolTimeType"
+                :placeholder="$t('common.请选择')"
+              >
+                <el-option
+                  :key="k"
+                  v-for="(i, k) in stationTimeTypeOptions"
+                  :label="$t('schoolbus.' + i.label)"
+                  :value="i.value"
+                ></el-option>
+              </el-select>
+            </el-form-item>
+            <el-form-item
+              :label="$t('schoolbus.车牌号')"
               prop="carId"
               style="width: 33.3%"
             >
@@ -91,7 +128,7 @@
                 ></el-option>
               </el-select>
             </el-form-item>
-            <el-form-item :label="$t('isagroup.司机')" prop="driver" style="width: 33.3%">
+            <el-form-item :label="$t('schoolbus.司机')" prop="driver" style="width: 33.3%">
               <el-input
                 disabled
                 style="width: 100%"
@@ -101,7 +138,7 @@
               ></el-input>
             </el-form-item>
             <el-form-item
-              :label="$t('isagroup.跟车老师')"
+              :label="$t('schoolbus.跟车老师')"
               prop="carTeacher"
               style="width: 33.3%"
             >
@@ -115,7 +152,7 @@
             </el-form-item>
 
             <el-form-item
-              :label="$t('isagroup.异常日期')"
+              :label="$t('schoolbus.异常日期')"
               prop="exceptionDate"
               style="width: 33.3%"
             >
@@ -130,7 +167,7 @@
               </el-date-picker>
             </el-form-item>
             <el-form-item
-              :label="$t('isagroup.异常类型')"
+              :label="$t('schoolbus.异常类型')"
               prop="exceptionType"
               style="width: 33.3%"
             >
@@ -142,15 +179,15 @@
               >
                 <el-option
                   :key="k"
-                  v-for="(i, k) in consts['exceptionType']"
-                  :label="$t('isagroup.' + i.label)"
+                  v-for="(i, k) in exceptionTypeOptions"
+                  :label="$t('schoolbus.' + i.label)"
                   :value="i.id"
                 ></el-option>
               </el-select>
             </el-form-item>
             <el-form-item
               v-if="ruleForm.exceptionType == '1'"
-              :label="$t('isagroup.是否调度')"
+              :label="$t('schoolbus.是否调度')"
               prop="needDispatch"
               style="width: 33.3%"
             >
@@ -162,7 +199,7 @@
               >
                 <el-option
                   :key="k"
-                  v-for="(i, k) in consts['isOrNo']"
+                  v-for="(i, k) in yesOrNoOptions"
                   :label="i.label"
                   :value="i.id"
                 ></el-option>
@@ -170,7 +207,7 @@
             </el-form-item>
             <el-form-item
               v-if="ruleForm.needDispatch == 1"
-              :label="$t('isagroup.车牌号')"
+              :label="$t('schoolbus.车牌号')"
               prop="dispatchCarId"
               style="width: 33.3%"
             >
@@ -190,7 +227,7 @@
             </el-form-item>
             <el-form-item
               v-if="ruleForm.needDispatch == 1"
-              :label="$t('isagroup.调度司机')"
+              :label="$t('schoolbus.调度司机')"
               prop="dispatchDriver"
               style="width: 33.3%"
             >
@@ -202,7 +239,7 @@
                 maxlength="50"
               ></el-input>
             </el-form-item>
-            <el-form-item :label="$t('isagroup.详情')" prop="details" style="width: 96%">
+            <el-form-item :label="$t('schoolbus.详情')" prop="details" style="width: 96%">
               <el-input
                 style="width: 100%"
                 v-model="ruleForm.details"
@@ -213,18 +250,15 @@
               ></el-input>
             </el-form-item>
           </div>
-          <el-form-item class="modalFromBtn">
-            <el-button type="primary" size="medium" @click="submitForm('ruleForm')">{{
-              $t("isagroup.确认")
-            }}</el-button>
-            <el-button type="default" size="medium" @click="closeModal">{{
-              $t("isagroup.取消")
-            }}</el-button>
-          </el-form-item>
-        </el-form>
+      </el-form>
+      <div class="drawer-footer" v-if="modalType !== 'look'">
+        <el-button @click="closeModal">{{ $t("btn.取消") }}</el-button>
+        <el-button type="primary" :loading="isSubmitting" @click="submitForm('ruleForm')">
+          {{ $t("schoolbus.确认") }}
+        </el-button>
       </div>
-    </el-dialog>
-  </div>
+    </div>
+  </el-drawer>
 </template>
 
 <script>
@@ -233,13 +267,18 @@ import {
   getSectionList,
   getLineList,
   getCarinfoList,
+  getStationList,
 } from "@/api/isacommunity/buscommon.js";
 import {
   addExcept,
   editExcept,
   getExceptDetail,
 } from "@/api/isacommunity/busexception.js";
-import consts from "@/const/isacommunity/consts.js";
+import {
+  BUS_STATION_TIME_TYPE,
+  BUS_EXCEPTION_TYPE,
+  BUS_YES_OR_NO,
+} from "../../../schoolbusConsts.js";
 import schoolListBuscommonMixin from "@/mixins/schoolListBuscommon.js";
 export default {
   name: "form",
@@ -248,33 +287,43 @@ export default {
   data() {
     let that = this;
     return {
-      consts: consts,
+      stationTimeTypeOptions: BUS_STATION_TIME_TYPE,
+      exceptionTypeOptions: BUS_EXCEPTION_TYPE,
+      yesOrNoOptions: BUS_YES_OR_NO,
       typeObj: { add: "新增", edit: "编辑", look: "查看" },
       modalType: "add",
-      showModal: false,
+      showDialog: false,
+      detailLoading: false,
+      isSubmitting: false,
       ruleForm: {},
       rules: {
         school: [
-          { required: true, message: that.$t("isagroup.请选择"), trigger: "blur" },
+          { required: true, message: that.$t("schoolbus.请选择"), trigger: "blur" },
         ],
         sectionId: [
-          { required: true, message: that.$t("isagroup.请选择"), trigger: "blur" },
+          { required: true, message: that.$t("schoolbus.请选择"), trigger: "blur" },
         ],
         lineId: [
-          { required: true, message: that.$t("isagroup.请选择"), trigger: "blur" },
+          { required: true, message: that.$t("schoolbus.请选择"), trigger: "blur" },
         ],
-        carId: [{ required: true, message: that.$t("isagroup.请选择"), trigger: "blur" }],
+        stationId: [
+          { required: false, message: that.$t("schoolbus.请选择"), trigger: "blur" },
+        ],
+        schoolTimeType: [
+          { required: true, message: that.$t("schoolbus.请选择"), trigger: "blur" },
+        ],
+        carId: [{ required: true, message: that.$t("schoolbus.请选择"), trigger: "blur" }],
         exceptionDate: [
-          { required: true, message: that.$t("isagroup.请选择"), trigger: "blur" },
+          { required: true, message: that.$t("schoolbus.请选择"), trigger: "blur" },
         ],
         needDispatch: [
-          { required: true, message: that.$t("isagroup.请选择"), trigger: "blur" },
+          { required: true, message: that.$t("schoolbus.请选择"), trigger: "blur" },
         ],
         exceptionType: [
-          { required: true, message: that.$t("isagroup.请选择"), trigger: "blur" },
+          { required: true, message: that.$t("schoolbus.请选择"), trigger: "blur" },
         ],
         dispatchCarId: [
-          { required: false, message: that.$t("isagroup.请选择"), trigger: "blur" },
+          { required: false, message: that.$t("schoolbus.请选择"), trigger: "blur" },
         ],
       },
       sectionList: [],
@@ -288,53 +337,78 @@ export default {
   mounted() {},
   computed: {
     ...mapGetters(["permissions", "i18nlocel"]),
+    drawerTitle() {
+      const key = this.typeObj[this.modalType] || "新增";
+      return this.$t('schoolbus')[key];
+    },
   },
   methods: {
     // 打开
     async showForm(type = "add", item = {}) {
       await this.fetchSchoolListBuscommon();
       this.modalType = type;
-      this.showModal = true;
-      if (type != "add") {
-        this.getDetail(item["id"]);
-      } else {
-        if (this.schoolSelectList.length === 1) {
-          let schoolId = this.schoolSelectList[0].id;
+      this.showDialog = true;
+      this.detailLoading = type !== "add";
+      try {
+        if (type != "add") {
+          await this.getDetail(item["id"]);
+        } else if (this.schoolSelectList.length === 1) {
+          const schoolId = this.schoolSelectList[0].id;
           this.ruleForm = {
             ...this.ruleForm,
             schoolId: schoolId,
+            schoolTimeType: "2",
           };
           this.changeSchool(schoolId);
+        } else {
+          this.ruleForm = {
+            ...this.ruleForm,
+            schoolTimeType: "2",
+          };
         }
+      } finally {
+        this.detailLoading = false;
       }
     },
     // 新增
     addData(data) {
-      addExcept(data).then((res) => {
-        if (res.data.success) {
-          this.$message.success(this.$t("isagroup.成功"));
-          this.$emit("getList");
-          this.closeModal();
-        }
-      });
+      this.isSubmitting = true;
+      addExcept(data)
+        .then((res) => {
+          if (res.data.success) {
+            this.$message.success(this.$t("schoolbus.成功"));
+            this.$emit("getList");
+            this.closeModal();
+          }
+        })
+        .finally(() => {
+          this.isSubmitting = false;
+        });
     },
     // 编辑
     editData(data) {
-      editExcept(data).then((res) => {
-        if (res.data.success) {
-          this.$message.success(this.$t("isagroup.成功"));
-          this.$emit("getList");
-          this.closeModal();
-        }
-      });
+      this.isSubmitting = true;
+      editExcept(data)
+        .then((res) => {
+          if (res.data.success) {
+            this.$message.success(this.$t("schoolbus.成功"));
+            this.$emit("getList");
+            this.closeModal();
+          }
+        })
+        .finally(() => {
+          this.isSubmitting = false;
+        });
     },
     getDetail(id) {
-      getExceptDetail(id).then(async (res) => {
+      return getExceptDetail(id).then(async (res) => {
         if (res.data.success) {
           let {
             schoolIds,
             sectionId,
             lineId,
+            stationId,
+            schoolTimeType,
             carId,
             exceptionDate,
             needDispatch,
@@ -347,6 +421,7 @@ export default {
             schoolIds: schoolIds,
             sectionId: sectionId,
           });
+          this.stationList = await getStationList({ lineId: lineId });
           //   this.carList = await getCarinfoList({ isAll: 1, lineId: lineId });
           this.lineList.map((item) => {
             if (item.id == lineId) {
@@ -362,6 +437,8 @@ export default {
               school: schoolIds,
               sectionId,
               lineId,
+              stationId,
+              schoolTimeType: String(schoolTimeType),
               carId,
               exceptionDate,
               needDispatch,
@@ -444,6 +521,8 @@ export default {
       delete this.ruleForm["driver"];
       delete this.ruleForm["dispatchCarId"];
       delete this.ruleForm["dispatchDriver"];
+      delete this.ruleForm["stationId"];
+      this.stationList = await getStationList({ lineId: e });
       //   this.carList = await getCarinfoList({ isAll: 1, lineId: e });
       this.lineList.map((item) => {
         if (item.id == e) {
@@ -476,6 +555,10 @@ export default {
       if (e == "0") {
         this.changeNeedDispatch(0);
       }
+      this.$set(this.rules["stationId"], 0, {
+        ...this.rules["stationId"][0],
+        required: e == "0",
+      });
     },
     async changeDispatchCar(e) {
       delete this.ruleForm["dispatchDriver"];
@@ -503,8 +586,9 @@ export default {
       this.sectionList = [];
       this.lineList = [];
       this.carList = [];
+      this.stationList = [];
       this.ruleForm = {};
-      this.showModal = false;
+      this.showDialog = false;
       this.$refs.ruleForm.resetFields();
     },
   },

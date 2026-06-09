@@ -408,9 +408,9 @@
               </el-select>
             </el-form-item>
             <el-form-item
-              :label="$t('consult.住宿情况')"
+              :label="$t('consult.住宿类型')"
               prop="boarding"
-              style="width: 50%"
+              style="width: 25%"
             >
               <el-select
                 v-model="ruleForm.boarding"

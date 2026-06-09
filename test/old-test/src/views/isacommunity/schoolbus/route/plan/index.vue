@@ -1,34 +1,52 @@
 <template>
   <div class="community_page">
     <div class="community_top">
-      <div class="community_top_title">{{ $t("isagroup.路线规划") }}</div>
+      <div class="community_top_title">{{ $t("schoolbus.路线规划") }}</div>
       <div class="community_top_btn" v-if="activeName == 'route'">
-        <el-button v-if="permissions['busline_add']" type="primary" size="large" @click="showRouteForm">{{
-          $t("isagroup.新增路线") }}</el-button>
-        <el-button v-if="permissions['busline_import']" type="defult" size="large" @click="batchUpdloadRoute">{{
-          $t("btn.导入") }}</el-button>
+        <el-button
+          v-if="permissions['busline_add']"
+          type="primary"
+          size="medium"
+          @click="showRouteForm"
+        >{{ $t("schoolbus.新增路线") }}</el-button>
+        <el-button
+          v-if="permissions['busline_import']"
+          size="medium"
+          @click="batchUpdloadRoute"
+        >{{ $t("btn.导入") }}</el-button>
       </div>
       <div class="community_top_btn" v-if="activeName == 'bussection'">
-        <el-button v-if="permissions['bussection_add']" type="primary" size="large" @click="showTermForm">{{
-          $t("isagroup.新增学期") }}</el-button>
+        <el-button
+          v-if="permissions['bussection_add']"
+          type="primary"
+          size="medium"
+          @click="showTermForm"
+        >{{ $t("schoolbus.新增学期") }}</el-button>
       </div>
       <div class="community_top_btn" v-if="activeName == 'station'">
-        <el-button v-if="permissions['busstation_add']" type="primary" size="large" @click="showStationForm">{{
-          $t("isagroup.新增站点") }}</el-button>
-        <el-button v-if="permissions['busstation_import']" type="defult" size="large" @click="batchUpdloadSation">{{
-          $t("btn.导入") }}</el-button>
+        <el-button
+          v-if="permissions['busstation_add']"
+          type="primary"
+          size="medium"
+          @click="showStationForm"
+        >{{ $t("schoolbus.新增站点") }}</el-button>
+        <el-button
+          v-if="permissions['busstation_import']"
+          size="medium"
+          @click="batchUpdloadSation"
+        >{{ $t("btn.导入") }}</el-button>
       </div>
     </div>
-    <div class="community_centent">
+    <div class="community_centent_v2">
       <div class="community_tabs">
         <el-tabs ref="tabRef" v-model="activeName" @tab-click="handleTabClick">
-          <el-tab-pane :label="$t('isagroup.全部路线')" name="route">
+          <el-tab-pane :label="$t('schoolbus.全部路线')" name="route">
             <Routes ref="Routes" />
           </el-tab-pane>
-          <el-tab-pane :label="$t('isagroup.学期配置')" name="bussection">
+          <el-tab-pane :label="$t('schoolbus.学期配置')" name="bussection">
             <Term ref="Term" />
           </el-tab-pane>
-          <el-tab-pane :label="$t('isagroup.站点配置')" name="station">
+          <el-tab-pane :label="$t('schoolbus.站点配置')" name="station">
             <Station ref="Station" />
           </el-tab-pane>
         </el-tabs>
@@ -52,13 +70,13 @@ export default {
       activeName: "route",
     };
   },
-  created() { },
+  created() {},
   mounted() {
     this.$nextTick(() => {
       this.syncActiveTabData();
     });
   },
-  activated() { },
+  activated() {},
   computed: {
     ...mapGetters(["permissions", "i18nlocel"]),
   },
@@ -103,11 +121,3 @@ export default {
   },
 };
 </script>
-
-<style lang="scss" scoped>
-.tablelist {
-  background-color: #fff;
-  padding: 20px;
-  box-sizing: border-box;
-}
-</style>

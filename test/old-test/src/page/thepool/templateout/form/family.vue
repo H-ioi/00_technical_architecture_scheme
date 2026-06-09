@@ -2,7 +2,10 @@
   <div class="family">
     <div v-for="(item, index) in familyList" :key="item">
       <div class="family-title">
-        <span> {{ index + 1 }}. {{ $t("consult.家长/监护人") }}</span>
+        <span>
+          {{ familyList.length > 1 ? `${index + 1}. ` : "" }}
+          {{ $t("consult.家长/监护人") }}</span
+        >
         <i
           v-if="familyList.length > 1"
           class="el-icon-delete"
@@ -79,6 +82,17 @@ export default {
     // 删除监护人
     removeFamily(index) {
       this.familyList.splice(index, 1);
+    },
+    resetInfo(data) {
+      this.familyList = [];
+      data.forEach((item) => {
+        let id = createCode();
+        this.familyList.push(id);
+        // 重置表单数据
+        this.$nextTick(() => {
+          this.$refs[`FamilyForm${id}`][0].resetForm(item);
+        });
+      });
     },
   },
 };

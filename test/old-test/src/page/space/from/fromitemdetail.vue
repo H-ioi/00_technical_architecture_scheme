@@ -13,11 +13,9 @@
       :label="item.label"
       :prop="item.id"
       :ref="item.id"
-      :style="
-        `width:${
-          item.type == 'input' || item.type == 'select' ? '25%' : '100%'
-        }`
-      "
+      :style="`width:${
+        item.type == 'input' || item.type == 'select' ? '25%' : '100%'
+      }`"
       class="formItem"
     >
       <span
@@ -26,7 +24,11 @@
         style="color: #0d0d0d; line-height: 18px"
         :title="formArrValue[item.id]"
         >{{
-          formArrValue[item.id] == undefined ? "--" : formArrValue[item.id]
+          formArrValue[item.id] == undefined ||
+          formArrValue[item.id] == "" ||
+          formArrValue[item.id] == []
+            ? "--"
+            : formArrValue[item.id]
         }}</span
       >
       <div v-else>
@@ -40,14 +42,14 @@
 // 动态模板
 import {
   getTemplateDetail,
-  getDynamicDetail
+  getDynamicDetail,
 } from "@/api/space/templatedynamic.js";
 import { getFiles, downloadFile } from "@/api/upload/index.js";
 import { download } from "@/util/download.js";
 import FileList from "../modal/fileList.vue";
 export default {
   components: {
-    FileList
+    FileList,
   },
   data() {
     return {
@@ -55,7 +57,7 @@ export default {
       formRules: {},
       formArr: [],
       templateFormId: "",
-      loadingFrom: false
+      loadingFrom: false,
     };
   },
   methods: {
@@ -67,18 +69,18 @@ export default {
     },
     getDynamicDetail(id) {
       if (id == null) return;
-      getDynamicDetail(id).then(res => {
+      getDynamicDetail(id).then((res) => {
         if (res.data.success) {
           let { fields, id, templateFormId } = res.data.data;
-          fields.map(item => {
-            let dataItem = this.formArr.filter(s => {
+          fields.map((item) => {
+            let dataItem = this.formArr.filter((s) => {
               return s.id == item.templateFormFieldId;
             });
             let itemValue = [];
             let type = dataItem[0].type;
             let option = dataItem[0].properties;
             if (type == "radio") {
-              option.map(o => {
+              option.map((o) => {
                 if (o.id == item.value && o.key == "option") {
                   itemValue.push(o.value);
                 }
@@ -89,7 +91,7 @@ export default {
               let ids = item.value
                 .substring(1, item.value.length - 1)
                 .split(",");
-              option.map(o => {
+              option.map((o) => {
                 if (ids.includes(o.id) && o.key == "option") {
                   itemValue.push(o.value);
                 }
@@ -99,7 +101,7 @@ export default {
               let ids = item.value
                 .substring(1, item.value.length - 1)
                 .split(",");
-              option.map(o => {
+              option.map((o) => {
                 if (ids.includes(o.id) && o.key == "option") {
                   itemValue.push(o.value);
                 }
@@ -120,19 +122,19 @@ export default {
               if (ids.length === 0) return;
               this.formArrValue[item.templateFormFieldId] = ids;
               this.$nextTick(() => {
-                getFiles({ ids }).then(res => {
+                getFiles({ ids }).then((res) => {
                   if (res.data.success) {
                     let refId = `filelist${item.templateFormFieldId}`;
                     this.$refs[refId][0].filelistobj = [];
                     this.$refs[refId][0].filelist = ids;
                     let data = res.data.data;
                     // console.log("filelistobj",  this.$refs[refId][0]);
-                    data.map(file => {
+                    data.map((file) => {
                       let obj = {
                         id: file.id,
                         type: file.contentType,
                         file: "",
-                        name: file.originalName
+                        name: file.originalName,
                       };
 
                       this.$refs[refId][0].getFile(file.id, obj);
@@ -153,11 +155,14 @@ export default {
       if (id == null) return;
       this.loadingFrom = true;
       getTemplateDetail(id)
-        .then(res => {
+        .then((res) => {
           if (res.data.success) {
             let data = res.data.data.fields;
             this.formArr = data.sort((a, b) => {
               return a.sort - b.sort;
+            });
+            this.formArr = this.formArr.filter((item) => {
+              return !item.isHidden;
             });
             this.getDynamicDetail(formId);
             this.loadingFrom = false;
@@ -171,11 +176,11 @@ export default {
     },
     // 下载文件
     downFile(file) {
-      downloadFile(file.id).then(res => {
+      downloadFile(file.id).then((res) => {
         download(res.data, res.headers["content-disposition"]);
       });
-    }
-  }
+    },
+  },
 };
 </script>
 <style lang="scss" scoped>

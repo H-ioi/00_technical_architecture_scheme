@@ -28,8 +28,16 @@
                   }`
                 }}
               </div>
-              <div v-if="i.showDetail" style="cursor: pointer" @click="lookLog(i)">
-                {{ i.followType != "10" ? $t("consult.详情") : $t("consult.查看邮件") }}
+              <div
+                v-if="i.showDetail"
+                style="cursor: pointer"
+                @click="lookLog(i)"
+              >
+                {{
+                  i.followType != "10"
+                    ? $t("consult.详情")
+                    : $t("consult.查看邮件")
+                }}
               </div>
             </div>
             <ShowText
@@ -97,7 +105,13 @@ export default {
   created() {},
   mounted() {},
   computed: {
-    ...mapGetters(["permissions", "dictionary", "userList", "userInfo", "i18nlocel"]),
+    ...mapGetters([
+      "permissions",
+      "dictionary",
+      "userList",
+      "userInfo",
+      "i18nlocel",
+    ]),
   },
   methods: {
     setLogList(data) {
@@ -160,7 +174,10 @@ export default {
           item["key"] == "follow_status_change"
         ) {
           let obj = JSON.parse(item["value"]);
-          if ((obj["old"] || obj["old"] == 0) && (obj["new"] || obj["new"] == 0)) {
+          if (
+            (obj["old"] || obj["old"] == 0) &&
+            (obj["new"] || obj["new"] == 0)
+          ) {
             if (item["key"] == "follow_status_change") {
               oldStatus = consult["followStatus"][obj["old"]];
               newStatus = consult["followStatus"][obj["new"]];
@@ -207,7 +224,6 @@ export default {
 <style lang="scss" scoped>
 .poolSteps {
   width: 100%;
-  margin-top: 30px;
 }
 
 .loglabel {

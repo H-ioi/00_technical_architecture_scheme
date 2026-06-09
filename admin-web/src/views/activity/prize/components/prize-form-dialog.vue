@@ -59,6 +59,7 @@ const uploading = ref(false)
 const mode = ref<'add' | 'edit' | 'view'>('add')
 const uniFormRef = ref<InstanceType<typeof UniForm> | null>(null)
 const programOptions = ref<UniOption[]>([])
+const bindProgramId = ref<string | number | undefined>()
 
 const form = ref<ActivityPrizeFormModel>({
   cnName: '',
@@ -103,19 +104,23 @@ const formConfig = computed<UniFormConfig>(() => ({
       component: 'ElInput',
       componentProps: { maxlength: 100, showWordLimit: true }
     },
-    {
-      field: 'programId',
-      label: tr('activity.prizeProgram'),
-      component: 'ElSelect',
-      options: programOptions.value,
-      viewType: 'enum',
-      componentProps: {
-        filterable: true,
-        clearable: true,
-        placeholder: tr('activity.ruleSelect'),
-        style: { width: '100%' }
-      }
-    },
+    ...(bindProgramId.value
+      ? []
+      : [
+          {
+            field: 'programId',
+            label: tr('activity.prizeProgram'),
+            component: 'ElSelect' as const,
+            options: programOptions.value,
+            viewType: 'enum' as const,
+            componentProps: {
+              filterable: true,
+              clearable: true,
+              placeholder: tr('activity.ruleSelect'),
+              style: { width: '100%' }
+            }
+          }
+        ]),
     {
       field: 'amount',
       label: tr('activity.prizeAmount'),
@@ -232,14 +237,25 @@ async function submit() {
 
 function onClosed() {
   resetForm()
+  bindProgramId.value = undefined
   uniFormRef.value?.clearValidate()
 }
 
 defineExpose({
-  open: async (m: 'add' | 'edit' | 'view', row?: ActivityPrizeRow) => {
+  open: async (
+    m: 'add' | 'edit' | 'view',
+    row?: ActivityPrizeRow,
+    opts?: { bindProgramId?: string | number }
+  ) => {
     mode.value = m
+    bindProgramId.value = opts?.bindProgramId
     resetForm()
-    await loadProgramOptions()
+    if (bindProgramId.value != null && bindProgramId.value !== '') {
+      form.value.programId = bindProgramId.value
+    }
+    if (!bindProgramId.value) {
+      await loadProgramOptions()
+    }
     if (m !== 'add' && row?.id != null) {
       await fillFromDetail(row.id as string | number)
     }

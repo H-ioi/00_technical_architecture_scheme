@@ -198,6 +198,44 @@ export const formlist = [
       },
     },
   },
+  {
+    name: "标题",
+    type: "title",
+    icon: "el-icon-tickets",
+    outerType: "base",
+    attribute: {
+      outerType: "base",
+      type: "title",
+      label: "标题", //标签(字段显示名)
+      labelVisible: 1, //标签是否显示
+      readonly: true, //是否只读
+      required: false, //是否必填
+      //附加属性
+      properties: {
+        // placeholder: "请选择", //占位文本
+        // ciphertext: false, //是否明文显示
+      },
+    },
+  },
+  {
+    name: "语言",
+    type: "language",
+    icon: "el-icon-tickets",
+    outerType: "base",
+    attribute: {
+      outerType: "base",
+      type: "language",
+      label: "语言", //标签(字段显示名)
+      labelVisible: 1, //标签是否显示
+      readonly: true, //是否只读
+      required: false, //是否必填
+      //附加属性
+      properties: {
+        placeholder: "请选择", //占位文本
+        // ciphertext: false, //是否明文显示
+      },
+    },
+  },
 ];
 export const dateTimeType = [
   // 年选择器
@@ -298,6 +336,14 @@ export const uploadAccept = [
     list: ".xls/.xlsx/.ppt/.doc/.pdf/.txt",
     contentType:
       "application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-powerpoint,application/msword,application/pdf,text/plain",
+  },
+  {
+    id: "5",
+    name: "文件和图片",
+    type: "image/*,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-powerpoint,application/msword,application/pdf,text/plain",
+    list: "文件/图片",
+    contentType:
+      "image/png,image/jpg,image/jpeg,image/etc/application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-powerpoint,application/msword,application/pdf,text/plain",
   },
 ];
 // 基础字段的校验

@@ -180,10 +180,9 @@
               class="orderDetail_baseinfo_item"
             >
               <span>{{ $t("isagroup.报名人数限制") }}</span>
-              <span
-                :title="$checkNull(detailData['registrationLimitLabel'])"
-                >{{ $checkNull(detailData["registrationLimitLabel"]) }}</span
-              >
+              <span :title="$checkNull(detailData['registrationLimitLabel'])">{{
+                $checkNull(detailData["registrationLimitLabel"])
+              }}</span>
             </div>
             <div
               style="width: 100%; margin-bottom: 15px"
@@ -215,9 +214,10 @@
               class="orderDetail_baseinfo_item"
             >
               <span>{{ $t("isagroup.买票通知邮箱") }}</span>
-              <span :title="$checkNull(detailData['ticketNotifyEmailsLabel'])">{{
-                $checkNull(detailData["ticketNotifyEmailsLabel"])
-              }}</span>
+              <span
+                :title="$checkNull(detailData['ticketNotifyEmailsLabel'])"
+                >{{ $checkNull(detailData["ticketNotifyEmailsLabel"]) }}</span
+              >
             </div>
             <div
               style="width: 25%; margin-bottom: 15px"
@@ -259,7 +259,7 @@
               style="width: 100%; margin-bottom: 15px"
               class="orderDetail_baseinfo_item"
             >
-              <span>{{ $t("isagroup.推送校区") }}</span>
+              <span>{{ $t("isagroup.推送微信校区") }}</span>
               <span
                 :title="$checkNull(detailData['wechatPushSchoolIdsLabel'])"
                 >{{ $checkNull(detailData["wechatPushSchoolIdsLabel"]) }}</span
@@ -311,15 +311,14 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
 import {
-  getActivityDetail,
   downloadVisibleScopeTemplate,
+  getActivityDetail,
   importVisibleScopeFile,
 } from "@/api/isacommunity/activity.js";
-import tabletitle from "@/const/isacommunity/tabletitle.js";
 import consts from "@/const/isacommunity/consts.js";
-import dayjs from "dayjs";
+import tabletitle from "@/const/isacommunity/tabletitle.js";
+import { mapGetters } from "vuex";
 export default {
   name: "detail",
   props: {
@@ -448,7 +447,8 @@ export default {
                     ? String(registrationLimit)
                     : "--",
                 ticketNotifyEmailsLabel:
-                  Number(ticketPrice) > 0 && String(ticketNotifyEmailEnabled) === "1"
+                  Number(ticketPrice) > 0 &&
+                  String(ticketNotifyEmailEnabled) === "1"
                     ? Array.isArray(ticketNotifyEmails)
                       ? String(ticketNotifyEmails)
                       : ticketNotifyEmails

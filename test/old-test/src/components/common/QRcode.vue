@@ -43,8 +43,19 @@ export default {
   mounted() {
     this.creatQrCode();
   },
+  watch: {
+    path: {
+      handler(newVal, oldVal) {
+        if (newVal != oldVal) {
+          this.creatQrCode();
+        }
+      },
+    },
+  },
   methods: {
     creatQrCode() {
+      // 清空容器，避免多次调用产生多个二维码
+      this.$refs.qrCodeUrl.innerHTML = "";
       let qrcode = new QRCode(this.$refs.qrCodeUrl, {
         // text: `${process.env.VUE_APP_BASE_POOL}/#/thepool/activity/questionnaire?id=${this.codeId}`,
         text: this.path,

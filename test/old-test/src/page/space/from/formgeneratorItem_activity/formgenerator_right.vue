@@ -114,6 +114,7 @@
             <el-select
               style="width: 100%"
               clearable
+              @change="changeOptionDefault"
               :multiple="
                 setform.type == 'radio'
                   ? false
@@ -656,6 +657,55 @@ export default {
     },
     handlePreview(file) {
       window.open(file.url, "_blank");
+    },
+    changeOptionDefault(e) {
+      switch (this.setform.type) {
+        case "radio":
+          this.setOddOptionDefault(e);
+          break;
+        case "checkbox":
+          this.setMultipleOptionDefault(e);
+          break;
+        case "select":
+          if (this.setform.properties.option_multi) {
+            this.setMultipleOptionDefault(e);
+          } else {
+            this.setOddOptionDefault(e);
+          }
+          break;
+      }
+    },
+    setOddOptionDefault(e) {
+      let id = e || "";
+      this.setform.properties.option.forEach((item, index) => {
+        if (id == item.id) {
+          this.$set(this.setform.properties.option, index, {
+            ...item,
+            optionDefault: 1,
+          });
+        } else {
+          this.$set(this.setform.properties.option, index, {
+            ...item,
+            optionDefault: 0,
+          });
+        }
+      });
+    },
+    setMultipleOptionDefault(e) {
+      let ids = e || [];
+      this.setform.properties.option.forEach((item, index) => {
+        if (ids.includes(item.id)) {
+          this.$set(this.setform.properties.option, index, {
+            ...item,
+            optionDefault: 1,
+          });
+        } else {
+          this.$set(this.setform.properties.option, index, {
+            ...item,
+            optionDefault: 0,
+          });
+        }
+      });
     },
   },
 };

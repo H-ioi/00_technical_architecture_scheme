@@ -48,7 +48,7 @@
             </div>
           </div>
         </div>
-        <div class="orderDetail_baseinfo">
+        <div class="orderDetail_baseinfo" style="padding: 0 !important">
           <TemplateResult
             style="width: 100%"
             ref="TemplateResult"
@@ -124,7 +124,8 @@ export default {
                 return this.getDataLabel(item, this.pooldictionary);
               })
             ),
-            collections: data["collections"].length > 0 ? data["collections"] : [],
+            collections:
+              data["collections"].length > 0 ? data["collections"] : [],
           };
           if (this.activityData["collections"].length > 0) {
             this.currentCollectionId = this.activityData["collections"][0].id;

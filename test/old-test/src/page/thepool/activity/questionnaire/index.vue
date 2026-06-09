@@ -11,6 +11,7 @@
           <FromitemActivity
             ref="FromitemActivity"
             type="questionnaire"
+            codeType="collection_get_info"
             @signUpCollection="signUpCollection"
           />
         </div>

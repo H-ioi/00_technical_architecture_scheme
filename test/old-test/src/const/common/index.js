@@ -16,21 +16,27 @@ export default {
     return str;
   },
   $getListLabels(data, ids, label = "label", value = "value") {
-    let str = "";
+    let str = [];
     const i18nlocel = getStore({ name: "i18nlocel" });
     data.map((item) => {
       if (ids.includes(item[value])) {
-        str +=
+        let name =
           label == "label"
             ? i18nlocel == "en"
               ? item["enLabel"] || item["label"]
               : item["label"]
             : item[label];
+        str.push(name);
       }
     });
-    return str == "" ? "--" : str;
+    return str == [] ? "--" : String(str);
   },
-  $checkNull(str) {
-    return str === null || str === undefined || str === "" ? "--" : str;
+  $checkNull(value) {
+    if (!value) {
+      return "--";
+    } else {
+      let str = value.replace(/\s/g, "");
+      return str == "" ? "--" : value;
+    }
   },
 };

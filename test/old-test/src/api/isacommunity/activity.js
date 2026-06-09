@@ -73,6 +73,16 @@ export function batchPublishActivityStatus(ids) {
     paramsSerializer: (p) => qs.stringify(p, { arrayFormat: "repeat" }),
   });
 }
+
+/** 批量取消发布（支持任意状态改为待发布），query：`ids` 数组 */
+export function batchResetActivityStatusToPending(ids) {
+  return request({
+    url: `${path}/batchResetActivityStatusToPending`,
+    method: "post",
+    params: { ids },
+    paramsSerializer: (p) => qs.stringify(p, { arrayFormat: "repeat" }),
+  });
+}
 export function sendWechatMessage(activityId) {
   return request({
     url: `${path}/sendWechatMessage`,

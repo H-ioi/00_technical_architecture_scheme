@@ -58,9 +58,14 @@
                     'is-required': item.required,
                   },
                 ]"
-                :label="item.label"
+                :label="item.label + (item.isHidden ? '(隐藏)' : '')"
                 :prop="item.fontId"
               >
+                <div
+                  v-if="item.placeholder"
+                  class="form-item-remark"
+                  v-html="item.placeholder"
+                ></div>
                 <!-- 单文本输入框 -->
                 <el-input
                   v-if="item.type == 'input'"
@@ -224,6 +229,34 @@
                   </div>
                   <el-checkbox v-model="checked">I agree/我同意</el-checkbox>
                 </div>
+                <p
+                  style="
+                    line-height: 20px !important;
+                    padding: 5px 0;
+                    margin: 0;
+                  "
+                  class="formgenerator-placeholder"
+                  v-if="item.type == 'title'"
+                >
+                  {{ item.properties.placeholder }}
+                </p>
+                <el-select
+                  class="selectform"
+                  v-if="item.type == 'language'"
+                  style="width: 100%"
+                  v-model="formArrValue[item.fontId]"
+                  :filterable="true"
+                  :placeholder="item.properties.placeholder"
+                >
+                  <div v-for="item in languageList" :key="item.code">
+                    <el-option
+                      :key="item.code"
+                      :label="item.name"
+                      :value="item.code"
+                    >
+                    </el-option>
+                  </div>
+                </el-select>
               </el-form-item>
             </div>
           </transition-group>
@@ -246,6 +279,7 @@
 import { formlist, dateTimeType, uploadAccept, setformrules } from "./form.js";
 import draggable from "vuedraggable";
 import { deepClone } from "@/util/util.js";
+import { getLanguageList, formatChinaArea } from "@/util/jsondata.js";
 export default {
   components: {
     draggable,
@@ -265,6 +299,7 @@ export default {
       // 上传
       fileList: [],
       currentUpload: {},
+      languageList: getLanguageList(),
     };
   },
   watch: {

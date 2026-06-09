@@ -1,81 +1,44 @@
 <template>
-  <el-form
-    ref="ruleForm"
-    :label-position="'top'"
-    :model="ruleForm"
-    :rules="rules"
-    class="activity-form"
-    :class="{
-      'activity-form--embedded': embedded,
-      'activity-form--readonly': readonly || formReadonlyForTinymce,
-    }"
-  >
+  <el-form ref="ruleForm" :label-position="'top'" :model="ruleForm" :rules="rules" class="activity-form" :class="{
+    'activity-form--embedded': embedded,
+    'activity-form--readonly': readonly || formReadonlyForTinymce,
+  }">
     <fieldset class="activity-form-fieldset" :disabled="fieldsetDisabled">
       <div class="activity-form-body">
         <el-row :gutter="16">
           <el-col :xs="24" :sm="18">
             <el-row :gutter="16">
               <el-col :xs="24" :sm="12">
-                <el-form-item
-                  :label="$t('isagroup.中文名')"
-                  prop="activityCnName"
-                >
-                  <el-input
-                    v-model="ruleForm.activityCnName"
-                    :placeholder="$t('consult.请输入')"
-                    maxlength="100"
-                  ></el-input>
+                <el-form-item :label="$t('isagroup.中文名')" prop="activityCnName">
+                  <el-input v-model="ruleForm.activityCnName" :placeholder="$t('consult.请输入')"
+                    maxlength="100"></el-input>
                 </el-form-item>
               </el-col>
               <el-col :xs="24" :sm="12">
-                <el-form-item
-                  :label="$t('isagroup.英文名')"
-                  prop="activityEnName"
-                >
-                  <el-input
-                    v-model="ruleForm.activityEnName"
-                    :placeholder="$t('consult.请输入')"
-                    maxlength="100"
-                  ></el-input>
+                <el-form-item :label="$t('isagroup.英文名')" prop="activityEnName">
+                  <el-input v-model="ruleForm.activityEnName" :placeholder="$t('consult.请输入')"
+                    maxlength="100"></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="24">
                 <el-form-item :label="$t('isagroup.中文简介')" prop="introCn">
-                  <el-input
-                    v-model="ruleForm.introCn"
-                    :placeholder="$t('consult.请输入')"
-                    type="textarea"
-                    rows="2"
-                    maxlength="100"
-                  ></el-input>
+                  <el-input v-model="ruleForm.introCn" :placeholder="$t('consult.请输入')" type="textarea" rows="2"
+                    maxlength="100"></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="24">
                 <el-form-item :label="$t('isagroup.英文简介')" prop="introEn">
-                  <el-input
-                    v-model="ruleForm.introEn"
-                    :placeholder="$t('consult.请输入')"
-                    type="textarea"
-                    rows="2"
-                    maxlength="100"
-                  ></el-input>
+                  <el-input v-model="ruleForm.introEn" :placeholder="$t('consult.请输入')" type="textarea" rows="2"
+                    maxlength="100"></el-input>
                 </el-form-item>
               </el-col>
             </el-row>
           </el-col>
           <el-col :span="24" :sm="6">
             <el-form-item :label="$t('isagroup.背景图')" prop="imageUrl">
-              <el-upload
-                class="avatar-uploader"
-                :action="uploadAction"
-                :show-file-list="false"
-                :before-upload="beforeUpload"
-              >
-                <img
-                  v-if="ruleForm['imageUrl']"
-                  :src="ruleForm['imageUrl']"
-                  class="avatar"
-                />
+              <el-upload class="avatar-uploader" :action="uploadAction" :show-file-list="false"
+                :before-upload="beforeUpload">
+                <img v-if="ruleForm['imageUrl']" :src="ruleForm['imageUrl']" class="avatar" />
                 <i v-else class="el-icon-plus avatar-uploader-icon"></i>
               </el-upload>
             </el-form-item>
@@ -84,81 +47,45 @@
         <el-row :gutter="16">
           <el-col :xs="24" :sm="12">
             <el-form-item :label="$t('isagroup.中文地址')" prop="addressCn">
-              <el-input
-                v-model="ruleForm.addressCn"
-                :placeholder="$t('consult.请输入')"
-                type="textarea"
-                rows="1"
-                maxlength="100"
-              ></el-input>
+              <el-input v-model="ruleForm.addressCn" :placeholder="$t('consult.请输入')" type="textarea" rows="1"
+                maxlength="100"></el-input>
             </el-form-item>
           </el-col>
           <el-col :xs="24" :sm="12">
             <el-form-item :label="$t('isagroup.英文地址')" prop="addressEn">
-              <el-input
-                v-model="ruleForm.addressEn"
-                :placeholder="$t('consult.请输入')"
-                type="textarea"
-                rows="1"
-                maxlength="100"
-              ></el-input>
+              <el-input v-model="ruleForm.addressEn" :placeholder="$t('consult.请输入')" type="textarea" rows="1"
+                maxlength="100"></el-input>
             </el-form-item>
           </el-col>
         </el-row>
         <el-row :gutter="16">
           <el-col :xs="24" :sm="12">
             <el-form-item :label="$t('isagroup.中文提示')" prop="tipsCn">
-              <el-input
-                v-model="ruleForm.tipsCn"
-                :placeholder="$t('consult.请输入')"
-                type="textarea"
-                rows="1"
-                maxlength="100"
-              ></el-input>
+              <el-input v-model="ruleForm.tipsCn" :placeholder="$t('consult.请输入')" type="textarea" rows="1"
+                maxlength="100"></el-input>
             </el-form-item>
           </el-col>
           <el-col :xs="24" :sm="12">
             <el-form-item :label="$t('isagroup.英文提示')" prop="tipsEn">
-              <el-input
-                v-model="ruleForm.tipsEn"
-                :placeholder="$t('consult.请输入')"
-                type="textarea"
-                rows="1"
-                maxlength="100"
-              ></el-input>
+              <el-input v-model="ruleForm.tipsEn" :placeholder="$t('consult.请输入')" type="textarea" rows="1"
+                maxlength="100"></el-input>
             </el-form-item>
           </el-col>
         </el-row>
         <el-row :gutter="16">
           <el-col :xs="24" :sm="12">
             <el-form-item :label="$t('isagroup.活动时间')" prop="activityTime">
-              <el-date-picker
-                v-model="ruleForm.activityTime"
-                type="datetimerange"
-                range-separator="至"
-                start-placeholder="开始"
-                end-placeholder="结束"
-                value-format="yyyy-MM-dd HH:mm:ss"
-                format="yyyy-MM-dd HH:mm:ss"
-                :disabled="activityTimeRangeDisabled"
-              >
+              <el-date-picker v-model="ruleForm.activityTime" type="datetimerange" range-separator="至"
+                start-placeholder="开始" end-placeholder="结束" value-format="yyyy-MM-dd HH:mm:ss"
+                format="yyyy-MM-dd HH:mm:ss" :disabled="activityTimeRangeDisabled">
               </el-date-picker>
             </el-form-item>
           </el-col>
           <el-col :xs="24" :sm="12">
-            <el-form-item
-              :label="$t('isagroup.报名时间')"
-              prop="registrationTime"
-            >
-              <el-date-picker
-                v-model="ruleForm.registrationTime"
-                type="datetimerange"
-                range-separator="至"
-                start-placeholder="开始"
-                end-placeholder="结束"
-                value-format="yyyy-MM-dd HH:mm:ss"
-                format="yyyy-MM-dd HH:mm:ss"
-              >
+            <el-form-item :label="$t('isagroup.报名时间')" prop="registrationTime">
+              <el-date-picker v-model="ruleForm.registrationTime" type="datetimerange" range-separator="至"
+                start-placeholder="开始" end-placeholder="结束" value-format="yyyy-MM-dd HH:mm:ss"
+                format="yyyy-MM-dd HH:mm:ss">
               </el-date-picker>
             </el-form-item>
           </el-col>
@@ -166,98 +93,60 @@
         <el-row :gutter="16">
           <el-col :xs="24" :sm="12" :md="6">
             <el-form-item :label="$t('isagroup.活动校区')" prop="schoolIds">
-              <el-select
-                clearable
-                collapse-tags
-                v-model="ruleForm['schoolIds']"
-                :placeholder="$t('common.请选择')"
-                multiple
-              >
-                <el-option
-                  :key="k"
-                  v-for="(i, k) in schoolSelectList"
-                  :label="schoolDropdownLabel(i)"
-                  :value="i.id"
-                ></el-option>
+              <el-select clearable collapse-tags v-model="ruleForm['schoolIds']" :placeholder="$t('common.请选择')"
+                multiple>
+                <el-option :key="k" v-for="(i, k) in schoolSelectList" :label="schoolDropdownLabel(i)"
+                  :value="i.id"></el-option>
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :xs="24" :sm="24" :md="6">
+            <el-form-item :label="$t('isagroup.推送邮箱')" prop="emailConfigIds">
+              <el-select clearable collapse-tags filterable v-model="ruleForm['emailConfigIds']"
+                :placeholder="$t('common.请选择')" multiple @visible-change="onEmailConfigDropdownVisible">
+                <el-option v-for="opt in emailConfigOptions" :key="'ec-' + opt.id" :label="opt.email"
+                  :value="opt.id"></el-option>
               </el-select>
             </el-form-item>
           </el-col>
           <el-col :xs="24" :sm="12" :md="6">
             <el-form-item :label="$t('isagroup.签到方式')" prop="checkinMethod">
-              <el-select
-                v-model="ruleForm['checkinMethod']"
-                :placeholder="$t('common.请选择')"
-              >
-                <el-option
-                  :key="k"
-                  v-for="(i, k) in consts['activityCheckinMethod']"
-                  :label="i18nlocel == 'en' ? i.enLabel : i.label"
-                  :value="i.id"
-                ></el-option>
+              <el-select v-model="ruleForm['checkinMethod']" :placeholder="$t('common.请选择')">
+                <el-option :key="k" v-for="(i, k) in consts['activityCheckinMethod']"
+                  :label="i18nlocel == 'en' ? i.enLabel : i.label" :value="i.id"></el-option>
               </el-select>
             </el-form-item>
           </el-col>
           <el-col :xs="24" :sm="12" :md="6">
             <el-form-item :label="$t('isagroup.票价')" prop="ticketPrice">
-              <el-input-number
-                v-model="ruleForm.ticketPrice"
-                :precision="0"
-                :step="0.01"
-                :min="0"
-                :placeholder="$t('consult.请输入')"
-              ></el-input-number>
+              <el-input-number v-model="ruleForm.ticketPrice" :step="0.01" :min="0"
+                :placeholder="$t('consult.请输入')"></el-input-number>
             </el-form-item>
           </el-col>
-          <el-col :xs="24" :sm="12" :md="6">
-            <el-form-item :label="$t('isagroup.是否推荐')" prop="recommended">
-              <el-select
-                clearable
-                v-model="ruleForm['recommended']"
-                :placeholder="$t('isagroup.请选择')"
-              >
-                <el-option
-                  :key="k"
-                  v-for="(i, k) in consts['yesOrno']"
-                  :label="i18nlocel == 'en' ? i.enLabel : i.label"
-                  :value="i.id"
-                ></el-option>
-              </el-select>
-            </el-form-item>
-          </el-col>
+          
         </el-row>
         <el-row :gutter="16">
           <el-col :xs="24" :sm="12" :md="6">
-            <el-form-item :label="$t('isagroup.是否Banner')" prop="banner">
-              <el-select
-                clearable
-                v-model="ruleForm['banner']"
-                :placeholder="$t('isagroup.请选择')"
-              >
-                <el-option
-                  :key="k"
-                  v-for="(i, k) in consts['yesOrno']"
-                  :label="i18nlocel == 'en' ? i.enLabel : i.label"
-                  :value="i.id"
-                ></el-option>
+            <el-form-item :label="$t('isagroup.是否推荐')" prop="recommended">
+              <el-select clearable v-model="ruleForm['recommended']" :placeholder="$t('isagroup.请选择')">
+                <el-option :key="k" v-for="(i, k) in consts['yesOrno']" :label="i18nlocel == 'en' ? i.enLabel : i.label"
+                  :value="i.id"></el-option>
               </el-select>
             </el-form-item>
           </el-col>
           <el-col :xs="24" :sm="12" :md="6">
-            <el-form-item
-              :label="$t('isagroup.是否需要反馈')"
-              prop="needFeedback"
-            >
-              <el-select
-                clearable
-                v-model="ruleForm['needFeedback']"
-                :placeholder="$t('isagroup.请选择')"
-              >
-                <el-option
-                  :key="k"
-                  v-for="(i, k) in consts['yesOrno']"
-                  :label="i18nlocel == 'en' ? i.enLabel : i.label"
-                  :value="i.id"
-                ></el-option>
+            <el-form-item :label="$t('isagroup.是否Banner')" prop="banner">
+              <el-select clearable v-model="ruleForm['banner']" :placeholder="$t('isagroup.请选择')">
+                <el-option :key="k" v-for="(i, k) in consts['yesOrno']" :label="i18nlocel == 'en' ? i.enLabel : i.label"
+                  :value="i.id"></el-option>
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :xs="24" :sm="12" :md="6">
+            <el-form-item :label="$t('isagroup.是否需要反馈')" prop="needFeedback">
+              <el-select clearable v-model="ruleForm['needFeedback']" :placeholder="$t('isagroup.请选择')">
+                <el-option :key="k" v-for="(i, k) in consts['yesOrno']" :label="i18nlocel == 'en' ? i.enLabel : i.label"
+                  :value="i.id"></el-option>
               </el-select>
             </el-form-item>
           </el-col>
@@ -271,139 +160,56 @@
             </el-form-item>
           </el-col> -->
           <el-col :xs="24" :sm="12" :md="6">
-            <el-form-item
-              :label="$t('isagroup.推送校区')"
-              prop="wechatPushSchoolIds"
-            >
-              <el-select
-                clearable
-                collapse-tags
-                v-model="ruleForm['wechatPushSchoolIds']"
-                :placeholder="$t('common.请选择')"
-                multiple
-              >
-                <el-option
-                  :key="k"
-                  v-for="(i, k) in schoolSelectList"
-                  :label="schoolDropdownLabel(i)"
-                  :value="i.id"
-                ></el-option>
+            <el-form-item :label="$t('isagroup.推送微信校区')" prop="wechatPushSchoolIds">
+              <el-select clearable collapse-tags v-model="ruleForm['wechatPushSchoolIds']"
+                :placeholder="$t('common.请选择')" multiple @change="onWechatPushSchoolIdsChange">
+                <el-option :key="k" v-for="(i, k) in schoolSelectList" :label="schoolDropdownLabel(i)"
+                  :value="i.id"></el-option>
               </el-select>
             </el-form-item>
           </el-col>
-          <el-col :xs="24" :sm="24" :md="6">
-            <el-form-item
-              :label="$t('isagroup.推送邮箱')"
-              prop="emailConfigIds"
-            >
-              <el-select
-                clearable
-                collapse-tags
-                filterable
-                v-model="ruleForm['emailConfigIds']"
-                :placeholder="$t('common.请选择')"
-                multiple
-                @visible-change="onEmailConfigDropdownVisible"
-              >
-                <el-option
-                  v-for="opt in emailConfigOptions"
-                  :key="'ec-' + opt.id"
-                  :label="opt.email"
-                  :value="opt.id"
-                ></el-option>
-              </el-select>
-            </el-form-item>
-          </el-col>
+
         </el-row>
-        <el-row
-          :gutter="16"
-          type="flex"
-          align="middle"
-          class="activity-form__row--limit-scope"
-        >
+        <el-row :gutter="16" type="flex" align="middle" class="activity-form__row--limit-scope">
           <el-col :xs="24" :span="12">
-            <el-form-item
-              :label="$t('isagroup.报名人数限制')"
-              prop="registrationLimit"
-            >
+            <el-form-item :label="$t('isagroup.报名人数限制')" prop="registrationLimit">
               <div class="activity-form-registration-limit">
-                <el-radio-group
-                  v-model="registrationUnlimited"
-                  class="activity-form-registration-radios"
-                >
+                <el-radio-group v-model="registrationUnlimited" class="activity-form-registration-radios">
                   <el-radio :label="true">{{ $t("isagroup.不限制") }}</el-radio>
                   <el-radio :label="false">{{
                     $t("isagroup.限制人数")
                   }}</el-radio>
                 </el-radio-group>
-                <el-input-number
-                  v-if="!registrationUnlimited"
-                  v-model="ruleForm.registrationLimit"
-                  :min="1"
-                  :precision="0"
-                  :step="1"
-                  controls-position="right"
-                  class="activity-form-registration-cap"
-                  :placeholder="$t('consult.请输入')"
-                />
+                <el-input-number v-if="!registrationUnlimited" v-model="ruleForm.registrationLimit" :min="1"
+                  :precision="0" :step="1" controls-position="right" class="activity-form-registration-cap"
+                  :placeholder="$t('consult.请输入')" />
               </div>
             </el-form-item>
           </el-col>
           <el-col :xs="24" :span="12">
             <el-form-item :label="$t('isagroup.可见范围')" prop="visibleScope">
-              <el-radio-group
-                v-model="ruleForm.visibleScope"
-                class="activity-form-radio-group"
-              >
+              <el-radio-group v-model="ruleForm.visibleScope" class="activity-form-radio-group">
                 <el-radio :label="0">{{ $t("isagroup.公开") }}</el-radio>
                 <el-radio :label="1">{{ $t("isagroup.指定") }}</el-radio>
               </el-radio-group>
             </el-form-item>
           </el-col>
         </el-row>
-        <el-row
-          v-if="Number(ruleForm.visibleScope) === 1"
-          :gutter="16"
-          type="flex"
-          align="middle"
-          class="activity-form__row--limit-scope"
-        >
+        <el-row v-if="Number(ruleForm.visibleScope) === 1" :gutter="16" type="flex" align="middle"
+          class="activity-form__row--limit-scope">
           <el-col :xs="24" :span="24">
-            <el-form-item
-              :label="$t('isagroup.可见范围名单')"
-              class="activity-form-item--action-only"
-            >
+            <el-form-item :label="$t('isagroup.可见范围名单')" class="activity-form-item--action-only">
               <div class="visible-scope-file-actions">
-                <el-button
-                  type="primary"
-                  size="small"
-                  icon="el-icon-download"
-                  :disabled="fieldsetDisabled"
-                  @click="handleDownloadVisibleScopeTemplate"
-                  >{{ $t("isagroup.下载Excel模板") }}</el-button
-                >
-                <el-upload
-                  class="visible-scope-upload"
-                  :action="uploadAction"
-                  :show-file-list="false"
-                  accept=".xlsx,.xls"
-                  :disabled="!ruleForm.id || fieldsetDisabled"
-                  :http-request="handleImportVisibleScope"
-                >
-                  <el-button
-                    size="small"
-                    icon="el-icon-upload2"
-                    :disabled="!ruleForm.id || fieldsetDisabled"
-                    >{{ $t("isagroup.上传可见范围名单") }}</el-button
-                  >
+                <el-button type="primary" size="small" icon="el-icon-download" :disabled="fieldsetDisabled"
+                  @click="handleDownloadVisibleScopeTemplate">{{ $t("isagroup.下载Excel模板") }}</el-button>
+                <el-upload class="visible-scope-upload" :action="uploadAction" :show-file-list="false"
+                  accept=".xlsx,.xls" :disabled="!ruleForm.id || fieldsetDisabled"
+                  :http-request="handleImportVisibleScope">
+                  <el-button size="small" icon="el-icon-upload2" :disabled="!ruleForm.id || fieldsetDisabled">{{
+                    $t("isagroup.上传可见范围名单") }}</el-button>
                 </el-upload>
-                <el-button
-                  size="small"
-                  icon="el-icon-view"
-                  :disabled="!ruleForm.id || fieldsetDisabled"
-                  @click="openVisibleScopeDrawer"
-                  >查看名单</el-button
-                >
+                <el-button size="small" icon="el-icon-view" :disabled="!ruleForm.id || fieldsetDisabled"
+                  @click="openVisibleScopeDrawer">查看名单</el-button>
                 <span v-if="!ruleForm.id" class="visible-scope-tip">{{
                   $t("isagroup.保存活动后可上传名单")
                 }}</span>
@@ -413,52 +219,26 @@
         </el-row>
         <el-row :gutter="16">
           <el-col :span="24">
-            <el-form-item
-              :label="$t('isagroup.推送内容')"
-              prop="wechatPushContent"
-            >
-              <el-input
-                v-model="ruleForm.wechatPushContent"
-                :placeholder="$t('consult.请输入')"
-                type="textarea"
-                rows="2"
-                maxlength="20"
-                show-word-limit
-              ></el-input>
+            <el-form-item :label="$t('isagroup.推送内容')" prop="wechatPushContent">
+              <el-input v-model="ruleForm.wechatPushContent" :placeholder="$t('consult.请输入')" type="textarea" rows="2"
+                maxlength="20" show-word-limit></el-input>
             </el-form-item>
           </el-col>
         </el-row>
         <el-row :gutter="16">
           <el-col :span="24">
-            <el-form-item
-              :label="$t('isagroup.推送备注')"
-              prop="wechatPushRemark"
-            >
-              <el-input
-                v-model="ruleForm.wechatPushRemark"
-                :placeholder="$t('consult.请输入')"
-                type="textarea"
-                rows="2"
-                maxlength="50"
-                show-word-limit
-              ></el-input>
+            <el-form-item :label="$t('isagroup.推送备注')" prop="wechatPushRemark">
+              <el-input v-model="ruleForm.wechatPushRemark" :placeholder="$t('consult.请输入')" type="textarea" rows="2"
+                maxlength="50" show-word-limit></el-input>
             </el-form-item>
           </el-col>
         </el-row>
         <el-row :gutter="16">
           <el-col :span="24">
             <el-form-item :label="$t('isagroup.状态')" prop="activityStatus">
-              <el-radio-group
-                v-model="ruleForm['activityStatus']"
-                class="activity-form-radio-group"
-                :disabled="activityStatusRadiosDisabled"
-              >
-                <el-radio
-                  v-for="(i, k) in activityStatusRadioOptions"
-                  :key="k"
-                  :label="i.value"
-                  style="color: #999999"
-                >
+              <el-radio-group v-model="ruleForm['activityStatus']" class="activity-form-radio-group"
+                :disabled="activityStatusRadiosDisabled">
+                <el-radio v-for="(i, k) in activityStatusRadioOptions" :key="k" :label="i.value" style="color: #999999">
                   {{ i18nlocel === "en" ? i.enLabel : i.label }}
                 </el-radio>
               </el-radio-group>
@@ -468,22 +248,14 @@
         <el-row :gutter="16">
           <el-col :span="24">
             <el-form-item :label="$t('isagroup.中文详情')" prop="detailCn">
-              <TinymceCn
-                ref="TinymceCn"
-                :editor-id="'tinymce-cn'"
-                :language="'zh_CN'"
-              />
+              <TinymceCn ref="TinymceCn" :editor-id="'tinymce-cn'" :language="'zh_CN'" />
             </el-form-item>
           </el-col>
         </el-row>
         <el-row :gutter="16">
           <el-col :span="24">
             <el-form-item :label="$t('isagroup.英文详情')" prop="detailEn">
-              <TinymceEn
-                ref="TinymceEn"
-                :editor-id="'tinymce-en'"
-                :language="'en'"
-              />
+              <TinymceEn ref="TinymceEn" :editor-id="'tinymce-en'" :language="'en'" />
             </el-form-item>
           </el-col>
         </el-row>
@@ -497,47 +269,17 @@
         $t("isagroup.取消")
       }}</el-button>
     </el-form-item>
-    <el-drawer
-      title="可见范围名单"
-      :visible.sync="visibleScopeDrawerVisible"
-      size="640px"
-      append-to-body
-    >
+    <el-drawer title="可见范围名单" :visible.sync="visibleScopeDrawerVisible" size="640px" append-to-body>
       <div class="visible-scope-drawer">
-        <el-table
-          v-loading="visibleScopeLoading"
-          :data="visibleScopeTableData"
-          border
-          style="width: 100%"
-        >
-          <el-table-column
-            label="序号"
-            type="index"
-            width="60"
-            align="center"
-          />
-          <el-table-column
-            prop="mobile"
-            label="手机号"
-            min-width="160"
-            show-overflow-tooltip
-          />
-          <el-table-column
-            prop="createTime"
-            label="创建时间"
-            min-width="170"
-            show-overflow-tooltip
-          />
+        <el-table v-loading="visibleScopeLoading" :data="visibleScopeTableData" border style="width: 100%">
+          <el-table-column label="序号" type="index" width="60" align="center" />
+          <el-table-column prop="mobile" label="手机号" min-width="160" show-overflow-tooltip />
+          <el-table-column prop="createTime" label="创建时间" min-width="170" show-overflow-tooltip />
         </el-table>
         <div class="visible-scope-drawer__footer">
-          <el-pagination
-            background
-            layout="total, prev, pager, next"
-            :current-page="visibleScopePagination.current"
-            :page-size="visibleScopePagination.size"
-            :total="visibleScopePagination.total"
-            @current-change="handleVisibleScopeCurrentChange"
-          />
+          <el-pagination background layout="total, prev, pager, next" :current-page="visibleScopePagination.current"
+            :page-size="visibleScopePagination.size" :total="visibleScopePagination.total"
+            @current-change="handleVisibleScopeCurrentChange" />
         </div>
       </div>
     </el-drawer>
@@ -553,7 +295,10 @@ import {
   getVisibleScopeListByFile,
   importVisibleScopeFile,
 } from "@/api/isacommunity/activity.js";
-import { getSchoolEmailConfigDetail, getSchoolEmailConfigList } from "@/api/isacommunity/schoolEmailConfig.js";
+import {
+  getSchoolEmailConfigDetail,
+  getSchoolEmailConfigList,
+} from "@/api/isacommunity/schoolEmailConfig.js";
 import IsaTinymce from "@/components/tinymce/isatinymce.vue";
 import consts from "@/const/isacommunity/consts.js";
 import schoolListBuscommonMixin from "@/mixins/schoolListBuscommon.js";
@@ -615,7 +360,7 @@ export default {
   created() {
     this.rules = this.initRules();
   },
-  mounted() {},
+  mounted() { },
   computed: {
     ...mapGetters(["permissions", "i18nlocel"]),
     uploadAction() {
@@ -693,11 +438,8 @@ export default {
         this.rules = this.initRules();
       },
     },
-    "ruleForm.schoolIds": {
-      handler() {
-        this.fetchEmailConfigOptions();
-      },
-      deep: true,
+    "ruleForm.schoolIds"(newVal, oldVal) {
+      this.fetchEmailConfigOptions();
     },
   },
   methods: {
@@ -845,15 +587,27 @@ export default {
         ],
         wechatPushContent: [
           {
-            required: false,
-            message: that.$t("isagroup.请输入"),
+            validator(rule, value, callback) {
+              const hasSchoolSelected = Array.isArray(that.ruleForm.wechatPushSchoolIds) &&
+                that.ruleForm.wechatPushSchoolIds.length > 0;
+              if (hasSchoolSelected && (!value || String(value).trim() === "")) {
+                return callback(new Error(that.$t("isagroup.请输入")));
+              }
+              return callback();
+            },
             trigger: "blur",
           },
         ],
         wechatPushRemark: [
           {
-            required: false,
-            message: that.$t("isagroup.请输入"),
+            validator(rule, value, callback) {
+              const hasSchoolSelected = Array.isArray(that.ruleForm.wechatPushSchoolIds) &&
+                that.ruleForm.wechatPushSchoolIds.length > 0;
+              if (hasSchoolSelected && (!value || String(value).trim() === "")) {
+                return callback(new Error(that.$t("isagroup.请输入")));
+              }
+              return callback();
+            },
             trigger: "blur",
           },
         ],
@@ -910,9 +664,9 @@ export default {
         .map((item) => {
           const id =
             item != null &&
-            typeof item === "object" &&
-            !Array.isArray(item) &&
-            "id" in item
+              typeof item === "object" &&
+              !Array.isArray(item) &&
+              "id" in item
               ? item.id
               : item;
           if (id == null || id === "") {
@@ -943,6 +697,7 @@ export default {
       if (schoolIds.length) {
         params.schoolIds = schoolIds;
       }
+      console.log("fetchEmailConfigOptions with params", params);
       try {
         const res = await getSchoolEmailConfigList(params);
         if (res.data && res.data.success) {
@@ -959,9 +714,7 @@ export default {
     },
     async mergeMissingEmailConfigOptions() {
       const selected = Array.isArray(this.ruleForm.emailConfigIds)
-        ? this.ruleForm.emailConfigIds.filter(
-            (id) => id != null && id !== ""
-          )
+        ? this.ruleForm.emailConfigIds.filter((id) => id != null && id !== "")
         : [];
       if (!selected.length) {
         return;
@@ -1108,7 +861,7 @@ export default {
             this.$nextTick(() => {
               const raw =
                 registrationLimitFromApi === null ||
-                registrationLimitFromApi === undefined
+                  registrationLimitFromApi === undefined
                   ? 0
                   : Number(registrationLimitFromApi);
               const regLimit = Number.isFinite(raw) ? raw : 0;
@@ -1136,8 +889,8 @@ export default {
                 wechatPushRemark,
                 activityStatus:
                   activityStatusFromApi !== undefined &&
-                  activityStatusFromApi !== null &&
-                  activityStatusFromApi !== ""
+                    activityStatusFromApi !== null &&
+                    activityStatusFromApi !== ""
                     ? String(activityStatusFromApi)
                     : "0",
                 activityTime: [activityStartTime, activityEndTime],
@@ -1147,8 +900,8 @@ export default {
                 emailConfigIds: this.normalizeEmailConfigIds(emailConfigIds),
                 visibleScope:
                   visibleScope !== undefined &&
-                  visibleScope !== null &&
-                  visibleScope !== ""
+                    visibleScope !== null &&
+                    visibleScope !== ""
                     ? Number(visibleScope)
                     : 0,
               };
@@ -1168,11 +921,7 @@ export default {
       });
     },
     submitForm(formName) {
-      if (
-        this.readonly ||
-        this.isSubmitting ||
-        this.embeddedBasicInfoLocked
-      ) {
+      if (this.readonly || this.isSubmitting || this.embeddedBasicInfoLocked) {
         return;
       }
 
@@ -1263,6 +1012,22 @@ export default {
       }
     },
 
+    /** 上传可见范围名单后仅同步文件信息，避免 getDetail 覆盖未保存的表单字段 */
+    refreshVisibleScopeFileOnly() {
+      const id = this.ruleForm.id;
+      if (!id) {
+        return;
+      }
+      getActivityDetail(id).then((res) => {
+        if (!res.data.success || !res.data.data) {
+          return;
+        }
+        const fileFromApi = res.data.data.visibleScopeFile;
+        if (fileFromApi) {
+          this.$set(this.ruleForm, "visibleScopeFile", fileFromApi);
+        }
+      });
+    },
     handleImportVisibleScope(req) {
       if (this.readonly || this.embeddedBasicInfoLocked) {
         return;
@@ -1276,10 +1041,18 @@ export default {
         .then((res) => {
           if (res.data.success) {
             this.$message.success(this.$t("isagroup.成功"));
-            this.getDetail(this.ruleForm.id);
+            const fileFromImport =
+              res.data.data && res.data.data.visibleScopeFile
+                ? res.data.data.visibleScopeFile
+                : res.data.data;
+            if (fileFromImport && fileFromImport.id) {
+              this.$set(this.ruleForm, "visibleScopeFile", fileFromImport);
+            } else {
+              this.refreshVisibleScopeFileOnly();
+            }
           }
         })
-        .catch(() => {});
+        .catch(() => { });
     },
 
     openVisibleScopeDrawer() {
@@ -1368,6 +1141,15 @@ export default {
         .catch(() => {
           this.isSubmitting = false;
         });
+    },
+
+    // 推送微信校区变化，清除关联字段的校验状态
+    onWechatPushSchoolIdsChange() {
+      this.$nextTick(() => {
+        if (this.$refs.ruleForm) {
+          this.$refs.ruleForm.clearValidate(["wechatPushContent", "wechatPushRemark"]);
+        }
+      });
     },
 
     // 微信通知改变
@@ -1499,8 +1281,10 @@ export default {
 
     /* 报名人数限制：全局样式隐藏了 el-input-number 增减按钮，此处仅在本字段恢复 */
     .activity-form__row--limit-scope {
+
       /* community/common.scss 内全局隐藏了 .el-input-number 的增减按钮，此处仅恢复本字段 */
       ::v-deep .el-input-number.activity-form-registration-cap {
+
         .el-input-number__decrease,
         .el-input-number__increase {
           display: flex !important;
@@ -1540,7 +1324,7 @@ export default {
         box-sizing: border-box;
       }
 
-      .el-form-item__content > div {
+      .el-form-item__content>div {
         width: 100%;
         box-sizing: border-box;
       }

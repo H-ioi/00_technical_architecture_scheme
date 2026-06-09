@@ -16,10 +16,9 @@
             style="margin: 0 20px 0 0 !important"
           >
             <el-input
-              style="width: 380px"
+              style="width: 320px"
               v-model="templateFrom.label"
               :placeholder="$t('consult.请输入')"
-              :maxlength="32"
             ></el-input>
           </el-form-item>
           <el-form-item
@@ -28,15 +27,14 @@
             style="margin: 0"
           >
             <el-input
-              style="width: 380px"
+              style="width: 320px"
               v-model="templateFrom.enlabel"
               :placeholder="$t('consult.请输入')"
-              :maxlength="32"
             ></el-input>
           </el-form-item>
           <el-form-item
             style="margin-left: 30px"
-            v-if="this.formData['scene'] == '1'"
+            v-if="formData['scene'] == '1' && formData['typeId'] == '5'"
             :label="$t('consult.是否对外显示')"
             prop="isShowOutside"
           >
@@ -47,6 +45,27 @@
               <el-radio :label="1">{{ $t("consult.是") }}</el-radio>
               <el-radio :label="0">{{ $t("consult.否") }}</el-radio>
             </el-radio-group>
+          </el-form-item>
+          <el-form-item
+            style="margin-left: 30px"
+            v-if="formData['scene'] == '1' && formData['typeId'] == '5'"
+            :label="$t('consult.方向')"
+            prop="direction"
+          >
+            <el-select
+              style="width: 320px"
+              filterable
+              multiple
+              v-model="templateFrom.direction"
+              :placeholder="$t('consult.请选择')"
+            >
+              <el-option
+                v-for="item in directionList"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+              ></el-option>
+            </el-select>
           </el-form-item>
           <!-- <el-form-item label="备注" prop="mark" style="margin: 0; width: 100%">
             <el-input
@@ -110,6 +129,7 @@
 </template>
 
 <script>
+import { mapGetters } from "vuex";
 import {
   formlist,
   dateTimeType,
@@ -171,7 +191,13 @@ export default {
       // 正则校验
       regeList: regeList,
       // 模板名称
-      templateFrom: { label: "", enlabel: "", mark: "" },
+      templateFrom: {
+        label: "",
+        enlabel: "",
+        isShowOutside: 0,
+        direction: [],
+        mark: "",
+      },
       templateRule: {
         label: [{ required: true, message: "请输入", trigger: "blur" }],
         enlabel: [{ required: true, message: "请输入", trigger: "blur" }],
@@ -187,6 +213,7 @@ export default {
       // 基础字段的校验
       setformrules: setformrules,
       templateType: "add",
+      directionList: [],
     };
   },
   watch: {
@@ -208,13 +235,27 @@ export default {
       deep: true,
     },
   },
+  computed: {
+    ...mapGetters(["i18nlocel", "pooldictionary"]),
+  },
   created() {
     this.fullPath = this.$route.fullPath;
+  },
+  mounted() {
     this.init();
   },
   methods: {
     // 初始化数据
-    async init() {},
+    async init() {
+      let schoolId = this.$route.query.typeId;
+      this.pooldictionary.map((item) => {
+        if (item.value == schoolId) {
+          let child = item["child"] || {};
+          this.directionList = child["enquiry_direction"] || [];
+          console.log("this.directionList", this.directionList);
+        }
+      });
+    },
 
     // 添加动态表单模板
     addTemplateDynamic(data) {
@@ -264,12 +305,14 @@ export default {
           this.templateData.templateFormId = id;
           this.setform = {};
           this.formArr = [];
-          let { templateName, templateNameEn, isShowOutside } = res.data.data;
+          let { templateName, templateNameEn, isShowOutside, direction } =
+            res.data.data;
           this.templateFrom = {
             ...this.templateFrom,
             label: templateName || "模板表单",
             enlabel: templateNameEn || "Template Form",
             isShowOutside: isShowOutside || 0,
+            direction: direction ? direction.split(",") : [],
           };
           let data = res.data.data.templateFields;
           let sortData = data.sort((a, b) => {
@@ -286,6 +329,7 @@ export default {
             item.readonly = item.readonly ? true : false;
             item.disabled = item.disabled ? true : false;
             item.isHidden = item.isHidden ? 1 : 0;
+            item.placeholder = item.placeholder || "";
             item.properties = item.properties ? item.properties : [];
 
             // 提取创建option数组的逻辑到单独函数
@@ -297,7 +341,12 @@ export default {
                 properties[res.key] = res.value === "true";
               }
               if (res.key === "option_default") {
-                option_default.push(res.value);
+                option_default = [];
+                option.forEach((op) => {
+                  if (op.optionDefault) {
+                    option_default.push(op.id);
+                  }
+                });
               }
               if (res.key === "datetime_type") {
                 let date = dateTimeType.filter(
@@ -365,6 +414,7 @@ export default {
               id: res.id,
               isHide: res.isHide || 0,
               fontId: createCode(),
+              optionDefault: res.optionDefault,
             });
           }
         }
@@ -411,6 +461,7 @@ export default {
                   label: option.label,
                   id: customId,
                   value: option.label,
+                  optionDefault: option.optionDefault,
                 });
               });
             }
@@ -466,6 +517,7 @@ export default {
           readonly: item.readonly ? 1 : 0,
           required: item.required ? 1 : 0,
           isHidden: item.isHidden ? 1 : 0,
+          placeholder: item.placeholder || "",
           sort: index,
           properties: properties,
           fieldMappings: item["fieldMappings"] || [],
@@ -486,6 +538,10 @@ export default {
         templateFields: templateArr,
         structure: "top",
         isShowOutside: this.templateFrom.isShowOutside || 0,
+        direction:
+          this.templateFrom.direction.length > 0
+            ? String(this.templateFrom.direction)
+            : "",
       };
       if (this.templateType == "add") {
         this.addTemplateDynamic(data);

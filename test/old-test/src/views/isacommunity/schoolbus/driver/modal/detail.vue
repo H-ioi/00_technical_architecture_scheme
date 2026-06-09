@@ -14,10 +14,10 @@
               <div
                 style="width: 25%; margin-bottom: 15px"
                 class="orderDetail_baseinfo_item"
-                v-for="(item, index) in tabletitle['busdriverTable']"
+                v-for="(item, index) in detailFields"
                 :key="index"
               >
-                <span>{{ $t("isagroup")[item.label] }}</span>
+                <span>{{ item.label }}</span>
                 <span :title="$checkNull(detailData[item.prop])">{{
                   $checkNull(detailData[item.prop])
                 }}</span>
@@ -33,50 +33,59 @@
 <script>
 import { mapGetters } from "vuex";
 import { getBusdriverDetail } from "@/api/isacommunity/busdriver.js";
-import tabletitle from "@/const/isacommunity/tabletitle.js";
-import consts from "@/const/isacommunity/consts.js";
+import { BUS_SERVICE_TYPE } from "../../schoolbusConsts.js";
+import schoolListBuscommonMixin from "@/mixins/schoolListBuscommon.js";
 import dayjs from "dayjs";
 export default {
   name: "detail",
+  mixins: [schoolListBuscommonMixin],
   components: {},
   props: {
     title: String,
   },
   data() {
     return {
-      tablestyle: consts["tablestyle"],
-      tabletitle: tabletitle,
       showDialog: false,
       detailData: {},
-      driverList: [],
     };
   },
-  created() {},
-  mounted() {},
   computed: {
     ...mapGetters(["i18nlocel"]),
+    detailFields() {
+      return [
+        { label: "ID", prop: "id" },
+        { label: this.$t("schoolbus.校区"), prop: "schoolEnNames" },
+        { label: this.$t("schoolbus.司机姓名"), prop: "name" },
+        { label: this.$t("schoolbus.工号"), prop: "employeeNo" },
+        { label: this.$t("schoolbus.联系方式"), prop: "contact" },
+        { label: this.$t("schoolbus.年龄"), prop: "age" },
+        { label: this.$t("schoolbus.驾照类型"), prop: "licenseType" },
+        { label: this.$t("schoolbus.状态"), prop: "statusLabel" },
+        { label: this.$t("schoolbus.创建时间"), prop: "createTime" },
+        { label: this.$t("schoolbus.更新时间"), prop: "updateTime" },
+      ];
+    },
   },
   methods: {
-    showModal(item) {
+    async showModal(item) {
+      await this.fetchSchoolListBuscommon();
       this.showDialog = true;
       this.getDetail(item.id);
     },
     closeModal() {
       this.showDialog = false;
     },
-    // 获取详情
     getDetail(id) {
       getBusdriverDetail(id).then(async (res) => {
         if (res.data.success) {
           this.$nextTick(() => {
             let { status, createTime, updateTime } = res.data.data;
-            this.detailData = {
-              ...this.detailData,
+            this.detailData = this.withSchoolEnNamesFromIds({
               ...res.data.data,
-              statusLabel: this.$getListLabel(consts["serviceType"], status),
+              statusLabel: this.$getListLabel(BUS_SERVICE_TYPE, status),
               createTime: dayjs(createTime).format("YYYY-MM-DD HH:mm"),
               updateTime: dayjs(updateTime).format("YYYY-MM-DD HH:mm"),
-            };
+            });
           });
         }
       });

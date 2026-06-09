@@ -4,7 +4,7 @@
       :current-page="pagination['current']"
       @size-change="handleSizeChange"
       @current-change="handleCurrentChange"
-      :page-size="pagination['size']"
+      :page-size="pagination['size'] || pagination['pageSize']"
       :layout="getLayout"
       :total="total"
       :page-sizes="[10, 50, 100]"

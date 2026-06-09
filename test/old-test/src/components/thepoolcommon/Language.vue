@@ -1,27 +1,32 @@
 <template>
-  <div class="language">
-    <div
-      :class="[
-        'language_item',
-        {
-          active: $i18n.locale == 'zh',
-        },
-      ]"
-      @click="changeLanguage"
-    >
-      中文
+  <div>
+    <div class="language" v-if="!isCollapse">
+      <div
+        :class="[
+          'language_item',
+          {
+            active: $i18n.locale == 'zh',
+          },
+        ]"
+        @click="changeLanguage"
+      >
+        中文
+      </div>
+      <img @click="changeLanguage" src="/thepool/other/qiehuan.png" />
+      <div
+        :class="[
+          'language_item',
+          {
+            active: $i18n.locale == 'en',
+          },
+        ]"
+        @click="changeLanguage"
+      >
+        EN
+      </div>
     </div>
-    <img @click="changeLanguage" src="/thepool/other/qiehuan.png" />
-    <div
-      :class="[
-        'language_item',
-        {
-          active: $i18n.locale == 'en',
-        },
-      ]"
-      @click="changeLanguage"
-    >
-      EN
+    <div v-else @click="changeLanguage" style="cursor: pointer; color: #ffffff">
+      {{ $i18n.locale == "zh" ? "EN" : "中文" }}
     </div>
   </div>
 </template>
@@ -35,9 +40,7 @@ export default {
     return {};
   },
   computed: {
-    // getCurrentLanguage() {
-    //   return this.$i18n.locale == "en" ? "CN" : "EN";
-    // },
+    ...mapGetters(["isCollapse"]),
   },
   mounted() {},
 

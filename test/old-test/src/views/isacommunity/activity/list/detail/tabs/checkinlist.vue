@@ -299,6 +299,31 @@ export default {
       }
       return this.ynLabel(val);
     },
+    /** 是否在抽奖池内：优先 lottery_validate，列表未返回时兼容驼峰及 participateLottery / allow_lottery */
+    resolveLotteryPoolVal(row) {
+      if (!row) {
+        return undefined;
+      }
+      if (row.lottery_validate != null) {
+        return row.lottery_validate;
+      }
+      if (row.lotteryValidate != null) {
+        return row.lotteryValidate;
+      }
+      if (row.participateLottery != null) {
+        return row.participateLottery;
+      }
+      if (row.participate_lottery != null) {
+        return row.participate_lottery;
+      }
+      if (row.allow_lottery != null) {
+        return row.allow_lottery;
+      }
+      if (row.allowLottery != null) {
+        return row.allowLottery;
+      }
+      return undefined;
+    },
     /** API checkin 为 boolean，列表也可能返回 true/false */
     ynCheckinDisplay(val) {
       if (val === undefined || val === null || val === "") {
@@ -444,7 +469,7 @@ export default {
         item.participateLottery != null
           ? item.participateLottery
           : item.participate_lottery;
-      const lotteryValRaw = item.lottery_validate;
+      const lotteryValRaw = this.resolveLotteryPoolVal(item);
       const allowLotRaw =
         item.allow_lottery != null ? item.allow_lottery : item.allowLottery;
       const checkedRaw = item.checkin != null ? item.checkin : item.checked_in;
@@ -492,7 +517,7 @@ export default {
         row.participateLottery != null
           ? row.participateLottery
           : row.participate_lottery;
-      const lottery_validate = row.lottery_validate;
+      const lottery_validate = this.resolveLotteryPoolVal(row);
       const allowLottery =
         row.allow_lottery != null ? row.allow_lottery : row.allowLottery;
       const ticketId =

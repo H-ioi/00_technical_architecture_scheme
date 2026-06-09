@@ -1,8 +1,11 @@
 <template>
   <div class="space thepool_page">
-    <el-scrollbar class="space_right" ref="space_right">
+    <el-scrollbar class="space_right" ref="space_right" style="width: 100%">
       <div class="df_fa" style="height: 100%">
-        <el-scrollbar class="scrollList">
+        <el-scrollbar
+          class="scrollList"
+          style="width: 300px; min-width: 300px; height: 100%"
+        >
           <div
             @click="changeSchool(i)"
             :class="[

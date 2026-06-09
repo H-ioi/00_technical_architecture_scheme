@@ -1,9 +1,11 @@
 /** 菜单 i18n 命名空间，按优先级查找（菜单词条统一在 isagroup） */
 const I18N_NAMESPACES = [
   "isagroup",
+  "schoolDoctor",
   "consult",
   "mail",
   "attendance",
+  "dorm",
   "common",
   "route",
 ];

@@ -14,122 +14,62 @@
     @select="selectCheck"
     @select-all="selectAllCheck"
     @sort-change="sortChange"
-    class="table_fixed"
-  >
+    class="table_fixed">
     <!-- 多选按钮 -->
-    <el-table-column
-      v-if="showSelection"
-      type="selection"
-      width="50"
-      :selectable="checkSelectable"
-      :reserve-selection="false"
-    >
-    </el-table-column>
+    <el-table-column v-if="showSelection" type="selection" width="50" :selectable="checkSelectable" :reserve-selection="false"></el-table-column>
     <el-table-column
       v-for="(i, k) in tableTitle"
       :key="k"
       :prop="i['prop']"
-      :label="
-        i['hasEn'] ? $t('isagroup')[i['label']] || i['label'] : i['label']
-      "
+      :label="i['hasEn'] ? $t('isagroup')[i['label']] || i['label'] : i['label']"
       show-overflow-tooltip
       :width="i.width || undefined"
       :min-width="i.minWidth || undefined"
       :fixed="i['fixed']"
-      :sortable="i['sortable']"
-    >
+      :sortable="i['sortable']">
       <template slot-scope="scope">
-        <span
-          v-if="i.hasCopy"
-          class="table-cell-copy df_align_center"
-          @click.stop
-        >
-          <span
-            class="table-cell-copy__text"
-            :title="resetData(scope.row[i.prop])"
-            >{{ resetData(scope.row[i.prop]) }}</span
-          >
+        <span v-if="i.hasCopy" class="table-cell-copy df_align_center" @click.stop>
+          <span class="table-cell-copy__text" :title="resetData(scope.row[i.prop])">{{ resetData(scope.row[i.prop]) }}</span>
           <i
-            v-if="
-              scope.row[i.prop] !== null &&
-              scope.row[i.prop] !== undefined &&
-              scope.row[i.prop] !== ''
-            "
+            v-if="scope.row[i.prop] !== null && scope.row[i.prop] !== undefined && scope.row[i.prop] !== ''"
             class="el-icon-copy-document table-cell-copy__icon"
             title="复制"
-            @click.stop="handleCopyCell(scope.row[i.prop])"
-          />
+            @click.stop="handleCopyCell(scope.row[i.prop])" />
         </span>
         <template v-else>
           <span v-if="!i.isUrl" :title="resetData(scope.row[i.prop])">
-            {{ resetData(scope.row[i.prop]) }}</span
-          >
-          <a
-            v-if="i.isUrl"
-            style="color: #ba8e62"
-            :href="resetData(scope.row[i.prop])"
-            target="_blank"
-            >{{ resetData(scope.row[i.prop]) }}</a
-          >
+            {{ resetData(scope.row[i.prop]) }}
+          </span>
+          <a v-if="i.isUrl" style="color: #ba8e62" :href="resetData(scope.row[i.prop])" target="_blank">{{ resetData(scope.row[i.prop]) }}</a>
         </template>
       </template>
     </el-table-column>
 
     <!-- 操作列 -->
-    <el-table-column
-      v-if="tableBtn.length > 0"
-      fixed="right"
-      :label="$t('common.操作')"
-      :width="`${tableBtn.length * (i18nlocel == 'en' ? 100 : 60)}px`"
-    >
+    <el-table-column v-if="tableBtn.length > 0" fixed="right" :label="$t('common.操作')" :width="`${tableBtn.length * (i18nlocel == 'en' ? 100 : 60)}px`">
       <template slot-scope="scope">
         <div class="df_align_center table_textbtn">
           <span v-for="(s, b) in tableBtn" :key="b">
+            <el-popover v-if="popoverBbtn.includes(s.name)" :ref="scope.$index" placement="top" class="popoverBtn">
+              <div class="df_sb">
+                <el-button style="width: 48%" type="defult" size="mini" @click="cancledel(scope.$index)">{{ $t('btn.取消') }}</el-button>
+                <el-button style="width: 48%" type="primary" size="mini" @click.stop="cancledel(scope.$index), playTab(s.type, scope.row, scope)">
+                  {{ $t('btn.确定') }}
+                </el-button>
+              </div>
+
+              <el-button :style="`${s.color == '' ? '' : 'color:' + s.color + '!important'}`" type="text" size="small" slot="reference">
+                <span>{{ $t('btn')[s.name] }}</span>
+              </el-button>
+            </el-popover>
             <el-button
-              v-if="!popoverBbtn.includes(s.name)"
+              v-else-if="isBtnVisible(s, scope.row)"
               type="text"
               size="small"
               :disabled="setDisabledType(s.type, scope.row, scope)"
-              @click.stop="playTab(s.type, scope.row, scope)"
-            >
-              {{ $t("btn")[s.name] }}
+              @click.stop="playTab(s.type, scope.row, scope)">
+              {{ $t('btn')[s.name] }}
             </el-button>
-            <el-popover
-              v-else
-              :ref="scope.$index"
-              placement="top"
-              class="popoverBtn"
-            >
-              <div class="df_sb">
-                <el-button
-                  style="width: 48%"
-                  type="defult"
-                  size="mini"
-                  @click="cancledel(scope.$index)"
-                  >{{ $t("btn.取消") }}</el-button
-                >
-                <el-button
-                  style="width: 48%"
-                  type="primary"
-                  size="mini"
-                  @click.stop="
-                    cancledel(scope.$index), playTab(s.type, scope.row, scope)
-                  "
-                  >{{ $t("btn.确定") }}</el-button
-                >
-              </div>
-
-              <el-button
-                :style="`${
-                  s.color == '' ? '' : 'color:' + s.color + '!important'
-                }`"
-                type="text"
-                size="small"
-                slot="reference"
-              >
-                <span>{{ $t("btn")[s.name] }}</span>
-              </el-button>
-            </el-popover>
           </span>
         </div>
       </template>
@@ -138,286 +78,271 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
-import { tableObj } from "@/const/tabledata/index";
-import consts from "@/const/isagroup/consts.js";
+import { mapGetters } from 'vuex'
+import { tableObj } from '@/const/tabledata/index'
+import consts from '@/const/isagroup/consts.js'
 export default {
-  name: "PCOrderTable",
+  name: 'PCOrderTable',
   props: {
     tableType: {
       type: String,
       require: false,
-      default: null,
+      default: null
     },
     height: {
       type: [String, Number],
       require: false,
-      default: undefined,
+      default: undefined
     },
     tableTitle: {
       type: Array,
       require: true,
       default: () => {
-        return [];
-      },
+        return []
+      }
     },
     tableData: {
       type: Array,
       require: true,
       default: () => {
-        return [];
-      },
+        return []
+      }
     },
     tableBtn: {
       type: Array,
       require: false,
       default: () => {
-        return [];
-      },
+        return []
+      }
     },
     showSelection: {
       type: Boolean,
       require: false,
-      default: false,
+      default: false
     },
     showSearch: {
       type: Boolean,
       require: false,
-      default: false,
-    },
+      default: false
+    }
   },
   data() {
     return {
-      search: "",
+      search: '',
       tablestyle: {
         headercellstyle: {
-          background: "#F5F8FD",
-          color: "#333333 !important",
-          "font-size": "14px",
-          "font-weight": "400",
-          height: "38px",
-          "font-family": "AlibabaPuHuiTiM",
+          background: '#F5F8FD',
+          color: '#333333 !important',
+          'font-size': '14px',
+          'font-weight': '400',
+          height: '38px',
+          'font-family': 'AlibabaPuHuiTiM'
         },
         rowstyle: {
-          color: " #666666",
-          "font-size": "14px",
-          "font-weight": "400",
-          height: "44px",
-          padding: "0px",
-        },
+          color: ' #666666',
+          'font-size': '14px',
+          'font-weight': '400',
+          height: '44px',
+          padding: '0px'
+        }
       },
       selectionId: [],
-      popoverBbtn: ["删除"],
-    };
+      popoverBbtn: ['删除']
+    }
   },
   computed: {
-    ...mapGetters(["i18nlocel"]),
+    ...mapGetters(['i18nlocel'])
   },
   watch: {
     tableData: {
       handler: function (newVal, oldVal) {
-        this.resetHeight();
+        this.resetHeight()
       },
-      deep: true,
-    },
+      deep: true
+    }
   },
   mounted() {},
   activated() {},
 
   methods: {
     rowClick(row, column, event) {
-      this.$emit("rowClick", row, column, event);
+      this.$emit('rowClick', row, column, event)
     },
     playTab(name, item, scope) {
-      this.$emit("playTab", name, item);
+      this.$emit('playTab', name, item)
+    },
+    /** 操作列按钮是否展示，支持 btn.show(row) 或 btn.show === false */
+    isBtnVisible(btn, row) {
+      if (typeof btn.show === 'function') {
+        return btn.show(row)
+      }
+      return btn.show !== false
     },
     cancledel(id) {
-      let arr = this.$refs[id];
+      let arr = this.$refs[id]
       arr.map((item) => {
-        item.doClose();
-      });
+        item.doClose()
+      })
     },
 
     deleteRow(index, rows) {
-      rows.splice(index, 1);
+      rows.splice(index, 1)
     },
     // 多选
     handleSelectionChange(arr) {
-      this.selectionId = [];
+      this.selectionId = []
       arr.map((i) => {
-        this.selectionId.push(i.id);
-      });
-      this.$emit("selection-change", arr);
+        this.selectionId.push(i.id)
+      })
+      this.$emit('selection-change', arr)
     },
     checkSelectable(e) {
-      return true;
+      return true
     },
     // 动态更改一行table样式
     tableRowClassName({ rowIndex }) {
       // return rowIndex % 2 > 0 ? "shinning" : "";
-      return "";
+      return ''
     },
     // 动态更改单元格样式
     tableCellClassName({ row, column, rowIndex, columnIndex }) {
       let data = {
-        ...this.tablestyle["rowstyle"],
-      };
-      let columnItem = this.tableTitle[columnIndex];
+        ...this.tablestyle['rowstyle']
+      }
+      let columnItem = this.tableTitle[columnIndex]
       if (!columnItem) {
-        data["background"] = "#ffffff";
+        data['background'] = '#ffffff'
       } else {
-        if (!columnItem["hasColor"]) {
-          data["background"] = "#ffffff";
+        if (!columnItem['hasColor']) {
+          data['background'] = '#ffffff'
         } else {
-          if (row["cellType"] == "classCombine") {
-            data["background"] = this.setColor(
-              row[columnItem["prop"]],
-              columnItem["gradeType"]
-            );
+          if (row['cellType'] == 'classCombine') {
+            data['background'] = this.setColor(row[columnItem['prop']], columnItem['gradeType'])
           } else {
-            if (row["cellType"]) {
-              data["background"] = this.setColor(
-                row[columnItem["prop"]],
-                row["cellType"]
-              );
+            if (row['cellType']) {
+              data['background'] = this.setColor(row[columnItem['prop']], row['cellType'])
             } else {
-              data["background"] = "#ffffff";
+              data['background'] = '#ffffff'
             }
           }
         }
       }
-      return data;
+      return data
     },
 
     selectCheck(selection, row) {
-      console.log("selectCheck, row", selection, row);
+      console.log('selectCheck, row', selection, row)
     },
     selectAllCheck(selection) {
-      console.log("selectAllCheck", selection);
+      console.log('selectAllCheck', selection)
     },
     toggleSelection(rows) {
       if (rows) {
         rows.forEach((row) => {
-          this.$refs.multipleTable.toggleRowSelection(row);
-        });
+          this.$refs.multipleTable.toggleRowSelection(row)
+        })
       }
     },
     getRowKeys(row) {
       // 自定义行主键（分页/大整数 id 场景避免 key 冲突或表格不刷新）
-      if (row._rowKey !== undefined && row._rowKey !== null && row._rowKey !== "") {
-        return row._rowKey;
+      if (row._rowKey !== undefined && row._rowKey !== null && row._rowKey !== '') {
+        return row._rowKey
       }
-      return row.id;
+      return row.id
     },
     resetData(item) {
-      return item === null || item === "" || item === undefined
-        ? "--"
-        : String(item);
+      return item === null || item === '' || item === undefined ? '--' : String(item)
     },
     handleCopyCell(value) {
-      const text =
-        value === null || value === undefined ? "" : String(value).trim();
+      const text = value === null || value === undefined ? '' : String(value).trim()
       if (!text) {
-        return;
+        return
       }
-      if (typeof this.$copyText === "function") {
+      if (typeof this.$copyText === 'function') {
         this.$copyText(text)
           .then(() => {
-            this.$message.success(this.$t("isagroup.成功"));
+            this.$message.success(this.$t('isagroup.成功'))
           })
           .catch(() => {
-            this.$message.error("复制失败");
-          });
+            this.$message.error('复制失败')
+          })
       } else if (navigator.clipboard && navigator.clipboard.writeText) {
         navigator.clipboard.writeText(text).then(
           () => {
-            this.$message.success(this.$t("isagroup.成功"));
+            this.$message.success(this.$t('isagroup.成功'))
           },
           () => {
-            this.$message.error("复制失败");
+            this.$message.error('复制失败')
           }
-        );
+        )
       }
     },
     setColor(value, type) {
-      let color = "#ffffff";
-      let isNumber = !isNaN(parseFloat(value)) && isFinite(value);
+      let color = '#ffffff'
+      let isNumber = !isNaN(parseFloat(value)) && isFinite(value)
       // console.log("isNumber", isNumber);
-      if (!value || !isNumber) return color;
-      let scoreColorList = consts["scoreColorList"];
+      if (!value || !isNumber) return color
+      let scoreColorList = consts['scoreColorList']
       scoreColorList.map((item) => {
-        let score = item[type];
-        if (!(value < score["min"]) && !(value > score["max"])) {
-          color = item["value"];
+        let score = item[type]
+        if (!(value < score['min']) && !(value > score['max'])) {
+          color = item['value']
         }
-      });
-      return color;
+      })
+      return color
     },
     sortChange(column, prop, order) {
-      this.$emit("sortChange", {
-        prop: column["prop"],
-        order: column["order"],
-      });
+      this.$emit('sortChange', {
+        prop: column['prop'],
+        order: column['order']
+      })
     },
     resetHeight() {
       this.$nextTick(() => {
         if (this.$refs.multipleTable) {
           try {
             // 安全地调用doLayout，避免在表格未完全初始化时出错
-            this.$refs.multipleTable.doLayout();
+            this.$refs.multipleTable.doLayout()
 
             // 只有当height有有效值时才尝试更新高度
-            if (
-              this.height &&
-              this.$refs.multipleTable.layout &&
-              this.$refs.multipleTable.layout.updateElsHeight
-            ) {
-              this.$refs.multipleTable.layout.updateElsHeight();
+            if (this.height && this.$refs.multipleTable.layout && this.$refs.multipleTable.layout.updateElsHeight) {
+              this.$refs.multipleTable.layout.updateElsHeight()
             }
           } catch (error) {
-            console.warn("重置表格高度时出错:", error);
+            console.warn('重置表格高度时出错:', error)
           }
         }
-      });
+      })
     },
     // 设置禁用状态
     setDisabledType(name, item, scope) {
-      let isDisabled = false;
-      if (this.tableType == "activity") {
-        if (
-          item["activityStatus"] != "1" &&
-          item["activityStatus"] != "0" &&
-          name == "edit"
-        ) {
-          isDisabled = true;
+      let isDisabled = false
+      if (this.tableType == 'activity') {
+        if (item['activityStatus'] != '1' && item['activityStatus'] != '0' && name == 'edit') {
+          isDisabled = true
         }
       }
       /** 活动项目列表：已结束、进行中非抽奖、进行中多轮抽奖禁编辑；进行中单轮抽奖可有限编辑 */
-      if (this.tableType == "activityProgram" && name === "edit") {
-        const ps = String(item.programStatus != null ? item.programStatus : "");
-        const pt = String(item.programType != null ? item.programType : "");
-        if (ps === "2") {
-          isDisabled = true;
-        } else if (ps === "1" && pt !== "1") {
-          isDisabled = true;
-        } else if (ps === "1" && pt === "1") {
-          const raw =
-            item.totalRounds != null
-              ? item.totalRounds
-              : item.total_rounds != null
-              ? item.total_rounds
-              : null;
-          const n = Number(raw);
-          const single = Number.isFinite(n) && n === 1;
+      if (this.tableType == 'activityProgram' && name === 'edit') {
+        const ps = String(item.programStatus != null ? item.programStatus : '')
+        const pt = String(item.programType != null ? item.programType : '')
+        if (ps === '2') {
+          isDisabled = true
+        } else if (ps === '1' && pt !== '1') {
+          isDisabled = true
+        } else if (ps === '1' && pt === '1') {
+          const raw = item.totalRounds != null ? item.totalRounds : item.total_rounds != null ? item.total_rounds : null
+          const n = Number(raw)
+          const single = Number.isFinite(n) && n === 1
           if (!single) {
-            isDisabled = true;
+            isDisabled = true
           }
         }
       }
-      return isDisabled;
-    },
-  },
-};
+      return isDisabled
+    }
+  }
+}
 </script>
 
 <style lang="scss" scoped>

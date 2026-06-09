@@ -1,23 +1,24 @@
 <template>
-  <div class="community_page">
-    <el-dialog
-      :title="$t('isagroup')[typeObj[modalType]]"
-      :visible.sync="showModal"
-      width="1000px"
+  <div>
+    <el-drawer
+      :title="drawerTitle"
+      :visible.sync="showDialog"
+      size="1120px"
       :before-close="closeModal"
-      :close-on-click-modal="false"
+      :wrapper-closable="false"
+      class="drawer-body bus-order-drawer"
     >
-      <div class="moadlFromBox" v-if="showModal">
+      <div class="drawer-content" v-if="showDialog" v-loading="detailLoading">
         <el-form
+          class="drawer-form"
           :label-position="'top'"
-          :inline="true"
           :model="ruleForm"
           :rules="rules"
           ref="ruleForm"
         >
-          <div class="df_center_wrap" style="max-height: 600px; overflow-y: auto">
+          <div class="df_center_wrap">
             <el-form-item
-              :label="$t('isagroup.校区')"
+              :label="$t('schoolbus.校区')"
               prop="schoolId"
               style="width: 33%"
               :class="{ detailFormItem: modalType == 'look' }"
@@ -31,14 +32,14 @@
               >
                 <el-option
                   :key="k"
-                  v-for="(i, k) in dictionary['school']"
-                  :label="i.enName"
+                  v-for="(i, k) in schoolSelectList"
+                  :label="schoolDropdownLabel(i)"
                   :value="i.id"
                 ></el-option>
               </el-select>
             </el-form-item>
             <el-form-item
-              :label="$t('isagroup.学期')"
+              :label="$t('schoolbus.学期')"
               prop="sectionId"
               style="width: 33%"
               :class="{ detailFormItem: modalType == 'look' }"
@@ -59,7 +60,7 @@
               </el-select>
             </el-form-item>
             <el-form-item
-              :label="$t('isagroup.学号')"
+              :label="$t('schoolbus.学号')"
               prop="admissionNo"
               style="width: 33%"
               :class="{ detailFormItem: modalType == 'look' }"
@@ -80,7 +81,7 @@
               ></el-autocomplete>
             </el-form-item>
             <el-form-item
-              :label="$t('isagroup.姓名')"
+              :label="$t('schoolbus.姓名')"
               prop="studentName"
               style="width: 33%"
               :class="{ detailFormItem: modalType == 'look' }"
@@ -93,7 +94,7 @@
               ></el-input>
             </el-form-item>
             <el-form-item
-              :label="$t('isagroup.年级')"
+              :label="$t('schoolbus.年级')"
               prop="studentGrade"
               style="width: 33%"
               :class="{ detailFormItem: modalType == 'look' }"
@@ -106,7 +107,7 @@
               ></el-input>
             </el-form-item>
             <el-form-item
-              :label="$t('isagroup.应缴金额')"
+              :label="$t('schoolbus.应缴金额')"
               prop="amountDue"
               style="width: 33%"
               :class="{ detailFormItem: modalType == 'look' }"
@@ -121,7 +122,7 @@
               ></el-input-number>
             </el-form-item>
             <el-form-item
-              :label="$t('isagroup.接送方式')"
+              :label="$t('schoolbus.接送方式')"
               prop="pickupMethod"
               style="width: 33%"
               :class="{ detailFormItem: modalType == 'look' }"
@@ -143,7 +144,7 @@
 
             <div class="df_center_wrap form_item" style="width: 100%">
               <div class="form_item_top df_sb">
-                <span class="form_item_top_name">{{ $t("isagroup.路线选择") }}</span>
+                <span class="form_item_top_name">{{ $t("schoolbus.路线选择") }}</span>
                 <el-button
                   v-if="modalType != 'look'"
                   @click="addRoute"
@@ -151,7 +152,7 @@
                   size="small"
                   type="text"
                   icon="el-icon-plus"
-                  >{{ $t("isagroup.增加路线") }}</el-button
+                  >{{ $t("schoolbus.增加路线") }}</el-button
                 >
               </div>
               <div style="width: 100%">
@@ -161,10 +162,10 @@
                   style="width: 100%"
                 >
                   <el-table-column
-                    v-for="(i, k) in tabletitle['bindRouteTable']"
+                    v-for="(i, k) in bindRouteTableColumns"
                     :key="k"
                     :prop="i['prop']"
-                    :label="i['hasEn'] ? $t('isagroup')[i['label']] : i['label']"
+                    :label="i['label']"
                     show-overflow-tooltip
                     :width="`${i['width']}`"
                     :fixed="i['fixed']"
@@ -183,14 +184,14 @@
                           type="text"
                           size="small"
                           @click="editCurrentRoute(scope.row, scope.$index)"
-                          >{{ $t("isagroup.编辑") }}</el-button
+                          >{{ $t("schoolbus.编辑") }}</el-button
                         >
                         <el-button
                           class="button_text"
                           type="text"
                           size="small"
                           @click="delCurrentRoute(scope.row, scope.$index)"
-                          >{{ $t("isagroup.删除") }}</el-button
+                          >{{ $t("schoolbus.删除") }}</el-button
                         >
                       </span>
                     </template>
@@ -200,7 +201,7 @@
             </div>
             <!-- <div class="df_center_wrap form_item" style="width: 100%">
               <div class="form_item_top df_sb">
-                <span class="form_item_top_name">{{ $t("isagroup.接送信息") }}</span>
+                <span class="form_item_top_name">{{ $t("schoolbus.接送信息") }}</span>
               </div>
             </div> -->
             <div
@@ -209,7 +210,7 @@
               style="width: 100%"
             >
               <div class="form_item_top df_sb">
-                <span class="form_item_top_name">{{ $t("isagroup.接送人信息") }}</span>
+                <span class="form_item_top_name">{{ $t("schoolbus.接送人信息") }}</span>
                 <el-button
                   v-if="modalType != 'look'"
                   @click="addPerson"
@@ -217,7 +218,7 @@
                   size="small"
                   type="text"
                   icon="el-icon-plus"
-                  >{{ $t("isagroup.增加接送人") }}</el-button
+                  >{{ $t("schoolbus.增加接送人") }}</el-button
                 >
               </div>
               <div class="isa_table">
@@ -228,10 +229,10 @@
                     style="width: 100%"
                   >
                     <el-table-column
-                      v-for="(i, k) in tabletitle['bindPersonTable']"
+                      v-for="(i, k) in bindPersonTableColumns"
                       :key="k"
                       :prop="i['prop']"
-                      :label="i['hasEn'] ? $t('isagroup')[i['label']] : i['label']"
+                      :label="i['label']"
                       show-overflow-tooltip
                       :width="`${i['width']}`"
                       :fixed="i['fixed']"
@@ -250,14 +251,14 @@
                             type="text"
                             size="small"
                             @click="editCurrentPerson(scope.row, scope.$index)"
-                            >{{ $t("isagroup.编辑") }}</el-button
+                            >{{ $t("schoolbus.编辑") }}</el-button
                           >
                           <el-button
                             class="button_text"
                             type="text"
                             size="small"
                             @click="delCurrentPerson(scope.row, scope.$index)"
-                            >{{ $t("isagroup.删除") }}</el-button
+                            >{{ $t("schoolbus.删除") }}</el-button
                           >
                         </span>
                       </template>
@@ -268,7 +269,7 @@
             </div>
           </div>
           <el-form-item
-            :label="$t('isagroup.审批状态')"
+            :label="$t('schoolbus.审批状态')"
             prop="approvalStatus"
             style="width: 100%; margin-top: 20px"
             :class="{ detailFormItem: modalType == 'look' }"
@@ -282,14 +283,14 @@
               <el-radio
                 :label="i.value"
                 :key="k"
-                v-for="(i, k) in consts['approvalStatus']"
+                v-for="(i, k) in approvalStatusOptions"
                 >{{ i.label }}</el-radio
               >
             </el-radio-group>
           </el-form-item>
           <el-form-item
             v-if="ruleForm.approvalStatus == '2'"
-            :label="$t('isagroup.拒绝理由')"
+            :label="$t('schoolbus.拒绝理由')"
             prop="denyReason"
             style="width: 100%"
             :class="{ detailFormItem: modalType == 'look' }"
@@ -305,7 +306,7 @@
             ></el-input>
           </el-form-item>
           <el-form-item
-            :label="$t('isagroup.缴费状态')"
+            :label="$t('schoolbus.缴费状态')"
             prop="paymentStatus"
             style="width: 100%"
             :class="{ detailFormItem: modalType == 'look' }"
@@ -319,7 +320,7 @@
                 style="display: flex; align-items: center"
                 :label="i.value"
                 :key="k"
-                v-for="(i, k) in consts['paymentStatus']"
+                v-for="(i, k) in paymentStatusOptions"
                 :disabled="modalType == 'look'"
               >
                 <div style="display: flex; align-items: center">
@@ -339,7 +340,7 @@
           </el-form-item>
           <el-form-item
             v-if="ruleForm.paymentStatus == '1'"
-            :label="$t('isagroup.签名')"
+            :label="$t('schoolbus.签名')"
             prop="signImageUrl"
             style="width: 33%"
           >
@@ -350,37 +351,34 @@
               @upload-success="uploadSignup"
             />
           </el-form-item>
-          <el-form-item class="modalFromBtn" v-if="modalType != 'look'">
-            <el-button type="primary" size="medium" @click="submitForm('ruleForm')">{{
-              $t("consult.保存")
-            }}</el-button>
-            <el-button type="default" size="medium" @click="closeModal">{{
-              $t("consult.取消")
-            }}</el-button>
-          </el-form-item>
         </el-form>
+        <div class="drawer-footer" v-if="modalType !== 'look'">
+          <el-button @click="closeModal">{{ $t("btn.取消") }}</el-button>
+          <el-button type="primary" :loading="isSubmitting" @click="submitForm('ruleForm')">
+            {{ $t("consult.保存") }}
+          </el-button>
+        </div>
       </div>
-      <!-- 新增路线 -->
+    </el-drawer>
+      <!-- 新增路线（子表单弹窗） -->
       <el-dialog
         style="z-index: 99999"
-        :title="$t('isagroup')[typeObj[routeModalType]]"
+        :title="$t('schoolbus')[typeObj[routeModalType]]"
         :visible.sync="showRouteModal"
         width="450px"
         :before-close="closeRoute"
         :modal-append-to-body="false"
         :close-on-click-modal="false"
-        :modal="false"
       >
         <el-form
           :label-position="'top'"
           :inline="true"
           :model="routeForm"
           :rules="routeRules"
-          :modal="false"
           ref="routeForm"
         >
           <div class="moadlFromBox">
-            <el-form-item style="width: 100%" :label="$t('isagroup.路线')" prop="lineId">
+            <el-form-item style="width: 100%" :label="$t('schoolbus.路线')" prop="lineId">
               <el-select
                 style="width: 100%"
                 v-model="routeForm['lineId']"
@@ -396,7 +394,7 @@
               </el-select>
             </el-form-item>
             <el-form-item
-              :label="$t('isagroup.路线类型')"
+              :label="$t('schoolbus.路线类型')"
               prop="studentLineType"
               style="width: 100%"
             >
@@ -408,15 +406,15 @@
               >
                 <el-option
                   :key="k"
-                  v-for="(i, k) in consts['routeType']"
-                  :label="$t('isagroup')[i.label]"
+                  v-for="(i, k) in routeTypeOptions"
+                  :label="$t('schoolbus')[i.label]"
                   :value="i.value"
                 ></el-option>
               </el-select>
             </el-form-item>
             <el-form-item
               style="width: 100%"
-              :label="$t('isagroup.站点')"
+              :label="$t('schoolbus.站点')"
               prop="stationId"
             >
               <el-select
@@ -434,7 +432,7 @@
               </el-select>
             </el-form-item>
             <el-form-item
-              :label="$t('isagroup.起止时间')"
+              :label="$t('schoolbus.起止时间')"
               prop="ridingDay"
               style="width: 100%"
             >
@@ -467,26 +465,24 @@
       <!-- 新增接送人 -->
       <el-dialog
         style="z-index: 99999"
-        :title="$t('isagroup')[typeObj[personModalType]]"
+        :title="$t('schoolbus')[typeObj[personModalType]]"
         :visible.sync="showPersonModal"
         width="350px"
         :before-close="closePerson"
         :modal-append-to-body="false"
         :close-on-click-modal="false"
-        :modal="false"
       >
         <el-form
           :label-position="'top'"
           :inline="true"
           :model="personForm"
           :rules="personRules"
-          :modal="false"
           ref="personForm"
         >
           <div class="moadlFromBox">
             <el-form-item
               style="width: 100%"
-              :label="$t('isagroup.关系')"
+              :label="$t('schoolbus.关系')"
               prop="stationId"
             >
               <el-input
@@ -497,7 +493,7 @@
             </el-form-item>
             <el-form-item
               style="width: 100%"
-              :label="$t('isagroup.联系方式')"
+              :label="$t('schoolbus.联系方式')"
               prop="stationId"
             >
               <el-input
@@ -508,7 +504,7 @@
             </el-form-item>
             <el-form-item
               style="width: 100%"
-              :label="$t('isagroup.照片')"
+              :label="$t('schoolbus.照片')"
               prop="pickupImageUrl"
             >
               <UploadPersonFile
@@ -529,7 +525,6 @@
           </div>
         </el-form>
       </el-dialog>
-    </el-dialog>
   </div>
 </template>
 
@@ -549,41 +544,36 @@ import {
   getOrderDetail,
 } from "@/api/isacommunity/busorder.js";
 import Table from "@/components/communitycommon/Table.vue";
-import tabletitle from "@/const/isacommunity/tabletitle.js";
-import consts from "@/const/isacommunity/consts.js";
+import {
+  BUS_APPROVAL_STATUS,
+  BUS_PAYMENT_STATUS,
+  BUS_ROUTE_TYPE,
+  BUS_TABLE_STYLE,
+  bindRouteTableColumns,
+  bindPersonTableColumns,
+} from "../../../schoolbusConsts.js";
 import UploadPersonFile from "@/components/communitycommon/uploadFile.vue";
 import UploadSignupFile from "@/components/communitycommon/uploadFile.vue";
 import _ from "lodash";
+import schoolListBuscommonMixin from "@/mixins/schoolListBuscommon.js";
 export default {
   name: "operation",
+  mixins: [schoolListBuscommonMixin],
   components: { Table, UploadPersonFile, UploadSignupFile },
   props: {},
 
   data() {
     let that = this;
     return {
-      consts: consts,
-      tabletitle: tabletitle,
-      tablestyle: {
-        headercellstyle: {
-          background: "#F5F8FD",
-          color: "#333333 !important",
-          "font-size": "14px",
-          "font-weight": "400",
-          height: "38px",
-          "font-family": "AlibabaPuHuiTiM",
-        },
-        rowstyle: {
-          color: " #666666",
-          "font-size": "14px",
-          "font-weight": "400",
-          height: "44px",
-          padding: "0px",
-        },
-      },
+      approvalStatusOptions: BUS_APPROVAL_STATUS,
+      paymentStatusOptions: BUS_PAYMENT_STATUS,
+      routeTypeOptions: BUS_ROUTE_TYPE,
+      tablestyle: BUS_TABLE_STYLE,
       typeObj: { add: "新增", edit: "编辑", look: "查看" },
       modalType: "add",
-      showModal: false,
+      showDialog: false,
+      detailLoading: false,
+      isSubmitting: false,
       ruleForm: {},
       rules: {
         schoolId: [{ required: true, message: "请选择", trigger: "blur" }],
@@ -645,9 +635,19 @@ export default {
     this.initData();
   },
   computed: {
-    ...mapGetters(["pooldictpermissions", "permissions", "dictionary", "i18nlocel"]),
+    ...mapGetters(["pooldictpermissions", "permissions", "i18nlocel"]),
+    drawerTitle() {
+      const key = this.typeObj[this.modalType] || "新增";
+      return this.$t('schoolbus')[key];
+    },
     routeTableDataClone() {
       return JSON.parse(JSON.stringify(this.routeTableData));
+    },
+    bindRouteTableColumns() {
+      return bindRouteTableColumns(this);
+    },
+    bindPersonTableColumns() {
+      return bindPersonTableColumns(this);
     },
   },
   watch: {
@@ -666,34 +666,54 @@ export default {
       this.pickupMethod = await getPickupMethodList();
     },
     // 打开
-    showForm(type = "add", item = {}) {
-      console.log("222showForm", type);
-
+    async showForm(type = "add", item = {}) {
+      await this.fetchSchoolListBuscommon();
       this.modalType = type;
-      this.showModal = true;
-      if (this.modalType != "add") {
-        this.getDetail(item.id);
+      this.showDialog = true;
+      this.detailLoading = type !== "add";
+      try {
+        if (this.modalType != "add") {
+          await this.getDetail(item.id);
+        } else if (this.schoolSelectList.length === 1) {
+          const schoolId = this.schoolSelectList[0].id;
+          this.$nextTick(() => {
+            this.ruleForm = { ...this.ruleForm, schoolId };
+            this.changeSchool(schoolId);
+          });
+        }
+      } finally {
+        this.detailLoading = false;
       }
     },
     // 新增
     addData(data) {
-      addOrder(data).then((res) => {
-        if (res.data.success) {
-          this.$message.success(this.$t("isagroup.成功"));
-          this.$emit("getList");
-          this.closeModal();
-        }
-      });
+      this.isSubmitting = true;
+      addOrder(data)
+        .then((res) => {
+          if (res.data.success) {
+            this.$message.success(this.$t("schoolbus.成功"));
+            this.$emit("getList");
+            this.closeModal();
+          }
+        })
+        .finally(() => {
+          this.isSubmitting = false;
+        });
     },
     // 编辑
     editData(data) {
-      editOrder(data).then((res) => {
-        if (res.data.success) {
-          this.$message.success(this.$t("isagroup.成功"));
-          this.$emit("getList");
-          this.closeModal();
-        }
-      });
+      this.isSubmitting = true;
+      editOrder(data)
+        .then((res) => {
+          if (res.data.success) {
+            this.$message.success(this.$t("schoolbus.成功"));
+            this.$emit("getList");
+            this.closeModal();
+          }
+        })
+        .finally(() => {
+          this.isSubmitting = false;
+        });
     },
     // 初始化数据
     initData() {
@@ -704,7 +724,7 @@ export default {
     },
     // 获取详情
     getDetail(id) {
-      getOrderDetail(id).then(async (res) => {
+      return getOrderDetail(id).then(async (res) => {
         if (res.data.success) {
           let data = res.data.data;
           let {
@@ -829,7 +849,7 @@ export default {
     },
     // 关闭
     closeModal() {
-      this.showModal = false;
+      this.showDialog = false;
       this.$refs.ruleForm.resetFields();
     },
 
@@ -893,7 +913,7 @@ export default {
     // 选择路线类型
     changeLineType(e) {
       this.routeForm["studentLineType"] = e;
-      consts["routeType"].map((item) => {
+      BUS_ROUTE_TYPE.map((item) => {
         if (item.value == e) {
           this.routeForm["lineTypeName"] = item.label;
         }
@@ -947,8 +967,8 @@ export default {
       this.showRouteModal = true;
     },
     delCurrentRoute(item, index) {
-      this.$alert(this.$t("isagroup.确定要删除吗？"), this.$t("isagroup.删除"), {
-        confirmButtonText: this.$t("isagroup.确定"),
+      this.$alert(this.$t("schoolbus.确定要删除吗？"), this.$t("schoolbus.删除"), {
+        confirmButtonText: this.$t("schoolbus.确定"),
       }).then(() => {
         this.routeTableData.splice(index, 1);
       });
@@ -991,8 +1011,8 @@ export default {
       }
     },
     delCurrentPerson(item, index) {
-      this.$alert(this.$t("isagroup.确定要删除吗？"), this.$t("isagroup.删除"), {
-        confirmButtonText: this.$t("isagroup.确定"),
+      this.$alert(this.$t("schoolbus.确定要删除吗？"), this.$t("schoolbus.删除"), {
+        confirmButtonText: this.$t("schoolbus.确定"),
       }).then(() => {
         this.personTableData.splice(index, 1);
       });
@@ -1022,7 +1042,7 @@ export default {
       return item ? item.enName : "";
     },
     routeTypeNameEn(id) {
-      const item = consts["routeType"].find((item) => item.value == id);
+      const item = BUS_ROUTE_TYPE.find((item) => item.value == id);
       return item ? item.enName : "";
     },
     // 上传接送人图片

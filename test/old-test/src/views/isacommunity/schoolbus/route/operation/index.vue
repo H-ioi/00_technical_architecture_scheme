@@ -1,159 +1,153 @@
 <template>
   <div class="community_page">
     <div class="community_top">
-      <div class="community_top_title">{{ $t("isagroup.路线运营") }}</div>
+      <div class="community_top_title">{{ $t("schoolbus.路线运营") }}</div>
       <div class="community_top_btn">
+        <el-button
+          v-if="permissions['busoperation_import']"
+          size="medium"
+          @click="batchUpdload"
+        >{{ $t("btn.导入") }}</el-button>
+        <el-button
+          v-if="permissions['busoperation_export']"
+          size="medium"
+          @click="exportData"
+        >{{ $t("btn.导出") }}</el-button>
         <el-button
           v-if="permissions['busoperation_add']"
           type="primary"
-          size="large"
+          size="medium"
           @click="showForm('add')"
-          >{{ $t("btn.新增") }}</el-button
-        >
-        <el-button
-          v-if="permissions['busoperation_import']"
-          type="defult"
-          size="large"
-          @click="batchUpdload"
-          >{{ $t("btn.导入") }}</el-button
-        >
-        <el-button
-          v-if="permissions['busoperation_export']"
-          type="defult"
-          size="large"
-          @click="exportData"
-          >{{ $t("btn.导出") }}</el-button
-        >
+        >{{ $t("btn.新增") }}</el-button>
       </div>
     </div>
-    <div class="community_centent">
-      <div class="community_searchFrom">
-        <el-form
-          class="df_align_center"
-          :label-position="'top'"
-          :inline="true"
-          :model="searchFrom"
-        >
-          <el-form-item style="width: 120px" v-if="schoolSelectList.length > 1">
-            <el-select
-              filterable
-              style="width: 100%"
-              v-model="searchFrom['schoolIds']"
-              :placeholder="$t('isagroup.请选择学校')"
-              multiple
-              @change="changeSchool"
-            >
-              <el-option
-                :key="i.id"
-                v-for="(i, k) in schoolSelectList"
-                :label="schoolDropdownLabel(i)"
-                :value="i.id"
-              ></el-option>
-            </el-select>
-          </el-form-item>
-          <el-form-item style="width: 120px">
-            <el-select
-              style="width: 100%"
-              v-model="searchFrom['lineIds']"
-              :placeholder="$t('isagroup.请选择路线')"
-              multiple
-            >
-              <el-option
-                :key="i.id"
-                v-for="(i, k) in selectLineList"
-                :label="i18nlocel == 'en' ? i.enName : i.cnName"
-                :value="i.id"
-              ></el-option>
-            </el-select>
-          </el-form-item>
-          <el-form-item style="width: 120px">
-            <el-select
-              filterable
-              style="width: 100%"
-              v-model="searchFrom['stationId']"
-              :placeholder="$t('isagroup.请选择站点')"
-            >
-              <el-option
-                :key="i.id"
-                v-for="(i, k) in selectStationList"
-                :label="i18nlocel == 'en' ? i.enName : i.cnName"
-                :value="i.id"
-              ></el-option>
-            </el-select>
-          </el-form-item>
-          <el-form-item style="width: 120px">
-            <el-select
-              style="width: 100%"
-              v-model="searchFrom['status']"
-              :placeholder="$t('isagroup.状态')"
-            >
-              <el-option
-                :key="i.value"
-                v-for="(i, k) in consts['operationStatus']"
-                :label="i18nlocel == 'en' ? i.enLabel : i.label"
-                :value="i.value"
-              ></el-option>
-            </el-select>
-          </el-form-item>
-          <el-form-item style="width: 120px">
-            <el-date-picker
-              style="width: 100%"
-              v-model="searchFrom['rideDateStart']"
-              type="date"
-              :placeholder="$t('isagroup.开始时间')"
-              value-format="yyyy-MM-dd"
-              format="yyyy-MM-dd"
-            >
-            </el-date-picker>
-          </el-form-item>
-          <el-form-item style="width: 120px">
-            <el-date-picker
-              style="width: 100%"
-              v-model="searchFrom['rideDateEnd']"
-              type="date"
-              :placeholder="$t('isagroup.结束时间')"
-              value-format="yyyy-MM-dd"
-              format="yyyy-MM-dd"
-            >
-            </el-date-picker>
-          </el-form-item>
-          <el-form-item style="width: auto; margin-right: 0">
-            <el-button
-              style="color: #2a3f54 !important"
-              class="button_text"
-              size="medium"
-              type="text"
-              icon="el-icon-refresh-right"
-              @click="clear"
-              >{{ $t("btn.重置") }}</el-button
-            >
-            <el-button size="medium" type="primary" @click="getList">{{
-              $t("btn.查询")
-            }}</el-button>
-          </el-form-item>
+    <div class="community_centent_v2">
+      <div class="search_body">
+        <el-form class="search_form" :label-position="'top'" :inline="true" :model="searchFrom">
+          <el-row :gutter="10">
+            <el-col v-if="schoolSelectList.length > 1" :span="6">
+              <el-form-item>
+                <el-select
+                  filterable
+                  v-model="searchFrom.schoolIds"
+                  :placeholder="$t('schoolbus.请选择学校')"
+                  multiple
+                  @change="changeSchool"
+                >
+                  <el-option
+                    v-for="i in schoolSelectList"
+                    :key="i.id"
+                    :label="schoolDropdownLabel(i)"
+                    :value="i.id"
+                  />
+                </el-select>
+              </el-form-item>
+            </el-col>
+            <el-col :span="6">
+              <el-form-item>
+                <el-select
+                  v-model="searchFrom.lineIds"
+                  :placeholder="$t('schoolbus.请选择路线')"
+                  multiple
+                >
+                  <el-option
+                    v-for="i in selectLineList"
+                    :key="i.id"
+                    :label="i18nlocel === 'en' ? i.enName : i.cnName"
+                    :value="i.id"
+                  />
+                </el-select>
+              </el-form-item>
+            </el-col>
+            <el-col :span="6">
+              <el-form-item>
+                <el-select
+                  filterable
+                  v-model="searchFrom.stationId"
+                  :placeholder="$t('schoolbus.请选择站点')"
+                >
+                  <el-option
+                    v-for="i in selectStationList"
+                    :key="i.id"
+                    :label="i18nlocel === 'en' ? i.enName : i.cnName"
+                    :value="i.id"
+                  />
+                </el-select>
+              </el-form-item>
+            </el-col>
+            <el-col :span="6">
+              <el-form-item>
+                <el-select
+                  v-model="searchFrom.status"
+                  :placeholder="$t('schoolbus.状态')"
+                >
+                  <el-option
+                    v-for="i in operationStatusOptions"
+                    :key="i.value"
+                    :label="i18nlocel === 'en' ? i.enLabel : i.label"
+                    :value="i.value"
+                  />
+                </el-select>
+              </el-form-item>
+            </el-col>
+            <template v-if="searchOpen">
+              <el-col :span="6">
+                <el-form-item>
+                  <el-date-picker
+                    v-model="searchFrom.rideDateStart"
+                    type="date"
+                    :placeholder="$t('schoolbus.开始时间')"
+                    value-format="yyyy-MM-dd"
+                    format="yyyy-MM-dd"
+                    style="width: 100%"
+                  />
+                </el-form-item>
+              </el-col>
+              <el-col :span="6">
+                <el-form-item>
+                  <el-date-picker
+                    v-model="searchFrom.rideDateEnd"
+                    type="date"
+                    :placeholder="$t('schoolbus.结束时间')"
+                    value-format="yyyy-MM-dd"
+                    format="yyyy-MM-dd"
+                    style="width: 100%"
+                  />
+                </el-form-item>
+              </el-col>
+            </template>
+          </el-row>
         </el-form>
+        <div class="search_btn">
+          <el-button type="primary" size="medium" @click="getList">{{ $t("btn.查询") }}</el-button>
+          <el-button text bg size="medium" @click="clear">{{ $t("btn.重置") }}</el-button>
+          <span class="open" @click="searchOpen = !searchOpen">
+            {{ searchOpen ? $t("schoolbus.收起") : $t("schoolbus.展开") }}
+          </span>
+        </div>
       </div>
 
       <div class="isa_table">
         <Table
           ref="Table"
           :showSelection="true"
-          :tableTitle="tabletitle['operationTable']"
+          :tableTitle="tableTitle"
           :tableData="tableData"
           :tableBtn="tableBtn"
+          :height="schoolbusTableHeight"
           @playTab="playTab"
           @rowClick="rowClick"
+          @selection-change="handleSelectionChange"
         />
         <div class="df_sb isa_table_footer">
           <div>
             <el-button
               v-if="permissions['busoperation_del']"
-              size="small"
+              :disabled="!selectedIds.length"
+              size="mini"
               type="danger"
-              plain
               @click="batchChange('del')"
-              >{{ $t("btn.删除") }}</el-button
-            >
+            >{{ $t("btn.删除") }}</el-button>
           </div>
           <Pagination
             :total="paginationTotal"
@@ -163,67 +157,46 @@
         </div>
       </div>
     </div>
-    <!-- 新增编辑弹窗 -->
     <Form ref="Form" @getList="getList" />
-    <!-- 详情弹窗 -->
-    <Detail ref="Detail" :title="$t('isagroup.详情')" />
-    <!-- 批量导入弹窗 -->
+    <Detail ref="Detail" :title="$t('schoolbus.详情')" />
     <BatchUpdload ref="BatchUpdload" @getList="getList" />
   </div>
 </template>
 
 <script>
 import { mapGetters } from "vuex";
-import {
-  getSectionList,
-  getStationList,
-  getLineList,
-} from "@/api/isacommunity/buscommon.js";
+import { getStationList, getLineList } from "@/api/isacommunity/buscommon.js";
 import {
   getOperationPage,
   delOperation,
   exportOperation,
 } from "@/api/isacommunity/busoperation.js";
 import { download } from "@/util/download.js";
-import tabletitle from "@/const/isacommunity/tabletitle.js";
-import consts from "@/const/isacommunity/consts.js";
+import { BUS_OPERATION_STATUS } from "../../schoolbusConsts.js";
 import Table from "@/components/communitycommon/Table.vue";
 import Pagination from "@/components/communitycommon/Pagination.vue";
 import Form from "./modal/form.vue";
 import Detail from "./modal/detail.vue";
 import BatchUpdload from "./modal/batchupdload.vue";
-// 引入 dayjs
 import dayjs from "dayjs";
 import schoolListBuscommonMixin from "@/mixins/schoolListBuscommon.js";
+import schoolbusListPage from "../../mixins/schoolbusListPage.js";
+
 export default {
   name: "teacher",
-  mixins: [schoolListBuscommonMixin],
+  mixins: [schoolListBuscommonMixin, schoolbusListPage],
   components: { Table, Pagination, Detail, Form, BatchUpdload },
   data() {
     return {
-      consts: consts,
-      tabletitle: tabletitle,
-      pagination: {
-        size: 10,
-        current: 1,
-      },
+      operationStatusOptions: BUS_OPERATION_STATUS,
+      pagination: { size: 10, current: 1 },
       paginationTotal: 0,
       searchFrom: {},
       tableData: [],
       tableBtn: [],
       permissionsBtn: [
-        {
-          name: "查看",
-          type: "look",
-          icon: "",
-          permissions: "",
-        },
-        {
-          name: "编辑",
-          type: "edit",
-          icon: "",
-          permissions: "busoperation_edit",
-        },
+        { name: "查看", type: "look", icon: "", permissions: "" },
+        { name: "编辑", type: "edit", icon: "", permissions: "busoperation_edit" },
       ],
       lineList: [],
       stationList: [],
@@ -236,12 +209,29 @@ export default {
     this.getBtn();
     this.initData();
   },
-  mounted() {},
   activated() {
     this.initData();
   },
   computed: {
     ...mapGetters(["permissions", "i18nlocel"]),
+    tableTitle() {
+      return [
+        { label: "ID", prop: "id", width: "70", fixed: true },
+        { label: this.$t("schoolbus.状态"), prop: "statusLabel", width: "90" },
+        { label: this.$t("schoolbus.实际状态"), prop: "arrivalStatusLabel", width: "100" },
+        { label: this.$t("schoolbus.校区"), prop: "schoolEnNames", minWidth: "140" },
+        { label: this.$t("schoolbus.学期"), prop: "sectionName", minWidth: "120" },
+        { label: this.$t("schoolbus.车牌号"), prop: "carNumber", width: "110" },
+        { label: this.$t("schoolbus.跟车老师"), prop: "carTeacher", minWidth: "120" },
+        { label: this.$t("schoolbus.路线"), prop: "lineName", minWidth: "120" },
+        { label: this.$t("schoolbus.站点"), prop: "stationName", minWidth: "120" },
+        { label: this.$t("schoolbus.乘车日期"), prop: "rideDate", width: "120" },
+        { label: this.$t("schoolbus.到达时间"), prop: "arrivalTime", width: "170" },
+        { label: this.$t("schoolbus.创建时间"), prop: "createTime", width: "170" },
+        { label: this.$t("schoolbus.更新时间"), prop: "updateTime", width: "170" },
+        { label: this.$t("schoolbus.备注"), prop: "remark", minWidth: "120" },
+      ];
+    },
   },
   watch: {
     i18nlocel() {
@@ -253,7 +243,7 @@ export default {
       this.getBtn();
       await this.fetchSchoolListBuscommon();
       if (this.schoolSelectList.length === 1) {
-        this.pagination["schoolIds"] = this.schoolSelectList[0].id;
+        this.pagination.schoolIds = this.schoolSelectList[0].id;
       }
       this.getList();
       this.getSeclectList();
@@ -262,17 +252,13 @@ export default {
       this.lineList = await getLineList();
       this.stationList = await getStationList();
       if (this.schoolSelectList.length === 1) {
-        this.changeSchool(this.pagination["schoolIds"]);
+        this.changeSchool(this.pagination.schoolIds);
       }
     },
     getList() {
-      getOperationPage({
-        ...this.pagination,
-        ...this.searchFrom,
-      }).then((res) => {
+      getOperationPage({ ...this.pagination, ...this.searchFrom }).then((res) => {
         if (res.data.success) {
-          console.log("getList", res.data.data);
-          let { total, data } = res.data.data;
+          const { total, data } = res.data.data;
           this.paginationTotal = total;
           this.tableData = data;
           this.formatData();
@@ -280,102 +266,79 @@ export default {
       });
     },
     formatData() {
-      this.tableData.map((item) => {
-        item["sectionName"] =
-          this.i18nlocel == "en" ? item["sectionEnName"] : item["sectionCnName"];
-        item["statusLabel"] = this.$getListLabel(
-          consts["operationStatus"],
-          item["status"]
+      this.tableData.forEach((item) => {
+        this.applySchoolEnNamesFromIds(item);
+        item.sectionName =
+          this.i18nlocel === "en" ? item.sectionEnName : item.sectionCnName;
+        item.statusLabel = this.$getListLabel(BUS_OPERATION_STATUS, item.status);
+        item.arrivalStatusLabel = this.$getListLabel(
+          BUS_OPERATION_STATUS,
+          item.arrivalStatus
         );
-        item["arrivalStatusLabel"] = this.$getListLabel(
-          consts["operationStatus"],
-          item["arrivalStatus"]
-        );
-        item["rideDate"] = item["rideDate"]
-          ? dayjs(item["rideDate"]).format("YYYY-MM-DD")
+        item.rideDate = item.rideDate
+          ? dayjs(item.rideDate).format("YYYY-MM-DD")
           : "--";
-        item["arrivalTime"] = item["arrivalTime"]
-          ? dayjs(item["arrivalTime"]).format("YYYY-MM-DD HH:mm")
+        item.arrivalTime = item.arrivalTime
+          ? dayjs(item.arrivalTime).format("YYYY-MM-DD HH:mm")
           : "--";
-        item["createTime"] = item["createTime"]
-          ? dayjs(item["createTime"]).format("YYYY-MM-DD HH:mm")
+        item.createTime = item.createTime
+          ? dayjs(item.createTime).format("YYYY-MM-DD HH:mm")
           : "--";
-        item["updateTime"] = item["updateTime"]
-          ? dayjs(item["updateTime"]).format("YYYY-MM-DD HH:mm")
+        item.updateTime = item.updateTime
+          ? dayjs(item.updateTime).format("YYYY-MM-DD HH:mm")
           : "--";
       });
     },
-    playTab(name, item, scope) {
-      this.currenntItem = item;
-      switch (name) {
-        case "look":
-          this.rowClick(item);
-          break;
-        case "edit":
-          this.showForm("edit", item);
-          break;
-      }
+    playTab(name, item) {
+      if (name === "look") this.rowClick(item);
+      else if (name === "edit") this.showForm("edit", item);
     },
     batchChange(type) {
-      let selectionId = this.$refs.Table.selectionId;
-      switch (type) {
-        case "del":
-          if (selectionId.length > 0) {
-            this.$alert(this.$t("isagroup.确定要删除吗？"), this.$t("isagroup.删除"), {
-              confirmButtonText: this.$t("isagroup.确定"),
-            }).then(() => {
-              delOperation({ ids: selectionId }).then((res) => {
-                if (res.data.success) {
-                  this.$message.success(this.$t("isagroup.成功"));
-                  this.getList();
-                }
-              });
-            });
-          }
-          break;
+      if (type === "del") {
+        this.confirmBatchDelete(() => {
+          delOperation({ ids: this.selectedIds }).then((res) => {
+            if (res.data.success) {
+              this.$message.success(this.$t("schoolbus.成功"));
+              this.getList();
+            }
+          });
+        });
       }
     },
     exportData() {
-      let data = {
-        ...this.pagination,
-        ...this.searchFrom,
-      };
-      console.log("exportData", this.pagination, this.searchFrom);
-
-      delete data["size"];
-      delete data["current"];
+      const data = { ...this.pagination, ...this.searchFrom };
+      delete data.size;
+      delete data.current;
       exportOperation(data).then((res) => {
         this.$message.success(this.$t("consult.成功"));
         download(res.data, res.headers["content-disposition"]);
       });
     },
-    rowClick(row, column, event) {
-      this.$refs["Detail"].showModal(row);
+    rowClick(row) {
+      this.$refs.Detail.showModal(row);
     },
     clear() {
       this.searchFrom = {};
       this.selectLineList = [];
       this.selectStationList = [];
+      this.pagination.current = 1;
       this.getList();
     },
-    // 分页
     handleCurrentChange(page) {
-      this.pagination["current"] = page;
+      this.pagination.current = page;
       this.getList();
     },
     getBtn() {
-      this.tableBtn = this.permissionsBtn.filter((item) => {
-        return this.permissions[item["permissions"]] || item["type"] == "look";
-      });
+      this.tableBtn = this.permissionsBtn.filter(
+        (item) => this.permissions[item.permissions] || item.type === "look"
+      );
     },
     showForm(type = "look", item = {}) {
-      console.log("111showForm", type);
       this.$refs.Form.showForm(type, item);
     },
     batchUpdload() {
       this.$refs.BatchUpdload.showUpload = true;
     },
-    // 选择校区
     changeSchool(e) {
       const selectedSchoolIds = new Set(e);
       this.selectLineList = this.lineList.filter((item) => {
@@ -394,11 +357,3 @@ export default {
   },
 };
 </script>
-
-<style lang="scss" scoped>
-.tablelist {
-  background-color: #fff;
-  padding: 20px;
-  box-sizing: border-box;
-}
-</style>

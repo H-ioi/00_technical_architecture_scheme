@@ -15,6 +15,7 @@ import ISA from './isa/'
 import Academy from './academy/'
 import Isacommunity from './isacommunity/'
 import Ems from './ems/'
+import SchoolDoctor from './schoolDoctor/'
 Vue.use(VueRouter)
 const originalPush = VueRouter.prototype.push
 VueRouter.prototype.push = function (location) {
@@ -22,7 +23,7 @@ VueRouter.prototype.push = function (location) {
 }
 //创建路由
 export const createRouter = () => new VueRouter({
-	routes: [...PageRouter, ...ViewsRouter, ...User, ...Order, ...Space, ...Reservation, ...Assets, ...Consult, ...Notification, ...ISA, ...Academy, ...Isacommunity, ...Ems]
+	routes: [...PageRouter, ...ViewsRouter, ...User, ...Order, ...Space, ...Reservation, ...Assets, ...Consult, ...Notification, ...ISA, ...Academy, ...Isacommunity, ...Ems, ...SchoolDoctor]
 
 })
 

@@ -13,7 +13,9 @@
       :label="item.label"
       :prop="item.id"
       :ref="item.id"
-      :style="`width:${item.type == 'input' || item.type == 'select' ? '25%' : '100%'}`"
+      :style="`width:${
+        item.type == 'input' || item.type == 'select' ? '25%' : '100%'
+      }`"
       :class="[
         'list-complete-item',
         {
@@ -111,18 +113,33 @@
         end-placeholder="结束"
         :picker-options="{
           disabledDate: (time) => {
-            if (!item.properties.datetime_begin && !item.properties.datetime_end) {
+            if (
+              !item.properties.datetime_begin &&
+              !item.properties.datetime_end
+            ) {
               return false;
-            } else if (!item.properties.datetime_begin && item.properties.datetime_end) {
-              return time.getTime() >= Date.parse(new Date(item.properties.datetime_end));
-            } else if (item.properties.datetime_begin && !item.properties.datetime_end) {
+            } else if (
+              !item.properties.datetime_begin &&
+              item.properties.datetime_end
+            ) {
               return (
-                time.getTime() <= Date.parse(new Date(item.properties.datetime_begin))
+                time.getTime() >=
+                Date.parse(new Date(item.properties.datetime_end))
+              );
+            } else if (
+              item.properties.datetime_begin &&
+              !item.properties.datetime_end
+            ) {
+              return (
+                time.getTime() <=
+                Date.parse(new Date(item.properties.datetime_begin))
               );
             } else {
               return !(
-                Date.parse(new Date(item.properties.datetime_begin)) <= time.getTime() &&
-                time.getTime() <= Date.parse(new Date(item.properties.datetime_end))
+                Date.parse(new Date(item.properties.datetime_begin)) <=
+                  time.getTime() &&
+                time.getTime() <=
+                  Date.parse(new Date(item.properties.datetime_end))
               );
             }
           },
@@ -169,7 +186,12 @@ import {
   getDynamicDetailList,
 } from "@/api/space/templatedynamic.js";
 import { formlist, dateTimeType, uploadAccept, setformrules } from "./form.js";
-import { uploadFile, deleteFiles, getFiles, downloadFile } from "@/api/upload/index.js";
+import {
+  uploadFile,
+  deleteFiles,
+  getFiles,
+  downloadFile,
+} from "@/api/upload/index.js";
 import { download } from "@/util/download.js";
 import { regeList } from "@/const/space/regex.js";
 import { deepClone } from "@/util/util";
@@ -251,7 +273,9 @@ export default {
                 option_multi = true;
               }
               // 截取id字符串专黄成数组
-              let value = item.value.substring(1, item.value.length - 1).split(",");
+              let value = item.value
+                .substring(1, item.value.length - 1)
+                .split(",");
               //查询id值是否在可选择值中
               option.map((o) => {
                 if (value.includes(o.id)) {
@@ -270,7 +294,9 @@ export default {
                   isArr = d.isArr;
                 }
               });
-              this.formArrValue[item.templateFormFieldId] = isArr ? date : String(date);
+              this.formArrValue[item.templateFormFieldId] = isArr
+                ? date
+                : String(date);
             } else if (type == "upload") {
               let ids = JSON.parse(item.value);
               if (ids.length === 0) return;
@@ -287,7 +313,9 @@ export default {
                     list.push(obj);
                   });
                   this.formArrValue[item.templateFormFieldId] = list;
-                  this.formArrValue = JSON.parse(JSON.stringify(this.formArrValue));
+                  this.formArrValue = JSON.parse(
+                    JSON.stringify(this.formArrValue)
+                  );
                 }
               });
             } else {
@@ -312,10 +340,16 @@ export default {
               let item = this.formArr.filter((item) => {
                 return item.id == res;
               });
-              if (item[0].type == "select" && !item[0].properties.option_multi) {
+              if (
+                item[0].type == "select" &&
+                !item[0].properties.option_multi
+              ) {
                 fromData[res] = [fromData[res]];
               }
-              if (item[0].type == "datetimepicker" && typeof fromData[res] == "string") {
+              if (
+                item[0].type == "datetimepicker" &&
+                typeof fromData[res] == "string"
+              ) {
                 fromData[res] = [fromData[res]];
               } else {
                 obj["value"] = JSON.stringify(fromData[res]);
@@ -621,31 +655,3 @@ export default {
   }
 }
 </style>
-> //获取动态表单模板详情 getDynamicDetail(templateVlue) { this.type = "edit"; let { fields
-} = templateVlue; // 创建formArr的fieldId映射，避免多次filter操作 const formArrMap = new
-Map(); this.formArr.forEach((item) => { formArrMap.set(item.fieldId, item); }); //
-处理每个字段 fields.forEach((item) => { const fromItem = formArrMap.get(item.fieldId); if
-(!fromItem) return; // 容错处理 // 确保字段ID匹配：使用item.id作为键名，与模板中的绑定一致
-const fieldId = fromItem.id; const type = item.fieldType; // 根据字段类型处理不同的数据
-switch (type) { case "select": case "checkbox": { const option_multi = type === "checkbox"
-|| item.properties.option_multi; const option = item.properties.option; const valueStr =
-item.value || "[]"; try { // 安全解析JSON，避免格式错误导致的异常 const values =
-JSON.parse(valueStr); const idArr = option .filter((opt) => values.includes(opt.id))
-.map((opt) => opt.id); // 使用Vue的$set方法确保响应式更新 this.$set(this.formArrValue,
-fieldId, option_multi ? idArr : idArr[0] || ""); } catch (e) {
-console.error("解析选项值失败:", e); this.$set(this.formArrValue, fieldId, option_multi ?
-[] : ""); } break; } case "datetimepicker": { const datetime_type =
-fromItem.properties.datetime_type; // 直接查找对应的日期类型配置，避免多次遍历 const
-dateConfig = dateTimeType.find((d) => d.type === datetime_type); const isArr = dateConfig
-? dateConfig.isArr : false; try { const date = JSON.parse(item.value);
-this.$set(this.formArrValue, fieldId, isArr ? date : String(date || "")); } catch (e) {
-console.error("解析日期值失败:", e); this.$set(this.formArrValue, fieldId, isArr ? [] :
-""); } break; } case "upload": { try { const ids = JSON.parse(item.value || "[]"); if
-(ids.length > 0) { getFiles({ ids }) .then((res) => { if (res.data.success) { const list =
-res.data.data.map((file) => ({ name: file.originalName, id: file.id, }));
-this.$set(this.formArrValue, fieldId, list); } }) .catch((error) => {
-console.error("获取上传文件信息失败:", error); this.$set(this.formArrValue, fieldId, []);
-}); } else { this.$set(this.formArrValue, fieldId, []); } } catch (e) {
-console.error("解析上传文件ID失败:", e); this.$set(this.formArrValue, fieldId, []); }
-break; } default: // 处理文本输入等简单类型 this.$set(this.formArrValue, fieldId,
-item.value || ""); } }); }

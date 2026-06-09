@@ -33,7 +33,11 @@
             <span v-else>{{ scope.row[item["prop"]] }}</span>
           </template>
         </el-table-column>
-        <el-table-column fixed="right" :label="$t('consult.操作')" width="150px">
+        <el-table-column
+          fixed="right"
+          :label="$t('consult.操作')"
+          width="150px"
+        >
           <template slot-scope="scope" class="df_center">
             <el-button
               style="padding: 0; min-width: 50px"
@@ -47,9 +51,13 @@
         </el-table-column>
       </el-table>
       <div class="df_center modal_footer">
-        <el-button type="primary" size="medium" round @click="saveGuardianList">{{
-          $t("consult.保存")
-        }}</el-button>
+        <el-button
+          type="primary"
+          size="medium"
+          round
+          @click="saveGuardianList"
+          >{{ $t("consult.保存") }}</el-button
+        >
         <el-button type="default" size="medium" round @click="closeModal">{{
           $t("consult.取消")
         }}</el-button>
@@ -119,12 +127,20 @@
           />
         </div>
         <div class="df_center modal_footer">
-          <el-button type="primary" size="medium" round @click="handleAddguardian">{{
-            $t("consult.确定")
-          }}</el-button>
-          <el-button type="default" size="medium" round @click="closeInnerModal">{{
-            $t("consult.取消")
-          }}</el-button>
+          <el-button
+            type="primary"
+            size="medium"
+            round
+            @click="handleAddguardian"
+            >{{ $t("consult.确定") }}</el-button
+          >
+          <el-button
+            type="default"
+            size="medium"
+            round
+            @click="closeInnerModal"
+            >{{ $t("consult.取消") }}</el-button
+          >
         </div>
       </el-dialog>
     </el-dialog>
@@ -191,8 +207,8 @@ export default {
       tableData: [],
       tableBtn: [],
       pagination: {
-        size: 10,
-        current: 1,
+        pageSize: 50,
+        pageNum: 1,
       },
       paginationTotal: 0,
       searchFrom: { keyword: "" },
@@ -286,7 +302,7 @@ export default {
         .catch(() => {});
     },
     handleCurrentChange(page) {
-      this.pagination["current"] = page;
+      this.pagination["pageNum"] = page;
       this.getList();
     },
     handleCurrentTableItem(val) {
@@ -318,7 +334,7 @@ export default {
     closeInnerModal() {
       this.innerVisible = false;
       this.currentRow = {};
-      this.pagination["current"] = 1;
+      this.pagination["pageNum"] = 1;
       this.searchFrom = { keyword: "" };
       this.getList();
     },

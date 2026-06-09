@@ -1,48 +1,48 @@
 <template>
   <div class="thepool_page">
     <div class="schedule">
-      <div class="schedule_top">
-        <el-input
-          style="width: 200px; margin-bottom: 20px"
-          v-model="searchFrom['eventSubject']"
-          placeholder="输入关键字"
-          @change="changeWord"
-          @keyup.enter.native="changeWord"
-          clearable
-          @clear="changeWord"
-        ></el-input>
-        <div class="df_sb">
-          <el-date-picker
-            v-model="searchFrom['eventTime']"
-            type="datetimerange"
-            start-placeholder="开始时间"
-            end-placeholder="结束时间"
-            format="yyyy-MM-dd HH:mm"
-            value-format="yyyy-MM-dd HH:mm:ss"
-            @change="changeEventTime"
-          >
-          </el-date-picker>
+      <el-scrollbar style="height: 100%">
+        <div class="schedule_top">
+          <el-input
+            style="width: 200px; margin-bottom: 20px"
+            v-model="searchFrom['eventSubject']"
+            placeholder="输入关键字"
+            @change="changeWord"
+            @keyup.enter.native="changeWord"
+            clearable
+            @clear="changeWord"
+          ></el-input>
           <div class="df_sb">
-            <el-checkbox
-              style="margin: 0"
-              class="checkbox_center"
-              @change="changeCheckbox"
-              v-model="searchFrom['showTodayAndAfter']"
-              >{{ $t("consult.显示今天及以后的事件") }}</el-checkbox
+            <el-date-picker
+              v-model="searchFrom['eventTime']"
+              type="datetimerange"
+              start-placeholder="开始时间"
+              end-placeholder="结束时间"
+              format="yyyy-MM-dd HH:mm"
+              value-format="yyyy-MM-dd HH:mm:ss"
+              @change="changeEventTime"
             >
-            <el-checkbox
-              style="margin-left: 20px"
-              v-if="permissions['event_all_list']"
-              class="checkbox_center"
-              @change="changeAllEvent"
-              v-model="isAllEvent"
-              >{{ $t("consult.查看全部事件") }}</el-checkbox
-            >
+            </el-date-picker>
+            <div class="df_sb">
+              <el-checkbox
+                style="margin: 0"
+                class="checkbox_center"
+                @change="changeCheckbox"
+                v-model="searchFrom['showTodayAndAfter']"
+                >{{ $t("consult.显示今天及以后的事件") }}</el-checkbox
+              >
+              <el-checkbox
+                style="margin-left: 20px"
+                v-if="permissions['event_all_list']"
+                class="checkbox_center"
+                @change="changeAllEvent"
+                v-model="isAllEvent"
+                >{{ $t("consult.查看全部事件") }}</el-checkbox
+              >
+            </div>
           </div>
         </div>
-      </div>
-      <div class="schedule_content">
-        <el-scrollbar style="height: 520px">
+        <div class="schedule_content">
           <div class="schedule_list" v-if="scheduleList.length > 0">
             <div
               class="schedule_item"
@@ -62,20 +62,20 @@
             </div>
           </div>
           <el-empty v-else :description="$t('consult.暂无数据')"></el-empty>
-        </el-scrollbar>
-      </div>
+        </div>
 
-      <div class="df_sb palyTableBox" style="padding: 0">
-        <PaginationInfo
-          v-if="paginationTotal > 10"
-          :paginationTotal="paginationTotal"
-        />
-        <Pagination
-          :total="paginationTotal"
-          :pagination="pagination"
-          @handleCurrentChange="handleCurrentChange"
-        />
-      </div>
+        <div class="df_sb palyTableBox" style="padding: 0">
+          <PaginationInfo
+            v-if="paginationTotal > 10"
+            :paginationTotal="paginationTotal"
+          />
+          <Pagination
+            :total="paginationTotal"
+            :pagination="pagination"
+            @handleCurrentChange="handleCurrentChange"
+          />
+        </div>
+      </el-scrollbar>
     </div>
   </div>
 </template>

@@ -275,9 +275,12 @@ export default {
       let templateForm = await getTemplateInfoByType({ templateType: 3 });
       if (templateForm.length > 0) {
         this.showTemplate = true;
-        this.templateList = templateForm.find(
-          (dynamicItem) => dynamicItem.schoolId == this.ruleForm.applySchool
-        ).templates;
+        this.templateList = [];
+        templateForm.map((dynamicItem) => {
+          if (dynamicItem.schoolId == this.ruleForm.applySchool) {
+            this.templateList = dynamicItem.templates || [];
+          }
+        });
         this.$nextTick(() => {
           this.$refs[`FromItemClue`].getTemplateDetail(
             this.templateList[0],

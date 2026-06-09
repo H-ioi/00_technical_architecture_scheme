@@ -7,55 +7,44 @@
 
 
                 <el-form :model="form" :rules="rules" ref="form" label-width="100px">
-                    <el-form-item label="学校" prop="school" style="width: 100%;">
-                        <el-select v-model="form.school" placeholder="请选择学校" style="width: 100%;">
-                            <el-option v-for="school in schoolList" :key="school.enName" :label="school.enName"
-                                :value="school.enName"></el-option>
+                    <el-form-item :label="$t('dorm.学校')" prop="school" style="width: 100%;">
+                        <el-select v-model="form.school" :placeholder="$t('dorm.请选择学校')" style="width: 100%;"  @change="handleSchoolChange">
+                            <el-option v-for="school in schoolList" :key="school.externId" :label="school.enName" 
+                                :value="school.externId"></el-option>
                         </el-select>
                     </el-form-item>
 
-                    <el-form-item label="楼栋名称" prop="name">
-                        <el-input v-model="form.name" placeholder="请输入楼栋名称"></el-input>
-                    </el-form-item>
-
-
-                    <el-form-item label="楼层数" prop="department">
-                        <el-input v-model="form.department" placeholder="请输入楼层数"></el-input>
-                    </el-form-item>
-
-                    <el-form-item label="开始楼层" prop="department">
-                        <el-input v-model="form.department" placeholder="请输入楼层数"></el-input>
-                    </el-form-item>
-                    <el-form-item label="状态" prop="status">
-                        <el-select v-model="form.status" :placeholder="$t('dorm.状态')" clearable style="width: 100%;">
-                            <el-option :label="$t('dorm.启用')" value="1"></el-option>
-                            <el-option :label="$t('dorm.禁用')" value="0"></el-option>
-
+                      <el-form-item :label="$t('dorm.楼栋')" prop="buildingId" style="width: 100%;">
+                        <el-select v-model="form.buildingId" :placeholder="$t('dorm.请选择楼栋')" style="width: 100%;">
+                            <el-option v-for="building in buildingList" :key="building.id" :label="building.name"
+                                :value="building.id"></el-option>
                         </el-select>
                     </el-form-item>
 
 
+                    <el-form-item :label="$t('dorm.楼层名称')" prop="name">
+                        <el-input v-model="form.name" :placeholder="$t('dorm.请输入楼层名称')"></el-input>
+                    </el-form-item>
 
 
                 </el-form>
 
-                <div class="floor-dialog-footer">
-
+                  <div class="floor-dialog-footer">
+                    <el-button size="medium" @click="cancel">{{
+                        $t('attendance.取消') }}</el-button>
                     <el-button type="primary" size="medium" @click="submit()" class="submit-btn" :loading="loading">{{
-                        $t('attendance.确定申请') }}</el-button>
+                        $t('attendance.确定') }}</el-button>
                 </div>
             </div>
         </el-dialog>
-        <el-dialog :visible.sync="dialogVisible2" class="image-dialog">
-            <img width="100%" :src="dialogImageUrl" style="scale: 0.8;">
-        </el-dialog>
+
     </div>
 
 </template>
 
 <script>
-import { saveHoliday, updateHoliday, getStudentInfo, searchStudentList, } from "@/api/isacommunity/holiday.js";
-import myRequest from "@/router/axiosother.js";
+
+import { getBuildingList, saveFloor, updateFloor, getFloorDetail } from "@/api/isacommunity/dorm.js";
 
 export default {
     name: 'FloorDialog',
@@ -71,6 +60,10 @@ export default {
         isViewMode: {
             type: Boolean,
             default: false
+        },
+        schoolList: {
+            type: Array,
+            default: () => []
         }
     },
     data() {
@@ -78,62 +71,47 @@ export default {
             dialogImageUrl: '',
             dialogVisible2: false,
             fileList: [],
-            studentInfo: {}, // 存储学生详细信息
+            buildingList: [],
             loading: false, // 防止重复点击
             form: {
-                type: '',
-                scope: [],
-                fixed: '102',
+                id: '',
                 school: '',
                 name: '',
-                department: '',
-                startFloor: '',
-                reason: '',
-                remark: '',
                 status: '',
-                parentResponsible: false,
-                needPass: '101', // 是否需要放行条
-                processInstanceId: '',
-                taskId: '',
-                dataFrom: '',
+                buildingId: ''
             },
             rules: {
                 school: [
                     { required: true, message: this.$t('attendance.请选择学校'), trigger: 'change' }
                 ],
-                type: [
-                    { required: true, message: this.$t('attendance.请选择请假类型'), trigger: 'change' }
+                buildingId: [
+                    { required: true, message: this.$t('dorm.请选择楼栋'), trigger: 'change' }
                 ],
-                scope: [
-                    { required: true, message: this.$t('attendance.请选择请假范围'), trigger: 'change' }
+                name: [
+                    { required: true, message: this.$t('dorm.请输入楼层名称'), trigger: 'blur' }
                 ],
-                reason: [
-                    { required: true, message: this.$t('attendance.请填写请假原因'), trigger: 'blur' }
-                ],
-                dateRange: [
-                    { required: true, message: this.$t('attendance.请选择请假时间'), trigger: 'change' }
-                ],
-                dateLimit: [
-                    { required: true, message: this.$t('attendance.请选择请假时间'), trigger: 'change' }
-                ],
-                weekDays: [
-                    { required: true, message: this.$t('attendance.请选择星期'), trigger: 'change' }
-                ],
+            
             }
         }
     },
     watch: {
+    
         dialogVisible: {
-            handler(newVal) {
-              //  alert(newVal)
-                if (newVal) {
-                    // 对话框打开时重置表单
-                    //this.resetForm();
-                   // this.$nextTick(() => {
-                   //     if (this.$refs.form) {
-                            //this.$refs.form.clearValidate();
-                        //}
-                  //  });
+            handler(val) {
+                if (val) {
+                    if(this.schoolList.length == 1){
+                        this.form.school = this.schoolList[0].externId;
+                        this.loadBuildingList(this.schoolList[0].externId);
+                      }
+                    this.$nextTick(() => {
+                        if (this.$refs.form) {
+                            this.$refs.form.clearValidate();
+                        }
+                    });
+                    if (this.editData && this.editData.id) {
+                        // 如果有 editData 说明是编辑/查看模式，调用详情接口
+                        this.loadDetail(this.editData.id);
+                    }
                 } else {
                     // 对话框关闭时重置表单
                     this.resetForm();
@@ -146,38 +124,13 @@ export default {
                 if (newVal) {
                     // 将编辑数据加载到表单中
                     this.form.id = newVal.id // 保存id用于更新操作
-                    this.form.type = newVal.type || ''
-                    // 转换files为对象数组
-                    if (newVal.files && Array.isArray(newVal.files)) {
-                        this.fileList = newVal.files.map(fileUrl => {
+                    this.form.school = newVal.school || ''
+                    this.form.buildingId = newVal.buildingId || ''
+                    this.form.name = newVal.name || ''
+                  //  this.form.status = newVal.status || ''
+                    this.form.name = newVal.name || ''
 
-                            const fileName = fileUrl.split('/').pop()
-
-
-                            return {
-                                url: fileUrl.replace(/"/g, ''),
-                                name: fileName
-                            }
-                        })
-                    } else {
-                        this.fileList = []
-                    }
-                    this.form.scope = newVal.scope || []
-                    this.form.fixed = newVal.fixed || 'no'
-                    this.form.taskId = newVal.taskId || ''
-                    this.form.remark = newVal.remark || ''
-                    this.form.dataFrom = newVal.dataFrom || ''
-                    this.form.weekDays = newVal.weekDays || []
-                   
-                    this.form.dateLimit = newVal.dateLimit || []
-                    this.form.reason = newVal.reason || ''
-                    this.form.needPass = newVal.needPass || ''
-
-                    this.$nextTick(() => {
-                        this.form.admissonNo = newVal.admissonNo || ''
-                        this.handleSelect({ admissonNo: newVal.admissonNo })
-                    });
-                    this.form.parentResponsible = newVal.parentResponsible || false
+                    
                 }
             },
             deep: true,
@@ -186,90 +139,31 @@ export default {
     },
 
     methods: {
-        async beforeAvatarUpload(file) {
-            // 检查文件类型
+      
+   // 学校下拉框选中值改变时触发
+        handleSchoolChange(schoolId) {
+            
+            this.form.buildingId = ''
+            this.buildingList = []
 
-            const isLt2M = file.size / 1024 / 1024 < 20;
-
-            if (!isLt2M) {
-                this.$message.warning(this.$t('attendance.文件大小不能超过20MB'));
-                return false;
+            if (schoolId) {
+                this.loadBuildingList(schoolId);
             }
-            const formData = new FormData();
-            formData.append("file", file); // 将文件添加到 FormData 对象
-
+        },
+        async loadBuildingList(schoolId) {
             try {
-                const response = await myRequest.upload(formData, {
-                    headers: {
-                        'x-target-scene': 'community-new'
-                    }
-                });
-                // 上传成功，通过 $emit 通知父组件
-                console.log("response", response.data);
-                const url = response.data.url;
-                this.fileList.push({
-                    url: url,
-                    name: file.name
-                });
-                return true;
+                if (!schoolId) return;
+                // 假设 getBuildingList 接口支持传入 schoolId
+                const res = await getBuildingList({ schoolId: schoolId })
+                console.log('获取到的楼栋列表:', res);
+                this.buildingList = res || []
             } catch (error) {
-                console.error("文件上传失败", error);
-                return false;
-            }
-        },
-
-        // 挂载查询到的学生
-        async querySearch(queryString, cb) {
-            searchStudentList({ student: queryString }).then((res) => {
-                console.log(res, 'rrrrrrrr')
-                let data = res.data.data
-                let list = [];
-                data.forEach(item => {
-                    list.push({
-                        value: item.showName + '(' + item.admissonNo + ')',
-                        admissonNo: item.admissonNo,
-                    });
-                })
-                cb(list);
-            });
-        },
-
-        handleSelect(item) {
-            getStudentInfo({ admissonNo: item["admissonNo"] }).then(res => {
-                console.log(res, 'info');
-                // 存储学生信息
-                this.studentInfo = res.data.data
-            })
-            this.form.admissonNo = item["admissonNo"];
-            this.changeStyle("none", ".el-autocomplete-suggestion");
-            if (!item["admissonNo"]) {
-                this.form.admissonNo = "";
-                this.studentInfo = {};
-            }
-        },
-        changeStyle(status, className) {
-            let dom = document.querySelectorAll(className);
-            dom[0].style.display = status;
-        },
-
-        handleRemove(file, fileList) {
-            console.log("handleRemove", file, fileList);
-            this.fileList = fileList;
-            // 从表单的attachments中移除对应文件
-            const index = this.fileList.findIndex(attach => attach.name === file.name);
-            if (index > -1) {
-                this.fileList.splice(index, 1);
+                console.error('获取宿舍列表失败:', error)
             }
         },
 
 
-
-
-        handlePictureCardPreview(file) {
-            this.dialogVisible2 = true;
-            this.dialogImageUrl = file.url;
-
-        },
+    
         submit() {
             if (this.loading) return; // 防止重复点击
 
@@ -278,50 +172,15 @@ export default {
             this.$refs.form.validate((valid) => {
                 // 检查病假是否需要上传附件
                 if (valid) {
-                    if (this.form.type == 102 && this.fileList.length === 0) {
-                        this.$message.error(this.$t('attendance.病假必须上传附件'));
-                        this.loading = false; // 加载结束
-                        return false;
-                    }
+                    const request = this.form.id ? updateFloor : saveFloor
 
-                    // 检查家长是否负责
-                    if (!this.form.parentResponsible) {
-                        this.$message.error(this.$t('attendance.请勾选注意事项'));
-                        this.loading = false; // 加载结束
-                        return false;
-                    }
-
-                    // 将日期范围转换为开始日期和结束日期
-                    if (this.form.dateRange && this.form.dateRange.length === 2) {
-                        this.form.beginTime = this.form.dateRange[0]
-                        this.form.endTime = this.form.dateRange[1]
-                    }
-
-                    // 添加学生信息到表单中
-                    this.form.studentName = this.studentInfo.name || this.studentInfo.fullName || ''
-                    this.form.studentSchool = this.studentInfo.schoolName || this.studentInfo.enName || ''
-                    this.form.studentGrade = this.studentInfo.gradeName || this.studentInfo.grade || ''
-                    this.form.studentClass = this.studentInfo.formCode || ''
-                    this.form.processInstanceId = this.form.processInstanceId || ''
-                    this.form.taskId = this.form.taskId || ''
-                    // 如果是固定假，不需要传 dateLimit
-                    if (this.form.fixed == '101') {
-                        this.form.dateLimit = this.form.dateLimit || []
-                    } else {
-                        // 固定假不需要传 dateLimit
-                        delete this.form.dateLimit
-                    }
-                    this.form.source = 'admin'
-                    // 判断是新增还是更新
-                    const request = this.form.id ? updateHoliday : saveHoliday
+                    
                     const message = this.form.id ? this.$t('attendance.更新成功') : this.$t('attendance.新增成功')
                     if (this.fileList.length > 0) {
                         this.form.files = this.fileList.map(item => item.url)
                     }
-                    console.log(this.form, 'this.form')
 
                     request(this.form).then((res) => {
-                        console.log(res, 'restttt')
                         this.$message({
                             message: message,
                             type: 'success',
@@ -333,8 +192,7 @@ export default {
                         })
 
                     }).catch(err => {
-                        this.$message.error(this.$t('attendance.操作失败'))
-                        console.error(err)
+                      
                         this.loading = false; // 加载结束
                     })
                 } else {
@@ -349,6 +207,7 @@ export default {
             this.$emit('update:dialogVisible', false)
             this.$emit('dialog-cancel')
         },
+
         closeDialog(done) {
             this.resetForm()
             this.$emit('update:dialogVisible', false)
@@ -362,36 +221,34 @@ export default {
             }
             // 重置表单数据
             this.form = {
-                type: '',
-                scope: [],
-                fixed: '102',
-                weekDays: [],
-                dateRange: [],
-                files: [],
-                reason: '',
-                admissonNo: '',
-                dateLimit: ['08:00', '09:00'],
-                parentResponsible: false,
-                needPass: '101',
-                processInstanceId: '',
-                taskId: '',
+                id: '',
+                school: '',
+                name: '',
+                status: '',
+                buildingId: ''
             }
-            // 重置文件列表，保留默认图片
-            this.fileList = []
-            // 重置学生信息
-            this.studentInfo = {}
         },
-        handlePreview(file) {
-            console.log(file)
-        },
+      
 
-
-        handleFixedChange(val) {
-            // 当固定假改变时，重置相关字段
-            if (val === '102') {
-                this.form.weekDays = []
-            }
-            this.form.dateRange = []
+        // 获取详情
+        async loadDetail(id) {
+            try {
+                const res = await getFloorDetail(id);
+                if (res) {
+                    this.form = {
+                        id: res.id,
+                        school: res.building.school.extern_id ,
+                        buildingId: res.building.id ,
+                        name: res.name,
+                    };
+                  
+                    if (this.form.school) {
+                        this.loadBuildingList(this.form.school);
+                    }
+                }
+            } catch (error) {
+                console.error('获取详情失败:', error);
+            } 
         }
     }
 }

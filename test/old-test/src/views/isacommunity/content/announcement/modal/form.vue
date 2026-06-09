@@ -1,111 +1,39 @@
 <template>
   <div class="community_page">
-    <el-dialog
-      :title="$t('isagroup')[typeObj[modalType]]"
-      :visible.sync="showModal"
-      width="600px"
-      :before-close="closeModal"
-      :close-on-click-modal="false"
-    >
+    <el-dialog :title="$t('isagroup')[typeObj[modalType]]" :visible.sync="showModal" width="600px"
+      :before-close="closeModal" :close-on-click-modal="false">
       <div class="moadlFromBox" v-if="showModal">
-        <el-form
-          :label-position="'top'"
-          :inline="true"
-          :model="ruleForm"
-          :rules="rules"
-          ref="ruleForm"
-        >
-          <div
-            class="df_center_wrap"
-            style="max-height: 600px; overflow-y: auto"
-          >
-            <el-form-item
-              :label="$t('isagroup.校区')"
-              prop="schoolId"
-              style="width: 100%"
-            >
-              <el-select
-                clearable
-                style="width: 100%"
-                v-model="ruleForm.schoolId"
-                :placeholder="$t('isagroup.请选择')"
-              >
-                <el-option
-                  v-for="(i, k) in schoolList"
-                  :label="i18nlocel == 'en' ? i.enName : i.cnName"
-                  :value="i.id"
-                ></el-option>
+        <el-form :label-position="'top'" :inline="true" :model="ruleForm" :rules="rules" ref="ruleForm">
+          <div class="df_center_wrap" style="max-height: 600px; overflow-y: auto">
+            <el-form-item :label="$t('isagroup.校区')" prop="schoolId" style="width: 100%">
+              <el-select clearable style="width: 100%" v-model="ruleForm.schoolId" :placeholder="$t('isagroup.请选择')">
+                <el-option v-for="(i, k) in schoolList" :label="i18nlocel == 'en' ? i.enName : i.cnName"
+                  :value="i.id"></el-option>
               </el-select>
             </el-form-item>
-            <el-form-item
-              :label="$t('isagroup.中文内容')"
-              prop="cnContent"
-              style="width: 100%"
-            >
-              <el-input
-                style="width: 100%"
-                v-model="ruleForm.cnContent"
-                :placeholder="$t('consult.请输入')"
-                maxlength="200"
-                type="textarea"
-                rows="5"
-              ></el-input>
+            <el-form-item :label="$t('isagroup.中文内容')" prop="cnContent" style="width: 100%">
+              <el-input style="width: 100%" v-model="ruleForm.cnContent" :placeholder="$t('consult.请输入')"
+                maxlength="200" type="textarea" rows="5"></el-input>
             </el-form-item>
-            <el-form-item
-              :label="$t('isagroup.英文内容')"
-              prop="enContent"
-              style="width: 100%"
-            >
-              <el-input
-                style="width: 100%"
-                v-model="ruleForm.enContent"
-                :placeholder="$t('consult.请输入')"
-                maxlength="200"
-                type="textarea"
-                rows="5"
-              ></el-input>
+            <el-form-item :label="$t('isagroup.英文内容')" prop="enContent" style="width: 100%">
+              <el-input style="width: 100%" v-model="ruleForm.enContent" :placeholder="$t('consult.请输入')"
+                maxlength="200" type="textarea" rows="5"></el-input>
             </el-form-item>
-            <el-form-item
-              :label="$t('isagroup.紧急程度')"
-              prop="urgencyLevel"
-              style="width: 100%"
-            >
-              <el-radio-group
-                style="width: 100%"
-                v-model="ruleForm['urgencyLevel']"
-              >
-                <el-radio
-                  :key="k"
-                  v-for="(i, k) in consts['urgencyLevel']"
-                  :label="i.id"
-                  style="color: 999999"
-                  >{{ i18nlocel == "en" ? i.enLabel : i.label }}</el-radio
-                >
+            <el-form-item :label="$t('isagroup.紧急程度')" prop="urgencyLevel" style="width: 100%">
+              <el-radio-group style="width: 100%" v-model="ruleForm['urgencyLevel']">
+                <el-radio :key="k" v-for="(i, k) in consts['urgencyLevel']" :label="i.id" style="color: 999999">{{
+                  i18nlocel == "en" ? i.enLabel : i.label }}</el-radio>
               </el-radio-group>
             </el-form-item>
-            <el-form-item
-              :label="$t('isagroup.是否可见')"
-              prop="active"
-              style="width: 100%"
-            >
+            <el-form-item :label="$t('isagroup.是否可见')" prop="active" style="width: 100%">
               <el-radio-group style="width: 100%" v-model="ruleForm['active']">
-                <el-radio
-                  :key="k"
-                  v-for="(i, k) in consts['yesOrno']"
-                  :label="i.id"
-                  style="color: 999999"
-                  >{{ i18nlocel == "en" ? i.enLabel : i.label }}</el-radio
-                >
+                <el-radio :key="k" v-for="(i, k) in consts['yesOrno']" :label="i.id" style="color: 999999">{{ i18nlocel
+                  == "en" ? i.enLabel : i.label }}</el-radio>
               </el-radio-group>
             </el-form-item>
           </div>
           <el-form-item class="modalFromBtn">
-            <el-button
-              type="primary"
-              size="medium"
-              @click="submitForm('ruleForm')"
-              >{{ $t("isagroup.确认") }}</el-button
-            >
+            <el-button type="primary" size="medium" @click="submitForm('ruleForm')">{{ $t("isagroup.确认") }}</el-button>
             <el-button type="default" size="medium" @click="closeModal">{{
               $t("isagroup.取消")
             }}</el-button>
@@ -152,7 +80,7 @@ export default {
   created() {
     this.rules = this.initRules();
   },
-  mounted() {},
+  mounted() { },
   computed: {
     ...mapGetters(["permissions", "dictionary", "i18nlocel"]),
   },

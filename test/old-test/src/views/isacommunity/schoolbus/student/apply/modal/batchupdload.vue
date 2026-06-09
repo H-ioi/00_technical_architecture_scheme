@@ -1,6 +1,6 @@
 <template>
   <el-dialog
-    :title="$t('isagroup.批量新增')"
+    :title="$t('schoolbus.批量新增')"
     :visible.sync="showUpload"
     width="650px"
     :before-close="closeModal"
@@ -15,7 +15,7 @@
       :rules="rules"
     >
       <div class="moadlFromBox">
-        <el-form-item :label="$t('isagroup.模板')" prop="file" style="width: 100%">
+        <el-form-item :label="$t('schoolbus.模板')" prop="file" style="width: 100%">
           <el-upload
             class="upload-demo batchupload"
             drag
@@ -26,10 +26,10 @@
             <div class="df_sb">
               <img src="/svg/other/shangchuan.svg" alt="" />
               <div class="batchupload_text">
-                <div class="batchupload_title">{{ $t("isagroup.上传填好的模板") }}</div>
+                <div class="batchupload_title">{{ $t("schoolbus.上传填好的模板") }}</div>
                 <div class="batchupload_prompt">
-                  {{ $t("isagroup.文件上传只能是 xls、xlsx 格式!") }}
-                  {{ $t("isagroup.文件上传不能超过10M!") }}
+                  {{ $t("schoolbus.文件上传只能是 xls、xlsx 格式!") }}
+                  {{ $t("schoolbus.文件上传不能超过10M!") }}
                 </div>
                 <div class="batchupload_btn_box">
                   <div
@@ -39,7 +39,7 @@
                   >
                     {{ $t("consult.下载模板") }}
                   </div>
-                  <div class="batchupload_btn">{{ $t("isagroup.点击上传") }}</div>
+                  <div class="batchupload_btn">{{ $t("schoolbus.点击上传") }}</div>
                 </div>
                 <div class="batchupload_prompt">{{ fileName }}</div>
               </div>
@@ -48,10 +48,10 @@
         </el-form-item>
         <el-form-item class="modalFromBtn">
           <el-button type="primary" size="medium" @click="submitForm('from')">{{
-            $t("isagroup.提交")
+            $t("schoolbus.提交")
           }}</el-button>
           <el-button type="default" size="medium" @click="closeModal">{{
-            $t("isagroup.取消")
+            $t("schoolbus.取消")
           }}</el-button>
         </el-form-item>
       </div>
@@ -75,7 +75,7 @@ export default {
       downloading: false,
       from: { file: "" },
       rules: {
-        file: [{ required: true, message: that.$t("isagroup.请上传"), trigger: "blur" }],
+        file: [{ required: true, message: that.$t("schoolbus.请上传"), trigger: "blur" }],
       },
       fileList: [],
       fileName: "",
@@ -109,7 +109,7 @@ export default {
     importData(data) {
       importIntentionOrder(data).then((res) => {
         if (res.data.success) {
-          this.$message.success(this.$t("isagroup.成功"));
+          this.$message.success(this.$t("schoolbus.成功"));
           this.$emit("getList");
           this.closeModal();
         }
@@ -119,7 +119,7 @@ export default {
     downloadTemplate() {
       downloadIntentionOrder().then((res) => {
         console.log("res", res);
-        this.$message.success(this.$t("isagroup.成功"));
+        this.$message.success(this.$t("schoolbus.成功"));
         download(res.data, res.headers["content-disposition"]);
       });
     },
@@ -129,11 +129,11 @@ export default {
       console.log("beforeUpload", name);
       const isLt10M = file.size / 1024 / 1024 < 10;
       if (name[name.length - 1] !== "xls" && name[name.length - 1] !== "xlsx") {
-        this.$message.warning(this.$t("isagroup.文件上传只能是 xls、xlsx 格式!"));
+        this.$message.warning(this.$t("schoolbus.文件上传只能是 xls、xlsx 格式!"));
         return;
       }
       if (!isLt10M) {
-        this.$message.warning(this.$t("isagroup.文件上传不能超过10M!"));
+        this.$message.warning(this.$t("schoolbus.文件上传不能超过10M!"));
         return;
       }
       this.fileName = file.name;

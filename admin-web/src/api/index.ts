@@ -10,11 +10,18 @@ import activityApi from './modules/activity'
 import activityParentStudentApi from './modules/activity-parent-student'
 import activityProgramApi from './modules/activity-program'
 import activityQuestionnaireApi from './modules/activity-questionnaire'
+import activityLotteryPoolApi from './modules/activity-lottery-pool'
 import activityPrizeApi from './modules/activity-prize'
 import activityVoteProgramApi from './modules/activity-vote-program'
 import bulkEmailApi from './modules/bulk-email'
 import baseDictApi from './modules/base-dict'
 import captchaApi from './modules/captcha'
+import contentAnnouncementApi from './modules/content-announcement'
+import contentArticleApi from './modules/content-article'
+import contentCategoryApi from './modules/content-category'
+import contentCommonApi from './modules/content-common'
+import contentFoodWeeklyApi from './modules/content-food-weekly'
+import contentMomentApi from './modules/content-moment'
 import membershipApi from './modules/membership'
 import studentApi from './modules/member-student'
 import teacherApi from './modules/member-teacher'
@@ -25,6 +32,7 @@ import permissionRoleApi from './modules/permission-role'
 import permissionUserApi from './modules/permission-user'
 import protocolApi from './modules/protocol'
 import publicFileApi from './modules/public-file'
+import schoolBusAttendanceApi from './modules/school-bus-attendance'
 import schoolBusCarApi from './modules/school-bus-car'
 import schoolBusCommonApi from './modules/school-bus-common'
 import schoolBusDriverApi from './modules/school-bus-driver'
@@ -43,6 +51,7 @@ export {
   activityApi,
   activityParentStudentApi,
   activityProgramApi,
+  activityLotteryPoolApi,
   activityPrizeApi,
   activityQuestionnaireApi,
   activityVoteProgramApi,
@@ -57,6 +66,12 @@ export {
   baseDictApi,
   bulkEmailApi,
   captchaApi,
+  contentAnnouncementApi,
+  contentArticleApi,
+  contentCategoryApi,
+  contentCommonApi,
+  contentFoodWeeklyApi,
+  contentMomentApi,
   membershipApi,
   studentApi,
   teacherApi,
@@ -67,6 +82,7 @@ export {
   permissionUserApi,
   protocolApi,
   publicFileApi,
+  schoolBusAttendanceApi,
   schoolBusCarApi,
   schoolBusCommonApi,
   schoolBusDriverApi,

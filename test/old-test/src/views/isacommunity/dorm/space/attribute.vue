@@ -1,150 +1,95 @@
 <template>
-   <div class="community_page">
+  <div class="community_page">
 
-     <div class="community_top">
+    <div class="community_top">
       <div class="community_top_title">{{ $t("dorm.属性管理") }}</div>
       <div class="community_top_btn">
-            <el-button type="primary" @click="addItem">{{ $t('attendance.新增') }}</el-button>
+        <el-button type="primary" @click="addItem" v-if="permissions['attribute-add']">{{ $t('dorm.新增属性') }}</el-button>
       </div>
     </div>
-      <div class="community_centent">
-    <div class="community_searchFrom">
-      <el-form :inline="true" :model="dataForm" @keyup.enter.native="getDataList()"
-        style="display: flex; align-items: center; flex-wrap: wrap;">
-        <el-form-item>
-          <el-select v-model="dataForm.school" :placeholder="$t('attendance.学校')" clearable>
-            <el-option v-for="school in schoolList" :key="school.enName" :label="school.enName"
-              :value="school.enName"></el-option>
-          </el-select>
-        </el-form-item>
+    <div class="community_centent">
+      <div class="community_searchFrom">
+        <el-form :inline="true" :model="dataForm" @keyup.enter.native="getDataList()"
+          style="display: flex; align-items: center; flex-wrap: wrap;">
+          <el-form-item>
+            <el-select v-model="dataForm.schoolId" :placeholder="$t('attendance.学校')" clearable>
+               <el-option
+                :key="k"
+                v-for="(i, k) in dictionary['school']"
+                :label="i.enName"
+                :value="i.externId"
+              ></el-option>
+            </el-select>
+          </el-form-item>
 
 
-        <el-form-item>
-          <el-input v-model="dataForm.keyword" :placeholder="$t('dorm.属性名称')" clearable style="width: 150px;"></el-input>
-        </el-form-item>
+          <!--
+          <el-form-item>
+            <el-input v-model="dataForm.keyword" :placeholder="$t('dorm.属性名称')" clearable
+              style="width: 150px;"></el-input>
+          </el-form-item>
+-->
+
+          <el-form-item>
+            <div class="button-group" style="margin-top: 10px;">
+              <el-button class="button_text" size="medium" type="text" icon="el-icon-refresh-right" @click="clear">{{
+                $t("btn.重置") }}</el-button>
+              <el-button @click="getDataList()" type="primary">{{ $t('attendance.查询') }}</el-button>
+
+            </div>
+          </el-form-item>
+        </el-form>
 
 
-        <el-form-item>
-          <el-select v-model="dataForm.scp" :placeholder="$t('dorm.状态')" clearable style="width: 140px;">
-            <el-option :label="$t('dorm.满员')" value="1"></el-option>
-            <el-option :label="$t('dorm.空房')" value="0"></el-option>
-  <el-option :label="$t('dorm.部分满员')" value="2"></el-option>
-          </el-select>
-        </el-form-item>
+
+      </div>
+
+      <div class="isa_table">
+        <el-table :data="dataList" fit v-loading="dataListLoading" @selection-change="selectionChangeHandle"
+          :header-cell-style="headercellstyle" style="width: 100%; font-size: 14px;">
+
+          <el-table-column type="selection" width="55" align="center"></el-table-column>
+
+          <el-table-column header-align="center" align="left" :label="$t('attendance.学校')" show-overflow-tooltip>
 
 
-        <el-form-item>
-          <div class="button-group" style="margin-top: 10px;">
-            <el-button class="button_text" size="medium" type="text" icon="el-icon-refresh-right" @click="clear">{{
-              $t("btn.重置") }}</el-button>
-            <el-button @click="getDataList()" type="primary">{{ $t('attendance.查询') }}</el-button>
-       
-            <el-button type="primary">{{ $t('attendance.删除') }}</el-button>
+            <template slot-scope="scope">
+              {{ scope.row.school.en_name }}
+            </template>
+
+
+          </el-table-column>
+          <el-table-column prop="name" header-align="center" align="center" :label="$t('dorm.属性')" show-overflow-tooltip>
+          </el-table-column>
+          <el-table-column prop="status" header-align="center" align="center" :label="$t('dorm.状态')" show-overflow-tooltip>
+            <template slot-scope="scope">
+              {{ scope.row.is_active == '1'  ? $t('dorm.启用') : $t('dorm.禁用') }}
+            </template>
+          </el-table-column>
+
+
+          <el-table-column prop="creatorName" header-align="center" align="center" :label="$t('dorm.创建人')" show-overflow-tooltip>
+          </el-table-column>
+
+
+          <el-table-column fixed="right" header-align="center" align="center" width="150" :label="$t('attendance.操作')">
+            <template slot-scope="scope">
+              <a type="text" size="small" @click="editForm(scope.row)" class="text-btn" v-if="permissions['attribute-edit']">{{ $t("btn.编辑") }} </a>
+              <!-- <a type="text" size="small" @click="viewForm(scope.row)" class="text-btn">{{ $t("btn.查看") }} </a>-->
+            </template>
+          </el-table-column>
+        </el-table>
+        <div class="df_sb isa_table_footer">
+          <div>
+            <el-button size="small" type="danger" @click="deleteHandle" v-if="permissions['attribute-delete']">{{ $t('attendance.删除') }}</el-button>
 
           </div>
-        </el-form-item>
-      </el-form>
-
-
-
-    </div>
-
-    <div class="isa_table">
-      <el-table :data="dataList" fit v-loading="dataListLoading" @selection-change="selectionChangeHandle"
-        :header-cell-style="headercellstyle" style="width: 100%; font-size: 14px;">
-        <el-table-column prop="admissonNo" header-align="center" align="center" :label="$t('attendance.学号')"
-          show-overflow-tooltip width="120">
-        </el-table-column>
-        <el-table-column prop="studentName" header-align="center" align="center" :label="$t('attendance.姓名')"
-          show-overflow-tooltip width="120">
-        </el-table-column>
-        <el-table-column prop="studentSchool" header-align="center" align="left" :label="$t('attendance.学校')"
-          show-overflow-tooltip width="200px">
-        </el-table-column>
-        <el-table-column prop="studentGrade" header-align="center" align="center" :label="$t('attendance.年级')"
-          show-overflow-tooltip width="120">
-        </el-table-column>
-        <el-table-column prop="studentClass" header-align="center" align="center" :label="$t('attendance.班级')"
-          show-overflow-tooltip width="120">
-        </el-table-column>
-
-
-
-
-        <el-table-column prop="reason" header-align="center" align="center" :label="$t('attendance.请假原因')"
-          show-overflow-tooltip width="120">
-        </el-table-column>
-
-        <el-table-column prop="dateString" header-align="center" align="center" :label="$t('attendance.请假时间')"
-          show-overflow-tooltip width="200">
-        </el-table-column>
-
-
-        <el-table-column prop="extendTime" header-align="center" align="center" :label="$t('attendance.延期时间')"
-          show-overflow-tooltip width="120">
-
-        </el-table-column>
-
-        <el-table-column prop="isInfectious" header-align="center" align="center" :label="$t('attendance.传染病')"
-          show-overflow-tooltip width="120">
-          <template slot-scope="scope">
-            {{ scope.row.isInfectious === '101' ? $t('attendance.是') : scope.row.isInfectious === '102' ?
-              $t('attendance.否') : '-' }}
-          </template>
-        </el-table-column>
-        <el-table-column prop="fixed" header-align="center" align="center" :label="$t('attendance.固定假')"
-          show-overflow-tooltip width="120">
-          <template slot-scope="scope">
-            {{ scope.row.fixed === '101' ? $t('attendance.是') : scope.row.fixed === '102' ? $t('attendance.否') :
-              scope.row.fixed }}
-          </template>
-        </el-table-column>
-
-        <el-table-column prop="cancelLeave" header-align="center" align="center" :label="$t('attendance.是否销假')">
-          <template slot-scope="scope">
-            {{ getHolidayEndStatusText(scope.row.cancelLeave) }}
-          </template>
-        </el-table-column>
-        <el-table-column prop="weekDays" header-align="center" align="center" :label="$t('attendance.星期')"
-          show-overflow-tooltip width="180">
-          <template slot-scope="scope">
-            <el-tag v-for="(item, index) in scope.row.weekDays" :key="index" type="primary" size="small"
-              style="margin-right: 5px;">
-              {{ getWeekDaysText(item) }}
-            </el-tag>
-          </template>
-        </el-table-column>
-
-        <el-table-column prop="status" header-align="center" align="center" :label="$t('attendance.状态')">
-          <template slot-scope="scope">
-            {{ getStatusText(scope.row.status) }}
-          </template>
-        </el-table-column>
-        <el-table-column prop="createdAt" header-align="center" align="center" :label="$t('attendance.创建时间')"
-          show-overflow-tooltip width="200px">
-        </el-table-column>
-
-        <el-table-column fixed="right" header-align="center" align="center" width="150" :label="$t('attendance.操作')">
-          <template slot-scope="scope">
-
-            <!--<el-button type="text" size="small" @click="deleteHandle(scope.row.id)">{{ $t("btn.删除") }}</el-button>-->
-            <a type="text" size="small" @click="backHandle(scope.row.procId, scope.row.id)"
-              v-if="(scope.row.status == '1100' || scope.row.status == '1103') && scope.row.dataFrom != 'MB'"
-              class="text-btn">{{
-                $t("attendance.撤销") }}</a>
-
-            <a type="text" size="small" @click="editForm(scope.row)" class="text-btn">{{ $t("btn.查看") }} </a>
-          </template>
-        </el-table-column>
-      </el-table>
-      <div class="df_sb isa_table_footer">
-        <div></div>
-        <Pagination :total="paginationTotal" :pagination="pagination" :hasSizes="true"
-          @handleCurrentChange="handleCurrentChange" @handleSizeChange="handleSizeChange" />
+          <Pagination :total="paginationTotal" :pagination="pagination" :hasSizes="true"
+            @handleCurrentChange="handleCurrentChange" @handleSizeChange="handleSizeChange" />
+        </div>
       </div>
-    </div>
 
-</div>
+    </div>
 
     <attribute-model :dialog-visible.sync="dialogVisible" :edit-data="editData" :is-view-mode="isViewMode"
       @dialog-submit="submitConditionDialog" @dialog-cancel="closeConditionDialog" />
@@ -157,10 +102,10 @@
 </template>
 
 <script>
-import { listHoliday, cancelFlow, getSchoolList } from '@/api/isacommunity/holiday'
+import { getProjectListPage, deleteProjectBatch } from '@/api/isacommunity/dorm'
 import Pagination from "@/components/communitycommon/Pagination.vue";
 import AttributeModel from './attribute-model.vue';
-
+import { mapGetters } from "vuex";
 import { headercellstyle } from '../common-style.js';
 
 export default {
@@ -171,9 +116,8 @@ export default {
       dataForm: {
         keyword: '',
         type: '',
-        school: '',
-        dateRange: [],
-        scp: ''
+        schoolId: '',
+        status: '',
       },
       isViewMode: false,
       pagination: {
@@ -189,12 +133,15 @@ export default {
       dialogVisible: false,
       dataListLoading: false,
       dataListSelections: [],
-      schoolList: []
+  
     }
   },
   mounted() {
     this.getDataList();
-    this.loadSchoolList();
+
+  },
+    computed: {
+    ...mapGetters(["dictionary", "permissions", "i18nlocel"]),
   },
   methods: {
     // 获取数据列表
@@ -203,7 +150,34 @@ export default {
       this.editData = null // 重置编辑数据
     },
 
+    deleteHandle() {
+      if (this.dataListSelections.length === 0) {
+        this.$message({
+          message: this.$t('dorm.请选择要操作的项'),
+          type: 'warning',
+          duration: 1500
+        })
+        return
+      }
+      this.$confirm(this.$t('dorm.确定删除选中项吗？'), this.$t('consult.提示'), {
+        confirmButtonText: this.$t('btn.确定'),
+        cancelButtonText: this.$t('btn.取消'),
+        type: 'warning'
+      }).then(() => {
+        deleteProjectBatch({
+          ids: this.dataListSelections.map(item => item.id).join(",")
+        }).then((res) => {
+          this.dataListSelections = []
+          this.getDataList()
+          this.$message({
+            message: this.$t('dorm.删除成功'),
+            type: 'success'
+          })
+        })
+      })
+    },
 
+    
     submitConditionDialog(formData) {
       this.dialogVisible = false
       this.getDataList()
@@ -216,33 +190,18 @@ export default {
       this.dataListLoading = true
       const params = {
         ...this.pagination,
-        scp: this.dataForm.scp,
         keyword: this.dataForm.keyword,
-        type: this.dataForm.type,
-        studentSchool: this.dataForm.school
+        schoolId: this.dataForm.schoolId
       }
-      // 添加时间范围参数
-      if (this.dataForm.dateRange && this.dataForm.dateRange.length === 2) {
-        params.beginTime = this.dataForm.dateRange[0]
-        params.endTime = this.dataForm.dateRange[1]
-      }
-      listHoliday(params).then((res) => {
-        this.dataList = res.records
+
+      getProjectListPage(params).then((res) => {
+        this.dataList = res.data
         this.paginationTotal = res.total
         this.dataListLoading = false
       }).catch(err => {
         console.error(err);
         this.dataListLoading = false
       })
-    },
-    // 加载学校列表
-    loadSchoolList() {
-
-      this.$nextTick(async () => {
-        let res = await getSchoolList()
-        this.schoolList = res.data.data
-      });
-
     },
 
 
@@ -252,9 +211,8 @@ export default {
       this.dataForm = {
         keyword: '',
         type: '',
-        school: '',
-        dateRange: [],
-        scp: ''
+        schoolId: '',
+        status: '',
       };
       this.getDataList()
     },
@@ -266,34 +224,16 @@ export default {
       this.editData = null;
     },
 
-
-
-    backHandle(procId, id) {
-      this.$confirm(this.$t('attendance.确定撤销操作'), this.$t('attendance.提示'), {
-        confirmButtonText: this.$t('attendance.确定'),
-        cancelButtonText: this.$t('attendance.取消'),
-        type: 'warning'
-      }).then(() => {
-
-        cancelFlow(procId, id).then((res) => {
-          console.log(res, 'resaaaaa')
-
-          this.$message({
-            message: this.$t('attendance.操作成功'),
-            type: 'success',
-            duration: 1500,
-            onClose: () => {
-              this.getDataList()
-            }
-          })
-
-        })
-      })
-    },
     // 编辑
     editForm(row) {
       this.editData = JSON.parse(JSON.stringify(row)) // 深拷贝避免直接修改原数据
-      this.isViewMode = true
+      this.isViewMode = false // 编辑模式，可以修改
+      this.dialogVisible = true
+    },
+    // 查看
+    viewForm(row) {
+      this.editData = JSON.parse(JSON.stringify(row))
+      this.isViewMode = true // 查看模式，表单将被禁用或隐藏保存按钮
       this.dialogVisible = true
     },
     // 分页
@@ -310,52 +250,6 @@ export default {
     selectionChangeHandle(val) {
       this.dataListSelections = val
     },
-    // 获取部门标签
-    getScopeLabel(value) {
-      const scopeMap = {
-        course: this.$t('attendance.课程'),
-        dorm: this.$t('attendance.宿舍'),
-        bus: this.$t('attendance.校巴')
-      }
-      return scopeMap[value] || value
-    },
-    // 获取状态文本
-    getStatusText(status) {
-      const statusMap = {
-        '1100': this.$t('attendance.待审批'),
-        '102': this.$t('attendance.已拒绝'),
-        '101': this.$t('attendance.已撤销'),
-        '104': this.$t('attendance.已销假'),
-        '1101': this.$t('attendance.休假中'),
-        '1102': this.$t('attendance.已结束'),
-        '1103': this.$t('attendance.待休假')
-      }
-      return statusMap[status] || '-'
-    },
-
-    getWeekDaysText(status) {
-      const statusMap = {
-        'monday': this.$t('attendance.周一'),
-        'tuesday': this.$t('attendance.周二'),
-        'wednesday': this.$t('attendance.周三'),
-        'thursday': this.$t('attendance.周四'),
-        'friday': this.$t('attendance.周五'),
-
-      }
-      return statusMap[status] || '-'
-    },
-
-
-    getHolidayEndStatusText(status) {
-      const statusMap = {
-        '100': this.$t('attendance.待审批'),
-        '102': this.$t('attendance.已销假'),
-        '101': this.$t('attendance.未销假'),
-
-      }
-      return statusMap[status] || this.$t('attendance.未销假')
-    }
-
 
   }
 }

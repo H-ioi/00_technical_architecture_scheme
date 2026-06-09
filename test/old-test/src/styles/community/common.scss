@@ -26,6 +26,8 @@
   // main主体样式
   left: 204px !important;
   background-color: #fff;
+  width: calc(100% - 204px);
+  height: calc(100% - 80px);
 
   .avue-view {
     box-sizing: border-box !important;
@@ -34,6 +36,10 @@
     -moz-border-radius: 20px 0 0 0 !important;
     -ms-border-radius: 20px 0 0 0 !important;
     -o-border-radius: 20px 0 0 0 !important;
+  }
+  #avue-view {
+    flex: 1;
+    height: 100%;
   }
 }
 
@@ -297,6 +303,226 @@
         height: 22px !important;
         line-height: 22px !important;
       }
+    }
+  }
+}
+
+/* 重新微调样式 */
+.community_page_v2 {
+  .community_top_title {
+    display: flex;
+    align-items: center;
+    gap: 30px;
+    .el-radio-button__inner {
+      &:hover {
+        color: #ba8e62;
+      }
+    }
+    .is-active {
+      .el-radio-button__inner {
+        &:hover {
+          color: #fff;
+        }
+      }
+    }
+  }
+}
+.community_centent_v2 {
+  height: calc(100vh - 175px);
+  background-color: #fff;
+  padding: 20px;
+  box-sizing: border-box;
+  border-radius: 20px;
+  overflow: hidden;
+
+  .isa_table_footer {
+    margin-top: 10px;
+  }
+  .search_body {
+    display: flex;
+    align-items: flex-start;
+
+    .search_form {
+      flex: 1;
+      .el-range-editor--small .el-range-separator {
+        line-height: 34px;
+      }
+      .el-range-editor--small .el-range__icon {
+        line-height: 36px;
+      }
+      .el-form-item {
+        width: 100%;
+        margin-bottom: 5px;
+      }
+      .el-select,
+      .el-input {
+        width: 100%;
+      }
+    }
+    .search_btn {
+      margin-left: 20px;
+      display: flex;
+      align-items: flex-end;
+      flex: 0 0 130px;
+      .open {
+        color: #ba8e62;
+        display: inline-block;
+        width: 30px;
+        font-size: 12px;
+        margin-left: 5px;
+        cursor: pointer;
+      }
+    }
+  }
+  .el-pagination {
+    padding: 0 !important;
+  }
+}
+.drawer-body {
+  .el-drawer__header {
+    margin-bottom: 20px;
+  }
+
+  .drawer-content {
+    position: relative;
+  }
+
+  .drawer-form {
+    padding: 0 20px 20px 20px;
+    position: relative;
+    height: calc(100vh - 145px);
+    overflow-y: auto;
+  }
+
+  .drawer-footer {
+    padding: 10px 20px;
+    background: #fff;
+    border-top: 1px solid #eee;
+    text-align: right;
+  }
+}
+
+/* 校巴简单表单弹窗（对齐 schoolDoctor 表单项排版） */
+.schoolbus-dialog {
+  .el-dialog__body {
+    overflow-x: hidden;
+    padding: 16px 20px;
+    box-sizing: border-box;
+  }
+
+  .schoolbus-dialog-form {
+    max-height: 60vh;
+    overflow-x: hidden;
+    overflow-y: auto;
+    box-sizing: border-box;
+
+    /* el-row gutter 负边距会导致弹窗底部出现横向滚动条 */
+    .el-row {
+      margin-left: 0 !important;
+      margin-right: 0 !important;
+    }
+
+    .el-col {
+      padding-left: 10px !important;
+      padding-right: 10px !important;
+    }
+
+    .el-form-item {
+      margin-bottom: 18px;
+    }
+  }
+}
+
+/* 校巴高复杂表单二级页 */
+.schoolbus-form-page {
+  /* 保留与 community_centent_v2 一致的上内边距，避免表单贴顶 */
+  padding: 20px 20px 24px;
+  height: calc(100vh - 170px);
+  overflow-y: auto;
+  box-sizing: border-box;
+
+  .schoolbus-form-page__inner {
+    padding-top: 4px;
+  }
+
+  /* 申请/订单全页表单分区布局 */
+  .schoolbus-apply-form {
+    .schoolbus-apply-form__section {
+      padding-bottom: 24px;
+      margin-bottom: 24px;
+      border-bottom: 1px solid #ebeef5;
+
+      &:last-child {
+        margin-bottom: 0;
+        padding-bottom: 0;
+        border-bottom: none;
+      }
+    }
+
+    .schoolbus-apply-form__grid {
+      display: flex;
+      flex-wrap: wrap;
+      margin: 0 -10px;
+    }
+
+    .schoolbus-apply-form__grid--3 .el-form-item {
+      width: 33.33%;
+      padding: 0 10px;
+      margin-right: 0;
+      box-sizing: border-box;
+    }
+
+    .schoolbus-apply-form__grid--1 .el-form-item {
+      width: 33.33%;
+      padding: 0 10px;
+      margin-right: 0;
+      box-sizing: border-box;
+    }
+
+    .schoolbus-apply-form__section-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 12px;
+      font-size: 14px;
+      font-weight: 600;
+      color: #303133;
+    }
+
+    .schoolbus-apply-form__footer-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 32px;
+    }
+
+    .schoolbus-apply-form__footer-col {
+      flex: 1;
+      min-width: 0;
+
+      .el-form-item {
+        margin-right: 0;
+        padding-right: 0;
+      }
+    }
+
+    .schoolbus-apply-form__signature-box {
+      width: 100%;
+      background: #f5f7fa;
+      border: 1px dashed #dcdfe6;
+      border-radius: 4px;
+      box-sizing: border-box;
+      overflow: hidden;
+    }
+
+    .schoolbus-apply-form__extra {
+      margin-top: 20px;
+      padding-top: 20px;
+      border-top: 1px solid #ebeef5;
+    }
+
+    .el-form-item__label {
+      padding-bottom: 4px;
+      line-height: 1.4;
     }
   }
 }

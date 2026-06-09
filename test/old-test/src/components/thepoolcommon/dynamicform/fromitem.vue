@@ -478,11 +478,12 @@ export default {
                 options.push({
                   label: prop.label || "",
                   id: prop.id || "",
+                  optionDefault: prop.optionDefault || 0,
                 });
                 break;
-              case "option_default":
-                optionDefault.push(prop.value);
-                break;
+              // case "option_default":
+              //   optionDefault.push(prop.value);
+              //   break;
               case "datetime_type": {
                 const dateConfig = dateTimeTypeMap.get(prop.value);
                 if (dateConfig) {
@@ -512,7 +513,11 @@ export default {
 
         // 设置选项
         properties.option = options;
-
+        options.forEach((op) => {
+          if (op.optionDefault) {
+            optionDefault.push(op.id);
+          }
+        });
         // 处理默认值
         switch (formItem.type) {
           case "checkbox":

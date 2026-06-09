@@ -7,6 +7,8 @@ export const consult = {
       "font-weight": "400",
       height: "40px",
       "box-sizing": "border-box",
+      padding: "0px",
+      border: "none",
     },
     rowstyle: {
       color: " #666666",
@@ -707,6 +709,19 @@ export const consult = {
   ],
   statusAllList: [
     {
+      name: "全部",
+      type: "-1",
+      btn: [
+        {
+          name: "查看",
+          type: "look",
+          permissions: "enquiry_mine_view",
+          icon: "el-icon-view",
+          followStatus: "-1",
+        },
+      ],
+    },
+    {
       name: "待分配",
       type: "0",
       btn: [
@@ -727,7 +742,7 @@ export const consult = {
         {
           name: "关闭",
           type: "close",
-          permissions: "enquiry_status_close",
+          permissions: "enquiry_all_status_close",
           icon: "el-icon-circle-close",
           followStatus: 1,
         },
@@ -754,7 +769,7 @@ export const consult = {
         {
           name: "关闭",
           type: "close",
-          permissions: "enquiry_status_close",
+          permissions: "enquiry_all_status_close",
           icon: "el-icon-circle-close",
           followStatus: 1,
         },
@@ -781,7 +796,7 @@ export const consult = {
         {
           name: "关闭",
           type: "close",
-          permissions: "enquiry_all_status_batch_apply_close",
+          permissions: "enquiry_all_status_close",
           icon: "el-icon-circle-close",
           followStatus: 2,
         },
@@ -827,6 +842,8 @@ export const consult = {
         },
       ],
     },
+  ],
+  statusMineList: [
     {
       name: "全部",
       type: "-1",
@@ -836,12 +853,10 @@ export const consult = {
           type: "look",
           permissions: "enquiry_mine_view",
           icon: "el-icon-view",
-          followStatus: "-1",
+          followStatus: 1,
         },
       ],
     },
-  ],
-  statusMineList: [
     {
       name: "待跟进",
       type: "1",
@@ -936,19 +951,6 @@ export const consult = {
         },
       ],
     },
-    {
-      name: "全部",
-      type: "-1",
-      btn: [
-        {
-          name: "查看",
-          type: "look",
-          permissions: "enquiry_mine_view",
-          icon: "el-icon-view",
-          followStatus: 1,
-        },
-      ],
-    },
   ],
   sortMode: [
     {
@@ -1017,6 +1019,18 @@ export const consult = {
     },
   ],
   enrolledStatusMyList: [
+    {
+      name: "全部",
+      type: "-1",
+      btn: [
+        {
+          name: "查看",
+          type: "look",
+          permissions: "look",
+          icon: "el-icon-view",
+        },
+      ],
+    },
     {
       name: "未入学",
       type: "0",
@@ -1125,6 +1139,8 @@ export const consult = {
         },
       ],
     },
+  ],
+  enrolledStatusList: [
     {
       name: "全部",
       type: "-1",
@@ -1137,8 +1153,6 @@ export const consult = {
         },
       ],
     },
-  ],
-  enrolledStatusList: [
     {
       name: "未入学",
       type: "0",
@@ -1238,18 +1252,6 @@ export const consult = {
     {
       name: "已毕业",
       type: "4",
-      btn: [
-        {
-          name: "查看",
-          type: "look",
-          permissions: "look",
-          icon: "el-icon-view",
-        },
-      ],
-    },
-    {
-      name: "全部",
-      type: "-1",
       btn: [
         {
           name: "查看",
@@ -2198,6 +2200,24 @@ export const consult = {
       label: "倒序",
       enLabel: "Descending",
       value: "1",
+    },
+  ],
+  // 荔湾对外固定模板收集表
+  liWanTemplateName: [
+    {
+      value: 5,
+      label: "广州荔湾爱莎文华学校（国内部）学生信息登记表",
+      enLabel: "ISALW Wenhua  STUDENT REGISTRATION FORM (Domestic)",
+    },
+    {
+      value: 6,
+      label: "广州荔湾爱莎文华学校（国际部）意向学生登记表",
+      enLabel: "ISALW Wenhua  STUDENT REGISTRATION FORM",
+    },
+    {
+      value: 7,
+      label: "广州荔湾爱莎外籍人员子女学校意向学生登记表",
+      enLabel: "ISALWIS Prospective Student Registration Form",
     },
   ],
 };

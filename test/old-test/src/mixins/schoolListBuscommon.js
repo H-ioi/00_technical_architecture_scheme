@@ -31,5 +31,46 @@ export default {
 				? row.enName || row.cnName || row.label || ""
 				: row.cnName || row.label || row.enName || "";
 		},
+		/** 按校区 id 取展示名（详情等只读场景） */
+		schoolLabelById (id) {
+			if (id == null || id === "") return "";
+			const row = this.schoolSelectList.find((s) => String(s.id) === String(id));
+			return row ? this.schoolDropdownLabel(row) : "";
+		},
+		/** 多校区 id（数组或单值）拼接展示名 */
+		schoolLabelsByIds (ids) {
+			if (ids == null || ids === "") return "";
+			const idList = Array.isArray(ids)
+				? ids
+				: [ids];
+			const labels = idList
+				.map((id) => this.schoolLabelById(id))
+				.filter(Boolean);
+			return labels.length ? labels.join(", ") : "";
+		},
+		/** 列表行 schoolEnNames ← schoolIds */
+		applySchoolEnNamesFromIds (item) {
+			const mapped = this.schoolLabelsByIds(item.schoolIds);
+			item.schoolEnNames = mapped || item.schoolEnNames || "--";
+		},
+		/** 列表行 schoolEnName ← schoolId */
+		applySchoolEnNameFromId (item) {
+			const mapped = this.schoolLabelById(item.schoolId);
+			item.schoolEnName = mapped || item.schoolEnName || "--";
+		},
+		/** 列表行 schoolName ← schoolId（考勤） */
+		applySchoolNameFromId (item) {
+			const mapped = this.schoolLabelById(item.schoolId);
+			item.schoolName = mapped || item.schoolName || "--";
+		},
+		/** 详情对象 schoolEnNames ← schoolIds */
+		withSchoolEnNamesFromIds (data) {
+			if (!data) return data;
+			return {
+				...data,
+				schoolEnNames:
+					this.schoolLabelsByIds(data.schoolIds) || data.schoolEnNames || "--",
+			};
+		},
 	},
 };

@@ -3,55 +3,27 @@
     <div class="community_top">
       <div class="community_top_title">{{ $t("isagroup.学校邮箱配置") }}</div>
       <div class="community_top_btn">
-        <el-button
-          v-if="permissions['busdriver_add']"
-          type="primary"
-          size="large"
-          @click="showForm('add')"
-          >{{ $t("btn.新增") }}</el-button
-        >
+        <el-button v-if="permissions['busdriver_add']" type="primary" size="large" @click="showForm('add')">{{
+          $t("btn.新增") }}</el-button>
       </div>
     </div>
     <div class="community_centent">
       <div class="community_searchFrom">
-        <el-form
-          class="df_align_center"
-          :label-position="'top'"
-          :inline="true"
-          :model="searchFrom"
-        >
+        <el-form class="df_align_center" :label-position="'top'" :inline="true" :model="searchFrom">
           <el-form-item style="width: 200px">
-            <el-select
-              clearable
-              style="width: 100%"
-              v-model="searchFrom['schoolId']"
-              :placeholder="$t('isagroup.请选择学校')"
-            >
-              <el-option
-                v-for="(i, k) in dictionary['school']"
-                :key="k"
-                :label="i18nlocel == 'en' ? i.enName : i.cnName || i.enName"
-                :value="i.id"
-              ></el-option>
+            <el-select clearable style="width: 100%" v-model="searchFrom['schoolIds']"
+              :placeholder="$t('isagroup.请选择学校')">
+              <el-option v-for="(i, k) in dictionary['school']" :key="k"
+                :label="i18nlocel == 'en' ? i.enName : i.cnName || i.enName" :value="i.id"></el-option>
             </el-select>
           </el-form-item>
           <el-form-item style="width: 200px">
-            <el-input
-              clearable
-              style="width: 100%"
-              v-model="searchFrom['keyword']"
-              :placeholder="$t('isagroup.邮箱地址')"
-            ></el-input>
+            <el-input clearable style="width: 100%" v-model="searchFrom['keyword']"
+              :placeholder="$t('isagroup.邮箱地址')"></el-input>
           </el-form-item>
           <el-form-item style="width: auto; margin-right: 0">
-            <el-button
-              class="button_text"
-              size="medium"
-              type="text"
-              icon="el-icon-refresh-right"
-              @click="clear"
-              >{{ $t("btn.重置") }}</el-button
-            >
+            <el-button class="button_text" size="medium" type="text" icon="el-icon-refresh-right" @click="clear">{{
+              $t("btn.重置") }}</el-button>
             <el-button size="medium" type="primary" @click="getList">{{
               $t("btn.查询")
             }}</el-button>
@@ -60,31 +32,14 @@
       </div>
 
       <div class="isa_table">
-        <Table
-          ref="Table"
-          :showSelection="true"
-          :tableTitle="tabletitle['schoolEmailConfigTable']"
-          :tableData="tableData"
-          :tableBtn="tableBtn"
-          @playTab="playTab"
-          @rowClick="rowClick"
-        />
+        <Table ref="Table" :showSelection="true" :tableTitle="tabletitle['schoolEmailConfigTable']"
+          :tableData="tableData" :tableBtn="tableBtn" @playTab="playTab" @rowClick="rowClick" />
         <div class="df_sb isa_table_footer">
           <div>
-            <el-button
-              v-if="permissions['busdriver_del']"
-              size="small"
-              type="danger"
-              plain
-              @click="delData"
-              >{{ $t("btn.删除") }}</el-button
-            >
+            <el-button v-if="permissions['busdriver_del']" size="small" type="danger" plain @click="delData">{{
+              $t("btn.删除") }}</el-button>
           </div>
-          <Pagination
-            :total="paginationTotal"
-            :pagination="pagination"
-            @handleCurrentChange="handleCurrentChange"
-          />
+          <Pagination :total="paginationTotal" :pagination="pagination" @handleCurrentChange="handleCurrentChange" />
         </div>
       </div>
     </div>
@@ -94,15 +49,15 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
-import { getEmailConfigPage, delSchoolEmailConfig, getAppModules } from "@/api/isacommunity/schoolEmailConfig.js";
-import tabletitle from "@/const/isacommunity/tabletitle.js";
-import consts from "@/const/isacommunity/consts.js";
-import Table from "@/components/communitycommon/Table.vue";
+import { delSchoolEmailConfig, getAppModules, getEmailConfigPage } from "@/api/isacommunity/schoolEmailConfig.js";
 import Pagination from "@/components/communitycommon/Pagination.vue";
-import Form from "./modal/form.vue";
-import Detail from "./modal/detail.vue";
+import Table from "@/components/communitycommon/Table.vue";
+import consts from "@/const/isacommunity/consts.js";
+import tabletitle from "@/const/isacommunity/tabletitle.js";
 import dayjs from "dayjs";
+import { mapGetters } from "vuex";
+import Detail from "./modal/detail.vue";
+import Form from "./modal/form.vue";
 export default {
   name: "emailSchool",
   components: { Table, Pagination, Form, Detail },
@@ -188,7 +143,7 @@ export default {
             }
           });
         })
-        .catch(() => {});
+        .catch(() => { });
     },
     getList() {
       getEmailConfigPage({

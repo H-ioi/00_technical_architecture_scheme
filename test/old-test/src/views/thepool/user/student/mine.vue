@@ -1,358 +1,490 @@
 <template>
   <div class="thepool_page">
-    <StatusItem
-      :statusList="statusList"
-      :currentstatus="currentstatus"
-      @changeStasus="changeStasus"
-    />
-    <div class="requestParam" v-if="requestList.length > 0">
-      <div class="requestParam_title">{{ $t("consult.筛选信息") }}</div>
-      <div class="requestParamlist">
-        <div
-          @click="selectCurrentRequestParam(item)"
-          :class="[
-            'requestParamlist_item',
-            {
-              active_item: item.id == searchRequestParamId,
-            },
-          ]"
-          v-for="(item, index) in requestList"
-          :key="index"
-        >
-          {{ item.description }}
-          <i
-            style="margin-left: 2px"
-            class="el-icon-close"
-            @click="delRequestParam(item.id)"
-          ></i>
+    <div class="pool-search">
+      <div class="pool-search-top">
+        <StatusItem
+          :statusList="statusList"
+          :currentstatus="currentstatus"
+          @changeStasus="changeStasus"
+        />
+        <SearchType />
+      </div>
+      <div class="requestParam" v-if="requestList.length > 0">
+        <div class="requestParamlist">
+          <div
+            @click="selectCurrentRequestParam(item)"
+            :class="[
+              'requestParamlist_item',
+              {
+                active_item: item.id == searchRequestParamId,
+              },
+            ]"
+            v-for="(item, index) in requestList"
+            :key="index"
+          >
+            <i
+              style="margin-left: 2px"
+              class="el-icon-circle-close"
+              @click="delRequestParam(item.id)"
+            ></i>
+            <span>
+              {{ item.description }}
+            </span>
+          </div>
         </div>
       </div>
-    </div>
-    <div class="searchFromBox search" style="padding: 20px">
-      <el-form
-        ref="searchFrom"
-        class="df_align_center searchFrom"
-        :label-position="'top'"
-        :inline="true"
-        :model="searchFrom"
-      >
-        <el-form-item
-          :label="$t('consult.关键词')"
-          prop="keyword"
-          style="width: 214px"
-        >
-          <el-input
-            v-model="searchFrom.keyword"
-            :placeholder="$t('consult.请输入')"
-            maxlength="20"
-            clearable
-            @clear="search"
-          ></el-input>
-        </el-form-item>
-        <el-form-item
-          v-if="currentstatus == '-1'"
-          :label="$t('consult.状态')"
-          style="width: 214px"
-        >
-          <el-select
-            clearable
-            @clear="search"
-            multiple
-            v-model="searchFrom.status"
-            :placeholder="$t('consult.请选择')"
-          >
-            <el-option
-              v-for="item in enrolledStatus"
-              :key="item.value"
-              :label="$t('consult')[item.label]"
-              :value="item.value"
-            ></el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item
-          v-if="dictpermissions['order_school'].length > 1"
-          :label="$t('consult.归属校区')"
-          style="width: 214px"
-        >
-          <el-select
-            multiple
-            v-model="searchFrom.schools"
-            :placeholder="$t('consult.请选择')"
-            clearable
-            @clear="search"
-          >
-            <el-option
-              v-for="item in dictpermissions['order_school']"
-              :key="item.value"
-              :label="i18nlocel == 'en' ? item.enLabel : item.label"
-              :value="item.value"
-            ></el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item
-          v-if="pooldictpermissions.length > 1"
-          :label="$t('consult.校区')"
-          style="width: 214px"
-        >
-          <el-select
-            multiple
-            v-model="searchFrom.applySchools"
-            :placeholder="$t('consult.请选择')"
-            @change="changeSchool"
-            clearable
-            @clear="search"
-          >
-            <el-option
-              v-for="item in pooldictpermissions"
-              :key="item.value"
-              :label="i18nlocel == 'en' ? item.enLabel : item.label"
-              :value="item.value"
-            ></el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item
-          v-if="enrollLevelList.length > 0"
-          :label="$t('consult.申请年级')"
-          style="width: 214px"
-        >
-          <el-select
-            multiple
-            v-model="searchFrom.enrollLevels"
-            :placeholder="$t('consult.请选择')"
-            clearable
-            @clear="search"
-          >
-            <el-option
-              v-for="item in enrollLevelList"
-              :key="item.value"
-              :label="i18nlocel == 'en' ? item.enLabel : item.label"
-              :value="item.value"
-            ></el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item
-          v-if="directionsList.length > 0"
-          :label="$t('consult.方向')"
-          style="width: 214px"
-        >
-          <el-select
-            multiple
-            v-model="searchFrom.directions"
-            :placeholder="$t('consult.请选择')"
-            clearable
-            @clear="search"
-          >
-            <el-option
-              v-for="item in directionsList"
-              :key="item.value"
-              :label="i18nlocel == 'en' ? item.enLabel : item.label"
-              :value="item.value"
-            ></el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item
-          :label="$t('consult.是否休学')"
-          prop="isDropout"
-          style="width: 214px"
-        >
-          <el-select
-            style="width: 100%"
-            v-model="searchFrom.isDropout"
-            :placeholder="$t('consult.请选择')"
-            clearable
-            @clear="search"
-          >
-            <el-option
-              v-for="item in consult['yesOrno']"
-              :key="item.value"
-              :label="i18nlocel == 'en' ? item.enLabel : item.label"
-              :value="item.value"
-            ></el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item :label="$t('consult.新增时间')" style="width: 214px">
-          <el-date-picker
-            style="width: 100%"
-            v-model="searchFrom.createdTime"
-            type="daterange"
-            :range-separator="$t('consult.至')"
-            :start-placeholder="$t('consult.开始')"
-            :end-placeholder="$t('consult.结束')"
-            :value-format="'yyyy-MM-dd'"
-            :format="'yyyy-MM-dd'"
-            clearable
-            @clear="search"
-          >
-          </el-date-picker>
-        </el-form-item>
-        <el-form-item style="width: 320px; margin-right: 0">
-          <div class="df_sb">
-            <el-button
-              type="defult"
-              size="small"
-              round
-              @click="saveRequestParam"
-              >{{ $t("consult.保存筛选信息") }}</el-button
-            >
-            <el-button type="defult" size="small" round @click="search">{{
-              $t("consult.搜索")
-            }}</el-button>
-            <el-button type="text" size="small" round @click="clear">
-              <div class="clear_btn">
-                <img src="/thepool/other/clear.png" alt="" />
-                <span> {{ $t("consult.清除") }}</span>
-              </div>
-            </el-button>
+      <div class="form-page" v-if="searchType == 'checkbox'">
+        <div>
+          <div class="form-item" v-if="currentstatus == '-1'">
+            <label class="form-label">{{ $t("consult.状态") }}：</label>
+            <OverflowWrap>
+              <el-checkbox-group v-model="searchFrom.status">
+                <el-checkbox
+                  v-for="item in enrolledStatus"
+                  :key="item.value"
+                  :name="item.value"
+                  :label="item.value"
+                >
+                  {{ i18nlocel == "en" ? item.enLabel : item.label }}
+                </el-checkbox>
+              </el-checkbox-group>
+            </OverflowWrap>
           </div>
-        </el-form-item>
-      </el-form>
+          <div class="form-item" v-if="pooldictpermissions.length > 1">
+            <label class="form-label">{{ $t("consult.归属校区") }}：</label>
+            <OverflowWrap>
+              <el-checkbox-group v-model="searchFrom.schools">
+                <el-checkbox
+                  v-for="item in pooldictpermissions"
+                  :key="item.value"
+                  :name="item.value"
+                  :label="item.value"
+                >
+                  {{ i18nlocel == "en" ? item.enLabel : item.label }}
+                </el-checkbox>
+              </el-checkbox-group>
+            </OverflowWrap>
+          </div>
+          <div class="form-item" v-if="pooldictpermissions.length > 1">
+            <label class="form-label">{{ $t("consult.校区") }}：</label>
+            <OverflowWrap>
+              <el-checkbox-group
+                @change="changeSchool"
+                v-model="searchFrom.applySchools"
+              >
+                <el-checkbox
+                  v-for="item in pooldictpermissions"
+                  :key="item.value"
+                  :name="item.value"
+                  :label="item.value"
+                >
+                  {{ i18nlocel == "en" ? item.enLabel : item.label }}
+                </el-checkbox>
+              </el-checkbox-group>
+            </OverflowWrap>
+          </div>
+          <div class="form-item" v-if="enrollLevelList.length > 1">
+            <label class="form-label">{{ $t("consult.申请年级") }}：</label>
+            <OverflowWrap>
+              <el-checkbox-group v-model="searchFrom.enrollLevels">
+                <el-checkbox
+                  v-for="item in enrollLevelList"
+                  :key="item.value"
+                  :name="item.value"
+                  :label="item.value"
+                >
+                  {{ i18nlocel == "en" ? item.enLabel : item.label }}
+                </el-checkbox>
+              </el-checkbox-group>
+            </OverflowWrap>
+          </div>
+          <div class="form-item" v-if="directionsList.length > 1">
+            <label class="form-label">{{ $t("consult.方向") }}：</label>
+            <OverflowWrap>
+              <el-checkbox-group v-model="searchFrom.directions">
+                <el-checkbox
+                  v-for="item in directionsList"
+                  :key="item.value"
+                  :name="item.value"
+                  :label="item.value"
+                >
+                  {{ i18nlocel == "en" ? item.enLabel : item.label }}
+                </el-checkbox>
+              </el-checkbox-group>
+            </OverflowWrap>
+          </div>
+          <div class="form-item">
+            <label class="form-label">{{ $t("consult.是否休学") }}：</label>
+            <OverflowWrap>
+              <el-radio-group v-model="searchFrom.isDropout">
+                <el-radio
+                  v-for="item in consult['yesOrno']"
+                  :key="item.value"
+                  :name="item.value"
+                  :label="item.value"
+                >
+                  {{ i18nlocel == "en" ? item.enLabel : item.label }}
+                </el-radio>
+              </el-radio-group>
+            </OverflowWrap>
+          </div>
+          <div class="form-item-center">
+            <label class="form-label">{{ $t("consult.新增时间") }}：</label>
+            <el-date-picker
+              style="width: 240px"
+              v-model="searchFrom.createdTime"
+              type="daterange"
+              :range-separator="$t('consult.至')"
+              :start-placeholder="$t('consult.开始')"
+              :end-placeholder="$t('consult.结束')"
+              :value-format="'yyyy-MM-dd'"
+              :format="'yyyy-MM-dd'"
+              clearable
+              @clear="search"
+            >
+            </el-date-picker>
+          </div>
+        </div>
+        <div class="form-page_btns">
+          <el-button type="primary" size="small" round @click.stop="search">{{
+            $t("consult.查询")
+          }}</el-button>
+          <img
+            @click.stop="saveRequestParam"
+            src="/thepool/icon/icon_save.png"
+            alt="保存查询条件"
+          />
+          <img
+            @click.stop="clear"
+            src="/thepool/icon/icon_refresh.png"
+            alt="清空"
+          />
+        </div>
+      </div>
+      <div
+        v-if="searchType == 'input'"
+        class="searchFromBox search"
+        style="padding: 15px 0 0 0"
+      >
+        <el-form
+          ref="searchFrom"
+          class="df_align_center searchFrom"
+          :label-position="'top'"
+          :inline="true"
+          :model="searchFrom"
+        >
+          <el-form-item
+            v-if="currentstatus == '-1'"
+            :label="$t('consult.状态')"
+            style="width: 214px"
+          >
+            <el-select
+              clearable
+              @clear="search"
+              multiple
+              v-model="searchFrom.status"
+              :placeholder="$t('consult.请选择')"
+            >
+              <el-option
+                v-for="item in enrolledStatus"
+                :key="item.value"
+                :label="$t('consult')[item.label]"
+                :value="item.value"
+              ></el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item
+            v-if="dictpermissions['order_school'].length > 1"
+            :label="$t('consult.归属校区')"
+            style="width: 214px"
+          >
+            <el-select
+              multiple
+              v-model="searchFrom.schools"
+              :placeholder="$t('consult.请选择')"
+              clearable
+              @clear="search"
+            >
+              <el-option
+                v-for="item in dictpermissions['order_school']"
+                :key="item.value"
+                :label="i18nlocel == 'en' ? item.enLabel : item.label"
+                :value="item.value"
+              ></el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item
+            v-if="pooldictpermissions.length > 1"
+            :label="$t('consult.校区')"
+            style="width: 214px"
+          >
+            <el-select
+              multiple
+              v-model="searchFrom.applySchools"
+              :placeholder="$t('consult.请选择')"
+              @change="changeSchool"
+              clearable
+              @clear="search"
+            >
+              <el-option
+                v-for="item in pooldictpermissions"
+                :key="item.value"
+                :label="i18nlocel == 'en' ? item.enLabel : item.label"
+                :value="item.value"
+              ></el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item
+            v-if="enrollLevelList.length > 0"
+            :label="$t('consult.申请年级')"
+            style="width: 214px"
+          >
+            <el-select
+              multiple
+              v-model="searchFrom.enrollLevels"
+              :placeholder="$t('consult.请选择')"
+              clearable
+              @clear="search"
+            >
+              <el-option
+                v-for="item in enrollLevelList"
+                :key="item.value"
+                :label="i18nlocel == 'en' ? item.enLabel : item.label"
+                :value="item.value"
+              ></el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item
+            v-if="directionsList.length > 0"
+            :label="$t('consult.方向')"
+            style="width: 214px"
+          >
+            <el-select
+              multiple
+              v-model="searchFrom.directions"
+              :placeholder="$t('consult.请选择')"
+              clearable
+              @clear="search"
+            >
+              <el-option
+                v-for="item in directionsList"
+                :key="item.value"
+                :label="i18nlocel == 'en' ? item.enLabel : item.label"
+                :value="item.value"
+              ></el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item
+            :label="$t('consult.是否休学')"
+            prop="isDropout"
+            style="width: 214px"
+          >
+            <el-select
+              style="width: 100%"
+              v-model="searchFrom.isDropout"
+              :placeholder="$t('consult.请选择')"
+              clearable
+              @clear="search"
+            >
+              <el-option
+                v-for="item in consult['yesOrno']"
+                :key="item.value"
+                :label="i18nlocel == 'en' ? item.enLabel : item.label"
+                :value="item.value"
+              ></el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item :label="$t('consult.新增时间')" style="width: 214px">
+            <el-date-picker
+              style="width: 100%"
+              v-model="searchFrom.createdTime"
+              type="daterange"
+              :range-separator="$t('consult.至')"
+              :start-placeholder="$t('consult.开始')"
+              :end-placeholder="$t('consult.结束')"
+              :value-format="'yyyy-MM-dd'"
+              :format="'yyyy-MM-dd'"
+              clearable
+              @clear="search"
+            >
+            </el-date-picker>
+          </el-form-item>
+          <el-form-item style="width: 170px; margin-right: 0">
+            <div class="df_sb">
+              <el-button
+                type="primary"
+                size="small"
+                round
+                @click.stop="search"
+                >{{ $t("consult.查询") }}</el-button
+              >
+              <img
+                style="width: 32px; height: 32px"
+                @click.stop="saveRequestParam"
+                src="/thepool/icon/icon_save.png"
+                alt="保存查询条件"
+              />
+              <img
+                style="width: 32px; height: 32px"
+                @click.stop="clear"
+                src="/thepool/icon/icon_refresh.png"
+                alt="清空"
+              />
+            </div>
+          </el-form-item>
+        </el-form>
+      </div>
     </div>
-    <div class="df_sb palyTableBox" style="padding-top: 0">
-      <div class="df_sb">
-        <el-button
-          v-if="permissions['thepool_user_student_mine_add']"
-          type="primary"
-          size="small"
-          round
-          @click="addStudent"
-          >{{ $t("consult.新增") }}</el-button
-        >
-        <el-button
-          v-if="hasSchool(5)"
-          type="primary"
-          size="small"
-          round
-          @click="showQrcodeModal = true"
-          >{{ $t("consult.申请表二维码") }}</el-button
-        >
-        <el-button
-          v-if="
-            currentstatus == '2' && permissions['enquiry_student_upgrade_enter']
-          "
-          type="primary"
-          size="small"
-          round
-          @click="showUpgrade"
-          >{{ $t("consult.一键升学") }}</el-button
-        >
-        <el-button
-          v-if="
-            tableData.length > 0 &&
-            currentstatus == '4' &&
-            permissions['thepool_user_student_mine_enternotice']
-          "
-          type="primary"
-          size="small"
-          round
-          @click="handleBtns('showAdmissionNotice')"
-          >{{ $t("consult.入学通知") }}</el-button
-        >
-        <el-button
-          v-if="permissions['thepool_user_student_mine_batchedit']"
-          type="defult"
-          size="small"
-          round
-          @click="handleBtns('batchEditstudent')"
-          >{{ $t("consult.批量编辑") }}</el-button
-        >
+    <div class="pool-tableBox">
+      <div class="df_sb palyTableBox" style="padding-top: 0">
+        <div class="df_sb">
+          <el-button
+            v-if="permissions['thepool_user_student_mine_add']"
+            type="primary"
+            size="small"
+            round
+            @click="addStudent"
+            >{{ $t("consult.新增") }}</el-button
+          >
+          <el-button
+            v-if="permissions['thepool_user_student_mine_qrcode']"
+            type="primary"
+            size="small"
+            round
+            @click="showQrcodeModal = true"
+            >{{ $t("consult.申请表二维码") }}</el-button
+          >
 
-        <el-button
-          v-if="
-            tableData.length > 0 &&
-            (currentstatus == '1' || currentstatus == '3') &&
-            permissions['thepool_user_student_mine_enter']
-          "
-          type="defult"
-          size="small"
-          round
-          @click="handleBtns('batchEnrollment')"
-          >{{ $t("consult.批量入学") }}</el-button
-        >
-        <el-button
-          v-if="
-            tableData.length > 0 &&
-            currentstatus == '2' &&
-            permissions['thepool_user_student_mine_leaving']
-          "
-          type="defult"
-          size="small"
-          round
-          @click="handleBtns('batchLeaving')"
-          >{{ $t("consult.批量离校") }}</el-button
-        >
-        <el-button
-          v-if="
-            tableData.length > 0 &&
-            currentstatus == '2' &&
-            permissions['thepool_user_student_mine_graduated']
-          "
-          type="defult"
-          size="small"
-          round
-          @click="handleBtns('batchGraduation')"
-          >{{ $t("consult.批量毕业") }}</el-button
-        >
-        <el-button
-          v-if="
-            tableData.length > 0 &&
-            currentstatus == '0' &&
-            permissions['thepool_user_student_mine_apply']
-          "
-          type="defult"
-          size="small"
-          round
-          @click="handleBtns('batchApply')"
-          >{{ $t("consult.批量申请") }}</el-button
-        >
-        <el-button
-          v-if="permissions['thepool_user_student_mine_import']"
-          type="defult"
-          size="small"
-          round
-          @click.stop="showUpload = true"
-          >{{ $t("consult.导入") }}</el-button
-        >
-        <el-button
-          v-if="
-            tableData.length > 0 &&
-            permissions['thepool_user_student_mine_export']
-          "
-          type="defult"
-          size="small"
-          round
-          @click="exportList"
-          >{{ $t("consult.导出") }}</el-button
-        >
+          <el-button
+            v-if="
+              currentstatus == '2' &&
+              permissions['enquiry_student_upgrade_enter']
+            "
+            type="primary"
+            size="small"
+            round
+            @click="showUpgrade"
+            >{{ $t("consult.一键升学") }}</el-button
+          >
+          <el-button
+            v-if="
+              tableData.length > 0 &&
+              currentstatus == '4' &&
+              permissions['thepool_user_student_mine_enternotice']
+            "
+            type="primary"
+            size="small"
+            round
+            @click="handleBtns('showAdmissionNotice')"
+            >{{ $t("consult.入学通知") }}</el-button
+          >
+          <el-button
+            v-if="permissions['thepool_user_student_mine_batchedit']"
+            type="defult"
+            size="small"
+            round
+            @click="handleBtns('batchEditstudent')"
+            >{{ $t("consult.批量编辑") }}</el-button
+          >
+
+          <el-button
+            v-if="
+              tableData.length > 0 &&
+              (currentstatus == '1' || currentstatus == '3') &&
+              permissions['thepool_user_student_mine_enter']
+            "
+            type="defult"
+            size="small"
+            round
+            @click="handleBtns('batchEnrollment')"
+            >{{ $t("consult.批量入学") }}</el-button
+          >
+          <el-button
+            v-if="
+              tableData.length > 0 &&
+              currentstatus == '2' &&
+              permissions['thepool_user_student_mine_leaving']
+            "
+            type="defult"
+            size="small"
+            round
+            @click="handleBtns('batchLeaving')"
+            >{{ $t("consult.批量离校") }}</el-button
+          >
+          <el-button
+            v-if="
+              tableData.length > 0 &&
+              currentstatus == '2' &&
+              permissions['thepool_user_student_mine_graduated']
+            "
+            type="defult"
+            size="small"
+            round
+            @click="handleBtns('batchGraduation')"
+            >{{ $t("consult.批量毕业") }}</el-button
+          >
+          <el-button
+            v-if="
+              tableData.length > 0 &&
+              currentstatus == '0' &&
+              permissions['thepool_user_student_mine_apply']
+            "
+            type="defult"
+            size="small"
+            round
+            @click="handleBtns('batchApply')"
+            >{{ $t("consult.批量申请") }}</el-button
+          >
+          <el-button
+            v-if="permissions['thepool_user_student_mine_import']"
+            type="defult"
+            size="small"
+            round
+            @click.stop="showUpload = true"
+            >{{ $t("consult.导入") }}</el-button
+          >
+          <el-button
+            v-if="
+              tableData.length > 0 &&
+              permissions['thepool_user_student_mine_export']
+            "
+            type="defult"
+            size="small"
+            round
+            @click="exportList"
+            >{{ $t("consult.导出") }}</el-button
+          >
+        </div>
+        <div class="df_sb">
+          <SelectTabletMenu
+            type="studentMyTitle"
+            @resetTableTitle="resetTableTitle"
+          />
+        </div>
       </div>
-      <div class="df_sb">
-        <SelectTabletMenu
-          type="studentMyTitle"
-          @resetTableTitle="resetTableTitle"
+      <div class="tableBox">
+        <Table
+          ref="Table"
+          :tableTitle="tableTitle"
+          :tableData="tableData"
+          :tableBtn="tableBtn"
+          :showSelection="true"
+          @playTab="playTab"
+          @rowClick="rowClick"
         />
-      </div>
-    </div>
-    <div class="tableBox">
-      <Table
-        ref="Table"
-        :tableTitle="tableTitle"
-        :tableData="tableData"
-        :tableBtn="tableBtn"
-        :showSelection="true"
-        @playTab="playTab"
-        @rowClick="rowClick"
-      />
-      <div class="df_sb palyTableBox" style="padding: 0">
-        <PaginationInfo
-          :paginationTotal="paginationTotal"
-          :paginationSize="pagination['pageSize']"
-        />
-        <Pagination
-          :showPageSizes="true"
-          :total="paginationTotal"
-          :pagination="pagination"
-          @handleCurrentChange="handleCurrentChange"
-          @handleSizeChange="handleSizeChange"
-        />
+        <div class="df_sb palyTableBox" style="padding: 0">
+          <PaginationInfo
+            :paginationTotal="paginationTotal"
+            :paginationSize="pagination['pageSize']"
+          />
+          <Pagination
+            :showPageSizes="true"
+            :total="paginationTotal"
+            :pagination="pagination"
+            @handleCurrentChange="handleCurrentChange"
+            @handleSizeChange="handleSizeChange"
+          />
+        </div>
       </div>
     </div>
     <!-- 批量导入 -->
@@ -399,6 +531,35 @@
       ref="SaveRequestParam"
       @saveRequestParam="addRequestParam"
     />
+    <el-dialog
+      :title="$t('consult.二维码')"
+      :visible.sync="showQrcodeModal"
+      width="400px"
+      :before-close="() => (showQrcodeModal = false)"
+      :close-on-click-modal="false"
+    >
+      <div class="moadlFromBox">
+        <el-select
+          style="width: 100%; margin-bottom: 20px"
+          v-model="paySubject"
+          :placeholder="$t('consult.请选择')"
+          @change="getQrcode"
+        >
+          <el-option
+            v-for="item in consult['liWanTemplateName']"
+            :key="item.value"
+            :label="i18nlocel == 'en' ? item.enLabel : item.label"
+            :value="item.value"
+          ></el-option>
+        </el-select>
+        <QRCode
+          v-if="showQrcodeModal && paySubject"
+          ref="QRCode"
+          :path="path"
+          :showBtn="true"
+        />
+      </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -434,6 +595,8 @@ import UpgradeTable from "@/page/thepool/modal/upgradeTable.vue";
 import SaveRequestParam from "@/page/thepool/modal/saveRequestParam.vue";
 import SelectTabletMenu from "@/components/common/pooldictselect/selecttabletmenu.vue";
 import QRCode from "@/components/common/QRcode.vue";
+import OverflowWrap from "@/components/thepoolcommon/OverflowWrap.vue";
+import SearchType from "@/components/thepoolcommon/searchtype.vue";
 export default {
   name: "TestUniWel",
   components: {
@@ -453,6 +616,8 @@ export default {
     SaveRequestParam,
     SelectTabletMenu,
     QRCode,
+    OverflowWrap,
+    SearchType,
   },
   data() {
     return {
@@ -460,15 +625,15 @@ export default {
       showUpload: false,
       statusList: consult["enrolledStatusMyList"],
       enrolledStatus: consult["enrolledStatus"],
-      currentstatus: "0",
+      currentstatus: "-1",
       tableTitle: consult["studentTitle"],
       sexList: consult["sexList"],
       tableData: [],
       tableBtn: [],
       pagination: {
-        pageSize: 10,
+        pageSize: 50,
         pageNum: 1,
-        status: ["4"],
+        status: [],
       },
       paginationTotal: 0,
       searchData: {},
@@ -479,6 +644,7 @@ export default {
         directions: [],
         schools: [],
         createdTime: [],
+        status: [],
       },
       enrollLevelList: [],
       directionsList: [],
@@ -489,6 +655,9 @@ export default {
       searchRequestParamId: null,
       requestList: [],
       submitting: false,
+      routeChange: null,
+      paySubjectList: [],
+      paySubject: null,
       showQrcodeModal: false,
       path: `${process.env.VUE_APP_BASE_POOL}/#/thepool/templateout/student`,
     };
@@ -501,6 +670,7 @@ export default {
       "dictpermissions",
       "pooldictionary",
       "pooldictpermissions",
+      "searchType",
     ]),
   },
 
@@ -514,9 +684,27 @@ export default {
     i18nlocel() {
       this.resetData();
     },
+    "$store.state.thepool.keyword": {
+      handler(val) {
+        console.log("Vuex keyword changed:", val);
+        this.searchFrom["keyword"] = val;
+      },
+      immediate: true,
+    },
   },
   mounted() {
+    this.getPaySubject();
     this.wathKeyDowm();
+    this.$store.subscribeAction((action) => {
+      console.log("搜索列表", action);
+      if (this.$route.path != "/thepool/user/student/mine") {
+        return;
+      }
+      if (action.type === "searchList") {
+        this.searchFrom["keyword"] = action.payload;
+        this.search();
+      }
+    });
   },
   beforeDestroy() {
     this.removeKeyDowm();
@@ -573,7 +761,7 @@ export default {
         console.log("res", res);
         if (res.data.success) {
           let { data, total } = res.data.data;
-          this.tableData = data;
+          this.tableData = data || [];
           this.paginationTotal = Number(total);
           this.resetData();
         }
@@ -867,6 +1055,7 @@ export default {
       return searchData;
     },
     clear() {
+      this.$store.dispatch("clearKeyword");
       this.searchData = {};
       if (this.pooldictpermissions.length == 1) {
         this.searchFrom = {
@@ -875,6 +1064,7 @@ export default {
           directions: [],
           keyword: "",
           createdTime: [],
+          status: [],
         };
       } else {
         this.searchFrom = {
@@ -884,6 +1074,7 @@ export default {
           schools: [],
           keyword: "",
           createdTime: [],
+          status: [],
         };
         this.enrollLevelList = [];
         this.directionsList = [];
@@ -902,11 +1093,16 @@ export default {
       this.tableBtn = this.gettableBtn(item.btn);
       this.pagination["pageNum"] = 1;
       if (item.type == "-1") {
+        this.searchFrom = {
+          ...this.searchFrom,
+          status: [],
+        };
         delete this.pagination["status"];
       } else {
+        delete this.searchFrom.status;
         this.pagination["status"] = [item.type];
       }
-      this.getList();
+      this.search();
     },
     gettableBtn(data) {
       let tableBtn = data.filter((res) => {
@@ -1055,7 +1251,7 @@ export default {
         this.changeSchool(applySchoolsId);
       }
 
-      this.getList();
+      this.search();
     },
     saveRequestParam() {
       this.requestParam = this.getSearchData();
@@ -1103,16 +1299,41 @@ export default {
           applySchools: data.applySchools || [],
           enrollLevels: data.enrollLevels || [],
           directions: data.directions || [],
+          status: data.status || [],
           createdTime:
             data.createTimeBegin && data.createTimeEnd
               ? [data.createTimeBegin, data.createTimeEnd]
               : [],
         };
-        this.getList();
+        this.search();
       });
     },
     hasSchool(value) {
       return this.pooldictpermissions.some((item) => item.value == value);
+    },
+    // 二维码
+    getQrcode(e) {
+      let paySubject = encodeURIComponent(
+        JSON.stringify({
+          value: e,
+        })
+      );
+      this.path = `${process.env.VUE_APP_BASE_POOL}/#/thepool/templateout/student?formType=${paySubject}`;
+      this.showQrcodeModal = true;
+    },
+    closeQrcodeModal() {
+      this.showQrcodeModal = false;
+      this.path = "";
+      this.paySubject = null;
+    },
+    // 获取荔湾校区下的缴费主体
+    getPaySubject() {
+      this.paySubjectList = [];
+      this.pooldictionary.map((item) => {
+        if (item.value == "5") {
+          this.paySubjectList = item["child"]["enquiry_pay_subject"] || [];
+        }
+      });
     },
   },
 };

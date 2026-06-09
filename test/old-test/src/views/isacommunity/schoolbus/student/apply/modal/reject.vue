@@ -1,7 +1,7 @@
 <template>
   <div class="community_page">
     <el-dialog
-      :title="$t('isagroup.批量拒绝')"
+      :title="$t('schoolbus.批量拒绝')"
       :visible.sync="showModal"
       width="800px"
       :before-close="closeModal"
@@ -17,7 +17,7 @@
         >
           <div class="df_center_wrap" style="max-height: 600px; overflow-y: auto">
             <el-form-item
-              :label="$t('isagroup.拒绝原因')"
+              :label="$t('schoolbus.拒绝原因')"
               prop="denyReason"
               style="width: 100%"
             >
@@ -31,11 +31,14 @@
             </el-form-item>
           </div>
           <el-form-item class="modalFromBtn">
-            <el-button type="primary" size="medium" @click="submitForm('ruleForm')">{{
-              $t("isagroup.确认")
-            }}</el-button>
+            <el-button
+              type="primary"
+              size="medium"
+              :loading="isSubmitting"
+              @click="submitForm('ruleForm')"
+            >{{ $t("schoolbus.确认") }}</el-button>
             <el-button type="default" size="medium" @click="closeModal">{{
-              $t("isagroup.取消")
+              $t("schoolbus.取消")
             }}</el-button>
           </el-form-item>
         </el-form>
@@ -59,16 +62,17 @@ export default {
       ruleForm: {},
       rules: {
         denyReason: [
-          { required: true, message: that.$t("isagroup.请输入"), trigger: "blur" },
+          { required: true, message: that.$t("schoolbus.请输入"), trigger: "blur" },
         ],
       },
       selectionId: [],
+      isSubmitting: false,
     };
   },
   created() {},
   mounted() {},
   computed: {
-    ...mapGetters(["permissions", "dictionary", "i18nlocel"]),
+    ...mapGetters(["permissions", "i18nlocel"]),
   },
   methods: {
     // 打开
@@ -79,13 +83,18 @@ export default {
 
     // 编辑
     batchDeny(data) {
-      batchDeny(data).then((res) => {
-        if (res.data.success) {
-          this.$message.success(this.$t("isagroup.成功"));
-          this.$emit("getList");
-          this.closeModal();
-        }
-      });
+      this.isSubmitting = true;
+      batchDeny(data)
+        .then((res) => {
+          if (res.data.success) {
+            this.$message.success(this.$t("schoolbus.成功"));
+            this.$emit("getList");
+            this.closeModal();
+          }
+        })
+        .finally(() => {
+          this.isSubmitting = false;
+        });
     },
     // 提交表单
     submitForm(formName) {

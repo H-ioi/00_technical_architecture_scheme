@@ -15,10 +15,10 @@
               <div
                 style="width: 25%; margin-bottom: 15px"
                 class="orderDetail_baseinfo_item"
-                v-for="(item, index) in tabletitle['orderBusTable']"
+                v-for="(item, index) in orderBusFields"
                 :key="index"
               >
-                <span>{{ $t("isagroup")[item.label] }}</span>
+                <span>{{ item.label }}</span>
                 <span :title="$checkNull(baseInfo[item.prop])">{{
                   $checkNull(baseInfo[item.prop])
                 }}</span>
@@ -28,7 +28,7 @@
                 style="width: 100%; margin-bottom: 15px"
                 class="orderDetail_baseinfo_item"
               >
-                <span>{{ $t("isagroup.拒绝理由") }}</span>
+                <span>{{ $t("schoolbus.拒绝理由") }}</span>
                 <span :title="$checkNull(baseInfo['denyReason'])">{{
                   $checkNull(baseInfo["denyReason"])
                 }}</span>
@@ -37,7 +37,7 @@
                 style="width: 100%; margin-bottom: 15px"
                 class="orderDetail_baseinfo_item"
               >
-                <span>{{ $t("isagroup.签名") }}</span>
+                <span>{{ $t("schoolbus.签名") }}</span>
                 <upload-file
                   style="margin-top: 15px"
                   ref="uploadFile"
@@ -58,10 +58,10 @@
               <div
                 style="width: 25%; margin-bottom: 15px"
                 class="orderDetail_baseinfo_item"
-                v-for="(item, index) in tabletitle['payInfo']"
+                v-for="(item, index) in payInfoFields"
                 :key="index"
               >
-                <span>{{ $t("isagroup")[item.label] }}</span>
+                <span>{{ item.label }}</span>
                 <span :title="$checkNull(baseInfo[item.prop])">{{
                   $checkNull(baseInfo[item.prop])
                 }}</span>
@@ -73,15 +73,15 @@
               <div style="width: 100%; margin-top: 15px">
                 <div style="width: 100%">
                   <el-table
-                    :header-cell-style="consts['tablestyle']['headercellstyle']"
+                    :header-cell-style="tableHeaderStyle"
                     :data="routeTableData"
                     style="width: 100%"
                   >
                     <el-table-column
-                      v-for="(i, k) in tabletitle['bindRouteTable']"
+                      v-for="(i, k) in bindRouteTableColumns"
                       :key="k"
                       :prop="i['prop']"
-                      :label="i['hasEn'] ? $t('isagroup')[i['label']] : i['label']"
+                      :label="i['label']"
                       show-overflow-tooltip
                       :width="`${i['width']}`"
                       :fixed="i['fixed']"
@@ -97,15 +97,15 @@
               <div style="width: 100%; margin-top: 15px">
                 <div style="width: 100%">
                   <el-table
-                    :header-cell-style="consts['tablestyle']['headercellstyle']"
+                    :header-cell-style="tableHeaderStyle"
                     :data="personTableData"
                     style="width: 100%"
                   >
                     <el-table-column
-                      v-for="(i, k) in tabletitle['bindPersonTable']"
+                      v-for="(i, k) in bindPersonTableColumns"
                       :key="k"
                       :prop="i['prop']"
-                      :label="i['hasEn'] ? $t('isagroup')[i['label']] : i['label']"
+                      :label="i['label']"
                       show-overflow-tooltip
                       :width="`${i['width']}`"
                       :fixed="i['fixed']"
@@ -125,23 +125,30 @@
 <script>
 import { mapGetters } from "vuex";
 import { getOrderDetail } from "@/api/isacommunity/busorder.js";
-import consts from "@/const/isacommunity/consts.js";
-import tabletitle from "@/const/isacommunity/tabletitle.js";
-import Table from "@/components/communitycommon/Table.vue";
+import {
+  BUS_APPROVAL_STATUS,
+  BUS_PAYMENT_STATUS,
+  BUS_PICKUP_METHOD,
+  BUS_PAYMENT_METHOD,
+  BUS_STUDENT_LINE_TYPE,
+  BUS_TABLE_STYLE,
+  bindRouteTableColumns,
+  bindPersonTableColumns,
+} from "../../../schoolbusConsts.js";
 import uploadFile from "@/components/communitycommon/uploadFile.vue";
 import _ from "lodash";
 // 引入 dayjs
 import dayjs from "dayjs";
+import schoolListBuscommonMixin from "@/mixins/schoolListBuscommon.js";
 export default {
   name: "detail",
+  mixins: [schoolListBuscommonMixin],
   components: { uploadFile },
   props: {
     title: String,
   },
   data() {
     return {
-      consts: consts,
-      tabletitle: tabletitle,
       showDialog: false,
       baseInfo: {},
       personTableData: [],
@@ -151,10 +158,45 @@ export default {
   created() {},
   mounted() {},
   computed: {
-    ...mapGetters(["i18nlocel", "dictionary", "permissions"]),
+    ...mapGetters(["i18nlocel", "permissions"]),
+    tableHeaderStyle() {
+      return BUS_TABLE_STYLE.headercellstyle;
+    },
+    orderBusFields() {
+      return [
+        { label: "ID", prop: "id" },
+        { label: this.$t("schoolbus.申请时间"), prop: "createTime" },
+        { label: this.$t("schoolbus.申请状态"), prop: "approvalStatusLabel" },
+        { label: this.$t("schoolbus.缴费状态"), prop: "paymentStatusLabel" },
+        { label: this.$t("schoolbus.应缴金额"), prop: "amountDue" },
+        { label: this.$t("schoolbus.校区"), prop: "schoolEnName" },
+        { label: this.$t("schoolbus.学期"), prop: "showSectionName" },
+        { label: this.$t("schoolbus.学号"), prop: "admissionNo" },
+        { label: this.$t("schoolbus.姓名"), prop: "studentName" },
+        { label: this.$t("schoolbus.年级"), prop: "studentGrade" },
+        { label: this.$t("schoolbus.接送方式"), prop: "pickupMethodLabel" },
+      ];
+    },
+    payInfoFields() {
+      return [
+        { label: this.$t("schoolbus.实缴金额"), prop: "paymentAmount" },
+        { label: this.$t("schoolbus.缴费方式"), prop: "paymentMethodLabel" },
+        { label: this.$t("schoolbus.缴费日期"), prop: "paymentDate" },
+        { label: this.$t("schoolbus.缴费账号"), prop: "paymentAccount" },
+        { label: this.$t("schoolbus.缴费单号"), prop: "paymentOrderNo" },
+        { label: this.$t("schoolbus.收款账号"), prop: "receivingAccount" },
+      ];
+    },
+    bindRouteTableColumns() {
+      return bindRouteTableColumns(this);
+    },
+    bindPersonTableColumns() {
+      return bindPersonTableColumns(this);
+    },
   },
   methods: {
-    showModal(item) {
+    async showModal(item) {
+      await this.fetchSchoolListBuscommon();
       this.showDialog = true;
       this.$nextTick(() => {
         this.getDetail(item.id);
@@ -200,34 +242,29 @@ export default {
             this.baseInfo = {
               ...this.baseInfo,
               id,
-              schoolEnName: this.$getListLabel(
-                this.dictionary["school"],
-                schoolId,
-                "enName",
-                "id"
-              ),
+              schoolEnName: this.schoolLabelById(schoolId) || "--",
               showSectionName: this.i18nlocel == "en" ? sectionEnName : sectionCnName,
               admissionNo,
               pickupMethod,
-              pickupMethodLabel: this.$getListLabel(consts["pickupMethod"], pickupMethod),
+              pickupMethodLabel: this.$getListLabel(BUS_PICKUP_METHOD, pickupMethod),
               studentName,
               studentGrade,
               amountDue,
               approvalStatus,
               approvalStatusLabel: this.$getListLabel(
-                consts["approvalStatus"],
+                BUS_APPROVAL_STATUS,
                 approvalStatus
               ),
               denyReason,
               paymentStatus,
               paymentStatusLabel: this.$getListLabel(
-                consts["paymentStatus"],
+                BUS_PAYMENT_STATUS,
                 paymentStatus
               ),
               createTime: dayjs(createTime).format("YYYY-MM-DD HH:mm"),
               paymentAmount,
               paymentMethodLabel: this.$getListLabel(
-                consts["paymentMethod"],
+                BUS_PAYMENT_METHOD,
                 paymentMethod
               ),
               paymentDate,
@@ -258,7 +295,7 @@ export default {
                 stationName:
                   this.i18nlocel == "en" ? item.stationEnName : item.stationCnName,
                 lineTypeName: this.$getListLabel(
-                  consts["studentLineType"],
+                  BUS_STUDENT_LINE_TYPE,
                   item.studentLineType
                 ),
                 carNumber: item.carinfoId

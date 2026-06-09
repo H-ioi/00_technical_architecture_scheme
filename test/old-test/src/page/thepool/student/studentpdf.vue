@@ -46,23 +46,17 @@ export default {
       this.studentId = this.$route.query.id;
       this.applySchool = this.$route.query.schoolId;
       this.getStudentDetail();
-      let templateList = await getPoolStudentTemplate({
-        applySchool: this.applySchool,
-      });
-      let studentFillInfo = await getStudentfillInfo({
-        studentId: this.studentId,
-      });
-
-      this.$refs.pdfGenerator.initData(templateList, studentFillInfo);
     },
     getStudentDetail() {
       getStudentDetail(this.studentId).then((res) => {
         if (res.data.success) {
-          let { baseInfo, schools, photos } = res.data.data;
+          let { baseInfo, schools, photos, extendInfo } = res.data.data;
           let data = baseInfo;
+          this.getFillTemplateData(data.direction);
           this.studentBaseInfo = {
             ...data,
             schools,
+            enrolledDate: extendInfo.enrolledDate,
             sexlabel: this.$getListLabel(this.sexList, data.sex),
             enrollYear: data["enrollYear"]
               ? `${data["enrollYear"]}-${data["enrollYear"] + 1}`
@@ -82,6 +76,16 @@ export default {
                   this.dictionary["enquiry_enroll_level"],
                   data.enrollLevel
                 ),
+            directionLabel: data.applySchool
+              ? this.getDictLabel(
+                  data.applySchool,
+                  "enquiry_direction",
+                  data.direction
+                )
+              : this.$getListLabel(
+                  this.dictionary["enquiry_direction"],
+                  data.direction
+                ),
           };
           this.$nextTick(async () => {
             if (photos && photos.length > 0) {
@@ -98,6 +102,24 @@ export default {
           console.log(" this.studentBaseInfo", this.studentBaseInfo);
         }
       });
+    },
+    async getFillTemplateData(direction) {
+      console.log("getFillTemplateData", direction, !direction);
+
+      if (!direction) return;
+      let templateList = await getPoolStudentTemplate({
+        applySchool: this.applySchool,
+      });
+      let studentFillInfo = await getStudentfillInfo({
+        studentId: this.studentId,
+      });
+      templateList = templateList.filter((item) => {
+        let templateDirection = item.direction || "";
+        let list = templateDirection.split(",");
+        return list.includes(direction);
+      });
+
+      this.$refs.pdfGenerator.initData(templateList, studentFillInfo);
     },
     getDictLabel(pid, type, cid) {
       let str = "";

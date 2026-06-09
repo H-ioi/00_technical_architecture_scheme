@@ -7,7 +7,7 @@
         type="primary"
         size="small"
         @click="generatePdf"
-        >打印</el-button
+        >{{ $t("consult.打印") }}</el-button
       >
     </div>
 
@@ -71,7 +71,6 @@
           "
         >
           <div
-            class="pdf-item"
             style="
               display: flex;
               justify-content: space-between;
@@ -152,9 +151,83 @@
               </div>
               <div style="font-size: 18px; line-height: 1.5">
                 <span style="color: #000"
-                  >{{ studentBaseInfo.statusLabel || "--" }}&nbsp;&nbsp;</span
+                  >{{ studentBaseInfo.statusLabel || "" }}&nbsp;&nbsp;</span
                 >
-                <!-- <span style="color: rgb(0, 0, 0, 0.8)">在 3月 29, 2026</span> -->
+                <span style="color: rgb(0, 0, 0, 0.8)">{{
+                  studentBaseInfo.enrolledDate || ""
+                }}</span>
+              </div>
+            </div>
+          </div>
+          <div>
+            <h3
+              v-if="studentData['paySubject']"
+              style="
+                text-align: left;
+                font-size: 6mm;
+                margin: 0 0 3mm 0;
+                color: #1f4060;
+                font-weight: bold;
+              "
+            >
+              {{
+                studentData["formType"]
+                  ? schoolName[studentData["formType"]]
+                  : ""
+              }}
+            </h3>
+            <h3
+              style="
+                text-align: left;
+                font-size: 4.5mm;
+                margin: 0 0 3mm 0;
+                color: #1f4060;
+                font-weight: bold;
+                font-weight: 600;
+              "
+            >
+              学生基本信息/Student Information
+            </h3>
+
+            <div
+              style="
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: space-between;
+                gap: 5mm;
+              "
+            >
+              <div
+                style="
+                  width: 45%;
+                  display: flex;
+                  flex-direction: column;
+                  align-items: flex-start;
+                  margin-bottom: 3mm;
+                "
+              >
+                <div style="font-weight: 600; margin-bottom: 1.5mm">
+                  {{ $t("consult.校区") }}
+                </div>
+                <div style="color: #333">
+                  {{ studentBaseInfo.applySchoolLabel || "--" }}
+                </div>
+              </div>
+              <div
+                style="
+                  width: 45%;
+                  display: flex;
+                  flex-direction: column;
+                  align-items: flex-start;
+                  margin-bottom: 3mm;
+                "
+              >
+                <div style="font-weight: 600; margin-bottom: 1.5mm">
+                  {{ $t("consult.方向") }}
+                </div>
+                <div style="color: #333">
+                  {{ studentBaseInfo.directionLabel || "--" }}
+                </div>
               </div>
             </div>
           </div>
@@ -166,9 +239,10 @@
                 margin: 0 0 3mm 0;
                 color: #1f4060;
                 font-weight: bold;
+                font-weight: 600;
               "
             >
-              学生基本信息/Student Information
+              基本信息/Basic Detail
             </h3>
             <div
               style="
@@ -285,80 +359,84 @@
               </div>
             </div>
           </div>
-          <div
-            v-for="(dynamic, index) in studentTemplate"
-            :key="dynamic.templateId"
-          >
-            <h3
-              style="
-                font-size: 16px;
-                margin: 3mm 0 3mm 0;
-                color: #1f4060;
-                font-weight: bold;
-              "
-            >
-              {{ dynamic["templateName"] + "/" + dynamic["templateNameEn"] }}
-            </h3>
+          <div v-if="studentTemplate.length > 0">
             <div
-              style="
-                display: flex;
-                flex-wrap: wrap;
-                justify-content: space-between;
-                gap: 5mm;
-              "
+              v-for="(dynamic, index) in studentTemplate"
+              :key="dynamic.templateId"
             >
+              <h3
+                style="
+                  font-size: 16px;
+                  margin: 3mm 0 3mm 0;
+                  color: #1f4060;
+                  font-weight: bold;
+                "
+              >
+                {{ dynamic["templateName"] + "/" + dynamic["templateNameEn"] }}
+              </h3>
               <div
-                v-for="(item, d) in dynamic['templateFields']"
-                :key="d + 'dynamic' + item.fieldName"
-                :style="` width: ${
-                  item.fieldType != 'upload' &&
-                  item.fieldType != 'sign' &&
-                  item.fieldType != 'protocol'
-                    ? 45
-                    : 100
-                }%;
+                style="
+                  display: flex;
+                  flex-wrap: wrap;
+                  justify-content: space-between;
+                  gap: 5mm;
+                "
+              >
+                <div
+                  v-for="(item, d) in dynamic['templateFields']"
+                  :key="d + 'dynamic' + item.fieldName"
+                  :style="` width: ${
+                    item.fieldType != 'upload' &&
+                    item.fieldType != 'sign' &&
+                    item.fieldType != 'protocol'
+                      ? 45
+                      : 100
+                  }%;
                   display: flex;
                   flex-direction: column;
                   align-items: flex-start;`"
-              >
-                <div style="font-weight: bold; margin-bottom: 1mm">
-                  {{
-                    item.fieldName +
-                    (item.fieldNameEn ? "/" + item.fieldNameEn : "")
-                  }}
-                </div>
-                <div
-                  v-if="item.fieldType == 'protocol'"
-                  style="
-                    font-weight: 400;
-                    color: #999999;
-                    white-space: pre-wrap;
-                    word-break: break-all;
-                    font-size: 3mm;
-                    line-height: 1.4;
-                  "
-                  v-html="getplaceholder(item)"
-                ></div>
-                <div
-                  v-if="item.fieldType != 'upload' && item.fieldType != 'sign'"
                 >
-                  {{ item["fieldValue"] || "--" }}
-                </div>
-                <div
-                  v-else
-                  style="
-                    display: flex;
-                    flex-direction: column;
-                    flex-wrap: wrap;
-                    gap: 5mm;
-                  "
-                >
-                  <img
-                    style="width: 30mm; height: auto; margin-top: 1mm"
-                    v-for="imgId in item['fieldValue']"
-                    :key="imgId"
-                    :src="imgObj[imgId]"
-                  />
+                  <div style="font-weight: bold; margin-bottom: 1mm">
+                    {{
+                      item.fieldName +
+                      (item.fieldNameEn ? "/" + item.fieldNameEn : "")
+                    }}
+                  </div>
+                  <div
+                    v-if="item.fieldType == 'protocol'"
+                    style="
+                      font-weight: 400;
+                      color: #999999;
+                      white-space: pre-wrap;
+                      word-break: break-all;
+                      font-size: 3mm;
+                      line-height: 1.4;
+                    "
+                    v-html="getplaceholder(item)"
+                  ></div>
+                  <div
+                    v-if="
+                      item.fieldType != 'upload' && item.fieldType != 'sign'
+                    "
+                  >
+                    {{ item["fieldValue"] || "--" }}
+                  </div>
+                  <div
+                    v-else
+                    style="
+                      display: flex;
+                      flex-direction: column;
+                      flex-wrap: wrap;
+                      gap: 5mm;
+                    "
+                  >
+                    <img
+                      style="width: 30mm; height: auto; margin-top: 1mm"
+                      v-for="imgId in item['fieldValue']"
+                      :key="imgId"
+                      :src="imgObj[imgId]"
+                    />
+                  </div>
                 </div>
               </div>
             </div>
@@ -675,6 +753,16 @@ export default {
       imgObj: {},
       enrollLevelList: [], //入学年级
       relationTypeList: [], //关系类型
+      schoolName: {
+        7: "广州荔湾爱莎外籍人员子女学校意向学生登记表", //爱莎荔湾外籍学校
+        6: "广州荔湾爱莎文华学校（国际部）意向学生登记表", //爱莎荔湾文华高中
+        5: "广州荔湾爱莎文华学校（国内部）学生信息登记表", //荔湾爱莎文华学校
+      },
+      schoolEnName: {
+        7: "ISALWIS Prospective Student Registration Form", //爱莎荔湾外籍学校
+        6: "ISALW Wenhua  STUDENT REGISTRATION FORM", //爱莎荔湾文华高中
+        5: "ISALW Wenhua  STUDENT REGISTRATION FORM (Domestic)", //荔湾爱莎文华学校
+      },
     };
   },
   methods: {
@@ -910,38 +998,8 @@ export default {
         let position = 0;
         let pageIndex = 1;
 
-        // 获取内容元素的子元素高度信息（用于智能分页）
-        const contentHeights = this.calculateContentHeights(contentElement);
-        console.log("内容元素高度信息:", contentHeights);
-
         while (position < imgFullHeight) {
           console.log("处理第", pageIndex, "页");
-
-          // 智能计算当前页的结束位置，避免截断内容
-          let endY = this.calculatePageBreakPosition(
-            position,
-            CONTENT_HEIGHT,
-            imgFullHeight,
-            contentHeights,
-            imgRatio
-          );
-
-          // 确保结束位置有效
-          endY = Math.min(endY, imgFullHeight);
-          endY = Math.max(endY, position);
-
-          let currentHeight = endY - position;
-
-          // 确保内容高度有效
-          if (currentHeight <= 0) {
-            currentHeight = CONTENT_HEIGHT;
-            endY = position + currentHeight;
-          }
-
-          console.log(
-            `第${pageIndex}页: position=${position}, endY=${endY}, currentHeight=${currentHeight}`
-          );
-
           // 1. 添加页眉
           if (headerCanvas) {
             pdf.addImage(
@@ -956,8 +1014,13 @@ export default {
             // this.drawHeader(pdf, A4_WIDTH, header);
           }
 
-          // 2. 计算图片上的对应区域
-          const imgStartY = position / imgRatio;
+          // 2. 计算当前页的内容区域
+          const startY = position;
+          const endY = Math.min(position + CONTENT_HEIGHT, imgFullHeight);
+          const currentHeight = endY - startY;
+
+          // 计算图片上的对应区域
+          const imgStartY = startY / imgRatio;
           const imgEndY = endY / imgRatio;
           const imgCurrentHeight = imgEndY - imgStartY;
 
@@ -1019,7 +1082,7 @@ export default {
             pageCount
           );
 
-          position = endY;
+          position += CONTENT_HEIGHT;
           if (position < imgFullHeight) {
             pdf.addPage();
             pageIndex++;
@@ -1087,70 +1150,6 @@ export default {
         pageHeight - 6,
         { align: "right" }
       );
-    },
-    // 计算内容元素的子元素高度信息（用于智能分页）
-    calculateContentHeights(contentElement) {
-      const heights = [];
-      const children = contentElement.children;
-      let cumulativeHeight = 0;
-
-      for (let i = 0; i < children.length; i++) {
-        const child = children[i];
-        const rect = child.getBoundingClientRect();
-        const height = rect.height;
-
-        heights.push({
-          index: i,
-          element: child,
-          height: height,
-          startY: cumulativeHeight,
-          endY: cumulativeHeight + height,
-          tagName: child.tagName,
-        });
-
-        cumulativeHeight += height;
-      }
-
-      return heights;
-    },
-    // 智能计算分页位置，避免截断内容
-    calculatePageBreakPosition(
-      currentPosition,
-      contentHeight,
-      fullHeight,
-      contentHeights,
-      imgRatio
-    ) {
-      const pageEnd = currentPosition + contentHeight;
-
-      // 如果已经是最后一页，直接返回末尾
-      if (pageEnd >= fullHeight) {
-        return fullHeight;
-      }
-
-      // 计算当前页结束位置在原始内容中的坐标
-      const pageEndInContent = pageEnd / imgRatio;
-
-      // 查找可能被截断的元素
-      for (let i = 0; i < contentHeights.length; i++) {
-        const item = contentHeights[i];
-
-        // 检查当前元素是否会被截断
-        if (item.startY < pageEndInContent && item.endY > pageEndInContent) {
-          // 找到会被截断的元素
-          // 将分页位置调整到该元素开始之前
-          const adjustedPosition = item.startY * imgRatio;
-
-          console.log(
-            `检测到元素 ${item.tagName} 会被截断，调整分页位置: ${pageEnd} -> ${adjustedPosition}`
-          );
-
-          return adjustedPosition;
-        }
-      }
-
-      // 如果没有找到需要调整的元素，使用原始分页位置
-      return pageEnd;
     },
 
     // 绘制页眉（后备方案）

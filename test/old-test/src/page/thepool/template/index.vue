@@ -3,7 +3,7 @@
     <el-scrollbar
       class="space_right"
       ref="space_right"
-      style="background: #ffffff; padding: 30px"
+      style="width: 100%; background: #ffffff; padding: 30px"
     >
       <FormgeneratorPool
         ref="FormgeneratorPool"
@@ -17,7 +17,10 @@
 
 <script>
 import { mapGetters } from "vuex";
-import { getTemplateOuterId, bindTemplateOuterId } from "@/api/space/templatedynamic.js";
+import {
+  getTemplateOuterId,
+  bindTemplateOuterId,
+} from "@/api/space/templatedynamic.js";
 import FormgeneratorPool from "@/page/space/from/formgenerator_pool.vue";
 export default {
   components: {
@@ -50,7 +53,9 @@ export default {
           this.$refs["FormgeneratorPool"].clearData();
         } else {
           this.$refs["FormgeneratorPool"].templateType = "edit";
-          this.$refs["FormgeneratorPool"].getTemplateDetail(query["templateId"]);
+          this.$refs["FormgeneratorPool"].getTemplateDetail(
+            query["templateId"]
+          );
         }
       });
     },

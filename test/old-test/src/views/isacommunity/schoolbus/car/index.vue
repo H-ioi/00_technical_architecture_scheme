@@ -1,138 +1,119 @@
 <template>
   <div class="community_page">
     <div class="community_top">
-      <div class="community_top_title">{{ $t("isagroup.车辆管理") }}</div>
+      <div class="community_top_title">{{ $t("schoolbus.车辆管理") }}</div>
       <div class="community_top_btn">
+        <el-button
+          v-if="permissions['buscarinfo_import']"
+          size="medium"
+          @click="batchUpdload"
+        >{{ $t("btn.导入") }}</el-button>
         <el-button
           v-if="permissions['buscarinfo_add']"
           type="primary"
-          size="large"
+          size="medium"
           @click="showForm('add')"
-          >{{ $t("btn.新增") }}</el-button
-        >
-        <el-button
-          v-if="permissions['buscarinfo_import']"
-          type="defult"
-          size="large"
-          @click="batchUpdload"
-          >{{ $t("btn.导入") }}</el-button
-        >
+        >{{ $t("btn.新增") }}</el-button>
       </div>
     </div>
-    <div class="community_centent">
-      <div class="community_searchFrom">
-        <el-form
-          class="df_align_center"
-          :label-position="'top'"
-          :inline="true"
-          :model="searchFrom"
-        >
-          <el-form-item style="width: 180px" v-if="schoolSelectList.length > 1">
-            <el-select
-              clearable
-              style="width: 100%"
-              v-model="searchFrom['schoolIds']"
-              :placeholder="$t('isagroup.请选择学校')"
-            >
-              <el-option
-                :key="k"
-                v-for="(i, k) in schoolSelectList"
-                :label="schoolDropdownLabel(i)"
-                :value="i.id"
-              ></el-option>
-            </el-select>
-          </el-form-item>
-          <el-form-item style="width: 180px">
-            <el-input
-              clearable
-              style="width: 100%"
-              v-model="searchFrom['carNumber']"
-              :placeholder="$t('isagroup.车牌号')"
-            ></el-input>
-          </el-form-item>
-          <el-form-item style="width: 180px">
-            <el-input
-              clearable
-              style="width: 100%"
-              v-model="searchFrom['driver']"
-              :placeholder="$t('isagroup.司机姓名')"
-            ></el-input>
-          </el-form-item>
-          <el-form-item style="width: 180px">
-            <el-input
-              clearable
-              style="width: 100%"
-              v-model="searchFrom['carTeacher']"
-              :placeholder="$t('isagroup.跟车老师')"
-            ></el-input>
-          </el-form-item>
-          <el-form-item style="width: 180px">
-            <el-select
-              clearable
-              style="width: 100%"
-              v-model="searchFrom['status']"
-              :placeholder="$t('isagroup.状态')"
-            >
-              <el-option
-                :key="k"
-                v-for="(i, k) in consts['carStatus']"
-                :label="i18nlocel == 'en' ? i.enLabel : i.label"
-                :value="i.id"
-              ></el-option>
-            </el-select>
-          </el-form-item>
-          <el-form-item style="width: auto; margin-right: 0">
-            <el-button
-              class="button_text"
-              size="medium"
-              type="text"
-              icon="el-icon-refresh-right"
-              @click="clear"
-              >{{ $t("btn.重置") }}</el-button
-            >
-            <el-button size="medium" type="primary" @click="getList">{{
-              $t("btn.查询")
-            }}</el-button>
-          </el-form-item>
+    <div class="community_centent_v2">
+      <div class="search_body">
+        <el-form class="search_form" :label-position="'top'" :inline="true" :model="searchFrom">
+          <el-row :gutter="10">
+            <el-col v-if="schoolSelectList.length > 1" :span="6">
+              <el-form-item>
+                <el-select
+                  clearable
+                  v-model="searchFrom.schoolIds"
+                  :placeholder="$t('schoolbus.请选择学校')"
+                >
+                  <el-option
+                    v-for="(i, k) in schoolSelectList"
+                    :key="k"
+                    :label="schoolDropdownLabel(i)"
+                    :value="i.id"
+                  />
+                </el-select>
+              </el-form-item>
+            </el-col>
+            <el-col :span="6">
+              <el-form-item>
+                <el-input
+                  clearable
+                  v-model="searchFrom.carNumber"
+                  :placeholder="$t('schoolbus.车牌号')"
+                  @keyup.enter.native="getList"
+                />
+              </el-form-item>
+            </el-col>
+            <el-col :span="6">
+              <el-form-item>
+                <el-input
+                  clearable
+                  v-model="searchFrom.driver"
+                  :placeholder="$t('schoolbus.司机姓名')"
+                  @keyup.enter.native="getList"
+                />
+              </el-form-item>
+            </el-col>
+            <el-col :span="6">
+              <el-form-item>
+                <el-input
+                  clearable
+                  v-model="searchFrom.carTeacher"
+                  :placeholder="$t('schoolbus.跟车老师')"
+                  @keyup.enter.native="getList"
+                />
+              </el-form-item>
+            </el-col>
+            <el-col v-if="searchOpen" :span="6">
+              <el-form-item>
+                <el-select
+                  clearable
+                  v-model="searchFrom.status"
+                  :placeholder="$t('schoolbus.状态')"
+                >
+                  <el-option
+                    v-for="(i, k) in carStatusOptions"
+                    :key="k"
+                    :label="i18nlocel === 'en' ? i.enLabel : i.label"
+                    :value="i.id"
+                  />
+                </el-select>
+              </el-form-item>
+            </el-col>
+          </el-row>
         </el-form>
+        <div class="search_btn">
+          <el-button type="primary" size="medium" @click="getList">{{ $t("btn.查询") }}</el-button>
+          <el-button text bg size="medium" @click="clear">{{ $t("btn.重置") }}</el-button>
+          <span class="open" @click="searchOpen = !searchOpen">
+            {{ searchOpen ? $t("schoolbus.收起") : $t("schoolbus.展开") }}
+          </span>
+        </div>
       </div>
 
       <div class="isa_table">
         <Table
           ref="Table"
           :showSelection="true"
-          :tableTitle="tabletitle['carTable']"
+          :tableTitle="tableTitle"
           :tableData="tableData"
           :tableBtn="tableBtn"
+          :height="schoolbusTableHeight"
           @playTab="playTab"
           @rowClick="rowClick"
+          @selection-change="handleSelectionChange"
         />
         <div class="df_sb isa_table_footer">
           <div>
-            <!-- <el-button
-              v-if="permissions['buscarinfo_batch_enable']"
-              size="small"
-              type="defult"
-              plain
-              @click="batchUpdateStatus(1)"
-              >{{ $t("btn.启用") }}</el-button
-            >
-            <el-button
-              v-if="permissions['buscarinfo_batch_enable']"
-              size="small"
-              type="defult"
-              plain
-              @click="batchUpdateStatus(0)"
-              >{{ $t("btn.禁用") }}</el-button
-            > -->
             <el-button
               v-if="permissions['buscarinfo_del']"
-              size="small"
+              :disabled="!selectedIds.length"
+              size="mini"
               type="danger"
-              plain
               @click="delData"
-              >{{ $t("btn.删除") }}</el-button
-            >
+            >{{ $t("btn.删除") }}</el-button>
           </div>
           <Pagination
             :total="paginationTotal"
@@ -142,11 +123,8 @@
         </div>
       </div>
     </div>
-    <!-- 新增编辑弹窗 -->
     <Form ref="Form" @getList="getList" />
-    <!-- 详情弹窗 -->
-    <Detail ref="Detail" :title="$t('isagroup.详情')" />
-    <!-- 批量导入弹窗 -->
+    <Detail ref="Detail" :title="$t('schoolbus.详情')" />
     <BatchUpdload ref="BatchUpdload" @getList="getList" />
   </div>
 </template>
@@ -154,48 +132,32 @@
 <script>
 import { mapGetters } from "vuex";
 import { getCarinfoPage, delCarinfo, batchUpdateStatus } from "@/api/isacommunity/car.js";
-import tabletitle from "@/const/isacommunity/tabletitle.js";
-import consts from "@/const/isacommunity/consts.js";
 import Table from "@/components/communitycommon/Table.vue";
+import { BUS_CAR_STATUS } from "../schoolbusConsts.js";
 import Pagination from "@/components/communitycommon/Pagination.vue";
 import Form from "./modal/form.vue";
 import Detail from "./modal/detail.vue";
 import BatchUpdload from "./modal/batchupdload.vue";
 import dayjs from "dayjs";
 import schoolListBuscommonMixin from "@/mixins/schoolListBuscommon.js";
+import schoolbusListPage from "../mixins/schoolbusListPage.js";
+
 export default {
   name: "teacher",
-  mixins: [schoolListBuscommonMixin],
+  mixins: [schoolListBuscommonMixin, schoolbusListPage],
   components: { Table, Pagination, Form, Detail, BatchUpdload },
   data() {
     return {
-      consts: consts,
-      tabletitle: tabletitle,
-      pagination: {
-        size: 10,
-        current: 1,
-      },
+      carStatusOptions: BUS_CAR_STATUS,
+      pagination: { size: 10, current: 1 },
       paginationTotal: 0,
       searchFrom: {},
       tableData: [],
       tableBtn: [],
       permissionsBtn: [
-        {
-          name: "查看",
-          type: "look",
-          icon: "",
-          permissions: "",
-        },
-        {
-          name: "编辑",
-          type: "edit",
-          icon: "",
-          permissions: "buscarinfo_edit",
-        },
+        { name: "查看", type: "look", icon: "", permissions: "" },
+        { name: "编辑", type: "edit", icon: "", permissions: "buscarinfo_edit" },
       ],
-      schoolList: [],
-      roleList: [],
-      detailData: {},
       schoolId: "",
     };
   },
@@ -203,30 +165,45 @@ export default {
     this.getBtn();
     this.initData();
   },
-  mounted() {},
   activated() {
     this.getList();
   },
+  watch: {
+    i18nlocel() {
+      this.formatData();
+    },
+  },
   computed: {
     ...mapGetters(["permissions", "i18nlocel"]),
+    tableTitle() {
+      return [
+        { label: "ID", prop: "id", width: "70", fixed: true },
+        { label: this.$t("schoolbus.校区"), prop: "schoolEnNames", minWidth: "140" },
+        { label: this.$t("schoolbus.车牌号"), prop: "carNumber", width: "110" },
+        { label: this.$t("schoolbus.跟车老师"), prop: "carTeacher", minWidth: "120" },
+        { label: this.$t("schoolbus.绑定路线"), prop: "boundLineNamesLabel", minWidth: "160" },
+        { label: this.$t("schoolbus.司机姓名"), prop: "driverName", width: "110" },
+        { label: this.$t("schoolbus.座位数"), prop: "seatNumber", width: "80" },
+        { label: this.$t("schoolbus.照片"), prop: "carImageUrl", width: "90", isUrl: true },
+        { label: this.$t("schoolbus.状态"), prop: "statusLabel", width: "90" },
+        { label: this.$t("schoolbus.创建时间"), prop: "createTime", width: "170" },
+        { label: this.$t("schoolbus.更新时间"), prop: "updateTime", width: "170" },
+      ];
+    },
   },
   methods: {
     async initData() {
       await this.fetchSchoolListBuscommon();
       if (this.schoolSelectList.length === 1) {
         this.schoolId = this.schoolSelectList[0].id;
-        this.pagination["schoolIds"] = this.schoolId;
+        this.pagination.schoolIds = this.schoolId;
       }
       this.getList();
     },
     getList() {
-      getCarinfoPage({
-        ...this.pagination,
-        ...this.searchFrom,
-      }).then((res) => {
+      getCarinfoPage({ ...this.pagination, ...this.searchFrom }).then((res) => {
         if (res.data.success) {
-          console.log("getCarinfoPage", res.data.data);
-          let { data, total, current } = res.data.data;
+          const { data, total } = res.data.data;
           this.paginationTotal = total;
           this.tableData = data;
           this.formatData();
@@ -234,48 +211,42 @@ export default {
       });
     },
     formatData() {
-      this.tableData.map((item) => {
-        item["driverName"] = item["driverInfo"] ? item["driverInfo"]["name"] : "--";
-        item["statusLabel"] = this.$getListLabel(consts["carStatus"], item["status"]);
-        item["createTime"] = dayjs(item["createTime"]).format("YYYY-MM-DD HH:mm");
-        item["updateTime"] = dayjs(item["updateTime"]).format("YYYY-MM-DD HH:mm");
+      this.tableData.forEach((item) => {
+        this.applySchoolEnNamesFromIds(item);
+        item.driverName = item.driverInfo ? item.driverInfo.name : "--";
+        item.boundLineNamesLabel = item.boundLineNames || "--";
+        item.statusLabel = this.$getListLabel(BUS_CAR_STATUS, item.status);
+        item.createTime = dayjs(item.createTime).format("YYYY-MM-DD HH:mm");
+        item.updateTime = dayjs(item.updateTime).format("YYYY-MM-DD HH:mm");
       });
     },
-    playTab(name, item, scope) {
-      this.currenntItem = item;
-      switch (name) {
-        case "look":
-          this.rowClick(item);
-          break;
-        case "edit":
-          this.showForm("edit", item);
-          2;
-          break;
-      }
+    playTab(name, item) {
+      if (name === "look") this.rowClick(item);
+      else if (name === "edit") this.showForm("edit", item);
     },
     batchUpdateStatus(status) {
-      let selectionId = this.$refs.Table.selectionId;
+      const selectionId = this.$refs.Table.selectionId;
       if (selectionId.length > 0) {
-        let list = this.tableData.map((item) => {
+        const list = this.tableData.map((item) => {
           return item.status != status && selectionId.includes(item.id);
         });
         if (list.length > 0) {
           if (status) {
             this.$message.warning(
-              this.$t("isagroup.只有禁用状态可以修改启用状态，请重新选择")
+              this.$t("schoolbus.只有禁用状态可以修改启用状态，请重新选择")
             );
           } else {
             this.$message.warning(
-              this.$t("isagroup.只有启用状态可以修改禁用状态，请重新选择")
+              this.$t("schoolbus.只有启用状态可以修改禁用状态，请重新选择")
             );
           }
         } else {
-          this.$alert(this.$t("isagroup.确认修改吗"), this.$t("isagroup.批量修改状态"), {
-            confirmButtonText: this.$t("isagroup.确定"),
+          this.$alert(this.$t("schoolbus.确认修改吗"), this.$t("schoolbus.批量修改状态"), {
+            confirmButtonText: this.$t("schoolbus.确定"),
           }).then(() => {
-            batchUpdateStatus({ ids: selectionId, status: status }).then((res) => {
+            batchUpdateStatus({ ids: selectionId, status }).then((res) => {
               if (res.data.success) {
-                this.$message.success(this.$t("isagroup.成功"));
+                this.$message.success(this.$t("schoolbus.成功"));
                 this.getList();
               }
             });
@@ -284,38 +255,31 @@ export default {
       }
     },
     delData() {
-      let selectionId = this.$refs.Table.selectionId;
-      if (selectionId.length == 0) {
-      } else {
-        this.$alert(this.$t("isagroup.确定要删除吗？"), this.$t("isagroup.删除"), {
-          confirmButtonText: this.$t("isagroup.确定"),
-        }).then(() => {
-          delCarinfo({ ids: selectionId }).then((res) => {
-            if (res.data.success) {
-              this.$message.success(this.$t("isagroup.成功"));
-              this.getList();
-            }
-          });
+      this.confirmBatchDelete(() => {
+        delCarinfo({ ids: this.selectedIds }).then((res) => {
+          if (res.data.success) {
+            this.$message.success(this.$t("schoolbus.成功"));
+            this.getList();
+          }
         });
-      }
+      });
     },
-    rowClick(row, column, event) {
-      console.log("rowClick", row);
-      this.$refs["Detail"].showModal(row);
+    rowClick(row) {
+      this.$refs.Detail.showModal(row);
     },
     clear() {
       this.searchFrom = {};
+      this.pagination.current = 1;
       this.getList();
     },
-    // 分页
     handleCurrentChange(page) {
-      this.pagination["current"] = page;
+      this.pagination.current = page;
       this.getList();
     },
     getBtn() {
-      this.tableBtn = this.permissionsBtn.filter((item) => {
-        return this.permissions[item["permissions"]] || item["type"] == "look";
-      });
+      this.tableBtn = this.permissionsBtn.filter(
+        (item) => this.permissions[item.permissions] || item.type === "look"
+      );
     },
     showForm(type, item = {}) {
       this.$refs.Form.showForm(type, item);
@@ -326,11 +290,3 @@ export default {
   },
 };
 </script>
-
-<style lang="scss" scoped>
-.tablelist {
-  background-color: #fff;
-  padding: 20px;
-  box-sizing: border-box;
-}
-</style>

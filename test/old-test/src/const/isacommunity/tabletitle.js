@@ -1,1282 +1,522 @@
 export default {
   studentTable: [
     {
-      label: "ID",
-      prop: "id",
+      label: 'ID',
+      prop: 'id',
       hasEn: true,
       hasColor: false,
-      fixed: "left",
+      fixed: 'left'
     },
     {
-      label: "校区",
-      prop: "schoolName",
+      label: '校区',
+      prop: 'schoolName',
       hasEn: true,
-      hasColor: false,
+      hasColor: false
     },
     {
-      label: "学号",
-      prop: "admissonNo",
+      label: '学号',
+      prop: 'admissonNo',
       hasEn: true,
-      hasColor: false,
+      hasColor: false
     },
 
     {
-      label: "中文名",
-      prop: "cnFullName",
+      label: '中文名',
+      prop: 'cnFullName',
       hasEn: true,
-      hasColor: false,
+      hasColor: false
     },
     {
-      label: "英文名",
-      prop: "fullName",
+      label: '英文名',
+      prop: 'fullName',
       hasEn: true,
-      hasColor: false,
+      hasColor: false
     },
     {
-      label: "年级",
-      prop: "grade",
+      label: '年级',
+      prop: 'grade',
       hasEn: true,
-      hasColor: false,
+      hasColor: false
     },
     {
-      label: "班级",
-      prop: "formCode",
+      label: '班级',
+      prop: 'formCode',
       hasEn: true,
-      hasColor: false,
+      hasColor: false
     },
     {
-      label: "校巴",
-      prop: "busStatus",
+      label: '校巴',
+      prop: 'busStatus',
       hasEn: true,
-      hasColor: false,
+      hasColor: false
     },
     {
-      label: "住宿",
-      prop: "dormitoryStatus",
+      label: '住宿',
+      prop: 'dormitoryStatus',
       hasEn: true,
-      hasColor: false,
+      hasColor: false
     },
     {
-      label: "状态",
-      prop: "studentStatus",
+      label: '状态',
+      prop: 'studentStatus',
       hasEn: true,
-      hasColor: false,
-    },
+      hasColor: false
+    }
   ],
   studentInfo: [
     {
-      label: "ID",
-      prop: "id",
+      label: 'ID',
+      prop: 'id',
       hasEn: true,
       hasColor: false,
-      fixed: "left",
+      fixed: 'left'
     },
     {
-      label: "校区",
-      prop: "schoolName",
+      label: '校区',
+      prop: 'schoolName',
       hasEn: true,
-      hasColor: false,
+      hasColor: false
     },
     {
-      label: "学号",
-      prop: "admissonNo",
+      label: '学号',
+      prop: 'admissonNo',
       hasEn: true,
-      hasColor: false,
+      hasColor: false
     },
 
     {
-      label: "中文名",
-      prop: "cnFullName",
+      label: '中文名',
+      prop: 'cnFullName',
       hasEn: true,
-      hasColor: false,
+      hasColor: false
     },
     {
-      label: "英文名",
-      prop: "fullName",
+      label: '英文名',
+      prop: 'fullName',
       hasEn: true,
-      hasColor: false,
+      hasColor: false
     },
     {
-      label: "昵称",
-      prop: "nickname",
+      label: '昵称',
+      prop: 'nickname',
       hasEn: true,
-      hasColor: false,
+      hasColor: false
     },
     {
-      label: "出生日期",
-      prop: "birthday",
+      label: '出生日期',
+      prop: 'birthday',
       hasEn: true,
-      hasColor: false,
+      hasColor: false
     },
     {
-      label: "性别",
-      prop: "gender",
+      label: '性别',
+      prop: 'gender',
       hasEn: true,
-      hasColor: false,
+      hasColor: false
     },
     {
-      label: "国籍",
-      prop: "nationality",
+      label: '国籍',
+      prop: 'nationality',
       hasEn: true,
-      hasColor: false,
+      hasColor: false
     },
     {
-      label: "邮箱",
-      prop: "emailAddress",
+      label: '邮箱',
+      prop: 'emailAddress',
       hasEn: true,
-      hasColor: false,
+      hasColor: false
     },
     {
-      label: "年级",
-      prop: "grade",
+      label: '年级',
+      prop: 'grade',
       hasEn: true,
-      hasColor: false,
+      hasColor: false
     },
     {
-      label: "班级",
-      prop: "formCode",
+      label: '班级',
+      prop: 'formCode',
       hasEn: true,
-      hasColor: false,
+      hasColor: false
     },
 
     {
-      label: "校巴",
-      prop: "busStatus",
+      label: '校巴',
+      prop: 'busStatus',
       hasEn: true,
-      hasColor: false,
+      hasColor: false
     },
     {
-      label: "住宿",
-      prop: "dormitoryStatus",
+      label: '住宿',
+      prop: 'dormitoryStatus',
       hasEn: true,
-      hasColor: false,
+      hasColor: false
     },
     {
-      label: "住宿类型",
-      prop: "boardingType",
+      label: '住宿类型',
+      prop: 'boardingType',
       hasEn: true,
-      hasColor: false,
+      hasColor: false
     },
     {
-      label: "入学日期",
-      prop: "enrolmentDate",
+      label: '入学日期',
+      prop: 'enrolmentDate',
       hasEn: true,
-      hasColor: false,
+      hasColor: false
     },
     {
-      label: "离校日期",
-      prop: "leavingDate",
+      label: '离校日期',
+      prop: 'leavingDate',
       hasEn: true,
-      hasColor: false,
+      hasColor: false
     },
     {
-      label: "状态",
-      prop: "studentStatus",
+      label: '状态',
+      prop: 'studentStatus',
       hasEn: true,
-      hasColor: false,
-    },
+      hasColor: false
+    }
   ],
   teacherTable: [
     {
-      label: "ID",
-      prop: "id",
+      label: 'ID',
+      prop: 'id',
       hasEn: true,
       hasColor: false,
-      fixed: "left",
+      fixed: 'left'
     },
     {
-      label: "校区",
-      prop: "schoolName",
+      label: '校区',
+      prop: 'schoolName',
       hasEn: true,
-      hasColor: false,
+      hasColor: false
     },
     {
-      label: "工号",
-      prop: "isaTeacherCode",
+      label: '工号',
+      prop: 'isaTeacherCode',
       hasEn: true,
-      hasColor: false,
+      hasColor: false
     },
     {
-      label: "姓名",
-      prop: "fullName",
+      label: '姓名',
+      prop: 'fullName',
       hasEn: true,
-      hasColor: false,
+      hasColor: false
     },
     {
-      label: "性别",
-      prop: "gender",
+      label: '性别',
+      prop: 'gender',
       hasEn: true,
-      hasColor: false,
+      hasColor: false
     },
     {
-      label: "国籍",
-      prop: "nationalities",
+      label: '国籍',
+      prop: 'nationalities',
       hasEn: true,
-      hasColor: false,
+      hasColor: false
     },
     {
-      label: "手机号",
-      prop: "phoneNumber",
+      label: '手机号',
+      prop: 'phoneNumber',
       hasEn: true,
-      hasColor: false,
+      hasColor: false
     },
     {
-      label: "邮箱",
-      prop: "email",
+      label: '邮箱',
+      prop: 'email',
       hasEn: true,
-      hasColor: false,
+      hasColor: false
     },
     {
-      label: "职位",
-      prop: "role",
+      label: '职位',
+      prop: 'role',
       hasEn: true,
-      hasColor: false,
+      hasColor: false
     },
     {
-      label: "状态",
-      prop: "archived",
+      label: '状态',
+      prop: 'archived',
       hasEn: true,
-      hasColor: false,
+      hasColor: false
     },
     {
-      label: "创建时间",
-      prop: "createTime",
+      label: '创建时间',
+      prop: 'createTime',
       hasEn: true,
-      hasColor: false,
-    },
+      hasColor: false
+    }
   ],
   teacherInfo: [
     {
-      label: "ID",
-      prop: "id",
+      label: 'ID',
+      prop: 'id',
       hasEn: true,
-      hasColor: false,
+      hasColor: false
     },
     {
-      label: "校区",
-      prop: "schoolName",
+      label: '校区',
+      prop: 'schoolName',
       hasEn: true,
-      hasColor: false,
+      hasColor: false
     },
     {
-      label: "工号",
-      prop: "isaTeacherCode",
+      label: '工号',
+      prop: 'isaTeacherCode',
       hasEn: true,
-      hasColor: false,
+      hasColor: false
     },
     {
-      label: "姓名",
-      prop: "fullName",
+      label: '姓名',
+      prop: 'fullName',
       hasEn: true,
-      hasColor: false,
+      hasColor: false
     },
 
     {
-      label: "手机号",
-      prop: "phoneNumber",
+      label: '手机号',
+      prop: 'phoneNumber',
       hasEn: true,
-      hasColor: false,
+      hasColor: false
     },
     {
-      label: "邮箱",
-      prop: "email",
+      label: '邮箱',
+      prop: 'email',
       hasEn: true,
-      hasColor: false,
+      hasColor: false
     },
     {
-      label: "职位",
-      prop: "role",
+      label: '职位',
+      prop: 'role',
       hasEn: true,
-      hasColor: false,
+      hasColor: false
     },
     {
-      label: "出生日期",
-      prop: "birthday",
+      label: '出生日期',
+      prop: 'birthday',
       hasEn: true,
-      hasColor: false,
+      hasColor: false
     },
     {
-      label: "性别",
-      prop: "gender",
+      label: '性别',
+      prop: 'gender',
       hasEn: true,
-      hasColor: false,
+      hasColor: false
     },
     {
-      label: "国籍",
-      prop: "nationalities",
+      label: '国籍',
+      prop: 'nationalities',
       hasEn: true,
-      hasColor: false,
+      hasColor: false
     },
     {
-      label: "状态",
-      prop: "archived",
+      label: '状态',
+      prop: 'archived',
       hasEn: true,
-      hasColor: false,
+      hasColor: false
     },
     {
-      label: "创建时间",
-      prop: "createTime",
+      label: '创建时间',
+      prop: 'createTime',
       hasEn: true,
-      hasColor: false,
-    },
-  ],
-  routeTable: [
-    {
-      label: "ID",
-      prop: "id",
-      hasEn: true,
-      hasColor: false,
-      width: "100px",
-      fixed: "left",
-    },
-    {
-      label: "校区",
-      prop: "schoolEnNames",
-      hasEn: true,
-      hasColor: false,
-    },
-    {
-      label: "路线",
-      prop: "showLineName",
-      hasEn: true,
-      hasColor: false,
-    },
-    {
-      label: "路线类型",
-      prop: "lineTypeName",
-      hasEn: true,
-      hasColor: false,
-    },
-    {
-      label: "学期",
-      prop: "showSectionName",
-      hasEn: true,
-      hasColor: false,
-    },
-    // {
-    // 	label: "车牌号",
-    // 	prop: "carNumber",
-    // 	hasEn: true,
-    // 	hasColor: false,
-    // },
-    // {
-    // 	label: "跟车老师",
-    // 	prop: "teacherName",
-    // 	hasEn: true,
-    // 	hasColor: false,
-    // },
-    // {
-    // 	label: "座位数",
-    // 	prop: "seatNumber",
-    // 	hasEn: true,
-    // 	hasColor: false,
-    // },
-    {
-      label: "状态",
-      prop: "visibleLabel",
-      hasEn: true,
-      hasColor: false,
-    },
-    {
-      label: "创建时间",
-      prop: "createTime",
-      hasEn: true,
-      hasColor: false,
-    },
-    {
-      label: "更新时间",
-      prop: "updateTime",
-      hasEn: true,
-      hasColor: false,
-    },
-  ],
-  busTermTable: [
-    {
-      label: "ID",
-      prop: "id",
-      hasEn: true,
-      hasColor: false,
-      width: "100px",
-    },
-    {
-      label: "校区",
-      prop: "schoolEnNames",
-      hasEn: true,
-      hasColor: false,
-    },
-    {
-      label: "学期",
-      prop: "showTermName",
-      hasEn: true,
-      hasColor: false,
-    },
-    {
-      label: "申请开始时间",
-      prop: "intentStartDate",
-      hasEn: true,
-      hasColor: false,
-    },
-    {
-      label: "申请结束时间",
-      prop: "intentEndDate",
-      hasEn: true,
-      hasColor: false,
-    },
-    {
-      label: "服务开始时间",
-      prop: "serviceStartDate",
-      hasEn: true,
-      hasColor: false,
-    },
-    {
-      label: "服务结束时间",
-      prop: "serviceEndDate",
-      hasEn: true,
-      hasColor: false,
-    },
-    {
-      label: "创建时间",
-      prop: "createTime",
-      hasEn: true,
-      hasColor: false,
-    },
-  ],
-  busStationTable: [
-    {
-      label: "ID",
-      prop: "id",
-      hasEn: true,
-      hasColor: false,
-      width: "100px",
-    },
-    {
-      label: "校区",
-      prop: "schoolEnNames",
-      hasEn: false,
-      hasColor: false,
-    },
-    {
-      label: "站点",
-      prop: "showStationName",
-      hasEn: true,
-      hasColor: false,
-    },
-    {
-      label: "创建时间",
-      prop: "createTime",
-      hasEn: true,
-      hasColor: false,
-    },
-  ],
-  bindStationTable: [
-    {
-      label: "站点",
-      prop: "stationName",
-      hasEn: true,
-      hasColor: false,
-    },
-    {
-      label: "上学上车时间",
-      prop: "showGoTime",
-      hasEn: false,
-      hasColor: false,
-    },
-    {
-      label: "放学下车时间",
-      prop: "showBackTime",
-      hasEn: false,
-      hasColor: false,
-    },
-    {
-      label: "日价格",
-      prop: "price",
-      hasEn: true,
-      hasColor: false,
-    },
-    {
-      label: "周价格",
-      prop: "weekPrice",
-      hasEn: true,
-      hasColor: false,
-    },
-  ],
-  applyStudentTable: [
-    {
-      label: "ID",
-      prop: "id",
-      hasEn: true,
-      hasColor: false,
-      width: "100px",
-    },
-    {
-      label: "申请时间",
-      prop: "createTime",
-      hasEn: true,
-      hasColor: false,
-    },
-    {
-      label: "申请状态",
-      prop: "approvalStatusLabel",
-      hasEn: true,
-      hasColor: false,
-    },
-    {
-      label: "缴费状态",
-      prop: "paymentStatusLabel",
-      hasEn: true,
-      hasColor: false,
-    },
-    {
-      label: "校区",
-      prop: "schoolEnName",
-      hasEn: true,
-      hasColor: false,
-    },
-    {
-      label: "学期",
-      prop: "showSectionName",
-      hasEn: true,
-      hasColor: false,
-    },
-    {
-      label: "学号",
-      prop: "admissionNo",
-      hasEn: true,
-      hasColor: false,
-    },
-    {
-      label: "姓名",
-      prop: "studentName",
-      hasEn: true,
-      hasColor: false,
-    },
-    {
-      label: "年级",
-      prop: "studentGrade",
-      hasEn: true,
-      hasColor: false,
-    },
-    {
-      label: "路线",
-      prop: "showLineName",
-      hasEn: true,
-      hasColor: false,
-    },
-    {
-      label: "站点",
-      prop: "showStationName",
-      hasEn: true,
-      hasColor: false,
-    },
-    {
-      label: "接送方式",
-      prop: "pickupMethodLabel",
-      hasEn: true,
-      hasColor: false,
-    },
-    {
-      label: "创建时间",
-      prop: "createTime",
-      hasEn: true,
-      hasColor: false,
-    },
-  ],
-  busStudentTable: [
-    {
-      label: "ID",
-      prop: "id",
-      hasEn: true,
-      hasColor: false,
-      width: "100px",
-    },
-    {
-      label: "校区",
-      prop: "id",
-      hasEn: true,
-      hasColor: false,
-    },
-    {
-      label: "学期",
-      prop: "id",
-      hasEn: true,
-      hasColor: false,
-    },
-    {
-      label: "学号",
-      prop: "id",
-      hasEn: true,
-      hasColor: false,
-    },
-    {
-      label: "姓名",
-      prop: "id",
-      hasEn: true,
-      hasColor: false,
-    },
-    {
-      label: "路线",
-      prop: "id",
-      hasEn: true,
-      hasColor: false,
-    },
-    {
-      label: "站点",
-      prop: "id",
-      hasEn: true,
-      hasColor: false,
-    },
-    {
-      label: "车牌号",
-      prop: "id",
-      hasEn: true,
-      hasColor: false,
-    },
-    {
-      label: "起止时间",
-      prop: "id",
-      hasEn: true,
-      hasColor: false,
-    },
-  ],
-  bindRouteTable: [
-    {
-      label: "路线",
-      prop: "lineName",
-      hasEn: true,
-      hasColor: false,
-      fixed: "left",
-    },
-    {
-      label: "站点",
-      prop: "stationName",
-      hasEn: true,
-      hasColor: false,
-    },
-    {
-      label: "乘车类型",
-      prop: "lineTypeName",
-      hasEn: true,
-      hasColor: false,
-    },
-    {
-      label: "乘车星期",
-      prop: "ridingWeekDay",
-      hasEn: true,
-      hasColor: false,
-    },
-    {
-      label: "车牌号",
-      prop: "carNumber",
-      hasEn: true,
-      hasColor: false,
-    },
-    {
-      label: "开始时间",
-      prop: "ridingStartDay",
-      hasEn: true,
-      hasColor: false,
-    },
-    {
-      label: "结束时间",
-      prop: "ridingEndDay",
-      hasEn: true,
-      hasColor: false,
-    },
-  ],
-  bindPersonTable: [
-    {
-      label: "关系",
-      prop: "pickupRelationships",
-      hasEn: true,
-      hasColor: false,
-    },
-    {
-      label: "联系方式",
-      prop: "pickupPhone",
-      hasEn: true,
-      hasColor: false,
-    },
-    {
-      label: "照片",
-      prop: "pickupImageUrl",
-      hasEn: true,
-      hasColor: false,
-    },
-  ],
-  orderStudentTable: [
-    {
-      label: "ID",
-      prop: "id",
-      hasEn: true,
-      hasColor: false,
-      width: "100px",
-    },
-    {
-      label: "校区",
-      prop: "schoolEnName",
-      hasEn: true,
-      hasColor: false,
-    },
-    {
-      label: "学期",
-      prop: "showSectionName",
-      hasEn: true,
-      hasColor: false,
-    },
-    {
-      label: "学号",
-      prop: "admissionNo",
-      hasEn: true,
-      hasColor: false,
-    },
-    {
-      label: "姓名",
-      prop: "studentName",
-      hasEn: true,
-      hasColor: false,
-    },
-    {
-      label: "年级",
-      prop: "studentGrade",
-      hasEn: true,
-      hasColor: false,
-    },
-    {
-      label: "路线",
-      prop: "showLineName",
-      hasEn: true,
-      hasColor: false,
-    },
-    {
-      label: "站点",
-      prop: "showStationName",
-      hasEn: true,
-      hasColor: false,
-    },
-    {
-      label: "接送方式",
-      prop: "pickupMethodLabel",
-      hasEn: true,
-      hasColor: false,
-    },
-    {
-      label: "创建时间",
-      prop: "createTime",
-      hasEn: true,
-      hasColor: false,
-    },
-  ],
-  orderBusTable: [
-    {
-      label: "ID",
-      prop: "id",
-      hasEn: true,
-      hasColor: false,
-      width: "100px",
-    },
-    {
-      label: "申请时间",
-      prop: "createTime",
-      hasEn: true,
-      hasColor: false,
-    },
-    {
-      label: "申请状态",
-      prop: "approvalStatusLabel",
-      hasEn: true,
-      hasColor: false,
-    },
-    {
-      label: "缴费状态",
-      prop: "paymentStatusLabel",
-      hasEn: true,
-      hasColor: false,
-    },
-    {
-      label: "应缴金额",
-      prop: "amountDue",
-      hasEn: true,
-      hasColor: false,
-    },
-    // {
-    // 	label: "实缴金额",
-    // 	prop: "paymentAmount",
-    // 	hasEn: true,
-    // 	hasColor: false,
-    // },
-    {
-      label: "校区",
-      prop: "schoolEnName",
-      hasEn: true,
-      hasColor: false,
-    },
-    {
-      label: "学期",
-      prop: "showSectionName",
-      hasEn: true,
-      hasColor: false,
-    },
-    {
-      label: "学号",
-      prop: "admissionNo",
-      hasEn: true,
-      hasColor: false,
-    },
-    {
-      label: "姓名",
-      prop: "studentName",
-      hasEn: true,
-      hasColor: false,
-    },
-    {
-      label: "年级",
-      prop: "studentGrade",
-      hasEn: true,
-      hasColor: false,
-    },
-
-    {
-      label: "接送方式",
-      prop: "pickupMethodLabel",
-      hasEn: true,
-      hasColor: false,
-    },
-    {
-      label: "创建时间",
-      prop: "createTime",
-      hasEn: true,
-      hasColor: false,
-    },
-    // {
-    // 	label: "拒绝理由",
-    // 	prop: "denyReason",
-    // 	hasEn: true,
-    // 	hasColor: false,
-    // },
-  ],
-  payInfo: [
-    {
-      label: "实缴金额",
-      prop: "paymentAmount",
-      hasEn: true,
-      hasColor: false,
-    },
-    {
-      label: "缴费方式",
-      prop: "paymentMethodLabel",
-      hasEn: true,
-      hasColor: false,
-    },
-    {
-      label: "缴费日期",
-      prop: "paymentDate",
-      hasEn: true,
-      hasColor: false,
-    },
-    {
-      label: "缴费账号",
-      prop: "paymentAccount",
-      hasEn: true,
-      hasColor: false,
-    },
-    {
-      label: "缴费单号",
-      prop: "paymentOrderNo",
-      hasEn: true,
-      hasColor: false,
-    },
-    {
-      label: "收款账号",
-      prop: "receivingAccount",
-      hasEn: true,
-      hasColor: false,
-    },
-  ],
-  carTable: [
-    {
-      label: "ID",
-      prop: "id",
-      hasEn: true,
-      hasColor: false,
-      width: "100px",
-    },
-    {
-      label: "校区",
-      prop: "schoolEnNames",
-      hasEn: true,
-      hasColor: false,
-      width: "100px",
-    },
-    {
-      label: "车牌号",
-      prop: "carNumber",
-      hasEn: true,
-      hasColor: false,
-    },
-    {
-      label: "跟车老师",
-      prop: "carTeacher",
-      hasEn: true,
-      hasColor: false,
-    },
-    {
-      label: "司机姓名",
-      prop: "driverName",
-      hasEn: true,
-      hasColor: false,
-    },
-    {
-      label: "座位数",
-      prop: "seatNumber",
-      hasEn: true,
-      hasColor: false,
-    },
-    {
-      label: "照片",
-      prop: "carImageUrl",
-      hasEn: true,
-      hasColor: false,
-      isUrl: true,
-    },
-    {
-      label: "状态",
-      prop: "statusLabel",
-      hasEn: true,
-      hasColor: false,
-    },
-    {
-      label: "创建时间",
-      prop: "createTime",
-      hasEn: true,
-      hasColor: false,
-    },
-    {
-      label: "更新时间",
-      prop: "updateTime",
-      hasEn: true,
-      hasColor: false,
-    },
-  ],
-  carDetail: [
-    {
-      label: "ID",
-      prop: "id",
-      hasEn: true,
-      hasColor: false,
-      width: "100px",
-    },
-    {
-      label: "状态",
-      prop: "statusLabel",
-      hasEn: true,
-      hasColor: false,
-    },
-    {
-      label: "校区",
-      prop: "schoolEnNames",
-      hasEn: true,
-      hasColor: false,
-      width: "100px",
-    },
-    {
-      label: "车牌号",
-      prop: "carNumber",
-      hasEn: true,
-      hasColor: false,
-    },
-    {
-      label: "跟车老师",
-      prop: "carTeacher",
-      hasEn: true,
-      hasColor: false,
-    },
-    {
-      label: "司机姓名",
-      prop: "driverName",
-      hasEn: true,
-      hasColor: false,
-    },
-    {
-      label: "座位数",
-      prop: "seatNumber",
-      hasEn: true,
-      hasColor: false,
-    },
-    {
-      label: "创建时间",
-      prop: "createTime",
-      hasEn: true,
-      hasColor: false,
-    },
-    {
-      label: "更新时间",
-      prop: "updateTime",
-      hasEn: true,
-      hasColor: false,
-    },
-  ],
-  bindCarTable: [
-    {
-      label: "校车ID",
-      prop: "id",
-      hasEn: true,
-      hasColor: false,
-      width: "100px",
-    },
-    // {
-    // 	label: "状态",
-    // 	prop: "statusLabel",
-    // 	hasEn: true,
-    // 	hasColor: false,
-    // },
-    // {
-    // 	label: "校区",
-    // 	prop: "schoolEnNames",
-    // 	hasEn: true,
-    // 	hasColor: false,
-    // 	width: "100px",
-    // },
-    {
-      label: "车牌号",
-      prop: "carNumber",
-      hasEn: true,
-      hasColor: false,
-    },
-    {
-      label: "跟车老师",
-      prop: "carTeacher",
-      hasEn: true,
-      hasColor: false,
-    },
-    {
-      label: "司机姓名",
-      prop: "driverName",
-      hasEn: true,
-      hasColor: false,
-    },
-    {
-      label: "座位数",
-      prop: "seatNumber",
-      hasEn: true,
-      hasColor: false,
-    },
-    {
-      label: "照片",
-      prop: "carImageUrl",
-      hasEn: true,
-      hasColor: false,
-      isUrl: true,
-    },
-    // {
-    // 	label: "创建时间",
-    // 	prop: "createTime",
-    // 	hasEn: true,
-    // 	hasColor: false,
-    // },
-    // {
-    // 	label: "更新时间",
-    // 	prop: "updateTime",
-    // 	hasEn: true,
-    // 	hasColor: false,
-    // },
+      hasColor: false
+    }
   ],
   busdriverTable: [
     {
-      label: "ID",
-      prop: "id",
+      label: 'ID',
+      prop: 'id',
       hasEn: true,
       hasColor: false,
-      width: "100px",
+      width: '100px'
     },
     {
-      label: "校区",
-      prop: "schoolEnNames",
+      label: '校区',
+      prop: 'schoolEnNames',
       hasEn: true,
       hasColor: false,
-      width: "100px",
+      width: '100px'
     },
     {
-      label: "司机姓名",
-      prop: "name",
+      label: '司机姓名',
+      prop: 'name',
       hasEn: true,
-      hasColor: false,
+      hasColor: false
     },
     {
-      label: "工号",
-      prop: "employeeNo",
+      label: '工号',
+      prop: 'employeeNo',
       hasEn: true,
-      hasColor: false,
+      hasColor: false
     },
     {
-      label: "联系方式",
-      prop: "contact",
+      label: '联系方式',
+      prop: 'contact',
       hasEn: true,
-      hasColor: false,
+      hasColor: false
     },
     {
-      label: "年龄",
-      prop: "age",
+      label: '年龄',
+      prop: 'age',
       hasEn: true,
-      hasColor: false,
+      hasColor: false
     },
     {
-      label: "驾照类型",
-      prop: "licenseType",
+      label: '驾照类型',
+      prop: 'licenseType',
       hasEn: true,
-      hasColor: false,
+      hasColor: false
     },
     {
-      label: "状态",
-      prop: "statusLabel",
+      label: '状态',
+      prop: 'statusLabel',
       hasEn: true,
-      hasColor: false,
+      hasColor: false
     },
     {
-      label: "创建时间",
-      prop: "createTime",
+      label: '创建时间',
+      prop: 'createTime',
       hasEn: true,
-      hasColor: false,
+      hasColor: false
     },
     {
-      label: "更新时间",
-      prop: "updateTime",
+      label: '更新时间',
+      prop: 'updateTime',
       hasEn: true,
-      hasColor: false,
-    },
+      hasColor: false
+    }
   ],
   protocolTable: [
     {
-      label: "ID",
-      prop: "id",
+      label: 'ID',
+      prop: 'id',
       hasEn: true,
       hasColor: false,
-      width: "100px",
+      width: '100px'
     },
     {
-      label: "校区",
-      prop: "schoolEnNames",
+      label: '校区',
+      prop: 'schoolEnNames',
       hasEn: true,
       hasColor: false,
-      width: "100px",
+      width: '100px'
     },
     {
-      label: "中文名",
-      prop: "cnName",
+      label: '中文名',
+      prop: 'cnName',
       hasEn: true,
-      hasColor: false,
+      hasColor: false
     },
     {
-      label: "英文名",
-      prop: "enName",
+      label: '英文名',
+      prop: 'enName',
       hasEn: true,
-      hasColor: false,
+      hasColor: false
     },
     {
-      label: "协议类型",
-      prop: "protocolTypeName",
+      label: '协议类型',
+      prop: 'protocolTypeName',
       hasEn: true,
-      hasColor: false,
+      hasColor: false
     },
     {
-      label: "所属模块",
-      prop: "moduleName",
+      label: '所属模块',
+      prop: 'moduleName',
       hasEn: true,
-      hasColor: false,
+      hasColor: false
     },
     {
-      label: "是否需要签名",
-      prop: "needSignLabel",
+      label: '是否需要签名',
+      prop: 'needSignLabel',
       hasEn: true,
-      hasColor: false,
+      hasColor: false
     },
     {
-      label: "状态",
-      prop: "statusLabel",
+      label: '状态',
+      prop: 'statusLabel',
       hasEn: true,
-      hasColor: false,
+      hasColor: false
     },
     {
-      label: "文档",
-      prop: "documentUrl",
+      label: '文档',
+      prop: 'documentUrl',
       hasEn: true,
       hasColor: false,
-      isUrl: true,
+      isUrl: true
     },
     {
-      label: "创建时间",
-      prop: "createTime",
+      label: '创建时间',
+      prop: 'createTime',
       hasEn: true,
-      hasColor: false,
+      hasColor: false
     },
     {
-      label: "更新时间",
-      prop: "updateTime",
+      label: '更新时间',
+      prop: 'updateTime',
       hasEn: true,
-      hasColor: false,
-    },
+      hasColor: false
+    }
   ],
   followTeacherTable: [
     {
-      label: "ID",
-      prop: "id",
+      label: 'ID',
+      prop: 'id',
       hasEn: true,
       hasColor: false,
-      fixed: "left",
+      fixed: 'left'
     },
     {
-      label: "昵称",
-      prop: "nickname",
+      label: '昵称',
+      prop: 'nickname',
       hasEn: true,
-      hasColor: false,
+      hasColor: false
     },
     {
-      label: "校区",
-      prop: "schoolLabel",
+      label: '校区',
+      prop: 'schoolLabel',
       hasEn: true,
-      hasColor: false,
+      hasColor: false
     },
     {
-      label: "部门",
-      prop: "department",
+      label: '部门',
+      prop: 'department',
       hasEn: true,
-      hasColor: false,
+      hasColor: false
     },
     {
-      label: "邮箱",
-      prop: "email",
+      label: '邮箱',
+      prop: 'email',
       hasEn: true,
-      hasColor: false,
+      hasColor: false
     },
     {
-      label: "手机号",
-      prop: "phone",
+      label: '手机号',
+      prop: 'phone',
       hasEn: true,
-      hasColor: false,
+      hasColor: false
     },
     {
-      label: "模块",
-      prop: "modulesLabel",
+      label: '模块',
+      prop: 'modulesLabel',
       hasEn: true,
-      hasColor: false,
+      hasColor: false
     },
     {
-      label: "角色",
-      prop: "rolesLabel",
+      label: '角色',
+      prop: 'rolesLabel',
       hasEn: true,
-      hasColor: false,
+      hasColor: false
     },
     {
-      label: "状态",
-      prop: "statusLabel",
+      label: '状态',
+      prop: 'statusLabel',
       hasEn: true,
-      hasColor: false,
+      hasColor: false
     },
     {
-      label: "最后登录时间",
-      prop: "lastLoginTime",
+      label: '最后登录时间',
+      prop: 'lastLoginTime',
       hasEn: true,
-      hasColor: false,
-    },
+      hasColor: false
+    }
     // {
     // 	label: "创建时间",
     // 	prop: "createTime",
@@ -1284,438 +524,78 @@ export default {
     // 	hasColor: false
     // },
   ],
-  operationTable: [
-    {
-      label: "ID",
-      prop: "id",
-      hasEn: true,
-      hasColor: false,
-      width: "100px",
-    },
-    {
-      label: "状态",
-      prop: "statusLabel",
-      hasEn: true,
-      hasColor: false,
-    },
-    {
-      label: "实际状态",
-      prop: "arrivalStatusLabel",
-      hasEn: true,
-      hasColor: false,
-    },
-    {
-      label: "校区",
-      prop: "schoolEnNames",
-      hasEn: true,
-      hasColor: false,
-    },
-    {
-      label: "学期",
-      prop: "sectionName",
-      hasEn: true,
-      hasColor: false,
-    },
-    {
-      label: "车牌号",
-      prop: "carNumber",
-      hasEn: true,
-      hasColor: false,
-    },
-    {
-      label: "跟车老师",
-      prop: "carTeacher",
-      hasEn: true,
-      hasColor: false,
-    },
-    {
-      label: "路线",
-      prop: "lineName",
-      hasEn: true,
-      hasColor: false,
-    },
-    {
-      label: "站点",
-      prop: "stationName",
-      hasEn: true,
-      hasColor: false,
-    },
-
-    {
-      label: "乘车日期",
-      prop: "rideDate",
-      hasEn: true,
-      hasColor: false,
-    },
-    {
-      label: "到达时间",
-      prop: "arrivalTime",
-      hasEn: true,
-      hasColor: false,
-    },
-    {
-      label: "创建时间",
-      prop: "createTime",
-      hasEn: true,
-      hasColor: false,
-    },
-    {
-      label: "更新时间",
-      prop: "updateTime",
-      hasEn: true,
-      hasColor: false,
-    },
-    {
-      label: "备注",
-      prop: "remark",
-      hasEn: true,
-      hasColor: false,
-    },
-  ],
-  operationInfo: [
-    {
-      label: "ID",
-      prop: "id",
-      hasEn: true,
-      hasColor: false,
-    },
-    {
-      label: "状态",
-      prop: "statusLabel",
-      hasEn: true,
-      hasColor: false,
-    },
-    {
-      label: "实际状态",
-      prop: "arrivalStatusLabel",
-      hasEn: true,
-      hasColor: false,
-    },
-    {
-      label: "校区",
-      prop: "schoolEnNames",
-      hasEn: true,
-      hasColor: false,
-    },
-    {
-      label: "学期",
-      prop: "sectionName",
-      hasEn: true,
-      hasColor: false,
-    },
-    {
-      label: "车牌号",
-      prop: "carNumber",
-      hasEn: true,
-      hasColor: false,
-    },
-    {
-      label: "跟车老师",
-      prop: "carTeacher",
-      hasEn: true,
-      hasColor: false,
-    },
-    {
-      label: "路线",
-      prop: "lineName",
-      hasEn: true,
-      hasColor: false,
-    },
-    {
-      label: "站点",
-      prop: "stationName",
-      hasEn: true,
-      hasColor: false,
-    },
-
-    {
-      label: "乘车日期",
-      prop: "rideDate",
-      hasEn: true,
-      hasColor: false,
-    },
-    {
-      label: "到达时间",
-      prop: "arrivalTime",
-      hasEn: true,
-      hasColor: false,
-    },
-    {
-      label: "创建时间",
-      prop: "createTime",
-      hasEn: true,
-      hasColor: false,
-    },
-    {
-      label: "更新时间",
-      prop: "updateTime",
-      hasEn: true,
-      hasColor: false,
-    },
-    {
-      label: "备注",
-      prop: "remark",
-      hasEn: true,
-      hasColor: false,
-      width: "100%",
-    },
-  ],
-  exceptionTable: [
-    {
-      label: "ID",
-      prop: "id",
-      hasEn: true,
-      hasColor: false,
-      width: "100px",
-    },
-    {
-      label: "校区",
-      prop: "schoolEnNames",
-      hasEn: true,
-      hasColor: false,
-    },
-    {
-      label: "学期",
-      prop: "sectionName",
-      hasEn: true,
-      hasColor: false,
-    },
-    {
-      label: "路线",
-      prop: "lineName",
-      hasEn: true,
-      hasColor: false,
-    },
-    // {
-    // 	label: "站点",
-    // 	prop: "stationName",
-    // 	hasEn: true,
-    // 	hasColor: false,
-    // },
-    {
-      label: "车牌号",
-      prop: "carNumber",
-      hasEn: true,
-      hasColor: false,
-    },
-    {
-      label: "司机",
-      prop: "driver",
-      hasEn: true,
-      hasColor: false,
-    },
-    {
-      label: "跟车老师",
-      prop: "teacher",
-      hasEn: true,
-      hasColor: false,
-    },
-
-    {
-      label: "异常类型",
-      prop: "exceptionTypeLabel",
-      hasEn: true,
-      hasColor: false,
-    },
-    {
-      label: "异常日期",
-      prop: "exceptionDate",
-      hasEn: true,
-      hasColor: false,
-    },
-    {
-      label: "是否调度",
-      prop: "needDispatchLabel",
-      hasEn: true,
-      hasColor: false,
-    },
-    {
-      label: "调度车牌号",
-      prop: "dispatchCarNumber",
-      hasEn: true,
-      hasColor: false,
-    },
-    {
-      label: "调度司机",
-      prop: "dispatchDriver",
-      hasEn: true,
-      hasColor: false,
-    },
-
-    {
-      label: "创建时间",
-      prop: "createTime",
-      hasEn: true,
-      hasColor: false,
-    },
-    {
-      label: "详情",
-      prop: "details",
-      hasEn: true,
-      hasColor: false,
-    },
-  ],
-  exceptionInfo: [
-    {
-      label: "ID",
-      prop: "id",
-      hasEn: true,
-      hasColor: false,
-    },
-    {
-      label: "校区",
-      prop: "schoolEnNames",
-      hasEn: true,
-      hasColor: false,
-    },
-    {
-      label: "学期",
-      prop: "sectionName",
-      hasEn: true,
-      hasColor: false,
-    },
-    {
-      label: "路线",
-      prop: "lineName",
-      hasEn: true,
-      hasColor: false,
-    },
-    {
-      label: "车牌号",
-      prop: "carNumber",
-      hasEn: true,
-      hasColor: false,
-    },
-    {
-      label: "司机",
-      prop: "driver",
-      hasEn: true,
-      hasColor: false,
-    },
-    {
-      label: "跟车老师",
-      prop: "teacher",
-      hasEn: true,
-      hasColor: false,
-    },
-
-    {
-      label: "异常类型",
-      prop: "exceptionTypeLabel",
-      hasEn: true,
-      hasColor: false,
-    },
-    {
-      label: "异常日期",
-      prop: "exceptionDate",
-      hasEn: true,
-      hasColor: false,
-    },
-    {
-      label: "是否调度",
-      prop: "needDispatchLabel",
-      hasEn: true,
-      hasColor: false,
-    },
-    // {
-    // 	label: "调度车牌号",
-    // 	prop: "dispatchCarNumber",
-    // 	hasEn: true,
-    // 	hasColor: false,
-    // },
-    // {
-    // 	label: "调度司机",
-    // 	prop: "dispatchDriver",
-    // 	hasEn: true,
-    // 	hasColor: false,
-    // },
-
-    {
-      label: "创建时间",
-      prop: "createTime",
-      hasEn: true,
-      hasColor: false,
-    },
-    // {
-    // 	label: "详情",
-    // 	prop: "details",
-    // 	hasEn: true,
-    // 	hasColor: false,
-    // 	width: "100%",
-    // },
-  ],
   protocolSignTable: [
     {
-      label: "ID",
-      prop: "id",
+      label: 'ID',
+      prop: 'id',
       hasEn: true,
       hasColor: false,
-      width: "100px",
+      width: '100px'
     },
     {
-      label: "姓名",
-      prop: "studentName",
+      label: '姓名',
+      prop: 'studentName',
       hasEn: true,
-      hasColor: false,
+      hasColor: false
     },
     {
-      label: "学号",
-      prop: "admissionNo",
+      label: '学号',
+      prop: 'admissionNo',
       hasEn: true,
-      hasColor: false,
+      hasColor: false
     },
     {
-      label: "年级",
-      prop: "grade",
+      label: '年级',
+      prop: 'grade',
       hasEn: true,
-      hasColor: false,
+      hasColor: false
     },
     {
-      label: "签名",
-      prop: "signImageUrl",
+      label: '签名',
+      prop: 'signImageUrl',
       hasEn: true,
       hasColor: false,
-      isUrl: true,
+      isUrl: true
     },
     {
-      label: "更新时间",
-      prop: "updateTime",
+      label: '更新时间',
+      prop: 'updateTime',
       hasEn: true,
-      hasColor: false,
-    },
+      hasColor: false
+    }
   ],
   voteProgramTable: [
     {
-      label: "ID",
-      prop: "id",
+      label: 'ID',
+      prop: 'id',
       hasEn: true,
       hasColor: false,
-      width: "100px",
+      width: '100px'
     },
     {
-      label: "项目名称",
-      prop: "programName",
+      label: '项目名称',
+      prop: 'programName',
       hasEn: true,
-      hasColor: false,
+      hasColor: false
     },
     {
-      label: "中文名",
-      prop: "cnName",
+      label: '中文名',
+      prop: 'cnName',
       hasEn: true,
-      hasColor: false,
+      hasColor: false
     },
     {
-      label: "英文名",
-      prop: "enName",
+      label: '英文名',
+      prop: 'enName',
       hasEn: true,
-      hasColor: false,
+      hasColor: false
     },
     {
-      label: "表演者",
-      prop: "performer",
+      label: '表演者',
+      prop: 'performer',
       hasEn: true,
-      hasColor: false,
-    },
+      hasColor: false
+    }
     // {
     // 	label: "中文内容",
     // 	prop: "contentCn",
@@ -1732,155 +612,155 @@ export default {
   ],
   wechatSchoolInfoTable: [
     {
-      label: "ID",
-      prop: "id",
+      label: 'ID',
+      prop: 'id',
       hasEn: true,
       hasColor: false,
-      width: "100px",
+      width: '100px'
     },
     {
-      label: "校区",
-      prop: "schoolIdLabel",
+      label: '校区',
+      prop: 'schoolIdLabel',
       hasEn: true,
       hasColor: false,
-      minWidth: "160px",
+      minWidth: '160px'
     },
     {
-      label: "微信AppID",
-      prop: "wechatAppid",
+      label: '微信AppID',
+      prop: 'wechatAppid',
       hasEn: true,
       hasColor: false,
-      minWidth: "160px",
+      minWidth: '160px'
     },
     {
-      label: "推送模板",
-      prop: "msgTemplateId",
+      label: '推送模板',
+      prop: 'msgTemplateId',
       hasEn: true,
       hasColor: false,
-      minWidth: "140px",
+      minWidth: '140px'
     },
     {
-      label: "Token值",
-      prop: "verifyToken",
+      label: 'Token值',
+      prop: 'verifyToken',
       hasEn: true,
       hasColor: false,
-      minWidth: "120px",
+      minWidth: '120px'
     },
     {
-      label: "激活状态",
-      prop: "activeLabel",
+      label: '激活状态',
+      prop: 'activeLabel',
       hasEn: true,
       hasColor: false,
-      width: "100px",
+      width: '100px'
     },
     {
-      label: "创建时间",
-      prop: "createdAt",
+      label: '创建时间',
+      prop: 'createdAt',
       hasEn: true,
       hasColor: false,
-      width: "168px",
+      width: '168px'
     },
     {
-      label: "更新时间",
-      prop: "updatedAt",
+      label: '更新时间',
+      prop: 'updatedAt',
       hasEn: true,
       hasColor: false,
-      width: "168px",
-    },
+      width: '168px'
+    }
   ],
   schoolEmailConfigTable: [
     {
-      label: "ID",
-      prop: "id",
+      label: 'ID',
+      prop: 'id',
       hasEn: true,
       hasColor: false,
-      width: "100px",
+      width: '100px'
     },
     {
-      label: "校区",
-      prop: "schoolIdLabel",
+      label: '校区',
+      prop: 'schoolIdLabel',
       hasEn: true,
       hasColor: false,
-      minWidth: "160px",
+      minWidth: '160px'
     },
     {
-      label: "邮箱地址",
-      prop: "email",
+      label: '邮箱地址',
+      prop: 'email',
       hasEn: true,
       hasColor: false,
-      minWidth: "200px",
+      minWidth: '200px'
     },
     {
-      label: "应用模块",
-      prop: "appModuleLabel",
+      label: '应用模块',
+      prop: 'appModuleLabel',
       hasEn: true,
       hasColor: false,
-      width: "120px",
+      width: '120px'
     },
     {
-      label: "创建时间",
-      prop: "createdAt",
+      label: '创建时间',
+      prop: 'createdAt',
       hasEn: true,
       hasColor: false,
-      width: "168px",
+      width: '168px'
     },
     {
-      label: "更新时间",
-      prop: "updatedAt",
+      label: '更新时间',
+      prop: 'updatedAt',
       hasEn: true,
       hasColor: false,
-      width: "168px",
-    },
+      width: '168px'
+    }
   ],
   activityTable: [
     {
-      label: "ID",
-      prop: "id",
+      label: 'ID',
+      prop: 'id',
       hasEn: true,
       hasColor: false,
-      width: "88px",
+      width: '88px'
     },
     {
-      label: "状态",
-      prop: "activityStatusLabel",
+      label: '状态',
+      prop: 'activityStatusLabel',
       hasEn: true,
       hasColor: false,
-      width: "100px",
+      width: '100px'
     },
     {
-      label: "校区",
-      prop: "schoolIdsLabel",
+      label: '校区',
+      prop: 'schoolIdsLabel',
       hasEn: true,
       hasColor: false,
-      minWidth: "160px",
+      minWidth: '160px'
     },
     {
-      label: "中文名",
-      prop: "activityCnName",
+      label: '中文名',
+      prop: 'activityCnName',
       hasEn: true,
       hasColor: false,
-      minWidth: "140px",
+      minWidth: '140px'
     },
     {
-      label: "英文名",
-      prop: "activityEnName",
+      label: '英文名',
+      prop: 'activityEnName',
       hasEn: true,
       hasColor: false,
-      minWidth: "140px",
+      minWidth: '140px'
     },
     {
-      label: "开始时间",
-      prop: "activityStartTime",
+      label: '开始时间',
+      prop: 'activityStartTime',
       hasEn: true,
       hasColor: false,
-      width: "168px",
+      width: '168px'
     },
     {
-      label: "结束时间",
-      prop: "activityEndTime",
+      label: '结束时间',
+      prop: 'activityEndTime',
       hasEn: true,
       hasColor: false,
-      width: "168px",
+      width: '168px'
     },
     // {
     //   label: "微信提醒",
@@ -1890,55 +770,55 @@ export default {
     //   width: "100px",
     // },
     {
-      label: "是否推荐",
-      prop: "recommendedLabel",
+      label: '是否推荐',
+      prop: 'recommendedLabel',
       hasEn: true,
       hasColor: false,
-      width: "100px",
+      width: '100px'
     },
     {
-      label: "是否Banner",
-      prop: "bannerLabel",
+      label: '是否Banner',
+      prop: 'bannerLabel',
       hasEn: true,
-      width: "120px",
-      hasColor: false,
+      width: '120px',
+      hasColor: false
     },
     {
-      label: "活动码",
-      prop: "magicNo",
+      label: '活动码',
+      prop: 'magicNo',
       hasEn: true,
       hasColor: false,
-      width: "180px",
-      hasCopy: true,
+      width: '180px',
+      hasCopy: true
     },
     {
-      label: "票价",
-      prop: "ticketPrice",
+      label: '票价',
+      prop: 'ticketPrice',
       hasEn: true,
       hasColor: false,
-      width: "100px",
+      width: '100px'
     },
     {
-      label: "签到方式",
-      prop: "checkinMethodLabel",
+      label: '签到方式',
+      prop: 'checkinMethodLabel',
       hasEn: true,
       hasColor: false,
-      width: "120px",
+      width: '120px'
     },
     {
-      label: "创建人",
-      prop: "publisher",
+      label: '创建人',
+      prop: 'publisher',
       hasEn: true,
       hasColor: false,
-      width: "100px",
+      width: '100px'
     },
     {
-      label: "创建时间",
-      prop: "createTime",
+      label: '创建时间',
+      prop: 'createTime',
       hasEn: true,
       hasColor: false,
-      width: "168px",
-    },
+      width: '168px'
+    }
     // {
     // 	label: "中文简介",
     // 	prop: "introCn",
@@ -1967,529 +847,529 @@ export default {
   /** 活动详情-报名人数（购票记录） — 仅 minWidth，避免与固定 width 混用导致少数列在大屏被异常撑宽 */
   activityTicketTable: [
     {
-      label: "序号",
-      prop: "_seq",
+      label: '序号',
+      prop: '_seq',
       hasEn: true,
       hasColor: false,
-      minWidth: "64px",
+      minWidth: '64px'
     },
     {
-      label: "活动名称",
-      prop: "activityName",
+      label: '活动名称',
+      prop: 'activityName',
       hasEn: true,
       hasColor: false,
-      minWidth: "120px",
+      minWidth: '120px'
     },
     {
-      label: "电话",
-      prop: "phone",
+      label: '电话',
+      prop: 'phone',
       hasEn: true,
       hasColor: false,
-      minWidth: "118px",
+      minWidth: '118px'
     },
     {
-      label: "邮箱地址",
-      prop: "email",
+      label: '邮箱地址',
+      prop: 'email',
       hasEn: true,
       hasColor: false,
-      minWidth: "152px",
+      minWidth: '152px'
     },
     {
-      label: "姓名",
-      prop: "name",
+      label: '姓名',
+      prop: 'name',
       hasEn: true,
       hasColor: false,
-      minWidth: "88px",
+      minWidth: '88px'
     },
     {
-      label: "票价",
-      prop: "ticketPrice",
+      label: '票价',
+      prop: 'ticketPrice',
       hasEn: true,
       hasColor: false,
-      minWidth: "76px",
+      minWidth: '76px'
     },
     {
-      label: "实付金额",
-      prop: "paidAmount",
+      label: '实付金额',
+      prop: 'paidAmount',
       hasEn: true,
       hasColor: false,
-      minWidth: "88px",
+      minWidth: '88px'
     },
     {
-      label: "人数",
-      prop: "peopleCount",
+      label: '人数',
+      prop: 'peopleCount',
       hasEn: true,
       hasColor: false,
-      minWidth: "64px",
+      minWidth: '64px'
     },
     {
-      label: "报名ID",
-      prop: "id",
+      label: '报名ID',
+      prop: 'id',
       hasEn: true,
       hasColor: false,
-      minWidth: "92px",
+      minWidth: '92px'
     },
     {
-      label: "是否支付",
-      prop: "paidLabel",
+      label: '是否支付',
+      prop: 'paidLabel',
       hasEn: true,
       hasColor: false,
-      minWidth: "84px",
+      minWidth: '84px'
     },
     {
-      label: "报名时间",
-      prop: "registerTimeLabel",
+      label: '报名时间',
+      prop: 'registerTimeLabel',
       hasEn: true,
       hasColor: false,
-      minWidth: "150px",
-    },
+      minWidth: '150px'
+    }
   ],
   /** 活动详情-签到人数 — 仅 minWidth */
   activityCheckinTable: [
     {
-      label: "序号",
-      prop: "_seq",
+      label: '序号',
+      prop: '_seq',
       hasEn: true,
       hasColor: false,
-      minWidth: "56px",
+      minWidth: '56px'
     },
     {
-      label: "票码",
-      prop: "codeStr",
+      label: '票码',
+      prop: 'codeStr',
       hasEn: true,
       hasColor: false,
-      minWidth: "136px",
+      minWidth: '136px'
     },
     {
-      label: "电话",
-      prop: "phone",
+      label: '电话',
+      prop: 'phone',
       hasEn: true,
       hasColor: false,
-      minWidth: "116px",
+      minWidth: '116px'
     },
     {
-      label: "邮箱地址",
-      prop: "email",
+      label: '邮箱地址',
+      prop: 'email',
       hasEn: true,
       hasColor: false,
-      minWidth: "148px",
+      minWidth: '148px'
     },
     {
-      label: "姓名",
-      prop: "name",
+      label: '姓名',
+      prop: 'name',
       hasEn: true,
       hasColor: false,
-      minWidth: "86px",
+      minWidth: '86px'
     },
     {
-      label: "报名ID",
-      prop: "ticketIdStr",
+      label: '报名ID',
+      prop: 'ticketIdStr',
       hasEn: true,
       hasColor: false,
-      minWidth: "88px",
+      minWidth: '88px'
     },
     {
-      label: "是否支付",
-      prop: "paidLabel",
+      label: '是否支付',
+      prop: 'paidLabel',
       hasEn: true,
       hasColor: false,
-      minWidth: "82px",
+      minWidth: '82px'
     },
     {
-      label: "是否参与抽奖",
-      prop: "participateLotteryLabel",
+      label: '是否参与抽奖',
+      prop: 'participateLotteryLabel',
       hasEn: true,
       hasColor: false,
-      minWidth: "108px",
+      minWidth: '108px'
     },
     {
-      label: "是否在抽奖池内",
-      prop: "lotteryValidateLabel",
+      label: '是否在抽奖池内',
+      prop: 'lotteryValidateLabel',
       hasEn: true,
       hasColor: false,
-      minWidth: "136px",
+      minWidth: '136px'
     },
     {
-      label: "是否签到",
-      prop: "checkedInLabel",
+      label: '是否签到',
+      prop: 'checkedInLabel',
       hasEn: true,
       hasColor: false,
-      minWidth: "82px",
+      minWidth: '82px'
     },
     {
-      label: "签到时间",
-      prop: "checkinTimeLabel",
+      label: '签到时间',
+      prop: 'checkinTimeLabel',
       hasEn: true,
       hasColor: false,
-      minWidth: "146px",
+      minWidth: '146px'
     },
     {
-      label: "创建时间",
-      prop: "createdAtLabel",
+      label: '创建时间',
+      prop: 'createdAtLabel',
       hasEn: true,
       hasColor: false,
-      minWidth: "146px",
-    },
+      minWidth: '146px'
+    }
   ],
   /** 活动详情-投票信息（投票记录） — 仅 minWidth */
   activityVoteRecordTable: [
     {
-      label: "序号",
-      prop: "_seq",
+      label: '序号',
+      prop: '_seq',
       hasEn: true,
       hasColor: false,
-      minWidth: "56px",
+      minWidth: '56px'
     },
     {
-      label: "投票人",
-      prop: "voter",
+      label: '投票人',
+      prop: 'voter',
       hasEn: true,
       hasColor: false,
-      minWidth: "104px",
+      minWidth: '104px'
     },
     {
-      label: "电话",
-      prop: "phone",
+      label: '电话',
+      prop: 'phone',
       hasEn: true,
       hasColor: false,
-      minWidth: "116px",
+      minWidth: '116px'
     },
     {
-      label: "投票项目",
-      prop: "programName",
+      label: '投票项目',
+      prop: 'programName',
       hasEn: true,
       hasColor: false,
-      minWidth: "116px",
+      minWidth: '116px'
     },
     {
-      label: "投票节目",
-      prop: "voteName",
+      label: '投票节目',
+      prop: 'voteName',
       hasEn: true,
       hasColor: false,
-      minWidth: "116px",
+      minWidth: '116px'
     },
     {
-      label: "创建时间",
-      prop: "createTimeLabel",
+      label: '创建时间',
+      prop: 'createTimeLabel',
       hasEn: true,
       hasColor: false,
-      minWidth: "146px",
-    },
+      minWidth: '146px'
+    }
   ],
   /** 活动详情-祝福语内容 — 仅 minWidth */
   activityBlessingTable: [
     {
-      label: "序号",
-      prop: "_seq",
+      label: '序号',
+      prop: '_seq',
       hasEn: true,
       hasColor: false,
-      minWidth: "56px",
+      minWidth: '56px'
     },
     {
-      label: "报名ID",
-      prop: "ticketIdLabel",
+      label: '报名ID',
+      prop: 'ticketIdLabel',
       hasEn: true,
       hasColor: false,
-      minWidth: "96px",
+      minWidth: '96px'
     },
     {
-      label: "内容",
-      prop: "content",
+      label: '内容',
+      prop: 'content',
       hasEn: true,
       hasColor: false,
-      minWidth: "160px",
+      minWidth: '160px'
     },
     {
-      label: "是否可见",
-      prop: "visibleLabel",
+      label: '是否可见',
+      prop: 'visibleLabel',
       hasEn: true,
       hasColor: false,
-      minWidth: "92px",
+      minWidth: '92px'
     },
     {
-      label: "创建时间",
-      prop: "createTimeLabel",
+      label: '创建时间',
+      prop: 'createTimeLabel',
       hasEn: true,
       hasColor: false,
-      minWidth: "152px",
-    },
+      minWidth: '152px'
+    }
   ],
   /** 活动详情-活动反馈 — 仅 minWidth */
   activityFeedbackTable: [
     {
-      label: "序号",
-      prop: "_seq",
+      label: '序号',
+      prop: '_seq',
       hasEn: true,
       hasColor: false,
-      minWidth: "56px",
+      minWidth: '56px'
     },
     {
-      label: "内容",
-      prop: "content",
+      label: '内容',
+      prop: 'content',
       hasEn: true,
       hasColor: false,
-      minWidth: "156px",
+      minWidth: '156px'
     },
     {
-      label: "满意度",
-      prop: "satisfactionLabel",
+      label: '满意度',
+      prop: 'satisfactionLabel',
       hasEn: true,
       hasColor: false,
-      minWidth: "92px",
+      minWidth: '92px'
     },
     {
-      label: "电话",
-      prop: "phone",
+      label: '电话',
+      prop: 'phone',
       hasEn: true,
       hasColor: false,
-      minWidth: "116px",
+      minWidth: '116px'
     },
     {
-      label: "是否可见",
-      prop: "visibleLabel",
+      label: '是否可见',
+      prop: 'visibleLabel',
       hasEn: true,
       hasColor: false,
-      minWidth: "92px",
+      minWidth: '92px'
     },
     {
-      label: "创建时间",
-      prop: "createTimeLabel",
+      label: '创建时间',
+      prop: 'createTimeLabel',
       hasEn: true,
       hasColor: false,
-      minWidth: "152px",
-    },
+      minWidth: '152px'
+    }
   ],
   /** 活动详情-获奖名单（抽奖类） — 仅 minWidth */
   activityPrizeAwardLotteryTable: [
     {
-      label: "ID",
-      prop: "id",
+      label: 'ID',
+      prop: 'id',
       hasEn: true,
       hasColor: false,
-      minWidth: "72px",
+      minWidth: '72px'
     },
     {
-      label: "项目名",
-      prop: "programName",
+      label: '项目名',
+      prop: 'programName',
       hasEn: true,
       hasColor: false,
-      minWidth: "114px",
+      minWidth: '114px'
     },
     {
-      label: "中奖票码",
-      prop: "ticketCode",
+      label: '中奖票码',
+      prop: 'ticketCode',
       hasEn: true,
       hasColor: false,
-      minWidth: "136px",
+      minWidth: '136px'
     },
     {
-      label: "姓名",
-      prop: "name",
+      label: '姓名',
+      prop: 'name',
       hasEn: true,
       hasColor: false,
-      minWidth: "92px",
+      minWidth: '92px'
     },
     {
-      label: "电话",
-      prop: "phone",
+      label: '电话',
+      prop: 'phone',
       hasEn: true,
       hasColor: false,
-      minWidth: "116px",
+      minWidth: '116px'
     },
     {
-      label: "创建时间",
-      prop: "createTimeLabel",
+      label: '创建时间',
+      prop: 'createTimeLabel',
       hasEn: true,
       hasColor: false,
-      minWidth: "146px",
-    },
+      minWidth: '146px'
+    }
   ],
   /** 活动详情-获奖名单（投票类） — 仅 minWidth */
   activityPrizeAwardVoteTable: [
     {
-      label: "ID",
-      prop: "id",
+      label: 'ID',
+      prop: 'id',
       hasEn: true,
       hasColor: false,
-      minWidth: "72px",
+      minWidth: '72px'
     },
     {
-      label: "参赛节目",
-      prop: "voteName",
+      label: '参赛节目',
+      prop: 'voteName',
       hasEn: true,
       hasColor: false,
-      minWidth: "116px",
+      minWidth: '116px'
     },
     {
-      label: "项目名",
-      prop: "programName",
+      label: '项目名',
+      prop: 'programName',
       hasEn: true,
       hasColor: false,
-      minWidth: "114px",
+      minWidth: '114px'
     },
     {
-      label: "总票数",
-      prop: "totalVotes",
+      label: '总票数',
+      prop: 'totalVotes',
       hasEn: true,
       hasColor: false,
-      minWidth: "80px",
+      minWidth: '80px'
     },
     {
-      label: "姓名",
-      prop: "name",
+      label: '姓名',
+      prop: 'name',
       hasEn: true,
       hasColor: false,
-      minWidth: "92px",
+      minWidth: '92px'
     },
     {
-      label: "电话",
-      prop: "phone",
+      label: '电话',
+      prop: 'phone',
       hasEn: true,
       hasColor: false,
-      minWidth: "116px",
+      minWidth: '116px'
     },
     {
-      label: "创建时间",
-      prop: "createTimeLabel",
+      label: '创建时间',
+      prop: 'createTimeLabel',
       hasEn: true,
       hasColor: false,
-      minWidth: "146px",
-    },
+      minWidth: '146px'
+    }
   ],
   /** 活动详情-获奖名单（比赛类） — 仅 minWidth */
   activityPrizeAwardCompetitionTable: [
     {
-      label: "ID",
-      prop: "id",
+      label: 'ID',
+      prop: 'id',
       hasEn: true,
       hasColor: false,
-      minWidth: "72px",
+      minWidth: '72px'
     },
     {
-      label: "项目名",
-      prop: "programName",
+      label: '项目名',
+      prop: 'programName',
       hasEn: true,
       hasColor: false,
-      minWidth: "124px",
+      minWidth: '124px'
     },
     {
-      label: "节目名称",
-      prop: "voteName",
+      label: '节目名称',
+      prop: 'voteName',
       hasEn: true,
       hasColor: false,
-      minWidth: "124px",
+      minWidth: '124px'
     },
     {
-      label: "名次",
-      prop: "awardRank",
+      label: '名次',
+      prop: 'awardRank',
       hasEn: true,
       hasColor: false,
-      minWidth: "76px",
+      minWidth: '76px'
     },
     {
-      label: "表演者",
-      prop: "performer",
+      label: '表演者',
+      prop: 'performer',
       hasEn: true,
       hasColor: false,
-      minWidth: "92px",
-    },
+      minWidth: '92px'
+    }
   ],
   activityProgramTable: [
     {
-      label: "ID",
-      prop: "id",
+      label: 'ID',
+      prop: 'id',
       hasEn: true,
       hasColor: false,
-      width: "100px",
+      width: '100px'
     },
     {
-      label: "活动ID",
-      prop: "activityId",
+      label: '活动ID',
+      prop: 'activityId',
       hasEn: true,
       hasColor: false,
-      width: "100px",
+      width: '100px'
     },
     {
-      label: "状态",
-      prop: "programStatusLabel",
+      label: '状态',
+      prop: 'programStatusLabel',
       hasEn: true,
-      hasColor: false,
+      hasColor: false
     },
     {
-      label: "中文名",
-      prop: "cnName",
+      label: '中文名',
+      prop: 'cnName',
       hasEn: true,
-      hasColor: false,
+      hasColor: false
     },
     {
-      label: "英文名",
-      prop: "enName",
+      label: '英文名',
+      prop: 'enName',
       hasEn: true,
-      hasColor: false,
+      hasColor: false
     },
     {
-      label: "项目类型",
-      prop: "programTypeLabel",
+      label: '项目类型',
+      prop: 'programTypeLabel',
       hasEn: true,
-      hasColor: false,
+      hasColor: false
     },
     {
-      label: "项目顺序",
-      prop: "sortOrder",
+      label: '项目顺序',
+      prop: 'sortOrder',
       hasEn: true,
       hasColor: false,
-      width: "100px",
+      width: '100px'
     },
     {
-      label: "轮次总数",
-      prop: "totalRounds",
+      label: '轮次总数',
+      prop: 'totalRounds',
       hasEn: true,
-      hasColor: false,
+      hasColor: false
     },
     {
-      label: "当前轮次",
-      prop: "currentRound",
+      label: '当前轮次',
+      prop: 'currentRound',
       hasEn: true,
-      hasColor: false,
+      hasColor: false
     },
     {
-      label: "操作者",
-      prop: "operator",
+      label: '操作者',
+      prop: 'operator',
       hasEn: true,
-      hasColor: false,
+      hasColor: false
     },
     {
-      label: "操作时间",
-      prop: "operateTime",
+      label: '操作时间',
+      prop: 'operateTime',
       hasEn: true,
-      hasColor: false,
-    },
+      hasColor: false
+    }
   ],
   activityPrizeTable: [
     {
-      label: "ID",
-      prop: "id",
+      label: 'ID',
+      prop: 'id',
       hasEn: true,
       hasColor: false,
-      width: "100px",
+      width: '100px'
     },
     {
-      label: "项目名称",
-      prop: "programName",
+      label: '项目名称',
+      prop: 'programName',
       hasEn: true,
-      hasColor: false,
+      hasColor: false
     },
     {
-      label: "中文名",
-      prop: "cnName",
+      label: '中文名',
+      prop: 'cnName',
       hasEn: true,
-      hasColor: false,
+      hasColor: false
     },
     {
-      label: "英文名",
-      prop: "enName",
+      label: '英文名',
+      prop: 'enName',
       hasEn: true,
-      hasColor: false,
+      hasColor: false
     },
     // 数量 prizeCount 列暂时隐藏（奖品列表 / 详情弹窗共用 activityPrizeTable）
     // {
@@ -2499,78 +1379,78 @@ export default {
     //   hasColor: false,
     // },
     {
-      label: "金额",
-      prop: "amount",
+      label: '金额',
+      prop: 'amount',
       hasEn: true,
-      hasColor: false,
+      hasColor: false
     },
     {
-      label: "图片",
-      prop: "imageUrl",
+      label: '图片',
+      prop: 'imageUrl',
       hasEn: true,
       hasColor: false,
-      isUrl: true,
+      isUrl: true
     },
     {
-      label: "更新时间",
-      prop: "updateTime",
+      label: '更新时间',
+      prop: 'updateTime',
       hasEn: true,
-      hasColor: false,
-    },
+      hasColor: false
+    }
   ],
   lotteryPoolFilesTable: [
     {
-      label: "ID",
-      prop: "id",
+      label: 'ID',
+      prop: 'id',
       hasEn: true,
       hasColor: false,
-      width: "100px",
+      width: '100px'
     },
     {
-      label: "文件名",
-      prop: "fileName",
+      label: '文件名',
+      prop: 'fileName',
       hasEn: true,
-      hasColor: false,
+      hasColor: false
     },
     {
-      label: "更新时间",
-      prop: "updateTime",
+      label: '更新时间',
+      prop: 'updateTime',
       hasEn: true,
-      hasColor: false,
-    },
+      hasColor: false
+    }
   ],
   contentCategoryTable: [
     {
-      label: "ID",
-      prop: "id",
+      label: 'ID',
+      prop: 'id',
       hasEn: true,
       hasColor: false,
-      width: "100px",
+      width: '100px'
     },
     {
-      label: "中文名",
-      prop: "cnName",
+      label: '中文名',
+      prop: 'cnName',
       hasEn: true,
-      hasColor: false,
+      hasColor: false
     },
     {
-      label: "英文名",
-      prop: "enName",
+      label: '英文名',
+      prop: 'enName',
       hasEn: true,
-      hasColor: false,
+      hasColor: false
     },
     {
-      label: "排序",
-      prop: "index",
+      label: '排序',
+      prop: 'index',
       hasEn: true,
-      hasColor: false,
+      hasColor: false
     },
     {
-      label: "是否可见",
-      prop: "visibleLabel",
+      label: '是否可见',
+      prop: 'visibleLabel',
       hasEn: true,
-      hasColor: false,
-    },
+      hasColor: false
+    }
     // {
     // 	label: "更新时间",
     // 	prop: "updateTime",
@@ -2586,48 +1466,48 @@ export default {
   ],
   contentAnnouncementTable: [
     {
-      label: "ID",
-      prop: "id",
+      label: 'ID',
+      prop: 'id',
       hasEn: true,
       hasColor: false,
-      width: "100px",
+      width: '100px'
     },
     {
-      label: "校区",
-      prop: "schoolName",
+      label: '校区',
+      prop: 'schoolName',
       hasEn: true,
-      hasColor: false,
+      hasColor: false
     },
     {
-      label: "中文内容",
-      prop: "cnContent",
+      label: '中文内容',
+      prop: 'cnContent',
       hasEn: true,
-      hasColor: false,
+      hasColor: false
     },
     {
-      label: "英文内容",
-      prop: "enContent",
+      label: '英文内容',
+      prop: 'enContent',
       hasEn: true,
-      hasColor: false,
+      hasColor: false
     },
     {
-      label: "紧急程度",
-      prop: "urgencyLevelLabel",
+      label: '紧急程度',
+      prop: 'urgencyLevelLabel',
       hasEn: true,
-      hasColor: false,
+      hasColor: false
     },
     {
-      label: "是否可见",
-      prop: "activeLabel",
+      label: '是否可见',
+      prop: 'activeLabel',
       hasEn: true,
-      hasColor: false,
+      hasColor: false
     },
     {
-      label: "更新时间",
-      prop: "updatedAt",
+      label: '更新时间',
+      prop: 'updatedAt',
       hasEn: true,
-      hasColor: false,
-    },
+      hasColor: false
+    }
     // {
     // 	label: "创建时间",
     // 	prop: "createTime",
@@ -2637,85 +1517,85 @@ export default {
   ],
   contentArticleTable: [
     {
-      label: "ID",
-      prop: "id",
+      label: 'ID',
+      prop: 'id',
       hasEn: true,
       hasColor: false,
-      width: "100px",
+      width: '100px'
     },
     {
-      label: "校区",
-      prop: "schoolName",
+      label: '校区',
+      prop: 'schoolName',
       hasEn: true,
-      hasColor: false,
+      hasColor: false
     },
     {
-      label: "中文标题",
-      prop: "cnTitle",
+      label: '中文标题',
+      prop: 'cnTitle',
       hasEn: true,
-      hasColor: false,
+      hasColor: false
     },
     {
-      label: "英文标题",
-      prop: "enTitle",
+      label: '英文标题',
+      prop: 'enTitle',
       hasEn: true,
-      hasColor: false,
+      hasColor: false
     },
     {
-      label: "内容分类",
-      prop: "categoryName",
+      label: '内容分类',
+      prop: 'categoryName',
       hasEn: true,
-      hasColor: false,
+      hasColor: false
     },
     {
-      label: "重要等级",
-      prop: "importanceLevelLabel",
+      label: '重要等级',
+      prop: 'importanceLevelLabel',
       hasEn: true,
-      hasColor: false,
+      hasColor: false
     },
     {
-      label: "发布状态",
-      prop: "publishStatusLabel",
+      label: '发布状态',
+      prop: 'publishStatusLabel',
       hasEn: true,
-      hasColor: false,
+      hasColor: false
     },
     {
-      label: "是否可见",
-      prop: "visibleLabel",
+      label: '是否可见',
+      prop: 'visibleLabel',
       hasEn: true,
-      hasColor: false,
+      hasColor: false
     },
     {
-      label: "是否Banner",
-      prop: "isBannerLabel",
+      label: '是否Banner',
+      prop: 'isBannerLabel',
       hasEn: true,
-      hasColor: false,
+      hasColor: false
     },
     {
-      label: "是否推荐",
-      prop: "recommendedLabel",
+      label: '是否推荐',
+      prop: 'recommendedLabel',
       hasEn: true,
-      hasColor: false,
+      hasColor: false
     },
     {
-      label: "是否已推送给微信",
-      prop: "isWechatPushedLabel",
+      label: '是否已推送给微信',
+      prop: 'isWechatPushedLabel',
       hasEn: true,
-      hasColor: false,
+      hasColor: false
     },
     {
-      label: "微信链接",
-      prop: "wechatUrl",
+      label: '微信链接',
+      prop: 'wechatUrl',
       hasEn: true,
-      hasColor: false,
+      hasColor: false
     },
 
     {
-      label: "更新时间",
-      prop: "updatedAt",
+      label: '更新时间',
+      prop: 'updatedAt',
       hasEn: true,
-      hasColor: false,
-    },
+      hasColor: false
+    }
     // {
     // 	label: "创建时间",
     // 	prop: "createTime",
@@ -2725,63 +1605,63 @@ export default {
   ],
   discussionTagTable: [
     {
-      label: "ID",
-      prop: "id",
+      label: 'ID',
+      prop: 'id',
       hasEn: true,
       hasColor: false,
-      width: "100px",
+      width: '100px'
     },
     {
-      label: "中文名",
-      prop: "cnName",
+      label: '中文名',
+      prop: 'cnName',
       hasEn: true,
-      hasColor: false,
+      hasColor: false
     },
     {
-      label: "英文名",
-      prop: "enName",
+      label: '英文名',
+      prop: 'enName',
       hasEn: true,
-      hasColor: false,
+      hasColor: false
     },
 
     {
-      label: "创建时间",
-      prop: "createdAt",
+      label: '创建时间',
+      prop: 'createdAt',
       hasEn: true,
-      hasColor: false,
+      hasColor: false
     },
     {
-      label: "更新时间",
-      prop: "updatedAt",
+      label: '更新时间',
+      prop: 'updatedAt',
       hasEn: true,
-      hasColor: false,
-    },
+      hasColor: false
+    }
   ],
   discussionCommentTable: [
     {
-      label: "ID",
-      prop: "id",
+      label: 'ID',
+      prop: 'id',
       hasEn: true,
       hasColor: false,
-      width: "100px",
+      width: '100px'
     },
     {
-      label: "discussionId",
-      prop: "discussionId",
+      label: 'discussionId',
+      prop: 'discussionId',
       hasEn: true,
-      hasColor: false,
+      hasColor: false
     },
     {
-      label: "parentId",
-      prop: "parentId",
+      label: 'parentId',
+      prop: 'parentId',
       hasEn: true,
-      hasColor: false,
+      hasColor: false
     },
     {
-      label: "评论内容",
-      prop: "content",
+      label: '评论内容',
+      prop: 'content',
       hasEn: true,
-      hasColor: false,
+      hasColor: false
     },
     // {
     //   label: "是否可见",
@@ -2790,190 +1670,190 @@ export default {
     //   hasColor: false,
     // },
     {
-      label: "创建时间",
-      prop: "createdAt",
+      label: '创建时间',
+      prop: 'createdAt',
       hasEn: true,
-      hasColor: false,
-    },
+      hasColor: false
+    }
   ],
   foodWeeklyTable: [
     {
-      label: "ID",
-      prop: "id",
+      label: 'ID',
+      prop: 'id',
       hasEn: true,
       hasColor: false,
-      width: "100px",
+      width: '100px'
     },
     {
-      label: "校区",
-      prop: "schoolNames",
+      label: '校区',
+      prop: 'schoolNames',
       hasEn: true,
-      hasColor: false,
+      hasColor: false
     },
     {
-      label: "公众号链接",
-      prop: "wechatUrl",
+      label: '公众号链接',
+      prop: 'wechatUrl',
       hasEn: true,
-      hasColor: false,
+      hasColor: false
     },
     {
-      label: "状态",
-      prop: "statusLabel",
+      label: '状态',
+      prop: 'statusLabel',
       hasEn: true,
-      hasColor: false,
+      hasColor: false
     },
     {
-      label: "创建时间",
-      prop: "createdAt",
+      label: '创建时间',
+      prop: 'createdAt',
       hasEn: true,
-      hasColor: false,
+      hasColor: false
     },
     {
-      label: "更新时间",
-      prop: "updatedAt",
+      label: '更新时间',
+      prop: 'updatedAt',
       hasEn: true,
-      hasColor: false,
-    },
+      hasColor: false
+    }
   ],
   likeAndFavorTable: [
     {
-      label: "ID",
-      prop: "id",
+      label: 'ID',
+      prop: 'id',
       hasEn: true,
       hasColor: false,
-      width: "100px",
+      width: '100px'
     },
     {
-      label: "discussionId",
-      prop: "discussionId",
+      label: 'discussionId',
+      prop: 'discussionId',
       hasEn: true,
-      hasColor: false,
+      hasColor: false
     },
     {
-      label: "parentId",
-      prop: "parentId",
+      label: 'parentId',
+      prop: 'parentId',
       hasEn: true,
-      hasColor: false,
+      hasColor: false
     },
     {
-      label: "是否收藏",
-      prop: "favorLabel",
+      label: '是否收藏',
+      prop: 'favorLabel',
       hasEn: true,
-      hasColor: false,
+      hasColor: false
     },
     {
-      label: "是否点赞",
-      prop: "likeLabel",
+      label: '是否点赞',
+      prop: 'likeLabel',
       hasEn: true,
-      hasColor: false,
+      hasColor: false
     },
     {
-      label: "创建时间",
-      prop: "createdAt",
+      label: '创建时间',
+      prop: 'createdAt',
       hasEn: true,
-      hasColor: false,
+      hasColor: false
     },
     {
-      label: "更新时间",
-      prop: "updatedAt",
+      label: '更新时间',
+      prop: 'updatedAt',
       hasEn: true,
-      hasColor: false,
-    },
+      hasColor: false
+    }
   ],
   discussionContentTable: [
     {
-      label: "ID",
-      prop: "id",
+      label: 'ID',
+      prop: 'id',
       hasEn: true,
       hasColor: false,
-      width: "100px",
+      width: '100px'
     },
     {
-      label: "校区",
-      prop: "schoolNames",
+      label: '校区',
+      prop: 'schoolNames',
       hasEn: true,
-      hasColor: false,
+      hasColor: false
     },
     {
-      label: "中文内容",
-      prop: "cnContent",
+      label: '中文内容',
+      prop: 'cnContent',
       hasEn: true,
-      hasColor: false,
+      hasColor: false
     },
     {
-      label: "英文内容",
-      prop: "enContent",
+      label: '英文内容',
+      prop: 'enContent',
       hasEn: true,
-      hasColor: false,
+      hasColor: false
     },
     {
-      label: "是否推荐",
-      prop: "recommendedLabel",
+      label: '是否推荐',
+      prop: 'recommendedLabel',
       hasEn: true,
-      hasColor: false,
+      hasColor: false
     },
     {
-      label: "是否可见",
-      prop: "activeLabel",
+      label: '是否可见',
+      prop: 'activeLabel',
       hasEn: true,
-      hasColor: false,
+      hasColor: false
     },
     {
-      label: "是否置顶",
-      prop: "topLabel",
+      label: '是否置顶',
+      prop: 'topLabel',
       hasEn: true,
-      hasColor: false,
+      hasColor: false
     },
     {
-      label: "创建时间",
-      prop: "createdAt",
+      label: '创建时间',
+      prop: 'createdAt',
       hasEn: true,
-      hasColor: false,
+      hasColor: false
     },
     {
-      label: "更新时间",
-      prop: "updatedAt",
+      label: '更新时间',
+      prop: 'updatedAt',
       hasEn: true,
-      hasColor: false,
-    },
+      hasColor: false
+    }
   ],
   contentMomentTable: [
     {
-      label: "ID",
-      prop: "id",
+      label: 'ID',
+      prop: 'id',
       hasEn: true,
       hasColor: false,
-      width: "100px",
+      width: '100px'
     },
     {
-      label: "校区",
-      prop: "schoolNames",
+      label: '校区',
+      prop: 'schoolNames',
       hasEn: true,
-      hasColor: false,
+      hasColor: false
     },
     {
-      label: "标题",
-      prop: "title",
+      label: '标题',
+      prop: 'title',
       hasEn: true,
-      hasColor: false,
+      hasColor: false
     },
     {
-      label: "内容",
-      prop: "content",
+      label: '内容',
+      prop: 'content',
       hasEn: true,
-      hasColor: false,
+      hasColor: false
     },
     {
-      label: "类型",
-      prop: "typeName",
+      label: '类型',
+      prop: 'typeName',
       hasEn: true,
-      hasColor: false,
+      hasColor: false
     },
     {
-      label: "发布者",
-      prop: "publisherUsername",
+      label: '发布者',
+      prop: 'publisherUsername',
       hasEn: true,
-      hasColor: false,
+      hasColor: false
     },
     // {
     //   label: "学生",
@@ -2983,268 +1863,268 @@ export default {
     // },
 
     {
-      label: "是否需要推送",
-      prop: "pushLabel",
+      label: '是否需要推送',
+      prop: 'pushLabel',
       hasEn: true,
-      hasColor: false,
+      hasColor: false
     },
     {
-      label: "是否已推送",
-      prop: "pushedLabel",
+      label: '是否已推送',
+      prop: 'pushedLabel',
       hasEn: true,
-      hasColor: false,
+      hasColor: false
     },
     {
-      label: "是否发送短信",
-      prop: "sendSmsLabel",
+      label: '是否发送短信',
+      prop: 'sendSmsLabel',
       hasEn: true,
-      hasColor: false,
+      hasColor: false
     },
     {
-      label: "创建时间",
-      prop: "createdAt",
+      label: '创建时间',
+      prop: 'createdAt',
       hasEn: true,
-      hasColor: false,
+      hasColor: false
     },
     {
-      label: "更新时间",
-      prop: "updatedAt",
+      label: '更新时间',
+      prop: 'updatedAt',
       hasEn: true,
-      hasColor: false,
-    },
+      hasColor: false
+    }
   ],
   schoolAttendanceTable: [
     {
-      label: "ID",
-      prop: "id",
+      label: 'ID',
+      prop: 'id',
       hasEn: true,
       hasColor: false,
-      width: "100px",
+      width: '100px'
     },
     {
-      label: "校区",
-      prop: "schoolName",
+      label: '校区',
+      prop: 'schoolName',
       hasEn: true,
-      hasColor: false,
+      hasColor: false
     },
     {
-      label: "人员编号",
-      prop: "personCode",
+      label: '人员编号',
+      prop: 'personCode',
       hasEn: true,
-      hasColor: false,
+      hasColor: false
     },
     {
-      label: "人员姓名",
-      prop: "personName",
+      label: '人员姓名',
+      prop: 'personName',
       hasEn: true,
-      hasColor: false,
+      hasColor: false
     },
     {
-      label: "所属部门",
-      prop: "deptName",
+      label: '所属部门',
+      prop: 'deptName',
       hasEn: true,
-      hasColor: false,
+      hasColor: false
     },
     {
-      label: "卡号",
-      prop: "cardNumber",
+      label: '卡号',
+      prop: 'cardNumber',
       hasEn: true,
-      hasColor: false,
+      hasColor: false
     },
     {
-      label: "状态",
-      prop: "schoolStatus",
+      label: '状态',
+      prop: 'schoolStatus',
       hasEn: true,
-      hasColor: false,
+      hasColor: false
     },
     {
-      label: "入校类型",
-      prop: "entryOpenType",
+      label: '入校类型',
+      prop: 'entryOpenType',
       hasEn: true,
-      hasColor: false,
+      hasColor: false
     },
     {
-      label: "入校时间",
-      prop: "entryTime",
+      label: '入校时间',
+      prop: 'entryTime',
       hasEn: true,
-      hasColor: false,
+      hasColor: false
     },
     {
-      label: "入校通道",
-      prop: "entryAscChannel",
+      label: '入校通道',
+      prop: 'entryAscChannel',
       hasEn: true,
-      hasColor: false,
+      hasColor: false
     },
     {
-      label: "离校类型",
-      prop: "leavingOpenType",
+      label: '离校类型',
+      prop: 'leavingOpenType',
       hasEn: true,
-      hasColor: false,
+      hasColor: false
     },
     {
-      label: "离校时间",
-      prop: "leavingTime",
+      label: '离校时间',
+      prop: 'leavingTime',
       hasEn: true,
-      hasColor: false,
+      hasColor: false
     },
     {
-      label: "离校通道",
-      prop: "leavingAcsChannel",
+      label: '离校通道',
+      prop: 'leavingAcsChannel',
       hasEn: true,
-      hasColor: false,
+      hasColor: false
     },
     {
-      label: "考勤日期",
-      prop: "attendanceDate",
+      label: '考勤日期',
+      prop: 'attendanceDate',
       hasEn: true,
-      hasColor: false,
+      hasColor: false
     },
     {
-      label: "创建时间",
-      prop: "createdAt",
+      label: '创建时间',
+      prop: 'createdAt',
       hasEn: true,
-      hasColor: false,
-    },
+      hasColor: false
+    }
   ],
   wechatNoticeTable: [
     {
-      label: "ID",
-      prop: "id",
+      label: 'ID',
+      prop: 'id',
       hasEn: true,
       hasColor: false,
-      width: "100px",
+      width: '100px'
     },
     {
-      label: "校区",
-      prop: "schoolName",
+      label: '校区',
+      prop: 'schoolName',
       hasEn: true,
-      hasColor: false,
+      hasColor: false
     },
     {
-      label: "学号",
-      prop: "admissionNo",
+      label: '学号',
+      prop: 'admissionNo',
       hasEn: true,
-      hasColor: false,
+      hasColor: false
     },
     {
-      label: "人员姓名",
-      prop: "personName",
+      label: '人员姓名',
+      prop: 'personName',
       hasEn: true,
-      hasColor: false,
+      hasColor: false
     },
     {
-      label: "状态",
-      prop: "sendStatus",
+      label: '状态',
+      prop: 'sendStatus',
       hasEn: true,
-      hasColor: false,
+      hasColor: false
     },
     {
-      label: "OpenID",
-      prop: "sendOpenId",
+      label: 'OpenID',
+      prop: 'sendOpenId',
       hasEn: true,
-      hasColor: false,
+      hasColor: false
     },
     {
-      label: "通知结果",
-      prop: "result",
+      label: '通知结果',
+      prop: 'result',
       hasEn: true,
-      hasColor: false,
+      hasColor: false
     },
     {
-      label: "更新时间",
-      prop: "updateTime",
+      label: '更新时间',
+      prop: 'updateTime',
       hasEn: true,
-      hasColor: false,
+      hasColor: false
     },
     {
-      label: "创建时间",
-      prop: "createTime",
+      label: '创建时间',
+      prop: 'createTime',
       hasEn: true,
-      hasColor: false,
-    },
+      hasColor: false
+    }
   ],
   wechatOpenidTable: [
     {
-      label: "ID",
-      prop: "id",
+      label: 'ID',
+      prop: 'id',
       hasEn: true,
       hasColor: false,
-      width: "100px",
+      width: '100px'
     },
     {
-      label: "校区",
-      prop: "schoolName",
+      label: '校区',
+      prop: 'schoolName',
       hasEn: true,
-      hasColor: false,
+      hasColor: false
     },
     {
-      label: "学号",
-      prop: "admissionNo",
+      label: '学号',
+      prop: 'admissionNo',
       hasEn: true,
-      hasColor: false,
+      hasColor: false
     },
     {
-      label: "人员姓名",
-      prop: "nickname",
+      label: '人员姓名',
+      prop: 'nickname',
       hasEn: true,
-      hasColor: false,
+      hasColor: false
     },
     {
-      label: "状态",
-      prop: "status",
+      label: '状态',
+      prop: 'status',
       hasEn: true,
-      hasColor: false,
+      hasColor: false
     },
     {
-      label: "OpenID",
-      prop: "encryptedOpenId",
+      label: 'OpenID',
+      prop: 'encryptedOpenId',
       hasEn: true,
-      hasColor: false,
+      hasColor: false
     },
     {
-      label: "更新时间",
-      prop: "updateTime",
+      label: '更新时间',
+      prop: 'updateTime',
       hasEn: true,
-      hasColor: false,
+      hasColor: false
     },
     {
-      label: "创建时间",
-      prop: "createTime",
+      label: '创建时间',
+      prop: 'createTime',
       hasEn: true,
-      hasColor: false,
-    },
+      hasColor: false
+    }
   ],
   accessRecordTable: [
     {
-      label: "ID",
-      prop: "id",
+      label: 'ID',
+      prop: 'id',
       hasEn: true,
       hasColor: false,
-      width: "100px",
+      width: '100px'
     },
     {
-      label: "校区",
-      prop: "schoolName",
+      label: '校区',
+      prop: 'schoolName',
       hasEn: true,
-      hasColor: false,
+      hasColor: false
     },
     {
-      label: "所属部门",
-      prop: "deptName",
+      label: '所属部门',
+      prop: 'deptName',
       hasEn: true,
-      hasColor: false,
+      hasColor: false
     },
     {
-      label: "人员编号",
-      prop: "personCode",
+      label: '人员编号',
+      prop: 'personCode',
       hasEn: true,
-      hasColor: false,
+      hasColor: false
     },
     {
-      label: "人员姓名",
-      prop: "personName",
+      label: '人员姓名',
+      prop: 'personName',
       hasEn: true,
-      hasColor: false,
+      hasColor: false
     },
     // {
     // 	label: "人员照片",
@@ -3262,42 +2142,42 @@ export default {
     // },
 
     {
-      label: "通道",
-      prop: "acsChannelName",
+      label: '通道',
+      prop: 'acsChannelName',
       hasEn: true,
-      hasColor: false,
+      hasColor: false
     },
 
     {
-      label: "考勤日期",
-      prop: "attendanceDate",
+      label: '考勤日期',
+      prop: 'attendanceDate',
       hasEn: true,
-      hasColor: false,
+      hasColor: false
     },
     {
-      label: "状态",
-      prop: "enterOrExit",
+      label: '状态',
+      prop: 'enterOrExit',
       hasEn: true,
-      hasColor: false,
+      hasColor: false
     },
     {
-      label: "开门类型",
-      prop: "openType",
+      label: '开门类型',
+      prop: 'openType',
       hasEn: true,
-      hasColor: false,
+      hasColor: false
     },
     {
-      label: "开门结果",
-      prop: "openResult",
+      label: '开门结果',
+      prop: 'openResult',
       hasEn: true,
-      hasColor: false,
+      hasColor: false
     },
 
     {
-      label: "卡号",
-      prop: "cardNumber",
+      label: '卡号',
+      prop: 'cardNumber',
       hasEn: true,
-      hasColor: false,
+      hasColor: false
     },
     // {
     // 	label: "卡状态",
@@ -3312,10 +2192,10 @@ export default {
     // 	hasColor: false,
     // },
     {
-      label: "设备名称",
-      prop: "deviceName",
+      label: '设备名称',
+      prop: 'deviceName',
       hasEn: true,
-      hasColor: false,
+      hasColor: false
     },
     // {
     // 	label: "设备代码",
@@ -3324,261 +2204,261 @@ export default {
     // 	hasColor: false,
     // },
     {
-      label: "打卡时间",
-      prop: "swingTime",
+      label: '打卡时间',
+      prop: 'swingTime',
       hasEn: true,
-      hasColor: false,
+      hasColor: false
     },
     {
-      label: "创建时间",
-      prop: "createTime",
+      label: '创建时间',
+      prop: 'createTime',
       hasEn: true,
-      hasColor: false,
-    },
+      hasColor: false
+    }
   ],
   studentAttendanceTable: [
     {
-      label: "ID",
-      prop: "id",
+      label: 'ID',
+      prop: 'id',
       hasEn: true,
       hasColor: false,
-      width: "100px",
+      width: '100px'
     },
     {
-      label: "校区",
-      prop: "schoolName",
+      label: '校区',
+      prop: 'schoolName',
       hasEn: true,
-      hasColor: false,
+      hasColor: false
     },
     {
-      label: "姓名",
-      prop: "studentName",
+      label: '姓名',
+      prop: 'studentName',
       hasEn: true,
-      hasColor: false,
+      hasColor: false
     },
     {
-      label: "学号",
-      prop: "admissionNo",
+      label: '学号',
+      prop: 'admissionNo',
       hasEn: true,
-      hasColor: false,
+      hasColor: false
     },
     {
-      label: "年级",
-      prop: "grade",
+      label: '年级',
+      prop: 'grade',
       hasEn: true,
-      hasColor: false,
+      hasColor: false
     },
     {
-      label: "班级",
-      prop: "form",
+      label: '班级',
+      prop: 'form',
       hasEn: true,
-      hasColor: false,
+      hasColor: false
     },
     {
-      label: "是否住宿",
-      prop: "boarding",
+      label: '是否住宿',
+      prop: 'boarding',
       hasEn: true,
-      hasColor: false,
+      hasColor: false
     },
     {
-      label: "是否坐校巴",
-      prop: "schoolBus",
+      label: '是否坐校巴',
+      prop: 'schoolBus',
       hasEn: true,
-      hasColor: false,
+      hasColor: false
     },
     {
-      label: "状态",
-      prop: "schoolStatus",
+      label: '状态',
+      prop: 'schoolStatus',
       hasEn: true,
-      hasColor: false,
+      hasColor: false
     },
     {
-      label: "考勤日期",
-      prop: "attendanceDate",
+      label: '考勤日期',
+      prop: 'attendanceDate',
       hasEn: true,
-      hasColor: false,
+      hasColor: false
     },
     {
-      label: "入校时间",
-      prop: "entryTime",
+      label: '入校时间',
+      prop: 'entryTime',
       hasEn: true,
-      hasColor: false,
+      hasColor: false
     },
     {
-      label: "离校时间",
-      prop: "leavingTime",
+      label: '离校时间',
+      prop: 'leavingTime',
       hasEn: true,
-      hasColor: false,
+      hasColor: false
     },
     {
-      label: "更新时间",
-      prop: "updatedAt",
+      label: '更新时间',
+      prop: 'updatedAt',
       hasEn: true,
-      hasColor: false,
+      hasColor: false
     },
     {
-      label: "创建时间",
-      prop: "createdAt",
+      label: '创建时间',
+      prop: 'createdAt',
       hasEn: true,
-      hasColor: false,
-    },
+      hasColor: false
+    }
   ],
   questionnaireTable: [
     {
-      label: "ID",
-      prop: "id",
+      label: 'ID',
+      prop: 'id',
       hasEn: true,
       hasColor: false,
-      width: "100px",
+      width: '100px'
     },
     {
-      label: "问卷名称",
-      prop: "name",
+      label: '问卷名称',
+      prop: 'name',
       hasEn: true,
-      hasColor: false,
+      hasColor: false
     },
     {
-      label: "校区",
-      prop: "schoolIdsLabel",
+      label: '校区',
+      prop: 'schoolIdsLabel',
       hasEn: true,
-      hasColor: false,
+      hasColor: false
     },
     {
-      label: "活动",
-      prop: "activityName",
+      label: '活动',
+      prop: 'activityName',
       hasEn: true,
-      hasColor: false,
+      hasColor: false
     },
     {
-      label: "是否有效",
-      prop: "statusLabel",
+      label: '是否有效',
+      prop: 'statusLabel',
       hasEn: true,
-      hasColor: false,
+      hasColor: false
     },
     {
-      label: "是否冻结",
-      prop: "frozenLabel",
+      label: '是否冻结',
+      prop: 'frozenLabel',
       hasEn: true,
-      hasColor: false,
+      hasColor: false
     },
     {
-      label: "是否填写学生信息",
-      prop: "needStudentInfoLabel",
+      label: '是否填写学生信息',
+      prop: 'needStudentInfoLabel',
       hasEn: true,
-      hasColor: false,
+      hasColor: false
     },
     {
-      label: "填报须知",
-      prop: "instructions",
+      label: '填报须知',
+      prop: 'instructions',
       hasEn: true,
-      hasColor: false,
+      hasColor: false
     },
 
     {
-      label: "更新时间",
-      prop: "updateTime",
+      label: '更新时间',
+      prop: 'updateTime',
       hasEn: true,
-      hasColor: false,
+      hasColor: false
     },
     {
-      label: "创建时间",
-      prop: "createTime",
+      label: '创建时间',
+      prop: 'createTime',
       hasEn: true,
-      hasColor: false,
-    },
+      hasColor: false
+    }
   ],
   discussionTagTable: [
     {
-      label: "ID",
-      prop: "id",
+      label: 'ID',
+      prop: 'id',
       hasEn: true,
       hasColor: false,
-      width: "100px",
+      width: '100px'
     },
     {
-      label: "中文名",
-      prop: "cnName",
+      label: '中文名',
+      prop: 'cnName',
       hasEn: true,
-      hasColor: false,
+      hasColor: false
     },
     {
-      label: "英文名",
-      prop: "enName",
+      label: '英文名',
+      prop: 'enName',
       hasEn: true,
-      hasColor: false,
+      hasColor: false
     },
 
     {
-      label: "创建时间",
-      prop: "createdAt",
+      label: '创建时间',
+      prop: 'createdAt',
       hasEn: true,
-      hasColor: false,
+      hasColor: false
     },
     {
-      label: "更新时间",
-      prop: "updatedAt",
+      label: '更新时间',
+      prop: 'updatedAt',
       hasEn: true,
-      hasColor: false,
-    },
+      hasColor: false
+    }
   ],
   discussionCommentTable: [
     {
-      label: "ID",
-      prop: "id",
+      label: 'ID',
+      prop: 'id',
       hasEn: true,
       hasColor: false,
-      width: "100px",
+      width: '100px'
     },
     {
-      label: "discussionId",
-      prop: "discussionId",
+      label: 'discussionId',
+      prop: 'discussionId',
       hasEn: true,
-      hasColor: false,
+      hasColor: false
     },
     {
-      label: "parentId",
-      prop: "parentId",
+      label: 'parentId',
+      prop: 'parentId',
       hasEn: true,
-      hasColor: false,
+      hasColor: false
     },
     {
-      label: "评论内容",
-      prop: "content",
+      label: '评论内容',
+      prop: 'content',
       hasEn: true,
-      hasColor: false,
+      hasColor: false
     },
     {
-      label: "是否可见",
-      prop: "visibleLabel",
+      label: '是否可见',
+      prop: 'visibleLabel',
       hasEn: true,
-      hasColor: false,
+      hasColor: false
     },
     {
-      label: "创建时间",
-      prop: "createdAt",
+      label: '创建时间',
+      prop: 'createdAt',
       hasEn: true,
-      hasColor: false,
-    },
+      hasColor: false
+    }
   ],
   foodWeeklyTable: [
     {
-      label: "ID",
-      prop: "id",
+      label: 'ID',
+      prop: 'id',
       hasEn: true,
       hasColor: false,
-      width: "100px",
+      width: '100px'
     },
     {
-      label: "校区",
-      prop: "schoolNames",
+      label: '校区',
+      prop: 'schoolNames',
       hasEn: true,
-      hasColor: false,
+      hasColor: false
     },
     {
-      label: "公众号链接",
-      prop: "wechatUrl",
+      label: '公众号链接',
+      prop: 'wechatUrl',
       hasEn: true,
-      hasColor: false,
+      hasColor: false
     },
     // {
     //   label: "状态",
@@ -3587,175 +2467,175 @@ export default {
     //   hasColor: false,
     // },
     {
-      label: "创建时间",
-      prop: "createdAt",
+      label: '创建时间',
+      prop: 'createdAt',
       hasEn: true,
-      hasColor: false,
+      hasColor: false
     },
     {
-      label: "更新时间",
-      prop: "updatedAt",
+      label: '更新时间',
+      prop: 'updatedAt',
       hasEn: true,
-      hasColor: false,
-    },
+      hasColor: false
+    }
   ],
   likeAndFavorTable: [
     {
-      label: "ID",
-      prop: "id",
+      label: 'ID',
+      prop: 'id',
       hasEn: true,
       hasColor: false,
-      width: "100px",
+      width: '100px'
     },
     {
-      label: "discussionId",
-      prop: "discussionId",
+      label: 'discussionId',
+      prop: 'discussionId',
       hasEn: true,
-      hasColor: false,
+      hasColor: false
     },
     {
-      label: "parentId",
-      prop: "parentId",
+      label: 'parentId',
+      prop: 'parentId',
       hasEn: true,
-      hasColor: false,
+      hasColor: false
     },
     {
-      label: "是否收藏",
-      prop: "favorLabel",
+      label: '是否收藏',
+      prop: 'favorLabel',
       hasEn: true,
-      hasColor: false,
+      hasColor: false
     },
     {
-      label: "是否点赞",
-      prop: "likeLabel",
+      label: '是否点赞',
+      prop: 'likeLabel',
       hasEn: true,
-      hasColor: false,
+      hasColor: false
     },
     {
-      label: "创建时间",
-      prop: "createdAt",
+      label: '创建时间',
+      prop: 'createdAt',
       hasEn: true,
-      hasColor: false,
+      hasColor: false
     },
     {
-      label: "更新时间",
-      prop: "updatedAt",
+      label: '更新时间',
+      prop: 'updatedAt',
       hasEn: true,
-      hasColor: false,
-    },
+      hasColor: false
+    }
   ],
   discussionContentTable: [
     {
-      label: "ID",
-      prop: "id",
+      label: 'ID',
+      prop: 'id',
       hasEn: true,
       hasColor: false,
-      width: "100px",
+      width: '100px'
     },
     {
-      label: "校区",
-      prop: "schoolNames",
+      label: '校区',
+      prop: 'schoolNames',
       hasEn: true,
-      hasColor: false,
+      hasColor: false
     },
     {
-      label: "中文内容",
-      prop: "cnContent",
+      label: '中文内容',
+      prop: 'cnContent',
       hasEn: true,
-      hasColor: false,
+      hasColor: false
     },
     {
-      label: "英文内容",
-      prop: "enContent",
+      label: '英文内容',
+      prop: 'enContent',
       hasEn: true,
-      hasColor: false,
+      hasColor: false
     },
     {
-      label: "讨论标签",
-      prop: "tagName",
+      label: '讨论标签',
+      prop: 'tagName',
       hasEn: true,
-      hasColor: false,
+      hasColor: false
     },
     {
-      label: "公开范围",
-      prop: "scopeLabel",
+      label: '公开范围',
+      prop: 'scopeLabel',
       hasEn: true,
-      hasColor: false,
+      hasColor: false
     },
     {
-      label: "是否推荐",
-      prop: "recommendedLabel",
+      label: '是否推荐',
+      prop: 'recommendedLabel',
       hasEn: true,
-      hasColor: false,
+      hasColor: false
     },
     {
-      label: "是否可见",
-      prop: "activeLabel",
+      label: '是否可见',
+      prop: 'activeLabel',
       hasEn: true,
-      hasColor: false,
+      hasColor: false
     },
     {
-      label: "是否置顶",
-      prop: "topLabel",
+      label: '是否置顶',
+      prop: 'topLabel',
       hasEn: true,
-      hasColor: false,
+      hasColor: false
     },
     {
-      label: "创建时间",
-      prop: "createdAt",
+      label: '创建时间',
+      prop: 'createdAt',
       hasEn: true,
-      hasColor: false,
+      hasColor: false
     },
     {
-      label: "更新时间",
-      prop: "updatedAt",
+      label: '更新时间',
+      prop: 'updatedAt',
       hasEn: true,
-      hasColor: false,
-    },
+      hasColor: false
+    }
   ],
   contentMomentTable: [
     {
-      label: "ID",
-      prop: "id",
+      label: 'ID',
+      prop: 'id',
       hasEn: true,
       hasColor: false,
-      width: "100px",
+      width: '100px'
     },
     {
-      label: "校区",
-      prop: "schoolNames",
+      label: '校区',
+      prop: 'schoolNames',
       hasEn: true,
-      hasColor: false,
+      hasColor: false
     },
     {
-      label: "标题",
-      prop: "title",
+      label: '标题',
+      prop: 'title',
       hasEn: true,
-      hasColor: false,
+      hasColor: false
     },
     {
-      label: "内容",
-      prop: "content",
+      label: '内容',
+      prop: 'content',
       hasEn: true,
-      hasColor: false,
+      hasColor: false
     },
     {
-      label: "类型",
-      prop: "typeName",
+      label: '类型',
+      prop: 'typeName',
       hasEn: true,
-      hasColor: false,
+      hasColor: false
     },
     {
-      label: "发布者",
-      prop: "publisherUsername",
+      label: '发布者',
+      prop: 'publisherUsername',
       hasEn: true,
-      hasColor: false,
+      hasColor: false
     },
     {
-      label: "是否可见",
-      prop: "visibleLabel",
+      label: '是否可见',
+      prop: 'visibleLabel',
       hasEn: true,
-      hasColor: false,
+      hasColor: false
     },
     // {
     //   label: "是否需要推送",
@@ -3764,10 +2644,10 @@ export default {
     //   hasColor: false,
     // },
     {
-      label: "是否已推送",
-      prop: "pushedLabel",
+      label: '是否已推送',
+      prop: 'pushedLabel',
       hasEn: true,
-      hasColor: false,
+      hasColor: false
     },
     // {
     //   label: "是否发送短信",
@@ -3776,16 +2656,16 @@ export default {
     //   hasColor: false,
     // },
     {
-      label: "创建时间",
-      prop: "createdAt",
+      label: '创建时间',
+      prop: 'createdAt',
       hasEn: true,
-      hasColor: false,
+      hasColor: false
     },
     {
-      label: "更新时间",
-      prop: "updatedAt",
+      label: '更新时间',
+      prop: 'updatedAt',
       hasEn: true,
-      hasColor: false,
-    },
-  ],
-};
+      hasColor: false
+    }
+  ]
+}

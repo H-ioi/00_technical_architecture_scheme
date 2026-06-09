@@ -23,17 +23,17 @@ export default [
             /* webpackChunkName: "views" */ "@/page/thepool/guardian/detail"
           ),
       },
-      {
-        path: "/thepool/enquiry/index/index",
-        name: "咨询列表",
-        meta: {
-          keepAlive: true,
-        },
-        component: () =>
-          import(
-            /* webpackChunkName: "views" */ "@/views/thepool/enquiry/index/index"
-          ),
-      },
+      // {
+      //   path: "/thepool/enquiry/index/index",
+      //   name: "咨询列表",
+      //   meta: {
+      //     keepAlive: true,
+      //   },
+      //   component: () =>
+      //     import(
+      //       /* webpackChunkName: "views" */ "@/views/thepool/enquiry/index/index"
+      //     ),
+      // },
       {
         path: "/thepool/enquiry/my/index",
         name: "我的咨询",
@@ -54,50 +54,62 @@ export default [
             /* webpackChunkName: "views" */ "@/page/thepool/consult/detail"
           ),
       },
-      {
-        path: "/thepool/user/student/index",
-        name: "学生管理",
-        meta: {
-          keepAlive: true,
-        },
-        component: () =>
-          import(
-            /* webpackChunkName: "views" */ "@/views/thepool/user/student/index"
-          ),
-      },
-      {
-        path: "/thepool/user/student/mine",
-        name: "我的学生",
-        meta: {
-          keepAlive: true,
-        },
-        component: () =>
-          import(
-            /* webpackChunkName: "views" */ "@/views/thepool/user/student/mine"
-          ),
-      },
-      {
-        path: "/thepool/user/guardian/index",
-        name: "家长管理",
-        meta: {
-          keepAlive: true,
-        },
-        component: () =>
-          import(
-            /* webpackChunkName: "views" */ "@/views/thepool/user/guardian/index"
-          ),
-      },
-      {
-        path: "/thepool/user/guardian/mine",
-        name: "我的家长",
-        meta: {
-          keepAlive: true,
-        },
-        component: () =>
-          import(
-            /* webpackChunkName: "views" */ "@/views/thepool/user/guardian/mine"
-          ),
-      },
+      // {
+      //   path: "/thepool/user/student/index",
+      //   name: "学生管理",
+      //   meta: {
+      //     keepAlive: true,
+      //   },
+      //   component: () =>
+      //     import(
+      //       /* webpackChunkName: "views" */ "@/views/thepool/user/student/index"
+      //     ),
+      //   children: [
+      //     {
+      //       path: "/student/detail",
+      //       name: "学生详情",
+      //     },
+      //   ],
+      // },
+      // {
+      //   path: "/thepool/user/student/mine",
+      //   name: "我的学生",
+      //   meta: {
+      //     keepAlive: true,
+      //   },
+      //   component: () =>
+      //     import(
+      //       /* webpackChunkName: "views" */ "@/views/thepool/user/student/mine"
+      //     ),
+      //   children: [
+      //     {
+      //       path: "/student/detail",
+      //       name: "学生详情",
+      //     },
+      //   ],
+      // },
+      // {
+      //   path: "/thepool/user/guardian/index",
+      //   name: "家长管理",
+      //   meta: {
+      //     keepAlive: true,
+      //   },
+      //   component: () =>
+      //     import(
+      //       /* webpackChunkName: "views" */ "@/views/thepool/user/guardian/index"
+      //     ),
+      // },
+      // {
+      //   path: "/thepool/user/guardian/mine",
+      //   name: "我的家长",
+      //   meta: {
+      //     keepAlive: true,
+      //   },
+      //   component: () =>
+      //     import(
+      //       /* webpackChunkName: "views" */ "@/views/thepool/user/guardian/mine"
+      //     ),
+      // },
       {
         path: "/thepool/activity/list",
         name: "活动列表",

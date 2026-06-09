@@ -104,7 +104,7 @@
             </el-form>
           </div>
         </div>
-        <div class="df_fa" style="height: calc(100% - 54px)">
+        <div class="df_fa">
           <div style="flex: 1; height: 100%">
             <FormgeneratorActivity
               ref="FormgeneratorActivity"

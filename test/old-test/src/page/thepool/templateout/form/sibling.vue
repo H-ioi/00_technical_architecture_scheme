@@ -2,7 +2,10 @@
   <div class="sibling">
     <div v-for="(item, index) in siblingList" :key="item">
       <div class="sibling-title">
-        <span> {{ index + 1 }}. {{ $t("consult.兄弟姐妹信息") }}</span>
+        <span>
+          {{ siblingList.length > 1 ? `${index + 1}. ` : "" }}
+          {{ $t("consult.兄弟姐妹信息") }}</span
+        >
         <i
           v-if="siblingList.length > 1"
           class="el-icon-delete"
@@ -55,7 +58,9 @@ export default {
         Promise.all(resultList)
           .then((item) => {
             console.log("获取到的兄弟姐妹信息", item);
-            resolve(item);
+            // 过滤掉status为false的项
+            let filteredList = item.filter((item) => item.status);
+            resolve(filteredList);
           })
           .catch((err) => {
             reject(err);
@@ -69,6 +74,17 @@ export default {
     // 删除兄弟姐妹
     removeSibling(index) {
       this.siblingList.splice(index, 1);
+    },
+    resetInfo(data) {
+      this.siblingList = [];
+      data.forEach((item) => {
+        let id = createCode();
+        this.siblingList.push(id);
+        // 重置表单数据
+        this.$nextTick(() => {
+          this.$refs[`SiblingForm${id}`][0].resetForm(item);
+        });
+      });
     },
   },
 };

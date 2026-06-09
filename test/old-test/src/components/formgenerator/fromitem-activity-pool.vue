@@ -160,6 +160,7 @@
               @click.native="getCurrentUpload(item)"
               @mouseover.native="getCurrentUpload(item)"
               class="upload-demo uploadH5"
+              :show-file-list="true"
               drag
               action=""
               multiple
@@ -324,10 +325,13 @@
             :filterable="true"
             :placeholder="item.properties.placeholder"
           >
-            <div v-for="(i, k) in countryList" :key="i.value">
-              <el-option :key="i.value" :label="i.name" :value="i.name">
-              </el-option>
-            </div>
+            <el-option
+              v-for="(i, k) in countryList"
+              :key="i.value"
+              :label="i18nlocel == 'en' ? i.en : i.cn"
+              :value="i18nlocel == 'en' ? i.en : i.cn"
+            >
+            </el-option>
           </el-select>
           <!-- 语言组件 -->
           <el-select
@@ -339,10 +343,13 @@
             :filterable="true"
             :placeholder="item.properties.placeholder"
           >
-            <div v-for="(i, k) in languageList" :key="i.code">
-              <el-option :key="i.code" :label="i.name" :value="i.code">
-              </el-option>
-            </div>
+            <el-option
+              v-for="(i, k) in languageList"
+              :key="i.value"
+              :label="i18nlocel == 'en' ? i.en : i.cn"
+              :value="i18nlocel == 'en' ? i.en : i.cn"
+            >
+            </el-option>
           </el-select>
           <el-cascader
             popper-class="questionnaire-cascader-picker"
@@ -419,6 +426,7 @@
 </template>
 
 <script>
+import { mapGetters } from "vuex";
 // 动态模板
 import {
   addDynamic,
@@ -432,6 +440,7 @@ import {
   uploadOuterFile,
   getOuterFile,
   getOuterFileName,
+  getOuterFileInfos,
 } from "@/api/upload/index.js";
 import {
   getStudentByPhone,
@@ -443,12 +452,21 @@ import { regeList } from "@/const/space/regex.js";
 import { deepClone } from "@/util/util";
 import SignatureH5 from "@/components/signature/signatureH5.vue";
 import countryList from "country-list";
-import { getLanguageList, formatChinaArea } from "@/util/jsondata.js";
+import {
+  getLanguageList,
+  formatChinaArea,
+  languages,
+  nationalities,
+} from "@/util/jsondata.js";
 import { createCode } from "@/util/util.js";
 import FromitemChild from "./fromitem-child.vue";
 export default {
   props: {
     templateType: {
+      type: String,
+      default: "default",
+    },
+    codeType: {
       type: String,
       default: "default",
     },
@@ -486,9 +504,9 @@ export default {
         code: null,
       },
       // 国籍
-      countryList: countryList.getData(),
+      countryList: nationalities,
       // 语言
-      languageList: getLanguageList(),
+      languageList: languages,
       // 中国省市区
       chinaAreaOptions: formatChinaArea(),
       // 验证码加载中
@@ -503,10 +521,26 @@ export default {
       childForm: {},
     };
   },
+  computed: {
+    ...mapGetters(["i18nlocel"]),
+  },
   created() {
     this.getStudentInfo();
   },
   beforeDestroy() {},
+  // 在组件销毁时清理
+  beforeUnmount() {
+    // 遍历 formArrValue 中的文件列表，释放 URL 对象
+    Object.values(this.formArrValue).forEach((item) => {
+      if (Array.isArray(item)) {
+        item.forEach((file) => {
+          if (file.url) {
+            window.URL.revokeObjectURL(file.url);
+          }
+        });
+      }
+    });
+  },
   methods: {
     clear() {
       this.formArrValue = {};
@@ -767,7 +801,7 @@ export default {
       for (const item of filteredAndSortedData) {
         const properties = {};
         let option = [];
-        const option_default = [];
+        let option_default = [];
 
         item.label = item.fieldName;
         item.type = item.fieldType;
@@ -786,7 +820,13 @@ export default {
 
         for (const res of item.properties) {
           if (res.key === "option_default") {
-            option_default.push(res.value);
+            // option_default.push(res.value);
+            option_default = [];
+            option.forEach((op) => {
+              if (op.optionDefault) {
+                option_default.push(op.id);
+              }
+            });
           } else {
             properties[res.key] = res.value;
             if (res.key === "datetime_type") {
@@ -853,6 +893,7 @@ export default {
               label: res.label,
               id: res.id,
               isHide: res.isHide,
+              optionDefault: res.optionDefault || 0,
             });
           }
         }
@@ -953,6 +994,7 @@ export default {
       }
     },
     downFile(file) {
+      if (this.templateType == "templateout") return;
       downloadFile(file.id).then((res) => {
         download(res.data, res.headers["content-disposition"]);
       });
@@ -1087,9 +1129,10 @@ export default {
       this.$set(this.formArrValue, item.id, []);
     },
     confirmEvent(uploadResult, imgUrlRes, item) {
-      console.log("confirmEvent", uploadResult, imgUrlRes);
+      console.log("confirmEvent", uploadResult, item);
       this.$set(this.signature, item.id, imgUrlRes);
       this.$set(this.formArrValue, item.id, [uploadResult]);
+      this.formArrValue = JSON.parse(JSON.stringify(this.formArrValue));
     },
     // 显示协议弹窗
     showProtocolDialog(url) {
@@ -1155,6 +1198,7 @@ export default {
       }
       await getPhoneCode({
         phone: phone,
+        type: this.codeType,
       });
       this.codeLoading = true;
       this.codeCountDown = 60;
@@ -1181,6 +1225,111 @@ export default {
     delGuardian(item, childItem, index) {
       this.childForm[item.fieldId].splice(index, 1);
       this.childForm = JSON.parse(JSON.stringify(this.childForm));
+    },
+    // 回填数据
+    resetFormData(template, data) {
+      console.log("222resetForm", template, data);
+      let { templateFields } = template;
+      let { fields } = data;
+      let values = {};
+      fields.forEach((item) => {
+        values[item.fieldId] = item.value;
+      });
+      templateFields.forEach(async (item) => {
+        let { fieldType, properties } = item;
+        let fieldId = item.fieldId;
+        let propertieObj = properties || {};
+        let fileValue = null;
+        switch (fieldType) {
+          case "input":
+            this.$set(this.formArrValue, item.fieldId, values[fieldId]);
+            break;
+          case "textarea":
+            this.$set(this.formArrValue, item.fieldId, values[fieldId]);
+            break;
+          case "radio":
+            this.$set(this.formArrValue, item.fieldId, values[fieldId]);
+            break;
+          case "checkbox":
+            this.$set(
+              this.formArrValue,
+              item.fieldId,
+              JSON.parse(values[fieldId])
+            );
+            break;
+          case "select":
+            fileValue = JSON.parse(values[fieldId]) || [];
+            if (propertieObj["option_multi"]) {
+              this.$set(this.formArrValue, item.fieldId, fileValue);
+            } else {
+              if (fileValue.length > 0) {
+                this.$set(this.formArrValue, item.fieldId, fileValue[0]);
+              }
+            }
+
+            break;
+          case "datetimepicker":
+            fileValue = JSON.parse(values[fieldId]) || [];
+            if (fileValue.length > 1) {
+              this.$set(this.formArrValue, item.fieldId, fileValue);
+            } else if (fileValue.length == 1) {
+              this.$set(this.formArrValue, item.fieldId, fileValue[0]);
+            }
+            break;
+          case "sign":
+            fileValue = JSON.parse(values[fieldId]) || [];
+            if (fileValue.length > 0) {
+              let signId = fileValue[0].id;
+              this.$set(this.formArrValue, item.fieldId, signId);
+              const file = await getOuterFile(signId);
+              let signUrl = window.URL.createObjectURL(file);
+              this.$set(this.signature, item.fieldId, signUrl);
+            }
+            break;
+          case "protocol":
+            this.$set(this.formArrValue, item.fieldId, values[fieldId]);
+            break;
+          case "upload":
+            try {
+              fileValue = JSON.parse(values[fieldId]) || [];
+              if (fileValue.length > 0) {
+                const fileInfos = await getOuterFileInfos({
+                  ids: fileValue,
+                  tenantId: 2,
+                });
+
+                // 使用 Promise.all 并行处理，确保所有异步操作完成
+                const fileList = await Promise.all(
+                  fileInfos.map(async (file) => {
+                    const uploadFile = await getOuterFile(file.id);
+                    const fileUrl = window.URL.createObjectURL(uploadFile);
+                    return {
+                      uid: file.id,
+                      id: file.id,
+                      type: file.contentType,
+                      file: "",
+                      url: fileUrl,
+                      name: file.originalName,
+                      status: "success",
+                    };
+                  })
+                );
+
+                this.$nextTick(() => {
+                  this.$set(this.formArrValue, item.fieldId, fileList);
+                  console.log("fileList", item.fieldId, fileList);
+                  this.formArrValue = JSON.parse(
+                    JSON.stringify(this.formArrValue)
+                  );
+                });
+              }
+            } catch (error) {
+              console.error("文件加载失败:", error);
+              // 可以添加错误提示或降级处理
+            }
+            break;
+        }
+      });
     },
   },
 };
@@ -1210,5 +1359,13 @@ export default {
       padding: 0 0 10px !important;
     }
   }
+}
+.form-item-remark {
+  font-size: 12px;
+  color: #999999;
+  line-height: 16px;
+  margin-bottom: 10px;
+  // 识别换行符号换行
+  white-space: pre-wrap;
 }
 </style>

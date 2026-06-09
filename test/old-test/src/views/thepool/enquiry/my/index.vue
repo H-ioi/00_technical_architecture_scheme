@@ -1,13 +1,15 @@
 <template>
   <div class="thepool_page">
-    <el-scrollbar style="height: 100%">
-      <StatusItem
-        :statusList="statusList"
-        :currentstatus="currentstatus"
-        @changeStasus="changeStasus"
-      />
+    <div class="pool-search">
+      <div class="pool-search-top">
+        <StatusItem
+          :statusList="statusList"
+          :currentstatus="currentstatus"
+          @changeStasus="changeStasus"
+        />
+        <SearchType />
+      </div>
       <div class="requestParam" v-if="requestList.length > 0">
-        <div class="requestParam_title">{{ $t("consult.筛选信息") }}</div>
         <div class="requestParamlist">
           <div
             @click="selectCurrentRequestParam(item)"
@@ -20,16 +22,235 @@
             v-for="(item, index) in requestList"
             :key="index"
           >
-            {{ item.description }}
             <i
               style="margin-left: 2px"
-              class="el-icon-close"
+              class="el-icon-circle-close"
               @click="delRequestParam(item.id)"
             ></i>
+            <span>
+              {{ item.description }}
+            </span>
           </div>
         </div>
       </div>
-      <div class="searchFromBox search" style="padding: 20px">
+      <div class="form-page" v-if="searchType == 'checkbox'">
+        <div>
+          <div class="form-item" v-if="currentstatus == '-1'">
+            <label class="form-label">{{ $t("consult.跟进状态") }}：</label>
+            <OverflowWrap>
+              <el-checkbox-group v-model="searchFrom.followStatus">
+                <el-checkbox
+                  v-for="item in filterStatusList"
+                  :key="item.type"
+                  :name="item.type"
+                  :label="item.type"
+                >
+                  {{ $t("consult")[item.name] }}
+                </el-checkbox>
+              </el-checkbox-group>
+            </OverflowWrap>
+          </div>
+          <div class="form-item" v-if="pooldictpermissions.length > 1">
+            <label class="form-label">{{ $t("consult.归属校区") }}：</label>
+            <OverflowWrap>
+              <el-checkbox-group v-model="searchFrom.schools">
+                <el-checkbox
+                  v-for="item in pooldictpermissions"
+                  :key="item.value"
+                  :name="item.value"
+                  :label="item.value"
+                >
+                  {{ i18nlocel == "en" ? item.enLabel : item.label }}
+                </el-checkbox>
+              </el-checkbox-group>
+            </OverflowWrap>
+          </div>
+          <div class="form-item" v-if="pooldictpermissions.length > 1">
+            <label class="form-label">{{ $t("consult.校区") }}：</label>
+            <OverflowWrap>
+              <el-checkbox-group
+                @change="changeSchool"
+                v-model="searchFrom.applySchools"
+              >
+                <el-checkbox
+                  v-for="item in pooldictpermissions"
+                  :key="item.value"
+                  :name="item.value"
+                  :label="item.value"
+                >
+                  {{ i18nlocel == "en" ? item.enLabel : item.label }}
+                </el-checkbox>
+              </el-checkbox-group>
+            </OverflowWrap>
+          </div>
+          <div v-if="showMore">
+            <div class="form-item" v-if="enrollLevelList.length > 1">
+              <label class="form-label">{{ $t("consult.申请年级") }}：</label>
+              <OverflowWrap>
+                <el-checkbox-group v-model="searchFrom.enrollLevels">
+                  <el-checkbox
+                    v-for="item in enrollLevelList"
+                    :key="item.value"
+                    :name="item.value"
+                    :label="item.value"
+                  >
+                    {{ i18nlocel == "en" ? item.enLabel : item.label }}
+                  </el-checkbox>
+                </el-checkbox-group>
+              </OverflowWrap>
+            </div>
+            <div class="form-item" v-if="directionsList.length > 1">
+              <label class="form-label">{{ $t("consult.方向") }}：</label>
+              <OverflowWrap>
+                <el-checkbox-group v-model="searchFrom.directions">
+                  <el-checkbox
+                    v-for="item in directionsList"
+                    :key="item.value"
+                    :name="item.value"
+                    :label="item.value"
+                  >
+                    {{ i18nlocel == "en" ? item.enLabel : item.label }}
+                  </el-checkbox>
+                </el-checkbox-group>
+              </OverflowWrap>
+            </div>
+            <div class="form-item" v-if="followTagsList.length > 1">
+              <label class="form-label">{{ $t("consult.跟进标签") }}：</label>
+              <OverflowWrap>
+                <el-checkbox-group v-model="searchFrom.followTags">
+                  <el-checkbox
+                    v-for="item in followTagsList"
+                    :key="item.value"
+                    :name="item.value"
+                    :label="item.value"
+                  >
+                    {{ i18nlocel == "en" ? item.enLabel : item.label }}
+                  </el-checkbox>
+                </el-checkbox-group>
+              </OverflowWrap>
+            </div>
+            <div class="form-item" v-if="channelList.length > 0">
+              <label class="form-label">{{ $t("consult.渠道一级") }}：</label>
+              <OverflowWrap>
+                <el-checkbox-group v-model="searchFrom.channels">
+                  <el-checkbox
+                    v-for="item in channelList"
+                    :key="item.value"
+                    :name="item.value"
+                    :label="item.value"
+                  >
+                    {{ i18nlocel == "en" ? item.enLabel : item.label }}
+                  </el-checkbox>
+                </el-checkbox-group>
+              </OverflowWrap>
+            </div>
+            <div class="form-item" v-if="channelChildOnes.length > 0">
+              <label class="form-label">{{ $t("consult.渠道二级") }}：</label>
+              <OverflowWrap>
+                <el-checkbox-group v-model="searchFrom.channelChildOnes">
+                  <el-checkbox
+                    v-for="item in channelChildOnes"
+                    :key="item.value"
+                    :name="item.value"
+                    :label="item.value"
+                  >
+                    {{ i18nlocel == "en" ? item.enLabel : item.label }}
+                  </el-checkbox>
+                </el-checkbox-group>
+              </OverflowWrap>
+            </div>
+
+            <div class="form-item-center">
+              <label class="form-label">{{ $t("consult.新增时间") }}：</label>
+              <el-date-picker
+                style="width: 240px"
+                v-model="searchFrom.createdTime"
+                type="daterange"
+                :range-separator="$t('consult.至')"
+                :start-placeholder="$t('consult.开始')"
+                :end-placeholder="$t('consult.结束')"
+                :value-format="'yyyy-MM-dd'"
+                :format="'yyyy-MM-dd'"
+                clearable
+                @clear="search"
+              >
+              </el-date-picker>
+            </div>
+            <div class="form-item-center">
+              <label class="form-label">{{ $t("consult.更新时间") }}：</label>
+              <el-date-picker
+                style="width: 240px"
+                v-model="searchFrom.updateTime"
+                type="daterange"
+                :range-separator="$t('consult.至')"
+                :start-placeholder="$t('consult.开始')"
+                :end-placeholder="$t('consult.结束')"
+                :value-format="'yyyy-MM-dd'"
+                :format="'yyyy-MM-dd'"
+                clearable
+                @clear="search"
+              >
+              </el-date-picker>
+            </div>
+            <div class="form-item">
+              <label class="form-label">{{ $t("consult.排序方式") }}：</label>
+              <OverflowWrap>
+                <el-radio-group v-model="searchFrom.orderBy">
+                  <el-radio
+                    v-for="item in sortModeList"
+                    :key="item.value"
+                    :name="item.value"
+                    :label="item.value"
+                  >
+                    {{ $t("consult")[item["label"]] }}
+                  </el-radio>
+                </el-radio-group>
+              </OverflowWrap>
+            </div>
+            <div class="form-item">
+              <label class="form-label">{{ $t("consult.排序") }}：</label>
+              <OverflowWrap>
+                <el-radio-group v-model="searchFrom.order">
+                  <el-radio
+                    v-for="item in upOrdown"
+                    :key="item.value"
+                    :name="item.value"
+                    :label="item.value"
+                  >
+                    {{ $t("consult")[item["label"]] }}
+                  </el-radio>
+                </el-radio-group>
+              </OverflowWrap>
+            </div>
+          </div>
+        </div>
+        <div class="form-page_btns">
+          <el-button
+            :icon="`el-icon-arrow-${showMore ? 'up' : 'down'}`"
+            type="text"
+            @click="showMore = !showMore"
+            >{{ $t("consult.更多筛选") }}</el-button
+          >
+          <el-button type="primary" size="small" round @click.stop="search">{{
+            $t("consult.查询")
+          }}</el-button>
+          <img
+            @click.stop="saveRequestParam"
+            src="/thepool/icon/icon_save.png"
+            alt="保存查询条件"
+          />
+          <img
+            @click.stop="clear"
+            src="/thepool/icon/icon_refresh.png"
+            alt="清空"
+          />
+        </div>
+      </div>
+      <div
+        v-if="searchType == 'input'"
+        class="searchFromBox search"
+        style="padding: 15px 0 0 0"
+      >
         <el-form
           ref="searchFrom"
           class="df_align_center searchFrom"
@@ -46,7 +267,7 @@
             >
               <el-select
                 multiple
-                v-model="pagination.followStatus"
+                v-model="searchFrom.followStatus"
                 :placeholder="$t('consult.请选择')"
                 clearable
                 @clear="search"
@@ -59,14 +280,7 @@
                 ></el-option>
               </el-select>
             </el-form-item>
-            <el-form-item :label="$t('consult.关键词')" style="width: 214px">
-              <el-input
-                v-model="searchFrom.keyword"
-                :placeholder="$t('consult.请输入')"
-                clearable
-                @clear="search"
-              ></el-input>
-            </el-form-item>
+
             <el-form-item :label="$t('consult.归属校区')" style="width: 214px">
               <el-select
                 multiple
@@ -231,29 +445,34 @@
                 ></el-option>
               </el-select>
             </el-form-item>
-            <el-form-item style="width: 320px; margin-right: 0">
+            <el-form-item style="width: 170px; margin-right: 0">
               <div class="df_sb">
                 <el-button
-                  type="defult"
+                  type="primary"
                   size="small"
                   round
-                  @click="saveRequestParam"
-                  >{{ $t("consult.保存筛选信息") }}</el-button
+                  @click.stop="search"
+                  >{{ $t("consult.查询") }}</el-button
                 >
-                <el-button type="defult" size="small" round @click="search">{{
-                  $t("consult.搜索")
-                }}</el-button>
-                <el-button type="text" size="small" round @click="clear">
-                  <div class="clear_btn">
-                    <img src="/thepool/other/clear.png" alt="" />
-                    <span> {{ $t("consult.清除") }}</span>
-                  </div>
-                </el-button>
+                <img
+                  style="width: 32px; height: 32px"
+                  @click.stop="saveRequestParam"
+                  src="/thepool/icon/icon_save.png"
+                  alt="保存查询条件"
+                />
+                <img
+                  style="width: 32px; height: 32px"
+                  @click.stop="clear"
+                  src="/thepool/icon/icon_refresh.png"
+                  alt="清空"
+                />
               </div>
             </el-form-item>
           </div>
         </el-form>
       </div>
+    </div>
+    <div class="pool-tableBox">
       <div class="df_sb palyTableBox" style="padding-top: 0">
         <div class="df_sb">
           <div class="df_sb">
@@ -414,7 +633,8 @@
           </div>
         </div>
       </div>
-    </el-scrollbar>
+    </div>
+
     <!-- 新增线索 -->
     <addClue
       v-if="showAddClue"
@@ -543,6 +763,8 @@ import SelectSchool from "@/page/thepool/consult/modal/selectschool.vue";
 import ErrorTable from "@/page/thepool/modal/errorinfo.vue";
 import sendemail from "@/page/thepool/email/modal/sendemail.vue";
 import SaveRequestParam from "@/page/thepool/modal/saveRequestParam.vue";
+import OverflowWrap from "@/components/thepoolcommon/OverflowWrap.vue";
+import SearchType from "@/components/thepoolcommon/searchtype.vue";
 export default {
   name: "TestUniWel",
   components: {
@@ -567,6 +789,8 @@ export default {
     ErrorTable,
     sendemail,
     SaveRequestParam,
+    OverflowWrap,
+    SearchType,
   },
   beforeRouteEnter(to, from, next) {
     if (from.path == "/loginisa") {
@@ -601,9 +825,9 @@ export default {
       currentClueType: "",
       currentClueId: "",
       pagination: {
-        pageSize: 10,
+        pageSize: 50,
         pageNum: 1,
-        followStatus: ["0", "1"],
+        followStatus: [],
       },
       paginationTotal: 0,
       currentUserId: "",
@@ -619,6 +843,7 @@ export default {
         channelChildOnes: [],
         followTags: [],
         orderBy: "orderByCreateTime",
+        followStatus: [],
       },
       searchRules: {},
       searchData: { orderBy: "orderByCreateTime" },
@@ -628,7 +853,7 @@ export default {
       tableTitle: consult["selectTableTitle"],
       sortModeList: consult["sortMode"],
       upOrdown: consult["upOrdown"],
-      currentstatus: "1",
+      currentstatus: "-1",
       tableData: [],
       tableBtn: [],
       spaceType: [],
@@ -645,6 +870,11 @@ export default {
       selectedCount: 0,
       searchRequestParamId: null,
       requestList: [],
+      showMore: false,
+      // 渠道一级列表
+      channelList: [],
+      // 渠道二级列表
+      channelChildOnes: [],
     };
   },
   computed: {
@@ -655,6 +885,7 @@ export default {
       "dictpermissions",
       "pooldictionary",
       "pooldictpermissions",
+      "searchType",
     ]),
   },
 
@@ -670,9 +901,26 @@ export default {
     i18nlocel() {
       this.resetData();
     },
+    "$store.state.thepool.keyword": {
+      handler(val) {
+        console.log("Vuex keyword changed:", val);
+        this.searchFrom["keyword"] = val;
+      },
+      immediate: true,
+    },
   },
   mounted() {
     this.wathKeyDowm();
+    this.$store.subscribeAction((action) => {
+      console.log("搜索列表", action);
+      if (this.$route.path != "/thepool/enquiry/my/index") {
+        return;
+      }
+      if (action.type === "searchList") {
+        this.searchFrom["keyword"] = action.payload;
+        this.search();
+      }
+    });
   },
   beforeDestroy() {
     this.removeKeyDowm();
@@ -1015,6 +1263,12 @@ export default {
       searchData["channels"] = this.searchFrom["channels"];
       searchData["channelChildOnes"] = this.searchFrom["channelChildOnes"];
       if (
+        this.currentstatus == "-1" &&
+        this.searchFrom["followStatus"].length > 0
+      ) {
+        searchData["followStatus"] = this.searchFrom["followStatus"];
+      }
+      if (
         this.searchFrom["createdTime"] &&
         this.searchFrom["createdTime"].length > 0
       ) {
@@ -1032,6 +1286,7 @@ export default {
     },
     // 清除搜索
     clear() {
+      this.$store.dispatch("clearKeyword");
       if (this.pooldictpermissions.length == 1) {
         this.searchFrom = {
           ...this.searchFrom,
@@ -1047,6 +1302,7 @@ export default {
           followTags: [],
           orderBy: "orderByCreateTime",
           order: "",
+          followStatus: [],
         };
       } else {
         this.searchFrom = {
@@ -1064,24 +1320,33 @@ export default {
           followTags: [],
           orderBy: "orderByCreateTime",
           order: "",
+          followStatus: [],
         };
         this.enrollLevelList = [];
         this.directionsList = [];
         this.followTagsList = [];
+        this.channelList = [];
+        this.channelChildOnes = [];
       }
       this.searchData = { orderBy: "orderByCreateTime" };
       this.pagination["pageNum"] = 1;
       if (this.currentstatus == "-1") {
         this.pagination["followStatus"] = [];
+        this.searchFrom = {
+          ...this.searchFrom,
+          followStatus: [],
+        };
       }
       if (this.channelsList.length > 0) {
         this.channelsList = [];
-        this.$refs["SelectChannle"].clear();
+        if (this.$refs["SelectChannle"]) {
+          this.$refs["SelectChannle"].clear();
+        }
       } else {
         this.channelsList = [];
       }
 
-      this.getMyClueList();
+      this.search();
     },
     gettableBtn(data) {
       let tableBtn = data.filter((res) => {
@@ -1099,19 +1364,24 @@ export default {
       this.tableBtn = this.gettableBtn(item.btn);
       this.pagination["pageNum"] = 1;
       if (item.type == "-1") {
-        this.pagination["followStatus"] = [];
+        delete this.pagination["followStatus"];
+        this.searchFrom = {
+          ...this.searchFrom,
+          followStatus: [],
+        };
       } else {
+        delete this.searchFrom["followStatus"];
         if (item.type == "1") {
           this.pagination["followStatus"] = ["0", "1"];
         } else {
           this.pagination["followStatus"] = [item.type];
         }
       }
-      this.getMyClueList();
+      this.search();
     },
     initData() {
       this.changeModal(false);
-      this.getMyClueList();
+      this.search();
     },
     changeModal(type) {
       this.showAdd = type;
@@ -1166,123 +1436,147 @@ export default {
         }
       }
     },
-    changeSchool(e) {
-      // console.log("changeSchool", e);
-      if (e.length == 0) {
-        this.enrollLevelList = [];
-        this.directionsList = [];
-        this.channelsList = [];
-        this.followTagsList = [];
-        this.searchFrom.enrollLevels = [];
-        this.searchFrom.directions = [];
-        this.searchFrom.channels = [];
-        this.searchFrom.channelChildOnes = [];
-        this.searchFrom.followTags = [];
-        return;
+    /**
+     * 安全的字符串分割方法
+     * @param {string} str - 要分割的字符串
+     * @param {string} separator - 分隔符
+     * @returns {Array} - 分割后的数组，空值返回空数组
+     */
+    safeSplit(str, separator = ",") {
+      if (!str || typeof str !== "string") {
+        return [];
       }
-      let enrollLevelList = [];
-      let directionsList = [];
-      let channelsList = [];
-      let followtagsList = [];
-      let enrollLevelIds = [];
-      let directionsIds = [];
-      let channelsIds = [];
-      let followtagsIds = [];
+      return str.split(separator);
+    },
+
+    /**
+     * 合并标签：当同一 value 出现多次时，合并 label 和 enLabel
+     * @param {Object} existingItem - 已存在的项
+     * @param {Object} newItem - 新项
+     */
+    mergeLabels(existingItem, newItem) {
+      const labels = new Set([
+        ...this.safeSplit(existingItem.label),
+        ...this.safeSplit(newItem.label),
+      ]);
+      const enLabels = new Set([
+        ...this.safeSplit(existingItem.enLabel),
+        ...this.safeSplit(newItem.enLabel),
+      ]);
+      existingItem.label = [...labels].join(",");
+      existingItem.enLabel = [...enLabels].join(",");
+    },
+
+    /**
+     * 根据选中的校区更新关联的下拉列表（入学等级、方向、渠道、跟进标签）
+     * @param {Array} schoolIds - 选中的校区 ID 数组
+     */
+    changeSchool(schoolIds) {
+      // 清空所有列表
       this.enrollLevelList = [];
       this.directionsList = [];
       this.channelsList = [];
       this.followTagsList = [];
-      console.log("this.pooldictpermissions", this.pooldictpermissions);
-      let pooldictpermissions = _.cloneDeep(this.pooldictpermissions);
-      pooldictpermissions.map((item) => {
-        if (e.includes(item.value)) {
-          if (item["child"]["enquiry_enroll_level"]) {
-            item["child"]["enquiry_enroll_level"].map((level) => {
-              if (enrollLevelIds.includes(level.value)) {
-                // console.log("enrollLevelList", enrollLevelList);
-                enrollLevelList.map((enrollLevel) => {
-                  if (level.value == enrollLevel.value) {
-                    let label = enrollLevel["label"].split(",");
-                    let enLabel = enrollLevel["enLabel"].split(",");
-                    if (!label.includes(level["label"])) {
-                      label = [...label, ...level["label"].split(",")];
-                      enrollLevel["label"] = String([...new Set(label)]);
-                    }
-                    if (!enLabel.includes(level["enLabel"])) {
-                      enLabel = [...enLabel, ...level["enLabel"].split(",")];
-                      enrollLevel["enLabel"] = String([...new Set(enLabel)]);
-                    }
-                  }
-                });
-              } else {
-                enrollLevelIds.push(level.value);
-                enrollLevelList.push(level);
-              }
-            });
-          }
-          if (item["child"]["enquiry_direction"]) {
-            item["child"]["enquiry_direction"].map((direction) => {
-              if (directionsIds.includes(direction.value)) {
-                // console.log("directionsList", directionsList);
-                directionsList.map((d) => {
-                  if (direction.value == d.value) {
-                    let label = d["label"].split(",");
-                    let enLabel = d["enLabel"].split(",");
-                    if (!label.includes(direction["label"])) {
-                      label = [...label, ...direction["label"].split(",")];
-                      d["label"] = String([...new Set(label)]);
-                    }
-                    if (!enLabel.includes(direction["enLabel"])) {
-                      enLabel = [
-                        ...enLabel,
-                        ...direction["enLabel"].split(","),
-                      ];
-                      d["enLabel"] = String([...new Set(enLabel)]);
-                    }
-                  }
-                });
-              } else {
-                directionsIds.push(direction.value);
-                directionsList.push(direction);
-              }
-            });
-          }
-          if (item["child"]["enquiry_channel"]) {
-            channelsList.push({
-              ...item,
-              child: item["child"]["enquiry_channel"],
-            });
-          }
-          if (item["child"]["enquiry_follow_tags"]) {
-            item["child"]["enquiry_follow_tags"].map((tags) => {
-              if (followtagsIds.includes(tags.value)) {
-                followtagsList.map((d) => {
-                  if (tags.value == d.value) {
-                    let label = d["label"].split(",");
-                    let enLabel = d["enLabel"].split(",");
-                    if (!label.includes(tags["label"])) {
-                      label = [...label, ...tags["label"].split(",")];
-                      d["label"] = String([...new Set(label)]);
-                    }
-                    if (!enLabel.includes(tags["enLabel"])) {
-                      enLabel = [...enLabel, ...tags["enLabel"].split(",")];
-                      d["enLabel"] = String([...new Set(enLabel)]);
-                    }
-                  }
-                });
-              } else {
-                followtagsIds.push(tags.value);
-                followtagsList.push(tags);
-              }
-            });
+      this.searchFrom.enrollLevels = [];
+      this.searchFrom.directions = [];
+      this.searchFrom.channels = [];
+      this.searchFrom.channelChildOnes = [];
+      this.searchFrom.followTags = [];
+      this.channelList = [];
+      this.channelChildOnes = [];
+
+      if (!schoolIds || schoolIds.length === 0) {
+        return;
+      }
+
+      // 使用 Map 保持插入顺序，同时用于去重
+      const enrollLevelMap = new Map();
+      const directionMap = new Map();
+      const followTagMap = new Map();
+      const channelMap = new Map();
+      const channelChildOneMap = new Map();
+
+      // 遍历校区权限配置
+      for (const item of this.pooldictpermissions) {
+        if (!schoolIds.includes(item.value)) {
+          continue;
+        }
+
+        const child = item.child;
+
+        // 处理入学等级
+        if (child.enquiry_enroll_level) {
+          for (const level of child.enquiry_enroll_level) {
+            const existing = enrollLevelMap.get(level.value);
+            if (existing) {
+              this.mergeLabels(existing, level);
+            } else {
+              enrollLevelMap.set(level.value, { ...level });
+            }
           }
         }
-      });
-      console.log("enrollLevelList", enrollLevelList);
-      this.enrollLevelList = enrollLevelList;
-      this.directionsList = directionsList;
-      this.channelsList = channelsList;
-      this.followTagsList = followtagsList;
+
+        // 处理方向
+        if (child.enquiry_direction) {
+          for (const direction of child.enquiry_direction) {
+            const existing = directionMap.get(direction.value);
+            if (existing) {
+              this.mergeLabels(existing, direction);
+            } else {
+              directionMap.set(direction.value, { ...direction });
+            }
+          }
+        }
+
+        // 处理渠道
+        if (child.enquiry_channel) {
+          this.channelsList.push({
+            ...item,
+            child: child.enquiry_channel,
+          });
+        }
+
+        // 处理跟进标签
+        if (child.enquiry_follow_tags) {
+          for (const tag of child.enquiry_follow_tags) {
+            const existing = followTagMap.get(tag.value);
+            if (existing) {
+              this.mergeLabels(existing, tag);
+            } else {
+              followTagMap.set(tag.value, { ...tag });
+            }
+          }
+        }
+        // 处理渠道一级
+        if (child.enquiry_channel) {
+          for (const channel of child.enquiry_channel) {
+            const existing = channelMap.get(channel.value);
+            if (existing) {
+              this.mergeLabels(existing, channel);
+            } else {
+              channelMap.set(channel.value, { ...channel });
+            }
+          }
+        }
+        // 处理渠道二级
+        if (child.enquiry_channel_child_one) {
+          for (const channelChild of child.enquiry_channel_child_one) {
+            const existing = channelChildOneMap.get(channelChild.value);
+            if (existing) {
+              this.mergeLabels(existing, channelChild);
+            } else {
+              channelChildOneMap.set(channelChild.value, { ...channelChild });
+            }
+          }
+        }
+      }
+
+      // 将 Map 转换为数组，保持插入顺序
+      this.enrollLevelList = Array.from(enrollLevelMap.values());
+      this.directionsList = Array.from(directionMap.values());
+      this.followTagsList = Array.from(followTagMap.values());
+      this.channelList = Array.from(channelMap.values());
+      this.channelChildOnes = Array.from(channelChildOneMap.values());
     },
     setCreator(data) {
       console.log("setCreator", data);
@@ -1480,7 +1774,7 @@ export default {
     },
     saveRequestParam() {
       this.requestParam = this.getSearchData();
-      if (this.channelsList.length > 0) {
+      if (this.channelsList.length > 0 && this.$refs["SelectChannle"]) {
         this.requestParam["selectChannle"] =
           this.$refs["SelectChannle"].cascaderValue;
       } else {
@@ -1517,10 +1811,14 @@ export default {
       let { id, requestParam } = item;
       this.searchRequestParamId = id;
       let data = JSON.parse(requestParam);
+      this.changeSchool(data.applySchools || []);
+      this.setSearchData(data);
+      this.search();
+    },
+    setSearchData(data) {
       this.searchData = {
         ...data,
       };
-      this.changeSchool(data.applySchools || []);
       this.$nextTick(() => {
         this.searchFrom = {
           keyword: data.keyword || "",
@@ -1532,6 +1830,7 @@ export default {
           followTags: data.followTags || [],
           channels: data.channels || [],
           channelChildOnes: data.channelChildOnes || [],
+          followStatus: data.followStatus || [],
           createdTime:
             data.createTimeBegin && data.createTimeEnd
               ? [data.createTimeBegin, data.createTimeEnd]
@@ -1541,10 +1840,9 @@ export default {
               ? [data.updateTimeBegin, data.updateTimeEnd]
               : [],
         };
-        if (data.selectChannle) {
+        if (data.selectChannle && this.$refs["SelectChannle"]) {
           this.$refs["SelectChannle"].cascaderValue = data.selectChannle;
         }
-        this.getMyClueList();
       });
     },
   },

@@ -9,9 +9,13 @@
       custom-class="pooldialog"
     >
       <div class="modal_top">
-        <el-button type="primary" size="medium" round @click="getGuardianList">{{
-          $t("consult.新增")
-        }}</el-button>
+        <el-button
+          type="primary"
+          size="medium"
+          round
+          @click="getGuardianList"
+          >{{ $t("consult.新增") }}</el-button
+        >
       </div>
       <el-table
         :data="guardianList"
@@ -52,9 +56,13 @@
         </el-table-column>
       </el-table>
       <div class="df_center modal_footer">
-        <el-button type="primary" size="medium" round @click="saveGuardianList">{{
-          $t("consult.保存")
-        }}</el-button>
+        <el-button
+          type="primary"
+          size="medium"
+          round
+          @click="saveGuardianList"
+          >{{ $t("consult.保存") }}</el-button
+        >
         <el-button type="default" size="medium" round @click="closeModal">{{
           $t("consult.取消")
         }}</el-button>
@@ -74,7 +82,11 @@
             :inline="true"
             :model="searchFrom"
           >
-            <el-form-item :label="$t('consult.电话')" prop="phone" style="width: 320px">
+            <el-form-item
+              :label="$t('consult.电话')"
+              prop="phone"
+              style="width: 320px"
+            >
               <el-input
                 v-model="searchFrom['phone']"
                 :placeholder="$t('consult.请输入')"
@@ -120,12 +132,20 @@
           />
         </div>
         <div class="df_center modal_footer">
-          <el-button type="primary" size="medium" round @click="handleAddguardian">{{
-            $t("consult.确定")
-          }}</el-button>
-          <el-button type="default" size="medium" round @click="closeInnerModal">{{
-            $t("consult.取消")
-          }}</el-button>
+          <el-button
+            type="primary"
+            size="medium"
+            round
+            @click="handleAddguardian"
+            >{{ $t("consult.确定") }}</el-button
+          >
+          <el-button
+            type="default"
+            size="medium"
+            round
+            @click="closeInnerModal"
+            >{{ $t("consult.取消") }}</el-button
+          >
         </div>
       </el-dialog>
     </el-dialog>
@@ -196,8 +216,8 @@ export default {
       tableData: [],
       tableBtn: [],
       pagination: {
-        size: 10,
-        current: 1,
+        pageSize: 50,
+        pageNum: 1,
       },
       paginationTotal: 0,
       searchFrom: { phone: "" },
@@ -292,7 +312,7 @@ export default {
         .catch(() => {});
     },
     handleCurrentChange(page) {
-      this.pagination["current"] = page;
+      this.pagination["pageNum"] = page;
       this.getList();
     },
     handleCurrentTableItem(val) {
@@ -323,7 +343,7 @@ export default {
     closeInnerModal() {
       this.innerVisible = false;
       this.currentRow = {};
-      this.pagination["current"] = 1;
+      this.pagination["pageNum"] = 1;
       this.searchFrom = { phone: "" };
       this.getList();
     },

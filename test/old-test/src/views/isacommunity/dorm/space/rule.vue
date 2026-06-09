@@ -4,7 +4,7 @@
     <div class="community_top">
       <div class="community_top_title">{{ $t("dorm.自动分配规则") }}</div>
       <div class="community_top_btn">
-        <el-button type="primary" @click="addItem">{{ $t('attendance.新增') }}</el-button>
+        <el-button type="primary" @click="addItem" v-if="permissions['rule-add']">{{ $t('dorm.新增规则') }}</el-button>
       </div>
     </div>
     <div class="community_centent">
@@ -12,9 +12,13 @@
         <el-form :inline="true" :model="dataForm" @keyup.enter.native="getDataList()"
           style="display: flex; align-items: center; flex-wrap: wrap;">
           <el-form-item>
-            <el-select v-model="dataForm.school" :placeholder="$t('attendance.学校')" clearable>
-              <el-option v-for="school in schoolList" :key="school.enName" :label="school.enName"
-                :value="school.enName"></el-option>
+            <el-select v-model="dataForm.schoolId" :placeholder="$t('attendance.学校')" clearable>
+              <el-option
+                :key="k"
+                v-for="(i, k) in dictionary['school']"
+                :label="i.enName"
+                :value="i.externId"
+              ></el-option>
             </el-select>
           </el-form-item>
 
@@ -26,7 +30,7 @@
 
 
           <el-form-item>
-            <el-select v-model="dataForm.scp" :placeholder="$t('dorm.状态')" clearable style="width: 140px;">
+            <el-select v-model="dataForm.isActive" :placeholder="$t('dorm.状态')" clearable style="width: 140px;">
               <el-option :label="$t('dorm.启用')" value="1"></el-option>
               <el-option :label="$t('dorm.禁用')" value="0"></el-option>
 
@@ -53,30 +57,32 @@
           :header-cell-style="headercellstyle" style="width: 100%; font-size: 14px;">
           <el-table-column type="selection" width="55" align="center"></el-table-column>
 
-          <el-table-column prop="studentSchool" header-align="center" align="left" :label="$t('attendance.学校')"
+          <el-table-column prop="school_en_name" header-align="center" align="left" :label="$t('attendance.学校')"
             show-overflow-tooltip>
           </el-table-column>
 
 
 
 
-          <el-table-column prop="admissonNo" header-align="center" align="center" :label="$t('dorm.规则名')"
+          <el-table-column prop="ruleName" header-align="center" align="center" :label="$t('dorm.规则名')"
             show-overflow-tooltip>
           </el-table-column>
 
+          <el-table-column prop="ruleItems" header-align="center" align="center" :label="$t('dorm.规则名')"
+            show-overflow-tooltip>
+          </el-table-column>
 
-
-          <el-table-column prop="status" header-align="center" align="center" :label="$t('attendance.状态')">
+          <el-table-column prop="isActive" header-align="center" align="center" :label="$t('attendance.状态')">
             <template slot-scope="scope">
-              {{ getStatusText(scope.row.status) }}
+              {{ getStatusText(scope.row.isActive) }} 
             </template>
           </el-table-column>
 
 
           <el-table-column fixed="right" header-align="center" align="center" width="250" :label="$t('attendance.操作')">
             <template slot-scope="scope">
-              <a type="text" size="small" @click="editForm(scope.row)" class="text-btn">{{ $t("btn.查看") }} </a>
-              <a type="text" size="small" @click="editForm(scope.row)" class="text-btn">{{ $t("btn.编辑") }} </a>
+              <!--<a type="text" size="small" @click="editForm(scope.row)" class="text-btn" v-if="permissions['rule-view']">{{ $t("btn.查看") }} </a>-->
+              <a type="text" size="small" @click="editForm(scope.row)" class="text-btn" v-if="permissions['rule-edit']">{{ $t("btn.编辑") }} </a>
             </template>
           </el-table-column>
         </el-table>
@@ -97,15 +103,15 @@
     </div>
 
     <rule-model :dialog-visible.sync="dialogVisible" :edit-data="editData" :is-view-mode="isViewMode"
-      @dialog-submit="submitConditionDialog" @dialog-cancel="closeConditionDialog" />
+      :school-list="dictionary['school']" @dialog-submit="submitConditionDialog" @dialog-cancel="closeConditionDialog" />
   </div>
 </template>
 
 <script>
-import { listHoliday, cancelFlow, getSchoolList } from '@/api/isacommunity/holiday'
+import {  getDormBedAssignRuleListPage, deleteBedAssignRuleBatch } from '@/api/isacommunity/dorm'
 import Pagination from "@/components/communitycommon/Pagination.vue";
 import RuleModel from './rule-model.vue';
-
+import { mapGetters } from "vuex";
 import { headercellstyle } from '../common-style.js';
 
 export default {
@@ -117,8 +123,8 @@ export default {
         keyword: '',
         type: '',
         school: '',
-        dateRange: [],
-        scp: ''
+        isActive: '',
+
       },
       isViewMode: false,
       pagination: {
@@ -134,12 +140,15 @@ export default {
       dialogVisible: false,
       dataListLoading: false,
       dataListSelections: [],
-      schoolList: []
+     
     }
   },
   mounted() {
     this.getDataList();
-    this.loadSchoolList();
+ 
+  },
+  computed: {
+    ...mapGetters(["dictionary", "permissions", "i18nlocel"]),
   },
   methods: {
     // 获取数据列表
@@ -147,28 +156,44 @@ export default {
       this.dialogVisible = false
       this.editData = null // 重置编辑数据
     },
-  deleteHandle() {
+      // 获取状态文本
+    getStatusText(status) {
+      const statusMap = {
+        '1': this.$t('dorm.启用'),
+        '0': this.$t('dorm.禁用'),
+       
+      }
+      return statusMap[status] || '-'
+    },
+    deleteHandle() {
       if (this.dataListSelections.length === 0) {
         this.$message({
-          message: this.$t('attendance.请选择要删除的项'),
+          message: this.$t('dorm.请选择要删除的项'),
           type: 'warning',
           duration: 1500
         })
         return
       }
-      this.$confirm(this.$t('attendance.确定删除操作'), this.$t('attendance.提示'), {
-        confirmButtonText: this.$t('attendance.确定'),
-        cancelButtonText: this.$t('attendance.取消'),
+      this.$confirm(this.$t('dorm.确定删除选中项吗？'), this.$t('consult.提示'), {
+        confirmButtonText: this.$t('btn.确定'),
+        cancelButtonText: this.$t('btn.取消'),
         type: 'warning'
       }).then(() => {
         const params = {
-          ...this.pagination,
-          scp: this.dataForm.scp,
-          keyword: this.dataForm.keyword,
-          type: this.dataForm.type,
-          studentSchool: this.dataForm.school
+          ids: this.dataListSelections.map(item => item.id).join(',')
         }
-        
+        deleteBedAssignRuleBatch(params).then((res) => {
+          this.$message({
+            message: this.$t('attendance.操作成功'),
+            type: 'success',
+            duration: 1500
+          })
+          this.getDataList()
+        }).catch(err => {
+          console.error(err);
+          this.dataListLoading = false
+        })
+
       }).catch(() => {
         // 取消删除
       });
@@ -186,30 +211,21 @@ export default {
       this.dataListLoading = true
       const params = {
         ...this.pagination,
-        scp: this.dataForm.scp,
         keyword: this.dataForm.keyword,
         type: this.dataForm.type,
-        studentSchool: this.dataForm.school
+        schoolId: this.dataForm.schoolId,
+        isActive: this.dataForm.isActive,
       }
       // 添加时间范围参数
-    
-      listHoliday(params).then((res) => {
-        this.dataList = res.records
+
+      getDormBedAssignRuleListPage(params).then((res) => {
+        this.dataList = res.data || []
         this.paginationTotal = res.total
         this.dataListLoading = false
       }).catch(err => {
         console.error(err);
         this.dataListLoading = false
       })
-    },
-    // 加载学校列表
-    loadSchoolList() {
-
-      this.$nextTick(async () => {
-        let res = await getSchoolList()
-        this.schoolList = res.data.data
-      });
-
     },
 
 
@@ -218,9 +234,9 @@ export default {
       this.dataForm = {
         keyword: '',
         type: '',
-        school: '',
-        dateRange: [],
-        scp: ''
+        schoolId: '',
+        isActive: '',
+
       };
       this.getDataList()
     },
@@ -276,51 +292,8 @@ export default {
     selectionChangeHandle(val) {
       this.dataListSelections = val
     },
-    // 获取部门标签
-    getScopeLabel(value) {
-      const scopeMap = {
-        course: this.$t('attendance.课程'),
-        dorm: this.$t('attendance.宿舍'),
-        bus: this.$t('attendance.校巴')
-      }
-      return scopeMap[value] || value
-    },
-    // 获取状态文本
-    getStatusText(status) {
-      const statusMap = {
-        '1100': this.$t('attendance.待审批'),
-        '102': this.$t('attendance.已拒绝'),
-        '101': this.$t('attendance.已撤销'),
-        '104': this.$t('attendance.已销假'),
-        '1101': this.$t('attendance.休假中'),
-        '1102': this.$t('attendance.已结束'),
-        '1103': this.$t('attendance.待休假')
-      }
-      return statusMap[status] || '-'
-    },
-
-    getWeekDaysText(status) {
-      const statusMap = {
-        'monday': this.$t('attendance.周一'),
-        'tuesday': this.$t('attendance.周二'),
-        'wednesday': this.$t('attendance.周三'),
-        'thursday': this.$t('attendance.周四'),
-        'friday': this.$t('attendance.周五'),
-
-      }
-      return statusMap[status] || '-'
-    },
-
-
-    getHolidayEndStatusText(status) {
-      const statusMap = {
-        '100': this.$t('attendance.待审批'),
-        '102': this.$t('attendance.已销假'),
-        '101': this.$t('attendance.未销假'),
-
-      }
-      return statusMap[status] || this.$t('attendance.未销假')
-    }
+  
+ 
 
 
   }
@@ -328,7 +301,6 @@ export default {
 </script>
 
 <style scoped>
-
 .text-btn {
   color: #BA8E62 !important;
   margin-right: 10px;

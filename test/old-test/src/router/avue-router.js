@@ -1,6 +1,13 @@
 import { getStore } from "@/util/store";
 import i18n from "@/i18n/i18n";
 import { resolveMenuLabel } from "@/util/menu-i18n";
+
+/** 菜单 path 统一为绝对路径，避免相对路径在当前路由下叠加 */
+function normalizeMenuPath(path) {
+  if (!path || /^https?:\/\//.test(path)) return path;
+  return path.startsWith("/") ? path : `/${path.replace(/^\/+/, "")}`;
+}
+
 const RouterPlugin = function () {
   this.$router = null
   this.$store = null
@@ -40,8 +47,10 @@ RouterPlugin.install = function (router, store) {
     getPath: function (params) {
       const { src } = params
       let result = src || '/'
-      if (src.includes('http') || src.includes('https')) {
+      if (src && (src.includes('http') || src.includes('https'))) {
         result = `/myiframe/urlPath?${objToform(params)}`
+      } else {
+        result = normalizeMenuPath(result)
       }
       return result
     },
@@ -81,17 +90,24 @@ RouterPlugin.install = function (router, store) {
         const oMenu = aMenu[i]
         if (this.routerList.includes(oMenu[propsDefault.path])) return
         const path = (() => {
-          if (!oMenu[propsDefault.path]) {
+          const menuPath = oMenu[propsDefault.path]
+          if (!menuPath) {
             return
-          } else if (first) {
-            return oMenu[propsDefault.path].replace('/index', '')
-          } else {
-            return oMenu[propsDefault.path]
           }
+          const normalized = normalizeMenuPath(menuPath)
+          if (first) {
+            return normalized.replace('/index', '')
+          }
+          return normalized
         })()
 
         //特殊处理组件
-        const component = 'views' + oMenu.path
+        const menuPath = oMenu[propsDefault.path] || ''
+        let normalizedPath = normalizeMenuPath(menuPath)
+        if (!normalizedPath.endsWith('/index')) {
+          normalizedPath = `${normalizedPath}/index`
+        }
+        const component = `views${normalizedPath}`
 
         const name = oMenu[propsDefault.label]
         // 设置英文名称：后端 menufiled 或前端 i18n 词典

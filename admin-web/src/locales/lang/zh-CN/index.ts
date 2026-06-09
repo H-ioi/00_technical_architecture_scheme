@@ -1,4 +1,5 @@
 import common from './common'
+import content from './modules/content'
 import dashboard from './dashboard'
 import activity from './modules/activity'
 import email from './modules/email'
@@ -20,6 +21,7 @@ export default {
   dashboard,
   activity,
   email,
+  content,
   attendance,
   base,
   member,

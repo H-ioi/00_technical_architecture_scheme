@@ -1,13 +1,21 @@
 <template>
   <div class="community_page">
-    <el-dialog
-      :title="$t('isagroup')[typeObj[modalType]]"
-      :visible.sync="showModal"
-      width="1000px"
-      :before-close="closeModal"
-      :close-on-click-modal="false"
-    >
-      <div class="moadlFromBox" v-if="showModal">
+    <div class="community_top">
+      <div class="community_top_title">{{ pageTitle }}</div>
+      <div class="community_top_btn">
+        <el-button size="medium" @click="goBack">{{ $t("btn.返回") }}</el-button>
+        <el-button
+          type="primary"
+          size="medium"
+          :loading="isSubmitting"
+          @click="submitForm('ruleForm')"
+        >
+          {{ $t("btn.保存") }}
+        </el-button>
+      </div>
+    </div>
+    <div class="community_centent_v2 schoolbus-form-page" v-loading="pageLoading">
+      <div class="schoolbus-form-page__inner moadlFromBox">
         <el-form
           :label-position="'top'"
           :inline="true"
@@ -15,9 +23,9 @@
           :rules="rules"
           ref="ruleForm"
         >
-          <div class="df_center_wrap" style="max-height: 600px; overflow-y: auto">
+          <div class="df_center_wrap">
             <el-form-item
-              :label="$t('isagroup.校区')"
+              :label="$t('schoolbus.校区')"
               prop="schoolIds"
               style="width: 33%"
               v-if="schoolSelectList.length > 1"
@@ -39,7 +47,7 @@
               </el-select>
             </el-form-item>
             <el-form-item
-              :label="$t('isagroup.学期')"
+              :label="$t('schoolbus.学期')"
               prop="sectionId"
               style="width: 33%"
             >
@@ -56,14 +64,14 @@
                 ></el-option>
               </el-select>
             </el-form-item>
-            <el-form-item :label="$t('isagroup.中文名')" prop="cnName" style="width: 33%">
+            <el-form-item :label="$t('schoolbus.中文名')" prop="cnName" style="width: 33%">
               <el-input
                 v-model="ruleForm.cnName"
                 :placeholder="$t('common.请输入')"
                 maxlength="50"
               ></el-input>
             </el-form-item>
-            <el-form-item :label="$t('isagroup.英文名')" prop="enName" style="width: 33%">
+            <el-form-item :label="$t('schoolbus.英文名')" prop="enName" style="width: 33%">
               <el-input
                 v-model="ruleForm.enName"
                 :placeholder="$t('common.请输入')"
@@ -71,7 +79,7 @@
               ></el-input>
             </el-form-item>
             <el-form-item
-              :label="$t('isagroup.路线类型')"
+              :label="$t('schoolbus.路线类型')"
               prop="lineType"
               style="width: 33%"
             >
@@ -82,14 +90,14 @@
               >
                 <el-option
                   :key="k"
-                  v-for="(i, k) in consts['routeType']"
-                  :label="$t('isagroup')[i.label]"
+                  v-for="(i, k) in routeTypeOptions"
+                  :label="$t('schoolbus')[i.label]"
                   :value="i.value"
                 ></el-option>
               </el-select>
             </el-form-item>
             <el-form-item
-              :label="$t('isagroup.车牌号')"
+              :label="$t('schoolbus.车牌号')"
               prop="carIdList"
               style="width: 33%"
             >
@@ -110,13 +118,27 @@
               </el-select>
             </el-form-item>
 
-            <el-form-item :label="$t('isagroup.状态')" prop="visible" style="width: 100%">
+            <div v-if="selectedCarSummaries.length" class="route-car-summary">
+              <div
+                v-for="item in selectedCarSummaries"
+                :key="item.id"
+                class="route-car-summary__item"
+              >
+                <span class="route-car-summary__tag">{{ item.carNumber }}</span>
+                <span class="route-car-summary__meta">
+                  {{ $t("schoolbus.跟车老师") }}：{{ item.teacherName }}
+                  · {{ $t("schoolbus.司机") }}：{{ item.driverName }}
+                </span>
+              </div>
+            </div>
+
+            <el-form-item :label="$t('schoolbus.状态')" prop="visible" style="width: 100%">
               <el-radio-group style="width: 100%" v-model="ruleForm.visible">
                 <el-radio
                   :label="i.value"
                   :key="k"
-                  v-for="(i, k) in consts['visibleType']"
-                  >{{ $t("isagroup")[i.label] }}</el-radio
+                  v-for="(i, k) in visibleTypeOptions"
+                  >{{ $t('schoolbus')[i.label] }}</el-radio
                 >
               </el-radio-group>
             </el-form-item>
@@ -127,7 +149,7 @@
             >
               <div class="df_sb" style="width: 100%">
                 <div class="df_start_center" style="width: 50%">
-                  <el-form-item :label="$t('isagroup.路线日期')" style="width: 46%">
+                  <el-form-item :label="$t('schoolbus.路线日期')" style="width: 46%">
                     <el-select
                       style="width: 100%"
                       v-model="item['weekDays']"
@@ -136,7 +158,7 @@
                     >
                       <el-option
                         :key="k"
-                        v-for="(i, k) in consts['WeeklyDays']"
+                        v-for="(i, k) in weeklyDaysOptions"
                         :label="i.label"
                         :value="i.value"
                         :disabled="isOptionDisabled(i.value, index)"
@@ -151,7 +173,7 @@
                       type="text"
                       icon="el-icon-plus"
                       @click="addWeekDays"
-                      >{{ $t("isagroup.增加") }}</el-button
+                      >{{ $t("schoolbus.增加") }}</el-button
                     >
                     <el-button
                       v-if="weekDays.length > 1"
@@ -160,7 +182,7 @@
                       type="text"
                       icon="el-icon-minus"
                       @click="delWeekDays(item, index)"
-                      >{{ $t("isagroup.减少") }}</el-button
+                      >{{ $t("schoolbus.减少") }}</el-button
                     >
                   </div>
                 </div>
@@ -170,7 +192,7 @@
                     type="primary"
                     icon="el-icon-plus"
                     @click="addStation(item, index)"
-                    >{{ $t("isagroup.新增站点") }}</el-button
+                    >{{ $t("schoolbus.新增站点") }}</el-button
                   >
                 </div>
               </div>
@@ -181,10 +203,10 @@
                   style="width: 100%"
                 >
                   <el-table-column
-                    v-for="(i, k) in tabletitle['bindStationTable']"
+                    v-for="(i, k) in bindStationTableColumns"
                     :key="k"
                     :prop="i['prop']"
-                    :label="i['hasEn'] ? $t('isagroup')[i['label']] : i['label']"
+                    :label="i['hasEn'] ? $t('schoolbus')[i['label']] : i['label']"
                     show-overflow-tooltip
                     :width="`${i['width']}`"
                     :fixed="i['fixed']"
@@ -198,14 +220,14 @@
                           type="text"
                           size="small"
                           @click="editCurrentStation(scope.row, scope.$index, index)"
-                          >{{ $t("isagroup.编辑") }}</el-button
+                          >{{ $t("schoolbus.编辑") }}</el-button
                         >
                         <el-button
                           class="button_text"
                           type="text"
                           size="small"
                           @click="delCurrentStation(scope.row, scope.$index, index)"
-                          >{{ $t("isagroup.删除") }}</el-button
+                          >{{ $t("schoolbus.删除") }}</el-button
                         >
                       </span>
                     </template>
@@ -214,39 +236,30 @@
               </div>
             </div>
           </div>
-          <el-form-item class="modalFromBtn">
-            <el-button type="primary" size="large" @click="submitForm('ruleForm')">{{
-              $t("consult.保存")
-            }}</el-button>
-            <el-button type="default" size="large" @click="closeModal">{{
-              $t("isagroup.取消")
-            }}</el-button>
-          </el-form-item>
         </el-form>
       </div>
-      <!-- 新增站点弹窗 -->
+    </div>
+      <!-- 新增站点弹窗（简单表单仍用弹窗） -->
       <el-dialog
         style="z-index: 99999"
-        :title="$t('isagroup')[typeObj[stationModalType]]"
+        :title="$t('schoolbus')[typeObj[stationModalType]]"
         :visible.sync="showAddStationModal"
         width="350px"
         :before-close="closeAddStationModal"
         :modal-append-to-body="false"
         :close-on-click-modal="false"
-        :modal="false"
       >
         <el-form
           :label-position="'top'"
           :inline="true"
           :model="addStationForm"
           :rules="addStationRules"
-          :modal="false"
           ref="addStationForm"
         >
           <div class="moadlFromBox">
             <el-form-item
               style="width: 100%"
-              :label="$t('isagroup.站点')"
+              :label="$t('schoolbus.站点')"
               prop="stationId"
             >
               <el-select
@@ -267,7 +280,7 @@
             <el-form-item
               class="timepicker"
               style="width: 100%"
-              :label="$t('isagroup.上学上车时间')"
+              :label="$t('schoolbus.上学上车时间')"
               prop="goTime"
             >
               <el-time-picker
@@ -282,7 +295,7 @@
             <el-form-item
               class="timepicker"
               style="width: 100%"
-              :label="$t('isagroup.放学下车时间')"
+              :label="$t('schoolbus.放学下车时间')"
               prop="backTime"
             >
               <el-time-picker
@@ -293,7 +306,7 @@
                 :placeholder="$t('common.请选择')"
               ></el-time-picker>
             </el-form-item>
-            <el-form-item style="width: 100%" :label="$t('isagroup.日价格')" prop="price">
+            <el-form-item style="width: 100%" :label="$t('schoolbus.日价格')" prop="price">
               <el-input-number
                 style="width: 100%"
                 v-model="addStationForm.price"
@@ -304,7 +317,7 @@
             </el-form-item>
             <el-form-item
               style="width: 100%"
-              :label="$t('isagroup.周价格')"
+              :label="$t('schoolbus.周价格')"
               prop="weekPrice"
             >
               <el-input-number
@@ -326,20 +339,24 @@
           </div>
         </el-form>
       </el-dialog>
-    </el-dialog>
   </div>
 </template>
 
 <script>
 import { mapGetters } from "vuex";
+import { SCHOOLBUS_PATHS } from "@/const/isacommunity/schoolbusRoutes.js";
 import {
   getSectionList,
   getStationList,
   getCarinfoList,
 } from "@/api/isacommunity/buscommon.js";
 import { addRoute, editRoute, getRouteDetail } from "@/api/isacommunity/route.js";
-import consts from "@/const/isacommunity/consts.js";
-import tabletitle from "@/const/isacommunity/tabletitle.js";
+import {
+  BUS_ROUTE_TYPE,
+  BUS_VISIBLE_TYPE,
+  BUS_WEEKLY_DAYS,
+  bindStationTableColumns,
+} from "../../../schoolbusConsts.js";
 import uploadFile from "@/components/communitycommon/uploadFile.vue";
 import _ from "lodash";
 // 引入 dayjs
@@ -356,8 +373,9 @@ export default {
   data() {
     let that = this;
     return {
-      consts: consts,
-      tabletitle: tabletitle,
+      routeTypeOptions: BUS_ROUTE_TYPE,
+      visibleTypeOptions: BUS_VISIBLE_TYPE,
+      weeklyDaysOptions: BUS_WEEKLY_DAYS,
       tablestyle: {
         headercellstyle: {
           background: "#F5F8FD",
@@ -377,29 +395,30 @@ export default {
       },
       typeObj: { add: "新增", edit: "编辑", look: "查看" },
       modalType: "add",
-      showModal: false,
+      pageLoading: false,
+      isSubmitting: false,
       ruleForm: {},
       rules: {
         schoolIds: [
-          { required: true, message: that.$t("isagroup.请选择"), trigger: "blur" },
+          { required: true, message: that.$t("schoolbus.请选择"), trigger: "blur" },
         ],
         sectionId: [
-          { required: true, message: that.$t("isagroup.请选择"), trigger: "blur" },
+          { required: true, message: that.$t("schoolbus.请选择"), trigger: "blur" },
         ],
         cnName: [
-          { required: true, message: that.$t("isagroup.请输入"), trigger: "blur" },
+          { required: true, message: that.$t("schoolbus.请输入"), trigger: "blur" },
         ],
         enName: [
-          { required: true, message: that.$t("isagroup.请输入"), trigger: "blur" },
+          { required: true, message: that.$t("schoolbus.请输入"), trigger: "blur" },
         ],
         lineType: [
-          { required: true, message: that.$t("isagroup.请选择"), trigger: "blur" },
+          { required: true, message: that.$t("schoolbus.请选择"), trigger: "blur" },
         ],
         carIdList: [
-          { required: true, message: that.$t("isagroup.请选择"), trigger: "blur" },
+          { required: true, message: that.$t("schoolbus.请选择"), trigger: "blur" },
         ],
         visible: [
-          { required: true, message: that.$t("isagroup.请选择"), trigger: "blur" },
+          { required: true, message: that.$t("schoolbus.请选择"), trigger: "blur" },
         ],
       },
       sectionList: [],
@@ -426,9 +445,32 @@ export default {
     };
   },
   created() {},
-  mounted() {},
+  mounted() {
+    this.initFromRoute();
+  },
   computed: {
     ...mapGetters(["permissions", "i18nlocel"]),
+    bindStationTableColumns() {
+      return bindStationTableColumns(this);
+    },
+    pageTitle() {
+      const key = this.typeObj[this.modalType] || "新增";
+      return this.$t('schoolbus')[key];
+    },
+    selectedCarSummaries() {
+      const carIds = this.ruleForm.carIdList || [];
+      if (!carIds.length) {
+        return [];
+      }
+      return this.carList
+        .filter((car) => carIds.includes(car.id))
+        .map((car) => ({
+          id: car.id,
+          carNumber: car.carNumber,
+          teacherName: car.carTeacher || (car.busTeacherUserDTO && car.busTeacherUserDTO.nickname) || "--",
+          driverName: car.driverInfo ? car.driverInfo.name : "--",
+        }));
+    },
   },
   watch: {
     weekDays: {
@@ -439,45 +481,73 @@ export default {
     },
   },
   methods: {
-    // 打开
-    async showForm(type = "add", item = {}) {
-      await this.fetchSchoolListBuscommon();
-      this.modalType = type;
-      this.showModal = true;
-      if (this.modalType != "add") {
-        this.getDetail(item.id);
+    goBack() {
+      if (window.history.length > 1) {
+        this.$router.go(-1);
       } else {
-        if (this.schoolSelectList.length === 1) {
-          let schoolId = this.schoolSelectList[0].id;
-          this.ruleForm = {
-            ...this.ruleForm,
-            schoolIds: [schoolId],
-          };
+        this.$router.push({ path: SCHOOLBUS_PATHS.routePlanList });
+      }
+    },
+    /** 二级页：从路由 query 初始化新增/编辑 */
+    async initFromRoute() {
+      const mode = this.$route.query.mode || "add";
+      const id = this.$route.query.id;
+      if (mode !== "add" && mode !== "edit") {
+        this.goBack();
+        return;
+      }
+      this.pageLoading = true;
+      try {
+        await this.fetchSchoolListBuscommon();
+        this.modalType = mode;
+        if (mode !== "add") {
+          if (!id) {
+            this.goBack();
+            return;
+          }
+          await this.getDetail(id);
+        } else if (this.schoolSelectList.length === 1) {
+          const schoolId = this.schoolSelectList[0].id;
+          this.ruleForm = { ...this.ruleForm, schoolIds: [schoolId] };
           this.selectSectionList = await getSectionList({ schoolIds: [schoolId] });
           this.selectStationList = await getStationList({ schoolIds: [schoolId] });
           this.carList = await getCarinfoList({ schoolIds: [schoolId], isAll: 0 });
         }
+      } finally {
+        this.pageLoading = false;
       }
     },
     // 新增
     addData(data) {
-      addRoute(data).then((res) => {
-        this.$message.success(this.$t("isagroup.成功"));
-        this.$emit("getList");
-        this.closeModal();
-      });
+      this.isSubmitting = true;
+      addRoute(data)
+        .then((res) => {
+          if (res.data.success) {
+            this.$message.success(this.$t("schoolbus.成功"));
+            this.goBack();
+          }
+        })
+        .finally(() => {
+          this.isSubmitting = false;
+        });
     },
     // 编辑
     editData(data) {
-      editRoute(data).then((res) => {
-        this.$message.success(this.$t("isagroup.成功"));
-        this.$emit("getList");
-        this.closeModal();
-      });
+      this.isSubmitting = true;
+      editRoute(data)
+        .then((res) => {
+          if (res.data.success) {
+            this.$message.success(this.$t("schoolbus.成功"));
+            this.goBack();
+          }
+        })
+        .finally(() => {
+          this.isSubmitting = false;
+        });
     },
     // 获取详情
     getDetail(id) {
-      getRouteDetail(id).then(async (res) => {
+      return getRouteDetail(id).then(async (res) => {
         if (res.data.success) {
           let {
             schoolIds,
@@ -548,7 +618,7 @@ export default {
           let isAllWeekDaysEmpty = this.isAllWeekDaysEmpty();
           pass = !isAllWeekDaysEmpty;
           if (isAllWeekDaysEmpty) {
-            this.$message.error(this.$t("isagroup.请选择路线日期并添加站点"));
+            this.$message.error(this.$t("schoolbus.请选择路线日期并添加站点"));
           }
         }
         if (pass) {
@@ -590,11 +660,12 @@ export default {
       });
       return hasEmpty;
     },
-    // 关闭
+    // 关闭/重置
     closeModal() {
-      this.showModal = false;
       this.weekDays = _.cloneDeep([{ weekDays: [], stationPrices: [] }]);
-      this.$refs.ruleForm.resetFields();
+      if (this.$refs.ruleForm) {
+        this.$refs.ruleForm.resetFields();
+      }
       this.addStationForm = {};
     },
     // 新增路线
@@ -630,7 +701,7 @@ export default {
     },
     // 检查是否所有日期都被选择
     checkAllDaysSelected(weekDays) {
-      const allDays = new Set(this.consts["WeeklyDays"].map((item) => item.value));
+      const allDays = new Set(BUS_WEEKLY_DAYS.map((item) => item.value));
       const selectedDays = new Set();
 
       weekDays.forEach((item) => {
@@ -667,8 +738,8 @@ export default {
     },
     // 删除当前站点
     delCurrentStation(station, stationIndex, weekDayIndex) {
-      this.$alert(this.$t("isagroup.确定要删除吗？"), this.$t("isagroup.删除"), {
-        confirmButtonText: this.$t("isagroup.确定"),
+      this.$alert(this.$t("schoolbus.确定要删除吗？"), this.$t("schoolbus.删除"), {
+        confirmButtonText: this.$t("schoolbus.确定"),
       }).then(() => {
         this.weekDays[weekDayIndex].stationPrices.splice(stationIndex, 1);
       });
@@ -698,7 +769,7 @@ export default {
             !this.addStationForm["goTime"] && !this.addStationForm["backTime"];
           if (hasTime) {
             isPass = false;
-            this.$message.warning(this.$t("isagroup.请选择上学/放学时间"));
+            this.$message.warning(this.$t("schoolbus.请选择上学/放学时间"));
           }
         }
         if (isPass) {
@@ -744,6 +815,42 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.route-car-summary {
+  width: 100%;
+  margin: 0 0 12px;
+  padding: 12px 14px;
+  box-sizing: border-box;
+  background: #f7f8fa;
+  border-radius: 8px;
+}
+
+.route-car-summary__item {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  line-height: 1.5;
+
+  & + & {
+    margin-top: 8px;
+  }
+}
+
+.route-car-summary__tag {
+  display: inline-block;
+  padding: 2px 10px;
+  border-radius: 999px;
+  background: #e9f2ff;
+  color: #1f3f61;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.route-car-summary__meta {
+  color: #606266;
+  font-size: 13px;
+}
+
 .el-form-item--small.el-form-item {
   margin-right: 0px;
   padding-right: 20px;

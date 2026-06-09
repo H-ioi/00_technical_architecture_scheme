@@ -18,7 +18,7 @@
                 v-for="(item, index) in detailInfo"
                 :key="index"
               >
-                <span>{{ $t("isagroup")[item.label] }}</span>
+                <span>{{ item.label }}</span>
                 <span :title="$checkNull(detailData[item.prop])">{{
                   $checkNull(detailData[item.prop])
                 }}</span>
@@ -27,7 +27,7 @@
                 style="width: 100%; margin-bottom: 15px"
                 class="orderDetail_baseinfo_item"
               >
-                <span>{{ $t("isagroup.照片") }}</span>
+                <span>{{ $t("schoolbus.照片") }}</span>
                 <upload-file
                   ref="uploadFile"
                   :disabled="true"
@@ -46,10 +46,10 @@
                   style="width: 100%"
                 >
                   <el-table-column
-                    v-for="(i, k) in tabletitle['bindCarTable']"
+                    v-for="(i, k) in bindCarTableColumns"
                     :key="k"
                     :prop="i['prop']"
-                    :label="i['hasEn'] ? $t('isagroup')[i['label']] : i['label']"
+                    :label="i['label']"
                     show-overflow-tooltip
                     :width="`${i['width']}`"
                     :fixed="i['fixed']"
@@ -94,10 +94,10 @@
                     style="width: 100%"
                   >
                     <el-table-column
-                      v-for="(i, k) in tabletitle['bindStationTable']"
+                      v-for="(i, k) in bindStationTableColumns"
                       :key="k"
                       :prop="i['prop']"
-                      :label="i['hasEn'] ? $t('isagroup')[i['label']] : i['label']"
+                      :label="i['label']"
                       show-overflow-tooltip
                       :width="`${i['width']}`"
                       :fixed="i['fixed']"
@@ -117,8 +117,12 @@
 <script>
 import { mapGetters } from "vuex";
 import { getRouteDetail } from "@/api/isacommunity/route.js";
-import tabletitle from "@/const/isacommunity/tabletitle.js";
-import consts from "@/const/isacommunity/consts.js";
+import {
+  BUS_TABLE_STYLE,
+  BUS_STATUS_TYPE,
+  bindCarTableColumns,
+  bindStationTableColumns,
+} from "../../../schoolbusConsts.js";
 import uploadFile from "@/components/communitycommon/uploadFile.vue";
 import dayjs from "dayjs";
 import _ from "lodash";
@@ -136,24 +140,7 @@ export default {
   },
   data() {
     return {
-      tablestyle: {
-        headercellstyle: {
-          background: "#F5F8FD",
-          color: "#333333 !important",
-          "font-size": "14px",
-          "font-weight": "400",
-          height: "38px",
-          "font-family": "AlibabaPuHuiTiM",
-        },
-        rowstyle: {
-          color: " #666666",
-          "font-size": "14px",
-          "font-weight": "400",
-          height: "44px",
-          padding: "0px",
-        },
-      },
-      tabletitle: tabletitle,
+      tablestyle: BUS_TABLE_STYLE,
       showDialog: false,
       detailData: {},
       baseInfo: {},
@@ -165,6 +152,12 @@ export default {
   mounted() {},
   computed: {
     ...mapGetters(["i18nlocel"]),
+    bindCarTableColumns() {
+      return bindCarTableColumns(this);
+    },
+    bindStationTableColumns() {
+      return bindStationTableColumns(this);
+    },
   },
   methods: {
     showModal(item) {
@@ -209,7 +202,7 @@ export default {
             this.carList.map((item) => {
               item["driverName"] = item["driverInfo"] ? item["driverInfo"]["name"] : "--";
               item["statusLabel"] = this.$getListLabel(
-                consts["statusType"],
+                BUS_STATUS_TYPE,
                 item["status"]
               );
               item["createTime"] = dayjs(item["createTime"]).format("YYYY-MM-DD HH:mm");

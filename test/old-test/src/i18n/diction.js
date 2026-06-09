@@ -9,6 +9,9 @@ import consult from './list/consult'
 import isagroup from './list/isagroup'
 import community from './list/community'
 import mail from './list/mail'
+import schoolDoctor from './list/schoolDoctor'
+import busAttendance from './list/busAttendance'
+import schoolbus from './list/schoolbus'
 let data = {
 	"version": "1.0.1",
 	"lang_order": [
@@ -38,8 +41,13 @@ let data = {
 		attendance,
 		dorm,
 		// 邮件管理
-		mail
-
+		mail,
+		// 校医管理
+		schoolDoctor,
+		// 校巴考勤
+		busAttendance,
+		// 校巴管理
+		schoolbus
 
 	}
 }

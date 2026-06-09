@@ -4,6 +4,7 @@ import type { AppRouteRecord } from '@/types/route'
 import { activityRoute } from './activity'
 import { attendanceRoute } from './attendance'
 import { baseRoute } from './base'
+import { contentRoute } from './content'
 import { dashboardRoute } from './dashboard'
 import { emailRoute } from './email'
 import { memberRoute } from './member'
@@ -30,6 +31,7 @@ export const layoutRoute: AppRouteRecord = {
     permissionRoute,
     attendanceRoute,
     emailRoute,
+    contentRoute,
     ...protocolRoutes
   ]
 }

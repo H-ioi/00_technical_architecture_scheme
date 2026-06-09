@@ -8,8 +8,8 @@ a {
 }
 
 // 关于 图标 CSS 的设置
-[class^="icon-"] {
-  font-family: "iconfont" !important;
+[class^='icon-'] {
+  font-family: 'iconfont' !important;
   /* 以下内容参照第三方图标库本身的规则 */
   font-size: 18px !important;
   font-style: normal;
@@ -19,7 +19,7 @@ a {
 
 .avue-input-icon__item i,
 .avue-crud__icon--small {
-  font-family: "iconfont" !important;
+  font-family: 'iconfont' !important;
   /* 以下内容参照第三方图标库本身的规则 */
   font-size: 24px !important;
   font-style: normal;
@@ -27,7 +27,7 @@ a {
   -moz-osx-font-smoothing: grayscale;
 }
 
-.el-menu-item [class^="icon-"] {
+.el-menu-item [class^='icon-'] {
   margin-right: 5px;
   width: 24px;
   text-align: center;
@@ -35,7 +35,7 @@ a {
   vertical-align: middle;
 }
 
-.el-submenu [class^="icon-"] {
+.el-submenu [class^='icon-'] {
   vertical-align: middle;
   margin-right: 5px;
   width: 24px;
@@ -305,7 +305,7 @@ a {
       color: $theme_color1;
 
       &::after {
-        content: "";
+        content: '';
         position: absolute;
         bottom: -2px; // 让色块紧贴底部边框
         left: 0;
@@ -941,13 +941,19 @@ a {
     box-sizing: border-box;
 
     .questionnaire-nav_text {
-      width: 80%;
-      font-size: 16px;
+      width: 88%;
+      font-size: 14px;
       color: #000000;
       font-weight: 500;
-      white-space: nowrap;
-      overflow: hidden;
       text-align: center;
+      line-height: 16px;
+      // 换行，超出两行省略号
+      // white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
     }
   }
 
@@ -978,7 +984,7 @@ a {
         font-weight: 400;
         white-space: pre-wrap;
         word-break: break-word;
-        line-height: 18px;
+        line-height: 20px;
       }
     }
     .el-radio {
@@ -989,9 +995,10 @@ a {
         font-weight: 400;
         white-space: pre-wrap;
         word-break: break-word;
-        line-height: 18px;
+        line-height: 20px;
       }
     }
+    margin: 0 auto;
   }
   .questionnaire-info {
     color: #ffffff !important;
@@ -1028,6 +1035,7 @@ a {
       font-size: 16px;
       color: #ffffff;
       text-align: center;
+      margin: 0 auto;
     }
   }
 
@@ -1074,6 +1082,27 @@ a {
 
   .el-radio__label {
     color: #606266 !important;
+  }
+}
+// 媒体查询 750px 以上
+@media screen and (min-width: 750px) {
+  .questionnaire {
+    .questionnaire-content-scroll {
+      width: 1440px;
+    }
+    .questionnaire-confirm {
+      max-width: 300px !important;
+    }
+  }
+}
+// 媒体查询 750px 以下
+@media screen and (max-width: 750px) {
+  .questionnaire-select-picker {
+    .el-select-dropdown__item {
+      max-width: 320px !important;
+      // white-space: pre-wrap !important;
+      // overflow: auto !important;
+    }
   }
 }
 
@@ -1150,6 +1179,12 @@ a {
   color: $theme_primary !important;
   margin-left: 10px;
 }
+.pool-tabletmenu {
+  width: 32px;
+  height: 32px;
+  margin-left: 10px;
+  cursor: pointer;
+}
 .signatureCanvas {
   .el-dialog {
     display: flex;
@@ -1220,4 +1255,8 @@ a {
   .el-range-separator {
     line-height: 34px !important;
   }
+}
+
+.el-table .el-table__cell {
+  background-color: #ffffff;
 }

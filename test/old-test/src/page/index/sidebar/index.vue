@@ -14,7 +14,7 @@
       :style="`height:100%;background:${tenantId == 2 ? '#2a3f54' : '#ffffff'}`"
     >
       <div v-if="validatenull(menuitem)" class="avue-sidebar--tip">
-        {{ $t("isagroup.没有发现菜单") }}
+        没有发现菜单
       </div>
       <el-menu
         :default-active="nowTagValue"
@@ -124,17 +124,26 @@ export default {
   },
   mounted() {},
   computed: {
-    ...mapGetters(["website", "menu", "tag", "keyCollapse", "screen", "tenantId"]),
+    ...mapGetters([
+      "website",
+      "menu",
+      "tag",
+      "keyCollapse",
+      "screen",
+      "tenantId",
+    ]),
     nowTagValue: function () {
       return this.$router.$avueRouter.getValue(this.$route);
     },
   },
   methods: {
     async openMenu(item = {}) {
-      this.$store.dispatch("GetMenu", { type: true, id: item.id }).then((data) => {
-        this.menuitem = data;
-        this.Index.openMenu(data);
-      });
+      this.$store
+        .dispatch("GetMenu", { type: true, id: item.id })
+        .then((data) => {
+          this.menuitem = data;
+          this.Index.openMenu(data);
+        });
       //   console.log("this.tenantId", this.tenantId, this.tenantId != 3);
     },
     handleBeforeUnload(event) {

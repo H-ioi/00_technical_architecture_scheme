@@ -3,6 +3,7 @@ import type zhCN from '../zh-CN'
 import common from './common'
 import dashboard from './dashboard'
 import activity from './modules/activity'
+import content from './modules/content'
 import email from './modules/email'
 import attendance from './modules/attendance'
 import base from './modules/base'
@@ -22,6 +23,7 @@ const en: typeof zhCN = {
   dashboard,
   activity,
   email,
+  content,
   attendance,
   base,
   member,

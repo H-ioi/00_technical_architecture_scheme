@@ -33,3 +33,7 @@ pnpm-lock.yaml
 
 .history
 *.zip
+FUNCTION_OVERVIEW.md
+.ai-coding-md/
+.vscode/settings.json
+.codegraph

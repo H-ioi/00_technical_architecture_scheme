@@ -479,6 +479,14 @@ export const uploadAccept = [
     contentType:
       "application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-powerpoint,application/msword,application/pdf,text/plain",
   },
+  {
+    id: "5",
+    name: "文件和图片",
+    type: "image/*,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-powerpoint,application/msword,application/pdf,text/plain",
+    list: "文件/图片",
+    contentType:
+      "image/png,image/jpg,image/jpeg,image/etc/application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-powerpoint,application/msword,application/pdf,text/plain",
+  },
 ];
 // 基础字段的校验
 export let setformrules = {

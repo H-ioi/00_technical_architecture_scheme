@@ -6,23 +6,25 @@
       trigger="manual"
       v-model="showPopover"
     >
-      <el-tree
-        v-if="showPopover"
-        ref="tree"
-        show-checkbox
-        draggable
-        :data="tableTitle"
-        node-key="prop"
-        default-expand-all
-        @node-drop="handleDrop"
-        @check="changeCheckbox"
-        :allow-drop="allowDrop"
-        :default-checked-keys="defaultCheckedKeys"
-      >
-        <span slot-scope="{ node, data }">
-          <span>{{ $t("consult")[node.label] }}</span>
-        </span>
-      </el-tree>
+      <el-scrollbar style="height: 500px">
+        <el-tree
+          v-if="showPopover"
+          ref="tree"
+          show-checkbox
+          draggable
+          :data="tableTitle"
+          node-key="prop"
+          default-expand-all
+          @node-drop="handleDrop"
+          @check="changeCheckbox"
+          :allow-drop="allowDrop"
+          :default-checked-keys="defaultCheckedKeys"
+        >
+          <span slot-scope="{ node, data }">
+            <span>{{ $t("consult")[node.label] }}</span>
+          </span>
+        </el-tree>
+      </el-scrollbar>
       <div class="df_sb" style="padding-top: 20px">
         <el-button type="defult" round @click="showPopover = false">{{
           $t("btn.取消")
@@ -31,11 +33,13 @@
           $t("btn.确定")
         }}</el-button>
       </div>
-      <i
-        slot="reference"
-        class="el-icon-menu tabletmenu"
+      <img
         @click="isShowPopover"
-      ></i>
+        class="pool-tabletmenu"
+        slot="reference"
+        src="/thepool/icon/icon_menu.png"
+        alt=""
+      />
     </el-popover>
   </div>
 </template>

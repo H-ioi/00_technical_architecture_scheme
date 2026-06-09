@@ -1,6 +1,10 @@
 <template>
   <div class="space thepool_page">
-    <el-scrollbar class="space_right" ref="space_right" style="background: #ffffff">
+    <el-scrollbar
+      class="space_right"
+      ref="space_right"
+      style="width: 100%; background: #ffffff"
+    >
       <div class="df_fa" style="height: 100%">
         <div style="flex: 1; height: 100%">
           <div class="palyTableBox" style="margin-bottom: 20px">

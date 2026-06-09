@@ -1,7 +1,6 @@
-import {
-  rule
-} from "@/util/validateRules.js";
-export const formlist = [{
+import { rule } from "@/util/validateRules.js";
+export const formlist = [
+  {
     name: "单文本",
     type: "input",
     icon: "el-icon-tickets",
@@ -15,8 +14,8 @@ export const formlist = [{
       properties: {
         placeholder: "请输入", //占位文本
         ciphertext: false, //是否明文显示
-      }
-    }
+      },
+    },
   },
   {
     name: "多文本",
@@ -31,8 +30,8 @@ export const formlist = [{
         placeholder: "请输入",
         text_num_line: 5, //显示行数
         text_num_column: 100, //最大显示字数
-      }
-    }
+      },
+    },
   },
   {
     name: "单选框",
@@ -45,16 +44,19 @@ export const formlist = [{
       required: false, //是否必填
       readonly: false, //是否只读
       properties: {
-        option_default: '', //默认选项
-        option: [{
-          label: "选项一",
-          id: -1,
-        }, {
-          label: "选项二",
-          id: -2,
-        }], //字典配置
-      }
-    }
+        option_default: "", //默认选项
+        option: [
+          {
+            label: "选项一",
+            id: -1,
+          },
+          {
+            label: "选项二",
+            id: -2,
+          },
+        ], //字典配置
+      },
+    },
   },
   {
     name: "多选框",
@@ -69,18 +71,20 @@ export const formlist = [{
 
       properties: {
         option_default: [], //默认选项
-        option: [{
-          label: "选项一",
-          id: -1,
-        }, {
-          label: "选项二",
-          id: -2,
-        }], //字典配置
+        option: [
+          {
+            label: "选项一",
+            id: -1,
+          },
+          {
+            label: "选项二",
+            id: -2,
+          },
+        ], //字典配置
         // option_min: '', //最小数量
         // option_max: '', //最大数量
-
-      }
-    }
+      },
+    },
   },
   {
     name: "下拉选框",
@@ -91,24 +95,26 @@ export const formlist = [{
       type: "select",
       disabled: false, //是否禁用
       required: false, //是否必填
-      readonly: false, //是否只读  
+      readonly: false, //是否只读
       properties: {
         option_multi: false, //是否多选
         placeholder: "请选择",
         searchable: false,
         option_default: [], //默认选项
-        option: [{
-          label: "选项一",
-          id: -1,
-        }, {
-          label: "选项二",
-          id: -2,
-        }], //字典配置
+        option: [
+          {
+            label: "选项一",
+            id: -1,
+          },
+          {
+            label: "选项二",
+            id: -2,
+          },
+        ], //字典配置
         // option_min: 0, //最小数量
         // option_max: null, //最大数量
-
-      }
-    }
+      },
+    },
   },
   {
     name: "时间选择",
@@ -127,8 +133,8 @@ export const formlist = [{
         // datetime_end: '', //默认可选结束时间
         datetime_pattern: "yyyy-MM-dd", //格式
         datetime_type: "date", //默认日期时间选择
-      }
-    }
+      },
+    },
   },
   {
     name: "上传",
@@ -147,11 +153,11 @@ export const formlist = [{
         upload_size_min: 1,
         upload_size_max: 10,
         // upload_size_total: 1024,
-        upload_file_type: []
-      }
+        upload_file_type: [],
+      },
     },
   },
-]
+];
 export const dateTimeType = [
   // 年选择器
   {
@@ -160,7 +166,7 @@ export const dateTimeType = [
     format: "yyyy",
     datetime_type: "year",
     default: "",
-    isArr: false
+    isArr: false,
   },
   // 月选择器
   {
@@ -169,7 +175,7 @@ export const dateTimeType = [
     format: "yyyy-MM",
     datetime_type: "month",
     default: "",
-    isArr: false
+    isArr: false,
   },
   // // 周选择器
   // {
@@ -184,7 +190,7 @@ export const dateTimeType = [
     format: "yyyy-MM-dd",
     datetime_type: "date",
     default: "",
-    isArr: false
+    isArr: false,
   },
   // 日期时间选择器
   {
@@ -193,7 +199,7 @@ export const dateTimeType = [
     format: "yyyy-MM-dd HH:mm",
     datetime_type: "datetime",
     default: "",
-    isArr: false
+    isArr: false,
   },
   // 日期范围选择器
   {
@@ -202,7 +208,7 @@ export const dateTimeType = [
     format: "yyyy-MM-dd HH:mm",
     datetime_type: "date_range",
     default: [],
-    isArr: true
+    isArr: true,
   },
   // 月范围选择器
   {
@@ -211,7 +217,7 @@ export const dateTimeType = [
     format: "yyyy-MM",
     datetime_type: "month_range",
     default: [],
-    isArr: true
+    isArr: true,
   },
   // 时间日期范围选择器
   {
@@ -220,22 +226,23 @@ export const dateTimeType = [
     format: "yyyy-MM-dd HH:mm",
     datetime_type: "datetime_range",
     default: [],
-    isArr: true
+    isArr: true,
   },
-]
-export const uploadAccept = [{
+];
+export const uploadAccept = [
+  {
     id: "1",
     name: "图片",
     type: "image/*",
-    list: '.png/.jpg/.jpeg/.etc',
-    contentType: "image/png,image/jpg,image/jpeg,image/etc"
+    list: ".png/.jpg/.jpeg/.etc",
+    contentType: "image/png,image/jpg,image/jpeg,image/etc",
   },
   {
     id: "2",
     name: "视频",
     type: "video/*",
-    list: '.avi/.mpg/.mpeg/.mp4',
-    contentType: "video/mp4,video/mpg,video/mpeg,video/avi"
+    list: ".avi/.mpg/.mpeg/.mp4",
+    contentType: "video/mp4,video/mpg,video/mpeg,video/avi",
   },
   // {
   //   id: "3",
@@ -247,49 +254,70 @@ export const uploadAccept = [{
     id: "4",
     name: "文件",
     type: "application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-powerpoint,application/msword,application/pdf,text/plain",
-    list: '.xls/.xlsx/.ppt/.doc/.pdf/.txt',
-    contentType: "application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-powerpoint,application/msword,application/pdf,text/plain",
+    list: ".xls/.xlsx/.ppt/.doc/.pdf/.txt",
+    contentType:
+      "application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-powerpoint,application/msword,application/pdf,text/plain",
   },
-
-]
+  {
+    id: "5",
+    name: "文件和图片",
+    type: "image/*,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-powerpoint,application/msword,application/pdf,text/plain",
+    list: "文件/图片",
+    contentType:
+      "image/png,image/jpg,image/jpeg,image/etc/application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-powerpoint,application/msword,application/pdf,text/plain",
+  },
+];
 // 基础字段的校验
 export let setformrules = {
-  label: [{
-    required: true,
-    message: "请输入",
-    trigger: "blur"
-  }, {
-    validator: rule.validatorNameCn,
-    trigger: "blur"
-  }, ],
+  label: [
+    {
+      required: true,
+      message: "请输入",
+      trigger: "blur",
+    },
+    {
+      validator: rule.validatorNameCn,
+      trigger: "blur",
+    },
+  ],
   //显示行数
-  text_num_line: [{
-    pattern: "^(0|-?[1-9]\\d*)$",
-    message: "请输入整数",
-    trigger: "blur",
-  }, ],
+  text_num_line: [
+    {
+      pattern: "^(0|-?[1-9]\\d*)$",
+      message: "请输入整数",
+      trigger: "blur",
+    },
+  ],
   //最大显示字数
-  text_num_column: [{
-    pattern: "^(0|-?[1-9]\\d*)$",
-    message: "请输入整数",
-    trigger: "blur",
-  }, ],
+  text_num_column: [
+    {
+      pattern: "^(0|-?[1-9]\\d*)$",
+      message: "请输入整数",
+      trigger: "blur",
+    },
+  ],
   //最小数量
-  option_min: [{
-    pattern: "^(0|-?[1-9]\\d*)$",
-    message: "请输入整数",
-    trigger: "blur",
-  }, ],
+  option_min: [
+    {
+      pattern: "^(0|-?[1-9]\\d*)$",
+      message: "请输入整数",
+      trigger: "blur",
+    },
+  ],
   //最大数量
-  option_max: [{
-    pattern: "^(0|-?[1-9]\\d*)$",
-    message: "请输入整数",
-    trigger: "blur",
-  }, ],
+  option_max: [
+    {
+      pattern: "^(0|-?[1-9]\\d*)$",
+      message: "请输入整数",
+      trigger: "blur",
+    },
+  ],
   //最小上传数量
-  upload_num: [{
-    pattern: "^(0|-?[1-9]\\d*)$",
-    message: "请输入整数",
-    trigger: "blur",
-  }, ],
-}
+  upload_num: [
+    {
+      pattern: "^(0|-?[1-9]\\d*)$",
+      message: "请输入整数",
+      trigger: "blur",
+    },
+  ],
+};

@@ -1,6 +1,6 @@
 <template>
-  <div class="menu-wrapper">
-    <div>
+  <div>
+    <div class="menu-wrapper" v-if="!isCollapse">
       <!-- 一级菜单 -->
       <div v-for="(item, index) in menu" :key="index" class="menuItem">
         <div :class="['itemfirst']">
@@ -15,7 +15,10 @@
             @click.stop="changeMenu(item)"
             :class="[
               'menuItem_info',
-              { firsr_active: vaildAvtive(item) || activeMenuIds.includes(item.id) },
+              {
+                firsr_active:
+                  vaildAvtive(item) || activeMenuIds.includes(item.id),
+              },
             ]"
           >
             <span class="menuItem_icon">
@@ -23,9 +26,13 @@
             </span>
             <span
               class="menuItem_label"
-              :title="$t('consult')[item.name] ? $t('consult')[item.name] : item.name"
+              :title="
+                $t('consult')[item.name] ? $t('consult')[item.name] : item.name
+              "
             >
-              {{ $t("consult")[item.name] ? $t("consult")[item.name] : item.name }}</span
+              {{
+                $t("consult")[item.name] ? $t("consult")[item.name] : item.name
+              }}</span
             >
             <i
               v-if="item.children.length > 0"
@@ -48,12 +55,18 @@
                 },
               ]"
             >
-              <div :class="['itemsecond', ,]" v-for="(i, k) in item.children" :key="k">
+              <div
+                :class="['itemsecond', ,]"
+                v-for="(i, k) in item.children"
+                :key="k"
+              >
                 <div
                   @click.stop="changeMenu(i)"
                   :class="[
                     'menuItem_info',
-                    { active: vaildAvtive(i) || activeMenuIds.includes(i.id) },
+                    {
+                      active: vaildAvtive(i) || activeMenuIds.includes(i.id),
+                    },
                   ]"
                 >
                   <span class="menuItem_icon">
@@ -61,9 +74,13 @@
                   </span>
                   <span
                     class="menuItem_label"
-                    :title="$t('consult')[i.name] ? $t('consult')[i.name] : i.name"
+                    :title="
+                      $t('consult')[i.name] ? $t('consult')[i.name] : i.name
+                    "
                   >
-                    {{ $t("consult")[i.name] ? $t("consult")[i.name] : i.name }}</span
+                    {{
+                      $t("consult")[i.name] ? $t("consult")[i.name] : i.name
+                    }}</span
                   >
                   <i
                     v-if="i.children.length !== 0"
@@ -84,7 +101,11 @@
                       },
                     ]"
                   >
-                    <div :class="['itemthree']" v-for="(c, d) in i.children" :key="d">
+                    <div
+                      :class="['itemthree']"
+                      v-for="(c, d) in i.children"
+                      :key="d"
+                    >
                       <div
                         @click.stop="changeMenu(c)"
                         :class="['menuItem_info', { active: vaildAvtive(c) }]"
@@ -92,10 +113,16 @@
                         <span class="menuItem_icon"> </span>
                         <span
                           class="menuItem_label"
-                          :title="$t('consult')[c.name] ? $t('consult')[c.name] : c.name"
+                          :title="
+                            $t('consult')[c.name]
+                              ? $t('consult')[c.name]
+                              : c.name
+                          "
                         >
                           {{
-                            $t("consult")[c.name] ? $t("consult")[c.name] : c.name
+                            $t("consult")[c.name]
+                              ? $t("consult")[c.name]
+                              : c.name
                           }}</span
                         >
                       </div>
@@ -105,6 +132,54 @@
               </div>
             </div>
           </transition>
+        </div>
+      </div>
+    </div>
+    <div v-else>
+      <div v-for="(item, index) in menu" :key="index" class="menuItem">
+        <div class="firstmenu">
+          <el-popover
+            placement="right"
+            trigger="hover"
+            :close-delay="100"
+            popper-class="menuItem_child-popover"
+          >
+            <div
+              @click.stop="changeMenu(item, 1)"
+              class="menuItem_info"
+              slot="reference"
+            >
+              <span class="menuItem_icon">
+                <img :src="showMenuIcon(item['path'])" />
+              </span>
+            </div>
+            <div class="menuItem_child">
+              <div
+                v-if="!item['children'] || item['children'].length == 0"
+                class="item_label"
+              >
+                {{
+                  $t("consult")[item.name]
+                    ? $t("consult")[item.name]
+                    : item.name
+                }}
+              </div>
+              <div v-else>
+                <div
+                  @click.stop="changeMenu(children, 2)"
+                  v-for="children in item['children']"
+                  :key="children.id"
+                  class="item_label"
+                >
+                  {{
+                    $t("consult")[children.name]
+                      ? $t("consult")[children.name]
+                      : children.name
+                  }}
+                </div>
+              </div>
+            </div>
+          </el-popover>
         </div>
       </div>
     </div>
@@ -156,7 +231,7 @@ export default {
     this.initData();
   },
   computed: {
-    ...mapGetters(["roles"]),
+    ...mapGetters(["roles", "isCollapse"]),
     labelKey() {
       return this.props.label || this.config.propsDefault.label;
     },
@@ -194,16 +269,39 @@ export default {
     validatenull(val) {
       return validatenull(val);
     },
-    changeMenu(item) {
-      if (!this.openMenuIds.includes(item.id)) {
-        if (item["children"] && item["children"].length > 0) {
-          this.openMenuIds.push(item.id);
+    changeMenu(item, level) {
+      if (!this.isCollapse) {
+        if (!this.openMenuIds.includes(item.id)) {
+          if (item["children"] && item["children"].length > 0) {
+            this.openMenuIds.push(item.id);
+          } else {
+            if (!this.activeMenuIds.includes(item.id)) {
+              this.activeMenuIds = this.getActiveMenuIds(
+                this.menu,
+                item["path"]
+              );
+              this.open(item);
+            } else {
+              this.open(item);
+            }
+          }
         } else {
-          this.activeMenuIds = this.getActiveMenuIds(this.menu, item["path"]);
-          this.open(item);
+          this.openMenuIds = this.openMenuIds.filter((ele) => ele !== item.id);
         }
       } else {
-        this.openMenuIds = this.openMenuIds.filter((ele) => ele !== item.id);
+        if (level == 1) {
+          let children = item["children"] || [];
+          if (children && children.length > 0) {
+            this.open(children[0]);
+            this.openMenuIds.push(children[0].id);
+            this.activeMenuIds = this.getActiveMenuIds(this.menu, item["path"]);
+          }
+        }
+        if (level == 2) {
+          this.open(item);
+          this.openMenuIds.push(item.id);
+          this.activeMenuIds = this.getActiveMenuIds(this.menu, item["path"]);
+        }
       }
     },
     /**
@@ -219,7 +317,11 @@ export default {
         if (path === item.path) {
           return newActiveMenuIds;
         } else if (item.children && item.children.length > 0) {
-          const result = this.getActiveMenuIds(item.children, path, newActiveMenuIds);
+          const result = this.getActiveMenuIds(
+            item.children,
+            path,
+            newActiveMenuIds
+          );
           if (result.length > 0) {
             return result;
           }
@@ -255,7 +357,10 @@ export default {
           relevantPath = relevantPath.slice(0, secondSlashIndex);
         } else {
           // 若第二个 / 不存在，找第三个 / 的位置
-          const thirdSlashIndex = relevantPath.indexOf("/", secondSlashIndex + 1);
+          const thirdSlashIndex = relevantPath.indexOf(
+            "/",
+            secondSlashIndex + 1
+          );
           if (thirdSlashIndex !== -1) {
             relevantPath = relevantPath.slice(0, thirdSlashIndex);
           }
@@ -457,6 +562,21 @@ export default {
   .menu-slide-leave-from {
     transform: translateY(0);
     opacity: 1;
+  }
+}
+.menuItem {
+  width: 100%;
+  .firstmenu {
+    .menuItem_info {
+      padding: 15px 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      img {
+        width: 20px;
+        height: 20px;
+      }
+    }
   }
 }
 </style>

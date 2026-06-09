@@ -130,9 +130,11 @@ module.exports = {
     'no-mixed-spaces-and-tabs': 2, //禁止混用tab和空格
     'no-multi-spaces': 2, //不能用多余的空格
     'no-multi-str': 2, //字符串不能用\换行
-    'no-multiple-empty-lines': [0, {
-      'max': 1
-    }], //空行最多不能超过1行
+    'no-multiple-empty-lines': [2, {
+      'max': 1,
+      'maxBOF': 0,
+      'maxEOF': 1
+    }], // 空行最多 1 行，保存时 ESLint 自动修复
     'no-native-reassign': 2, //不能重写native对象
     'no-negated-in-lhs': 2, //in 操作符的左边不能有!
     'no-new-object': 2, //禁止使用new Object()

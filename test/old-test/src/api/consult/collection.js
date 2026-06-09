@@ -176,6 +176,22 @@ export async function getStudentByPhone(data) {
     throw error;
   }
 }
+export async function getStudentFormByPhone(data) {
+  try {
+    const res = await requestouter({
+      url: "/enquiry/form/getStudentByPhone",
+      method: "post",
+      data: data,
+      headers: {
+        "form-token": "2675bfd7-6fe8-4f89-8d60-8143b9fa4226",
+      },
+    });
+    console.log("getStudentByPhone", res);
+    return res;
+  } catch (error) {
+    throw error;
+  }
+}
 export async function getPhoneCode(data) {
   try {
     const res = await requestouter({
@@ -278,6 +294,22 @@ export async function getStudentfillInfo(data) {
     });
     console.log("getStudentTemplate", res);
     return res.data.data;
+  } catch (error) {
+    throw error;
+  }
+}
+export async function getStudentfillOutInfo(data) {
+  try {
+    const res = await requestouter({
+      url: "/enquiry/form/out/student/get",
+      method: "post",
+      data: data,
+      headers: {
+        "form-token": "2675bfd7-6fe8-4f89-8d60-8143b9fa4226",
+      },
+    });
+    console.log("getStudentTemplate", res);
+    return res;
   } catch (error) {
     throw error;
   }

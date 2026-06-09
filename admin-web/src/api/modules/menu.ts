@@ -39,6 +39,8 @@ const MENU_PATH_ALIASES: Record<string, string> = {
   '/isacommunity/user/teacher': '/school-bus/follow-teacher',
   '/isacommunity/schoolbus/car/index': '/school-bus/car',
   '/isacommunity/schoolbus/car': '/school-bus/car',
+  '/isacommunity/schoolbus/attendance/index': '/school-bus/attendance',
+  '/isacommunity/schoolbus/attendance': '/school-bus/attendance',
   '/isacommunity/attendance': '/attendance',
   '/isacommunity/attendance/student/index': '/attendance/student',
   '/isacommunity/attendance/student': '/attendance/student',
@@ -100,7 +102,19 @@ const MENU_PATH_ALIASES: Record<string, string> = {
   '/isacommunity/activity/wechatSchool/index': '/activity/wechat-school',
   '/isacommunity/activity/wechatSchool': '/activity/wechat-school',
   '/isacommunity/activity/emailSchool/index': '/activity/email-school',
-  '/isacommunity/activity/emailSchool': '/activity/email-school'
+  '/isacommunity/activity/emailSchool': '/activity/email-school',
+  '/isacommunity/content': '/content',
+  '/isacommunity/content/announcement/index': '/content/announcement',
+  '/isacommunity/content/announcement': '/content/announcement',
+  '/isacommunity/content/article/list/index': '/content/article/list',
+  '/isacommunity/content/article/list': '/content/article/list',
+  '/isacommunity/content/article/category/index': '/content/article/category',
+  '/isacommunity/content/article/category': '/content/article/category',
+  '/isacommunity/content/moent': '/content/moment',
+  '/isacommunity/content/moent/foodweekly/index': '/content/moment/food-weekly',
+  '/isacommunity/content/moent/foodweekly': '/content/moment/food-weekly',
+  '/isacommunity/content/moent/schoollife/index': '/content/moment/school-life',
+  '/isacommunity/content/moent/schoollife': '/content/moment/school-life'
 }
 
 const normPath = (path?: string) => {
