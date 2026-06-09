@@ -20,6 +20,17 @@ import contentAnnouncementApi from './modules/content-announcement'
 import contentArticleApi from './modules/content-article'
 import contentCategoryApi from './modules/content-category'
 import contentCommonApi from './modules/content-common'
+import contentDiscussionApi from './modules/content-discussion'
+import contentDiscussionCommentApi from './modules/content-discussion-comment'
+import contentDiscussionLikeSaveApi from './modules/content-discussion-like-save'
+import contentDiscussionTagApi from './modules/content-discussion-tag'
+import dormAssignRuleApi from './modules/dorm-assign-rule'
+import dormBedApi from './modules/dorm-bed'
+import dormBuildingApi from './modules/dorm-building'
+import dormFloorApi from './modules/dorm-floor'
+import dormProjectApi from './modules/dorm-project'
+import dormRoomApi from './modules/dorm-room'
+import dormStudentApi from './modules/dorm-student'
 import contentFoodWeeklyApi from './modules/content-food-weekly'
 import contentMomentApi from './modules/content-moment'
 import membershipApi from './modules/membership'
@@ -70,6 +81,17 @@ export {
   contentArticleApi,
   contentCategoryApi,
   contentCommonApi,
+  contentDiscussionApi,
+  contentDiscussionCommentApi,
+  contentDiscussionLikeSaveApi,
+  contentDiscussionTagApi,
+  dormAssignRuleApi,
+  dormBedApi,
+  dormBuildingApi,
+  dormFloorApi,
+  dormProjectApi,
+  dormRoomApi,
+  dormStudentApi,
   contentFoodWeeklyApi,
   contentMomentApi,
   membershipApi,

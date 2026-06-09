@@ -77,6 +77,53 @@ export const contentRoute: AppRouteRecord = {
           }
         }
       ]
+    },
+    {
+      path: 'discussion',
+      name: 'ContentDiscussion',
+      redirect: '/content/discussion/list',
+      meta: {
+        title: '讨论管理',
+        titleKey: 'route.contentDiscussion'
+      },
+      children: [
+        {
+          path: 'list',
+          name: 'ContentDiscussionList',
+          component: () => import('@/views/content/discussion/list/list.vue'),
+          meta: {
+            title: '内容列表',
+            titleKey: 'route.contentDiscussionList'
+          }
+        },
+        {
+          path: 'tag',
+          name: 'ContentDiscussionTag',
+          component: () => import('@/views/content/discussion/tag/list.vue'),
+          meta: {
+            title: '讨论标签',
+            titleKey: 'route.contentDiscussionTag'
+          }
+        },
+        {
+          path: 'comment',
+          name: 'ContentDiscussionComment',
+          component: () => import('@/views/content/discussion/comment/list.vue'),
+          meta: {
+            title: '讨论评论',
+            titleKey: 'route.contentDiscussionComment'
+          }
+        },
+        {
+          path: 'like-save',
+          name: 'ContentDiscussionLikeSave',
+          component: () => import('@/views/content/discussion/like-save/list.vue'),
+          meta: {
+            title: '点赞收藏',
+            titleKey: 'route.contentDiscussionLikeSave'
+          }
+        }
+      ]
     }
   ]
 }

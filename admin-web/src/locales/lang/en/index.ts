@@ -4,6 +4,7 @@ import common from './common'
 import dashboard from './dashboard'
 import activity from './modules/activity'
 import content from './modules/content'
+import dorm from './modules/dorm'
 import email from './modules/email'
 import attendance from './modules/attendance'
 import base from './modules/base'
@@ -24,6 +25,7 @@ const en: typeof zhCN = {
   activity,
   email,
   content,
+  dorm,
   attendance,
   base,
   member,

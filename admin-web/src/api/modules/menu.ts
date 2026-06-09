@@ -114,7 +114,28 @@ const MENU_PATH_ALIASES: Record<string, string> = {
   '/isacommunity/content/moent/foodweekly/index': '/content/moment/food-weekly',
   '/isacommunity/content/moent/foodweekly': '/content/moment/food-weekly',
   '/isacommunity/content/moent/schoollife/index': '/content/moment/school-life',
-  '/isacommunity/content/moent/schoollife': '/content/moment/school-life'
+  '/isacommunity/content/moent/schoollife': '/content/moment/school-life',
+  '/isacommunity/content/discussion': '/content/discussion',
+  '/isacommunity/content/discussion/list/index': '/content/discussion/list',
+  '/isacommunity/content/discussion/list': '/content/discussion/list',
+  '/isacommunity/content/discussion/tag/index': '/content/discussion/tag',
+  '/isacommunity/content/discussion/tag': '/content/discussion/tag',
+  '/isacommunity/content/discussion/comment/index': '/content/discussion/comment',
+  '/isacommunity/content/discussion/comment': '/content/discussion/comment',
+  '/isacommunity/content/discussion/likeandsave/index': '/content/discussion/like-save',
+  '/isacommunity/content/discussion/likeandsave': '/content/discussion/like-save',
+  '/isacommunity/dorm': '/dorm',
+  '/isacommunity/dorm/space/building': '/dorm/space/building',
+  '/isacommunity/dorm/space/building/index': '/dorm/space/building',
+  '/isacommunity/dorm/space/floor': '/dorm/space/floor',
+  '/isacommunity/dorm/space/floor/index': '/dorm/space/floor',
+  '/isacommunity/dorm/space/room': '/dorm/space/room',
+  '/isacommunity/dorm/space/room/index': '/dorm/space/room',
+  '/isacommunity/dorm/space/room/:id': '/dorm/space/room-assign/:id',
+  '/isacommunity/dorm/space/attribute': '/dorm/space/attribute',
+  '/isacommunity/dorm/space/attribute/index': '/dorm/space/attribute',
+  '/isacommunity/dorm/space/rule': '/dorm/space/rule',
+  '/isacommunity/dorm/space/rule/index': '/dorm/space/rule'
 }
 
 const normPath = (path?: string) => {

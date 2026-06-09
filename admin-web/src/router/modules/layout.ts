@@ -6,6 +6,7 @@ import { attendanceRoute } from './attendance'
 import { baseRoute } from './base'
 import { contentRoute } from './content'
 import { dashboardRoute } from './dashboard'
+import { dormRoute } from './dorm'
 import { emailRoute } from './email'
 import { memberRoute } from './member'
 import { permissionRoute } from './permission'
@@ -32,6 +33,7 @@ export const layoutRoute: AppRouteRecord = {
     attendanceRoute,
     emailRoute,
     contentRoute,
+    dormRoute,
     ...protocolRoutes
   ]
 }
