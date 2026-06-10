@@ -138,6 +138,8 @@ const MENU_PATH_ALIASES: Record<string, string> = {
   '/isacommunity/dorm/space/rule/index': '/dorm/space/rule',
   '/isacommunity/dorm/boarding-student': '/dorm/boarding-student',
   '/isacommunity/dorm/boarding-student/index': '/dorm/boarding-student',
+  '/isacommunity/schoolDoctor': '/school-doctor',
+  '/isacommunity/schoolDoctor/index': '/school-doctor',
   '/isacommunity/schoolDoctor/studentRecord': '/school-doctor/student-record',
   '/isacommunity/schoolDoctor/studentRecord/index': '/school-doctor/student-record',
   '/isacommunity/schoolDoctor/medicalInfo': '/school-doctor/medical-info',
@@ -149,7 +151,11 @@ const MENU_PATH_ALIASES: Record<string, string> = {
   '/isacommunity/schoolDoctor/visitRecord': '/school-doctor/visit-record',
   '/isacommunity/schoolDoctor/visitRecord/index': '/school-doctor/visit-record',
   '/isacommunity/schoolDoctor/medicineApply': '/school-doctor/medicine-apply',
-  '/isacommunity/schoolDoctor/medicineApply/index': '/school-doctor/medicine-apply'
+  '/isacommunity/schoolDoctor/medicineApply/index': '/school-doctor/medicine-apply',
+  '/isacommunity/schoolDoctor/infectiousDisease': '/school-doctor/infectious-disease',
+  '/isacommunity/schoolDoctor/infectiousDisease/index': '/school-doctor/infectious-disease',
+  '/isacommunity/schoolDoctor/healthReport': '/school-doctor/health-report',
+  '/isacommunity/schoolDoctor/healthReport/index': '/school-doctor/health-report'
 }
 
 const normPath = (path?: string) => {

@@ -71,6 +71,8 @@ export default {
   schoolDoctorDiseaseSetting: '疾病设置',
   schoolDoctorVisitRecord: '就诊记录',
   schoolDoctorMedicineApply: '用药申请',
+  schoolDoctorInfectiousDisease: '传染病管理',
+  schoolDoctorHealthReport: '体检报告',
   activity: '活动管理',
   activityEventList: '活动列表',
   activityEventDetail: '活动详情',

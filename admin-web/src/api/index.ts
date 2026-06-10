@@ -50,6 +50,8 @@ import schoolDoctorDiseaseSettingApi from './modules/school-doctor-disease-setti
 import schoolDoctorRegulationApi from './modules/school-doctor-regulation'
 import schoolDoctorVisitRecordApi from './modules/school-doctor-visit-record'
 import schoolDoctorMedicineApplyApi from './modules/school-doctor-medicine-apply'
+import schoolDoctorInfectiousDiseaseApi from './modules/school-doctor-infectious-disease'
+import schoolDoctorHealthReportApi from './modules/school-doctor-health-report'
 import schoolBusCarApi from './modules/school-bus-car'
 import schoolBusCommonApi from './modules/school-bus-common'
 import schoolBusDriverApi from './modules/school-bus-driver'
@@ -117,6 +119,8 @@ export {
   schoolDoctorRegulationApi,
   schoolDoctorVisitRecordApi,
   schoolDoctorMedicineApplyApi,
+  schoolDoctorInfectiousDiseaseApi,
+  schoolDoctorHealthReportApi,
   schoolBusCarApi,
   schoolBusCommonApi,
   schoolBusDriverApi,

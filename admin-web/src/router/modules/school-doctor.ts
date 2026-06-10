@@ -64,6 +64,24 @@ export const schoolDoctorRoute: AppRouteRecord = {
         title: '用药申请',
         titleKey: 'route.schoolDoctorMedicineApply'
       }
+    },
+    {
+      path: 'infectious-disease',
+      name: 'SchoolDoctorInfectiousDisease',
+      component: () => import('@/views/school-doctor/infectious-disease/list.vue'),
+      meta: {
+        title: '传染病管理',
+        titleKey: 'route.schoolDoctorInfectiousDisease'
+      }
+    },
+    {
+      path: 'health-report',
+      name: 'SchoolDoctorHealthReport',
+      component: () => import('@/views/school-doctor/health-report/list.vue'),
+      meta: {
+        title: '体检报告',
+        titleKey: 'route.schoolDoctorHealthReport'
+      }
     }
   ]
 }

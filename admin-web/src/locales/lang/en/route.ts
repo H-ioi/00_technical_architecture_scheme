@@ -71,6 +71,8 @@ export default {
   schoolDoctorDiseaseSetting: 'Disease settings',
   schoolDoctorVisitRecord: 'Visit records',
   schoolDoctorMedicineApply: 'Medication applications',
+  schoolDoctorInfectiousDisease: 'Infectious disease',
+  schoolDoctorHealthReport: 'Health reports',
   activity: 'Activities',
   activityEventList: 'Activities',
   activityEventDetail: 'Activity detail',
