@@ -1,5 +1,5 @@
 <template>
-  <UniSearchForm v-model="query" :config="searchConfig" :collapsed-rows="2" @search="() => {}" />
+  <UniSearchForm v-model="query" :config="searchConfig" :collapsed-rows="1" @search="() => {}" />
 </template>
 
 <script setup lang="ts">

@@ -295,11 +295,11 @@ function onResetEvents() {
 
 ## collapsedRows：收起时保留多行
 
-<CompDemo title="collapsed-rows=2（约两行后再折叠）" :code="codeCollapsedRows2">
+<CompDemo title="collapsed-rows=1（约一行后再折叠）" :code="codeCollapsedRows2">
   <UniSearchForm
     v-model="queryRows2"
     :config="searchConfigRows2"
-    :collapsed-rows="2"
+    :collapsed-rows="1"
     @search="() => {}"
   />
 </CompDemo>

@@ -18,7 +18,7 @@
 </template>
 
 <script setup lang="ts">
-import type { UniTableColumn, UniTableRequest } from 'uni-ui-lib'
+import type { UniTableRequest } from 'uni-ui-lib'
 import { UniDataTable, useUniI18n } from 'uni-ui-lib'
 import { computed, nextTick, ref, watch } from 'vue'
 

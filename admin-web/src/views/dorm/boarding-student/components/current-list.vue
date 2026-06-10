@@ -10,7 +10,7 @@
       v-model="queryModel"
       :config="searchCfg"
       :collapsed="true"
-      :collapsed-rows="2"
+      :collapsed-rows="1"
       :action-min-span="0"
       :submit-text="$t('dorm.common.search')"
       :reset-text="$t('dorm.common.reset')"

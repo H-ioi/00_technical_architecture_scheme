@@ -20,7 +20,7 @@ import { computed, ref, watch } from 'vue'
 
 import { dormBedApi, dormStudentApi } from '@/api'
 import type { DormStudentRow } from '@/types/modules/dorm-student'
-import { normalizeArray, normalizePaged } from '@/utils/api-response-normalize'
+import { normalizePaged } from '@/utils/api-response-normalize'
 
 import {
   checkinFormConfig,
