@@ -8,7 +8,7 @@
     <div v-if="visible" v-loading="loading" class="medical-info-drawer__body">
       <FormPanel
         ref="formPanelRef"
-        :form="formModel"
+        v-model:form="formModel"
         :rules="rules"
         :disease-rules="diseaseRules"
         :readonly="mode === 'view'"

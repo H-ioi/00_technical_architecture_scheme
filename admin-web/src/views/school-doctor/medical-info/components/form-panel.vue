@@ -12,10 +12,10 @@
             @select="onStudentSelect"
             @clear="onStudentClear" />
           <el-form-item :label="$t('schoolDoctor.studentRecord.fieldAdmissionNo')" prop="admissionNo">
-            <el-input v-model="form.admissionNo" :disabled="readonly" />
+            <el-input v-model="formModel.admissionNo" :disabled="readonly" />
           </el-form-item>
           <el-form-item :label="$t('schoolDoctor.studentRecord.fieldSchool')" prop="schoolId">
-            <el-select v-model="form.schoolId" :disabled="readonly" filterable style="width: 100%">
+            <el-select v-model="formModel.schoolId" :disabled="readonly" filterable style="width: 100%">
               <el-option
                 v-for="item in schoolRecords"
                 :key="item.id"
@@ -28,10 +28,10 @@
     </aside>
 
     <main class="medical-form-panel__right">
-      <el-form ref="formRef" label-position="top" :model="form" :rules="rules">
-        <HealthSection :form="form" :readonly="readonly" />
+      <el-form ref="formRef" label-position="top" :model="formModel" :rules="rules">
+        <HealthSection v-model:form="formModel" :readonly="readonly" />
         <DiseaseSection
-          :disease-list="form.diseaseList"
+          :disease-list="formModel.diseaseList"
           :disease-options="diseaseOptions"
           :disease-rules="diseaseRules"
           :readonly="readonly"
@@ -40,7 +40,7 @@
           @remove="emit('remove-disease', $event)"
           @disease-change="emit('disease-change', $event)" />
         <AttachmentSection
-          :attachment-list="form.attachmentList"
+          :attachment-list="formModel.attachmentList"
           :special-proof-remark="specialProofRemark"
           :parent-sign-mode="parentSignMode"
           :parent-signature-url="parentSignatureUrl"
@@ -62,7 +62,7 @@
 
 <script setup lang="ts">
 import type { FormInstance, FormRules, UploadRequestOptions } from 'element-plus'
-import { ref } from 'vue'
+import { defineModel, ref } from 'vue'
 
 import type { SchoolDoctorDiseaseOption } from '@/api/modules/school-doctor-disease-setting'
 import type { MedicalInfoDiseaseItem, MedicalInfoFormModel } from '@/types/modules/medical-info'
@@ -73,8 +73,9 @@ import AttachmentSection from './attachment-section.vue'
 import DiseaseSection from './disease-section.vue'
 import HealthSection from './health-section.vue'
 
+const formModel = defineModel<MedicalInfoFormModel>('form', { required: true })
+
 defineProps<{
-  form: MedicalInfoFormModel
   rules: FormRules
   diseaseRules: FormRules
   readonly: boolean

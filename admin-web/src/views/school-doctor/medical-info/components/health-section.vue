@@ -5,7 +5,7 @@
       <el-row :gutter="16">
         <el-col v-for="field in healthFields" :key="field.prop" :span="8">
           <el-form-item :label="field.label">
-            <el-input v-model="form[field.prop]" :disabled="readonly" :placeholder="field.placeholder">
+            <el-input v-model="formModel[field.prop]" :disabled="readonly" :placeholder="field.placeholder">
               <template v-if="field.unit" #append>{{ field.unit }}</template>
             </el-input>
           </el-form-item>
@@ -19,7 +19,7 @@
         <el-col v-for="field in allergyFields" :key="field.prop" :span="12">
           <el-form-item :label="field.label">
             <el-input
-              v-model="form[field.prop]"
+              v-model="formModel[field.prop]"
               type="textarea"
               :rows="4"
               :disabled="readonly"
@@ -33,12 +33,13 @@
 
 <script setup lang="ts">
 import { useUniI18n } from 'uni-ui-lib'
-import { computed } from 'vue'
+import { computed, defineModel } from 'vue'
 
 import type { MedicalInfoFormModel } from '@/types/modules/medical-info'
 
+const formModel = defineModel<MedicalInfoFormModel>('form', { required: true })
+
 defineProps<{
-  form: MedicalInfoFormModel
   readonly: boolean
 }>()
 
