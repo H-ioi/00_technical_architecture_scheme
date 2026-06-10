@@ -10,11 +10,24 @@
 
 <script setup lang="ts">
 import type { ExceptionRecord } from '@/types/modules/school-bus-exception'
-import { detailCellDisplay } from '@/utils/school-bus'
 import type { UniTableColumn } from 'uni-ui-lib'
 import { ref } from 'vue'
 
 defineProps<{ columns: UniTableColumn[] }>()
+
+function detailCellDisplay(record: ExceptionRecord, prop: string | undefined): string {
+  if (!prop) {
+    return '--'
+  }
+  const value = (record as Record<string, unknown>)[prop]
+  if (value == null || value === '') {
+    return '--'
+  }
+  if (Array.isArray(value)) {
+    return value.map((item) => String(item)).join(', ')
+  }
+  return String(value)
+}
 
 const visible = ref(false)
 const record = ref<ExceptionRecord | null>(null)
