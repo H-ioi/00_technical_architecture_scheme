@@ -666,13 +666,13 @@ onMounted(() => void loadCards())
   }
 }
 
-@media (max-width: 992px) {
+@media (width <= 992px) {
   .activity-program-cards__stats {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
 
-@media (max-width: 576px) {
+@media (width <= 576px) {
   .activity-program-cards__stat.is-active {
     grid-column: 1 / -1;
   }

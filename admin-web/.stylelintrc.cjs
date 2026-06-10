@@ -13,6 +13,18 @@ module.exports = {
     'alpha-value-notation': null,
     'declaration-block-no-redundant-longhand-properties': null,
     'selector-class-pattern': null,
-    'no-descending-specificity': null
+    'no-descending-specificity': null,
+    'selector-pseudo-class-no-unknown': [
+      true,
+      {
+        ignorePseudoClasses: ['deep', 'global', 'slotted']
+      }
+    ],
+    'selector-pseudo-element-no-unknown': [
+      true,
+      {
+        ignorePseudoElements: ['v-deep', 'v-global', 'v-slotted']
+      }
+    ]
   }
 }
