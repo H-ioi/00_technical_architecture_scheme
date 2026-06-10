@@ -33,6 +33,8 @@ import dormRoomApi from './modules/dorm-room'
 import dormStudentApi from './modules/dorm-student'
 import contentFoodWeeklyApi from './modules/content-food-weekly'
 import contentMomentApi from './modules/content-moment'
+import medicalArchiveApi from './modules/medical-archive'
+import medicalInfoApi from './modules/medical-info'
 import membershipApi from './modules/membership'
 import studentApi from './modules/member-student'
 import teacherApi from './modules/member-teacher'
@@ -44,6 +46,10 @@ import permissionUserApi from './modules/permission-user'
 import protocolApi from './modules/protocol'
 import publicFileApi from './modules/public-file'
 import schoolBusAttendanceApi from './modules/school-bus-attendance'
+import schoolDoctorDiseaseSettingApi from './modules/school-doctor-disease-setting'
+import schoolDoctorRegulationApi from './modules/school-doctor-regulation'
+import schoolDoctorVisitRecordApi from './modules/school-doctor-visit-record'
+import schoolDoctorMedicineApplyApi from './modules/school-doctor-medicine-apply'
 import schoolBusCarApi from './modules/school-bus-car'
 import schoolBusCommonApi from './modules/school-bus-common'
 import schoolBusDriverApi from './modules/school-bus-driver'
@@ -94,6 +100,8 @@ export {
   dormStudentApi,
   contentFoodWeeklyApi,
   contentMomentApi,
+  medicalArchiveApi,
+  medicalInfoApi,
   membershipApi,
   studentApi,
   teacherApi,
@@ -105,6 +113,10 @@ export {
   protocolApi,
   publicFileApi,
   schoolBusAttendanceApi,
+  schoolDoctorDiseaseSettingApi,
+  schoolDoctorRegulationApi,
+  schoolDoctorVisitRecordApi,
+  schoolDoctorMedicineApplyApi,
   schoolBusCarApi,
   schoolBusCommonApi,
   schoolBusDriverApi,

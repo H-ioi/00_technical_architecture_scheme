@@ -135,7 +135,21 @@ const MENU_PATH_ALIASES: Record<string, string> = {
   '/isacommunity/dorm/space/attribute': '/dorm/space/attribute',
   '/isacommunity/dorm/space/attribute/index': '/dorm/space/attribute',
   '/isacommunity/dorm/space/rule': '/dorm/space/rule',
-  '/isacommunity/dorm/space/rule/index': '/dorm/space/rule'
+  '/isacommunity/dorm/space/rule/index': '/dorm/space/rule',
+  '/isacommunity/dorm/boarding-student': '/dorm/boarding-student',
+  '/isacommunity/dorm/boarding-student/index': '/dorm/boarding-student',
+  '/isacommunity/schoolDoctor/studentRecord': '/school-doctor/student-record',
+  '/isacommunity/schoolDoctor/studentRecord/index': '/school-doctor/student-record',
+  '/isacommunity/schoolDoctor/medicalInfo': '/school-doctor/medical-info',
+  '/isacommunity/schoolDoctor/medicalInfo/index': '/school-doctor/medical-info',
+  '/isacommunity/schoolDoctor/regulation': '/school-doctor/regulation',
+  '/isacommunity/schoolDoctor/regulation/index': '/school-doctor/regulation',
+  '/isacommunity/schoolDoctor/diseaseSetting': '/school-doctor/disease-setting',
+  '/isacommunity/schoolDoctor/diseaseSetting/index': '/school-doctor/disease-setting',
+  '/isacommunity/schoolDoctor/visitRecord': '/school-doctor/visit-record',
+  '/isacommunity/schoolDoctor/visitRecord/index': '/school-doctor/visit-record',
+  '/isacommunity/schoolDoctor/medicineApply': '/school-doctor/medicine-apply',
+  '/isacommunity/schoolDoctor/medicineApply/index': '/school-doctor/medicine-apply'
 }
 
 const normPath = (path?: string) => {

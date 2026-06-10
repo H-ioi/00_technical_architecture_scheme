@@ -12,6 +12,7 @@ import { memberRoute } from './member'
 import { permissionRoute } from './permission'
 import { protocolRoutes } from './protocol'
 import { schoolBusRoute } from './school-bus'
+import { schoolDoctorRoute } from './school-doctor'
 
 /** 主布局及其业务子路由 */
 export const layoutRoute: AppRouteRecord = {
@@ -34,6 +35,7 @@ export const layoutRoute: AppRouteRecord = {
     emailRoute,
     contentRoute,
     dormRoute,
+    schoolDoctorRoute,
     ...protocolRoutes
   ]
 }

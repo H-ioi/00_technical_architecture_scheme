@@ -2,11 +2,6 @@ import type { UniFormConfig, UniOption, UniTableColumn } from 'uni-ui-lib'
 
 import type { Translate } from '@/types/i18n'
 
-export const hasBedFilterOpts = (t: Translate): UniOption[] => [
-  { label: t('attendance.yes'), value: 'true' },
-  { label: t('attendance.no'), value: 'false' }
-]
-
 export const currentSearchForm = (
   t: Translate,
   schoolOptions: UniOption[],
@@ -14,7 +9,6 @@ export const currentSearchForm = (
   floorOptions: UniOption[],
   roomOptions: UniOption[],
   projectOptions: UniOption[],
-  hasBedOptions: UniOption[],
   defaultSchoolId?: string | number
 ): UniFormConfig => ({
   rowProps: { gutter: 8 },
@@ -71,7 +65,10 @@ export const currentSearchForm = (
       field: 'hasBed',
       label: '',
       component: 'ElSelect',
-      options: hasBedOptions,
+      options: [
+        { label: t('attendance.yes'), value: 'true' },
+        { label: t('attendance.no'), value: 'false' }
+      ],
       componentProps: { clearable: true, placeholder: t('dorm.boardingStudent.phHasBed') },
       colProps: { span: 4 }
     },

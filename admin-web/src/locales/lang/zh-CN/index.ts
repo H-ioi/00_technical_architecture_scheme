@@ -11,6 +11,7 @@ import permission from './modules/permission'
 import protocol from './modules/protocol'
 import schoolBus from './modules/school-bus'
 import schoolBusMore from './modules/school-bus-more'
+import schoolDoctor from './modules/school-doctor'
 import route from './route'
 
 export default {
@@ -29,5 +30,6 @@ export default {
   member,
   permission,
   protocol,
-  schoolBus: { ...schoolBus, ...schoolBusMore }
+  schoolBus: { ...schoolBus, ...schoolBusMore },
+  schoolDoctor
 }

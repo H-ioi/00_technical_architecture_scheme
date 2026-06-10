@@ -14,13 +14,11 @@ export const searchForm = (
   statusOptions: UniOption[],
   defaultSchoolId?: string | number
 ): UniFormConfig => ({
-  formProps: { labelPosition: 'top' },
-  rowProps: { gutter: 16 },
-  colProps: { span: 6 },
+  rowProps: { gutter: 8 },
   schema: [
     {
       field: 'schoolId',
-      label: t('dorm.rule.fieldSchool'),
+      label: '',
       component: 'ElSelect',
       options: schoolOptions,
       componentProps: { clearable: true, filterable: true, placeholder: t('dorm.rule.phSchool') },
@@ -29,14 +27,14 @@ export const searchForm = (
     },
     {
       field: 'keyword',
-      label: t('dorm.rule.fieldName'),
+      label: '',
       component: 'ElInput',
       componentProps: { clearable: true, placeholder: t('dorm.rule.phName') },
       colProps: { span: 6 }
     },
     {
       field: 'isActive',
-      label: t('dorm.rule.fieldStatus'),
+      label: '',
       component: 'ElSelect',
       options: statusOptions,
       componentProps: { clearable: true, placeholder: t('dorm.rule.phStatus') },

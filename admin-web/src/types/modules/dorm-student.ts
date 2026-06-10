@@ -59,6 +59,7 @@ export interface DormStudentPageParams {
   plannedCheckoutDateEnd?: string
   checkoutDateStart?: string
   checkoutDateEnd?: string
+  gender?: string
 }
 
 export interface DormStudentInfoLookup {

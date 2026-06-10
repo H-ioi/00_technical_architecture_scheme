@@ -78,6 +78,15 @@ export const dormRoute: AppRouteRecord = {
           }
         }
       ]
+    },
+    {
+      path: 'boarding-student',
+      name: 'DormBoardingStudent',
+      component: () => import('@/views/dorm/boarding-student/tab.vue'),
+      meta: {
+        title: '住宿生管理',
+        titleKey: 'route.dormBoardingStudent'
+      }
     }
   ]
 }
