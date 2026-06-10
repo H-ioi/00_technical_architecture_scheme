@@ -4,7 +4,8 @@
     :title="$t('dorm.boardingStudent.detailTitle')"
     width="900px"
     destroy-on-close
-    class="boarding-detail-dialog">
+    class="boarding-detail-dialog"
+  >
     <div v-loading="loading">
       <section class="boarding-detail-dialog__section">
         <h3>{{ $t('dorm.boardingStudent.sectionBasic') }}</h3>

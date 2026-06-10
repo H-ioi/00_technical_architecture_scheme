@@ -15,7 +15,8 @@
               :max="item.max"
               :step="item.step"
               :precision="item.precision"
-              style="width: 100%" />
+              style="width: 100%"
+            />
             <div v-else class="archive-health-tab__metric-value">{{ item.value }}</div>
           </div>
         </div>
@@ -28,7 +29,8 @@
           v-model="editForm.nurseRemark"
           type="textarea"
           :rows="5"
-          :placeholder="$t('schoolDoctor.studentRecord.phNurseRemark')" />
+          :placeholder="$t('schoolDoctor.studentRecord.phNurseRemark')"
+        />
         <div v-else class="archive-health-tab__nurse">{{ healthHistory.nurseRemark }}</div>
       </div>
     </div>
@@ -40,7 +42,8 @@
           v-for="item in visibleAllergies"
           :key="item.key"
           class="archive-health-tab__allergy"
-          :class="item.typeClass">
+          :class="item.typeClass"
+        >
           <div class="archive-health-tab__allergy-label">{{ item.label }}</div>
           <div>{{ item.value }}</div>
         </div>
@@ -54,20 +57,24 @@
         <el-table-column
           :label="$t('schoolDoctor.studentRecord.diseaseCondition')"
           prop="conditionStatusText"
-          width="120" />
+          width="120"
+        />
         <el-table-column
           :label="$t('schoolDoctor.studentRecord.diseaseMedication')"
           prop="medicationUsage"
-          min-width="140" />
+          min-width="140"
+        />
         <el-table-column
           :label="$t('schoolDoctor.studentRecord.diseaseAttack')"
           prop="attackTimeDetail"
-          min-width="160" />
+          min-width="160"
+        />
         <el-table-column :label="$t('schoolDoctor.studentRecord.diseaseMeasures')" prop="measures" min-width="120" />
         <el-table-column
           :label="$t('schoolDoctor.studentRecord.diseaseDiagnosis')"
           prop="diagnosisAndTreatment"
-          min-width="140" />
+          min-width="140"
+        />
       </el-table>
     </div>
 

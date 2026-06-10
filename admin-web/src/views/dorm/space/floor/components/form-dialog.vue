@@ -3,7 +3,8 @@
     <div
       v-loading="detailLoading"
       class="dorm-floor-form__body"
-      :element-loading-text="$t('common.loading')">
+      :element-loading-text="$t('common.loading')"
+    >
       <UniForm ref="uniFormRef" v-model="formModel" mode="edit" :config="dialogFormCfg" />
     </div>
 

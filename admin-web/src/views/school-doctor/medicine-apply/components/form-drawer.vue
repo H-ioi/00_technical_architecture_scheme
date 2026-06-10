@@ -4,7 +4,8 @@
     :title="drawerTitle"
     size="1120px"
     destroy-on-close
-    class="medicine-apply-drawer">
+    class="medicine-apply-drawer"
+  >
     <div v-if="visible" v-loading="loading" class="medicine-apply-drawer__body">
       <FormPanel
         ref="panelRef"
@@ -23,7 +24,8 @@
         @diagnosis-upload="handleDiagnosisUpload"
         @open-signature="signatureDialogRef?.open()"
         @signature-upload="handleSignatureUpload"
-        @open-visit-detail="openVisitDetail" />
+        @open-visit-detail="openVisitDetail"
+      />
     </div>
 
     <template v-if="mode !== 'view'" #footer>

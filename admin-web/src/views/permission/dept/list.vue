@@ -24,7 +24,8 @@
       :actions="actions"
       :action-column="{ width: 200, fixed: 'right' }"
       @refresh="loadTree"
-      @selection-change="onSelectionChange" />
+      @selection-change="onSelectionChange"
+    />
 
     <DeptFormDialog
       v-model:visible="dialogVisible"
@@ -32,7 +33,8 @@
       :snapshot="form"
       :parent-options="parentOptions"
       :submitting="submitting"
-      @save="submitFromDraft" />
+      @save="submitFromDraft"
+    />
   </section>
 </template>
 

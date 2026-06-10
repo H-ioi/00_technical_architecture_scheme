@@ -13,7 +13,8 @@
           :show-file-list="false"
           :auto-upload="false"
           accept=".xlsx,.xls"
-          :on-change="onImportFile">
+          :on-change="onImportFile"
+        >
           <el-button :loading="importing">{{ $t('schoolDoctor.common.import') }}</el-button>
         </el-upload>
         <el-button v-if="canExport" @click="handleExport">{{ $t('schoolDoctor.common.export') }}</el-button>
@@ -32,7 +33,8 @@
       :submit-text="$t('schoolDoctor.common.search')"
       :reset-text="$t('schoolDoctor.common.reset')"
       @search="search"
-      @reset="onReset" />
+      @reset="onReset"
+    />
 
     <UniDataTable
       ref="tableRef"
@@ -47,7 +49,8 @@
       :action-column="{ width: 120, fixed: 'right' }"
       @selection-change="onSelectionChange"
       @load-success="tableEmpty.onLoadSuccess"
-      @request-error="tableEmpty.onRequestError">
+      @request-error="tableEmpty.onRequestError"
+    >
       <template #toolbar>
         <el-button type="danger" :disabled="selectedIds.length === 0" @click="batchDelete">
           {{ $t('schoolDoctor.medicalInfo.batchDelete') }}
@@ -63,7 +66,8 @@
       :mode="drawerMode"
       :record-id="activeRecordId"
       :school-records="schoolRecords"
-      @saved="onDrawerSaved" />
+      @saved="onDrawerSaved"
+    />
   </section>
 </template>
 

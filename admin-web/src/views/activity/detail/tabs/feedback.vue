@@ -9,7 +9,8 @@
       :submit-text="$t('activity.search')"
       :reset-text="$t('activity.reset')"
       @search="search"
-      @reset="reset" />
+      @reset="reset"
+    />
     <UniDataTable
       ref="tableRef"
       row-key="id"
@@ -22,7 +23,8 @@
       :actions="actions"
       :action-column="{ width: 120, fixed: 'right' }"
       @load-success="handleLoadSuccess"
-      @selection-change="onSelectionChange">
+      @selection-change="onSelectionChange"
+    >
       <template #toolbar>
         <template v-if="!readOnly">
           <el-button
@@ -30,21 +32,24 @@
             type="danger"
             plain
             :disabled="!selectedIds.length"
-            @click="deleteSelected">
+            @click="deleteSelected"
+          >
             {{ $t('activity.delBatch') }}
           </el-button>
           <el-button
             v-uni-permission="'busdriver_edit'"
             plain
             :disabled="!selectedIds.length"
-            @click="batchVisible(1)">
+            @click="batchVisible(1)"
+          >
             {{ $t('activity.visibleYes') }}
           </el-button>
           <el-button
             v-uni-permission="'busdriver_edit'"
             plain
             :disabled="!selectedIds.length"
-            @click="batchVisible(0)">
+            @click="batchVisible(0)"
+          >
             {{ $t('activity.visibleNo') }}
           </el-button>
         </template>
@@ -55,7 +60,8 @@
       v-model="detailVisible"
       :title="$t('activity.feedbackDetailTitle')"
       width="560px"
-      append-to-body>
+      append-to-body
+    >
       <el-descriptions :column="1" border>
         <el-descriptions-item :label="$t('activity.feedbackContent')">
           {{ detail.content || '-' }}
@@ -87,7 +93,8 @@
       append-to-body
       destroy-on-close
       :close-on-click-modal="false"
-      @closed="resetEdit">
+      @closed="resetEdit"
+    >
       <UniForm ref="formRef" v-model="formModel" mode="edit" :config="formCfg" />
       <template #footer>
         <el-button @click="editVisible = false">{{ $t('common.cancel') }}</el-button>

@@ -3,7 +3,8 @@
     v-model="visible"
     :title="$t('dorm.boardingStudent.addStudent')"
     width="640px"
-    destroy-on-close>
+    destroy-on-close
+  >
     <UniForm ref="uniFormRef" v-model="formModel" mode="edit" :config="formCfg" />
     <div v-if="studentPreview" class="student-add-dialog__preview">
       <div class="student-add-dialog__row">

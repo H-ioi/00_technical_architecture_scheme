@@ -6,13 +6,15 @@
     destroy-on-close
     append-to-body
     :close-on-click-modal="false"
-    @closed="onClosed">
+    @closed="onClosed"
+  >
     <UniForm
       ref="uniFormRef"
       v-model="form"
       :mode="formMode"
       class="activity-vote-program-form"
-      :config="formConfig" />
+      :config="formConfig"
+    />
     <template v-if="mode !== 'view'" #footer>
       <el-button @click="visible = false">{{ $t('common.cancel') }}</el-button>
       <el-button type="primary" :loading="saving" @click="submit">

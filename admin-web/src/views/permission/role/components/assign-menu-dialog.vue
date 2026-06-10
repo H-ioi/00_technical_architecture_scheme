@@ -3,7 +3,8 @@
     <div
       v-loading="loading"
       class="permission-assign-tree"
-      :element-loading-text="t('common.loading')">
+      :element-loading-text="t('common.loading')"
+    >
       <el-tree
         v-if="ready"
         :key="treeKey"
@@ -14,7 +15,8 @@
         highlight-current
         default-expand-all
         :props="{ label: 'name', children: 'children' }"
-        :default-checked-keys="checkedKeys" />
+        :default-checked-keys="checkedKeys"
+      />
     </div>
     <template #footer>
       <el-button @click="visible = false">{{ t('permission.cancel') }}</el-button>

@@ -27,7 +27,8 @@
           @checkin="openCheckin"
           @change="openChange"
           @checkout="confirmCheckout"
-          @delete="confirmDeleteBed" />
+          @delete="confirmDeleteBed"
+        />
       </div>
       <el-empty v-if="!listLoading && beds.length === 0" />
     </div>
@@ -41,14 +42,16 @@
       :gender="genderQuery"
       :school-options="schoolOptions"
       :default-school-id="defaultSchoolId ?? undefined"
-      @saved="fetchBeds" />
+      @saved="fetchBeds"
+    />
 
     <ChangeDialog
       v-model:visible="changeVisible"
       :admission-no="activeAdmissionNo"
       :school-options="schoolOptions"
       :default-school-id="defaultSchoolId ?? undefined"
-      @saved="fetchBeds" />
+      @saved="fetchBeds"
+    />
   </section>
 </template>
 

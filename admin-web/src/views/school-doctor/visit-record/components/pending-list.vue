@@ -8,7 +8,8 @@
     :submit-text="$t('schoolDoctor.common.search')"
     :reset-text="$t('schoolDoctor.common.reset')"
     @search="search"
-    @reset="onReset" />
+    @reset="onReset"
+  />
 
   <UniDataTable
     ref="tableRef"
@@ -21,7 +22,8 @@
     :actions="actions"
     :action-column="{ width: 140, fixed: 'right' }"
     @load-success="tableEmpty.onLoadSuccess"
-    @request-error="tableEmpty.onRequestError">
+    @request-error="tableEmpty.onRequestError"
+  >
     <template #empty>
       <ListTableEmpty :kind="tableEmpty.kind" @reset="onReset" @retry="tableEmpty.retry" />
     </template>
@@ -32,7 +34,8 @@
     :mode="drawerMode"
     :record-id="activeRecordId"
     :list-row="activeRow"
-    @saved="refreshTable" />
+    @saved="refreshTable"
+  />
 </template>
 
 <script setup lang="ts">

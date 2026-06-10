@@ -3,7 +3,8 @@
     v-model="visible"
     destroy-on-close
     width="520px"
-    :title="t('permission.menu.editTitle')">
+    :title="t('permission.menu.editTitle')"
+  >
     <UniForm ref="uniFormRef" v-model="draft" mode="edit" :config="dialogFormConfig">
       <template #field-icon="{ model }">
         <IconPicker v-model="model.icon" :placeholder="t('permission.menu.icon')" />

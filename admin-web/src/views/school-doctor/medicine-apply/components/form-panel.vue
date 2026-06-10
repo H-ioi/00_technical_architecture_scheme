@@ -10,7 +10,8 @@
             :readonly="studentReadonly"
             :school-records="schoolRecords"
             @select="onStudentSelect"
-            @clear="onStudentClear" />
+            @clear="onStudentClear"
+          />
         </div>
       </aside>
 
@@ -27,12 +28,14 @@
                     filterable
                     style="width: 100%"
                     :disabled="formReadonly"
-                    :placeholder="$t('schoolDoctor.common.select')">
+                    :placeholder="$t('schoolDoctor.common.select')"
+                  >
                     <el-option
                       v-for="item in symptomOptions"
                       :key="item.id"
                       :label="`${item.cnName || ''} / ${item.enName || item.name || ''}`"
-                      :value="item.id!" />
+                      :value="item.id!"
+                    />
                   </el-select>
                 </el-form-item>
               </el-col>
@@ -43,7 +46,8 @@
                     clearable
                     style="width: 100%"
                     :disabled="formReadonly"
-                    :placeholder="$t('schoolDoctor.medicineApply.ruleNeedMedication')">
+                    :placeholder="$t('schoolDoctor.medicineApply.ruleNeedMedication')"
+                  >
                     <el-option v-for="opt in needOpts" :key="opt.value" :label="opt.label" :value="opt.value" />
                   </el-select>
                 </el-form-item>
@@ -77,7 +81,8 @@
                     :before-upload="beforeImage"
                     :on-remove="onRemoveImage"
                     :disabled="formReadonly || uploading"
-                    accept="image/*">
+                    accept="image/*"
+                  >
                     <span v-if="!formReadonly">+</span>
                   </el-upload>
                 </el-form-item>
@@ -91,7 +96,8 @@
             :mode="mode"
             :signature-uploading="signatureUploading"
             @open-signature="emit('open-signature')"
-            @signature-upload="emit('signature-upload', $event)" />
+            @signature-upload="emit('signature-upload', $event)"
+          />
 
           <div v-if="showApprovalSection" class="medicine-form__card">
             <h3>{{ $t('schoolDoctor.medicineApply.sectionApproval') }}</h3>

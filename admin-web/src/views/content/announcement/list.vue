@@ -21,7 +21,8 @@
       :submit-text="$t('content.search')"
       :reset-text="$t('content.reset')"
       @search="search"
-      @reset="onReset" />
+      @reset="onReset"
+    />
 
     <UniDataTable
       ref="tableRef"
@@ -34,7 +35,8 @@
       :actions="actions"
       :action-column="{ width: 120, fixed: 'right' }"
       @load-success="tableEmpty.onLoadSuccess"
-      @request-error="tableEmpty.onRequestError">
+      @request-error="tableEmpty.onRequestError"
+    >
       <template #empty>
         <ListTableEmpty :kind="tableEmpty.kind" @reset="onReset" @retry="tableEmpty.retry" />
       </template>
@@ -45,7 +47,8 @@
       :mode="formMode"
       :record-id="activeId"
       :school-options="schoolOptions"
-      @saved="refreshTable" />
+      @saved="refreshTable"
+    />
   </section>
 </template>
 

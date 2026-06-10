@@ -18,7 +18,8 @@
       :submit-text="$t('activity.search')"
       :reset-text="$t('activity.reset')"
       @search="search"
-      @reset="reset" />
+      @reset="reset"
+    />
     <UniDataTable
       ref="tableRef"
       row-key="id"
@@ -31,20 +32,23 @@
       :actions="actions"
       :action-column="{ width: 140, fixed: 'right' }"
       @load-success="handleLoadSuccess"
-      @selection-change="onSelectionChange">
+      @selection-change="onSelectionChange"
+    >
       <template #toolbar>
         <el-button
           v-uni-permission="'busdriver_edit'"
           plain
           :disabled="!selectedIds.length"
-          @click="openBatchStatus">
+          @click="openBatchStatus"
+        >
           {{ $t('activity.qBatchChangeStatus') }}
         </el-button>
         <el-button
           v-uni-permission="'busdriver_edit'"
           plain
           :disabled="!selectedIds.length"
-          @click="batchDlg?.open('frozen', selectedIds)">
+          @click="batchDlg?.open('frozen', selectedIds)"
+        >
           {{ $t('activity.qBatchChangeFrozen') }}
         </el-button>
         <el-button
@@ -52,7 +56,8 @@
           type="danger"
           plain
           :disabled="!selectedIds.length"
-          @click="deleteSelected">
+          @click="deleteSelected"
+        >
           {{ $t('activity.delBatch') }}
         </el-button>
       </template>

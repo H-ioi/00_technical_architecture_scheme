@@ -3,7 +3,8 @@
     v-model="visible"
     destroy-on-close
     width="520px"
-    :title="mode === 'add' ? t('permission.dept.formAdd') : t('permission.dept.formEdit')">
+    :title="mode === 'add' ? t('permission.dept.formAdd') : t('permission.dept.formEdit')"
+  >
     <UniForm ref="uniFormRef" v-model="draft" mode="edit" :config="dialogFormConfig" />
     <template #footer>
       <el-button @click="visible = false">{{ t('permission.cancel') }}</el-button>

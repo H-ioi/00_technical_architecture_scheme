@@ -9,7 +9,8 @@
       :submit-text="$t('dorm.common.search')"
       :reset-text="$t('dorm.common.reset')"
       @search="search"
-      @reset="onReset" />
+      @reset="onReset"
+    />
 
     <UniDataTable
       ref="tableRef"
@@ -22,7 +23,8 @@
       :actions="actions"
       :action-column="{ width: 120, fixed: 'right' }"
       @load-success="tableEmpty.onLoadSuccess"
-      @request-error="tableEmpty.onRequestError">
+      @request-error="tableEmpty.onRequestError"
+    >
       <template #empty>
         <ListTableEmpty :kind="tableEmpty.kind" @reset="onReset" @retry="tableEmpty.retry" />
       </template>
@@ -32,7 +34,8 @@
     <HistoryEditDialog
       v-model:visible="editVisible"
       :admission-no="activeAdmissionNo"
-      @saved="refreshTable" />
+      @saved="refreshTable"
+    />
   </div>
 </template>
 

@@ -23,7 +23,8 @@
           :submit-text="$t('member.search')"
           :reset-text="$t('member.reset')"
           @search="searchLeave"
-          @reset="resetLeaveSearch" />
+          @reset="resetLeaveSearch"
+        />
         <UniDataTable
           ref="leaveTableRef"
           row-key="id"
@@ -35,12 +36,14 @@
           :actions="leaveActions"
           :action-column="{ width: 110, fixed: 'right' }"
           @load-success="leaveTableEmpty.onLoadSuccess"
-          @request-error="leaveTableEmpty.onRequestError">
+          @request-error="leaveTableEmpty.onRequestError"
+        >
           <template #empty>
             <ListTableEmpty
               :kind="leaveTableEmpty.kind"
               @reset="resetLeaveSearch"
-              @retry="leaveTableEmpty.retry" />
+              @retry="leaveTableEmpty.retry"
+            />
           </template>
         </UniDataTable>
       </el-tab-pane>
@@ -55,7 +58,8 @@
           :submit-text="$t('member.search')"
           :reset-text="$t('member.reset')"
           @search="searchReturn"
-          @reset="resetReturnSearch" />
+          @reset="resetReturnSearch"
+        />
         <UniDataTable
           ref="returnTableRef"
           row-key="id"
@@ -67,12 +71,14 @@
           :actions="returnActions"
           :action-column="{ width: 60, fixed: 'right' }"
           @load-success="returnTableEmpty.onLoadSuccess"
-          @request-error="returnTableEmpty.onRequestError">
+          @request-error="returnTableEmpty.onRequestError"
+        >
           <template #empty>
             <ListTableEmpty
               :kind="returnTableEmpty.kind"
               @reset="resetReturnSearch"
-              @retry="returnTableEmpty.retry" />
+              @retry="returnTableEmpty.retry"
+            />
           </template>
         </UniDataTable>
       </el-tab-pane>
@@ -84,13 +90,15 @@
       v-model:visible="leaveDetailVisible"
       :source="leaveDetailModel"
       :config="leaveDetailConfig"
-      :loading="leaveDetailLoading" />
+      :loading="leaveDetailLoading"
+    />
 
     <DetailDrawer
       v-model:visible="returnDetailVisible"
       :source="returnDetailModel"
       :config="returnDetailConfig"
-      :loading="returnDetailLoading" />
+      :loading="returnDetailLoading"
+    />
   </section>
 </template>
 

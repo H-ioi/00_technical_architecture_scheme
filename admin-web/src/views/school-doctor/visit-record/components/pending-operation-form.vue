@@ -8,7 +8,8 @@
               v-model="operationForm.operateTime"
               type="datetime"
               value-format="YYYY-MM-DD HH:mm:ss"
-              style="width: 100%" />
+              style="width: 100%"
+            />
             <el-button v-if="!readonly" type="primary" link @click="setNow('operateTime')">
               {{ $t('schoolDoctor.visitRecord.now') }}
             </el-button>
@@ -43,7 +44,8 @@
             :rows="3"
             maxlength="300"
             show-word-limit
-            :placeholder="$t('schoolDoctor.visitRecord.phOperateSituation')" />
+            :placeholder="$t('schoolDoctor.visitRecord.phOperateSituation')"
+          />
         </el-form-item>
       </el-col>
       <el-col :span="12">
@@ -53,7 +55,8 @@
               v-model="operationForm.leaveTime"
               type="datetime"
               value-format="YYYY-MM-DD HH:mm:ss"
-              style="width: 100%" />
+              style="width: 100%"
+            />
             <el-button v-if="!readonly" type="primary" link @click="setNow('leaveTime')">
               {{ $t('schoolDoctor.visitRecord.now') }}
             </el-button>
@@ -66,7 +69,8 @@
             v-model="operationForm.leaveDestination"
             clearable
             style="width: 100%"
-            :placeholder="$t('schoolDoctor.visitRecord.phLeaveDestinationSelect')">
+            :placeholder="$t('schoolDoctor.visitRecord.phLeaveDestinationSelect')"
+          >
             <el-option v-for="item in leaveOptions" :key="item.value" :label="item.label" :value="item.value" />
           </el-select>
         </el-form-item>
@@ -88,7 +92,8 @@
             action="#"
             :show-file-list="false"
             :http-request="handleUpload"
-            :before-upload="beforeUpload">
+            :before-upload="beforeUpload"
+          >
             <el-button :loading="uploading">{{ $t('schoolDoctor.common.upload') }}</el-button>
           </el-upload>
         </el-form-item>

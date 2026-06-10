@@ -5,7 +5,8 @@
       :readonly="readonly"
       :school-records="schoolRecords"
       @select="onStudentSelect"
-      @clear="onStudentClear" />
+      @clear="onStudentClear"
+    />
 
     <el-row :gutter="20">
       <el-col :span="12">
@@ -13,7 +14,8 @@
           <el-input
             v-model="formModel.diseaseName"
             :disabled="readonly"
-            :placeholder="$t('schoolDoctor.infectiousDisease.phDiseaseName')" />
+            :placeholder="$t('schoolDoctor.infectiousDisease.phDiseaseName')"
+          />
         </el-form-item>
       </el-col>
       <el-col :span="12">
@@ -24,7 +26,8 @@
             value-format="YYYY-MM-DD HH:mm:ss"
             style="width: 100%"
             :disabled="readonly"
-            :placeholder="$t('schoolDoctor.infectiousDisease.phDiscoveryDateSelect')" />
+            :placeholder="$t('schoolDoctor.infectiousDisease.phDiscoveryDateSelect')"
+          />
         </el-form-item>
       </el-col>
     </el-row>
@@ -35,12 +38,14 @@
         style="width: 100%"
         clearable
         :disabled="readonly"
-        :placeholder="$t('schoolDoctor.infectiousDisease.phStatusSelect')">
+        :placeholder="$t('schoolDoctor.infectiousDisease.phStatusSelect')"
+      >
         <el-option
           v-for="item in statusOptions"
           :key="item.value"
           :label="item.label"
-          :value="item.value" />
+          :value="item.value"
+        />
       </el-select>
     </el-form-item>
 
@@ -55,7 +60,8 @@
         :on-preview="handlePicturePreview"
         :disabled="readonly || uploading"
         :class="{ 'hide-upload': readonly }"
-        accept=".jpg,.jpeg,.png,.gif,.webp,image/jpeg,image/png,image/gif,image/webp">
+        accept=".jpg,.jpeg,.png,.gif,.webp,image/jpeg,image/png,image/gif,image/webp"
+      >
         <el-icon><Plus /></el-icon>
       </el-upload>
       <div v-if="!readonly" class="infectious-form__tip">{{ $t('schoolDoctor.infectiousDisease.imageOnlyTip') }}</div>
@@ -67,7 +73,8 @@
         type="textarea"
         :rows="3"
         :disabled="readonly"
-        :placeholder="$t('schoolDoctor.infectiousDisease.phRemark')" />
+        :placeholder="$t('schoolDoctor.infectiousDisease.phRemark')"
+      />
     </el-form-item>
   </el-form>
 </template>

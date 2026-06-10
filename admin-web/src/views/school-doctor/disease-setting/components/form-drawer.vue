@@ -4,13 +4,15 @@
     :title="drawerTitle"
     size="600px"
     destroy-on-close
-    class="disease-setting-form-drawer">
+    class="disease-setting-form-drawer"
+  >
     <div v-if="visible" v-loading="loading" class="disease-setting-form-drawer__body">
       <UniForm
         ref="uniFormRef"
         v-model="formModel"
         :mode="mode === 'view' ? 'view' : 'edit'"
-        :config="formCfg" />
+        :config="formCfg"
+      />
     </div>
 
     <template v-if="mode !== 'view'" #footer>

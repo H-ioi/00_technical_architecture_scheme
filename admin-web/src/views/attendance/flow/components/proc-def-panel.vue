@@ -11,12 +11,14 @@
       :actions="actions"
       :action-column="{ width: 240, fixed: 'right' }"
       @load-success="tableEmpty.onLoadSuccess"
-      @request-error="tableEmpty.onRequestError">
+      @request-error="tableEmpty.onRequestError"
+    >
       <template #empty>
         <ListTableEmpty
           :kind="tableEmpty.kind"
           @reset="tableEmpty.retry"
-          @retry="tableEmpty.retry" />
+          @retry="tableEmpty.retry"
+        />
       </template>
     </UniDataTable>
 
@@ -24,15 +26,17 @@
       v-model="imgVisible"
       :title="$t('attendance.holidayTask.flowChart')"
       width="80%"
-      destroy-on-close>
-      <img v-if="flowImg" :src="flowImg" alt="" style="max-width: 100%; height: auto" />
+      destroy-on-close
+    >
+      <img v-if="flowImg" :src="flowImg" alt="" style="max-width: 100%; height: auto">
     </el-dialog>
 
     <el-dialog
       v-model="assignVisible"
       :title="$t('attendance.holidayFlow.procDef.setAssignee')"
       width="520px"
-      destroy-on-close>
+      destroy-on-close
+    >
       <UniForm v-model="assignFormModel" mode="edit" :config="assignFormConfig" />
       <template #footer>
         <el-button type="primary" @click="submitAssign">{{ $t('common.submit') }}</el-button>

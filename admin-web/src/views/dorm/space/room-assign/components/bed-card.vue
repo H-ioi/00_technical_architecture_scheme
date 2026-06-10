@@ -6,7 +6,8 @@
           <span class="dorm-bed-card__label">{{ bed.label }}</span>
           <span
             class="dorm-bed-card__status"
-            :class="bed.student ? 'dorm-bed-card__status--occupied' : 'dorm-bed-card__status--empty'">
+            :class="bed.student ? 'dorm-bed-card__status--occupied' : 'dorm-bed-card__status--empty'"
+          >
             {{ bed.student ? $t('dorm.roomAssign.statusOccupied') : $t('dorm.roomAssign.statusVacant') }}
           </span>
         </div>
@@ -17,7 +18,8 @@
           v-else
           type="danger"
           link
-          @click="emit('delete', bed)">
+          @click="emit('delete', bed)"
+        >
           {{ $t('dorm.common.delete') }}
         </el-button>
       </div>

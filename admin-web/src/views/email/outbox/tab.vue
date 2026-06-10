@@ -21,7 +21,8 @@
           :submit-text="$t('member.search')"
           :reset-text="$t('member.reset')"
           @search="searchSent"
-          @reset="resetSentSearch" />
+          @reset="resetSentSearch"
+        />
         <UniDataTable
           ref="sentTableRef"
           row-key="id"
@@ -33,12 +34,14 @@
           :actions="sentActions"
           :action-column="{ width: 110, fixed: 'right' }"
           @load-success="sentTableEmpty.onLoadSuccess"
-          @request-error="sentTableEmpty.onRequestError">
+          @request-error="sentTableEmpty.onRequestError"
+        >
           <template #empty>
             <ListTableEmpty
               :kind="sentTableEmpty.kind"
               @reset="resetSentSearch"
-              @retry="sentTableEmpty.retry" />
+              @retry="sentTableEmpty.retry"
+            />
           </template>
         </UniDataTable>
       </el-tab-pane>
@@ -53,7 +56,8 @@
           :submit-text="$t('member.search')"
           :reset-text="$t('member.reset')"
           @search="searchDraft"
-          @reset="resetDraftSearch" />
+          @reset="resetDraftSearch"
+        />
         <UniDataTable
           ref="draftTableRef"
           row-key="id"
@@ -65,12 +69,14 @@
           :actions="draftActions"
           :action-column="{ width: 150, fixed: 'right' }"
           @load-success="draftTableEmpty.onLoadSuccess"
-          @request-error="draftTableEmpty.onRequestError">
+          @request-error="draftTableEmpty.onRequestError"
+        >
           <template #empty>
             <ListTableEmpty
               :kind="draftTableEmpty.kind"
               @reset="resetDraftSearch"
-              @retry="draftTableEmpty.retry" />
+              @retry="draftTableEmpty.retry"
+            />
           </template>
         </UniDataTable>
       </el-tab-pane>
@@ -83,13 +89,15 @@
       :mail-sender-options="mailSenderOptions"
       :mail-group-options="mailGroupOptions"
       :submitting="formSubmitting"
-      @submit="(status: 0 | 1) => void submitComposeForm(status)" />
+      @submit="(status: 0 | 1) => void submitComposeForm(status)"
+    />
 
     <OutboxViewDialog
       v-model="viewVisible"
       :detail="viewModel"
       :can-export="hasPermission('outgo-view')"
-      @export="exportViewRecipients" />
+      @export="exportViewRecipients"
+    />
   </section>
 </template>
 

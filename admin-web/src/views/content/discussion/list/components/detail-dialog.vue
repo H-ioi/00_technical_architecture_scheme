@@ -3,7 +3,8 @@
     v-model="visible"
     :title="$t('content.discussion.formLook')"
     width="min(900px, 96vw)"
-    destroy-on-close>
+    destroy-on-close
+  >
     <div v-loading="loading" class="content-discussion-detail">
       <dl v-if="detail.id != null" class="content-discussion-detail__grid">
         <template v-for="item in fields" :key="item.key">
@@ -19,7 +20,8 @@
             :key="item.field"
             :src="item.url"
             fit="contain"
-            class="content-discussion-detail__image" />
+            class="content-discussion-detail__image"
+          />
         </div>
       </div>
       <div v-if="pdfItems.length" class="content-discussion-detail__pdfs">

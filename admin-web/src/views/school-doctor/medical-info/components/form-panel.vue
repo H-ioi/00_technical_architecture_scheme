@@ -10,7 +10,8 @@
             :readonly="readonly"
             :school-records="schoolRecords"
             @select="onStudentSelect"
-            @clear="onStudentClear" />
+            @clear="onStudentClear"
+          />
           <el-form-item :label="$t('schoolDoctor.studentRecord.fieldAdmissionNo')" prop="admissionNo">
             <el-input v-model="formModel.admissionNo" :disabled="readonly" />
           </el-form-item>
@@ -20,7 +21,8 @@
                 v-for="item in schoolRecords"
                 :key="item.id"
                 :label="item.cnName || item.enName || item.name"
-                :value="item.id" />
+                :value="item.id"
+              />
             </el-select>
           </el-form-item>
         </el-form>
@@ -38,7 +40,8 @@
           :is-other-disease="isOtherDisease"
           @add="emit('add-disease')"
           @remove="emit('remove-disease', $event)"
-          @disease-change="emit('disease-change', $event)" />
+          @disease-change="emit('disease-change', $event)"
+        />
         <AttachmentSection
           :attachment-list="formModel.attachmentList"
           :special-proof-remark="specialProofRemark"
@@ -54,7 +57,8 @@
           @open-signature="emit('open-signature')"
           @clear-signature="emit('clear-signature')"
           @upload-sign="emit('upload-sign', $event)"
-          @before-image="emit('before-image', $event)" />
+          @before-image="emit('before-image', $event)"
+        />
       </el-form>
     </main>
   </div>

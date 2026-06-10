@@ -25,7 +25,8 @@
           v-if="!parentUnlocked && canViewParentInfo"
           size="small"
           plain
-          @click="parentUnlocked = true">
+          @click="parentUnlocked = true"
+        >
           {{ $t('schoolDoctor.studentRecord.parentUnlock') }}
         </el-button>
       </div>

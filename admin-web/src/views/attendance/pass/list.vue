@@ -21,7 +21,8 @@
       :submit-text="$t('member.search')"
       :reset-text="$t('member.reset')"
       @search="search"
-      @reset="reset" />
+      @reset="reset"
+    />
 
     <UniDataTable
       ref="tableRef"
@@ -36,19 +37,22 @@
       :action-column="{ width: 150, fixed: 'right' }"
       @load-success="tableEmpty.onLoadSuccess"
       @request-error="tableEmpty.onRequestError"
-      @selection-change="onSelectionChange">
+      @selection-change="onSelectionChange"
+    >
       <template #toolbar>
         <el-button
           v-if="hasPermission('pass-generated-batch')"
           :disabled="selection.length === 0"
-          @click="openBatch">
+          @click="openBatch"
+        >
           {{ $t('attendance.holidayPass.batchGenerate') }}
         </el-button>
         <el-button
           v-if="hasPermission('pass-delete')"
           type="danger"
           :disabled="selection.length === 0"
-          @click="batchDelete">
+          @click="batchDelete"
+        >
           {{ $t('attendance.delete') }}
         </el-button>
       </template>
@@ -62,7 +66,8 @@
       :edit="dialogEdit"
       :batch-rows="batchPayload"
       :view-only="dialogViewOnly"
-      @success="refreshTable" />
+      @success="refreshTable"
+    />
   </section>
 </template>
 

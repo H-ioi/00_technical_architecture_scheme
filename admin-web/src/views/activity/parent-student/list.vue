@@ -16,7 +16,8 @@
       :submit-text="$t('activity.search')"
       :reset-text="$t('activity.reset')"
       @search="search"
-      @reset="reset" />
+      @reset="reset"
+    />
 
     <el-card v-loading="loading" shadow="never" class="activity-parent-student__card">
       <template #header>
@@ -46,7 +47,8 @@
         :data="studentRows"
         :loading="loading"
         :pagination="false"
-        :toolbar="{ refresh: false, columnSetting: true }" />
+        :toolbar="{ refresh: false, columnSetting: true }"
+      />
     </el-card>
 
     <el-card shadow="never" class="activity-parent-student__card">
@@ -59,7 +61,8 @@
         :data="activityRows"
         :loading="loading"
         :pagination="false"
-        :toolbar="{ refresh: false, columnSetting: true }" />
+        :toolbar="{ refresh: false, columnSetting: true }"
+      />
     </el-card>
   </section>
 </template>

@@ -4,13 +4,15 @@
     :title="drawerTitle"
     size="720px"
     destroy-on-close
-    class="regulation-form-drawer">
+    class="regulation-form-drawer"
+  >
     <div v-if="visible" v-loading="loading" class="regulation-form-drawer__body">
       <UniForm
         ref="uniFormRef"
         v-model="formModel"
         :mode="mode === 'view' ? 'view' : 'edit'"
-        :config="formCfg" />
+        :config="formCfg"
+      />
 
       <div class="regulation-form-drawer__attachment">
         <div class="regulation-form-drawer__attachment-label">
@@ -31,7 +33,8 @@
           :show-file-list="false"
           accept=".pdf,application/pdf"
           :http-request="handleUpload"
-          :before-upload="beforePdfUpload">
+          :before-upload="beforePdfUpload"
+        >
           <el-button :loading="uploading">{{ $t('schoolDoctor.common.upload') }}</el-button>
         </el-upload>
         <span v-else>--</span>

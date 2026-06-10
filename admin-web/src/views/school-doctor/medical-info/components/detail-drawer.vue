@@ -4,7 +4,8 @@
     :title="drawerTitle"
     size="1120px"
     destroy-on-close
-    class="medical-info-drawer">
+    class="medical-info-drawer"
+  >
     <div v-if="visible" v-loading="loading" class="medical-info-drawer__body">
       <FormPanel
         ref="formPanelRef"
@@ -32,7 +33,8 @@
         @open-signature="openSignature"
         @clear-signature="clearParentSignature"
         @upload-sign="handleParentSignUpload"
-        @before-image="beforeImageUpload" />
+        @before-image="beforeImageUpload"
+      />
     </div>
 
     <template v-if="mode !== 'view'" #footer>

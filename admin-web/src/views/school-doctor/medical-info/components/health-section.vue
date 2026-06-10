@@ -23,7 +23,8 @@
               type="textarea"
               :rows="4"
               :disabled="readonly"
-              :placeholder="field.placeholder" />
+              :placeholder="field.placeholder"
+            />
           </el-form-item>
         </el-col>
       </el-row>

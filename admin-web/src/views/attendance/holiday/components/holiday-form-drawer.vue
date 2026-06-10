@@ -6,13 +6,15 @@
     size="min(750px, 94vw)"
     destroy-on-close
     class="holiday-form-drawer"
-    @closed="onClosed">
+    @closed="onClosed"
+  >
     <UniForm
       ref="uniFormRef"
       v-model="form"
       mode="edit"
       class="holiday-form-drawer__form"
-      :config="holidayDrawerFormConfig">
+      :config="holidayDrawerFormConfig"
+    >
       <template #field-admissonNo>
         <el-autocomplete
           v-model="displayStudent"
@@ -22,23 +24,20 @@
           clearable
           style="width: 100%"
           @select="onStudentSelect"
-          @clear="onStudentClear" />
+          @clear="onStudentClear"
+        />
         <div v-if="studentInfo.name || studentInfo.fullName" class="holiday-form-drawer__student">
           <p>
-            <span class="label">{{ $t('attendance.studentName') }}：</span
-            >{{ studentInfo.name || studentInfo.fullName || '—' }}
+            <span class="label">{{ $t('attendance.studentName') }}：</span>{{ studentInfo.name || studentInfo.fullName || '—' }}
           </p>
           <p>
-            <span class="label">{{ $t('attendance.school') }}：</span
-            >{{ studentInfo.schoolName || studentInfo.enName || '—' }}
+            <span class="label">{{ $t('attendance.school') }}：</span>{{ studentInfo.schoolName || studentInfo.enName || '—' }}
           </p>
           <p>
-            <span class="label">{{ $t('attendance.grade') }}：</span
-            >{{ studentInfo.gradeName || studentInfo.grade || '—' }}
+            <span class="label">{{ $t('attendance.grade') }}：</span>{{ studentInfo.gradeName || studentInfo.grade || '—' }}
           </p>
           <p>
-            <span class="label">{{ $t('attendance.className') }}：</span
-            >{{ studentInfo.formCode || '—' }}
+            <span class="label">{{ $t('attendance.className') }}：</span>{{ studentInfo.formCode || '—' }}
           </p>
         </div>
       </template>
@@ -59,7 +58,8 @@
           :end-placeholder="$t('attendance.endDate')"
           value-format="YYYY-MM-DD HH:mm"
           format="YYYY-MM-DD HH:mm"
-          style="width: 100%" />
+          style="width: 100%"
+        />
         <el-date-picker
           v-else-if="form.fixed === '101'"
           v-model="form.dateRange"
@@ -69,7 +69,8 @@
           :end-placeholder="$t('attendance.endDate')"
           value-format="YYYY-MM-DD"
           format="YYYY-MM-DD"
-          style="width: 100%" />
+          style="width: 100%"
+        />
       </template>
       <template #field-weekDays>
         <el-checkbox-group v-model="form.weekDays">
@@ -87,7 +88,8 @@
           :end-placeholder="$t('attendance.holiday.timeEnd')"
           value-format="HH:mm"
           format="HH:mm"
-          style="width: 100%" />
+          style="width: 100%"
+        />
       </template>
       <template #field-attachments>
         <el-upload
@@ -96,7 +98,8 @@
           accept="image/jpeg,image/png,image/jpg"
           :before-upload="beforeUpload"
           :on-remove="onRemove"
-          :on-preview="onPreview">
+          :on-preview="onPreview"
+        >
           <el-icon><Plus /></el-icon>
         </el-upload>
       </template>
@@ -115,7 +118,7 @@
     </template>
 
     <el-dialog v-model="previewVisible" append-to-body title="">
-      <img v-if="previewUrl" :src="previewUrl" alt="" style="width: 100%" />
+      <img v-if="previewUrl" :src="previewUrl" alt="" style="width: 100%">
     </el-dialog>
   </el-drawer>
 </template>

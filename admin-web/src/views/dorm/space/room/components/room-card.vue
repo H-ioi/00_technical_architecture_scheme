@@ -2,7 +2,8 @@
   <el-card
     shadow="hover"
     class="dorm-room-card"
-    :class="genderCardBgClass(room.gender)">
+    :class="genderCardBgClass(room.gender)"
+  >
     <template #header>
       <div class="dorm-room-card__header">
         <span class="dorm-room-card__title">
@@ -10,7 +11,8 @@
           <span
             v-if="[0, 1, 2].includes(Number(room.occupancy_status))"
             class="dorm-room-card__occupancy"
-            :class="`dorm-room-card__occupancy--${room.occupancy_status}`">
+            :class="`dorm-room-card__occupancy--${room.occupancy_status}`"
+          >
             {{ occupancyStatusText(room.occupancy_status) }}
           </span>
         </span>
@@ -19,40 +21,44 @@
           :active-value="1"
           :inactive-value="0"
           active-color="#9CD1A0"
-          @change="onStatusChange" />
+          @change="onStatusChange"
+        />
       </div>
     </template>
 
     <div class="dorm-room-card__body">
       <div class="dorm-room-card__row dorm-room-card__row--split">
-        <span>{{ $t('dorm.room.fieldCreatedAt') }}：{{ room.created_at || '�? }}</span>
-        <span>{{ $t('dorm.room.fieldUpdatedAt') }}：{{ room.updated_at || '�? }}</span>
+        <span>{{ $t('dorm.room.fieldCreatedAt') }}：{{ room.created_at || '--' }}</span>
+        <span>{{ $t('dorm.room.fieldUpdatedAt') }}：{{ room.updated_at || '--' }}</span>
       </div>
       <div class="dorm-room-card__row">
-        <span>{{ $t('dorm.room.fieldCampus') }}�?/span>
+        <span>{{ $t('dorm.room.fieldCampus') }}：</span>
         <span>{{ campusName }}</span>
       </div>
       <div class="dorm-room-card__row dorm-room-card__row--split">
         <span>
-          {{ $t('dorm.room.fieldProject') }}�?          <el-tooltip
+          {{ $t('dorm.room.fieldProject') }}：
+          <el-tooltip
             v-if="room.project?.name && room.project.name.length > 30"
             :content="room.project.name"
-            placement="top">
+            placement="top"
+          >
             <span>{{ room.project.name.slice(0, 30) }}...</span>
           </el-tooltip>
-          <span v-else>{{ room.project?.name || '�? }}</span>
+          <span v-else>{{ room.project?.name || '--' }}</span>
         </span>
-        <span>{{ $t('dorm.room.fieldBedCount') }}：{{ room.bed_usage_ratio || '�? }}</span>
+        <span>{{ $t('dorm.room.fieldBedCount') }}：{{ room.bed_usage_ratio || '--' }}</span>
       </div>
       <div class="dorm-room-card__row">
-        <span>{{ $t('dorm.room.fieldStudents') }}�?/span>
+        <span>{{ $t('dorm.room.fieldStudents') }}：</span>
         <el-tooltip
           v-if="room.student_names && room.student_names.length > 60"
           :content="room.student_names"
-          placement="top">
+          placement="top"
+        >
           <span>{{ room.student_names.slice(0, 60) }}...</span>
         </el-tooltip>
-        <span v-else>{{ room.student_names || '�? }}</span>
+        <span v-else>{{ room.student_names || '--' }}</span>
       </div>
     </div>
 
@@ -62,7 +68,8 @@
         v-uni-permission="'room-assignment'"
         type="primary"
         link
-        @click="emit('assign', room)">
+        @click="emit('assign', room)"
+      >
         {{ $t('dorm.room.assignBeds') }}
       </el-button>
       <el-button v-uni-permission="'room-edit'" type="warning" link @click="emit('edit', room)">
@@ -97,10 +104,10 @@ const { t } = useUniI18n()
 
 const campusName = computed(
   () =>
-    props.floor.building?.school?.en_name || props.floor.building?.school?.cn_name || '�?
+    props.floor.building?.school?.en_name || props.floor.building?.school?.cn_name || '--'
 )
 
-/** 与旧版一致：gender 1/2 与卡片底�?class 映射与表单标签相�?*/
+/** 与旧版一致：gender 1/2 与卡片底部 class 映射与表单标签相反 */
 function genderCardBgClass(gender?: string | number) {
   if (String(gender) === '1') {
     return 'dorm-room-card--female-bg'

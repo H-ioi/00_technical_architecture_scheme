@@ -26,14 +26,16 @@
       type="file"
       accept=".xlsx,.xls"
       class="school-bus-student-order__file"
-      @change="onImportFile" />
+      @change="onImportFile"
+    >
 
     <el-alert
       v-if="commonDataError"
       class="school-bus-student-order__cascade-alert"
       type="warning"
       :closable="false"
-      show-icon>
+      show-icon
+    >
       <template #default>
         <span>{{ $t('schoolBus.cascadeOptionsLoadFail') }}</span>
         <el-button type="primary" link @click="reloadCommonData">
@@ -51,7 +53,8 @@
       :submit-text="$t('schoolBus.search')"
       :reset-text="$t('schoolBus.reset')"
       @search="search"
-      @reset="reset" />
+      @reset="reset"
+    />
 
     <UniDataTable
       ref="tableRef"
@@ -66,13 +69,15 @@
       :action-column="{ width: 110, fixed: 'right' }"
       @selection-change="onSelectionChange"
       @load-success="tableEmpty.onLoadSuccess"
-      @request-error="tableEmpty.onRequestError">
+      @request-error="tableEmpty.onRequestError"
+    >
       <template #toolbar>
         <el-button
           v-uni-permission="'busorder_del'"
           type="danger"
           :disabled="selection.length === 0"
-          @click="del">
+          @click="del"
+        >
           {{ $t('schoolBus.delete') }}
         </el-button>
       </template>
@@ -91,7 +96,8 @@
       :school-options="schoolOptions"
       :default-school-id="defaultSingleSchoolId"
       :multi-school="multiSchool"
-      @saved="refreshTable" />
+      @saved="refreshTable"
+    />
   </section>
 </template>
 

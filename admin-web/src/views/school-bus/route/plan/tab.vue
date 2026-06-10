@@ -20,7 +20,8 @@
         <el-button
           v-uni-permission="'bussection_add'"
           type="primary"
-          @click="((termEditingId = null), (termFormVisible = true))">
+          @click="((termEditingId = null), (termFormVisible = true))"
+        >
           {{ $t('schoolBus.routePlan.addTerm') }}
         </el-button>
       </div>
@@ -34,7 +35,8 @@
         <el-button
           v-uni-permission="'busstation_add'"
           type="primary"
-          @click="((stationEditingId = null), (stationFormVisible = true))">
+          @click="((stationEditingId = null), (stationFormVisible = true))"
+        >
           {{ $t('schoolBus.routePlan.addStation') }}
         </el-button>
       </div>
@@ -45,13 +47,15 @@
       type="file"
       accept=".xlsx,.xls"
       class="school-bus-route-plan__file"
-      @change="onRouteImportFile" />
+      @change="onRouteImportFile"
+    >
     <input
       ref="stationFileRef"
       type="file"
       accept=".xlsx,.xls"
       class="school-bus-route-plan__file"
-      @change="onStationImportFile" />
+      @change="onStationImportFile"
+    >
 
     <el-tabs v-model="activeTab" class="school-bus-route-plan__tabs">
       <el-tab-pane :label="$t('schoolBus.routePlan.tabRoutes')" name="routes">
@@ -64,7 +68,8 @@
           :submit-text="$t('schoolBus.search')"
           :reset-text="$t('schoolBus.reset')"
           @search="searchRoutes"
-          @reset="resetRouteSearch" />
+          @reset="resetRouteSearch"
+        />
         <UniDataTable
           ref="routesTableRef"
           row-key="id"
@@ -78,19 +83,22 @@
           :action-column="{ width: 110, fixed: 'right' }"
           @selection-change="onRouteSelectionChange"
           @load-success="routeTableEmpty.onLoadSuccess"
-          @request-error="routeTableEmpty.onRequestError">
+          @request-error="routeTableEmpty.onRequestError"
+        >
           <template #toolbar>
             <el-button
               v-uni-permission="ROUTE_LINE_COPY_PERMISSIONS"
               :disabled="routeSelectedIds.length === 0"
-              @click="copySelected">
+              @click="copySelected"
+            >
               {{ $t('schoolBus.routePlan.copyRoute') }}
             </el-button>
             <el-button
               v-uni-permission="'busline_del'"
               type="danger"
               :disabled="routeSelectedIds.length === 0"
-              @click="deleteSelected">
+              @click="deleteSelected"
+            >
               {{ $t('schoolBus.delete') }}
             </el-button>
           </template>
@@ -98,7 +106,8 @@
             <ListTableEmpty
               :kind="routeTableEmpty.kind"
               @reset="resetRouteSearch"
-              @retry="routeTableEmpty.retry" />
+              @retry="routeTableEmpty.retry"
+            />
           </template>
         </UniDataTable>
       </el-tab-pane>
@@ -112,7 +121,8 @@
           :submit-text="$t('schoolBus.search')"
           :reset-text="$t('schoolBus.reset')"
           @search="searchTerms"
-          @reset="resetTermSearch" />
+          @reset="resetTermSearch"
+        />
         <UniDataTable
           ref="termTableRef"
           row-key="id"
@@ -126,13 +136,15 @@
           :action-column="{ width: 110, fixed: 'right' }"
           @selection-change="onTermSelectionChange"
           @load-success="termTableEmpty.onLoadSuccess"
-          @request-error="termTableEmpty.onRequestError">
+          @request-error="termTableEmpty.onRequestError"
+        >
           <template #toolbar>
             <el-button
               v-uni-permission="'bussection_del'"
               type="danger"
               :disabled="termSelectedIds.length === 0"
-              @click="deleteTermsSelected">
+              @click="deleteTermsSelected"
+            >
               {{ $t('schoolBus.delete') }}
             </el-button>
           </template>
@@ -140,7 +152,8 @@
             <ListTableEmpty
               :kind="termTableEmpty.kind"
               @reset="resetTermSearch"
-              @retry="termTableEmpty.retry" />
+              @retry="termTableEmpty.retry"
+            />
           </template>
         </UniDataTable>
       </el-tab-pane>
@@ -154,7 +167,8 @@
           :submit-text="$t('schoolBus.search')"
           :reset-text="$t('schoolBus.reset')"
           @search="searchStations"
-          @reset="resetStationSearch" />
+          @reset="resetStationSearch"
+        />
         <UniDataTable
           ref="stationTableRef"
           row-key="id"
@@ -168,13 +182,15 @@
           :action-column="{ width: 110, fixed: 'right' }"
           @selection-change="onStationSelectionChange"
           @load-success="stationTableEmpty.onLoadSuccess"
-          @request-error="stationTableEmpty.onRequestError">
+          @request-error="stationTableEmpty.onRequestError"
+        >
           <template #toolbar>
             <el-button
               v-uni-permission="'busstation_del'"
               type="danger"
               :disabled="stationSelectedIds.length === 0"
-              @click="deleteStationsSelected">
+              @click="deleteStationsSelected"
+            >
               {{ $t('schoolBus.delete') }}
             </el-button>
           </template>
@@ -182,7 +198,8 @@
             <ListTableEmpty
               :kind="stationTableEmpty.kind"
               @reset="resetStationSearch"
-              @retry="stationTableEmpty.retry" />
+              @retry="stationTableEmpty.retry"
+            />
           </template>
         </UniDataTable>
       </el-tab-pane>
@@ -192,7 +209,8 @@
       ref="routeFormRef"
       :school-records="schoolRecords"
       :locale="locale()"
-      @saved="() => routesTableRef?.value?.refresh?.()" />
+      @saved="() => routesTableRef?.value?.refresh?.()"
+    />
 
     <TermFormDialog
       v-model="termFormVisible"
@@ -200,7 +218,8 @@
       :school-records="schoolRecords"
       :default-school-id="defaultSchoolId"
       :multi-school="multiSchool"
-      @saved="() => termTableRef?.value?.refresh?.()" />
+      @saved="() => termTableRef?.value?.refresh?.()"
+    />
 
     <StationFormDialog
       v-model="stationFormVisible"
@@ -208,14 +227,16 @@
       :school-records="schoolRecords"
       :default-school-id="defaultSchoolId"
       :multi-school="multiSchool"
-      @saved="() => stationTableRef?.value?.refresh?.()" />
+      @saved="() => stationTableRef?.value?.refresh?.()"
+    />
 
     <el-dialog v-model="detailVisible" width="900px" :title="$t('schoolBus.look')">
       <el-descriptions v-if="detailRecord" :column="2" border>
         <el-descriptions-item
           v-for="col in routeColumns"
           :key="String(col.prop)"
-          :label="col.label">
+          :label="col.label"
+        >
           {{ detailCellText(detailRecord, col.prop) }}
         </el-descriptions-item>
       </el-descriptions>
@@ -234,7 +255,8 @@
         <el-descriptions-item
           v-for="col in stationColumns"
           :key="String(col.prop)"
-          :label="col.label">
+          :label="col.label"
+        >
           {{ detailCellText(stationDetailRecord, col.prop) }}
         </el-descriptions-item>
       </el-descriptions>

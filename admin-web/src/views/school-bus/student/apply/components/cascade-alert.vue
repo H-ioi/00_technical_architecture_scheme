@@ -3,7 +3,8 @@
     class="school-bus-student-apply__cascade-alert"
     type="warning"
     :closable="false"
-    show-icon>
+    show-icon
+  >
     <template #default>
       <span>{{ $t('schoolBus.cascadeOptionsLoadFail') }}</span>
       <el-button type="primary" link @click="emit('retry')">

@@ -12,7 +12,8 @@
         :remote-method="remoteSearch"
         :loading="loading"
         @change="handleSelectChange"
-        @clear="handleClear">
+        @clear="handleClear"
+      >
         <el-option v-for="item in options" :key="studentKey(item)" :label="optionLabel(item)" :value="studentKey(item)" />
       </el-select>
     </el-form-item>

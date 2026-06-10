@@ -6,7 +6,8 @@
     size="min(880px, 96vw)"
     destroy-on-close
     class="email-group-drawer"
-    append-to-body>
+    append-to-body
+  >
     <div class="email-group-drawer__body">
       <div class="email-group-drawer__sheet">
         <!-- 顶部：类邮件元数据 -->
@@ -49,24 +50,28 @@
               clearable
               filterable
               :placeholder="$t('email.group.selectSchool')"
-              class="email-group-drawer__field email-group-drawer__field--school">
+              class="email-group-drawer__field email-group-drawer__field--school"
+            >
               <el-option
                 v-for="s in schoolList"
                 :key="String(s.enName)"
                 :label="String(s.enName ?? s.name)"
-                :value="String(s.enName ?? s.name)" />
+                :value="String(s.enName ?? s.name)"
+              />
             </el-select>
             <el-input
               v-model="form.admissionNo"
               clearable
               :placeholder="$t('email.group.nameOrNoPlaceholder')"
               class="email-group-drawer__field email-group-drawer__field--grow"
-              @keyup.enter="searchStudent" />
+              @keyup.enter="searchStudent"
+            />
             <el-button
               type="primary"
               class="email-group-drawer__search-btn"
               :loading="searchLoading"
-              @click="searchStudent">
+              @click="searchStudent"
+            >
               {{ $t('email.group.searchStudent') }}
             </el-button>
           </div>
@@ -80,19 +85,23 @@
               border
               size="small"
               class="email-group-drawer__table"
-              max-height="240">
+              max-height="240"
+            >
               <el-table-column
                 prop="schoolName"
                 :label="$t('email.group.colSchool')"
-                min-width="120" />
+                min-width="120"
+              />
               <el-table-column
                 prop="admissionNo"
                 :label="$t('email.group.colAdmission')"
-                width="100" />
+                width="100"
+              />
               <el-table-column
                 prop="studentShowName"
                 :label="$t('email.group.colStudentName')"
-                min-width="100" />
+                min-width="100"
+              />
               <el-table-column prop="grade" :label="$t('email.group.colGrade')" width="88" />
               <el-table-column :label="$t('email.add')" width="88" fixed="right">
                 <template #default="{ row }">
@@ -114,12 +123,14 @@
               filterable
               :placeholder="$t('email.group.selectSchool')"
               class="email-group-drawer__grid-item"
-              @change="(v: string) => handleSchoolChange(v)">
+              @change="(v: string) => handleSchoolChange(v)"
+            >
               <el-option
                 v-for="s in schoolList"
                 :key="String(s.enName)"
                 :label="String(s.enName ?? s.name)"
-                :value="String(s.enName ?? s.name)" />
+                :value="String(s.enName ?? s.name)"
+              />
             </el-select>
             <el-select
               v-model="form.rangeGrade"
@@ -129,12 +140,14 @@
               collapse-tags
               collapse-tags-tooltip
               :placeholder="$t('email.group.selectGrade')"
-              class="email-group-drawer__grid-item">
+              class="email-group-drawer__grid-item"
+            >
               <el-option
                 v-for="g in gradeList"
                 :key="JSON.stringify(g)"
                 :label="gradeOption(g).label"
-                :value="gradeOption(g).value" />
+                :value="gradeOption(g).value"
+              />
             </el-select>
             <el-select
               v-if="divisionList.length"
@@ -142,7 +155,8 @@
               clearable
               filterable
               :placeholder="$t('email.group.selectDivision')"
-              class="email-group-drawer__grid-item">
+              class="email-group-drawer__grid-item"
+            >
               <el-option v-for="d in divisionList" :key="d" :label="d" :value="d" />
             </el-select>
             <el-select
@@ -151,14 +165,16 @@
               clearable
               filterable
               :placeholder="$t('email.group.selectCollege')"
-              class="email-group-drawer__grid-item">
+              class="email-group-drawer__grid-item"
+            >
               <el-option v-for="c in boardingHouseList" :key="c" :label="c" :value="c" />
             </el-select>
             <el-select
               v-model="form.rangeBus"
               clearable
               :placeholder="$t('email.group.takeBus')"
-              class="email-group-drawer__grid-item">
+              class="email-group-drawer__grid-item"
+            >
               <el-option :label="$t('email.yes')" value="yes" />
               <el-option :label="$t('email.no')" value="no" />
             </el-select>
@@ -166,7 +182,8 @@
               v-model="form.rangeDorm"
               clearable
               :placeholder="$t('email.group.dorm')"
-              class="email-group-drawer__grid-item">
+              class="email-group-drawer__grid-item"
+            >
               <el-option :label="$t('email.yes')" value="yes" />
               <el-option :label="$t('email.no')" value="no" />
             </el-select>
@@ -176,7 +193,8 @@
               :range-separator="'—'"
               :start-placeholder="$t('email.group.dateStart')"
               :end-placeholder="$t('email.group.dateEnd')"
-              class="email-group-drawer__grid-item email-group-drawer__grid-item--span" />
+              class="email-group-drawer__grid-item email-group-drawer__grid-item--span"
+            />
           </div>
           <div class="email-group-drawer__range-actions">
             <el-button type="primary" @click="addRange">{{ $t('email.group.addRange') }}</el-button>
@@ -203,7 +221,8 @@
               effect="plain"
               closable
               :title="lb"
-              @close="removeAt(idx)">
+              @close="removeAt(idx)"
+            >
               <span class="email-group-drawer__tag-text">{{ lb }}</span>
             </el-tag>
           </div>

@@ -4,28 +4,33 @@
     :title="title"
     width="min(1000px, 96vw)"
     destroy-on-close
-    class="content-discussion-form-dialog">
+    class="content-discussion-form-dialog"
+  >
     <div
       v-loading="detailLoading"
       class="content-discussion-form-dialog__body"
-      :element-loading-text="$t('common.loading')">
+      :element-loading-text="$t('common.loading')"
+    >
       <UniForm ref="uniFormRef" v-model="formModel" mode="edit" :config="dialogFormCfg">
         <template #field-images>
           <div class="content-discussion-form-dialog__image-grid">
             <div
               v-for="item in imageSlots"
               :key="item.field"
-              class="content-discussion-form-dialog__image-item">
+              class="content-discussion-form-dialog__image-item"
+            >
               <span class="content-discussion-form-dialog__image-label">{{ item.label }}</span>
               <el-upload
                 class="content-discussion-form-dialog__uploader"
                 :show-file-list="false"
                 accept="image/jpeg,image/png"
-                :before-upload="(file) => onBeforeImage(file, item.field)">
+                :before-upload="(file) => onBeforeImage(file, item.field)"
+              >
                 <img
                   v-if="formModel[item.field]"
                   :src="String(formModel[item.field])"
-                  class="content-discussion-form-dialog__preview" />
+                  class="content-discussion-form-dialog__preview"
+                >
                 <el-icon v-else class="content-discussion-form-dialog__plus"><Plus /></el-icon>
               </el-upload>
             </div>
@@ -39,7 +44,8 @@
             accept="application/pdf"
             :before-upload="onBeforePdfUpload"
             :on-remove="onPdfRemove"
-            :on-preview="onPreview">
+            :on-preview="onPreview"
+          >
             <el-button type="primary">{{ $t('content.discussion.upload') }}</el-button>
             <template #tip>
               <div class="el-upload__tip">{{ $t('content.discussion.uploadPdfTip') }}</div>

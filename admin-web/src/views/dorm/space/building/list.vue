@@ -20,14 +20,16 @@
       :submit-text="$t('dorm.common.search')"
       :reset-text="$t('dorm.common.reset')"
       @search="onSearch"
-      @reset="onReset" />
+      @reset="onReset"
+    />
 
     <div v-loading="listLoading" class="dorm-building-page__cards">
       <el-card
         v-for="item in dataList"
         :key="item.id"
         shadow="hover"
-        class="dorm-building-page__card">
+        class="dorm-building-page__card"
+      >
         <template #header>
           <div class="dorm-building-page__card-header">
             <span class="dorm-building-page__card-title">{{ item.name }}</span>
@@ -36,7 +38,8 @@
               :active-value="1"
               :inactive-value="0"
               active-color="#9CD1A0"
-              @change="() => onStatusChange(item)" />
+              @change="() => onStatusChange(item)"
+            />
           </div>
         </template>
 
@@ -72,7 +75,8 @@
           <el-progress
             :percentage="occupancyPercent(item)"
             :show-text="false"
-            class="dorm-building-page__progress" />
+            class="dorm-building-page__progress"
+          />
         </div>
 
         <div class="dorm-building-page__card-footer">
@@ -80,14 +84,16 @@
             v-uni-permission="'building-edit'"
             type="warning"
             link
-            @click="openForm('edit', item)">
+            @click="openForm('edit', item)"
+          >
             {{ $t('dorm.common.edit') }}
           </el-button>
           <el-button
             v-uni-permission="'building-delete'"
             type="danger"
             link
-            @click="removeBuilding(item)">
+            @click="removeBuilding(item)"
+          >
             {{ $t('dorm.common.delete') }}
           </el-button>
         </div>
@@ -104,7 +110,8 @@
         :total="paginationTotal"
         :page-sizes="[10, 20, 50]"
         @current-change="fetchList"
-        @size-change="onPageSizeChange" />
+        @size-change="onPageSizeChange"
+      />
     </div>
 
     <BuildingFormDialog
@@ -113,7 +120,8 @@
       :record-id="activeId"
       :school-options="schoolOptions"
       :default-school-id="defaultSchoolId ?? undefined"
-      @saved="fetchList" />
+      @saved="fetchList"
+    />
   </section>
 </template>
 

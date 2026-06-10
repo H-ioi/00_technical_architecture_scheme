@@ -10,7 +10,8 @@
             :with-drug-allergy="true"
             :school-records="schoolRecords"
             @select="onStudentSelect"
-            @clear="onStudentClear" />
+            @clear="onStudentClear"
+          />
         </div>
       </aside>
 
@@ -27,7 +28,8 @@
                       type="datetime"
                       value-format="YYYY-MM-DD HH:mm:ss"
                       :disabled="isOperationDisabled"
-                      style="width: 100%" />
+                      style="width: 100%"
+                    />
                     <el-button v-if="!isOperationDisabled" type="primary" link @click="setNow('visitTime')">
                       {{ $t('schoolDoctor.visitRecord.now') }}
                     </el-button>
@@ -42,7 +44,8 @@
                       type="datetime"
                       value-format="YYYY-MM-DD HH:mm:ss"
                       :disabled="isLookMode"
-                      style="width: 100%" />
+                      style="width: 100%"
+                    />
                     <el-button v-if="!isLookMode" type="primary" link @click="setNow('leaveTime')">
                       {{ $t('schoolDoctor.visitRecord.now') }}
                     </el-button>
@@ -80,7 +83,8 @@
                 :show-file-list="false"
                 accept=".pdf,.png,.jpg,.jpeg,.docx"
                 :http-request="handleUpload"
-                :before-upload="beforeUpload">
+                :before-upload="beforeUpload"
+              >
                 <div class="visit-form__upload">{{ $t('schoolDoctor.visitRecord.uploadDrag') }}</div>
               </el-upload>
             </el-form-item>
@@ -92,7 +96,8 @@
                     clearable
                     style="width: 100%"
                     :disabled="isOperationDisabled"
-                    :placeholder="$t('schoolDoctor.visitRecord.phLeaveDestinationSelect')">
+                    :placeholder="$t('schoolDoctor.visitRecord.phLeaveDestinationSelect')"
+                  >
                     <el-option v-for="item in leaveOptions" :key="item.value" :label="item.label" :value="item.value" />
                   </el-select>
                 </el-form-item>
@@ -130,7 +135,8 @@
               type="primary"
               link
               :loading="parentReceiptRefreshing"
-              @click="emit('refresh-parent-receipt')">
+              @click="emit('refresh-parent-receipt')"
+            >
               {{ $t('schoolDoctor.visitRecord.refresh') }}
             </el-button>
           </div>

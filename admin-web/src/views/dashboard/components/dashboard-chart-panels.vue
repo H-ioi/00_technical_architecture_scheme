@@ -177,7 +177,8 @@ onUnmounted(disposeAll)
           ref="trendEl"
           class="dash-panels__chart"
           role="img"
-          :aria-label="t('dashboard.chartAttendanceTrend')" />
+          :aria-label="t('dashboard.chartAttendanceTrend')"
+        />
       </el-card>
       <el-card shadow="never" class="dash-panels__card">
         <div
@@ -185,7 +186,8 @@ onUnmounted(disposeAll)
           ref="mixEl"
           class="dash-panels__chart"
           role="img"
-          :aria-label="t('dashboard.chartMemberMix')" />
+          :aria-label="t('dashboard.chartMemberMix')"
+        />
         <div v-else class="dash-panels__empty">{{ t('dashboard.chartEmptyMix') }}</div>
       </el-card>
       <el-card shadow="never" class="dash-panels__card">
@@ -193,7 +195,8 @@ onUnmounted(disposeAll)
           ref="backlogEl"
           class="dash-panels__chart"
           role="img"
-          :aria-label="t('dashboard.chartBacklog')" />
+          :aria-label="t('dashboard.chartBacklog')"
+        />
       </el-card>
     </div>
 
@@ -203,14 +206,16 @@ onUnmounted(disposeAll)
           ref="workflowEl"
           class="dash-panels__chart dash-panels__chart--short"
           role="img"
-          :aria-label="t('dashboard.chartWorkflowLoad')" />
+          :aria-label="t('dashboard.chartWorkflowLoad')"
+        />
       </el-card>
       <el-card shadow="never" class="dash-panels__card">
         <div
           ref="leaveDomainEl"
           class="dash-panels__chart dash-panels__chart--short"
           role="img"
-          :aria-label="t('dashboard.chartLeaveDomain')" />
+          :aria-label="t('dashboard.chartLeaveDomain')"
+        />
       </el-card>
     </div>
   </div>

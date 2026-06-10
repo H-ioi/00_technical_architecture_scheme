@@ -4,7 +4,8 @@
     :title="drawerTitle"
     size="1120px"
     destroy-on-close
-    class="pending-drawer">
+    class="pending-drawer"
+  >
     <div v-if="visible" v-loading="loading" class="pending-drawer__body">
       <PendingDetailPanel
         ref="panelRef"
@@ -15,7 +16,8 @@
         :operation-readonly="mode === 'view'"
         :school-records="schoolRecords"
         @view-operation="openOperationDialog('view', $event)"
-        @edit-operation="openOperationDialog('edit', $event)" />
+        @edit-operation="openOperationDialog('edit', $event)"
+      />
     </div>
 
     <template v-if="mode === 'operate'" #footer>

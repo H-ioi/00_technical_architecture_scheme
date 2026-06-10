@@ -9,7 +9,8 @@
       :submit-text="$t('activity.search')"
       :reset-text="$t('activity.reset')"
       @search="search"
-      @reset="reset" />
+      @reset="reset"
+    />
     <UniDataTable
       ref="tableRef"
       row-key="id"
@@ -20,7 +21,8 @@
       :toolbar="{ refresh: true, columnSetting: true }"
       :actions="actions"
       :action-column="{ width: 100, fixed: 'right' }"
-      @load-success="handleLoadSuccess" />
+      @load-success="handleLoadSuccess"
+    />
 
     <el-dialog
       v-model="dialogVisible"
@@ -29,7 +31,8 @@
       append-to-body
       destroy-on-close
       :close-on-click-modal="false"
-      @closed="resetDialog">
+      @closed="resetDialog"
+    >
       <UniForm ref="formRef" v-model="formModel" mode="edit" :config="formCfg" />
       <template #footer>
         <el-button @click="dialogVisible = false">{{ $t('common.cancel') }}</el-button>

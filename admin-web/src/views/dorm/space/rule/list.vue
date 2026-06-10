@@ -20,7 +20,8 @@
       :submit-text="$t('dorm.common.search')"
       :reset-text="$t('dorm.common.reset')"
       @search="search"
-      @reset="onReset" />
+      @reset="onReset"
+    />
 
     <UniDataTable
       ref="tableRef"
@@ -35,13 +36,15 @@
       :action-column="{ width: 100, fixed: 'right' }"
       @selection-change="onSelectionChange"
       @load-success="tableEmpty.onLoadSuccess"
-      @request-error="tableEmpty.onRequestError">
+      @request-error="tableEmpty.onRequestError"
+    >
       <template #toolbar>
         <el-button
           v-uni-permission="'rule-delete'"
           type="danger"
           :disabled="selectedIds.length === 0"
-          @click="removeBatch">
+          @click="removeBatch"
+        >
           {{ $t('dorm.common.delete') }}
         </el-button>
       </template>
@@ -56,7 +59,8 @@
       :record-id="activeId"
       :school-options="schoolOptions"
       :default-school-id="defaultSchoolId ?? undefined"
-      @saved="refreshTable" />
+      @saved="refreshTable"
+    />
   </section>
 </template>
 

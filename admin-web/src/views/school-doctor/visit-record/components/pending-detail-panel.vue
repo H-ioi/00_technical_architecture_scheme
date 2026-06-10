@@ -8,7 +8,8 @@
             ref="studentSelectRef"
             readonly
             :with-drug-allergy="true"
-            :school-records="schoolRecords" />
+            :school-records="schoolRecords"
+          />
         </div>
         <div v-if="allergyList.length" class="pending-detail__card pending-detail__card--warn">
           <h3>{{ $t('schoolDoctor.visitRecord.sectionAllergy') }}</h3>

@@ -4,7 +4,8 @@
       @export="exportData"
       @download-template="downloadImportTemplate"
       @add="openForm('add')"
-      @import-file="onImportFile" />
+      @import-file="onImportFile"
+    />
 
     <UniSearchForm
       v-model="queryModel"
@@ -15,7 +16,8 @@
       :submit-text="$t('schoolBus.search')"
       :reset-text="$t('schoolBus.reset')"
       @search="search"
-      @reset="reset" />
+      @reset="reset"
+    />
 
     <UniDataTable
       ref="tableRef"
@@ -30,13 +32,15 @@
       :action-column="{ width: 110, fixed: 'right' }"
       @selection-change="onSelectionChange"
       @load-success="tableEmpty.onLoadSuccess"
-      @request-error="tableEmpty.onRequestError">
+      @request-error="tableEmpty.onRequestError"
+    >
       <template #toolbar>
         <el-button
           v-uni-permission="'busexception_del'"
           type="danger"
           :disabled="ids.length === 0"
-          @click="del">
+          @click="del"
+        >
           {{ $t('schoolBus.delete') }}
         </el-button>
       </template>
@@ -51,7 +55,8 @@
       :source="activeRow"
       :default-school-id="defaultSchoolId"
       :school-records="schoolRecords"
-      @saved="refreshTable" />
+      @saved="refreshTable"
+    />
 
     <ExceptionDetailDialog ref="detailDialogRef" :columns="columns" />
   </section>

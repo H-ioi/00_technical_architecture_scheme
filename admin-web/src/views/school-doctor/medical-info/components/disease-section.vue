@@ -27,12 +27,14 @@
               clearable
               filterable
               :placeholder="$t('schoolDoctor.common.select')"
-              @change="emit('disease-change', disease)">
+              @change="emit('disease-change', disease)"
+            >
               <el-option
                 v-for="item in diseaseOptions"
                 :key="item.id"
                 :label="item.cnName || item.name"
-                :value="item.id" />
+                :value="item.id"
+              />
             </el-select>
           </el-form-item>
         </el-col>
@@ -40,13 +42,15 @@
           <el-form-item
             :prop="`diseaseList.${index}.conditionStatus`"
             :rules="diseaseRules.conditionStatus"
-            :label="$t('schoolDoctor.studentRecord.diseaseCondition')">
+            :label="$t('schoolDoctor.studentRecord.diseaseCondition')"
+          >
             <el-select
               v-model="disease.conditionStatus"
               style="width: 100%"
               :disabled="readonly"
               clearable
-              :placeholder="$t('schoolDoctor.common.select')">
+              :placeholder="$t('schoolDoctor.common.select')"
+            >
               <el-option :label="$t('schoolDoctor.studentRecord.conditionRecovered')" :value="1" />
               <el-option :label="$t('schoolDoctor.studentRecord.conditionOccasional')" :value="2" />
               <el-option :label="$t('schoolDoctor.studentRecord.conditionFrequent')" :value="3" />
@@ -57,13 +61,15 @@
           <el-form-item
             :prop="`diseaseList.${index}.needRegularMedicationSchool`"
             :rules="diseaseRules.needRegularMedicationSchool"
-            :label="$t('schoolDoctor.medicalInfo.needSchoolMedication')">
+            :label="$t('schoolDoctor.medicalInfo.needSchoolMedication')"
+          >
             <el-select
               v-model="disease.needRegularMedicationSchool"
               style="width: 100%"
               :disabled="readonly"
               clearable
-              :placeholder="$t('schoolDoctor.common.select')">
+              :placeholder="$t('schoolDoctor.common.select')"
+            >
               <el-option :label="$t('schoolDoctor.common.yes')" :value="1" />
               <el-option :label="$t('schoolDoctor.common.no')" :value="0" />
             </el-select>
@@ -74,7 +80,8 @@
             <el-input
               v-model="disease.diseaseNameOther"
               :disabled="readonly"
-              :placeholder="$t('schoolDoctor.medicalInfo.phOtherDisease')" />
+              :placeholder="$t('schoolDoctor.medicalInfo.phOtherDisease')"
+            />
           </el-form-item>
         </el-col>
         <el-col :span="24">
@@ -82,7 +89,8 @@
             <el-input
               v-model="disease.medicationUsage"
               :disabled="readonly"
-              :placeholder="$t('schoolDoctor.medicalInfo.medicationUsagePh')" />
+              :placeholder="$t('schoolDoctor.medicalInfo.medicationUsagePh')"
+            />
           </el-form-item>
         </el-col>
         <el-col :span="8">

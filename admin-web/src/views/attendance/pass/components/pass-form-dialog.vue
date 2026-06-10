@@ -5,14 +5,16 @@
     width="860px"
     destroy-on-close
     class="holiday-pass-dialog"
-    @closed="onClose">
+    @closed="onClose"
+  >
     <!-- 对齐旧版 passModel.vue：批量时展示选中行列表，放行方式 / 日期 / 时段 / 备注 与单行生成共用表单 -->
     <div v-if="isBatch" class="holiday-pass-dialog__batch">
       <el-table :data="batchRows" size="small" max-height="220">
         <el-table-column
           prop="studentNo"
           :label="$t('attendance.holidayPass.colStudentNo')"
-          width="120" />
+          width="120"
+        />
         <el-table-column prop="studentName" :label="$t('attendance.studentName')" width="100" />
         <el-table-column prop="studentSchool" :label="$t('attendance.school')" min-width="120" />
         <el-table-column prop="studentGrade" :label="$t('attendance.grade')" width="88" />
@@ -30,7 +32,8 @@
       v-model="form"
       :mode="viewOnly ? 'view' : 'edit'"
       class="holiday-pass-dialog__form"
-      :config="passFormConfig">
+      :config="passFormConfig"
+    >
       <template #field-studentNo>
         <div>
           <el-autocomplete
@@ -42,7 +45,8 @@
             clearable
             :disabled="viewOnly || !!form.id"
             @select="onStudentSelect"
-            @clear="onStudentClear" />
+            @clear="onStudentClear"
+          />
           <div v-if="studentLine" class="holiday-pass-dialog__hint">{{ studentLine }}</div>
         </div>
       </template>
@@ -55,7 +59,8 @@
           format="HH:mm"
           style="width: 100%"
           :start-placeholder="$t('attendance.holiday.timeStart')"
-          :end-placeholder="$t('attendance.holiday.timeEnd')" />
+          :end-placeholder="$t('attendance.holiday.timeEnd')"
+        />
       </template>
     </UniForm>
 

@@ -6,7 +6,8 @@
     destroy-on-close
     append-to-body
     :close-on-click-modal="false"
-    @closed="onClosed">
+    @closed="onClosed"
+  >
     <UniForm ref="uniFormRef" v-model="form" mode="edit" :config="formConfig" />
     <template #footer>
       <el-button @click="visible = false">{{ $t('common.cancel') }}</el-button>

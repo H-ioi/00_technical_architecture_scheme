@@ -10,17 +10,20 @@
       <el-table :data="personTableData" border size="small">
         <el-table-column
           prop="pickupRelationships"
-          :label="$t('schoolBus.studentApply.detailRelation')" />
+          :label="$t('schoolBus.studentApply.detailRelation')"
+        />
         <el-table-column
           prop="pickupPhone"
           :label="$t('schoolBus.studentApply.detailPhone')"
-          width="140" />
+          width="140"
+        />
         <el-table-column :label="$t('schoolBus.studentApply.detailPhoto')" min-width="120">
           <template #default="{ row }">
             <el-image
               v-if="row.pickupImageUrl"
               :src="String(row.pickupImageUrl)"
-              class="bus-order-form__thumb" />
+              class="bus-order-form__thumb"
+            />
             <span v-else>--</span>
           </template>
         </el-table-column>

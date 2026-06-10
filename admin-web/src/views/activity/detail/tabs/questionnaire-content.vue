@@ -2,7 +2,8 @@
   <section v-loading="activityLoading || metaLoading" class="activity-questionnaire-content">
     <el-empty
       v-if="!activityLoading && !questionnaireId"
-      :description="$t('activity.questionnaireContentEmpty')" />
+      :description="$t('activity.questionnaireContentEmpty')"
+    />
     <template v-else>
       <p v-if="subtitle" class="activity-questionnaire-content__subtitle">{{ subtitle }}</p>
       <UniDataTable
@@ -14,14 +15,16 @@
         :filters="filters"
         :pagination="{ pageSize: 10, pageSizes: [10, 20, 50, 100] }"
         :toolbar="{ refresh: true, columnSetting: true }"
-        @load-success="handleLoadSuccess">
+        @load-success="handleLoadSuccess"
+      >
         <template #toolbar>
           <el-button
             v-uni-permission="'busdriver_edit'"
             type="primary"
             plain
             :loading="exporting"
-            @click="exportAnswers">
+            @click="exportAnswers"
+          >
             {{ $t('activity.export') }}
           </el-button>
         </template>
@@ -30,12 +33,13 @@
             type="primary"
             link
             :disabled="!(row as SubmissionRowMap).__attachmentIds?.length"
-            @click="openFiles(row as SubmissionRowMap)">
+            @click="openFiles(row as SubmissionRowMap)"
+          >
             {{
               (row as SubmissionRowMap).__attachmentIds?.length
                 ? $t('activity.qSubmissionAttachOpen', {
-                    n: (row as SubmissionRowMap).__attachmentIds?.length
-                  })
+                  n: (row as SubmissionRowMap).__attachmentIds?.length
+                })
                 : '-'
             }}
           </el-button>
@@ -46,14 +50,16 @@
     <el-dialog
       v-model="fileDialogVisible"
       :title="$t('activity.qSubmissionAttachTitle')"
-      width="520px">
+      width="520px"
+    >
       <div class="activity-questionnaire-content__files">
         <el-button
           v-for="f in fileRows"
           :key="String(f.id)"
           type="primary"
           link
-          @click="downloadOne(f.id, f.originalName ?? String(f.id))">
+          @click="downloadOne(f.id, f.originalName ?? String(f.id))"
+        >
           {{ f.originalName ?? f.id }}
         </el-button>
       </div>

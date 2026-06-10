@@ -16,7 +16,8 @@
       :submit-text="$t('schoolDoctor.common.search')"
       :reset-text="$t('schoolDoctor.common.reset')"
       @search="search"
-      @reset="onReset" />
+      @reset="onReset"
+    />
 
     <UniDataTable
       ref="tableRef"
@@ -31,7 +32,8 @@
       :action-column="{ width: 120, fixed: 'right' }"
       @selection-change="onSelectionChange"
       @load-success="tableEmpty.onLoadSuccess"
-      @request-error="tableEmpty.onRequestError">
+      @request-error="tableEmpty.onRequestError"
+    >
       <template #toolbar>
         <el-button type="danger" :disabled="selectedIds.length === 0" @click="batchDelete">
           {{ $t('schoolDoctor.studentRecord.batchDelete') }}
@@ -46,7 +48,8 @@
       v-model:visible="drawerVisible"
       :mode="drawerMode"
       :record-id="activeRecordId"
-      @saved="onDrawerSaved" />
+      @saved="onDrawerSaved"
+    />
   </section>
 </template>
 

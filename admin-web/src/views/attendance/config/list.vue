@@ -19,7 +19,8 @@
       :submit-text="$t('member.search')"
       :reset-text="$t('member.reset')"
       @search="search"
-      @reset="reset" />
+      @reset="reset"
+    />
 
     <UniDataTable
       ref="tableRef"
@@ -32,7 +33,8 @@
       :actions="actions"
       :action-column="{ width: 110, fixed: 'right' }"
       @load-success="tableEmpty.onLoadSuccess"
-      @request-error="tableEmpty.onRequestError">
+      @request-error="tableEmpty.onRequestError"
+    >
       <template #empty>
         <ListTableEmpty :kind="tableEmpty.kind" @reset="reset" @retry="tableEmpty.retry" />
       </template>
@@ -45,7 +47,8 @@
       :school-options="schoolOptions"
       :department-options="departmentOptions"
       :grade-options="gradeOptions"
-      @success="onFormSuccess" />
+      @success="onFormSuccess"
+    />
   </section>
 </template>
 

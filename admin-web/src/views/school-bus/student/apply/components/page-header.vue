@@ -7,7 +7,8 @@
     <div class="uni-list-page__header-actions">
       <el-button
         v-uni-permission="'busorder_import_intention_order'"
-        @click="emit('download-template')">
+        @click="emit('download-template')"
+      >
         {{ $t('schoolBus.downloadTemplate') }}
       </el-button>
       <el-button v-uni-permission="'busorder_import_intention_order'" @click="fileRef?.click()">
@@ -24,7 +25,8 @@
     type="file"
     accept=".xlsx,.xls"
     class="school-bus-student-apply__file"
-    @change="emit('import-file', $event)" />
+    @change="emit('import-file', $event)"
+  >
 </template>
 
 <script setup lang="ts">

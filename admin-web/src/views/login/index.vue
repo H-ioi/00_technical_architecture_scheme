@@ -2,7 +2,8 @@
   <UniLoginPage
     :captcha-client="captchaClient"
     :login-request="handleLogin"
-    random-str="blockPuzzle" />
+    random-str="blockPuzzle"
+  />
 </template>
 
 <script setup lang="ts">

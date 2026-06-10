@@ -8,7 +8,8 @@
         :xs="24"
         :sm="12"
         :md="8"
-        :lg="6">
+        :lg="6"
+      >
         <article class="activity-program-cards__card">
           <header class="activity-program-cards__header">
             <div class="activity-program-cards__header-text">
@@ -19,9 +20,10 @@
             <span
               v-if="
                 Number(card.programInfo.programType) === 1 &&
-                Number(card.programInfo.programStatus) === 1
+                  Number(card.programInfo.programStatus) === 1
               "
-              class="activity-program-cards__round-badge">
+              class="activity-program-cards__round-badge"
+            >
               {{
                 isEn
                   ? `Round ${String(card.programInfo.currentRound ?? '').padStart(2, '0')}`
@@ -30,7 +32,8 @@
             </span>
             <span
               v-else-if="Number(card.programInfo.programType) !== 1"
-              class="activity-program-cards__status-badge">
+              class="activity-program-cards__status-badge"
+            >
               {{
                 Number(card.programInfo.programStatus) === 0
                   ? $t('activity.programStatusPending')
@@ -45,11 +48,13 @@
 
           <div
             v-if="Number(card.programInfo.programType) === 1"
-            class="activity-program-cards__stats">
+            class="activity-program-cards__stats"
+          >
             <div
               v-for="item in lotteryStats(card.programInfo)"
               :key="item.key"
-              :class="['activity-program-cards__stat', { 'is-active': item.active }]">
+              :class="['activity-program-cards__stat', { 'is-active': item.active }]"
+            >
               <span class="activity-program-cards__stat-label">{{ item.label }}</span>
               <strong class="activity-program-cards__stat-value">{{ item.value }}</strong>
             </div>
@@ -60,27 +65,31 @@
             :column="2"
             size="small"
             border
-            class="activity-program-cards__desc">
+            class="activity-program-cards__desc"
+          >
             <el-descriptions-item label="ID">{{ card.programInfo.id ?? '-' }}</el-descriptions-item>
             <el-descriptions-item :label="$t('activity.programType')">
               {{ programTypeText(card.programInfo.programType) }}
             </el-descriptions-item>
             <el-descriptions-item
               v-if="Number(card.programInfo.programType) === 2"
-              :label="$t('activity.winnerQuota')">
+              :label="$t('activity.winnerQuota')"
+            >
               {{ ruleObj(card.programInfo).prizeCount ?? '-' }}
             </el-descriptions-item>
           </el-descriptions>
 
           <section
             v-if="programRuleTags(card.programInfo).length"
-            class="activity-program-cards__block">
+            class="activity-program-cards__block"
+          >
             <h4 class="activity-program-cards__block-title">{{ $t('activity.programRules') }}</h4>
             <div class="activity-program-cards__tags">
               <span
                 v-for="(tag, index) in programRuleTags(card.programInfo)"
                 :key="`${card.programInfo.id}-rule-${index}`"
-                :class="['activity-program-cards__tag', `is-${tag.tone}`]">
+                :class="['activity-program-cards__tag', `is-${tag.tone}`]"
+              >
                 {{ tag.text }}
               </span>
             </div>
@@ -88,7 +97,8 @@
 
           <section
             v-if="Number(card.programInfo.programType) === 2 && card.bindInfo.voteNames"
-            class="activity-program-cards__block">
+            class="activity-program-cards__block"
+          >
             <h4 class="activity-program-cards__block-title">
               {{ $t('activity.voteProgramTitle') }}
             </h4>
@@ -104,18 +114,21 @@
               :src="String(card.programInfo.backgroundImage)"
               fit="cover"
               :preview-src-list="[String(card.programInfo.backgroundImage)]"
-              preview-teleported />
+              preview-teleported
+            />
           </section>
 
           <section
             v-if="Number(card.programInfo.programType) === 1 && card.bindInfo.prizeList?.length"
-            class="activity-program-cards__block">
+            class="activity-program-cards__block"
+          >
             <h4 class="activity-program-cards__block-title">{{ $t('activity.prizeListTitle') }}</h4>
             <ul class="activity-program-cards__prize-list">
               <li
                 v-for="(prize, index) in card.bindInfo.prizeList"
                 :key="`${card.programInfo.id}-prize-${index}`"
-                class="activity-program-cards__prize">
+                class="activity-program-cards__prize"
+              >
                 <div class="activity-program-cards__prize-media">
                   <el-image
                     v-if="prize.imageUrl"
@@ -123,7 +136,8 @@
                     :src="String(prize.imageUrl)"
                     fit="cover"
                     :preview-src-list="[String(prize.imageUrl)]"
-                    preview-teleported />
+                    preview-teleported
+                  />
                   <span v-else class="activity-program-cards__prize-placeholder">-</span>
                 </div>
                 <div class="activity-program-cards__prize-main">
@@ -142,13 +156,15 @@
 
           <footer
             v-if="!readOnly && Number(card.programInfo.programStatus) !== 2"
-            class="activity-program-cards__footer">
+            class="activity-program-cards__footer"
+          >
             <el-button
               v-if="!card.programInfo.currentRoundStatus"
               v-uni-permission="'busdriver_edit'"
               class="activity-program-cards__cta"
               :loading="changingId === card.programInfo.id"
-              @click="changeStatus(card.programInfo, true)">
+              @click="changeStatus(card.programInfo, true)"
+            >
               {{
                 Number(card.programInfo.programType) === 1
                   ? $t('activity.programCardStartDraw')
@@ -160,7 +176,8 @@
               v-uni-permission="'busdriver_edit'"
               class="activity-program-cards__cta"
               :loading="changingId === card.programInfo.id"
-              @click="changeStatus(card.programInfo, false)">
+              @click="changeStatus(card.programInfo, false)"
+            >
               {{
                 Number(card.programInfo.programType) === 1
                   ? $t('activity.programCardEndDraw')

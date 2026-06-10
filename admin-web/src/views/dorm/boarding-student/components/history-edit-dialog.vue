@@ -4,7 +4,8 @@
     :title="$t('dorm.boardingStudent.detailTitle')"
     width="900px"
     destroy-on-close
-    class="boarding-history-edit-dialog">
+    class="boarding-history-edit-dialog"
+  >
     <div v-loading="loading">
       <section class="boarding-history-edit-dialog__section">
         <h3>{{ $t('dorm.boardingStudent.sectionBasic') }}</h3>
@@ -29,7 +30,8 @@
             type="date"
             value-format="YYYY-MM-DD"
             :placeholder="$t('dorm.boardingStudent.phCheckoutDateSingle')"
-            style="width: 260px" />
+            style="width: 260px"
+          />
         </div>
         <p class="boarding-history-edit-dialog__meta">
           {{ $t('dorm.boardingStudent.fieldRoom') }}: {{ detail.room }} /

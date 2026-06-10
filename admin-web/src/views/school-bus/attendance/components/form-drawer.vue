@@ -6,14 +6,16 @@
     size="min(720px, 94vw)"
     destroy-on-close
     class="school-bus-attendance-drawer"
-    @closed="onClosed">
+    @closed="onClosed"
+  >
     <div v-loading="detailLoading" class="school-bus-attendance-drawer__body">
       <UniForm
         ref="uniFormRef"
         v-model="formModel"
         :mode="uniFormMode"
         class="school-bus-attendance-drawer__form"
-        :config="formConfig">
+        :config="formConfig"
+      >
         <template #field-admissionNo>
           <el-autocomplete
             v-if="!isReadonly"
@@ -24,7 +26,8 @@
             :debounce="300"
             clearable
             style="width: 100%"
-            @select="onStudentSelect" />
+            @select="onStudentSelect"
+          />
           <el-input v-else v-model="formModel.admissionNo" disabled />
         </template>
       </UniForm>

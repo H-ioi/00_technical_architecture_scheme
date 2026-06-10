@@ -3,7 +3,8 @@
     v-model="visible"
     :title="$t('content.article.formLook')"
     width="min(900px, 96vw)"
-    destroy-on-close>
+    destroy-on-close
+  >
     <div v-loading="loading" class="content-article-detail">
       <dl v-if="detail.id != null" class="content-article-detail__grid">
         <template v-for="item in fields" :key="item.key">
@@ -17,6 +18,7 @@
       </div>
       <div v-if="detail.content" class="content-article-detail__html">
         <p class="content-article-detail__label">{{ $t('content.article.fieldContent') }}</p>
+        <!-- eslint-disable-next-line vue/no-v-html -- CMS article body preview -->
         <div class="content-article-detail__body" v-html="detail.content" />
       </div>
     </div>

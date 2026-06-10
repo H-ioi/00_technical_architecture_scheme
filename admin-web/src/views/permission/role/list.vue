@@ -21,7 +21,8 @@
       :submit-text="t('permission.search')"
       :reset-text="t('permission.reset')"
       @search="search"
-      @reset="reset" />
+      @reset="reset"
+    />
 
     <UniDataTable
       ref="tableRef"
@@ -34,7 +35,8 @@
       :actions="actions"
       :action-column="{ width: 180, fixed: 'right' }"
       @load-success="tableEmpty.onLoadSuccess"
-      @request-error="tableEmpty.onRequestError">
+      @request-error="tableEmpty.onRequestError"
+    >
       <template #empty>
         <ListTableEmpty :kind="tableEmpty.kind" @reset="reset" @retry="tableEmpty.retry" />
       </template>
@@ -43,7 +45,8 @@
     <AssignMenuDialog
       v-model:visible="assignVisible"
       :role-id="assignRole?.roleId"
-      @saved="refreshTable" />
+      @saved="refreshTable"
+    />
 
     <el-dialog
       v-model="roleFormVisible"
@@ -51,7 +54,8 @@
       width="640px"
       :title="
         roleFormMode === 'add' ? t('permission.role.formAdd') : t('permission.role.formEdit')
-      ">
+      "
+    >
       <UniForm ref="uniFormRef" v-model="roleForm" mode="edit" :config="roleFormConfig">
         <template #field-deptIds>
           <p class="perm-role-scope-hint">{{ t('permission.messages.deptScopeHint') }}</p>
@@ -63,7 +67,8 @@
             highlight-current
             default-expand-all
             check-strictly
-            :props="{ label: 'name', children: 'children' }" />
+            :props="{ label: 'name', children: 'children' }"
+          />
         </template>
       </UniForm>
       <template #footer>

@@ -20,7 +20,8 @@
       :submit-text="$t('dorm.common.search')"
       :reset-text="$t('dorm.common.reset')"
       @search="onSearch"
-      @reset="onReset" />
+      @reset="onReset"
+    />
 
     <div v-loading="listLoading" class="dorm-room-page__content">
       <template v-for="floor in visibleFloors" :key="floor.id">
@@ -41,7 +42,8 @@
             @status-change="onStatusChange"
             @edit="(row) => openForm('edit', row)"
             @delete="removeRoom"
-            @assign="goToAssign" />
+            @assign="goToAssign"
+          />
         </div>
       </template>
 
@@ -54,7 +56,8 @@
       :record-id="activeId"
       :school-options="schoolOptions"
       :default-school-id="defaultSchoolId ?? undefined"
-      @saved="fetchList" />
+      @saved="fetchList"
+    />
   </section>
 </template>
 

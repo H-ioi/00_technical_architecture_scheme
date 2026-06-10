@@ -39,7 +39,8 @@
           :show-file-list="false"
           accept="image/*"
           :http-request="(opt) => emit('signature-upload', opt)"
-          :before-upload="beforeImage">
+          :before-upload="beforeImage"
+        >
           <el-button :loading="signatureUploading">{{ $t('schoolDoctor.common.upload') }}</el-button>
         </el-upload>
       </template>

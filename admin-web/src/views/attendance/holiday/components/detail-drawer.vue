@@ -4,11 +4,13 @@
     :title="$t('attendance.detail')"
     direction="rtl"
     size="560px"
-    destroy-on-close>
+    destroy-on-close
+  >
     <div
       v-loading="loading"
       class="holiday-detail-drawer__body"
-      :element-loading-text="$t('common.loading')">
+      :element-loading-text="$t('common.loading')"
+    >
       <UniForm v-if="source" v-model="viewFormModel" :config="config" />
     </div>
     <template #footer>

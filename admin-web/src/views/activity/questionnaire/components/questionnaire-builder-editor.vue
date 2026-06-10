@@ -16,14 +16,16 @@
             <el-switch
               :model-value="knownHeaderProp(selected.fontId).required"
               size="small"
-              @change="emit('set-required', selected.fontId, $event)" />
+              @change="emit('set-required', selected.fontId, $event)"
+            />
           </span>
           <span class="qb__ctx-sw">
             <span class="qb__ctx-sw-lbl qb__muted">{{ t('activity.qbHide') }}</span>
             <el-switch
               :model-value="knownHeaderProp(selected.fontId).isHide"
               size="small"
-              @change="emit('set-hide', selected.fontId, $event)" />
+              @change="emit('set-hide', selected.fontId, $event)"
+            />
           </span>
         </div>
       </div>
@@ -34,7 +36,8 @@
           type="warning"
           show-icon
           :closable="false"
-          class="qb__editor-alert">
+          class="qb__editor-alert"
+        >
           {{ t('activity.qbRawHint', { type: rawType(selected) }) }}
         </el-alert>
 
@@ -68,19 +71,22 @@
                     :min="1"
                     :max="20"
                     controls-position="right"
-                    style="width: 100%" />
+                    style="width: 100%"
+                  />
                 </div>
               </template>
 
               <template
                 v-else-if="
                   draft.type === 'radio' || draft.type === 'checkbox' || draft.type === 'select'
-                ">
+                "
+              >
                 <div v-if="draft.type === 'select'" class="qb__fake-item qb__fake-item--switch">
                   <span class="qb__fake-label">{{ t('activity.qbMulti') }}</span>
                   <el-switch
                     :model-value="selectMulti"
-                    @update:model-value="emit('update:selectMulti', $event)" />
+                    @update:model-value="emit('update:selectMulti', $event)"
+                  />
                 </div>
 
                 <div class="qb__opts-head">
@@ -94,17 +100,20 @@
                         v-if="useSingleDefaultPicker"
                         :model-value="radioDefault"
                         class="qb__opt-block"
-                        @update:model-value="emit('update:radioDefault', $event)">
+                        @update:model-value="emit('update:radioDefault', $event)"
+                      >
                         <div
                           v-for="(opt, oi) in options"
                           :key="opt.id"
-                          class="qb__opt qb__opt--with-default">
+                          class="qb__opt qb__opt--with-default"
+                        >
                           <span class="qb__opt-idx">{{ oi + 1 }}</span>
                           <el-input v-model="opt.label" :placeholder="t('activity.qbOptLabel')" />
                           <el-radio
                             :label="String(opt.id)"
                             :title="t('activity.qbDefault')"
-                            class="qb__opt-default-el" />
+                            class="qb__opt-default-el"
+                          />
                           <el-button
                             text
                             link
@@ -112,7 +121,8 @@
                             :icon="Delete"
                             class="qb__opt-remove"
                             :title="t('activity.qbRemove')"
-                            @click="emit('remove-option', oi)" />
+                            @click="emit('remove-option', oi)"
+                          />
                         </div>
                       </el-radio-group>
 
@@ -120,14 +130,16 @@
                         <div
                           v-for="(opt, oi) in options"
                           :key="opt.id"
-                          class="qb__opt qb__opt--with-default">
+                          class="qb__opt qb__opt--with-default"
+                        >
                           <span class="qb__opt-idx">{{ oi + 1 }}</span>
                           <el-input v-model="opt.label" :placeholder="t('activity.qbOptLabel')" />
                           <el-checkbox
                             :model-value="multiDefaultHas(Number(opt.id))"
                             :title="t('activity.qbDefault')"
                             class="qb__opt-default-el qb__opt-default-el--chk"
-                            @change="emit('multi-default-change', Number(opt.id), $event)" />
+                            @change="emit('multi-default-change', Number(opt.id), $event)"
+                          />
                           <el-button
                             text
                             link
@@ -135,7 +147,8 @@
                             :icon="Delete"
                             class="qb__opt-remove"
                             :title="t('activity.qbRemove')"
-                            @click="emit('remove-option', oi)" />
+                            @click="emit('remove-option', oi)"
+                          />
                         </div>
                       </div>
                     </div>
@@ -145,7 +158,8 @@
                     type="primary"
                     class="qb__opts-add"
                     plain
-                    @click="emit('add-option')">
+                    @click="emit('add-option')"
+                  >
                     + {{ t('activity.qbAddOption') }}
                   </el-button>
                 </div>
@@ -157,7 +171,8 @@
                   <el-select
                     v-model="draft.datetimeTypeKey"
                     style="width: 100%"
-                    @change="emit('sync-dt')">
+                    @change="emit('sync-dt')"
+                  >
                     <el-option :label="t('activity.qbDateOnly')" value="date" />
                     <el-option :label="t('activity.qbDatetime')" value="datetime" />
                     <el-option :label="t('activity.qbYearMonth')" value="month" />
@@ -168,7 +183,8 @@
                   <el-input
                     v-model="draft.properties.datetime_pattern"
                     maxlength="80"
-                    show-word-limit />
+                    show-word-limit
+                  />
                 </div>
               </template>
             </template>

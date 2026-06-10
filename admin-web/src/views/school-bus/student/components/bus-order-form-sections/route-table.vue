@@ -6,7 +6,8 @@
         v-if="!mainDisabled && routeTableData.length < 2"
         type="primary"
         link
-        @click="openRouteAdd">
+        @click="openRouteAdd"
+      >
         {{ $t('schoolBus.studentOrder.formAddRoute') }}
       </el-button>
     </div>
@@ -15,31 +16,38 @@
         <el-table-column
           prop="lineName"
           :label="$t('schoolBus.studentApply.detailRouteLine')"
-          min-width="100" />
+          min-width="100"
+        />
         <el-table-column
           prop="stationName"
           :label="$t('schoolBus.studentApply.detailRouteStation')"
-          min-width="100" />
+          min-width="100"
+        />
         <el-table-column
           prop="lineTypeName"
           :label="$t('schoolBus.studentApply.detailLineType')"
-          width="120" />
+          width="120"
+        />
         <el-table-column
           prop="weekDaysLabel"
           :label="$t('schoolBus.studentOrder.formDateOption')"
-          width="100" />
+          width="100"
+        />
         <el-table-column
           prop="ridingWeekDay"
           :label="$t('schoolBus.studentApply.detailRidingWeekDay')"
-          min-width="100" />
+          min-width="100"
+        />
         <el-table-column
           prop="ridingRange"
           :label="$t('schoolBus.studentOrder.formRideRange')"
-          width="200" />
+          width="200"
+        />
         <el-table-column
           prop="carNumber"
           :label="$t('schoolBus.studentOrder.formPlate')"
-          width="100" />
+          width="100"
+        />
         <el-table-column :label="$t('schoolBus.studentOrder.formOps')" width="140">
           <template #default="{ row, $index }">
             <el-button type="primary" link @click="openRouteEdit(row, $index)">

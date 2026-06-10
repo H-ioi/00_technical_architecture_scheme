@@ -3,7 +3,8 @@
     <div
       v-loading="detailLoading"
       class="protocol-form__body"
-      :element-loading-text="$t('common.loading')">
+      :element-loading-text="$t('common.loading')"
+    >
       <UniForm ref="uniFormRef" v-model="formModel" mode="edit" :config="dialogFormConfig">
         <template #field-documentUrl>
           <UniUpload
@@ -14,7 +15,8 @@
             :max-size="10 * 1024 * 1024"
             :request="uploadReq"
             @validate-error="onUploadErr"
-            @remove="clearDoc">
+            @remove="clearDoc"
+          >
             <template #tip>
               <div class="protocol-form__upload-tip">
                 {{ $t('protocol.uploadPdfSize') }}

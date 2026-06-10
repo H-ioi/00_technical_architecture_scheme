@@ -15,7 +15,8 @@
       :submit-text="$t('dorm.common.search')"
       :reset-text="$t('dorm.common.reset')"
       @search="search"
-      @reset="onReset" />
+      @reset="onReset"
+    />
 
     <UniDataTable
       ref="tableRef"
@@ -30,27 +31,31 @@
       :action-column="{ width: 150, fixed: 'right' }"
       @selection-change="onSelectionChange"
       @load-success="tableEmpty.onLoadSuccess"
-      @request-error="tableEmpty.onRequestError">
+      @request-error="tableEmpty.onRequestError"
+    >
       <template #toolbar>
         <el-button
           v-uni-permission="'boarding-assigne'"
           type="danger"
           :disabled="selectedRows.length === 0"
-          @click="batchAssign">
+          @click="batchAssign"
+        >
           {{ $t('dorm.boardingStudent.batchAssign') }}
         </el-button>
         <el-button
           v-uni-permission="'boarding-checkout'"
           type="danger"
           :disabled="selectedRows.length === 0"
-          @click="batchCheckout">
+          @click="batchCheckout"
+        >
           {{ $t('dorm.boardingStudent.batchCheckout') }}
         </el-button>
         <el-button
           v-uni-permission="'boarding-planCheckOut'"
           type="danger"
           :disabled="selectedRows.length === 0"
-          @click="openPlannedCheckout">
+          @click="openPlannedCheckout"
+        >
           {{ $t('dorm.boardingStudent.plannedCheckout') }}
         </el-button>
       </template>
@@ -63,17 +68,20 @@
       v-model:visible="addVisible"
       :school-options="schoolOptions"
       :default-school-id="defaultSchoolId ?? undefined"
-      @saved="refreshTable" />
+      @saved="refreshTable"
+    />
     <StudentDetailDialog v-model:visible="detailVisible" :admission-no="activeAdmissionNo" variant="current" />
     <StudentEditDialog
       v-model:visible="editVisible"
       :admission-no="activeAdmissionNo"
       :school-options="schoolOptions"
-      @saved="refreshTable" />
+      @saved="refreshTable"
+    />
     <PlannedCheckoutDialog
       v-model:visible="plannedVisible"
       :admission-nos="selectedAdmissionNos"
-      @saved="onPlannedSaved" />
+      @saved="onPlannedSaved"
+    />
   </div>
 </template>
 

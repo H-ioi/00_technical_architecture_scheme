@@ -4,7 +4,8 @@
     :title="drawerTitle"
     size="1120px"
     destroy-on-close
-    class="record-form-drawer">
+    class="record-form-drawer"
+  >
     <div v-if="visible" v-loading="loading" class="record-form-drawer__body">
       <RecordFormPanel
         ref="panelRef"
@@ -12,7 +13,8 @@
         :mode="mode"
         :school-records="schoolRecords"
         :parent-receipt-refreshing="parentReceiptRefreshing"
-        @refresh-parent-receipt="refreshParentReceipt" />
+        @refresh-parent-receipt="refreshParentReceipt"
+      />
     </div>
 
     <template v-if="mode !== 'view'" #footer>

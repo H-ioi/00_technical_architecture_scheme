@@ -3,7 +3,8 @@
     v-model="visible"
     :title="$t('dorm.boardingStudent.plannedCheckoutTitle')"
     width="420px"
-    destroy-on-close>
+    destroy-on-close
+  >
     <div class="planned-checkout-dialog__body">
       <el-date-picker
         v-model="checkoutDate"
@@ -11,7 +12,8 @@
         value-format="YYYY-MM-DD"
         :placeholder="$t('dorm.boardingStudent.phPlannedCheckoutSingle')"
         :disabled-date="(date: Date) => date.getTime() <= Date.now()"
-        style="width: 100%" />
+        style="width: 100%"
+      />
     </div>
     <template #footer>
       <el-button @click="visible = false">{{ $t('dorm.common.cancel') }}</el-button>

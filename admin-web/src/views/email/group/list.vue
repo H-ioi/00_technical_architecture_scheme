@@ -19,7 +19,8 @@
       :submit-text="$t('member.search')"
       :reset-text="$t('member.reset')"
       @search="search"
-      @reset="reset" />
+      @reset="reset"
+    />
 
     <UniDataTable
       ref="tableRef"
@@ -34,25 +35,29 @@
       :action-column="{ width: 115, fixed: 'right' }"
       @load-success="tableEmpty.onLoadSuccess"
       @request-error="tableEmpty.onRequestError"
-      @selection-change="onSelectionChange">
+      @selection-change="onSelectionChange"
+    >
       <template #toolbar>
         <el-button
           v-if="hasPermission('mailgroup-gd')"
           :disabled="batchDisabled"
-          @click="batchStatus(0)">
+          @click="batchStatus(0)"
+        >
           {{ $t('email.archive') }}
         </el-button>
         <el-button
           v-if="hasPermission('mailgroup-sy')"
           :disabled="batchDisabled"
-          @click="batchStatus(1)">
+          @click="batchStatus(1)"
+        >
           {{ $t('email.markActive') }}
         </el-button>
         <el-button
           v-if="hasPermission('mailgroup-delete')"
           type="danger"
           :disabled="batchDisabled"
-          @click="batchStatus(-1)">
+          @click="batchStatus(-1)"
+        >
           {{ $t('email.deleteBatch') }}
         </el-button>
       </template>
@@ -65,7 +70,8 @@
       ref="dialogRef"
       v-model="dialogVisible"
       :mode="dialogMode"
-      @success="tableRef?.refresh()" />
+      @success="tableRef?.refresh()"
+    />
 
     <el-dialog v-model="viewVisible" :title="$t('email.view')" width="560px" destroy-on-close>
       <div class="email-grp-view">

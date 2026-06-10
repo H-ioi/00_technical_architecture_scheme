@@ -9,7 +9,8 @@
       :submit-text="$t('activity.search')"
       :reset-text="$t('activity.reset')"
       @search="search"
-      @reset="reset" />
+      @reset="reset"
+    />
     <UniDataTable
       ref="tableRef"
       row-key="id"
@@ -22,7 +23,8 @@
       :actions="actions"
       :action-column="{ width: 100, fixed: 'right' }"
       @load-success="handleLoadSuccess"
-      @selection-change="onSelectionChange">
+      @selection-change="onSelectionChange"
+    >
       <template v-if="!readOnly && canDeleteRegistration" #toolbar>
         <el-button type="danger" plain :disabled="!selectedIds.length" @click="deleteSelected">
           {{ $t('activity.delBatch') }}
@@ -37,7 +39,8 @@
       append-to-body
       destroy-on-close
       :close-on-click-modal="false"
-      @closed="resetDialog">
+      @closed="resetDialog"
+    >
       <UniForm ref="formRef" v-model="formModel" mode="edit" :config="formCfg" />
       <template #footer>
         <el-button @click="dialogVisible = false">{{ $t('common.cancel') }}</el-button>

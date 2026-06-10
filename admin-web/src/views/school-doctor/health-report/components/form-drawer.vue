@@ -4,7 +4,8 @@
     :title="drawerTitle"
     size="600px"
     destroy-on-close
-    class="health-report-drawer">
+    class="health-report-drawer"
+  >
     <div v-if="visible" v-loading="loading" class="health-report-drawer__body">
       <FormPanel
         ref="panelRef"
@@ -13,7 +14,8 @@
         :rules="rules"
         :school-records="schoolRecords"
         :uploading="uploading"
-        @upload="handleUpload" />
+        @upload="handleUpload"
+      />
     </div>
 
     <template v-if="mode !== 'view'" #footer>

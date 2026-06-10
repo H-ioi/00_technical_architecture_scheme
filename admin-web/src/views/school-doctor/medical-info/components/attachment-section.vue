@@ -15,7 +15,8 @@
           :show-file-list="false"
           :http-request="(opt) => emit('upload', opt, group.type)"
           :accept="uploadAccept(group.type)"
-          :before-upload="(file) => emit('before-upload', file, group.type)">
+          :before-upload="(file) => emit('before-upload', file, group.type)"
+        >
           <el-button :loading="uploading">{{ $t('schoolDoctor.common.upload') }}</el-button>
         </el-upload>
         <div v-for="(file, fileIndex) in attachments(group.type)" :key="`${group.type}-${fileIndex}`" class="attachment-file">
@@ -33,13 +34,15 @@
         :model-value="specialProofRemark"
         :disabled="readonly"
         :placeholder="$t('schoolDoctor.medicalInfo.phSpecialProof')"
-        @update:model-value="emit('update:specialProofRemark', $event)">
+        @update:model-value="emit('update:specialProofRemark', $event)"
+      >
         <template v-if="!readonly" #append>
           <el-upload
             action="#"
             :show-file-list="false"
             :http-request="(opt) => emit('upload', opt, 2)"
-            :before-upload="(file) => emit('before-upload', file, 2)">
+            :before-upload="(file) => emit('before-upload', file, 2)"
+          >
             <el-button link :loading="uploading">{{ $t('schoolDoctor.common.upload') }}</el-button>
           </el-upload>
         </template>
@@ -59,7 +62,8 @@
           v-if="!readonly"
           :model-value="parentSignMode"
           size="small"
-          @update:model-value="emit('update:parentSignMode', $event as 'draw' | 'upload')">
+          @update:model-value="emit('update:parentSignMode', $event as 'draw' | 'upload')"
+        >
           <el-radio-button label="draw">{{ $t('schoolDoctor.medicalInfo.signDraw') }}</el-radio-button>
           <el-radio-button label="upload">{{ $t('schoolDoctor.medicalInfo.signUpload') }}</el-radio-button>
         </el-radio-group>
@@ -80,7 +84,8 @@
           :show-file-list="false"
           accept="image/*"
           :http-request="(opt) => emit('upload-sign', opt)"
-          :before-upload="(file) => emit('before-image', file)">
+          :before-upload="(file) => emit('before-image', file)"
+        >
           <el-button :loading="uploading">{{ $t('schoolDoctor.common.upload') }}</el-button>
         </el-upload>
       </template>

@@ -9,7 +9,8 @@
             v-uni-permission="'busdriver_edit'"
             type="primary"
             size="small"
-            @click="openPrizeAdd">
+            @click="openPrizeAdd"
+          >
             {{ $t('activity.add') }}
           </el-button>
         </div>
@@ -22,20 +23,23 @@
         :pagination="false"
         :toolbar="{ refresh: false, columnSetting: false }"
         :actions="prizeActions"
-        :action-column="{ width: 110, fixed: 'right' }" />
+        :action-column="{ width: 110, fixed: 'right' }"
+      />
     </el-card>
 
     <el-card
       v-if="programType === '1' && createLotteryPool === '1'"
       shadow="never"
-      class="program-detail-bindings__card">
+      class="program-detail-bindings__card"
+    >
       <template #header>
         <div class="program-detail-bindings__header">
           <span>{{ $t('activity.programPoolSection') }}</span>
           <div
             v-if="!poolRows.length"
             v-uni-permission="'busdriver_edit'"
-            class="program-detail-bindings__header-actions">
+            class="program-detail-bindings__header-actions"
+          >
             <el-button size="small" @click="downloadPoolTemplate">
               {{ $t('activity.downloadTemplate') }}
             </el-button>
@@ -43,7 +47,8 @@
               action=""
               :show-file-list="false"
               :before-upload="beforePoolImport"
-              accept=".xlsx,.xls">
+              accept=".xlsx,.xls"
+            >
               <el-button type="primary" size="small" :loading="poolImporting">
                 {{ $t('activity.import') }}
               </el-button>
@@ -59,7 +64,8 @@
         :pagination="false"
         :toolbar="{ refresh: false, columnSetting: false }"
         :actions="poolActions"
-        :action-column="{ width: 140, fixed: 'right' }" />
+        :action-column="{ width: 140, fixed: 'right' }"
+      />
     </el-card>
 
     <el-card v-if="programType === '2'" shadow="never" class="program-detail-bindings__card">
@@ -70,7 +76,8 @@
             v-uni-permission="'busdriver_edit'"
             type="primary"
             size="small"
-            @click="openVoteAdd">
+            @click="openVoteAdd"
+          >
             {{ $t('activity.add') }}
           </el-button>
         </div>
@@ -83,7 +90,8 @@
         :pagination="false"
         :toolbar="{ refresh: false, columnSetting: false }"
         :actions="voteActions"
-        :action-column="{ width: 110, fixed: 'right' }" />
+        :action-column="{ width: 110, fixed: 'right' }"
+      />
     </el-card>
 
     <PrizeFormDialog ref="prizeDlgRef" @saved="loadPrizes" />

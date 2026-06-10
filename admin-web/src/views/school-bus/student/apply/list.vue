@@ -3,7 +3,8 @@
     <ApplyPageHeader
       @download-template="downloadIntentionTemplate"
       @add="openFormAdd"
-      @import-file="onImportFile" />
+      @import-file="onImportFile"
+    />
 
     <ApplyCascadeAlert v-if="commonDataError" @retry="reloadCommonData" />
 
@@ -16,7 +17,8 @@
       :submit-text="$t('schoolBus.search')"
       :reset-text="$t('schoolBus.reset')"
       @search="search"
-      @reset="reset" />
+      @reset="reset"
+    />
 
     <UniDataTable
       ref="tableRef"
@@ -31,14 +33,16 @@
       :action-column="{ width: 110, fixed: 'right' }"
       @selection-change="onSelectionChange"
       @load-success="tableEmpty.onLoadSuccess"
-      @request-error="tableEmpty.onRequestError">
+      @request-error="tableEmpty.onRequestError"
+    >
       <template #toolbar>
         <ApplyBatchToolbar
           :disabled="selection.length === 0"
           @approve="batchApprove"
           @reject="openReject"
           @payment="batchPayment"
-          @delete="del" />
+          @delete="del"
+        />
       </template>
       <template #empty>
         <ListTableEmpty :kind="tableEmpty.kind" @reset="reset" @retry="tableEmpty.retry" />
@@ -55,7 +59,8 @@
       :school-options="schoolOptions"
       :default-school-id="defaultSingleSchoolId"
       :multi-school="multiSchool"
-      @saved="refreshTable" />
+      @saved="refreshTable"
+    />
 
     <ApplyRejectDialog ref="rejectDialogRef" @saved="onRejectSaved" />
   </section>

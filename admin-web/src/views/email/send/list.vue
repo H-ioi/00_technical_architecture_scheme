@@ -19,7 +19,8 @@
       :submit-text="$t('member.search')"
       :reset-text="$t('member.reset')"
       @search="search"
-      @reset="reset" />
+      @reset="reset"
+    />
 
     <UniDataTable
       ref="tableRef"
@@ -34,7 +35,8 @@
       :action-column="{ width: 168, fixed: 'right' }"
       @load-success="tableEmpty.onLoadSuccess"
       @request-error="tableEmpty.onRequestError"
-      @selection-change="onSelectionChange">
+      @selection-change="onSelectionChange"
+    >
       <template #toolbar>
         <el-button :disabled="batchDisabled" @click="batchStatus(0)">
           {{ $t('email.archive') }}
@@ -55,7 +57,8 @@
       v-model="dialogVisible"
       v-model:form="formModel"
       :mode="dialogMode"
-      @success="tableRef?.refresh()" />
+      @success="tableRef?.refresh()"
+    />
 
     <el-dialog v-model="viewVisible" :title="$t('email.view')" width="520px" destroy-on-close>
       <div class="email-send-view">

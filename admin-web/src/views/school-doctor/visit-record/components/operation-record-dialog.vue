@@ -5,7 +5,8 @@
     width="760px"
     append-to-body
     :close-on-click-modal="false"
-    destroy-on-close>
+    destroy-on-close
+  >
     <PendingOperationForm ref="formRef" v-model:operation-form="operationForm" :readonly="readonly" />
     <template #footer>
       <el-button @click="visible = false">
