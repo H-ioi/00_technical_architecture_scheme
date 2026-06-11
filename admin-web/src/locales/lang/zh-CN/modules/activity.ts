@@ -177,6 +177,8 @@ export default {
   confirmSendWechat: '确定要「{title}」吗？',
   batchPublishSkip: '将发布 {n} 个待发布活动（已跳过 {m} 个非待发布）。是否继续？',
   batchPublishConfirm: '确定将选中的 {n} 个待发布活动批量发布吗？',
+  unpublishBatch: '取消发布',
+  batchUnpublishConfirm: '确定将选中的 {n} 个活动批量取消发布吗？',
   noPendingInSelection: '所选活动中没有待发布状态的活动',
   partialWechatFail: '部分活动发送失败',
   exportFail: '导出失败',

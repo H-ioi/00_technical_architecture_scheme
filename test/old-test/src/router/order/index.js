@@ -311,6 +311,15 @@ export default [
         component: () =>
           import(/* webpackChunkName: "views" */ "@/views/oms/visit/detail"),
       },
+      {
+        path: "/oms/visit/project",
+        name: "项目访客",
+        meta: {
+          keepAlive: true,
+        },
+        component: () =>
+          import(/* webpackChunkName: "views" */ "@/views/oms/visit/project"),
+      },
     ],
   },
 ];

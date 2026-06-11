@@ -1,4 +1,26 @@
 export const order = {
+  visitorTypeList: [
+    {
+      label: "外部供应商",
+      enLabel: "External Supplier",
+      value: 1,
+    },
+    {
+      label: "工程类人员",
+      enLabel: "Engineering Personnel",
+      value: 2,
+    },
+    {
+      label: "搭展架人员",
+      enLabel: "Setup Personnel",
+      value: 3,
+    },
+    {
+      label: "布场人员",
+      enLabel: "Field Personnel",
+      value: 4,
+    },
+  ],
   visitTypeList: [
     {
       label: "施工",

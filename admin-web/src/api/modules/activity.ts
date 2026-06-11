@@ -54,6 +54,11 @@ export default {
     post: async (ids: Array<string | number>) =>
       await request.post(`${path}/batchPublishActivityStatus?${repeatQuery('ids', ids)}`)
   },
+  batchResetToPending: {
+    name: '批量取消发布活动',
+    post: async (ids: Array<string | number>) =>
+      await request.post(`${path}/batchResetActivityStatusToPending?${repeatQuery('ids', ids)}`)
+  },
   sendWechat: {
     name: '发送活动到微信',
     post: async (activityId: string | number) =>

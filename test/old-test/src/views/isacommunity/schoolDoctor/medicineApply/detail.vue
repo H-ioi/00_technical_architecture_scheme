@@ -16,7 +16,6 @@
           :need-medication-options="needMedicationOptions"
           :nurse-approval-options="nurseApprovalOptions"
           :visit-record-list="visitRecordList"
-          :visit-loading="visitLoading"
           :uploading="uploading"
           :signature-uploading="signatureUploading"
           :parent-sign-mode.sync="parentSignMode"
@@ -51,7 +50,6 @@
 <script>
 import { getDiseaseSettingPage } from '@/api/isacommunity/diseaseSetting'
 import { addMedicationApply, editMedicationApply, getMedicationApplyDetail } from '@/api/isacommunity/medicationApply'
-import { getPendingMedicationDetail, getPendingMedicationPage } from '@/api/isacommunity/visitRecord'
 import schoolListBuscommonMixin from '@/mixins/schoolListBuscommon.js'
 import myRequest from '@/router/axiosother.js'
 import { mapGetters } from 'vuex'
@@ -76,7 +74,6 @@ export default {
       modalType: 'look',
       showDialog: false,
       detailLoading: false,
-      visitLoading: false,
       ruleForm: createEmptyForm(),
       isSubmitting: false,
       uploading: false,
@@ -145,6 +142,7 @@ export default {
       this.modalType = type
       this.showDialog = true
       this.detailLoading = true
+      this.visitRecordList = []
       try {
         await Promise.all([this.fetchSchoolListBuscommon(), this.loadSymptomOptions()])
         if (type === 'add') {
@@ -154,9 +152,6 @@ export default {
           await this.loadDetail(item.id)
           if (type === 'approve') {
             this.ruleForm.nurseOperator = this.getCurrentOperator()
-          }
-          if (type === 'look') {
-            await this.loadVisitRecords()
           }
         }
       } finally {
@@ -202,42 +197,9 @@ export default {
           contentList,
           diagnosisImageList: data.diagnosisImageList || []
         }
-        const embeddedList = data.medicationDetailList || data.visitRecordList || data.operationList
-        if (embeddedList && embeddedList.length) {
-          this.visitRecordList = embeddedList.map((item) => mapMedicationDetailRow(item, this.$t.bind(this)))
-        }
+        const ops = data.operationList || data.operationRecordList || []
+        this.visitRecordList = ops.map((op) => mapMedicationDetailRow(op, this.$t.bind(this)))
       })
-    },
-
-    /** 用药详情：拉取该申请关联的待用药操作记录 */
-    loadVisitRecords() {
-      if (!this.ruleForm.id) return Promise.resolve()
-      if (this.visitRecordList.length) return Promise.resolve()
-      this.visitLoading = true
-      return getPendingMedicationPage({ current: 1, size: 100, medicationApplicationId: this.ruleForm.id })
-        .then((res) => {
-          if (!res.data.success) return
-          const pendingList = (res.data.data && res.data.data.data) || []
-          if (!pendingList.length) {
-            this.visitRecordList = []
-            return
-          }
-          return Promise.all(
-            pendingList.map((pending) =>
-              getPendingMedicationDetail(pending.id).then((detailRes) => {
-                if (!detailRes.data.success) return []
-                const data = detailRes.data.data || {}
-                const ops = data.operationList || data.operationRecordList || []
-                return ops.map((op) => mapMedicationDetailRow({ ...op, pendingId: pending.id }, this.$t.bind(this)))
-              })
-            )
-          ).then((groups) => {
-            this.visitRecordList = groups.reduce((list, group) => list.concat(group), [])
-          })
-        })
-        .finally(() => {
-          this.visitLoading = false
-        })
     },
 
     handleStudentSelect(mappedFields) {
@@ -427,6 +389,7 @@ export default {
 .medication-apply-drawer {
   ::v-deep .el-drawer__body {
     padding: 0;
+    overflow-y: auto;
     background: #f5f7fa;
   }
 }

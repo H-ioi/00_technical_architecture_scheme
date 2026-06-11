@@ -167,6 +167,10 @@ export default {
       ],
       projectInfo: [
         {
+          label: "访客类型",
+          prop: "visitorTypeLabel",
+        },
+        {
           label: "工程名称",
           prop: "projectName",
         },
@@ -275,6 +279,10 @@ export default {
           if (data.visitType == "1" && data.projectInfo) {
             this.projectData = {
               ...data.projectInfo,
+              visitorTypeLabel: this.$getListLabel(
+                order["visitorTypeList"],
+                data.projectInfo.visitorType
+              ),
               constructionDate:
                 data.projectInfo.constructionDateBegin +
                 "至" +

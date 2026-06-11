@@ -5,7 +5,7 @@
         <h1>{{ $t('activity.questionnaireTitle') }}</h1>
         <p class="uni-list-page__description">{{ $t('activity.questionnaireDesc') }}</p>
       </div>
-      <div v-uni-permission="'busdriver_edit'" class="uni-list-page__header-actions">
+      <div v-uni-permission="'questionnaire_add'" class="uni-list-page__header-actions">
         <el-button type="primary" @click="metaDlg?.open('add')">{{ $t('activity.add') }}</el-button>
       </div>
     </div>
@@ -36,7 +36,7 @@
     >
       <template #toolbar>
         <el-button
-          v-uni-permission="'busdriver_edit'"
+          v-uni-permission="'questionnaire_edit_status'"
           plain
           :disabled="!selectedIds.length"
           @click="openBatchStatus"
@@ -44,7 +44,7 @@
           {{ $t('activity.qBatchChangeStatus') }}
         </el-button>
         <el-button
-          v-uni-permission="'busdriver_edit'"
+          v-uni-permission="'questionnaire_edit_frozen'"
           plain
           :disabled="!selectedIds.length"
           @click="batchDlg?.open('frozen', selectedIds)"
@@ -52,7 +52,7 @@
           {{ $t('activity.qBatchChangeFrozen') }}
         </el-button>
         <el-button
-          v-uni-permission="'busdriver_del'"
+          v-uni-permission="'questionnaire_delete'"
           type="danger"
           plain
           :disabled="!selectedIds.length"
@@ -253,12 +253,12 @@ const actions = computed<UniTableAction[]>(() => [
   },
   {
     label: tr('activity.entryEdit'),
-    code: 'busdriver_edit',
+    code: 'questionnaire_edit',
     onClick: (row) => void metaDlg.value?.open('edit', row as QuestionnaireListRow)
   },
   {
     label: tr('activity.questionnaireDesigner'),
-    code: 'busdriver_edit',
+    code: 'questionnaire_edit',
     onClick: (row) => {
       const id = (row as QuestionnaireListRow).id
       if (id != null) {
@@ -268,7 +268,7 @@ const actions = computed<UniTableAction[]>(() => [
   },
   {
     label: tr('activity.actionCopyQuestionnaire'),
-    code: 'busdriver_edit',
+    code: 'questionnaire_copy',
     onClick: (row) => void copyDlg.value?.open(row as QuestionnaireListRow)
   },
   {

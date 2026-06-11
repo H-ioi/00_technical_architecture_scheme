@@ -285,6 +285,7 @@ const leaveActions = computed<UniTableAction[]>(() => [
   },
   {
     label: t('attendance.delete'),
+    code: 'holiday-delete',
     visible: (row) => {
       const id = (row as AttendanceHolidayRecord).id
       return id != null && id !== ''

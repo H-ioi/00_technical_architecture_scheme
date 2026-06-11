@@ -32,11 +32,17 @@ export default {
     return str == [] ? "--" : String(str);
   },
   $checkNull(value) {
-    if (!value) {
+    // 1. 严格判断 null 和 undefined
+    if (value === null || value === undefined) {
       return "--";
-    } else {
-      let str = value.replace(/\s/g, "");
-      return str == "" ? "--" : value;
     }
+
+    // 2. 对于字符串，判断是否为空或全空白
+    if (typeof value === "string") {
+      return value.trim() === "" ? "--" : value;
+    }
+
+    // 3. 其他类型（数字、布尔等）保留原值
+    return value;
   },
 };

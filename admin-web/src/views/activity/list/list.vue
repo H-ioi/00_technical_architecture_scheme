@@ -81,6 +81,14 @@
           {{ $t('activity.publishBatch') }}
         </el-button>
         <el-button
+          v-uni-permission="'busdriver_edit'"
+          plain
+          :disabled="!selectedIds.length"
+          @click="unpublishBatch"
+        >
+          {{ $t('activity.unpublishBatch') }}
+        </el-button>
+        <el-button
           v-uni-permission="'busdriver_del'"
           type="danger"
           plain
@@ -332,6 +340,27 @@ const publishBatch = async () => {
     return
   }
   await activityApi.batchPublish.post(ids)
+  ElMessage.success(tr('activity.saveOk'))
+  selectedRows.value = []
+  tableRef.value?.refresh()
+}
+
+const unpublishBatch = async () => {
+  if (!selectedIds.value.length) {
+    ElMessage.warning(tr('activity.eventSelFirst'))
+    return
+  }
+  const ids = selectedIds.value.filter((id) => id != null) as Array<string | number>
+  try {
+    await ElMessageBox.confirm(
+      tr('activity.batchUnpublishConfirm', { n: ids.length }),
+      tr('common.tip'),
+      { type: 'warning' }
+    )
+  } catch {
+    return
+  }
+  await activityApi.batchResetToPending.post(ids)
   ElMessage.success(tr('activity.saveOk'))
   selectedRows.value = []
   tableRef.value?.refresh()

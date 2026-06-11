@@ -183,6 +183,8 @@ export default {
   confirmSendWechat: 'Run "{title}" now?',
   batchPublishSkip: 'Publish {n} pending activities ({m} non-pending skipped). Continue?',
   batchPublishConfirm: 'Publish {n} pending activities?',
+  unpublishBatch: 'Unpublish',
+  batchUnpublishConfirm: 'Reset {n} selected activities to pending (unpublish)?',
   noPendingInSelection: 'No pending activities in selection',
   partialWechatFail: 'Some activities failed to send',
   exportFail: 'Export failed',

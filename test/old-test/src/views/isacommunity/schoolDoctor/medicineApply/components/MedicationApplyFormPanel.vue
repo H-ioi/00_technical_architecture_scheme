@@ -16,6 +16,27 @@
             @clear="$emit('student-clear')" />
         </el-form>
       </div>
+
+      <div v-if="showApprovalSection" class="section-card approval-section-card">
+        <div class="section-card__header">
+          <span class="section-card__title has-icon">
+            <i class="el-icon-s-check section-card__title-icon"></i>
+            {{ $t('schoolDoctor.审批情况') }}
+          </span>
+        </div>
+        <el-form label-position="top" class="approval-form">
+          <el-form-item v-if="!approvalEditable" :label="$t('schoolDoctor.护士审批')">
+            <el-input :value="formatNurseApproval(form.nurseApproval)" disabled />
+          </el-form-item>
+          <el-form-item :label="$t('schoolDoctor.操作护士')">
+            <el-input v-model="form.nurseOperator" disabled />
+          </el-form-item>
+          <el-form-item :label="$t('schoolDoctor.审批意见')">
+            <el-input v-model="form.remark" type="textarea" :rows="4" :disabled="!approvalEditable" :placeholder="$t('schoolDoctor.请输入审批意见')" />
+          </el-form-item>
+          <p v-if="approvalEditable" class="approval-action-tip">{{ $t('schoolDoctor.审批操作提示') }}</p>
+        </el-form>
+      </div>
     </aside>
 
     <main class="apply-form-right">
@@ -80,35 +101,6 @@
           @signature-upload="(opt) => $emit('signature-upload', opt)"
           @before-image="(file) => $emit('before-image', file)"
           @clear-signature="$emit('clear-signature')" />
-
-        <div v-if="showApprovalSection" class="section-card">
-          <div class="section-card__header">
-            <span class="section-card__title has-icon">
-              <i class="el-icon-s-check section-card__title-icon"></i>
-              {{ $t('schoolDoctor.审批情况') }}
-            </span>
-          </div>
-          <el-row :gutter="16">
-            <el-col v-if="!approvalEditable" :span="8">
-              <el-form-item :label="$t('schoolDoctor.护士审批')">
-                <el-input :value="formatNurseApproval(form.nurseApproval)" disabled />
-              </el-form-item>
-            </el-col>
-            <el-col :span="approvalEditable ? 12 : 8">
-              <el-form-item :label="$t('schoolDoctor.操作护士')">
-                <el-input v-model="form.nurseOperator" disabled />
-              </el-form-item>
-            </el-col>
-            <el-col :span="24">
-              <el-form-item :label="$t('schoolDoctor.审批意见')">
-                <el-input v-model="form.remark" type="textarea" :rows="3" :disabled="!approvalEditable" :placeholder="$t('schoolDoctor.请输入审批意见')" />
-              </el-form-item>
-            </el-col>
-            <el-col v-if="approvalEditable" :span="24">
-              <p class="approval-action-tip">{{ $t('schoolDoctor.审批操作提示') }}</p>
-            </el-col>
-          </el-row>
-        </div>
 
         <div v-if="modalType === 'look'" class="section-card">
           <div class="section-card__header">
@@ -227,6 +219,16 @@ export default {
 .apply-form-left {
   flex: 0 0 320px;
   width: 320px;
+  position: sticky;
+  top: 20px;
+  align-self: flex-start;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.approval-section-card {
+  margin-bottom: 0;
 }
 
 .apply-form-right {
@@ -234,8 +236,20 @@ export default {
   min-width: 0;
 }
 
+.apply-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+
+  ::v-deep .el-form-item__label {
+    padding-bottom: 6px;
+    line-height: 1.4;
+    color: #606266;
+  }
+}
+
 .section-card {
-  margin-bottom: 16px;
+  margin-bottom: 0;
   padding: 20px;
   background: #fff;
   border: 1px solid #ebeef5;
@@ -297,7 +311,15 @@ export default {
   }
 }
 
-.apply-form {
+.approval-form {
+  ::v-deep .el-form-item {
+    margin-bottom: 12px;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+
   ::v-deep .el-form-item__label {
     padding-bottom: 6px;
     line-height: 1.4;

@@ -78,6 +78,7 @@
                 ></el-option>
               </el-select>
             </el-form-item>
+
             <el-form-item label="访客姓名" prop="visitHumanName">
               <el-input
                 v-model="formData.visitHumanName"
@@ -177,6 +178,20 @@
           >
             <div class="fromTitle">工程信息</div>
             <div class="df_center_wrap">
+              <el-form-item label="访客类型" prop="visitorType">
+                <el-select
+                  style="width: 100%"
+                  v-model="projectInfo.visitorType"
+                  placeholder="请选择"
+                >
+                  <el-option
+                    v-for="item in order['visitorTypeList']"
+                    :key="item.value"
+                    :label="item.label"
+                    :value="item.value"
+                  ></el-option>
+                </el-select>
+              </el-form-item>
               <el-form-item label="项目名称" prop="projectName">
                 <el-input
                   v-model="projectInfo.projectName"
@@ -366,6 +381,7 @@ export default {
       // 工程信息
       projectInfo: {},
       projectRules: {
+        visitorType: [{ required: true, message: "请选择", trigger: "blur" }],
         projectName: [{ required: true, message: "请输入", trigger: "blur" }],
         contactInfo: [{ required: true, message: "请输入", trigger: "blur" }],
         constructionArea: [
@@ -533,6 +549,7 @@ export default {
             this.$refs["projectForm"].validate((pass) => {
               if (pass) {
                 formData["projectInfo"] = {
+                  visitorType: this.projectInfo.visitorType,
                   projectName: this.projectInfo.projectName,
                   contactInfo: this.projectInfo.contactInfo,
                   constructionArea: this.projectInfo.constructionArea,

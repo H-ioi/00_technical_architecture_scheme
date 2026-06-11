@@ -18,7 +18,11 @@ npm run lint
 npm run lint:style
 npm run type-check
 npm run build
+npm run test:run
+npm run test:e2e
 ```
+
+Playwright E2E：复制 `.env.e2e.example` 为 `.env.e2e.local` 并填写 `E2E_USERNAME` / `E2E_PASSWORD` 后执行 `npm run test:e2e`；无账号时仅跑 smoke 用例。
 
 ## 目录约定
 
