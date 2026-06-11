@@ -5,7 +5,7 @@
 ## 基础用法
 
 ```ts
-document.documentElement.dataset.layout = 'custom'
+document.documentElement.dataset.layout = 'isa-light'
 ```
 
 `UniLayout` 会在初始化时把 `preset` 写入根节点：
@@ -20,6 +20,7 @@ document.documentElement.dataset.layout = 'custom'
 | ----------- | ---------------------------- |
 | `default`   | 组件库默认主题               |
 | `isa-light` | ISA 管理后台浅色主题         |
-| `custom`    | 业务通过 `--app-*` 覆盖主题 |
+| `ems-dark`  | EMS 深色侧栏 + 金色强调主题  |
+| `mas-dark`  | MAS 深色侧栏 + 金色强调主题  |
 
 组件库只提供无品牌主题 token，Logo、登录页背景、产品线专属视觉资源仍由业务工程维护。

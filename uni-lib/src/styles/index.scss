@@ -1,4 +1,5 @@
+// 样式聚合入口：按变量、基础、Element Plus、组件全局样式的顺序加载。
 @use './variables.scss';
 @use './base.scss';
 @use './element-plus.scss';
-@use './utilities.scss';
+@use './components.scss';

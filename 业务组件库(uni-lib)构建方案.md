@@ -133,11 +133,11 @@ uni-lib/
 - 导出 `install`。
 - 导出默认对象 `{ install, pinia }`，供 `app.use(UniLib)` 使用。
 - 引入 `./styles/index.scss`，构建生成 `dist/index.css`。
-- 导出类型、指令、组合式函数、store、请求、存储、语言包、主题 runtime 和工具函数。
+- 导出类型、指令、组合式函数、store、请求、存储、语言包和工具函数。
 
 当前主要导出包括：
 
-- 组件：`UniConfigProvider`、`UniDataTable`、`UniForm`、`UniIcon`、`UniLayout`、`UniLayoutChangePasswordDialog`、`UniSearchForm`、`UniThemeSettings`、`UniUpload`。
+- 组件：`UniConfigProvider`、`UniDataTable`、`UniForm`、`UniIcon`、`UniLayout`、`UniSearchForm`、`UniThemeSettings`、`UniUpload`。
 - 请求：`createUniRequest`、`initUniHttpClient`、`getUniRequest`、`request`、`http`。
 - Store：`pinia`、`defineStore`、`useAppStore`、`useMenuStore`、`usePermissionCodeStore`、`useRouteAccessStore`、`useUniTagsViewStore`、`useUserStore`。
 - 指令与组合式函数：`setupPermissionDirective`、`setupCopyDirective`、`setupDebounceClickDirective`、`useUniPermission`、`useUniListState`。
@@ -355,10 +355,10 @@ import 'uni-ui-lib/style.css'
 
 样式目录职责：
 
-- `variables.scss`：`--uni-*` 语义变量、布局变量、默认 token。
+- `variables.scss`：`--app-*`、`--uni-*`、`--uni-layout-*`、`--el-*` 主题变量。
 - `base.scss`：基础样式。
-- `element-plus.scss`：Element Plus 全局变量与结构性覆盖。
-- `utilities.scss`：少量工具类。
+- `element-plus.scss`：Element Plus 结构性全局样式重置。
+- `components.scss`：组件全局样式，按主题覆盖时使用 `[data-layout='xxx']` 包裹。
 - `index.scss`：聚合入口。
 
 规则：

@@ -1,37 +1,63 @@
 <template>
-  <el-drawer v-model="visible" class="uni-theme-settings" :title="title" size="520px">
-    <el-form label-position="top" class="uni-theme-settings__form">
-      <el-divider content-position="left">布局主题</el-divider>
-      <p class="uni-theme-settings__hint">
-        主题变量统一维护在 <code>uni-lib/src/styles/variables.scss</code>，这里仅切换根节点
-        <code>data-layout</code> 属性。
-      </p>
+  <el-drawer v-model="visible" class="uni-theme-settings" :title="title" size="480px">
+    <div class="uni-theme-settings__group">
+      <div class="uni-theme-settings__row">
+        <span>黑夜模式</span>
+        <el-switch v-model="darkModeValue" />
+      </div>
 
-      <el-radio-group v-model="selectedLayout" class="uni-theme-settings__layouts">
-        <el-radio-button label="default">默认主题</el-radio-button>
-        <el-radio-button label="isa-light">ISA 浅色</el-radio-button>
-        <el-radio-button label="custom">自定义主题</el-radio-button>
-      </el-radio-group>
-    </el-form>
+      <div class="uni-theme-settings__row">
+        <span>框架布局</span>
+        <el-select v-model="layoutValue" class="uni-theme-settings__select">
+          <el-option label="经典" value="default" />
+          <el-option label="ISA 浅色" value="isa-light" />
+          <el-option label="EMS 深色" value="ems-dark" />
+          <el-option label="MAS 深色" value="mas-dark" />
+        </el-select>
+      </div>
 
-    <template #footer>
-      <el-button @click="resetTheme">重置</el-button>
-      <el-button @click="visible = false">取消</el-button>
-      <el-button type="primary" @click="applyTheme">应用</el-button>
-    </template>
+      <div class="uni-theme-settings__row">
+        <span>折叠菜单</span>
+        <el-switch v-model="sidebarCollapsedValue" />
+      </div>
+
+      <div class="uni-theme-settings__row">
+        <span>标签栏</span>
+        <el-switch v-model="showTagsValue" />
+      </div>
+    </div>
+
+    <div class="uni-theme-settings__group">
+      <div class="uni-theme-settings__row">
+        <span>国际化</span>
+        <el-segmented
+          v-model="localeValue"
+          :options="[
+            { label: '简体中文', value: 'zh-CN' },
+            { label: 'English', value: 'en' }
+          ]" />
+      </div>
+    </div>
   </el-drawer>
 </template>
 
 <script setup lang="ts">
-import { ref, watch } from 'vue'
+import { computed, ref, watch } from 'vue'
+import { useI18n } from 'vue-i18n'
+
+import { useAppStore } from '@/stores'
 
 defineOptions({
   name: 'UniThemeSettings'
 })
 
-type UniThemeLayout = 'default' | 'isa-light' | 'custom'
+type UniThemeLayout = 'default' | 'isa-light' | 'ems-dark' | 'mas-dark'
 
 const visible = defineModel<boolean>({ required: true })
+const appStore = useAppStore()
+const { locale: globalLocale } = useI18n({
+  useScope: 'global'
+})
 
 withDefaults(
   defineProps<{
@@ -48,19 +74,41 @@ const emit = defineEmits<{
 
 const selectedLayout = ref<UniThemeLayout>('default')
 
-const applyTheme = () => {
-  if (typeof document !== 'undefined') {
-    document.documentElement.dataset.layout = selectedLayout.value
+const darkModeValue = computed({
+  get: () => appStore.darkMode,
+  set: (value: boolean) => appStore.setDarkMode(value)
+})
+
+const layoutValue = computed<UniThemeLayout>({
+  get: () => selectedLayout.value,
+  set: (value) => {
+    selectedLayout.value = value
+    appStore.setFrameworkLayout(value)
+    emit('applied', value)
   }
+})
 
-  emit('applied', selectedLayout.value)
-  visible.value = false
-}
+const sidebarCollapsedValue = computed({
+  get: () => appStore.sidebarCollapsed,
+  set: (value: boolean) => appStore.setSidebarCollapsed(value)
+})
 
-const resetTheme = () => {
-  selectedLayout.value = 'default'
-  applyTheme()
-}
+const showTagsValue = computed({
+  get: () => appStore.showTags,
+  set: (value: boolean) => appStore.setShowTags(value)
+})
+
+const localeValue = computed({
+  get: () => appStore.locale,
+  set: (value: string) => {
+    appStore.setLocale(value)
+    globalLocale.value = value
+
+    if (typeof document !== 'undefined') {
+      document.documentElement.lang = value
+    }
+  }
+})
 
 watch(visible, (nextVisible) => {
   if (!nextVisible || typeof document === 'undefined') {
@@ -68,7 +116,10 @@ watch(visible, (nextVisible) => {
   }
 
   const layout = document.documentElement.dataset.layout
-  selectedLayout.value = layout === 'isa-light' || layout === 'custom' ? layout : 'default'
+  selectedLayout.value =
+    layout === 'isa-light' || layout === 'ems-dark' || layout === 'mas-dark'
+      ? layout
+      : 'default'
 })
 </script>
 
@@ -81,43 +132,27 @@ watch(visible, (nextVisible) => {
     overflow-x: hidden;
   }
 
-  &__form {
-    box-sizing: border-box;
-    max-height: calc(100vh - 140px);
-    min-width: 0;
-    padding-right: 4px;
-    overflow-x: hidden;
-    overflow-y: auto;
+  &__group {
+    padding: 18px 0;
+    border-bottom: 1px solid var(--el-border-color-light);
   }
 
-  .el-form-item {
-    margin-bottom: 14px;
+  &__row {
+    display: grid;
+    grid-template-columns: 120px minmax(0, 1fr);
+    gap: 24px;
+    align-items: center;
+    min-height: 46px;
+    color: var(--el-text-color-primary);
+    font-size: 15px;
   }
 
-  .el-form-item__content {
-    min-width: 0;
+  &__select {
+    width: 100%;
   }
 
-  &__hint {
-    margin: 0 0 12px;
-    color: var(--el-text-color-secondary);
-    font-size: 12px;
-    line-height: 1.5;
-    overflow-wrap: anywhere;
-    word-break: break-word;
-
-    code {
-      padding: 0 4px;
-      font-size: 11px;
-      white-space: normal;
-      word-break: break-all;
-      background: var(--el-fill-color-light);
-      border-radius: 4px;
-    }
-  }
-
-  &__layouts {
-    max-width: 100%;
+  .el-segmented {
+    justify-self: start;
   }
 }
 </style>

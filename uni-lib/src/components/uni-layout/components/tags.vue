@@ -78,6 +78,10 @@ import { useRoute, useRouter } from 'vue-router'
 import { useUniTagsViewStore } from '@/stores'
 import type { UniLayoutTag, UniLayoutTranslate } from '@/types/uni-layout'
 
+defineOptions({
+  name: 'Tags'
+})
+
 const props = withDefaults(
   defineProps<{
     tags: UniLayoutTag[]

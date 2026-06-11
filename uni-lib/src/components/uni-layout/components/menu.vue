@@ -12,7 +12,7 @@
         </slot>
       </template>
 
-      <UniLayoutMenuTree :menus="menu.children" :icon-map="iconMap" :translate="translate" />
+      <Menu :menus="menu.children" :icon-map="iconMap" :translate="translate" />
     </el-sub-menu>
 
     <el-menu-item v-else :index="menu.path">
@@ -35,7 +35,7 @@ import type { UniLayoutIconMap, UniLayoutMenuRecord, UniLayoutTranslate } from '
 import { uniIconMap } from '@/utils/icons'
 
 defineOptions({
-  name: 'UniLayoutMenuTree'
+  name: 'Menu'
 })
 
 withDefaults(

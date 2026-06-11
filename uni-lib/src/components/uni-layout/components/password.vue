@@ -37,7 +37,7 @@ import { useUserStore } from '@/stores'
 import type { UniLayoutChangePasswordPayload } from '@/types/uni-layout'
 
 defineOptions({
-  name: 'UniLayoutChangePasswordDialog'
+  name: 'PasswordDialog'
 })
 
 const visible = defineModel<boolean>({ required: true })

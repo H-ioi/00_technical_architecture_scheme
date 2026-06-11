@@ -1,0 +1,287 @@
+// 组件全局样式：维护 uni-* 工具类和业务组件公共布局，按主题覆盖时使用 [data-layout='xxx'] 包裹。
+.uni-text-ellipsis {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.uni-flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.uni-scroll-y {
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+.uni-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: var(--uni-scrollbar-thumb-color) transparent;
+
+  &::-webkit-scrollbar {
+    width: var(--uni-scrollbar-size);
+    height: var(--uni-scrollbar-size);
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: var(--uni-scrollbar-thumb-color);
+    border-radius: var(--el-border-radius-circle);
+  }
+
+  &::-webkit-scrollbar-thumb:hover {
+    background-color: var(--uni-scrollbar-thumb-hover-color);
+  }
+}
+
+.uni-scroll-y.uni-scrollbar {
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+// 默认列表页布局
+.uni-list-page {
+  display: grid;
+  min-width: 0;
+
+  > * {
+    min-width: 0;
+  }
+
+  &__header {
+    display: flex;
+    gap: 16px;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 15px;
+
+    h1 {
+      margin: 0;
+      font-size: 22px;
+    }
+
+    p {
+      margin: 0;
+      color: #64748b;
+      font-size: 13px;
+    }
+  }
+
+  // 标题区右侧多按钮并排：只占位布局，具体外观交给 Element Plus
+  &__header-actions {
+    display: inline-flex;
+    flex-wrap: wrap;
+    align-items: center;
+    row-gap: 8px;
+  }
+}
+
+.uni-layout {
+  width: 100%;
+  height: 100vh;
+  max-height: 100vh;
+  overflow: hidden;
+  background: var(--uni-layout-bg);
+
+  &__sidebar {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    overflow: hidden;
+    background: var(--uni-layout-sidebar-bg);
+    border-right: 1px solid var(--uni-layout-border);
+    transition: width 0.2s ease;
+  }
+
+  &__brand {
+    display: flex;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
+    height: var(--uni-layout-header-height);
+    padding: 0 12px;
+    overflow: hidden;
+  }
+
+  &__logo {
+    display: block;
+    max-width: 100%;
+    height: 80%;
+    object-fit: contain;
+  }
+
+  /** 占用 Logo 以下剩余高度；min-height:0 可滚动；隐藏滚动条轨迹（仍可滚轮/触控滚动） */
+  &__menu-wrap {
+    flex: 1;
+    min-height: 0;
+    overflow-x: hidden;
+    overflow-y: auto;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+
+    &::-webkit-scrollbar {
+      display: none !important;
+      width: 0 !important;
+      height: 0 !important;
+      background: transparent;
+    }
+
+    /* 少数 WebKit 下需同时收口轨道（避免仍可拖出占位） */
+    &::-webkit-scrollbar-track {
+      background: transparent;
+    }
+  }
+
+  &__menu {
+    border-right: 0;
+  }
+
+  &__main {
+    flex: 1;
+    min-width: 0;
+    min-height: 0;
+    overflow: hidden;
+  }
+
+  &__header {
+    display: flex;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: space-between;
+    height: var(--uni-layout-header-height);
+    background: var(--uni-layout-card-bg);
+    border-bottom: 1px solid var(--uni-layout-border);
+  }
+
+  &__header-left,
+  &__header-right {
+    display: flex;
+    align-items: center;
+  }
+
+  &__header-left {
+    gap: 12px;
+  }
+
+  &__header-right {
+    gap: 12px;
+    height: 100%;
+  }
+
+  &__locale,
+  &__user,
+  &__action {
+    display: inline-flex;
+    gap: 8px;
+    align-items: center;
+    height: 36px;
+    padding: 0;
+    color: var(--uni-layout-text);
+    cursor: pointer;
+    background: transparent;
+    border: 0;
+    border-radius: 8px;
+    transition:
+      color 0.2s ease,
+      background-color 0.2s ease;
+  }
+
+  &__locale:hover,
+  &__user:hover,
+  &__action:hover {
+    color: var(--uni-layout-primary);
+  }
+
+  &__locale {
+    font-size: 13px;
+    font-weight: 500;
+  }
+
+  &__locale-icon,
+  &__locale-arrow,
+  &__user-arrow {
+    color: var(--uni-layout-text-secondary);
+    transition: color 0.2s ease;
+  }
+
+  &__locale:hover &__locale-icon {
+    color: var(--uni-layout-primary);
+  }
+
+  &__locale-arrow,
+  &__user-arrow {
+    font-size: 12px;
+  }
+
+  &__divider {
+    width: 1px;
+    height: 28px;
+    background: var(--uni-layout-border);
+  }
+
+  &__user {
+    height: 44px;
+  }
+
+  &__avatar {
+    color: var(--uni-layout-primary);
+    font-size: 18px;
+    font-weight: 700;
+    background: var(--uni-layout-primary-light);
+    box-shadow: 0 12px 28px rgb(108 92 231 / 18%);
+  }
+
+  &__user-info {
+    display: grid;
+    gap: 2px;
+    min-width: 0;
+    text-align: left;
+
+    strong,
+    small {
+      max-width: 96px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    strong {
+      color: var(--uni-layout-text);
+      font-size: 13px;
+      font-weight: 600;
+      line-height: 1.1;
+    }
+
+    small {
+      color: var(--uni-layout-text-secondary);
+      font-size: 11px;
+      line-height: 1.1;
+    }
+  }
+
+  &__content {
+    flex: 1;
+    width: 100%;
+    min-width: 0;
+    min-height: 0;
+    padding: var(--uni-layout-content-padding);
+    overflow-x: hidden;
+    overflow-y: auto;
+  }
+}
+
+/** Teleport 下拉挂载在 body，需全局类名 */
+.uni-layout-user-dropdown {
+  min-width: 112px;
+
+  .el-dropdown-menu {
+    padding: 6px;
+  }
+
+  .el-dropdown-menu__item {
+    justify-content: center;
+    border-radius: 6px;
+    font-size: 13px;
+  }
+}

@@ -1,119 +1,57 @@
 <template>
   <el-container class="uni-layout" :class="`uni-layout--${preset}`" direction="horizontal">
     <slot name="sidebar">
-      <el-aside
-        class="uni-layout__sidebar"
-        :width="resolvedCollapsed ? '64px' : resolvedSidebarWidth">
-        <div class="uni-layout__brand">
-          <slot name="logo">
-            <img v-if="resolvedLogo" class="uni-layout__logo" :src="resolvedLogo" :alt="logoAlt" />
-          </slot>
-        </div>
-
-        <div class="uni-layout__menu-wrap">
-          <el-menu
-            class="uni-layout__menu"
-            :collapse="resolvedCollapsed"
-            :default-active="resolvedActiveMenu"
-            @select="(path: string) => onMenuSelect(path)">
-            <MenuTree :menus="resolvedMenus" :icon-map="iconMap" :translate="tr">
-              <template #menu-icon="slotProps">
-                <slot name="menu-icon" v-bind="slotProps" />
-              </template>
-              <template #menu-title="slotProps">
-                <slot name="menu-title" v-bind="slotProps" />
-              </template>
-            </MenuTree>
-          </el-menu>
-        </div>
-      </el-aside>
+      <SidebarPanel
+        :collapsed="resolvedCollapsed"
+        :sidebar-width="resolvedSidebarWidth"
+        :logo="resolvedLogo"
+        :logo-alt="logoAlt"
+        :menus="resolvedMenus"
+        :active-menu="resolvedActiveMenu"
+        :icon-map="iconMap"
+        :translate="tr"
+        @menu-select="onMenuSelect">
+        <template v-if="$slots.logo" #logo>
+          <slot name="logo" />
+        </template>
+        <template v-if="$slots['menu-icon']" #menu-icon="slotProps">
+          <slot name="menu-icon" v-bind="slotProps" />
+        </template>
+        <template v-if="$slots['menu-title']" #menu-title="slotProps">
+          <slot name="menu-title" v-bind="slotProps" />
+        </template>
+      </SidebarPanel>
     </slot>
 
     <el-container class="uni-layout__main" direction="vertical">
       <slot name="header">
-        <el-header class="uni-layout__header">
-          <div class="uni-layout__header-left">
-            <el-button text @click="onToggleSidebar">
-              <el-icon>
-                <Fold v-if="!resolvedCollapsed" />
-                <Expand v-else />
-              </el-icon>
-            </el-button>
-            <slot name="breadcrumb">
-              <el-breadcrumb separator="/">
-                <el-breadcrumb-item
-                  v-for="item in resolvedBreadcrumbs"
-                  :key="item.titleKey || item.title">
-                  {{ tr(item.titleKey, item.title) }}
-                </el-breadcrumb-item>
-              </el-breadcrumb>
-            </slot>
-          </div>
-
-          <div class="uni-layout__header-right">
-            <slot name="header-right">
-              <el-dropdown
-                v-if="showLocale"
-                trigger="click"
-                @command="(value: string) => onChangeLocale(value)">
-                <button class="uni-layout__locale uni-layout__action" type="button">
-                  <UniIcon class="uni-layout__locale-icon" :icon="UniZhEnIcon" :size="24" />
-                  {{ activeLocaleLabel }}
-                  <el-icon class="uni-layout__locale-arrow">
-                    <ArrowDown />
-                  </el-icon>
-                </button>
-                <template #dropdown>
-                  <el-dropdown-menu>
-                    <el-dropdown-item
-                      v-for="item in localeOptions"
-                      :key="item.value"
-                      :command="item.value">
-                      {{ item.label }}
-                    </el-dropdown-item>
-                  </el-dropdown-menu>
-                </template>
-              </el-dropdown>
-
-              <span v-if="showLocale && showUser" class="uni-layout__divider" />
-
-              <el-dropdown
-                v-if="showUser"
-                trigger="click"
-                popper-class="uni-layout-user-dropdown"
-                @command="(command: string) => onUserCommand(command)">
-                <button class="uni-layout__user" type="button">
-                  <span class="uni-layout__user-info">
-                    <strong>{{ displayName }}</strong>
-                    <small v-if="resolvedUser.role">{{ resolvedUser.role }}</small>
-                  </span>
-                  <el-avatar class="uni-layout__avatar" :src="resolvedUser.avatar" :size="34">
-                    {{ avatarText }}
-                  </el-avatar>
-                  <el-icon class="uni-layout__user-arrow">
-                    <ArrowDown />
-                  </el-icon>
-                </button>
-                <template #dropdown>
-                  <el-dropdown-menu>
-                    <el-dropdown-item
-                      v-for="item in resolvedUserCommands"
-                      :key="item.command"
-                      :command="item.command"
-                      :divided="item.divided">
-                      {{ item.label }}
-                    </el-dropdown-item>
-                  </el-dropdown-menu>
-                </template>
-              </el-dropdown>
-            </slot>
-          </div>
-        </el-header>
+        <HeaderBar
+          :collapsed="resolvedCollapsed"
+          :breadcrumbs="resolvedBreadcrumbs"
+          :translate="tr"
+          :show-locale="showLocale"
+          :show-user="showUser"
+          :locale-options="localeOptions"
+          :active-locale-label="activeLocaleLabel"
+          :user="resolvedUser"
+          :user-commands="resolvedUserCommands"
+          :display-name="displayName"
+          :avatar-text="avatarText"
+          @toggle-sidebar="onToggleSidebar"
+          @change-locale="onChangeLocale"
+          @user-command="onUserCommand">
+          <template v-if="$slots.breadcrumb" #breadcrumb>
+            <slot name="breadcrumb" />
+          </template>
+          <template v-if="$slots['header-right']" #header-right>
+            <slot name="header-right" />
+          </template>
+        </HeaderBar>
       </slot>
 
       <slot name="tags">
-        <TagsView
-          v-if="showTags"
+        <Tags
+          v-if="resolvedShowTags"
           :tags="resolvedTags"
           :active-path="resolvedActivePath"
           :sync-from-route="autoWire"
@@ -138,21 +76,20 @@
   </el-container>
 
   <template v-if="shellDialogs">
-    <UniLayoutChangePasswordDialog v-model="passwordVisible" />
-    <UniThemeSettings v-model="themeVisible" :title="tr('common.themeSettings', 'Theme settings')" />
+    <PasswordDialog v-model="passwordVisible" />
+    <UniThemeSettings
+      v-model="themeVisible"
+      :title="tr('common.themeSettings', 'Theme settings')" />
   </template>
 </template>
 
 <script setup lang="ts">
-import { ArrowDown, Expand, Fold } from '@element-plus/icons-vue'
 import { computed, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRoute, useRouter } from 'vue-router'
 
 import defaultLayoutLogo from '@/assets/images/logo-top.png'
-import { UniIcon } from '@/components/uni-icon'
 import { UniThemeSettings } from '@/components/uni-theme-settings'
-import { UniZhEnIcon } from '@/icons'
 import { tryGetUniConfig } from '@/plugins/config'
 import { useAppStore, useMenuStore, useUniTagsViewStore, useUserStore } from '@/stores'
 import type {
@@ -165,24 +102,18 @@ import type {
   UniLayoutUser,
   UniLayoutUserCommand
 } from '@/types/uni-layout'
-import UniLayoutChangePasswordDialog from './components/change-password-dialog.vue'
-import MenuTree from './components/menu-tree.vue'
-import TagsView from './components/tags-view.vue'
+import PasswordDialog from './components/password.vue'
+import HeaderBar from './components/header.vue'
+import SidebarPanel from './components/sidebar.vue'
+import Tags from './components/tags.vue'
 
 defineOptions({
   name: 'UniLayout'
 })
-
 const props = withDefaults(
   defineProps<{
-    /**
-     * 为 true 时从 Pinia（permission / app / user）与 vue-router 自动接线，
-     * 模板项目通常只需传 preset；logo 不传则用库内默认图。
-     */
     autoWire?: boolean
-    /** 自动接线时标签栏「关闭全部」等回落路径 */
     tagsFallback?: string
-    /** 是否内嵌改密弹窗、主题设置（默认命令 password / theme） */
     shellDialogs?: boolean
     menus?: UniLayoutMenuRecord[]
     tags?: UniLayoutTag[]
@@ -190,7 +121,6 @@ const props = withDefaults(
     activeMenu?: string
     collapsed?: boolean
     sidebarWidth?: string
-    /** 侧栏 Logo 地址；不传则用内置默认图；传空字符串可隐藏 */
     logo?: string
     logoAlt?: string
     locale?: string
@@ -201,7 +131,7 @@ const props = withDefaults(
     showTags?: boolean
     showLocale?: boolean
     showUser?: boolean
-    preset?: 'default' | 'isa-light' | 'custom'
+    preset?: 'default' | 'isa-light' | 'ems-dark' | 'mas-dark'
     iconMap?: UniLayoutIconMap
     translate?: UniLayoutTranslate
   }>(),
@@ -261,7 +191,6 @@ const tr: UniLayoutTranslate = (key?: string, fallback = '') => {
   return out !== key ? out : fallback
 }
 
-/** 未传 logo 用包内默认图；传空字符串则隐藏 */
 const resolvedLogo = computed(() => {
   if (props.logo === '') {
     return ''
@@ -337,6 +266,7 @@ const resolvedActiveMenu = computed(() => resolvedActiveMenuBase.value || resolv
 const resolvedCollapsed = computed(() =>
   props.autoWire ? appStore.sidebarCollapsed : props.collapsed
 )
+const resolvedShowTags = computed(() => (props.autoWire ? appStore.showTags : props.showTags))
 const resolvedSidebarWidth = computed(() =>
   props.autoWire ? appStore.sidebarWidth : props.sidebarWidth
 )
@@ -401,14 +331,14 @@ const avatarText = computed(() => {
   return /[a-z]/i.test(firstChar) ? firstChar.toUpperCase() : firstChar
 })
 
-const passwordVisible = ref(false)
-const themeVisible = ref(false)
+const passwordVisible = ref(false),
+  themeVisible = ref(false)
 
 watch(
-  () => props.preset,
-  (layout) => {
+  () => [appStore.frameworkLayout, props.preset] as const,
+  ([storedLayout, preset]) => {
     if (typeof document !== 'undefined') {
-      document.documentElement.dataset.layout = layout
+      document.documentElement.dataset.layout = storedLayout || preset
     }
   },
   { immediate: true }
@@ -508,216 +438,3 @@ const onUserCommand = (command: string) => {
   emit('userCommand', command)
 }
 </script>
-
-<style lang="scss">
-.uni-layout {
-  width: 100%;
-  height: 100vh;
-  max-height: 100vh;
-  overflow: hidden;
-  background: var(--uni-layout-bg);
-
-  &__sidebar {
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-    overflow: hidden;
-    background: var(--uni-layout-sidebar-bg);
-    border-right: 1px solid var(--uni-layout-border);
-    transition: width 0.2s ease;
-  }
-
-  &__brand {
-    display: flex;
-    flex-shrink: 0;
-    align-items: center;
-    justify-content: center;
-    height: var(--uni-layout-header-height);
-    padding: 0 12px;
-    overflow: hidden;
-  }
-
-  &__logo {
-    display: block;
-    max-width: 100%;
-    height: 80%;
-    object-fit: contain;
-  }
-
-  /** 占用 Logo 以下剩余高度；min-height:0 可滚动；隐藏滚动条轨迹（仍可滚轮/触控滚动） */
-  &__menu-wrap {
-    flex: 1;
-    min-height: 0;
-    overflow-x: hidden;
-    overflow-y: auto;
-    scrollbar-width: none;
-    -ms-overflow-style: none;
-
-    &::-webkit-scrollbar {
-      display: none !important;
-      width: 0 !important;
-      height: 0 !important;
-      background: transparent;
-    }
-
-    /* 少数 WebKit 下需同时收口轨道（避免仍可拖出占位） */
-    &::-webkit-scrollbar-track {
-      background: transparent;
-    }
-  }
-
-  &__menu {
-    border-right: 0;
-  }
-
-  &__main {
-    flex: 1;
-    min-width: 0;
-    min-height: 0;
-    overflow: hidden;
-  }
-
-  &__header {
-    display: flex;
-    flex-shrink: 0;
-    align-items: center;
-    justify-content: space-between;
-    height: var(--uni-layout-header-height);
-    background: var(--uni-layout-card-bg);
-    border-bottom: 1px solid var(--uni-layout-border);
-  }
-
-  &__header-left,
-  &__header-right {
-    display: flex;
-    align-items: center;
-  }
-
-  &__header-left {
-    gap: 12px;
-  }
-
-  &__header-right {
-    gap: 12px;
-    height: 100%;
-  }
-
-  &__locale,
-  &__user,
-  &__action {
-    display: inline-flex;
-    gap: 8px;
-    align-items: center;
-    height: 36px;
-    padding: 0;
-    color: var(--uni-layout-text);
-    cursor: pointer;
-    background: transparent;
-    border: 0;
-    border-radius: 8px;
-    transition:
-      color 0.2s ease,
-      background-color 0.2s ease;
-  }
-
-  &__locale:hover,
-  &__user:hover,
-  &__action:hover {
-    color: var(--uni-layout-primary);
-  }
-
-  &__locale {
-    font-size: 13px;
-    font-weight: 500;
-  }
-
-  &__locale-icon,
-  &__locale-arrow,
-  &__user-arrow {
-    color: var(--uni-layout-text-secondary);
-    transition: color 0.2s ease;
-  }
-
-  &__locale:hover &__locale-icon {
-    color: var(--uni-layout-primary);
-  }
-
-  &__locale-arrow,
-  &__user-arrow {
-    font-size: 12px;
-  }
-
-  &__divider {
-    width: 1px;
-    height: 28px;
-    background: var(--uni-layout-border);
-  }
-
-  &__user {
-    height: 44px;
-  }
-
-  &__avatar {
-    color: var(--uni-layout-primary);
-    font-size: 18px;
-    font-weight: 700;
-    background: var(--uni-layout-primary-light);
-    box-shadow: 0 12px 28px rgb(108 92 231 / 18%);
-  }
-
-  &__user-info {
-    display: grid;
-    gap: 2px;
-    min-width: 0;
-    text-align: left;
-
-    strong,
-    small {
-      max-width: 96px;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-    }
-
-    strong {
-      color: var(--uni-layout-text);
-      font-size: 13px;
-      font-weight: 600;
-      line-height: 1.1;
-    }
-
-    small {
-      color: var(--uni-layout-text-secondary);
-      font-size: 11px;
-      line-height: 1.1;
-    }
-  }
-
-  &__content {
-    flex: 1;
-    width: 100%;
-    min-width: 0;
-    min-height: 0;
-    padding: var(--uni-layout-content-padding);
-    overflow-x: hidden;
-    overflow-y: auto;
-  }
-}
-</style>
-
-<style lang="scss">
-/** Teleport 下拉挂载在 body，需全局类名 */
-.uni-layout-user-dropdown {
-  min-width: 112px;
-
-  .el-dropdown-menu {
-    padding: 6px;
-  }
-
-  .el-dropdown-menu__item {
-    justify-content: center;
-    border-radius: 6px;
-    font-size: 13px;
-  }
-}
-</style>
