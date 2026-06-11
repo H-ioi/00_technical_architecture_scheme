@@ -3,8 +3,7 @@
     <div
       v-loading="detailLoading"
       class="protocol-detail-loading-wrap"
-      :element-loading-text="$t('common.loading')"
-    >
+      :element-loading-text="$t('common.loading')">
       <div v-if="detail" class="protocol-detail">
         <el-descriptions :column="2" border>
           <el-descriptions-item v-for="item in displayItems" :key="item.label" :label="item.label">
@@ -15,8 +14,7 @@
               v-if="detail.documentUrl"
               type="primary"
               :href="detail.documentUrl"
-              target="_blank"
-            >
+              target="_blank">
               {{ detail.documentUrl }}
             </el-link>
             <span v-else>--</span>
@@ -35,14 +33,12 @@
             :toolbar="false"
             :action-column="{ fixed: false }"
             @load-success="signTableEmpty.onLoadSuccess"
-            @request-error="signTableEmpty.onRequestError"
-          >
+            @request-error="signTableEmpty.onRequestError">
             <template #empty>
               <ListTableEmpty
                 :kind="signTableEmpty.kind"
                 @reset="signTableEmpty.retry"
-                @retry="signTableEmpty.retry"
-              />
+                @retry="signTableEmpty.retry" />
             </template>
           </UniDataTable>
         </section>

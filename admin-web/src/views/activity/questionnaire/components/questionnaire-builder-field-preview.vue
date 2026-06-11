@@ -18,8 +18,7 @@
               type="textarea"
               :autosize="{ minRows: preview.textareaRows, maxRows: preview.textareaRows }"
               :placeholder="field.properties.placeholder || undefined"
-              disabled
-            />
+              disabled />
           </div>
         </div>
       </template>
@@ -75,14 +74,12 @@
                 collapse-tags
                 collapse-tags-tooltip
                 disabled
-                style="width: 100%"
-              >
+                style="width: 100%">
                 <el-option
                   v-for="opt in preview.options"
                   :key="opt.id"
                   :label="opt.label"
-                  :value="preview.selectMulti ? Number(opt.id) : String(opt.id)"
-                />
+                  :value="preview.selectMulti ? Number(opt.id) : String(opt.id)" />
               </el-select>
             </template>
             <span v-else class="qb__pv-empty qb__muted">{{
@@ -102,8 +99,7 @@
               class="qb__pv-dp"
               style="width: 100%"
               :type="preview.dateType"
-              :placeholder="t('activity.qbPreviewDatePh')"
-            />
+              :placeholder="t('activity.qbPreviewDatePh')" />
             <p v-if="field.properties.datetime_pattern" class="qb__pv-pattern qb__muted">
               {{ field.properties.datetime_pattern }}
             </p>

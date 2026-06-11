@@ -3,52 +3,48 @@
     <ApplyPageHeader
       @download-template="downloadIntentionTemplate"
       @add="openFormAdd"
-      @import-file="onImportFile"
-    />
+      @import-file="onImportFile" />
 
     <ApplyCascadeAlert v-if="commonDataError" @retry="reloadCommonData" />
+    <div class="uni-list-page__body">
+      <UniSearchForm
+        v-model="queryModel"
+        :config="searchCfg"
+        :collapsed="true"
+        :collapsed-rows="1"
+        :action-min-span="0"
+        :submit-text="$t('schoolBus.search')"
+        :reset-text="$t('schoolBus.reset')"
+        @search="search"
+        @reset="reset" />
 
-    <UniSearchForm
-      v-model="queryModel"
-      :config="searchCfg"
-      :collapsed="true"
-      :collapsed-rows="1"
-      :action-min-span="0"
-      :submit-text="$t('schoolBus.search')"
-      :reset-text="$t('schoolBus.reset')"
-      @search="search"
-      @reset="reset"
-    />
-
-    <UniDataTable
-      ref="tableRef"
-      row-key="id"
-      selection
-      :columns="columns"
-      :request="loadData"
-      :filters="filters"
-      :pagination="{ pageSize: 10, pageSizes: [10, 20, 50, 100] }"
-      :toolbar="{ refresh: true, density: true, columnSetting: true }"
-      :actions="actions"
-      :action-column="{ width: 110, fixed: 'right' }"
-      @selection-change="onSelectionChange"
-      @load-success="tableEmpty.onLoadSuccess"
-      @request-error="tableEmpty.onRequestError"
-    >
-      <template #toolbar>
-        <ApplyBatchToolbar
-          :disabled="selection.length === 0"
-          @approve="batchApprove"
-          @reject="openReject"
-          @payment="batchPayment"
-          @delete="del"
-        />
-      </template>
-      <template #empty>
-        <ListTableEmpty :kind="tableEmpty.kind" @reset="reset" @retry="tableEmpty.retry" />
-      </template>
-    </UniDataTable>
-
+      <UniDataTable
+        ref="tableRef"
+        row-key="id"
+        selection
+        :columns="columns"
+        :request="loadData"
+        :filters="filters"
+        :pagination="{ pageSize: 10, pageSizes: [10, 20, 50, 100] }"
+        :toolbar="{ refresh: true, density: true, columnSetting: true }"
+        :actions="actions"
+        :action-column="{ width: 110, fixed: 'right' }"
+        @selection-change="onSelectionChange"
+        @load-success="tableEmpty.onLoadSuccess"
+        @request-error="tableEmpty.onRequestError">
+        <template #toolbar>
+          <ApplyBatchToolbar
+            :disabled="selection.length === 0"
+            @approve="batchApprove"
+            @reject="openReject"
+            @payment="batchPayment"
+            @delete="del" />
+        </template>
+        <template #empty>
+          <ListTableEmpty :kind="tableEmpty.kind" @reset="reset" @retry="tableEmpty.retry" />
+        </template>
+      </UniDataTable>
+    </div>
     <OrderDetailDialog :visible="detailVisible" :order-id="detailOrderId" @close="closeDetail" />
 
     <BusOrderFormDialog
@@ -59,8 +55,7 @@
       :school-options="schoolOptions"
       :default-school-id="defaultSingleSchoolId"
       :multi-school="multiSchool"
-      @saved="refreshTable"
-    />
+      @saved="refreshTable" />
 
     <ApplyRejectDialog ref="rejectDialogRef" @saved="onRejectSaved" />
   </section>

@@ -11,51 +11,48 @@
         </el-button>
       </div>
     </div>
+    <div class="uni-list-page__body">
+      <UniSearchForm
+        v-model="queryModel"
+        :config="searchCfg"
+        :collapsed="true"
+        :collapsed-rows="1"
+        :action-min-span="0"
+        :submit-text="$t('schoolDoctor.common.search')"
+        :reset-text="$t('schoolDoctor.common.reset')"
+        @search="search"
+        @reset="onReset" />
 
-    <UniSearchForm
-      v-model="queryModel"
-      :config="searchCfg"
-      :collapsed="true"
-      :collapsed-rows="1"
-      :action-min-span="0"
-      :submit-text="$t('schoolDoctor.common.search')"
-      :reset-text="$t('schoolDoctor.common.reset')"
-      @search="search"
-      @reset="onReset"
-    />
-
-    <UniDataTable
-      ref="tableRef"
-      row-key="id"
-      selection
-      :columns="columns"
-      :request="loadData"
-      :filters="filters"
-      :pagination="{ pageSize: 10, pageSizes: [10, 20, 50, 100] }"
-      :toolbar="{ refresh: true, density: true, columnSetting: true }"
-      :actions="actions"
-      :action-column="{ width: 120, fixed: 'right' }"
-      @selection-change="onSelectionChange"
-      @load-success="tableEmpty.onLoadSuccess"
-      @request-error="tableEmpty.onRequestError"
-    >
-      <template #toolbar>
-        <el-button type="danger" :disabled="selectedIds.length === 0" @click="batchDelete">
-          {{ $t('schoolDoctor.regulation.batchDelete') }}
-        </el-button>
-      </template>
-      <template #empty>
-        <ListTableEmpty :kind="tableEmpty.kind" @reset="onReset" @retry="tableEmpty.retry" />
-      </template>
-    </UniDataTable>
-
+      <UniDataTable
+        ref="tableRef"
+        row-key="id"
+        selection
+        :columns="columns"
+        :request="loadData"
+        :filters="filters"
+        :pagination="{ pageSize: 10, pageSizes: [10, 20, 50, 100] }"
+        :toolbar="{ refresh: true, density: true, columnSetting: true }"
+        :actions="actions"
+        :action-column="{ width: 120, fixed: 'right' }"
+        @selection-change="onSelectionChange"
+        @load-success="tableEmpty.onLoadSuccess"
+        @request-error="tableEmpty.onRequestError">
+        <template #toolbar>
+          <el-button type="danger" :disabled="selectedIds.length === 0" @click="batchDelete">
+            {{ $t('schoolDoctor.regulation.batchDelete') }}
+          </el-button>
+        </template>
+        <template #empty>
+          <ListTableEmpty :kind="tableEmpty.kind" @reset="onReset" @retry="tableEmpty.retry" />
+        </template>
+      </UniDataTable>
+    </div>
     <FormDrawer
       v-model:visible="drawerVisible"
       :mode="drawerMode"
       :record-id="activeRecordId"
       :school-options="schoolOptions"
-      @saved="refreshTable"
-    />
+      @saved="refreshTable" />
   </section>
 </template>
 
@@ -114,13 +111,7 @@ const defaultSchoolId = computed(() => {
 })
 
 const searchCfg = computed(() =>
-  searchForm(
-    t,
-    schoolOptions.value,
-    typeOpts(t),
-    statusOpts(t),
-    defaultSchoolId.value ?? undefined
-  )
+  searchForm(t, schoolOptions.value, typeOpts(t), statusOpts(t), defaultSchoolId.value ?? undefined)
 )
 const columns = computed(() => tableCols(t))
 

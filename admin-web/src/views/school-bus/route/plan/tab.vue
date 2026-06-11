@@ -20,8 +20,7 @@
         <el-button
           v-uni-permission="'bussection_add'"
           type="primary"
-          @click="((termEditingId = null), (termFormVisible = true))"
-        >
+          @click="((termEditingId = null), (termFormVisible = true))">
           {{ $t('schoolBus.routePlan.addTerm') }}
         </el-button>
       </div>
@@ -35,8 +34,7 @@
         <el-button
           v-uni-permission="'busstation_add'"
           type="primary"
-          @click="((stationEditingId = null), (stationFormVisible = true))"
-        >
+          @click="((stationEditingId = null), (stationFormVisible = true))">
           {{ $t('schoolBus.routePlan.addStation') }}
         </el-button>
       </div>
@@ -47,161 +45,152 @@
       type="file"
       accept=".xlsx,.xls"
       class="school-bus-route-plan__file"
-      @change="onRouteImportFile"
-    >
+      @change="onRouteImportFile" />
     <input
       ref="stationFileRef"
       type="file"
       accept=".xlsx,.xls"
       class="school-bus-route-plan__file"
-      @change="onStationImportFile"
-    >
+      @change="onStationImportFile" />
 
     <el-tabs v-model="activeTab" class="school-bus-route-plan__tabs">
       <el-tab-pane :label="$t('schoolBus.routePlan.tabRoutes')" name="routes">
-        <UniSearchForm
-          v-model="routeQueryModel"
-          :config="routeSearchConfig"
-          :collapsed="true"
-          :collapsed-rows="1"
-          :action-min-span="0"
-          :submit-text="$t('schoolBus.search')"
-          :reset-text="$t('schoolBus.reset')"
-          @search="searchRoutes"
-          @reset="resetRouteSearch"
-        />
-        <UniDataTable
-          ref="routesTableRef"
-          row-key="id"
-          selection
-          :columns="routeColumns"
-          :request="loadRoutes"
-          :filters="routeFilters"
-          :pagination="{ pageSize: 10, pageSizes: [10, 20, 50, 100] }"
-          :toolbar="{ refresh: true, density: true, columnSetting: true }"
-          :actions="routeActions"
-          :action-column="{ width: 110, fixed: 'right' }"
-          @selection-change="onRouteSelectionChange"
-          @load-success="routeTableEmpty.onLoadSuccess"
-          @request-error="routeTableEmpty.onRequestError"
-        >
-          <template #toolbar>
-            <el-button
-              v-uni-permission="ROUTE_LINE_COPY_PERMISSIONS"
-              :disabled="routeSelectedIds.length === 0"
-              @click="copySelected"
-            >
-              {{ $t('schoolBus.routePlan.copyRoute') }}
-            </el-button>
-            <el-button
-              v-uni-permission="'busline_del'"
-              type="danger"
-              :disabled="routeSelectedIds.length === 0"
-              @click="deleteSelected"
-            >
-              {{ $t('schoolBus.delete') }}
-            </el-button>
-          </template>
-          <template #empty>
-            <ListTableEmpty
-              :kind="routeTableEmpty.kind"
-              @reset="resetRouteSearch"
-              @retry="routeTableEmpty.retry"
-            />
-          </template>
-        </UniDataTable>
+        <div class="uni-list-page__body">
+          <UniSearchForm
+            v-model="routeQueryModel"
+            :config="routeSearchConfig"
+            :collapsed="true"
+            :collapsed-rows="1"
+            :action-min-span="0"
+            :submit-text="$t('schoolBus.search')"
+            :reset-text="$t('schoolBus.reset')"
+            @search="searchRoutes"
+            @reset="resetRouteSearch" />
+          <UniDataTable
+            ref="routesTableRef"
+            row-key="id"
+            selection
+            :columns="routeColumns"
+            :request="loadRoutes"
+            :filters="routeFilters"
+            :pagination="{ pageSize: 10, pageSizes: [10, 20, 50, 100] }"
+            :toolbar="{ refresh: true, density: true, columnSetting: true }"
+            :actions="routeActions"
+            :action-column="{ width: 110, fixed: 'right' }"
+            @selection-change="onRouteSelectionChange"
+            @load-success="routeTableEmpty.onLoadSuccess"
+            @request-error="routeTableEmpty.onRequestError">
+            <template #toolbar>
+              <el-button
+                v-uni-permission="ROUTE_LINE_COPY_PERMISSIONS"
+                :disabled="routeSelectedIds.length === 0"
+                @click="copySelected">
+                {{ $t('schoolBus.routePlan.copyRoute') }}
+              </el-button>
+              <el-button
+                v-uni-permission="'busline_del'"
+                type="danger"
+                :disabled="routeSelectedIds.length === 0"
+                @click="deleteSelected">
+                {{ $t('schoolBus.delete') }}
+              </el-button>
+            </template>
+            <template #empty>
+              <ListTableEmpty
+                :kind="routeTableEmpty.kind"
+                @reset="resetRouteSearch"
+                @retry="routeTableEmpty.retry" />
+            </template>
+          </UniDataTable>
+        </div>
       </el-tab-pane>
       <el-tab-pane :label="$t('schoolBus.routePlan.tabTerm')" name="term">
-        <UniSearchForm
-          v-model="termQueryModel"
-          :config="termSearchConfig"
-          :collapsed="true"
-          :collapsed-rows="1"
-          :action-min-span="0"
-          :submit-text="$t('schoolBus.search')"
-          :reset-text="$t('schoolBus.reset')"
-          @search="searchTerms"
-          @reset="resetTermSearch"
-        />
-        <UniDataTable
-          ref="termTableRef"
-          row-key="id"
-          selection
-          :columns="termColumns"
-          :request="loadTerms"
-          :filters="termFilters"
-          :pagination="{ pageSize: 10, pageSizes: [10, 20, 50, 100] }"
-          :toolbar="{ refresh: true, density: true, columnSetting: true }"
-          :actions="termActions"
-          :action-column="{ width: 110, fixed: 'right' }"
-          @selection-change="onTermSelectionChange"
-          @load-success="termTableEmpty.onLoadSuccess"
-          @request-error="termTableEmpty.onRequestError"
-        >
-          <template #toolbar>
-            <el-button
-              v-uni-permission="'bussection_del'"
-              type="danger"
-              :disabled="termSelectedIds.length === 0"
-              @click="deleteTermsSelected"
-            >
-              {{ $t('schoolBus.delete') }}
-            </el-button>
-          </template>
-          <template #empty>
-            <ListTableEmpty
-              :kind="termTableEmpty.kind"
-              @reset="resetTermSearch"
-              @retry="termTableEmpty.retry"
-            />
-          </template>
-        </UniDataTable>
+        <div class="uni-list-page__body">
+          <UniSearchForm
+            v-model="termQueryModel"
+            :config="termSearchConfig"
+            :collapsed="true"
+            :collapsed-rows="1"
+            :action-min-span="0"
+            :submit-text="$t('schoolBus.search')"
+            :reset-text="$t('schoolBus.reset')"
+            @search="searchTerms"
+            @reset="resetTermSearch" />
+          <UniDataTable
+            ref="termTableRef"
+            row-key="id"
+            selection
+            :columns="termColumns"
+            :request="loadTerms"
+            :filters="termFilters"
+            :pagination="{ pageSize: 10, pageSizes: [10, 20, 50, 100] }"
+            :toolbar="{ refresh: true, density: true, columnSetting: true }"
+            :actions="termActions"
+            :action-column="{ width: 110, fixed: 'right' }"
+            @selection-change="onTermSelectionChange"
+            @load-success="termTableEmpty.onLoadSuccess"
+            @request-error="termTableEmpty.onRequestError">
+            <template #toolbar>
+              <el-button
+                v-uni-permission="'bussection_del'"
+                type="danger"
+                :disabled="termSelectedIds.length === 0"
+                @click="deleteTermsSelected">
+                {{ $t('schoolBus.delete') }}
+              </el-button>
+            </template>
+            <template #empty>
+              <ListTableEmpty
+                :kind="termTableEmpty.kind"
+                @reset="resetTermSearch"
+                @retry="termTableEmpty.retry" />
+            </template>
+          </UniDataTable>
+        </div>
       </el-tab-pane>
       <el-tab-pane :label="$t('schoolBus.routePlan.tabStation')" name="station">
-        <UniSearchForm
-          v-model="stationQueryModel"
-          :config="stationSearchConfig"
-          :collapsed="true"
-          :collapsed-rows="1"
-          :action-min-span="0"
-          :submit-text="$t('schoolBus.search')"
-          :reset-text="$t('schoolBus.reset')"
-          @search="searchStations"
-          @reset="resetStationSearch"
-        />
-        <UniDataTable
-          ref="stationTableRef"
-          row-key="id"
-          selection
-          :columns="stationColumns"
-          :request="loadStations"
-          :filters="stationFilters"
-          :pagination="{ pageSize: 10, pageSizes: [10, 20, 50, 100] }"
-          :toolbar="{ refresh: true, density: true, columnSetting: true }"
-          :actions="stationActions"
-          :action-column="{ width: 110, fixed: 'right' }"
-          @selection-change="onStationSelectionChange"
-          @load-success="stationTableEmpty.onLoadSuccess"
-          @request-error="stationTableEmpty.onRequestError"
-        >
-          <template #toolbar>
-            <el-button
-              v-uni-permission="'busstation_del'"
-              type="danger"
-              :disabled="stationSelectedIds.length === 0"
-              @click="deleteStationsSelected"
-            >
-              {{ $t('schoolBus.delete') }}
-            </el-button>
-          </template>
-          <template #empty>
-            <ListTableEmpty
-              :kind="stationTableEmpty.kind"
-              @reset="resetStationSearch"
-              @retry="stationTableEmpty.retry"
-            />
-          </template>
-        </UniDataTable>
+        <div class="uni-list-page__body">
+          <UniSearchForm
+            v-model="stationQueryModel"
+            :config="stationSearchConfig"
+            :collapsed="true"
+            :collapsed-rows="1"
+            :action-min-span="0"
+            :submit-text="$t('schoolBus.search')"
+            :reset-text="$t('schoolBus.reset')"
+            @search="searchStations"
+            @reset="resetStationSearch" />
+          <UniDataTable
+            ref="stationTableRef"
+            row-key="id"
+            selection
+            :columns="stationColumns"
+            :request="loadStations"
+            :filters="stationFilters"
+            :pagination="{ pageSize: 10, pageSizes: [10, 20, 50, 100] }"
+            :toolbar="{ refresh: true, density: true, columnSetting: true }"
+            :actions="stationActions"
+            :action-column="{ width: 110, fixed: 'right' }"
+            @selection-change="onStationSelectionChange"
+            @load-success="stationTableEmpty.onLoadSuccess"
+            @request-error="stationTableEmpty.onRequestError">
+            <template #toolbar>
+              <el-button
+                v-uni-permission="'busstation_del'"
+                type="danger"
+                :disabled="stationSelectedIds.length === 0"
+                @click="deleteStationsSelected">
+                {{ $t('schoolBus.delete') }}
+              </el-button>
+            </template>
+            <template #empty>
+              <ListTableEmpty
+                :kind="stationTableEmpty.kind"
+                @reset="resetStationSearch"
+                @retry="stationTableEmpty.retry" />
+            </template>
+          </UniDataTable>
+        </div>
       </el-tab-pane>
     </el-tabs>
 
@@ -209,8 +198,7 @@
       ref="routeFormRef"
       :school-records="schoolRecords"
       :locale="locale()"
-      @saved="() => routesTableRef?.value?.refresh?.()"
-    />
+      @saved="() => routesTableRef?.value?.refresh?.()" />
 
     <TermFormDialog
       v-model="termFormVisible"
@@ -218,8 +206,7 @@
       :school-records="schoolRecords"
       :default-school-id="defaultSchoolId"
       :multi-school="multiSchool"
-      @saved="() => termTableRef?.value?.refresh?.()"
-    />
+      @saved="() => termTableRef?.value?.refresh?.()" />
 
     <StationFormDialog
       v-model="stationFormVisible"
@@ -227,16 +214,14 @@
       :school-records="schoolRecords"
       :default-school-id="defaultSchoolId"
       :multi-school="multiSchool"
-      @saved="() => stationTableRef?.value?.refresh?.()"
-    />
+      @saved="() => stationTableRef?.value?.refresh?.()" />
 
     <el-dialog v-model="detailVisible" width="900px" :title="$t('schoolBus.look')">
       <el-descriptions v-if="detailRecord" :column="2" border>
         <el-descriptions-item
           v-for="col in routeColumns"
           :key="String(col.prop)"
-          :label="col.label"
-        >
+          :label="col.label">
           {{ detailCellText(detailRecord, col.prop) }}
         </el-descriptions-item>
       </el-descriptions>
@@ -255,8 +240,7 @@
         <el-descriptions-item
           v-for="col in stationColumns"
           :key="String(col.prop)"
-          :label="col.label"
-        >
+          :label="col.label">
           {{ detailCellText(stationDetailRecord, col.prop) }}
         </el-descriptions-item>
       </el-descriptions>

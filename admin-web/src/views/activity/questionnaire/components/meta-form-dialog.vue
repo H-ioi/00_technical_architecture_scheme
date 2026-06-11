@@ -6,8 +6,7 @@
     destroy-on-close
     append-to-body
     :close-on-click-modal="false"
-    @closed="onClosed"
-  >
+    @closed="onClosed">
     <el-alert type="info" show-icon :closable="false" class="activity-q-meta__hint">
       {{ $t('activity.qMetaDesignerHint') }}
     </el-alert>
@@ -16,8 +15,7 @@
       v-model="form"
       mode="edit"
       class="activity-q-meta__form"
-      :config="formConfig"
-    />
+      :config="formConfig" />
     <template #footer>
       <el-button @click="visible = false">{{ $t('common.cancel') }}</el-button>
       <el-button type="primary" :loading="saving" @click="submit">

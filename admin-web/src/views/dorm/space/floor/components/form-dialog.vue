@@ -3,8 +3,7 @@
     <div
       v-loading="detailLoading"
       class="dorm-floor-form__body"
-      :element-loading-text="$t('common.loading')"
-    >
+      :element-loading-text="$t('common.loading')">
       <UniForm ref="uniFormRef" v-model="formModel" mode="edit" :config="dialogFormCfg" />
     </div>
 
@@ -60,9 +59,7 @@ const dialogFormCfg = computed<UniFormConfig>(() => ({
   rules: dialogFormRules(t)
 }))
 
-const title = computed(() =>
-  t(props.mode === 'add' ? 'dorm.floor.formAdd' : 'dorm.floor.formEdit')
-)
+const title = computed(() => t(props.mode === 'add' ? 'dorm.floor.formAdd' : 'dorm.floor.formEdit'))
 
 async function loadBuildingOptions(schoolId?: string | number) {
   if (schoolId == null || schoolId === '') {

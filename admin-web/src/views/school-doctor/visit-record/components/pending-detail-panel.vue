@@ -8,8 +8,7 @@
             ref="studentSelectRef"
             readonly
             :with-drug-allergy="true"
-            :school-records="schoolRecords"
-          />
+            :school-records="schoolRecords" />
         </div>
         <div v-if="allergyList.length" class="pending-detail__card pending-detail__card--warn">
           <h3>{{ $t('schoolDoctor.visitRecord.sectionAllergy') }}</h3>
@@ -41,33 +40,73 @@
 
         <div class="pending-detail__card">
           <h3>{{ $t('schoolDoctor.visitRecord.sectionMedication') }}</h3>
-          <div v-if="medicationList.length === 0" class="pending-detail__empty">{{ $t('schoolDoctor.common.noData') }}</div>
-          <div v-for="(item, index) in medicationList" :key="item.id || index" class="pending-detail__med">
+          <div v-if="medicationList.length === 0" class="pending-detail__empty">
+            {{ $t('schoolDoctor.common.noData') }}
+          </div>
+          <div
+            v-for="(item, index) in medicationList"
+            :key="item.id || index"
+            class="pending-detail__med">
             <strong>{{ index + 1 }}. {{ item.medicineName || '--' }}</strong>
-            <p v-if="item.dosage">{{ $t('schoolDoctor.visitRecord.fieldDosage') }}：{{ item.dosage }}</p>
-            <p v-if="item.bringQuantity">{{ $t('schoolDoctor.visitRecord.fieldBringQty') }}：{{ item.bringQuantity }}</p>
+            <p v-if="item.dosage">
+              {{ $t('schoolDoctor.visitRecord.fieldDosage') }}：{{ item.dosage }}
+            </p>
+            <p v-if="item.bringQuantity">
+              {{ $t('schoolDoctor.visitRecord.fieldBringQty') }}：{{ item.bringQuantity }}
+            </p>
           </div>
         </div>
 
         <div v-if="showOperationForm" class="pending-detail__card">
           <h3>{{ $t('schoolDoctor.visitRecord.sectionOperate') }}</h3>
-          <PendingOperationForm ref="operationFormRef" v-model:operation-form="operationForm" :readonly="operationReadonly" />
+          <PendingOperationForm
+            ref="operationFormRef"
+            v-model:operation-form="operationForm"
+            :readonly="operationReadonly" />
         </div>
 
         <div v-if="showOperationRecords" class="pending-detail__card">
           <h3>{{ $t('schoolDoctor.visitRecord.sectionOperateRecords') }}</h3>
           <el-table v-if="operationRecords.length" :data="operationRecords" border size="small">
-            <el-table-column :label="$t('schoolDoctor.visitRecord.fieldOperateDate')" prop="operateDate" width="150" />
-            <el-table-column :label="$t('schoolDoctor.visitRecord.fieldOperateTime')" prop="operateTime" width="150" />
-            <el-table-column :label="$t('schoolDoctor.visitRecord.fieldOperateStatus')" prop="operateStatusText" width="90" />
-            <el-table-column :label="$t('schoolDoctor.visitRecord.fieldSituation')" prop="specificSituation" min-width="140" show-overflow-tooltip />
-            <el-table-column :label="$t('schoolDoctor.visitRecord.fieldOperator')" prop="operatorName" width="100" />
-            <el-table-column :label="$t('schoolDoctor.visitRecord.fieldLeaveTime')" prop="leaveTime" width="150" />
-            <el-table-column :label="$t('schoolDoctor.visitRecord.fieldLeaveDestination')" prop="leaveDestinationText" width="90" />
+            <el-table-column
+              :label="$t('schoolDoctor.visitRecord.fieldOperateDate')"
+              prop="operateDate"
+              width="150" />
+            <el-table-column
+              :label="$t('schoolDoctor.visitRecord.fieldOperateTime')"
+              prop="operateTime"
+              width="150" />
+            <el-table-column
+              :label="$t('schoolDoctor.visitRecord.fieldOperateStatus')"
+              prop="operateStatusText"
+              width="90" />
+            <el-table-column
+              :label="$t('schoolDoctor.visitRecord.fieldSituation')"
+              prop="specificSituation"
+              min-width="140"
+              show-overflow-tooltip />
+            <el-table-column
+              :label="$t('schoolDoctor.visitRecord.fieldOperator')"
+              prop="operatorName"
+              width="100" />
+            <el-table-column
+              :label="$t('schoolDoctor.visitRecord.fieldLeaveTime')"
+              prop="leaveTime"
+              width="150" />
+            <el-table-column
+              :label="$t('schoolDoctor.visitRecord.fieldLeaveDestination')"
+              prop="leaveDestinationText"
+              width="90" />
             <el-table-column :label="$t('schoolDoctor.common.action')" width="100" fixed="right">
               <template #default="{ row }">
-                <el-button type="primary" link @click="emit('view-operation', row)">{{ $t('schoolDoctor.studentRecord.view') }}</el-button>
-                <el-button v-if="canEditOperation" type="primary" link @click="emit('edit-operation', row)">
+                <el-button type="primary" link @click="emit('view-operation', row)">{{
+                  $t('schoolDoctor.studentRecord.view')
+                }}</el-button>
+                <el-button
+                  v-if="canEditOperation"
+                  type="primary"
+                  link
+                  @click="emit('edit-operation', row)">
                   {{ $t('schoolDoctor.studentRecord.edit') }}
                 </el-button>
               </template>
@@ -86,7 +125,10 @@ import { useUniI18n } from 'uni-ui-lib'
 import { computed, ref, watch } from 'vue'
 
 import StudentRemoteSelect from '@/views/school-doctor/components/student-remote-select.vue'
-import type { PendingMedicationDetail, PendingOperationFormModel } from '@/types/modules/school-doctor-visit-record'
+import type {
+  PendingMedicationDetail,
+  PendingOperationFormModel
+} from '@/types/modules/school-doctor-visit-record'
 import type { SchoolOptionRecord } from '@/types/modules/membership'
 
 import { leaveDestinationOpts, operateStatusOpts } from '../record.config'

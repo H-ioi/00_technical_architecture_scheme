@@ -1,5 +1,10 @@
 <template>
-  <el-form ref="formRef" :model="operationForm" :rules="rules" label-position="top" :disabled="readonly">
+  <el-form
+    ref="formRef"
+    :model="operationForm"
+    :rules="rules"
+    label-position="top"
+    :disabled="readonly">
     <el-row :gutter="16">
       <el-col :span="12">
         <el-form-item :label="$t('schoolDoctor.visitRecord.fieldOperateTime')" prop="operateTime">
@@ -8,8 +13,7 @@
               v-model="operationForm.operateTime"
               type="datetime"
               value-format="YYYY-MM-DD HH:mm:ss"
-              style="width: 100%"
-            />
+              style="width: 100%" />
             <el-button v-if="!readonly" type="primary" link @click="setNow('operateTime')">
               {{ $t('schoolDoctor.visitRecord.now') }}
             </el-button>
@@ -22,9 +26,13 @@
         </el-form-item>
       </el-col>
       <el-col :span="12">
-        <el-form-item :label="$t('schoolDoctor.visitRecord.fieldOperateStatus')" prop="operateStatus">
+        <el-form-item
+          :label="$t('schoolDoctor.visitRecord.fieldOperateStatus')"
+          prop="operateStatus">
           <el-radio-group v-model="operationForm.operateStatus">
-            <el-radio v-for="item in operateOptions" :key="item.value" :value="item.value">{{ item.label }}</el-radio>
+            <el-radio v-for="item in operateOptions" :key="item.value" :value="item.value">{{
+              item.label
+            }}</el-radio>
           </el-radio-group>
         </el-form-item>
       </el-col>
@@ -37,15 +45,16 @@
         </el-form-item>
       </el-col>
       <el-col :span="24">
-        <el-form-item :label="$t('schoolDoctor.visitRecord.fieldSituation')" prop="specificSituation">
+        <el-form-item
+          :label="$t('schoolDoctor.visitRecord.fieldSituation')"
+          prop="specificSituation">
           <el-input
             v-model="operationForm.specificSituation"
             type="textarea"
             :rows="3"
             maxlength="300"
             show-word-limit
-            :placeholder="$t('schoolDoctor.visitRecord.phOperateSituation')"
-          />
+            :placeholder="$t('schoolDoctor.visitRecord.phOperateSituation')" />
         </el-form-item>
       </el-col>
       <el-col :span="12">
@@ -55,8 +64,7 @@
               v-model="operationForm.leaveTime"
               type="datetime"
               value-format="YYYY-MM-DD HH:mm:ss"
-              style="width: 100%"
-            />
+              style="width: 100%" />
             <el-button v-if="!readonly" type="primary" link @click="setNow('leaveTime')">
               {{ $t('schoolDoctor.visitRecord.now') }}
             </el-button>
@@ -69,9 +77,12 @@
             v-model="operationForm.leaveDestination"
             clearable
             style="width: 100%"
-            :placeholder="$t('schoolDoctor.visitRecord.phLeaveDestinationSelect')"
-          >
-            <el-option v-for="item in leaveOptions" :key="item.value" :label="item.label" :value="item.value" />
+            :placeholder="$t('schoolDoctor.visitRecord.phLeaveDestinationSelect')">
+            <el-option
+              v-for="item in leaveOptions"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value" />
           </el-select>
         </el-form-item>
       </el-col>
@@ -79,10 +90,17 @@
         <el-form-item>
           <template #label>
             <span>{{ $t('schoolDoctor.visitRecord.fieldAttachment') }}</span>
-            <span class="pending-op-form__tip">{{ $t('schoolDoctor.visitRecord.attachmentTip') }}</span>
+            <span class="pending-op-form__tip">{{
+              $t('schoolDoctor.visitRecord.attachmentTip')
+            }}</span>
           </template>
-          <div v-for="(file, index) in operationForm.attachmentList" :key="file.url || index" class="pending-op-form__file">
-            <el-link :href="file.attachmentUrl || file.url" target="_blank" type="primary">{{ file.name || 'file' }}</el-link>
+          <div
+            v-for="(file, index) in operationForm.attachmentList"
+            :key="file.url || index"
+            class="pending-op-form__file">
+            <el-link :href="file.attachmentUrl || file.url" target="_blank" type="primary">{{
+              file.name || 'file'
+            }}</el-link>
             <el-button v-if="!readonly" type="danger" link @click="removeAttachment(index)">
               {{ $t('schoolDoctor.common.remove') }}
             </el-button>
@@ -92,8 +110,7 @@
             action="#"
             :show-file-list="false"
             :http-request="handleUpload"
-            :before-upload="beforeUpload"
-          >
+            :before-upload="beforeUpload">
             <el-button :loading="uploading">{{ $t('schoolDoctor.common.upload') }}</el-button>
           </el-upload>
         </el-form-item>
@@ -124,9 +141,15 @@ const leaveOptions = computed(() => leaveDestinationOpts(t))
 const operateOptions = computed(() => operateStatusOpts(t))
 
 const rules = computed<FormRules>(() => ({
-  operateTime: [{ required: true, message: t('schoolDoctor.visitRecord.ruleOperateTime'), trigger: 'change' }],
-  operateStatus: [{ required: true, message: t('schoolDoctor.visitRecord.ruleOperateStatus'), trigger: 'change' }],
-  specificSituation: [{ required: true, message: t('schoolDoctor.visitRecord.ruleSituation'), trigger: 'blur' }]
+  operateTime: [
+    { required: true, message: t('schoolDoctor.visitRecord.ruleOperateTime'), trigger: 'change' }
+  ],
+  operateStatus: [
+    { required: true, message: t('schoolDoctor.visitRecord.ruleOperateStatus'), trigger: 'change' }
+  ],
+  specificSituation: [
+    { required: true, message: t('schoolDoctor.visitRecord.ruleSituation'), trigger: 'blur' }
+  ]
 }))
 
 function setNow(field: 'operateTime' | 'leaveTime') {

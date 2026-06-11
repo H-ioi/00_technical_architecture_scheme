@@ -17,14 +17,20 @@ export const searchForm = (t: Translate, statusOptions: UniOption[]): UniFormCon
       label: '',
       component: 'ElSelect',
       options: statusOptions,
-      componentProps: { clearable: true, placeholder: t('schoolDoctor.infectiousDisease.phStatus') },
+      componentProps: {
+        clearable: true,
+        placeholder: t('schoolDoctor.infectiousDisease.phStatus')
+      },
       colProps: { span: 6 }
     },
     {
       field: 'keyword',
       label: '',
       component: 'ElInput',
-      componentProps: { clearable: true, placeholder: t('schoolDoctor.infectiousDisease.phKeyword') },
+      componentProps: {
+        clearable: true,
+        placeholder: t('schoolDoctor.infectiousDisease.phKeyword')
+      },
       colProps: { span: 6 }
     },
     {
@@ -46,12 +52,20 @@ export const searchForm = (t: Translate, statusOptions: UniOption[]): UniFormCon
 export const tableCols = (t: Translate): UniTableColumn[] => [
   { prop: 'id', label: 'ID', width: 70, fixed: 'left' },
   { prop: 'schoolName', label: t('schoolDoctor.infectiousDisease.fieldSchool'), minWidth: 200 },
-  { prop: 'admissionNo', label: t('schoolDoctor.infectiousDisease.fieldAdmissionNo'), minWidth: 120 },
+  {
+    prop: 'admissionNo',
+    label: t('schoolDoctor.infectiousDisease.fieldAdmissionNo'),
+    minWidth: 120
+  },
   { prop: 'fullName', label: t('schoolDoctor.infectiousDisease.fieldName'), minWidth: 140 },
   { prop: 'grade', label: t('schoolDoctor.infectiousDisease.fieldGrade'), width: 100 },
   { prop: 'formCode', label: t('schoolDoctor.infectiousDisease.fieldClass'), width: 100 },
   { prop: 'diseaseName', label: t('schoolDoctor.infectiousDisease.fieldDiseaseName'), width: 120 },
-  { prop: 'discoveryDate', label: t('schoolDoctor.infectiousDisease.fieldDiscoveryDate'), width: 170 },
+  {
+    prop: 'discoveryDate',
+    label: t('schoolDoctor.infectiousDisease.fieldDiscoveryDate'),
+    width: 170
+  },
   { prop: 'statusText', label: t('schoolDoctor.infectiousDisease.fieldStatus'), width: 100 },
   { prop: 'createTime', label: t('schoolDoctor.infectiousDisease.fieldCreateTime'), width: 170 },
   { prop: 'updateTime', label: t('schoolDoctor.infectiousDisease.fieldUpdateTime'), width: 170 }
@@ -71,10 +85,38 @@ export const emptyFormModel = (): InfectiousDiseaseFormModel => ({
 })
 
 export const formRules = (t: Translate): FormRules => ({
-  admissionNo: [{ required: true, message: t('schoolDoctor.infectiousDisease.ruleAdmissionNo'), trigger: 'blur' }],
-  studentName: [{ required: true, message: t('schoolDoctor.infectiousDisease.ruleStudentName'), trigger: 'blur' }],
-  schoolId: [{ required: true, message: t('schoolDoctor.infectiousDisease.ruleSchool'), trigger: 'change' }],
-  diseaseName: [{ required: true, message: t('schoolDoctor.infectiousDisease.ruleDiseaseName'), trigger: 'blur' }],
-  discoveryDate: [{ required: true, message: t('schoolDoctor.infectiousDisease.ruleDiscoveryDate'), trigger: 'change' }],
-  status: [{ required: true, message: t('schoolDoctor.infectiousDisease.ruleStatus'), trigger: 'change' }]
+  admissionNo: [
+    {
+      required: true,
+      message: t('schoolDoctor.infectiousDisease.ruleAdmissionNo'),
+      trigger: 'blur'
+    }
+  ],
+  studentName: [
+    {
+      required: true,
+      message: t('schoolDoctor.infectiousDisease.ruleStudentName'),
+      trigger: 'blur'
+    }
+  ],
+  schoolId: [
+    { required: true, message: t('schoolDoctor.infectiousDisease.ruleSchool'), trigger: 'change' }
+  ],
+  diseaseName: [
+    {
+      required: true,
+      message: t('schoolDoctor.infectiousDisease.ruleDiseaseName'),
+      trigger: 'blur'
+    }
+  ],
+  discoveryDate: [
+    {
+      required: true,
+      message: t('schoolDoctor.infectiousDisease.ruleDiscoveryDate'),
+      trigger: 'change'
+    }
+  ],
+  status: [
+    { required: true, message: t('schoolDoctor.infectiousDisease.ruleStatus'), trigger: 'change' }
+  ]
 })

@@ -4,8 +4,7 @@
     :title="$t('dorm.boardingStudent.detailTitle')"
     width="900px"
     destroy-on-close
-    class="boarding-history-edit-dialog"
-  >
+    class="boarding-history-edit-dialog">
     <div v-loading="loading">
       <section class="boarding-history-edit-dialog__section">
         <h3>{{ $t('dorm.boardingStudent.sectionBasic') }}</h3>
@@ -15,7 +14,9 @@
       <section v-if="canViewParent" class="boarding-history-edit-dialog__section">
         <h3>{{ $t('dorm.boardingStudent.sectionParent') }}</h3>
         <el-table :data="detail.parents" border>
-          <el-table-column prop="relationship" :label="$t('dorm.boardingStudent.fieldRelationship')" />
+          <el-table-column
+            prop="relationship"
+            :label="$t('dorm.boardingStudent.fieldRelationship')" />
           <el-table-column prop="phone" :label="$t('dorm.boardingStudent.fieldPhone')" />
           <el-table-column prop="email_address" :label="$t('dorm.boardingStudent.fieldEmail')" />
         </el-table>
@@ -30,8 +31,7 @@
             type="date"
             value-format="YYYY-MM-DD"
             :placeholder="$t('dorm.boardingStudent.phCheckoutDateSingle')"
-            style="width: 260px"
-          />
+            style="width: 260px" />
         </div>
         <p class="boarding-history-edit-dialog__meta">
           {{ $t('dorm.boardingStudent.fieldRoom') }}: {{ detail.room }} /
@@ -97,7 +97,9 @@ watch(visible, async (open) => {
     detail.name = String(student.en_name ?? '--')
     detail.room = String(student.room_room ?? '--')
     detail.bed = String(student.bed_label ?? '--')
-    detail.parents = Array.isArray(student.parent_info) ? (student.parent_info as DormParentInfo[]) : []
+    detail.parents = Array.isArray(student.parent_info)
+      ? (student.parent_info as DormParentInfo[])
+      : []
     checkoutDate.value = String(body.checkout_date ?? '').slice(0, 10)
   })
 })

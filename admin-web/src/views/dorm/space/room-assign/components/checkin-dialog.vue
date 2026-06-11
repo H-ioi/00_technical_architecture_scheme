@@ -1,5 +1,9 @@
 <template>
-  <el-dialog v-model="visible" :title="$t('dorm.roomAssign.checkin')" width="640px" destroy-on-close>
+  <el-dialog
+    v-model="visible"
+    :title="$t('dorm.roomAssign.checkin')"
+    width="640px"
+    destroy-on-close>
     <div v-loading="studentLoading" :element-loading-text="$t('common.loading')">
       <UniForm ref="uniFormRef" v-model="formModel" mode="edit" :config="formCfg" />
     </div>

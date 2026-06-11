@@ -73,10 +73,7 @@ router.beforeEach(async (to) => {
       if (Array.isArray(result?.permissions) && result.permissions.length) {
         const cached = permissionCodeStore.permissionCodes
         const merged = [
-          ...new Set([
-            ...(Array.isArray(cached) ? cached : []),
-            ...result.permissions
-          ])
+          ...new Set([...(Array.isArray(cached) ? cached : []), ...result.permissions])
         ]
         permissionCodeStore.setPermissionCodes(merged)
       }

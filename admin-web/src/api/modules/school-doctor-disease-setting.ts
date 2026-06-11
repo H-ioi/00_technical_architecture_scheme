@@ -31,12 +31,14 @@ export default {
 
   add: {
     name: '新增疾病设置',
-    post: async (data: SchoolDoctorDiseaseSettingFormModel) => await request.post(`${base}/add`, data)
+    post: async (data: SchoolDoctorDiseaseSettingFormModel) =>
+      await request.post(`${base}/add`, data)
   },
 
   edit: {
     name: '更新疾病设置',
-    post: async (data: SchoolDoctorDiseaseSettingFormModel) => await request.post(`${base}/edit`, data)
+    post: async (data: SchoolDoctorDiseaseSettingFormModel) =>
+      await request.post(`${base}/edit`, data)
   },
 
   deleteBatch: {

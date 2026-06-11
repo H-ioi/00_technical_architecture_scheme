@@ -8,14 +8,12 @@
         <el-select
           v-model="ruleForm.paymentMethod"
           style="width: 100%"
-          :disabled="mainDisabled || !canEditPayInfo"
-        >
+          :disabled="mainDisabled || !canEditPayInfo">
           <el-option
             v-for="m in paymentMethodOpts"
             :key="String(m.value)"
             :label="m.label"
-            :value="m.value"
-          />
+            :value="m.value" />
         </el-select>
       </div>
     </el-col>
@@ -30,8 +28,7 @@
           style="width: 100%"
           value-format="YYYY-MM-DD HH:mm:ss"
           format="YYYY-MM-DD HH:mm:ss"
-          :disabled="mainDisabled || !canEditPayInfo"
-        />
+          :disabled="mainDisabled || !canEditPayInfo" />
       </div>
     </el-col>
     <el-col :span="8">

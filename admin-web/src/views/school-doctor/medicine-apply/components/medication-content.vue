@@ -3,7 +3,11 @@
     <div v-for="(item, index) in contentList" :key="index" class="medication-content__card">
       <div class="medication-content__head">
         <span>{{ index + 1 }}. {{ $t('schoolDoctor.medicineApply.contentTitle') }}</span>
-        <el-button v-if="!readonly && contentList.length > 1" type="danger" link @click="removeItem(index)">
+        <el-button
+          v-if="!readonly && contentList.length > 1"
+          type="danger"
+          link
+          @click="removeItem(index)">
           {{ $t('schoolDoctor.medicineApply.removeGroup') }}
         </el-button>
       </div>
@@ -25,25 +29,51 @@
         </el-col>
         <el-col :span="8">
           <el-form-item :label="$t('schoolDoctor.medicineApply.fieldStartDate')">
-            <el-date-picker v-model="item.startDate" type="date" value-format="YYYY-MM-DD" style="width: 100%" :disabled="readonly" />
+            <el-date-picker
+              v-model="item.startDate"
+              type="date"
+              value-format="YYYY-MM-DD"
+              style="width: 100%"
+              :disabled="readonly" />
           </el-form-item>
         </el-col>
         <el-col :span="8">
           <el-form-item :label="$t('schoolDoctor.medicineApply.fieldEndDate')">
-            <el-date-picker v-model="item.endDate" type="date" value-format="YYYY-MM-DD" style="width: 100%" :disabled="readonly" />
+            <el-date-picker
+              v-model="item.endDate"
+              type="date"
+              value-format="YYYY-MM-DD"
+              style="width: 100%"
+              :disabled="readonly" />
           </el-form-item>
         </el-col>
         <el-col :span="8">
           <el-form-item :label="$t('schoolDoctor.medicineApply.fieldAdminTime')">
-            <el-select v-model="item.administrationTimeType" clearable style="width: 100%" :disabled="readonly">
-              <el-option v-for="opt in adminTimeOpts" :key="opt.value" :label="opt.label" :value="opt.value" />
+            <el-select
+              v-model="item.administrationTimeType"
+              clearable
+              style="width: 100%"
+              :disabled="readonly">
+              <el-option
+                v-for="opt in adminTimeOpts"
+                :key="opt.value"
+                :label="opt.label"
+                :value="opt.value" />
             </el-select>
           </el-form-item>
         </el-col>
         <el-col :span="8">
           <el-form-item :label="$t('schoolDoctor.medicineApply.fieldFrequency')">
-            <el-select v-model="item.frequencyType" clearable style="width: 100%" :disabled="readonly">
-              <el-option v-for="opt in frequencyOpts" :key="opt.value" :label="opt.label" :value="opt.value" />
+            <el-select
+              v-model="item.frequencyType"
+              clearable
+              style="width: 100%"
+              :disabled="readonly">
+              <el-option
+                v-for="opt in frequencyOpts"
+                :key="opt.value"
+                :label="opt.label"
+                :value="opt.value" />
             </el-select>
           </el-form-item>
         </el-col>
@@ -55,7 +85,11 @@
         <el-col :span="8">
           <el-form-item :label="$t('schoolDoctor.medicineApply.fieldRoute')">
             <el-select v-model="item.routeType" clearable style="width: 100%" :disabled="readonly">
-              <el-option v-for="opt in routeOpts" :key="opt.value" :label="opt.label" :value="opt.value" />
+              <el-option
+                v-for="opt in routeOpts"
+                :key="opt.value"
+                :label="opt.label"
+                :value="opt.value" />
             </el-select>
           </el-form-item>
         </el-col>
@@ -67,7 +101,11 @@
         <el-col :span="8">
           <el-form-item :label="$t('schoolDoctor.medicineApply.fieldMealTiming')">
             <el-select v-model="item.mealTiming" clearable style="width: 100%" :disabled="readonly">
-              <el-option v-for="opt in mealOpts" :key="opt.value" :label="opt.label" :value="opt.value" />
+              <el-option
+                v-for="opt in mealOpts"
+                :key="opt.value"
+                :label="opt.label"
+                :value="opt.value" />
             </el-select>
           </el-form-item>
         </el-col>

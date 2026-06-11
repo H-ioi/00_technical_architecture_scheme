@@ -6,16 +6,14 @@
     size="min(720px, 94vw)"
     destroy-on-close
     class="school-bus-attendance-drawer"
-    @closed="onClosed"
-  >
+    @closed="onClosed">
     <div v-loading="detailLoading" class="school-bus-attendance-drawer__body">
       <UniForm
         ref="uniFormRef"
         v-model="formModel"
         :mode="uniFormMode"
         class="school-bus-attendance-drawer__form"
-        :config="formConfig"
-      >
+        :config="formConfig">
         <template #field-admissionNo>
           <el-autocomplete
             v-if="!isReadonly"
@@ -26,8 +24,7 @@
             :debounce="300"
             clearable
             style="width: 100%"
-            @select="onStudentSelect"
-          />
+            @select="onStudentSelect" />
           <el-input v-else v-model="formModel.admissionNo" disabled />
         </template>
       </UniForm>
@@ -149,8 +146,7 @@ const drawerTitle = computed(() => {
 })
 
 function resolveSchoolId(student: Loose, schools: SchoolOptionRecord[]) {
-  const raw =
-    student.schoolId ?? student.schoolIds ?? student.campusId ?? student.schoolCode ?? ''
+  const raw = student.schoolId ?? student.schoolIds ?? student.campusId ?? student.schoolCode ?? ''
   if (raw !== '' && raw != null) {
     const hit = schools.find((item) => String(item.id) === String(raw))
     if (hit) {
@@ -160,8 +156,7 @@ function resolveSchoolId(student: Loose, schools: SchoolOptionRecord[]) {
   const name = String(student.schoolName || student.enName || student.cnName || '').trim()
   if (name) {
     const hit = schools.find(
-      (item) =>
-        item.name === name || item.cnName === name || item.enName === name
+      (item) => item.name === name || item.cnName === name || item.enName === name
     )
     if (hit) {
       return hit.id

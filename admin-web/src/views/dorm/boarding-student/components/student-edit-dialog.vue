@@ -4,8 +4,7 @@
     :title="$t('dorm.boardingStudent.detailTitle')"
     width="900px"
     destroy-on-close
-    class="boarding-edit-dialog"
-  >
+    class="boarding-edit-dialog">
     <div v-loading="loading">
       <section class="boarding-edit-dialog__section">
         <h3>{{ $t('dorm.boardingStudent.sectionBasic') }}</h3>
@@ -15,7 +14,9 @@
       <section v-if="canViewParent" class="boarding-edit-dialog__section">
         <h3>{{ $t('dorm.boardingStudent.sectionParent') }}</h3>
         <el-table :data="parentRows" border>
-          <el-table-column prop="relationship" :label="$t('dorm.boardingStudent.fieldRelationship')" />
+          <el-table-column
+            prop="relationship"
+            :label="$t('dorm.boardingStudent.fieldRelationship')" />
           <el-table-column prop="phone" :label="$t('dorm.boardingStudent.fieldPhone')" />
           <el-table-column prop="email_address" :label="$t('dorm.boardingStudent.fieldEmail')" />
         </el-table>
@@ -40,7 +41,14 @@ import { UniForm, useUniI18n, useUniPermission } from 'uni-ui-lib'
 import type { UniFormConfig } from 'uni-ui-lib'
 import { computed, ref, watch } from 'vue'
 
-import { dormBedApi, dormBuildingApi, dormFloorApi, dormProjectApi, dormRoomApi, dormStudentApi } from '@/api'
+import {
+  dormBedApi,
+  dormBuildingApi,
+  dormFloorApi,
+  dormProjectApi,
+  dormRoomApi,
+  dormStudentApi
+} from '@/api'
 import { useDialogDetailLoading } from '@/composables/use-dialog-detail-loading'
 import type { DormBedBrief } from '@/types/modules/dorm-bed'
 import type { DormBuildingBrief, DormFloorBrief } from '@/types/modules/dorm-building'

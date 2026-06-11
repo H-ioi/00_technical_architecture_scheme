@@ -13,8 +13,7 @@
           circle
           :loading="statsLoading"
           :title="$t('dashboard.refresh')"
-          @click="refresh"
-        />
+          @click="refresh" />
       </div>
     </header>
 
@@ -23,8 +22,7 @@
       class="dash__alert"
       type="warning"
       :closable="false"
-      show-icon
-    >
+      show-icon>
       <template #title>{{ $t('dashboard.healthAlertTitle', { n: attentionTotal }) }}</template>
       {{ healthAlertDetail }}
     </el-alert>
@@ -92,8 +90,7 @@
           :key="item.path"
           class="dash__shortcut"
           type="button"
-          @click="go(item)"
-        >
+          @click="go(item)">
           <span class="dash__shortcut-icon" aria-hidden="true">
             <el-icon><component :is="shortcutIconMap[item.icon ?? 'Tickets']" /></el-icon>
           </span>

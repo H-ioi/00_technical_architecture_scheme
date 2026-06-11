@@ -1,33 +1,39 @@
 <template>
-  <el-form ref="formRef" :model="formModel" :rules="rules" label-position="top" class="infectious-form">
+  <el-form
+    ref="formRef"
+    :model="formModel"
+    :rules="rules"
+    label-position="top"
+    class="infectious-form">
     <StudentRemoteSelect
       ref="studentSelectRef"
       :readonly="readonly"
       :school-records="schoolRecords"
       @select="onStudentSelect"
-      @clear="onStudentClear"
-    />
+      @clear="onStudentClear" />
 
     <el-row :gutter="20">
       <el-col :span="12">
-        <el-form-item :label="$t('schoolDoctor.infectiousDisease.fieldDiseaseName')" prop="diseaseName">
+        <el-form-item
+          :label="$t('schoolDoctor.infectiousDisease.fieldDiseaseName')"
+          prop="diseaseName">
           <el-input
             v-model="formModel.diseaseName"
             :disabled="readonly"
-            :placeholder="$t('schoolDoctor.infectiousDisease.phDiseaseName')"
-          />
+            :placeholder="$t('schoolDoctor.infectiousDisease.phDiseaseName')" />
         </el-form-item>
       </el-col>
       <el-col :span="12">
-        <el-form-item :label="$t('schoolDoctor.infectiousDisease.fieldDiscoveryDate')" prop="discoveryDate">
+        <el-form-item
+          :label="$t('schoolDoctor.infectiousDisease.fieldDiscoveryDate')"
+          prop="discoveryDate">
           <el-date-picker
             v-model="formModel.discoveryDate"
             type="datetime"
             value-format="YYYY-MM-DD HH:mm:ss"
             style="width: 100%"
             :disabled="readonly"
-            :placeholder="$t('schoolDoctor.infectiousDisease.phDiscoveryDateSelect')"
-          />
+            :placeholder="$t('schoolDoctor.infectiousDisease.phDiscoveryDateSelect')" />
         </el-form-item>
       </el-col>
     </el-row>
@@ -38,18 +44,18 @@
         style="width: 100%"
         clearable
         :disabled="readonly"
-        :placeholder="$t('schoolDoctor.infectiousDisease.phStatusSelect')"
-      >
+        :placeholder="$t('schoolDoctor.infectiousDisease.phStatusSelect')">
         <el-option
           v-for="item in statusOptions"
           :key="item.value"
           :label="item.label"
-          :value="item.value"
-        />
+          :value="item.value" />
       </el-select>
     </el-form-item>
 
-    <el-form-item :label="$t('schoolDoctor.infectiousDisease.fieldAttachment')" prop="attachmentList">
+    <el-form-item
+      :label="$t('schoolDoctor.infectiousDisease.fieldAttachment')"
+      prop="attachmentList">
       <el-upload
         list-type="picture-card"
         action="#"
@@ -60,11 +66,12 @@
         :on-preview="handlePicturePreview"
         :disabled="readonly || uploading"
         :class="{ 'hide-upload': readonly }"
-        accept=".jpg,.jpeg,.png,.gif,.webp,image/jpeg,image/png,image/gif,image/webp"
-      >
+        accept=".jpg,.jpeg,.png,.gif,.webp,image/jpeg,image/png,image/gif,image/webp">
         <el-icon><Plus /></el-icon>
       </el-upload>
-      <div v-if="!readonly" class="infectious-form__tip">{{ $t('schoolDoctor.infectiousDisease.imageOnlyTip') }}</div>
+      <div v-if="!readonly" class="infectious-form__tip">
+        {{ $t('schoolDoctor.infectiousDisease.imageOnlyTip') }}
+      </div>
     </el-form-item>
 
     <el-form-item :label="$t('schoolDoctor.infectiousDisease.fieldRemark')" prop="remark">
@@ -73,14 +80,19 @@
         type="textarea"
         :rows="3"
         :disabled="readonly"
-        :placeholder="$t('schoolDoctor.infectiousDisease.phRemark')"
-      />
+        :placeholder="$t('schoolDoctor.infectiousDisease.phRemark')" />
     </el-form-item>
   </el-form>
 </template>
 
 <script setup lang="ts">
-import type { FormInstance, FormRules, UploadFile, UploadRequestOptions, UploadUserFile } from 'element-plus'
+import type {
+  FormInstance,
+  FormRules,
+  UploadFile,
+  UploadRequestOptions,
+  UploadUserFile
+} from 'element-plus'
 import { Plus } from '@element-plus/icons-vue'
 import { ElMessage } from 'element-plus'
 import { useUniI18n } from 'uni-ui-lib'
@@ -148,8 +160,7 @@ function onStudentClear() {
 }
 
 function beforeImageUpload(file: File) {
-  const isImage =
-    /^image\//.test(file.type) || /\.(jpe?g|png|gif|webp)$/i.test(file.name || '')
+  const isImage = /^image\//.test(file.type) || /\.(jpe?g|png|gif|webp)$/i.test(file.name || '')
   if (!isImage) {
     ElMessage.warning(t('schoolDoctor.infectiousDisease.imageOnlyWarning'))
     return false

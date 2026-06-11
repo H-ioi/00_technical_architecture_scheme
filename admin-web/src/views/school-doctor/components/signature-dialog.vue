@@ -6,8 +6,7 @@
     append-to-body
     :close-on-click-modal="false"
     @opened="initCanvas"
-    @closed="clearCanvas"
-  >
+    @closed="clearCanvas">
     <p class="signature-dialog__tip">{{ $t('schoolDoctor.medicalInfo.signDialogTip') }}</p>
     <div ref="canvasWrapRef" class="signature-dialog__canvas-wrap">
       <canvas
@@ -18,12 +17,13 @@
         @mouseleave="endDraw"
         @touchstart.prevent="startTouch"
         @touchmove.prevent="moveTouch"
-        @touchend.prevent="endDraw"
-      />
+        @touchend.prevent="endDraw" />
     </div>
     <template #footer>
       <el-button @click="visible = false">{{ $t('schoolDoctor.common.cancel') }}</el-button>
-      <el-button @click="clearCanvas">{{ $t('schoolDoctor.medicalInfo.clearSignature') }}</el-button>
+      <el-button @click="clearCanvas">{{
+        $t('schoolDoctor.medicalInfo.clearSignature')
+      }}</el-button>
       <el-button type="primary" :loading="uploading" @click="saveSignature">
         {{ $t('schoolDoctor.common.submit') }}
       </el-button>

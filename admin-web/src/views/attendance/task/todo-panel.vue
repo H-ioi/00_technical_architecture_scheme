@@ -11,14 +11,12 @@
       :actions="actions"
       :action-column="{ width: 200, fixed: 'right' }"
       @load-success="tableEmpty.onLoadSuccess"
-      @request-error="tableEmpty.onRequestError"
-    >
+      @request-error="tableEmpty.onRequestError">
       <template #empty>
         <ListTableEmpty
           :kind="tableEmpty.kind"
           @reset="tableEmpty.retry"
-          @retry="tableEmpty.retry"
-        />
+          @retry="tableEmpty.retry" />
       </template>
     </UniDataTable>
 
@@ -26,11 +24,11 @@
       v-model="approveVisible"
       :title="$t('attendance.holidayTask.approveTitle')"
       width="640px"
-      destroy-on-close
-    >
+      destroy-on-close>
       <div class="holiday-task-approve__grid">
         <p>
-          <strong>{{ $t('attendance.studentName') }}：</strong>{{ formData.studentName || formData.name || '—' }}
+          <strong>{{ $t('attendance.studentName') }}：</strong
+          >{{ formData.studentName || formData.name || '—' }}
         </p>
         <p>
           <strong>{{ $t('attendance.admissionNo') }}：</strong>{{ formData.admissonNo || '—' }}
@@ -45,7 +43,8 @@
           <strong>{{ $t('attendance.className') }}：</strong>{{ formData.studentClass || '—' }}
         </p>
         <p>
-          <strong>{{ $t('attendance.holiday.detailBeginTime') }}：</strong>{{
+          <strong>{{ $t('attendance.holiday.detailBeginTime') }}：</strong
+          >{{
             formData.beginTime
               ? `${formData.beginTime} ${$t('attendance.holidayTask.to')} ${formData.endTime}`
               : '—'
@@ -63,23 +62,20 @@
         </div>
         <div
           v-if="taskName === '护士审批' && formData.isInfectious === '101'"
-          class="holiday-task-approve__full"
-        >
+          class="holiday-task-approve__full">
           <span>{{ $t('attendance.holidayTask.extendTime') }}</span>
           <el-date-picker
             v-model="formData.dateRange"
             type="datetime"
             value-format="YYYY-MM-DD HH:mm"
             format="YYYY-MM-DD HH:mm"
-            style="width: 100%"
-          />
+            style="width: 100%" />
         </div>
         <el-input
           v-model="formData.remark"
           type="textarea"
           :rows="3"
-          :placeholder="$t('attendance.holiday.detailBeginTime')"
-        />
+          :placeholder="$t('attendance.holiday.detailBeginTime')" />
       </div>
       <template #footer>
         <el-button @click="approveVisible = false">{{ $t('common.cancel') }}</el-button>
@@ -96,17 +92,15 @@
       v-model="traceVisible"
       :title="$t('attendance.holidayTask.flowChart')"
       width="80%"
-      destroy-on-close
-    >
-      <img v-if="flowImg" :src="flowImg" alt="" style="max-width: 100%">
+      destroy-on-close>
+      <img v-if="flowImg" :src="flowImg" alt="" style="max-width: 100%" />
       <el-steps direction="vertical" style="margin-top: 16px">
         <el-step
           v-for="item in hiTasks"
           :key="item.id"
           :title="`${item.taskNodeName} ${item.assigneeName ?? ''} ${item.startTime ?? ''}`"
           :description="item.remark"
-          :status="item.status"
-        />
+          :status="item.status" />
       </el-steps>
     </el-dialog>
   </div>

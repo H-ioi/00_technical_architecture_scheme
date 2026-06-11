@@ -6,56 +6,56 @@
         <p>{{ $t('schoolDoctor.medicineApply.pageDesc') }}</p>
       </div>
       <div class="uni-list-page__header-actions">
-        <el-button v-uni-permission="'medicationapplication_add'" type="primary" @click="openDrawer('add')">
+        <el-button
+          v-uni-permission="'medicationapplication_add'"
+          type="primary"
+          @click="openDrawer('add')">
           {{ $t('schoolDoctor.common.add') }}
         </el-button>
       </div>
     </div>
+    <div class="uni-list-page__body">
+      <UniSearchForm
+        v-model="queryModel"
+        :config="searchCfg"
+        :collapsed="true"
+        :collapsed-rows="1"
+        :action-min-span="0"
+        :submit-text="$t('schoolDoctor.common.search')"
+        :reset-text="$t('schoolDoctor.common.reset')"
+        @search="search"
+        @reset="onReset" />
 
-    <UniSearchForm
-      v-model="queryModel"
-      :config="searchCfg"
-      :collapsed="true"
-      :collapsed-rows="1"
-      :action-min-span="0"
-      :submit-text="$t('schoolDoctor.common.search')"
-      :reset-text="$t('schoolDoctor.common.reset')"
-      @search="search"
-      @reset="onReset"
-    />
-
-    <UniDataTable
-      ref="tableRef"
-      row-key="id"
-      selection
-      :columns="columns"
-      :request="loadData"
-      :filters="filters"
-      :pagination="{ pageSize: 10, pageSizes: [10, 20, 50, 100] }"
-      :toolbar="{ refresh: true, density: true, columnSetting: true }"
-      :actions="actions"
-      :action-column="{ width: 140, fixed: 'right' }"
-      @selection-change="onSelectionChange"
-      @load-success="tableEmpty.onLoadSuccess"
-      @request-error="tableEmpty.onRequestError"
-    >
-      <template #toolbar>
-        <el-button type="danger" :disabled="selectedIds.length === 0" @click="batchDelete">
-          {{ $t('schoolDoctor.medicineApply.batchDelete') }}
-        </el-button>
-      </template>
-      <template #empty>
-        <ListTableEmpty :kind="tableEmpty.kind" @reset="onReset" @retry="tableEmpty.retry" />
-      </template>
-    </UniDataTable>
-
+      <UniDataTable
+        ref="tableRef"
+        row-key="id"
+        selection
+        :columns="columns"
+        :request="loadData"
+        :filters="filters"
+        :pagination="{ pageSize: 10, pageSizes: [10, 20, 50, 100] }"
+        :toolbar="{ refresh: true, density: true, columnSetting: true }"
+        :actions="actions"
+        :action-column="{ width: 140, fixed: 'right' }"
+        @selection-change="onSelectionChange"
+        @load-success="tableEmpty.onLoadSuccess"
+        @request-error="tableEmpty.onRequestError">
+        <template #toolbar>
+          <el-button type="danger" :disabled="selectedIds.length === 0" @click="batchDelete">
+            {{ $t('schoolDoctor.medicineApply.batchDelete') }}
+          </el-button>
+        </template>
+        <template #empty>
+          <ListTableEmpty :kind="tableEmpty.kind" @reset="onReset" @retry="tableEmpty.retry" />
+        </template>
+      </UniDataTable>
+    </div>
     <FormDrawer
       v-model:visible="drawerVisible"
       :mode="drawerMode"
       :record-id="activeRecordId"
       :school-records="schoolRecords"
-      @saved="refreshTable"
-    />
+      @saved="refreshTable" />
   </section>
 </template>
 
@@ -73,12 +73,7 @@ import type { SchoolOptionRecord } from '@/types/modules/membership'
 import { normalizePaged } from '@/utils/api-response-normalize'
 
 import FormDrawer from './components/form-drawer.vue'
-import {
-  applyMedicationFilterOpts,
-  applyStatusOpts,
-  searchForm,
-  tableCols
-} from './list.config'
+import { applyMedicationFilterOpts, applyStatusOpts, searchForm, tableCols } from './list.config'
 
 type Row = MedicineApplyListRow & {
   applyMedicationText?: string
@@ -105,7 +100,9 @@ const drawerVisible = ref(false)
 const drawerMode = ref<'add' | 'view' | 'approve'>('view')
 const activeRecordId = ref<string | number | undefined>()
 
-const defaultSchoolId = computed(() => (schoolRecords.value.length === 1 ? schoolRecords.value[0]?.id : null))
+const defaultSchoolId = computed(() =>
+  schoolRecords.value.length === 1 ? schoolRecords.value[0]?.id : null
+)
 const schoolOptions = computed(() =>
   toUniOptions(schoolRecords.value, { labelKeys: ['enName', 'cnName', 'name'], valueKey: 'id' })
 )
@@ -134,7 +131,12 @@ function canApproveRow(row: MedicineApplyListRow) {
 
 function formatApplicant(row: MedicineApplyListRow) {
   const source = [row.source, row.sourceType, row.applicantType].find((v) => v != null)
-  if (source === 1 || source === '1' || source === 'mini' || /mini|小程序|家长/i.test(String(row.applicant || ''))) {
+  if (
+    source === 1 ||
+    source === '1' ||
+    source === 'mini' ||
+    /mini|小程序|家长/i.test(String(row.applicant || ''))
+  ) {
     return t('schoolDoctor.common.parent')
   }
   return row.applicant || row.operator || row.creator || '--'

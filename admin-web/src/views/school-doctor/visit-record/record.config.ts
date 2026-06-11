@@ -32,7 +32,11 @@ export const recordSearchForm = (
       label: '',
       component: 'ElSelect',
       options: schoolOptions,
-      componentProps: { clearable: true, filterable: true, placeholder: t('schoolDoctor.visitRecord.phSchool') },
+      componentProps: {
+        clearable: true,
+        filterable: true,
+        placeholder: t('schoolDoctor.visitRecord.phSchool')
+      },
       defaultValue: defaultSchoolId,
       colProps: { span: 6 }
     },
@@ -48,7 +52,10 @@ export const recordSearchForm = (
       label: '',
       component: 'ElSelect',
       options: leaveOptions,
-      componentProps: { clearable: true, placeholder: t('schoolDoctor.visitRecord.phLeaveDestination') },
+      componentProps: {
+        clearable: true,
+        placeholder: t('schoolDoctor.visitRecord.phLeaveDestination')
+      },
       colProps: { span: 6 }
     },
     {
@@ -64,7 +71,10 @@ export const recordSearchForm = (
       label: '',
       component: 'ElSelect',
       options: yesNoOptions,
-      componentProps: { clearable: true, placeholder: t('schoolDoctor.visitRecord.phContactParent') },
+      componentProps: {
+        clearable: true,
+        placeholder: t('schoolDoctor.visitRecord.phContactParent')
+      },
       colProps: { span: 6 }
     },
     {
@@ -92,11 +102,31 @@ export const recordTableCols = (t: Translate): UniTableColumn[] => [
   { prop: 'formCode', label: t('schoolDoctor.visitRecord.fieldClass'), width: 90 },
   { prop: 'visitDate', label: t('schoolDoctor.visitRecord.fieldVisitDate'), width: 120 },
   { prop: 'visitTimeText', label: t('schoolDoctor.visitRecord.fieldVisitTime'), width: 150 },
-  { prop: 'specificSituationText', label: t('schoolDoctor.visitRecord.fieldSituation'), minWidth: 140 },
-  { prop: 'leaveDestinationText', label: t('schoolDoctor.visitRecord.fieldLeaveDestination'), width: 100 },
-  { prop: 'executeOperationText', label: t('schoolDoctor.visitRecord.fieldExecuteOperation'), width: 120 },
-  { prop: 'contactParentText', label: t('schoolDoctor.visitRecord.fieldContactParent'), width: 120 },
-  { prop: 'parentSignatureText', label: t('schoolDoctor.visitRecord.fieldParentSignature'), width: 100 },
+  {
+    prop: 'specificSituationText',
+    label: t('schoolDoctor.visitRecord.fieldSituation'),
+    minWidth: 140
+  },
+  {
+    prop: 'leaveDestinationText',
+    label: t('schoolDoctor.visitRecord.fieldLeaveDestination'),
+    width: 100
+  },
+  {
+    prop: 'executeOperationText',
+    label: t('schoolDoctor.visitRecord.fieldExecuteOperation'),
+    width: 120
+  },
+  {
+    prop: 'contactParentText',
+    label: t('schoolDoctor.visitRecord.fieldContactParent'),
+    width: 120
+  },
+  {
+    prop: 'parentSignatureText',
+    label: t('schoolDoctor.visitRecord.fieldParentSignature'),
+    width: 100
+  },
   { prop: 'createTime', label: t('schoolDoctor.visitRecord.fieldCreateTime'), width: 170 },
   { prop: 'updateTime', label: t('schoolDoctor.visitRecord.fieldUpdateTime'), width: 170 }
 ]

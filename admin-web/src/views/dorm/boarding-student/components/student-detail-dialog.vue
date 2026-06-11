@@ -4,46 +4,61 @@
     :title="$t('dorm.boardingStudent.detailTitle')"
     width="900px"
     destroy-on-close
-    class="boarding-detail-dialog"
-  >
+    class="boarding-detail-dialog">
     <div v-loading="loading">
       <section class="boarding-detail-dialog__section">
         <h3>{{ $t('dorm.boardingStudent.sectionBasic') }}</h3>
         <el-row :gutter="12" class="boarding-detail-dialog__row">
           <el-col :span="8">
-            <span class="boarding-detail-dialog__label">{{ $t('dorm.boardingStudent.fieldSchool') }}</span>
+            <span class="boarding-detail-dialog__label">{{
+              $t('dorm.boardingStudent.fieldSchool')
+            }}</span>
             <span>{{ detail.schoolName }}</span>
           </el-col>
           <el-col :span="8">
-            <span class="boarding-detail-dialog__label">{{ $t('dorm.boardingStudent.fieldAdmissionNo') }}</span>
+            <span class="boarding-detail-dialog__label">{{
+              $t('dorm.boardingStudent.fieldAdmissionNo')
+            }}</span>
             <span>{{ detail.admissionNo }}</span>
           </el-col>
           <el-col :span="8">
-            <span class="boarding-detail-dialog__label">{{ $t('dorm.boardingStudent.fieldName') }}</span>
+            <span class="boarding-detail-dialog__label">{{
+              $t('dorm.boardingStudent.fieldName')
+            }}</span>
             <span>{{ detail.name }}</span>
           </el-col>
         </el-row>
         <el-row :gutter="12" class="boarding-detail-dialog__row">
           <el-col :span="8">
-            <span class="boarding-detail-dialog__label">{{ $t('dorm.boardingStudent.fieldGrade') }}</span>
+            <span class="boarding-detail-dialog__label">{{
+              $t('dorm.boardingStudent.fieldGrade')
+            }}</span>
             <span>{{ detail.grade }}</span>
           </el-col>
           <el-col :span="8">
-            <span class="boarding-detail-dialog__label">{{ $t('dorm.boardingStudent.fieldClass') }}</span>
+            <span class="boarding-detail-dialog__label">{{
+              $t('dorm.boardingStudent.fieldClass')
+            }}</span>
             <span>{{ detail.className }}</span>
           </el-col>
           <el-col :span="8">
-            <span class="boarding-detail-dialog__label">{{ $t('dorm.boardingStudent.fieldGender') }}</span>
+            <span class="boarding-detail-dialog__label">{{
+              $t('dorm.boardingStudent.fieldGender')
+            }}</span>
             <span>{{ detail.gender }}</span>
           </el-col>
         </el-row>
         <el-row :gutter="12" class="boarding-detail-dialog__row">
           <el-col :span="8">
-            <span class="boarding-detail-dialog__label">{{ $t('dorm.boardingStudent.fieldNationality') }}</span>
+            <span class="boarding-detail-dialog__label">{{
+              $t('dorm.boardingStudent.fieldNationality')
+            }}</span>
             <span>{{ detail.nationality }}</span>
           </el-col>
           <el-col :span="8">
-            <span class="boarding-detail-dialog__label">{{ $t('dorm.boardingStudent.fieldBirthdate') }}</span>
+            <span class="boarding-detail-dialog__label">{{
+              $t('dorm.boardingStudent.fieldBirthdate')
+            }}</span>
             <span>{{ detail.birthdate }}</span>
           </el-col>
         </el-row>
@@ -52,7 +67,9 @@
       <section v-if="canViewParent" class="boarding-detail-dialog__section">
         <h3>{{ $t('dorm.boardingStudent.sectionParent') }}</h3>
         <el-table :data="detail.parents" border>
-          <el-table-column prop="relationship" :label="$t('dorm.boardingStudent.fieldRelationship')" />
+          <el-table-column
+            prop="relationship"
+            :label="$t('dorm.boardingStudent.fieldRelationship')" />
           <el-table-column prop="phone" :label="$t('dorm.boardingStudent.fieldPhone')" />
           <el-table-column prop="email_address" :label="$t('dorm.boardingStudent.fieldEmail')" />
         </el-table>
@@ -62,41 +79,57 @@
         <h3>{{ $t('dorm.boardingStudent.sectionLodging') }}</h3>
         <el-row :gutter="12" class="boarding-detail-dialog__row">
           <el-col :span="12">
-            <span class="boarding-detail-dialog__label">{{ $t('dorm.boardingStudent.fieldRoom') }}</span>
+            <span class="boarding-detail-dialog__label">{{
+              $t('dorm.boardingStudent.fieldRoom')
+            }}</span>
             <span>{{ detail.room }}</span>
           </el-col>
           <el-col :span="12">
-            <span class="boarding-detail-dialog__label">{{ $t('dorm.boardingStudent.fieldBed') }}</span>
+            <span class="boarding-detail-dialog__label">{{
+              $t('dorm.boardingStudent.fieldBed')
+            }}</span>
             <span>{{ detail.bed }}</span>
           </el-col>
         </el-row>
         <el-row :gutter="12" class="boarding-detail-dialog__row">
           <el-col :span="12">
-            <span class="boarding-detail-dialog__label">{{ $t('dorm.boardingStudent.fieldProject') }}</span>
+            <span class="boarding-detail-dialog__label">{{
+              $t('dorm.boardingStudent.fieldProject')
+            }}</span>
             <span>{{ detail.project }}</span>
           </el-col>
           <el-col :span="12">
-            <span class="boarding-detail-dialog__label">{{ $t('dorm.boardingStudent.fieldCheckinDate') }}</span>
+            <span class="boarding-detail-dialog__label">{{
+              $t('dorm.boardingStudent.fieldCheckinDate')
+            }}</span>
             <span>{{ detail.checkinDate }}</span>
           </el-col>
         </el-row>
         <el-row v-if="variant === 'current'" :gutter="12" class="boarding-detail-dialog__row">
           <el-col :span="12">
-            <span class="boarding-detail-dialog__label">{{ $t('dorm.boardingStudent.fieldPlannedCheckout') }}</span>
+            <span class="boarding-detail-dialog__label">{{
+              $t('dorm.boardingStudent.fieldPlannedCheckout')
+            }}</span>
             <span>{{ detail.plannedCheckout }}</span>
           </el-col>
           <el-col :span="12">
-            <span class="boarding-detail-dialog__label">{{ $t('dorm.boardingStudent.fieldPaymentStatus') }}</span>
+            <span class="boarding-detail-dialog__label">{{
+              $t('dorm.boardingStudent.fieldPaymentStatus')
+            }}</span>
             <span>{{ detail.paymentStatus }}</span>
           </el-col>
         </el-row>
         <el-row v-else :gutter="12" class="boarding-detail-dialog__row">
           <el-col :span="12">
-            <span class="boarding-detail-dialog__label">{{ $t('dorm.boardingStudent.fieldCheckoutDate') }}</span>
+            <span class="boarding-detail-dialog__label">{{
+              $t('dorm.boardingStudent.fieldCheckoutDate')
+            }}</span>
             <span>{{ detail.checkoutDate }}</span>
           </el-col>
           <el-col :span="12">
-            <span class="boarding-detail-dialog__label">{{ $t('dorm.boardingStudent.fieldPaymentStatus') }}</span>
+            <span class="boarding-detail-dialog__label">{{
+              $t('dorm.boardingStudent.fieldPaymentStatus')
+            }}</span>
             <span>{{ detail.paymentStatus }}</span>
           </el-col>
         </el-row>
@@ -205,7 +238,9 @@ function fillFromHistory(body: Loose) {
   detail.checkinDate = String(body.checkin_date ?? student.checkin_date ?? '--').slice(0, 10)
   detail.checkoutDate = String(body.checkout_date ?? '--').slice(0, 10)
   detail.paymentStatus = paymentLabel(student.payment_status)
-  detail.parents = Array.isArray(student.parent_info) ? (student.parent_info as DormParentInfo[]) : []
+  detail.parents = Array.isArray(student.parent_info)
+    ? (student.parent_info as DormParentInfo[])
+    : []
 }
 
 watch(visible, async (open) => {

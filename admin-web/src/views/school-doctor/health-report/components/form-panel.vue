@@ -1,12 +1,16 @@
 <template>
-  <el-form ref="formRef" :model="formModel" :rules="rules" label-position="top" class="health-report-form">
+  <el-form
+    ref="formRef"
+    :model="formModel"
+    :rules="rules"
+    label-position="top"
+    class="health-report-form">
     <StudentRemoteSelect
       ref="studentSelectRef"
       :readonly="readonly"
       :school-records="schoolRecords"
       @select="onStudentSelect"
-      @clear="onStudentClear"
-    />
+      @clear="onStudentClear" />
 
     <el-form-item :label="$t('schoolDoctor.healthReport.fieldReportType')" prop="reportType">
       <el-select
@@ -14,14 +18,12 @@
         style="width: 100%"
         clearable
         :disabled="readonly"
-        :placeholder="$t('schoolDoctor.healthReport.phReportTypeSelect')"
-      >
+        :placeholder="$t('schoolDoctor.healthReport.phReportTypeSelect')">
         <el-option
           v-for="item in reportTypeOptions"
           :key="item.value"
           :label="item.label"
-          :value="item.value"
-        />
+          :value="item.value" />
       </el-select>
     </el-form-item>
 
@@ -34,8 +36,7 @@
             value-format="YYYY"
             style="width: 100%"
             :disabled="readonly"
-            :placeholder="$t('schoolDoctor.healthReport.phExamYear')"
-          />
+            :placeholder="$t('schoolDoctor.healthReport.phExamYear')" />
         </el-form-item>
       </el-col>
       <el-col :span="12">
@@ -46,8 +47,7 @@
             value-format="YYYY-MM-DD"
             style="width: 100%"
             :disabled="readonly"
-            :placeholder="$t('schoolDoctor.healthReport.phExamDate')"
-          />
+            :placeholder="$t('schoolDoctor.healthReport.phExamDate')" />
         </el-form-item>
       </el-col>
     </el-row>
@@ -56,8 +56,7 @@
       <el-input
         v-model="formModel.examOrg"
         :disabled="readonly"
-        :placeholder="$t('schoolDoctor.healthReport.phExamOrg')"
-      />
+        :placeholder="$t('schoolDoctor.healthReport.phExamOrg')" />
     </el-form-item>
 
     <el-form-item :label="$t('schoolDoctor.healthReport.fieldAttachment')" prop="attachmentList">
@@ -65,12 +64,14 @@
         <div
           v-for="(item, index) in formModel.attachmentList"
           :key="item.id || item.attachmentUrl || index"
-          class="health-report-form__file"
-        >
+          class="health-report-form__file">
           <el-link type="primary" :underline="false" :href="item.attachmentUrl" target="_blank">
             {{ getAttachmentName(item, index) }}
           </el-link>
-          <el-icon v-if="!readonly" class="health-report-form__remove" @click="removeAttachment(index)">
+          <el-icon
+            v-if="!readonly"
+            class="health-report-form__remove"
+            @click="removeAttachment(index)">
             <Close />
           </el-icon>
         </div>
@@ -81,11 +82,14 @@
         :show-file-list="false"
         :http-request="handleCustomUpload"
         :before-upload="beforeAttachmentUpload"
-        accept=".pdf,.png,.jpg,.jpeg,application/pdf,image/png,image/jpeg"
-      >
-        <el-button size="small" :loading="uploading">{{ $t('schoolDoctor.common.upload') }}</el-button>
+        accept=".pdf,.png,.jpg,.jpeg,application/pdf,image/png,image/jpeg">
+        <el-button size="small" :loading="uploading">{{
+          $t('schoolDoctor.common.upload')
+        }}</el-button>
         <template #tip>
-          <div class="health-report-form__tip">{{ $t('schoolDoctor.healthReport.attachmentTip') }}</div>
+          <div class="health-report-form__tip">
+            {{ $t('schoolDoctor.healthReport.attachmentTip') }}
+          </div>
         </template>
       </el-upload>
     </el-form-item>
@@ -96,8 +100,7 @@
         type="textarea"
         :rows="3"
         :disabled="readonly"
-        :placeholder="$t('schoolDoctor.healthReport.phRemark')"
-      />
+        :placeholder="$t('schoolDoctor.healthReport.phRemark')" />
     </el-form-item>
   </el-form>
 </template>

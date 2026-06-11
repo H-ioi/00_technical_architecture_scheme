@@ -16,8 +16,7 @@
           v-else-if="detailId && canEdit"
           v-uni-permission="'busdriver_edit'"
           type="primary"
-          @click="goEdit"
-        >
+          @click="goEdit">
           {{ $t('activity.entryEdit') }}
         </el-button>
         <el-button @click="goBack">{{ $t('activity.back') }}</el-button>
@@ -30,8 +29,7 @@
         v-model="formModel"
         :mode="uniMode"
         class="activity-program-edit__form"
-        :config="formConfig"
-      >
+        :config="formConfig">
         <template #field-backgroundImage>
           <div class="activity-program-edit__cover">
             <el-upload
@@ -39,12 +37,11 @@
               class="activity-program-edit__cover-upload"
               accept="image/*"
               :show-file-list="false"
-              :before-upload="onCoverBeforeUpload"
-            >
+              :before-upload="onCoverBeforeUpload">
               <el-button type="primary">{{ $t('activity.pickCover') }}</el-button>
             </el-upload>
             <div v-if="form.backgroundImage" class="activity-program-edit__cover-preview">
-              <img :src="form.backgroundImage" alt="">
+              <img :src="form.backgroundImage" alt="" />
             </div>
           </div>
         </template>
@@ -53,8 +50,7 @@
             <div
               v-for="item in quotasList"
               :key="item.roundNo"
-              class="activity-program-edit__quota-row"
-            >
+              class="activity-program-edit__quota-row">
               <span class="activity-program-edit__quota-label">{{ item.roundNo }}:</span>
               <el-input-number
                 v-if="uniMode === 'edit'"
@@ -66,8 +62,7 @@
                 :precision="0"
                 controls-position="right"
                 style="width: 200px"
-                @change="normalizeQuotaRow(item)"
-              />
+                @change="normalizeQuotaRow(item)" />
               <span v-else>{{ item.quotaCount }}</span>
             </div>
           </div>
@@ -79,8 +74,7 @@
         :program-id="detailId"
         :program-type="String(form.programType || '')"
         :create-lottery-pool="String(form.createLotteryPool || '')"
-        :binding-editable="canEdit"
-      />
+        :binding-editable="canEdit" />
     </div>
   </section>
 </template>

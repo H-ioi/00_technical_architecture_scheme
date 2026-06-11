@@ -45,7 +45,11 @@ export const searchForm = (
       label: '',
       component: 'ElSelect',
       options: schoolOptions,
-      componentProps: { clearable: true, filterable: true, placeholder: t('content.discussion.fieldSchool') },
+      componentProps: {
+        clearable: true,
+        filterable: true,
+        placeholder: t('content.discussion.fieldSchool')
+      },
       defaultValue: defaultSchoolId,
       colProps: { span: 4 }
     },
@@ -54,7 +58,11 @@ export const searchForm = (
       label: '',
       component: 'ElSelect',
       options: tagOptions,
-      componentProps: { clearable: true, filterable: true, placeholder: t('content.discussion.fieldTag') },
+      componentProps: {
+        clearable: true,
+        filterable: true,
+        placeholder: t('content.discussion.fieldTag')
+      },
       colProps: { span: 4 }
     },
     {
@@ -176,7 +184,11 @@ export const dialogFormConfig = (
       label: t('content.discussion.fieldSchool'),
       component: 'ElSelect',
       options: schoolOptions,
-      componentProps: { clearable: true, filterable: true, placeholder: t('content.discussion.phSelect') },
+      componentProps: {
+        clearable: true,
+        filterable: true,
+        placeholder: t('content.discussion.phSelect')
+      },
       colProps: { span: 12 }
     },
     {
@@ -184,7 +196,11 @@ export const dialogFormConfig = (
       label: t('content.discussion.fieldTag'),
       component: 'ElSelect',
       options: tagOptions,
-      componentProps: { clearable: true, filterable: true, placeholder: t('content.discussion.phSelect') },
+      componentProps: {
+        clearable: true,
+        filterable: true,
+        placeholder: t('content.discussion.phSelect')
+      },
       colProps: { span: 12 }
     },
     {
@@ -251,7 +267,9 @@ export const dialogFormRules = (t: Translate): FormRules => ({
   tagId: [{ required: true, message: t('content.discussion.ruleTag'), trigger: 'change' }],
   scope: [{ required: true, message: t('content.discussion.ruleScope'), trigger: 'change' }],
   active: [{ required: true, message: t('content.discussion.ruleVisible'), trigger: 'change' }],
-  recommended: [{ required: true, message: t('content.discussion.ruleRecommended'), trigger: 'change' }],
+  recommended: [
+    { required: true, message: t('content.discussion.ruleRecommended'), trigger: 'change' }
+  ],
   top: [{ required: true, message: t('content.discussion.ruleTop'), trigger: 'change' }],
   cnContent: [{ required: true, message: t('content.discussion.ruleCnContent'), trigger: 'blur' }],
   enContent: [{ required: true, message: t('content.discussion.ruleEnContent'), trigger: 'blur' }]

@@ -9,60 +9,56 @@
         <el-button type="primary" @click="metaDlg?.open('add')">{{ $t('activity.add') }}</el-button>
       </div>
     </div>
-    <UniSearchForm
-      v-model="queryModel"
-      :config="searchCfg"
-      :collapsed="true"
-      :collapsed-rows="1"
-      :action-min-span="0"
-      :submit-text="$t('activity.search')"
-      :reset-text="$t('activity.reset')"
-      @search="search"
-      @reset="reset"
-    />
-    <UniDataTable
-      ref="tableRef"
-      row-key="id"
-      selection="multiple"
-      :columns="columns"
-      :request="loadData"
-      :filters="filters"
-      :pagination="{ pageSize: 10, pageSizes: [10, 20, 50, 100] }"
-      :toolbar="{ refresh: true, columnSetting: true }"
-      :actions="actions"
-      :action-column="{ width: 140, fixed: 'right' }"
-      @load-success="handleLoadSuccess"
-      @selection-change="onSelectionChange"
-    >
-      <template #toolbar>
-        <el-button
-          v-uni-permission="'questionnaire_edit_status'"
-          plain
-          :disabled="!selectedIds.length"
-          @click="openBatchStatus"
-        >
-          {{ $t('activity.qBatchChangeStatus') }}
-        </el-button>
-        <el-button
-          v-uni-permission="'questionnaire_edit_frozen'"
-          plain
-          :disabled="!selectedIds.length"
-          @click="batchDlg?.open('frozen', selectedIds)"
-        >
-          {{ $t('activity.qBatchChangeFrozen') }}
-        </el-button>
-        <el-button
-          v-uni-permission="'questionnaire_delete'"
-          type="danger"
-          plain
-          :disabled="!selectedIds.length"
-          @click="deleteSelected"
-        >
-          {{ $t('activity.delBatch') }}
-        </el-button>
-      </template>
-    </UniDataTable>
-
+    <div class="uni-list-page__body">
+      <UniSearchForm
+        v-model="queryModel"
+        :config="searchCfg"
+        :collapsed="true"
+        :collapsed-rows="1"
+        :action-min-span="0"
+        :submit-text="$t('activity.search')"
+        :reset-text="$t('activity.reset')"
+        @search="search"
+        @reset="reset" />
+      <UniDataTable
+        ref="tableRef"
+        row-key="id"
+        selection="multiple"
+        :columns="columns"
+        :request="loadData"
+        :filters="filters"
+        :pagination="{ pageSize: 10, pageSizes: [10, 20, 50, 100] }"
+        :toolbar="{ refresh: true, columnSetting: true }"
+        :actions="actions"
+        :action-column="{ width: 140, fixed: 'right' }"
+        @load-success="handleLoadSuccess"
+        @selection-change="onSelectionChange">
+        <template #toolbar>
+          <el-button
+            v-uni-permission="'questionnaire_edit_status'"
+            plain
+            :disabled="!selectedIds.length"
+            @click="openBatchStatus">
+            {{ $t('activity.qBatchChangeStatus') }}
+          </el-button>
+          <el-button
+            v-uni-permission="'questionnaire_edit_frozen'"
+            plain
+            :disabled="!selectedIds.length"
+            @click="batchDlg?.open('frozen', selectedIds)">
+            {{ $t('activity.qBatchChangeFrozen') }}
+          </el-button>
+          <el-button
+            v-uni-permission="'questionnaire_delete'"
+            type="danger"
+            plain
+            :disabled="!selectedIds.length"
+            @click="deleteSelected">
+            {{ $t('activity.delBatch') }}
+          </el-button>
+        </template>
+      </UniDataTable>
+    </div>
     <MetaFormDialog ref="metaDlg" @saved="refreshTable" />
     <QuestionnaireCopyDialog ref="copyDlg" @saved="refreshTable" />
     <BatchFlagDialog ref="batchDlg" @saved="refreshTable" />

@@ -6,20 +6,20 @@
           <span class="dorm-bed-card__label">{{ bed.label }}</span>
           <span
             class="dorm-bed-card__status"
-            :class="bed.student ? 'dorm-bed-card__status--occupied' : 'dorm-bed-card__status--empty'"
-          >
-            {{ bed.student ? $t('dorm.roomAssign.statusOccupied') : $t('dorm.roomAssign.statusVacant') }}
+            :class="
+              bed.student ? 'dorm-bed-card__status--occupied' : 'dorm-bed-card__status--empty'
+            ">
+            {{
+              bed.student
+                ? $t('dorm.roomAssign.statusOccupied')
+                : $t('dorm.roomAssign.statusVacant')
+            }}
           </span>
         </div>
         <div v-if="bed.student" class="dorm-bed-card__student">
           <span>{{ bed.student.en_name }}</span>
         </div>
-        <el-button
-          v-else
-          type="danger"
-          link
-          @click="emit('delete', bed)"
-        >
+        <el-button v-else type="danger" link @click="emit('delete', bed)">
           {{ $t('dorm.common.delete') }}
         </el-button>
       </div>
@@ -32,7 +32,11 @@
           <span>{{ bed.schoolName || '—' }}</span>
         </div>
         <div class="dorm-bed-card__row dorm-bed-card__row--split">
-          <span>{{ $t('dorm.roomAssign.fieldAdmissionNo') }}：{{ bed.student.admission_no || '—' }}</span>
+          <span
+            >{{ $t('dorm.roomAssign.fieldAdmissionNo') }}：{{
+              bed.student.admission_no || '—'
+            }}</span
+          >
           <span>{{ $t('dorm.roomAssign.fieldGrade') }}：{{ bed.student.grade_code || '—' }}</span>
           <span>{{ $t('dorm.roomAssign.fieldClass') }}：{{ bed.student.form_code || '—' }}</span>
         </div>

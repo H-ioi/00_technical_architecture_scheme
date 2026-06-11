@@ -3,8 +3,7 @@
     <div
       v-loading="detailLoading"
       class="dorm-rule-form__body"
-      :element-loading-text="$t('common.loading')"
-    >
+      :element-loading-text="$t('common.loading')">
       <UniForm ref="uniFormRef" v-model="formModel" mode="edit" :config="dialogFormCfg" />
 
       <div class="dorm-rule-form__items">
@@ -12,21 +11,18 @@
         <div
           v-for="(_item, index) in formModel.rulesList"
           :key="index"
-          class="dorm-rule-form__item-row"
-        >
+          class="dorm-rule-form__item-row">
           <el-select
             v-model="formModel.rulesList[index]"
             clearable
             filterable
             :placeholder="$t('dorm.rule.phRuleItem')"
-            class="dorm-rule-form__item-select"
-          >
+            class="dorm-rule-form__item-select">
             <el-option
               v-for="option in ruleItemOptions"
               :key="option.code"
               :label="option.name || option.code"
-              :value="option.code"
-            />
+              :value="option.code" />
           </el-select>
           <el-button v-if="index === 0" circle type="primary" @click="addRuleRow">
             <el-icon><Plus /></el-icon>
@@ -61,12 +57,7 @@ import type {
 } from '@/types/modules/dorm-assign-rule'
 import { normalizeArray, normalizePayload } from '@/utils/api-response-normalize'
 
-import {
-  activeStatusOpts,
-  dialogFormConfig,
-  dialogFormRules,
-  emptyFormModel
-} from '../list.config'
+import { activeStatusOpts, dialogFormConfig, dialogFormRules, emptyFormModel } from '../list.config'
 
 import { useDialogDetailLoading } from '@/composables/use-dialog-detail-loading'
 

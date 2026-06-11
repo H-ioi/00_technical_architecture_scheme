@@ -13,8 +13,7 @@
         plain
         size="small"
         class="qb__type-btn"
-        @click="emit('add', btn)"
-      >
+        @click="emit('add', btn)">
         <el-icon :size="16" class="qb__type-btn-ic">
           <component :is="PALETTE_ICON[btn]" />
         </el-icon>

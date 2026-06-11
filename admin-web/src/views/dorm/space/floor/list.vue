@@ -20,8 +20,7 @@
       :submit-text="$t('dorm.common.search')"
       :reset-text="$t('dorm.common.reset')"
       @search="onSearch"
-      @reset="onReset"
-    />
+      @reset="onReset" />
 
     <div v-loading="listLoading" class="dorm-floor-page__content">
       <template v-for="building in visibleBuildings" :key="building.id">
@@ -38,8 +37,7 @@
             v-for="floor in building.floor"
             :key="floor.id"
             shadow="hover"
-            class="dorm-floor-page__card"
-          >
+            class="dorm-floor-page__card">
             <template #header>
               <div class="dorm-floor-page__card-header">
                 <span class="dorm-floor-page__card-title">{{ floor.name }}</span>
@@ -48,8 +46,7 @@
                   :active-value="1"
                   :inactive-value="0"
                   active-color="#9CD1A0"
-                  @change="() => onStatusChange(floor)"
-                />
+                  @change="() => onStatusChange(floor)" />
               </div>
             </template>
 
@@ -64,25 +61,24 @@
               </div>
               <div class="dorm-floor-page__row dorm-floor-page__row--split">
                 <span>
-                  {{ $t('dorm.floor.fieldRoomCount') }}：
-                  {{ floor.total_room_count ?? '—' }}{{ roomUnit }}
+                  {{ $t('dorm.floor.fieldRoomCount') }}： {{ floor.total_room_count ?? '—'
+                  }}{{ roomUnit }}
                 </span>
                 <span>
-                  {{ $t('dorm.floor.fieldBedCount') }}：
-                  {{ floor.total_bed_count ?? '—' }}{{ bedUnit }}
+                  {{ $t('dorm.floor.fieldBedCount') }}： {{ floor.total_bed_count ?? '—'
+                  }}{{ bedUnit }}
                 </span>
               </div>
               <div class="dorm-floor-page__row">
                 <span>
-                  {{ $t('dorm.floor.fieldOccupied') }}：
-                  {{ floor.used_bed_count ?? '—' }}{{ bedUnit }}
+                  {{ $t('dorm.floor.fieldOccupied') }}： {{ floor.used_bed_count ?? '—'
+                  }}{{ bedUnit }}
                 </span>
               </div>
               <el-progress
                 :percentage="bedOccupancyPercent(floor)"
                 :show-text="false"
-                class="dorm-floor-page__progress"
-              />
+                class="dorm-floor-page__progress" />
             </div>
 
             <div class="dorm-floor-page__card-footer">
@@ -90,16 +86,14 @@
                 v-uni-permission="'floor-edit'"
                 type="warning"
                 link
-                @click="openForm('edit', floor)"
-              >
+                @click="openForm('edit', floor)">
                 {{ $t('dorm.common.edit') }}
               </el-button>
               <el-button
                 v-uni-permission="'floor-delete'"
                 type="danger"
                 link
-                @click="removeFloor(floor)"
-              >
+                @click="removeFloor(floor)">
                 {{ $t('dorm.common.delete') }}
               </el-button>
             </div>
@@ -116,8 +110,7 @@
       :record-id="activeId"
       :school-options="schoolOptions"
       :default-school-id="defaultSchoolId ?? undefined"
-      @saved="fetchList"
-    />
+      @saved="fetchList" />
   </section>
 </template>
 
@@ -125,7 +118,11 @@
 import FloorFormDialog from './components/form-dialog.vue'
 import { activeFilterOpts, searchForm } from './list.config'
 import { dormBuildingApi, dormFloorApi, membershipApi } from '@/api'
-import type { DormBuildingBrief, DormBuildingWithFloors, DormFloorRecord } from '@/types/modules/dorm-building'
+import type {
+  DormBuildingBrief,
+  DormBuildingWithFloors,
+  DormFloorRecord
+} from '@/types/modules/dorm-building'
 import type { SchoolOptionRecord } from '@/types/modules/membership'
 import { normalizeArray, normalizePaged } from '@/utils/api-response-normalize'
 import { ElMessage, ElMessageBox } from 'element-plus'

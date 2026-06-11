@@ -9,8 +9,7 @@
     value-key="value"
     :placeholder="$t('schoolBus.studentApply.phKeyword')"
     :disabled="mainDisabled"
-    @select="onStudentPick"
-  >
+    @select="onStudentPick">
     <template #default="{ item }">
       <div>{{ suggestLine(item) }}</div>
     </template>

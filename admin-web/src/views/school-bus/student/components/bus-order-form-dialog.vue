@@ -8,27 +8,23 @@
     :title="dialogTitle"
     :close-on-click-modal="false"
     :before-close="handleMainDialogBeforeClose"
-    @closed="onClosed"
-  >
+    @closed="onClosed">
     <div
       v-if="innerVisible"
       v-loading="formDetailLoading"
       class="bus-order-form"
-      :element-loading-text="$t('common.loading')"
-    >
+      :element-loading-text="$t('common.loading')">
       <div ref="formScrollRootRef" class="bus-order-form__scroll">
         <UniForm
           ref="mainUniFormRef"
           v-model="ruleForm"
           :mode="mainUniFormMode"
-          :config="mainFormConfig"
-        >
+          :config="mainFormConfig">
           <template #field-admissionNo>
             <BusOrderAdmissionField
               :main-disabled="mainDisabled"
               :query-students="queryStudents"
-              :on-student-pick="onStudentPick"
-            />
+              :on-student-pick="onStudentPick" />
           </template>
           <template #field-routeTableSlot>
             <BusOrderRouteTable
@@ -36,16 +32,14 @@
               :main-disabled="mainDisabled"
               :open-route-add="openRouteAdd"
               :open-route-edit="openRouteEdit"
-              :remove-route="removeRoute"
-            />
+              :remove-route="removeRoute" />
           </template>
           <template #field-personTableSlot>
             <BusOrderPersonTable
               :person-table-data="personTableData"
               :open-person-add="openPersonAdd"
               :open-person-edit="openPersonEdit"
-              :remove-person="removePerson"
-            />
+              :remove-person="removePerson" />
           </template>
           <template #field-approvalPaymentRowSlot>
             <BusOrderApprovalPayment
@@ -57,8 +51,7 @@
               :can-show-pay-info="canShowPayInfo"
               :can-edit-pay-info="canEditPayInfo"
               :on-approval-change="onApprovalChange"
-              :on-payment-change="onPaymentChange"
-            />
+              :on-payment-change="onPaymentChange" />
           </template>
           <template #field-signImageUrl>
             <BusOrderSignField :main-disabled="mainDisabled" :on-sign-file="onSignFile" />
@@ -67,8 +60,7 @@
             <BusOrderPaymentDetail
               :main-disabled="mainDisabled"
               :can-edit-pay-info="canEditPayInfo"
-              :payment-method-opts="paymentMethodOpts"
-            />
+              :payment-method-opts="paymentMethodOpts" />
           </template>
         </UniForm>
       </div>
@@ -93,8 +85,7 @@
       :disabled-riding-date="disabledRidingDate"
       :on-riding-range-change="onRidingRangeChange"
       :reset-route-form="resetRouteForm"
-      :submit-route="submitRoute"
-    />
+      :submit-route="submitRoute" />
 
     <BusOrderPersonDialog
       ref="personDialogRef"
@@ -104,8 +95,7 @@
       :person-dialog-form-config="personDialogFormConfig"
       :reset-person-form="resetPersonForm"
       :submit-person="submitPerson"
-      :on-person-file="onPersonFile"
-    />
+      :on-person-file="onPersonFile" />
   </el-drawer>
 </template>
 

@@ -20,16 +20,14 @@
       :submit-text="$t('dorm.common.search')"
       :reset-text="$t('dorm.common.reset')"
       @search="onSearch"
-      @reset="onReset"
-    />
+      @reset="onReset" />
 
     <div v-loading="listLoading" class="dorm-building-page__cards">
       <el-card
         v-for="item in dataList"
         :key="item.id"
         shadow="hover"
-        class="dorm-building-page__card"
-      >
+        class="dorm-building-page__card">
         <template #header>
           <div class="dorm-building-page__card-header">
             <span class="dorm-building-page__card-title">{{ item.name }}</span>
@@ -38,8 +36,7 @@
               :active-value="1"
               :inactive-value="0"
               active-color="#9CD1A0"
-              @change="() => onStatusChange(item)"
-            />
+              @change="() => onStatusChange(item)" />
           </div>
         </template>
 
@@ -58,25 +55,24 @@
           </div>
           <div class="dorm-building-page__row dorm-building-page__row--split">
             <span>
-              {{ $t('dorm.building.fieldFloorCount') }}：
-              {{ item.floor_count ?? '—' }}{{ floorUnit }}
+              {{ $t('dorm.building.fieldFloorCount') }}： {{ item.floor_count ?? '—'
+              }}{{ floorUnit }}
             </span>
             <span>
-              {{ $t('dorm.building.fieldRoomCount') }}：
-              {{ item.total_room_count ?? '—' }}{{ roomUnit }}
+              {{ $t('dorm.building.fieldRoomCount') }}： {{ item.total_room_count ?? '—'
+              }}{{ roomUnit }}
             </span>
           </div>
           <div class="dorm-building-page__row">
             <span>
-              {{ $t('dorm.building.fieldOccupied') }}：
-              {{ item.used_room_count ?? '—' }}{{ roomUnit }}
+              {{ $t('dorm.building.fieldOccupied') }}： {{ item.used_room_count ?? '—'
+              }}{{ roomUnit }}
             </span>
           </div>
           <el-progress
             :percentage="occupancyPercent(item)"
             :show-text="false"
-            class="dorm-building-page__progress"
-          />
+            class="dorm-building-page__progress" />
         </div>
 
         <div class="dorm-building-page__card-footer">
@@ -84,16 +80,14 @@
             v-uni-permission="'building-edit'"
             type="warning"
             link
-            @click="openForm('edit', item)"
-          >
+            @click="openForm('edit', item)">
             {{ $t('dorm.common.edit') }}
           </el-button>
           <el-button
             v-uni-permission="'building-delete'"
             type="danger"
             link
-            @click="removeBuilding(item)"
-          >
+            @click="removeBuilding(item)">
             {{ $t('dorm.common.delete') }}
           </el-button>
         </div>
@@ -110,8 +104,7 @@
         :total="paginationTotal"
         :page-sizes="[10, 20, 50]"
         @current-change="fetchList"
-        @size-change="onPageSizeChange"
-      />
+        @size-change="onPageSizeChange" />
     </div>
 
     <BuildingFormDialog
@@ -120,8 +113,7 @@
       :record-id="activeId"
       :school-options="schoolOptions"
       :default-school-id="defaultSchoolId ?? undefined"
-      @saved="fetchList"
-    />
+      @saved="fetchList" />
   </section>
 </template>
 
@@ -276,11 +268,15 @@ const onStatusChange = async (row: DormBuildingRecord) => {
 
 const removeBuilding = async (row: DormBuildingRecord) => {
   try {
-    await ElMessageBox.confirm(t('dorm.building.confirmDelete'), t('dorm.building.confirmDeleteTitle'), {
-      confirmButtonText: t('dorm.common.delete'),
-      cancelButtonText: t('dorm.common.cancel'),
-      type: 'warning'
-    })
+    await ElMessageBox.confirm(
+      t('dorm.building.confirmDelete'),
+      t('dorm.building.confirmDeleteTitle'),
+      {
+        confirmButtonText: t('dorm.common.delete'),
+        cancelButtonText: t('dorm.common.cancel'),
+        type: 'warning'
+      }
+    )
   } catch {
     return
   }

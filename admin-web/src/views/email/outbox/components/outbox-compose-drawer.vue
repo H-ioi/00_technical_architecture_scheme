@@ -7,23 +7,20 @@
     destroy-on-close
     class="email-compose-drawer"
     append-to-body
-    @closed="onDrawerClosed"
-  >
+    @closed="onDrawerClosed">
     <div class="email-compose-drawer__inner">
       <UniForm
         ref="uniFormRef"
         v-model="form"
         mode="edit"
         class="email-compose-form"
-        :config="composeFormConfig"
-      />
+        :config="composeFormConfig" />
       <div class="email-compose-editor">
         <UniEditor
           v-model="contentHtml"
           class="email-compose-uni-editor"
           height="min(360px, 38vh)"
-          :placeholder="contentPlaceholder"
-        />
+          :placeholder="contentPlaceholder" />
       </div>
     </div>
 

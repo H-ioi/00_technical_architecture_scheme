@@ -31,7 +31,11 @@ export const searchForm = (
       label: '',
       component: 'ElSelect',
       options: buildingOptions,
-      componentProps: { clearable: true, filterable: true, placeholder: t('dorm.floor.phBuilding') },
+      componentProps: {
+        clearable: true,
+        filterable: true,
+        placeholder: t('dorm.floor.phBuilding')
+      },
       colProps: { span: 6 }
     },
     {

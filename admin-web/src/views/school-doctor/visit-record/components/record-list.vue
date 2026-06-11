@@ -1,48 +1,46 @@
 <template>
-  <UniSearchForm
-    v-model="queryModel"
-    :config="searchCfg"
-    :collapsed="true"
-    :collapsed-rows="1"
-    :action-min-span="0"
-    :submit-text="$t('schoolDoctor.common.search')"
-    :reset-text="$t('schoolDoctor.common.reset')"
-    @search="search"
-    @reset="onReset"
-  />
+  <div class="uni-list-page__body">
+    <UniSearchForm
+      v-model="queryModel"
+      :config="searchCfg"
+      :collapsed="true"
+      :collapsed-rows="1"
+      :action-min-span="0"
+      :submit-text="$t('schoolDoctor.common.search')"
+      :reset-text="$t('schoolDoctor.common.reset')"
+      @search="search"
+      @reset="onReset" />
 
-  <UniDataTable
-    ref="tableRef"
-    row-key="id"
-    selection
-    :columns="columns"
-    :request="loadData"
-    :filters="filters"
-    :pagination="{ pageSize: 10, pageSizes: [10, 20, 50, 100] }"
-    :toolbar="{ refresh: true, density: true, columnSetting: true }"
-    :actions="actions"
-    :action-column="{ width: 120, fixed: 'right' }"
-    @selection-change="onSelectionChange"
-    @load-success="onTableLoadSuccess"
-    @request-error="tableEmpty.onRequestError"
-  >
-    <template #toolbar>
-      <el-button type="danger" :disabled="selectedIds.length === 0" @click="batchDelete">
-        {{ $t('schoolDoctor.visitRecord.batchDelete') }}
-      </el-button>
-    </template>
-    <template #empty>
-      <ListTableEmpty :kind="tableEmpty.kind" @reset="onReset" @retry="tableEmpty.retry" />
-    </template>
-  </UniDataTable>
-
+    <UniDataTable
+      ref="tableRef"
+      row-key="id"
+      selection
+      :columns="columns"
+      :request="loadData"
+      :filters="filters"
+      :pagination="{ pageSize: 10, pageSizes: [10, 20, 50, 100] }"
+      :toolbar="{ refresh: true, density: true, columnSetting: true }"
+      :actions="actions"
+      :action-column="{ width: 120, fixed: 'right' }"
+      @selection-change="onSelectionChange"
+      @load-success="onTableLoadSuccess"
+      @request-error="tableEmpty.onRequestError">
+      <template #toolbar>
+        <el-button type="danger" :disabled="selectedIds.length === 0" @click="batchDelete">
+          {{ $t('schoolDoctor.visitRecord.batchDelete') }}
+        </el-button>
+      </template>
+      <template #empty>
+        <ListTableEmpty :kind="tableEmpty.kind" @reset="onReset" @retry="tableEmpty.retry" />
+      </template>
+    </UniDataTable>
+  </div>
   <RecordFormDrawer
     v-model:visible="drawerVisible"
     :mode="drawerMode"
     :record-id="activeRecordId"
     :school-records="schoolRecords"
-    @saved="refreshTable"
-  />
+    @saved="refreshTable" />
 </template>
 
 <script setup lang="ts">
@@ -59,7 +57,12 @@ import type { VisitRecordListRow } from '@/types/modules/school-doctor-visit-rec
 import type { SchoolOptionRecord } from '@/types/modules/membership'
 import { normalizePaged } from '@/utils/api-response-normalize'
 
-import { leaveDestinationOpts, recordSearchForm, recordTableCols, yesNoOpts } from '../record.config'
+import {
+  leaveDestinationOpts,
+  recordSearchForm,
+  recordTableCols,
+  yesNoOpts
+} from '../record.config'
 import RecordFormDrawer from './record-form-drawer.vue'
 
 type Row = VisitRecordListRow & {
@@ -94,7 +97,9 @@ const drawerVisible = ref(false)
 const drawerMode = ref<'add' | 'view' | 'edit'>('view')
 const activeRecordId = ref<string | number | undefined>()
 
-const defaultSchoolId = computed(() => (schoolRecords.value.length === 1 ? schoolRecords.value[0]?.id : null))
+const defaultSchoolId = computed(() =>
+  schoolRecords.value.length === 1 ? schoolRecords.value[0]?.id : null
+)
 const schoolOptions = computed(() =>
   toUniOptions(schoolRecords.value, { labelKeys: ['enName', 'cnName', 'name'], valueKey: 'id' })
 )

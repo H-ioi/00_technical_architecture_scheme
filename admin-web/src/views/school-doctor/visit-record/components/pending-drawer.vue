@@ -4,8 +4,7 @@
     :title="drawerTitle"
     size="1120px"
     destroy-on-close
-    class="pending-drawer"
-  >
+    class="pending-drawer">
     <div v-if="visible" v-loading="loading" class="pending-drawer__body">
       <PendingDetailPanel
         ref="panelRef"
@@ -16,8 +15,7 @@
         :operation-readonly="mode === 'view'"
         :school-records="schoolRecords"
         @view-operation="openOperationDialog('view', $event)"
-        @edit-operation="openOperationDialog('edit', $event)"
-      />
+        @edit-operation="openOperationDialog('edit', $event)" />
     </div>
 
     <template v-if="mode === 'operate'" #footer>
@@ -223,7 +221,9 @@ async function submitPending(endMedication: boolean) {
   try {
     await schoolDoctorVisitRecordApi.pendingOperate.post(payload)
     ElMessage.success(
-      endMedication ? t('schoolDoctor.visitRecord.endMedicationSuccess') : t('schoolDoctor.common.actionSuccess')
+      endMedication
+        ? t('schoolDoctor.visitRecord.endMedicationSuccess')
+        : t('schoolDoctor.common.actionSuccess')
     )
     visible.value = false
     emit('saved')

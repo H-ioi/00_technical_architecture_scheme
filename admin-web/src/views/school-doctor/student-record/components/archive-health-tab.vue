@@ -2,7 +2,9 @@
   <div class="archive-health-tab">
     <div v-if="showMetricsPanel || showNursePanel" class="archive-health-tab__layout">
       <div v-if="showMetricsPanel" class="archive-health-tab__card">
-        <div class="archive-health-tab__title">{{ $t('schoolDoctor.studentRecord.healthMetrics') }}</div>
+        <div class="archive-health-tab__title">
+          {{ $t('schoolDoctor.studentRecord.healthMetrics') }}
+        </div>
         <div class="archive-health-tab__metrics">
           <div v-for="item in metricItems" :key="item.key" class="archive-health-tab__metric">
             <div class="archive-health-tab__metric-label">{{ item.label }}</div>
@@ -15,35 +17,38 @@
               :max="item.max"
               :step="item.step"
               :precision="item.precision"
-              style="width: 100%"
-            />
+              style="width: 100%" />
             <div v-else class="archive-health-tab__metric-value">{{ item.value }}</div>
           </div>
         </div>
       </div>
 
       <div v-if="showNursePanel" class="archive-health-tab__card">
-        <div class="archive-health-tab__title">{{ $t('schoolDoctor.studentRecord.nurseRemark') }}</div>
+        <div class="archive-health-tab__title">
+          {{ $t('schoolDoctor.studentRecord.nurseRemark') }}
+        </div>
         <el-input
           v-if="isEditable"
           v-model="editForm.nurseRemark"
           type="textarea"
           :rows="5"
-          :placeholder="$t('schoolDoctor.studentRecord.phNurseRemark')"
-        />
+          :placeholder="$t('schoolDoctor.studentRecord.phNurseRemark')" />
         <div v-else class="archive-health-tab__nurse">{{ healthHistory.nurseRemark }}</div>
       </div>
     </div>
 
-    <div v-if="visibleAllergies.length" class="archive-health-tab__card archive-health-tab__section">
-      <div class="archive-health-tab__title">{{ $t('schoolDoctor.studentRecord.allergySection') }}</div>
+    <div
+      v-if="visibleAllergies.length"
+      class="archive-health-tab__card archive-health-tab__section">
+      <div class="archive-health-tab__title">
+        {{ $t('schoolDoctor.studentRecord.allergySection') }}
+      </div>
       <div class="archive-health-tab__allergies">
         <div
           v-for="item in visibleAllergies"
           :key="item.key"
           class="archive-health-tab__allergy"
-          :class="item.typeClass"
-        >
+          :class="item.typeClass">
           <div class="archive-health-tab__allergy-label">{{ item.label }}</div>
           <div>{{ item.value }}</div>
         </div>
@@ -51,30 +56,34 @@
     </div>
 
     <div v-if="diseaseList.length" class="archive-health-tab__card archive-health-tab__section">
-      <div class="archive-health-tab__title">{{ $t('schoolDoctor.studentRecord.diseaseSection') }}</div>
+      <div class="archive-health-tab__title">
+        {{ $t('schoolDoctor.studentRecord.diseaseSection') }}
+      </div>
       <el-table :data="diseaseList" border size="small">
-        <el-table-column :label="$t('schoolDoctor.studentRecord.diseaseName')" min-width="120" prop="diseaseNameText" />
+        <el-table-column
+          :label="$t('schoolDoctor.studentRecord.diseaseName')"
+          min-width="120"
+          prop="diseaseNameText" />
         <el-table-column
           :label="$t('schoolDoctor.studentRecord.diseaseCondition')"
           prop="conditionStatusText"
-          width="120"
-        />
+          width="120" />
         <el-table-column
           :label="$t('schoolDoctor.studentRecord.diseaseMedication')"
           prop="medicationUsage"
-          min-width="140"
-        />
+          min-width="140" />
         <el-table-column
           :label="$t('schoolDoctor.studentRecord.diseaseAttack')"
           prop="attackTimeDetail"
-          min-width="160"
-        />
-        <el-table-column :label="$t('schoolDoctor.studentRecord.diseaseMeasures')" prop="measures" min-width="120" />
+          min-width="160" />
+        <el-table-column
+          :label="$t('schoolDoctor.studentRecord.diseaseMeasures')"
+          prop="measures"
+          min-width="120" />
         <el-table-column
           :label="$t('schoolDoctor.studentRecord.diseaseDiagnosis')"
           prop="diagnosisAndTreatment"
-          min-width="140"
-        />
+          min-width="140" />
       </el-table>
     </div>
 
@@ -106,12 +115,64 @@ const { t } = useUniI18n()
 const diseaseOptions = ref<SchoolDoctorDiseaseOption[]>([])
 
 const metricDefs = [
-  { key: 'height', prop: 'height' as const, labelKey: 'metricHeight', suffix: ' cm', min: 50, max: 250, step: 1, precision: 1 },
-  { key: 'weight', prop: 'weight' as const, labelKey: 'metricWeight', suffix: ' kg', min: 10, max: 200, step: 0.1, precision: 1 },
-  { key: 'leftVision', prop: 'leftVision' as const, labelKey: 'metricLeftVision', prefix: 'L: ', min: 0.1, max: 5.3, step: 0.1, precision: 1 },
-  { key: 'rightVision', prop: 'rightVision' as const, labelKey: 'metricRightVision', prefix: 'R: ', min: 0.1, max: 5.3, step: 0.1, precision: 1 },
-  { key: 'leftEar', prop: 'leftEar' as const, labelKey: 'metricLeftEar', min: 0, max: 120, step: 1, precision: 0 },
-  { key: 'rightEar', prop: 'rightEar' as const, labelKey: 'metricRightEar', min: 0, max: 120, step: 1, precision: 0 }
+  {
+    key: 'height',
+    prop: 'height' as const,
+    labelKey: 'metricHeight',
+    suffix: ' cm',
+    min: 50,
+    max: 250,
+    step: 1,
+    precision: 1
+  },
+  {
+    key: 'weight',
+    prop: 'weight' as const,
+    labelKey: 'metricWeight',
+    suffix: ' kg',
+    min: 10,
+    max: 200,
+    step: 0.1,
+    precision: 1
+  },
+  {
+    key: 'leftVision',
+    prop: 'leftVision' as const,
+    labelKey: 'metricLeftVision',
+    prefix: 'L: ',
+    min: 0.1,
+    max: 5.3,
+    step: 0.1,
+    precision: 1
+  },
+  {
+    key: 'rightVision',
+    prop: 'rightVision' as const,
+    labelKey: 'metricRightVision',
+    prefix: 'R: ',
+    min: 0.1,
+    max: 5.3,
+    step: 0.1,
+    precision: 1
+  },
+  {
+    key: 'leftEar',
+    prop: 'leftEar' as const,
+    labelKey: 'metricLeftEar',
+    min: 0,
+    max: 120,
+    step: 1,
+    precision: 0
+  },
+  {
+    key: 'rightEar',
+    prop: 'rightEar' as const,
+    labelKey: 'metricRightEar',
+    min: 0,
+    max: 120,
+    step: 1,
+    precision: 0
+  }
 ]
 
 function hasText(value: unknown) {
@@ -152,10 +213,30 @@ const metricItems = computed(() => {
 const visibleAllergies = computed(() => {
   const history = props.healthHistory || {}
   const items = [
-    { key: 'foodAllergy', label: t('schoolDoctor.studentRecord.allergyFood'), value: history.foodAllergy, typeClass: 'is-danger' },
-    { key: 'drugAllergy', label: t('schoolDoctor.studentRecord.allergyDrug'), value: history.drugAllergy, typeClass: 'is-danger' },
-    { key: 'contactAllergy', label: t('schoolDoctor.studentRecord.allergyContact'), value: history.contactAllergy, typeClass: 'is-purple' },
-    { key: 'otherAllergy', label: t('schoolDoctor.studentRecord.allergyOther'), value: history.otherAllergy, typeClass: 'is-warning' }
+    {
+      key: 'foodAllergy',
+      label: t('schoolDoctor.studentRecord.allergyFood'),
+      value: history.foodAllergy,
+      typeClass: 'is-danger'
+    },
+    {
+      key: 'drugAllergy',
+      label: t('schoolDoctor.studentRecord.allergyDrug'),
+      value: history.drugAllergy,
+      typeClass: 'is-danger'
+    },
+    {
+      key: 'contactAllergy',
+      label: t('schoolDoctor.studentRecord.allergyContact'),
+      value: history.contactAllergy,
+      typeClass: 'is-purple'
+    },
+    {
+      key: 'otherAllergy',
+      label: t('schoolDoctor.studentRecord.allergyOther'),
+      value: history.otherAllergy,
+      typeClass: 'is-warning'
+    }
   ]
   return items.filter((item) => hasText(item.value))
 })
@@ -210,7 +291,12 @@ function diseaseDisplayName(disease: MedicalArchiveDiseaseItem) {
 }
 
 onMounted(async () => {
-  const raw = await schoolDoctorDiseaseSettingApi.page.get({ current: 1, size: 500, type: 1, status: 1 })
+  const raw = await schoolDoctorDiseaseSettingApi.page.get({
+    current: 1,
+    size: 500,
+    type: 1,
+    status: 1
+  })
   const { list } = normalizePaged<SchoolDoctorDiseaseOption>(raw)
   diseaseOptions.value = list
 })

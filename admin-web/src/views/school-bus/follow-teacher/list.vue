@@ -26,66 +26,60 @@
       type="file"
       accept=".xlsx,.xls"
       class="school-bus-follow-teacher__file"
-      @change="onImportFile"
-    >
+      @change="onImportFile" />
+    <div class="uni-list-page__body">
+      <UniSearchForm
+        v-model="queryModel"
+        :config="searchCfg"
+        :collapsed="true"
+        :collapsed-rows="1"
+        :action-min-span="0"
+        :submit-text="$t('schoolBus.search')"
+        :reset-text="$t('schoolBus.reset')"
+        @search="search"
+        @reset="reset" />
 
-    <UniSearchForm
-      v-model="queryModel"
-      :config="searchCfg"
-      :collapsed="true"
-      :collapsed-rows="1"
-      :action-min-span="0"
-      :submit-text="$t('schoolBus.search')"
-      :reset-text="$t('schoolBus.reset')"
-      @search="search"
-      @reset="reset"
-    />
-
-    <UniDataTable
-      ref="tableRef"
-      row-key="id"
-      selection
-      :columns="columns"
-      :request="loadData"
-      :filters="filters"
-      :pagination="{ pageSize: 10, pageSizes: [10, 20, 50, 100] }"
-      :toolbar="{ refresh: true, density: true, columnSetting: true }"
-      :actions="actions"
-      :action-column="{ width: 110, fixed: 'right' }"
-      @selection-change="onSelectionChange"
-      @load-success="tableEmpty.onLoadSuccess"
-      @request-error="tableEmpty.onRequestError"
-    >
-      <template #toolbar>
-        <!-- 权限标识与旧系统一致，后端为历史拼写 teacheruser_enble -->
-        <el-button
-          v-uni-permission="'teacheruser_enble'"
-          :disabled="ids.length === 0"
-          @click="batchEnable"
-        >
-          {{ $t('schoolBus.followTeacher.enable') }}
-        </el-button>
-        <el-button
-          v-uni-permission="'teacheruser_disable'"
-          :disabled="ids.length === 0"
-          @click="batchDisable"
-        >
-          {{ $t('schoolBus.followTeacher.disable') }}
-        </el-button>
-        <el-button
-          v-uni-permission="'teacheruser_del'"
-          type="danger"
-          :disabled="ids.length === 0"
-          @click="del"
-        >
-          {{ $t('schoolBus.delete') }}
-        </el-button>
-      </template>
-      <template #empty>
-        <ListTableEmpty :kind="tableEmpty.kind" @reset="reset" @retry="tableEmpty.retry" />
-      </template>
-    </UniDataTable>
-
+      <UniDataTable
+        ref="tableRef"
+        row-key="id"
+        selection
+        :columns="columns"
+        :request="loadData"
+        :filters="filters"
+        :pagination="{ pageSize: 10, pageSizes: [10, 20, 50, 100] }"
+        :toolbar="{ refresh: true, density: true, columnSetting: true }"
+        :actions="actions"
+        :action-column="{ width: 110, fixed: 'right' }"
+        @selection-change="onSelectionChange"
+        @load-success="tableEmpty.onLoadSuccess"
+        @request-error="tableEmpty.onRequestError">
+        <template #toolbar>
+          <!-- 权限标识与旧系统一致，后端为历史拼写 teacheruser_enble -->
+          <el-button
+            v-uni-permission="'teacheruser_enble'"
+            :disabled="ids.length === 0"
+            @click="batchEnable">
+            {{ $t('schoolBus.followTeacher.enable') }}
+          </el-button>
+          <el-button
+            v-uni-permission="'teacheruser_disable'"
+            :disabled="ids.length === 0"
+            @click="batchDisable">
+            {{ $t('schoolBus.followTeacher.disable') }}
+          </el-button>
+          <el-button
+            v-uni-permission="'teacheruser_del'"
+            type="danger"
+            :disabled="ids.length === 0"
+            @click="del">
+            {{ $t('schoolBus.delete') }}
+          </el-button>
+        </template>
+        <template #empty>
+          <ListTableEmpty :kind="tableEmpty.kind" @reset="reset" @retry="tableEmpty.retry" />
+        </template>
+      </UniDataTable>
+    </div>
     <TeacherForm
       v-model:visible="formVisible"
       :mode="formMode"
@@ -94,8 +88,7 @@
       :school-options="schoolOptions"
       :status-options="statusOptions"
       :multi-school="multiSchool"
-      @saved="refreshTable"
-    />
+      @saved="refreshTable" />
   </section>
 </template>
 

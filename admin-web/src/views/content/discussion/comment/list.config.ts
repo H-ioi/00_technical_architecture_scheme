@@ -52,7 +52,11 @@ export const dialogFormConfig = (
       label: t('content.discussionComment.fieldDiscussion'),
       component: 'ElSelect',
       options: discussionOptions,
-      componentProps: { clearable: true, filterable: true, placeholder: t('content.discussionComment.phSelect') },
+      componentProps: {
+        clearable: true,
+        filterable: true,
+        placeholder: t('content.discussionComment.phSelect')
+      },
       colProps: { span: 24 }
     },
     {
@@ -80,10 +84,18 @@ export const dialogFormConfig = (
 })
 
 export const dialogFormRules = (t: Translate): FormRules => ({
-  discussionId: [{ required: true, message: t('content.discussionComment.ruleDiscussion'), trigger: 'change' }],
-  parentId: [{ required: true, message: t('content.discussionComment.ruleParentId'), trigger: 'blur' }],
-  content: [{ required: true, message: t('content.discussionComment.ruleContent'), trigger: 'blur' }],
-  visible: [{ required: true, message: t('content.discussionComment.ruleVisible'), trigger: 'change' }]
+  discussionId: [
+    { required: true, message: t('content.discussionComment.ruleDiscussion'), trigger: 'change' }
+  ],
+  parentId: [
+    { required: true, message: t('content.discussionComment.ruleParentId'), trigger: 'blur' }
+  ],
+  content: [
+    { required: true, message: t('content.discussionComment.ruleContent'), trigger: 'blur' }
+  ],
+  visible: [
+    { required: true, message: t('content.discussionComment.ruleVisible'), trigger: 'change' }
+  ]
 })
 
 export const emptyFormModel = (): ContentDiscussionCommentFormModel => ({

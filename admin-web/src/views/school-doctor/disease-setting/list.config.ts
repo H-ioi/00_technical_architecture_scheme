@@ -93,7 +93,10 @@ export const dialogFormConfig = (
       label: t('schoolDoctor.diseaseSetting.fieldType'),
       component: 'ElSelect',
       options: typeOptions,
-      componentProps: { clearable: true, placeholder: t('schoolDoctor.diseaseSetting.phTypeSelect') },
+      componentProps: {
+        clearable: true,
+        placeholder: t('schoolDoctor.diseaseSetting.phTypeSelect')
+      },
       colProps: { span: 12 }
     },
     {
@@ -101,22 +104,35 @@ export const dialogFormConfig = (
       label: t('schoolDoctor.diseaseSetting.fieldStatus'),
       component: 'ElSelect',
       options: statusOptions,
-      componentProps: { clearable: true, placeholder: t('schoolDoctor.diseaseSetting.phStatusSelect') },
+      componentProps: {
+        clearable: true,
+        placeholder: t('schoolDoctor.diseaseSetting.phStatusSelect')
+      },
       colProps: { span: 12 }
     },
     {
       field: 'remark',
       label: t('schoolDoctor.diseaseSetting.fieldRemark'),
       component: 'ElInput',
-      componentProps: { type: 'textarea', rows: 3, placeholder: t('schoolDoctor.diseaseSetting.phRemark') },
+      componentProps: {
+        type: 'textarea',
+        rows: 3,
+        placeholder: t('schoolDoctor.diseaseSetting.phRemark')
+      },
       colProps: { span: 24 }
     }
   ]
 })
 
 export const dialogFormRules = (t: Translate): FormRules => ({
-  cnName: [{ required: true, message: t('schoolDoctor.diseaseSetting.ruleCnName'), trigger: 'blur' }],
-  enName: [{ required: true, message: t('schoolDoctor.diseaseSetting.ruleEnName'), trigger: 'blur' }],
+  cnName: [
+    { required: true, message: t('schoolDoctor.diseaseSetting.ruleCnName'), trigger: 'blur' }
+  ],
+  enName: [
+    { required: true, message: t('schoolDoctor.diseaseSetting.ruleEnName'), trigger: 'blur' }
+  ],
   type: [{ required: true, message: t('schoolDoctor.diseaseSetting.ruleType'), trigger: 'change' }],
-  status: [{ required: true, message: t('schoolDoctor.diseaseSetting.ruleStatus'), trigger: 'change' }]
+  status: [
+    { required: true, message: t('schoolDoctor.diseaseSetting.ruleStatus'), trigger: 'change' }
+  ]
 })

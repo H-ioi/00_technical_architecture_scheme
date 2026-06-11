@@ -1,5 +1,9 @@
 <template>
-  <el-dialog v-model="visible" :title="$t('dorm.roomAssign.changeRoom')" width="640px" destroy-on-close>
+  <el-dialog
+    v-model="visible"
+    :title="$t('dorm.roomAssign.changeRoom')"
+    width="640px"
+    destroy-on-close>
     <UniForm ref="uniFormRef" v-model="formModel" mode="edit" :config="formCfg" />
     <template #footer>
       <el-button @click="visible = false">{{ $t('dorm.common.cancel') }}</el-button>

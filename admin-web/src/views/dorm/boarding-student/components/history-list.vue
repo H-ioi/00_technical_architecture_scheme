@@ -1,41 +1,42 @@
 <template>
   <div class="boarding-history-list">
-    <UniSearchForm
-      v-model="queryModel"
-      :config="searchCfg"
-      :collapsed="true"
-      :collapsed-rows="1"
-      :action-min-span="0"
-      :submit-text="$t('dorm.common.search')"
-      :reset-text="$t('dorm.common.reset')"
-      @search="search"
-      @reset="onReset"
-    />
+    <div class="uni-list-page__body">
+      <UniSearchForm
+        v-model="queryModel"
+        :config="searchCfg"
+        :collapsed="true"
+        :collapsed-rows="1"
+        :action-min-span="0"
+        :submit-text="$t('dorm.common.search')"
+        :reset-text="$t('dorm.common.reset')"
+        @search="search"
+        @reset="onReset" />
 
-    <UniDataTable
-      ref="tableRef"
-      row-key="id"
-      :columns="columns"
-      :request="loadData"
-      :filters="filters"
-      :pagination="{ pageSize: 10, pageSizes: [10, 20, 50, 100] }"
-      :toolbar="{ refresh: true, density: true, columnSetting: true }"
-      :actions="actions"
-      :action-column="{ width: 120, fixed: 'right' }"
-      @load-success="tableEmpty.onLoadSuccess"
-      @request-error="tableEmpty.onRequestError"
-    >
-      <template #empty>
-        <ListTableEmpty :kind="tableEmpty.kind" @reset="onReset" @retry="tableEmpty.retry" />
-      </template>
-    </UniDataTable>
-
-    <StudentDetailDialog v-model:visible="detailVisible" :admission-no="activeAdmissionNo" variant="history" />
+      <UniDataTable
+        ref="tableRef"
+        row-key="id"
+        :columns="columns"
+        :request="loadData"
+        :filters="filters"
+        :pagination="{ pageSize: 10, pageSizes: [10, 20, 50, 100] }"
+        :toolbar="{ refresh: true, density: true, columnSetting: true }"
+        :actions="actions"
+        :action-column="{ width: 120, fixed: 'right' }"
+        @load-success="tableEmpty.onLoadSuccess"
+        @request-error="tableEmpty.onRequestError">
+        <template #empty>
+          <ListTableEmpty :kind="tableEmpty.kind" @reset="onReset" @retry="tableEmpty.retry" />
+        </template>
+      </UniDataTable>
+    </div>
+    <StudentDetailDialog
+      v-model:visible="detailVisible"
+      :admission-no="activeAdmissionNo"
+      variant="history" />
     <HistoryEditDialog
       v-model:visible="editVisible"
       :admission-no="activeAdmissionNo"
-      @saved="refreshTable"
-    />
+      @saved="refreshTable" />
   </div>
 </template>
 

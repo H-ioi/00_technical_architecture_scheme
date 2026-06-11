@@ -17,8 +17,7 @@
       :toolbar="menuTableToolbar"
       :actions="actions"
       :action-column="{ width: 70, fixed: 'right' }"
-      @refresh="loadTree"
-    >
+      @refresh="loadTree">
       <template #column-icon="{ row }">
         <IconDisplay :name="row.icon" />
       </template>
@@ -45,8 +44,7 @@
       :snapshot="form"
       :parent-options="parentOptions"
       :submitting="submitting"
-      @save="submitFromDraft"
-    />
+      @save="submitFromDraft" />
   </section>
 </template>
 

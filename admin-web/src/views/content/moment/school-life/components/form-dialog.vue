@@ -4,13 +4,11 @@
     :title="title"
     width="min(1000px, 96vw)"
     destroy-on-close
-    class="content-school-life-form-dialog"
-  >
+    class="content-school-life-form-dialog">
     <div
       v-loading="detailLoading"
       class="content-school-life-form-dialog__body"
-      :element-loading-text="$t('common.loading')"
-    >
+      :element-loading-text="$t('common.loading')">
       <UniForm ref="uniFormRef" v-model="formModel" mode="edit" :config="dialogFormCfg">
         <template #field-images>
           <el-upload
@@ -20,8 +18,7 @@
             accept="image/jpeg,image/png"
             :before-upload="onBeforeImageUpload"
             :on-remove="onImageRemove"
-            :on-preview="onPreview"
-          >
+            :on-preview="onPreview">
             <el-button type="primary">{{ $t('content.schoolLife.upload') }}</el-button>
             <template #tip>
               <div class="el-upload__tip">{{ $t('content.schoolLife.uploadImageTip') }}</div>
@@ -36,8 +33,7 @@
             accept="application/pdf"
             :before-upload="onBeforePdfUpload"
             :on-remove="onPdfRemove"
-            :on-preview="onPreview"
-          >
+            :on-preview="onPreview">
             <el-button type="primary">{{ $t('content.schoolLife.upload') }}</el-button>
             <template #tip>
               <div class="el-upload__tip">{{ $t('content.schoolLife.uploadPdfTip') }}</div>
@@ -215,7 +211,10 @@ watch(
           sendSms: Boolean(row.sendSms),
           visible: row.visible === true || row.visible === '1' || row.visible === 1 ? '1' : '0'
         }
-        imageFiles.value = mapAttachmentsToFiles(row.images as MomentAttachment[] | undefined, 'image')
+        imageFiles.value = mapAttachmentsToFiles(
+          row.images as MomentAttachment[] | undefined,
+          'image'
+        )
         pdfFiles.value = mapAttachmentsToFiles(row.pdfs as MomentAttachment[] | undefined, 'pdf')
       }
     })

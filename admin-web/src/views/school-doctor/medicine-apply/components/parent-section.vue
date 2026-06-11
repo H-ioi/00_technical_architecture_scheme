@@ -19,12 +19,19 @@
       <div class="medicine-parent__sign-head">
         <span>{{ $t('schoolDoctor.medicineApply.fieldParentSignature') }}</span>
         <el-radio-group v-if="!readonly" v-model="signMode" size="small">
-          <el-radio-button value="draw">{{ $t('schoolDoctor.medicalInfo.signDraw') }}</el-radio-button>
-          <el-radio-button value="upload">{{ $t('schoolDoctor.medicalInfo.signUpload') }}</el-radio-button>
+          <el-radio-button value="draw">{{
+            $t('schoolDoctor.medicalInfo.signDraw')
+          }}</el-radio-button>
+          <el-radio-button value="upload">{{
+            $t('schoolDoctor.medicalInfo.signUpload')
+          }}</el-radio-button>
         </el-radio-group>
       </div>
       <div v-if="formModel.parentSignaturePath" class="medicine-parent__preview">
-        <el-image :src="formModel.parentSignaturePath" fit="contain" style="width: 200px; height: 100px" />
+        <el-image
+          :src="formModel.parentSignaturePath"
+          fit="contain"
+          style="width: 200px; height: 100px" />
         <el-button v-if="!readonly" type="danger" link @click="formModel.parentSignaturePath = ''">
           {{ $t('schoolDoctor.medicalInfo.clearSignature') }}
         </el-button>
@@ -39,9 +46,10 @@
           :show-file-list="false"
           accept="image/*"
           :http-request="(opt) => emit('signature-upload', opt)"
-          :before-upload="beforeImage"
-        >
-          <el-button :loading="signatureUploading">{{ $t('schoolDoctor.common.upload') }}</el-button>
+          :before-upload="beforeImage">
+          <el-button :loading="signatureUploading">{{
+            $t('schoolDoctor.common.upload')
+          }}</el-button>
         </el-upload>
       </template>
       <span v-else>--</span>
@@ -51,9 +59,13 @@
       <el-checkbox v-model="formModel.informedConsent" :true-value="1" :false-value="0">
         <span>{{ $t('schoolDoctor.medicineApply.informedConsent') }}</span>
       </el-checkbox>
-      <p class="medicine-parent__consent-tip">{{ $t('schoolDoctor.medicineApply.informedConsentTip') }}</p>
+      <p class="medicine-parent__consent-tip">
+        {{ $t('schoolDoctor.medicineApply.informedConsentTip') }}
+      </p>
     </el-form-item>
-    <div v-else-if="formModel.informedConsent === 1" class="medicine-parent__consent medicine-parent__consent--ok">
+    <div
+      v-else-if="formModel.informedConsent === 1"
+      class="medicine-parent__consent medicine-parent__consent--ok">
       {{ $t('schoolDoctor.medicineApply.informedConsent') }}
     </div>
   </div>

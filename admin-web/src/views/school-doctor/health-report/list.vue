@@ -12,8 +12,7 @@
           :show-file-list="false"
           :auto-upload="false"
           accept=".xlsx,.xls"
-          :on-change="onImportFile"
-        >
+          :on-change="onImportFile">
           <el-button :loading="importing">{{ $t('schoolDoctor.common.import') }}</el-button>
         </el-upload>
         <el-button @click="handleExport">{{ $t('schoolDoctor.common.export') }}</el-button>
@@ -22,51 +21,48 @@
         </el-button>
       </div>
     </div>
+    <div class="uni-list-page__body">
+      <UniSearchForm
+        v-model="queryModel"
+        :config="searchCfg"
+        :collapsed="true"
+        :collapsed-rows="1"
+        :action-min-span="0"
+        :submit-text="$t('schoolDoctor.common.search')"
+        :reset-text="$t('schoolDoctor.common.reset')"
+        @search="search"
+        @reset="onReset" />
 
-    <UniSearchForm
-      v-model="queryModel"
-      :config="searchCfg"
-      :collapsed="true"
-      :collapsed-rows="1"
-      :action-min-span="0"
-      :submit-text="$t('schoolDoctor.common.search')"
-      :reset-text="$t('schoolDoctor.common.reset')"
-      @search="search"
-      @reset="onReset"
-    />
-
-    <UniDataTable
-      ref="tableRef"
-      row-key="id"
-      selection
-      :columns="columns"
-      :request="loadData"
-      :filters="filters"
-      :pagination="{ pageSize: 10, pageSizes: [10, 20, 50, 100] }"
-      :toolbar="{ refresh: true, density: true, columnSetting: true }"
-      :actions="actions"
-      :action-column="{ width: 120, fixed: 'right' }"
-      @selection-change="onSelectionChange"
-      @load-success="tableEmpty.onLoadSuccess"
-      @request-error="tableEmpty.onRequestError"
-    >
-      <template #toolbar>
-        <el-button type="danger" :disabled="selectedIds.length === 0" @click="batchDelete">
-          {{ $t('schoolDoctor.healthReport.batchDelete') }}
-        </el-button>
-      </template>
-      <template #empty>
-        <ListTableEmpty :kind="tableEmpty.kind" @reset="onReset" @retry="tableEmpty.retry" />
-      </template>
-    </UniDataTable>
-
+      <UniDataTable
+        ref="tableRef"
+        row-key="id"
+        selection
+        :columns="columns"
+        :request="loadData"
+        :filters="filters"
+        :pagination="{ pageSize: 10, pageSizes: [10, 20, 50, 100] }"
+        :toolbar="{ refresh: true, density: true, columnSetting: true }"
+        :actions="actions"
+        :action-column="{ width: 120, fixed: 'right' }"
+        @selection-change="onSelectionChange"
+        @load-success="tableEmpty.onLoadSuccess"
+        @request-error="tableEmpty.onRequestError">
+        <template #toolbar>
+          <el-button type="danger" :disabled="selectedIds.length === 0" @click="batchDelete">
+            {{ $t('schoolDoctor.healthReport.batchDelete') }}
+          </el-button>
+        </template>
+        <template #empty>
+          <ListTableEmpty :kind="tableEmpty.kind" @reset="onReset" @retry="tableEmpty.retry" />
+        </template>
+      </UniDataTable>
+    </div>
     <FormDrawer
       v-model:visible="drawerVisible"
       :mode="drawerMode"
       :record-id="activeRecordId"
       :school-records="schoolRecords"
-      @saved="refreshTable"
-    />
+      @saved="refreshTable" />
   </section>
 </template>
 
@@ -80,7 +76,10 @@ import { computed, nextTick, onMounted, ref } from 'vue'
 import { membershipApi, schoolDoctorHealthReportApi } from '@/api'
 import ListTableEmpty from '@/components/list-table-empty/index.vue'
 import { useListTableEmpty } from '@/composables/use-list-table-empty'
-import type { HealthReportListRow, HealthReportPageParams } from '@/types/modules/school-doctor-health-report'
+import type {
+  HealthReportListRow,
+  HealthReportPageParams
+} from '@/types/modules/school-doctor-health-report'
 import type { SchoolOptionRecord } from '@/types/modules/membership'
 import { downloadBlob } from '@/utils/download'
 import { normalizePaged } from '@/utils/api-response-normalize'
@@ -111,7 +110,11 @@ const uploadRef = ref<UploadInstance | null>(null)
 const searchCfg = computed(() => searchForm(t, reportTypeOpts(t)))
 const columns = computed(() => tableCols(t))
 
-function buildPageParams(fv: typeof initialFilters, pageNo: number, pageSize: number): HealthReportPageParams {
+function buildPageParams(
+  fv: typeof initialFilters,
+  pageNo: number,
+  pageSize: number
+): HealthReportPageParams {
   return {
     current: pageNo,
     size: pageSize,

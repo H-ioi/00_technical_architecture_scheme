@@ -3,8 +3,7 @@
     v-model="visible"
     :title="$t('content.article.formLook')"
     width="min(900px, 96vw)"
-    destroy-on-close
-  >
+    destroy-on-close>
     <div v-loading="loading" class="content-article-detail">
       <dl v-if="detail.id != null" class="content-article-detail__grid">
         <template v-for="item in fields" :key="item.key">

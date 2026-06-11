@@ -32,8 +32,7 @@
       <el-tab-pane
         v-if="formModel.needApproval !== '102'"
         :label="$t('attendance.holidayFlow.design.tabBpmn')"
-        name="design"
-      >
+        name="design">
         <div class="holiday-flow-design__bpmn-shell">
           <div class="holiday-flow-design__bpmn">
             <div ref="canvasRef" class="holiday-flow-design__canvas" />
@@ -47,15 +46,13 @@
       v-model="xmlVisible"
       :title="$t('attendance.holidayFlow.design.viewXml')"
       width="80%"
-      destroy-on-close
-    >
+      destroy-on-close>
       <el-input
         v-model="xmlContent"
         type="textarea"
         :rows="18"
         readonly
-        class="holiday-flow-design__xml"
-      />
+        class="holiday-flow-design__xml" />
       <template #footer>
         <el-button @click="xmlVisible = false">{{ $t('common.cancel') }}</el-button>
         <el-button type="primary" @click="copyXml">
@@ -68,14 +65,12 @@
       v-model="importVisible"
       :title="$t('attendance.holidayFlow.design.importXml')"
       width="80%"
-      destroy-on-close
-    >
+      destroy-on-close>
       <el-input
         v-model="importXml"
         type="textarea"
         :rows="16"
-        :placeholder="$t('attendance.holidayFlow.design.importPh')"
-      />
+        :placeholder="$t('attendance.holidayFlow.design.importPh')" />
       <template #footer>
         <el-button @click="importVisible = false">{{ $t('common.cancel') }}</el-button>
         <el-button type="primary" @click="confirmImport">{{ $t('common.submit') }}</el-button>

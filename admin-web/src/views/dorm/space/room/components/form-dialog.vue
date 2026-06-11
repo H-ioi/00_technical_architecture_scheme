@@ -3,8 +3,7 @@
     <div
       v-loading="detailLoading"
       class="dorm-room-form__body"
-      :element-loading-text="$t('common.loading')"
-    >
+      :element-loading-text="$t('common.loading')">
       <UniForm ref="uniFormRef" v-model="formModel" mode="edit" :config="dialogFormCfg" />
     </div>
 
@@ -29,12 +28,7 @@ import type { DormFloorBrief } from '@/types/modules/dorm-building'
 import type { DormProjectBrief, DormRoomFormModel } from '@/types/modules/dorm-room'
 import { normalizeArray, normalizePayload } from '@/utils/api-response-normalize'
 
-import {
-  dialogFormConfig,
-  dialogFormRules,
-  emptyFormModel,
-  genderFormOpts
-} from '../list.config'
+import { dialogFormConfig, dialogFormRules, emptyFormModel, genderFormOpts } from '../list.config'
 
 import { useDialogDetailLoading } from '@/composables/use-dialog-detail-loading'
 
@@ -75,9 +69,7 @@ const dialogFormCfg = computed<UniFormConfig>(() => ({
   rules: dialogFormRules(t)
 }))
 
-const title = computed(() =>
-  t(props.mode === 'add' ? 'dorm.room.formAdd' : 'dorm.room.formEdit')
-)
+const title = computed(() => t(props.mode === 'add' ? 'dorm.room.formAdd' : 'dorm.room.formEdit'))
 
 async function loadBuildingOptions(schoolId?: string | number) {
   if (schoolId == null || schoolId === '') {

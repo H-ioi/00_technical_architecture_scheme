@@ -12,73 +12,71 @@
 
     <el-tabs v-model="activeTab" class="email-outbox-tab__tabs">
       <el-tab-pane :label="$t('email.outbox.tabSent')" name="sent">
-        <UniSearchForm
-          v-model="sentQueryModel"
-          :config="sentSearchConfig"
-          :collapsed="true"
-          :collapsed-rows="1"
-          :action-min-span="0"
-          :submit-text="$t('member.search')"
-          :reset-text="$t('member.reset')"
-          @search="searchSent"
-          @reset="resetSentSearch"
-        />
-        <UniDataTable
-          ref="sentTableRef"
-          row-key="id"
-          :columns="sentColumns"
-          :request="loadSentData"
-          :filters="sentFilters"
-          :pagination="{ pageSize: 10, pageSizes: [10, 20, 50, 100] }"
-          :toolbar="{ refresh: true, density: true, columnSetting: true }"
-          :actions="sentActions"
-          :action-column="{ width: 110, fixed: 'right' }"
-          @load-success="sentTableEmpty.onLoadSuccess"
-          @request-error="sentTableEmpty.onRequestError"
-        >
-          <template #empty>
-            <ListTableEmpty
-              :kind="sentTableEmpty.kind"
-              @reset="resetSentSearch"
-              @retry="sentTableEmpty.retry"
-            />
-          </template>
-        </UniDataTable>
+        <div class="uni-list-page__body">
+          <UniSearchForm
+            v-model="sentQueryModel"
+            :config="sentSearchConfig"
+            :collapsed="true"
+            :collapsed-rows="1"
+            :action-min-span="0"
+            :submit-text="$t('member.search')"
+            :reset-text="$t('member.reset')"
+            @search="searchSent"
+            @reset="resetSentSearch" />
+          <UniDataTable
+            ref="sentTableRef"
+            row-key="id"
+            :columns="sentColumns"
+            :request="loadSentData"
+            :filters="sentFilters"
+            :pagination="{ pageSize: 10, pageSizes: [10, 20, 50, 100] }"
+            :toolbar="{ refresh: true, density: true, columnSetting: true }"
+            :actions="sentActions"
+            :action-column="{ width: 110, fixed: 'right' }"
+            @load-success="sentTableEmpty.onLoadSuccess"
+            @request-error="sentTableEmpty.onRequestError">
+            <template #empty>
+              <ListTableEmpty
+                :kind="sentTableEmpty.kind"
+                @reset="resetSentSearch"
+                @retry="sentTableEmpty.retry" />
+            </template>
+          </UniDataTable>
+        </div>
       </el-tab-pane>
 
       <el-tab-pane :label="$t('email.outbox.tabDraft')" name="draft">
-        <UniSearchForm
-          v-model="draftQueryModel"
-          :config="draftSearchConfig"
-          :collapsed="true"
-          :collapsed-rows="1"
-          :action-min-span="0"
-          :submit-text="$t('member.search')"
-          :reset-text="$t('member.reset')"
-          @search="searchDraft"
-          @reset="resetDraftSearch"
-        />
-        <UniDataTable
-          ref="draftTableRef"
-          row-key="id"
-          :columns="draftColumns"
-          :request="loadDraftData"
-          :filters="draftFilters"
-          :pagination="{ pageSize: 10, pageSizes: [10, 20, 50, 100] }"
-          :toolbar="{ refresh: true, density: true, columnSetting: true }"
-          :actions="draftActions"
-          :action-column="{ width: 150, fixed: 'right' }"
-          @load-success="draftTableEmpty.onLoadSuccess"
-          @request-error="draftTableEmpty.onRequestError"
-        >
-          <template #empty>
-            <ListTableEmpty
-              :kind="draftTableEmpty.kind"
-              @reset="resetDraftSearch"
-              @retry="draftTableEmpty.retry"
-            />
-          </template>
-        </UniDataTable>
+        <div class="uni-list-page__body">
+          <UniSearchForm
+            v-model="draftQueryModel"
+            :config="draftSearchConfig"
+            :collapsed="true"
+            :collapsed-rows="1"
+            :action-min-span="0"
+            :submit-text="$t('member.search')"
+            :reset-text="$t('member.reset')"
+            @search="searchDraft"
+            @reset="resetDraftSearch" />
+          <UniDataTable
+            ref="draftTableRef"
+            row-key="id"
+            :columns="draftColumns"
+            :request="loadDraftData"
+            :filters="draftFilters"
+            :pagination="{ pageSize: 10, pageSizes: [10, 20, 50, 100] }"
+            :toolbar="{ refresh: true, density: true, columnSetting: true }"
+            :actions="draftActions"
+            :action-column="{ width: 150, fixed: 'right' }"
+            @load-success="draftTableEmpty.onLoadSuccess"
+            @request-error="draftTableEmpty.onRequestError">
+            <template #empty>
+              <ListTableEmpty
+                :kind="draftTableEmpty.kind"
+                @reset="resetDraftSearch"
+                @retry="draftTableEmpty.retry" />
+            </template>
+          </UniDataTable>
+        </div>
       </el-tab-pane>
     </el-tabs>
 
@@ -89,15 +87,13 @@
       :mail-sender-options="mailSenderOptions"
       :mail-group-options="mailGroupOptions"
       :submitting="formSubmitting"
-      @submit="(status: 0 | 1) => void submitComposeForm(status)"
-    />
+      @submit="(status: 0 | 1) => void submitComposeForm(status)" />
 
     <OutboxViewDialog
       v-model="viewVisible"
       :detail="viewModel"
       :can-export="hasPermission('outgo-view')"
-      @export="exportViewRecipients"
-    />
+      @export="exportViewRecipients" />
   </section>
 </template>
 

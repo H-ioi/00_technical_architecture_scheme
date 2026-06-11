@@ -6,8 +6,7 @@
     append-to-body
     destroy-on-close
     class="cancel-return-dialog"
-    @closed="resetInner"
-  >
+    @closed="resetInner">
     <div v-loading="loadingStudent" class="cancel-return-dialog__body">
       <div class="cancel-return-dialog__info">
         <div class="cancel-return-dialog__row">
@@ -36,7 +35,9 @@
             <span>{{ studentInfo.formCode || leaveRow?.studentClass || '—' }}</span>
           </div>
           <div class="cancel-return-dialog__item">
-            <span class="cancel-return-dialog__label">{{ $t('attendance.holiday.leaveType') }}：</span>
+            <span class="cancel-return-dialog__label"
+              >{{ $t('attendance.holiday.leaveType') }}：</span
+            >
             <span>{{ leaveTypeText }}</span>
           </div>
         </div>
@@ -50,23 +51,33 @@
             <span>{{ fixedText }}</span>
           </div>
         </div>
-        <div v-if="leaveRow?.fixed === '101' || leaveRow?.fixed === 101" class="cancel-return-dialog__row">
+        <div
+          v-if="leaveRow?.fixed === '101' || leaveRow?.fixed === 101"
+          class="cancel-return-dialog__row">
           <div class="cancel-return-dialog__item">
-            <span class="cancel-return-dialog__label">{{ $t('attendance.holiday.weekDays') }}：</span>
+            <span class="cancel-return-dialog__label"
+              >{{ $t('attendance.holiday.weekDays') }}：</span
+            >
             <span>{{ weekDaysText }}</span>
           </div>
           <div class="cancel-return-dialog__item">
-            <span class="cancel-return-dialog__label">{{ $t('attendance.holiday.timeSlot') }}：</span>
+            <span class="cancel-return-dialog__label"
+              >{{ $t('attendance.holiday.timeSlot') }}：</span
+            >
             <span>{{ dateLimitText }}</span>
           </div>
         </div>
         <div class="cancel-return-dialog__row">
           <div class="cancel-return-dialog__item">
-            <span class="cancel-return-dialog__label">{{ $t('attendance.holiday.dateRange') }}：</span>
+            <span class="cancel-return-dialog__label"
+              >{{ $t('attendance.holiday.dateRange') }}：</span
+            >
             <span>{{ dateRangeText }}</span>
           </div>
           <div class="cancel-return-dialog__item">
-            <span class="cancel-return-dialog__label">{{ $t('attendance.holiday.infectious') }}：</span>
+            <span class="cancel-return-dialog__label"
+              >{{ $t('attendance.holiday.infectious') }}：</span
+            >
             <span>{{ infectiousText }}</span>
           </div>
         </div>
@@ -86,8 +97,7 @@
             :placeholder="$t('attendance.holiday.ruleReturnTime')"
             format="YYYY-MM-DD HH:mm"
             value-format="YYYY-MM-DD HH:mm"
-            style="width: 100%"
-          />
+            style="width: 100%" />
         </el-form-item>
         <el-form-item :label="$t('attendance.holiday.returnProof')">
           <el-upload
@@ -96,8 +106,7 @@
             accept="image/jpeg,image/png,image/jpg"
             :before-upload="beforeReturnUpload"
             :on-remove="onRemoveReturn"
-            :on-preview="onPreview"
-          >
+            :on-preview="onPreview">
             <el-icon><Plus /></el-icon>
           </el-upload>
         </el-form-item>
@@ -118,7 +127,7 @@
     </template>
 
     <el-dialog v-model="previewVisible" append-to-body title="">
-      <img v-if="previewUrl" :src="previewUrl" alt="" style="width: 100%">
+      <img v-if="previewUrl" :src="previewUrl" alt="" style="width: 100%" />
     </el-dialog>
   </el-dialog>
 </template>

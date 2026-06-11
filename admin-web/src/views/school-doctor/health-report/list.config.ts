@@ -61,10 +61,22 @@ export const emptyFormModel = (): HealthReportFormModel => ({
 })
 
 export const formRules = (t: Translate): FormRules => ({
-  admissionNo: [{ required: true, message: t('schoolDoctor.healthReport.ruleAdmissionNo'), trigger: 'blur' }],
-  studentName: [{ required: true, message: t('schoolDoctor.healthReport.ruleStudentName'), trigger: 'blur' }],
-  schoolId: [{ required: true, message: t('schoolDoctor.healthReport.ruleSchool'), trigger: 'change' }],
-  reportType: [{ required: true, message: t('schoolDoctor.healthReport.ruleReportType'), trigger: 'change' }],
-  examYear: [{ required: true, message: t('schoolDoctor.healthReport.ruleExamYear'), trigger: 'change' }],
-  examDate: [{ required: true, message: t('schoolDoctor.healthReport.ruleExamDate'), trigger: 'change' }]
+  admissionNo: [
+    { required: true, message: t('schoolDoctor.healthReport.ruleAdmissionNo'), trigger: 'blur' }
+  ],
+  studentName: [
+    { required: true, message: t('schoolDoctor.healthReport.ruleStudentName'), trigger: 'blur' }
+  ],
+  schoolId: [
+    { required: true, message: t('schoolDoctor.healthReport.ruleSchool'), trigger: 'change' }
+  ],
+  reportType: [
+    { required: true, message: t('schoolDoctor.healthReport.ruleReportType'), trigger: 'change' }
+  ],
+  examYear: [
+    { required: true, message: t('schoolDoctor.healthReport.ruleExamYear'), trigger: 'change' }
+  ],
+  examDate: [
+    { required: true, message: t('schoolDoctor.healthReport.ruleExamDate'), trigger: 'change' }
+  ]
 })

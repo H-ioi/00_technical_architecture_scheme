@@ -3,8 +3,7 @@
     <div
       v-loading="detailLoading"
       class="dorm-attribute-form__body"
-      :element-loading-text="$t('common.loading')"
-    >
+      :element-loading-text="$t('common.loading')">
       <UniForm ref="uniFormRef" v-model="formModel" mode="edit" :config="dialogFormCfg" />
     </div>
 
@@ -27,12 +26,7 @@ import { dormProjectApi } from '@/api'
 import type { DormProjectFormModel } from '@/types/modules/dorm-project'
 import { normalizePayload } from '@/utils/api-response-normalize'
 
-import {
-  activeStatusOpts,
-  dialogFormConfig,
-  dialogFormRules,
-  emptyFormModel
-} from '../list.config'
+import { activeStatusOpts, dialogFormConfig, dialogFormRules, emptyFormModel } from '../list.config'
 
 import { useDialogDetailLoading } from '@/composables/use-dialog-detail-loading'
 

@@ -4,8 +4,7 @@
     :title="drawerTitle"
     size="1120px"
     destroy-on-close
-    class="medical-info-drawer"
-  >
+    class="medical-info-drawer">
     <div v-if="visible" v-loading="loading" class="medical-info-drawer__body">
       <FormPanel
         ref="formPanelRef"
@@ -33,8 +32,7 @@
         @open-signature="openSignature"
         @clear-signature="clearParentSignature"
         @upload-sign="handleParentSignUpload"
-        @before-image="beforeImageUpload"
-      />
+        @before-image="beforeImageUpload" />
     </div>
 
     <template v-if="mode !== 'view'" #footer>
@@ -111,13 +109,21 @@ const emptyForm = (): MedicalInfoFormModel => ({
 const formModel = ref<MedicalInfoFormModel>(emptyForm())
 
 const rules = computed<FormRules>(() => ({
-  admissionNo: [{ required: true, message: t('schoolDoctor.medicalInfo.ruleAdmissionNo'), trigger: 'blur' }],
-  schoolId: [{ required: true, message: t('schoolDoctor.medicalInfo.ruleSchool'), trigger: 'change' }]
+  admissionNo: [
+    { required: true, message: t('schoolDoctor.medicalInfo.ruleAdmissionNo'), trigger: 'blur' }
+  ],
+  schoolId: [
+    { required: true, message: t('schoolDoctor.medicalInfo.ruleSchool'), trigger: 'change' }
+  ]
 }))
 
 const diseaseRules = computed<FormRules>(() => ({
-  conditionStatus: [{ required: true, message: t('schoolDoctor.medicalInfo.ruleCondition'), trigger: 'change' }],
-  needRegularMedicationSchool: [{ required: true, message: t('schoolDoctor.medicalInfo.ruleNeedMedication'), trigger: 'change' }]
+  conditionStatus: [
+    { required: true, message: t('schoolDoctor.medicalInfo.ruleCondition'), trigger: 'change' }
+  ],
+  needRegularMedicationSchool: [
+    { required: true, message: t('schoolDoctor.medicalInfo.ruleNeedMedication'), trigger: 'change' }
+  ]
 }))
 
 const drawerTitle = computed(() => {
@@ -255,7 +261,9 @@ function openSignature() {
 }
 
 function setParentSignatureUrl(url: string) {
-  formModel.value.attachmentList = (formModel.value.attachmentList || []).filter((item) => item.attachType !== 3)
+  formModel.value.attachmentList = (formModel.value.attachmentList || []).filter(
+    (item) => item.attachType !== 3
+  )
   if (url) {
     formModel.value.attachmentList.push({ attachType: 3, attachUrl: url })
   }
@@ -274,12 +282,19 @@ function buildSubmitData() {
     })),
     diseaseList: [...formModel.value.diseaseList]
   }
-  const hasAllergen = [data.foodAllergy, data.drugAllergy, data.contactAllergy, data.otherAllergy].some(
-    (value) => String(value || '').trim() !== ''
-  )
+  const hasAllergen = [
+    data.foodAllergy,
+    data.drugAllergy,
+    data.contactAllergy,
+    data.otherAllergy
+  ].some((value) => String(value || '').trim() !== '')
   data.hasAllergen = hasAllergen ? 1 : 0
   data.hasDisease = (data.diseaseList || []).length ? 1 : 0
-  data.regularMedication = (data.diseaseList || []).some((item) => item.needRegularMedicationSchool === 1) ? 1 : 0
+  data.regularMedication = (data.diseaseList || []).some(
+    (item) => item.needRegularMedicationSchool === 1
+  )
+    ? 1
+    : 0
   return data
 }
 

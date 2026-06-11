@@ -5,8 +5,7 @@
     append-to-body
     :title="routeDialogTitle"
     destroy-on-close
-    @closed="resetRouteForm"
-  >
+    @closed="resetRouteForm">
     <UniForm ref="routeUniFormRef" v-model="routeForm" mode="edit" :config="routeDialogFormConfig">
       <template #field-ridingWeekDay>
         <el-select
@@ -14,8 +13,7 @@
           multiple
           clearable
           style="width: 100%"
-          :disabled="mainDisabled"
-        >
+          :disabled="mainDisabled">
           <el-option v-for="d in ridingWeekDaySelectOpts" :key="d" :label="d" :value="d" />
         </el-select>
       </template>
@@ -27,8 +25,7 @@
           value-format="YYYY-MM-DD"
           :disabled-date="disabledRidingDate"
           :disabled="mainDisabled"
-          @change="onRidingRangeChange"
-        />
+          @change="onRidingRangeChange" />
       </template>
     </UniForm>
     <template #footer>

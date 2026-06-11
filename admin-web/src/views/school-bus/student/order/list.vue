@@ -26,16 +26,14 @@
       type="file"
       accept=".xlsx,.xls"
       class="school-bus-student-order__file"
-      @change="onImportFile"
-    >
+      @change="onImportFile" />
 
     <el-alert
       v-if="commonDataError"
       class="school-bus-student-order__cascade-alert"
       type="warning"
       :closable="false"
-      show-icon
-    >
+      show-icon>
       <template #default>
         <span>{{ $t('schoolBus.cascadeOptionsLoadFail') }}</span>
         <el-button type="primary" link @click="reloadCommonData">
@@ -43,49 +41,46 @@
         </el-button>
       </template>
     </el-alert>
+    <div class="uni-list-page__body">
+      <UniSearchForm
+        v-model="queryModel"
+        :config="searchCfg"
+        :collapsed="true"
+        :collapsed-rows="1"
+        :action-min-span="0"
+        :submit-text="$t('schoolBus.search')"
+        :reset-text="$t('schoolBus.reset')"
+        @search="search"
+        @reset="reset" />
 
-    <UniSearchForm
-      v-model="queryModel"
-      :config="searchCfg"
-      :collapsed="true"
-      :collapsed-rows="1"
-      :action-min-span="0"
-      :submit-text="$t('schoolBus.search')"
-      :reset-text="$t('schoolBus.reset')"
-      @search="search"
-      @reset="reset"
-    />
-
-    <UniDataTable
-      ref="tableRef"
-      row-key="id"
-      selection
-      :columns="columns"
-      :request="loadData"
-      :filters="filters"
-      :pagination="{ pageSize: 10, pageSizes: [10, 20, 50, 100] }"
-      :toolbar="{ refresh: true, density: true, columnSetting: true }"
-      :actions="actions"
-      :action-column="{ width: 110, fixed: 'right' }"
-      @selection-change="onSelectionChange"
-      @load-success="tableEmpty.onLoadSuccess"
-      @request-error="tableEmpty.onRequestError"
-    >
-      <template #toolbar>
-        <el-button
-          v-uni-permission="'busorder_del'"
-          type="danger"
-          :disabled="selection.length === 0"
-          @click="del"
-        >
-          {{ $t('schoolBus.delete') }}
-        </el-button>
-      </template>
-      <template #empty>
-        <ListTableEmpty :kind="tableEmpty.kind" @reset="reset" @retry="tableEmpty.retry" />
-      </template>
-    </UniDataTable>
-
+      <UniDataTable
+        ref="tableRef"
+        row-key="id"
+        selection
+        :columns="columns"
+        :request="loadData"
+        :filters="filters"
+        :pagination="{ pageSize: 10, pageSizes: [10, 20, 50, 100] }"
+        :toolbar="{ refresh: true, density: true, columnSetting: true }"
+        :actions="actions"
+        :action-column="{ width: 110, fixed: 'right' }"
+        @selection-change="onSelectionChange"
+        @load-success="tableEmpty.onLoadSuccess"
+        @request-error="tableEmpty.onRequestError">
+        <template #toolbar>
+          <el-button
+            v-uni-permission="'busorder_del'"
+            type="danger"
+            :disabled="selection.length === 0"
+            @click="del">
+            {{ $t('schoolBus.delete') }}
+          </el-button>
+        </template>
+        <template #empty>
+          <ListTableEmpty :kind="tableEmpty.kind" @reset="reset" @retry="tableEmpty.retry" />
+        </template>
+      </UniDataTable>
+    </div>
     <OrderDetailDialog :visible="detailVisible" :order-id="detailOrderId" @close="closeDetail" />
 
     <BusOrderFormDialog
@@ -96,8 +91,7 @@
       :school-options="schoolOptions"
       :default-school-id="defaultSingleSchoolId"
       :multi-school="multiSchool"
-      @saved="refreshTable"
-    />
+      @saved="refreshTable" />
   </section>
 </template>
 

@@ -70,7 +70,11 @@ export const dialogFormConfig = (
       label: t('content.discussionLikeSave.fieldDiscussion'),
       component: 'ElSelect',
       options: discussionOptions,
-      componentProps: { clearable: true, filterable: true, placeholder: t('content.discussionLikeSave.phSelect') },
+      componentProps: {
+        clearable: true,
+        filterable: true,
+        placeholder: t('content.discussionLikeSave.phSelect')
+      },
       colProps: { span: 24 }
     },
     {
@@ -98,8 +102,12 @@ export const dialogFormConfig = (
 })
 
 export const dialogFormRules = (t: Translate): FormRules => ({
-  discussionId: [{ required: true, message: t('content.discussionLikeSave.ruleDiscussion'), trigger: 'change' }],
-  parentId: [{ required: true, message: t('content.discussionLikeSave.ruleParentId'), trigger: 'change' }]
+  discussionId: [
+    { required: true, message: t('content.discussionLikeSave.ruleDiscussion'), trigger: 'change' }
+  ],
+  parentId: [
+    { required: true, message: t('content.discussionLikeSave.ruleParentId'), trigger: 'change' }
+  ]
 })
 
 export const emptyFormModel = (): ContentDiscussionLikeSaveFormModel => ({

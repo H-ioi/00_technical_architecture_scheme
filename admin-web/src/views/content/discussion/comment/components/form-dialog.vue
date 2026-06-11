@@ -3,8 +3,7 @@
     <div
       v-loading="detailLoading"
       class="content-discussion-comment-form__body"
-      :element-loading-text="$t('common.loading')"
-    >
+      :element-loading-text="$t('common.loading')">
       <UniForm ref="uniFormRef" v-model="formModel" mode="edit" :config="dialogFormCfg" />
     </div>
 
@@ -27,12 +26,7 @@ import { contentDiscussionCommentApi } from '@/api'
 import type { ContentDiscussionCommentFormModel } from '@/types/modules/content-discussion-comment'
 import { normalizePayload } from '@/utils/api-response-normalize'
 
-import {
-  dialogFormConfig,
-  dialogFormRules,
-  emptyFormModel,
-  visibleRadioOpts
-} from '../list.config'
+import { dialogFormConfig, dialogFormRules, emptyFormModel, visibleRadioOpts } from '../list.config'
 
 import { useDialogDetailLoading } from '@/composables/use-dialog-detail-loading'
 
@@ -63,7 +57,11 @@ const dialogFormCfg = computed<UniFormConfig>(() => ({
 }))
 
 const title = computed(() =>
-  t(props.mode === 'add' ? 'content.discussionComment.formAdd' : 'content.discussionComment.formEdit')
+  t(
+    props.mode === 'add'
+      ? 'content.discussionComment.formAdd'
+      : 'content.discussionComment.formEdit'
+  )
 )
 
 watch(

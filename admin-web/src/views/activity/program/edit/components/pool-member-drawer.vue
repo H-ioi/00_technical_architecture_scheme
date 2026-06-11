@@ -5,8 +5,7 @@
     size="720px"
     append-to-body
     destroy-on-close
-    @closed="onClosed"
-  >
+    @closed="onClosed">
     <UniDataTable
       ref="tableRef"
       row-key="id"
@@ -14,8 +13,7 @@
       :request="loadPage"
       :filters="filters"
       :pagination="{ pageSize: 10, pageSizes: [10, 20, 50] }"
-      :toolbar="{ refresh: false, columnSetting: false }"
-    />
+      :toolbar="{ refresh: false, columnSetting: false }" />
   </el-drawer>
 </template>
 

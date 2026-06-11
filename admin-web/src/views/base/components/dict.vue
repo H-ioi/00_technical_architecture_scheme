@@ -9,44 +9,41 @@
         <el-button type="primary" @click="openAdd">{{ mt('actions.add') }}</el-button>
       </div>
     </div>
+    <div class="uni-list-page__body">
+      <UniSearchForm
+        v-model="queryModel"
+        :config="searchCfg"
+        :collapsed="true"
+        :collapsed-rows="1"
+        :action-min-span="0"
+        :submit-text="mt('actions.search')"
+        :reset-text="mt('actions.reset')"
+        @search="search"
+        @reset="reset" />
 
-    <UniSearchForm
-      v-model="queryModel"
-      :config="searchCfg"
-      :collapsed="true"
-      :collapsed-rows="1"
-      :action-min-span="0"
-      :submit-text="mt('actions.search')"
-      :reset-text="mt('actions.reset')"
-      @search="search"
-      @reset="reset"
-    />
-
-    <UniDataTable
-      ref="tableRef"
-      row-key="id"
-      :columns="columns"
-      :request="tableRequest"
-      :filters="filters"
-      :pagination="false"
-      :toolbar="{ refresh: true, density: true, columnSetting: true }"
-      :actions="actions"
-      :action-column="{ width: 180, fixed: 'right' }"
-      @load-success="tableEmpty.onLoadSuccess"
-      @request-error="onDictRequestError"
-      @switch-change="onStatusSwitch"
-    >
-      <template #empty>
-        <ListTableEmpty :kind="tableEmpty.kind" @reset="reset" @retry="tableEmpty.retry" />
-      </template>
-    </UniDataTable>
-
+      <UniDataTable
+        ref="tableRef"
+        row-key="id"
+        :columns="columns"
+        :request="tableRequest"
+        :filters="filters"
+        :pagination="false"
+        :toolbar="{ refresh: true, density: true, columnSetting: true }"
+        :actions="actions"
+        :action-column="{ width: 180, fixed: 'right' }"
+        @load-success="tableEmpty.onLoadSuccess"
+        @request-error="onDictRequestError"
+        @switch-change="onStatusSwitch">
+        <template #empty>
+          <ListTableEmpty :kind="tableEmpty.kind" @reset="reset" @retry="tableEmpty.retry" />
+        </template>
+      </UniDataTable>
+    </div>
     <el-dialog
       v-model="formVisible"
       destroy-on-close
       :title="formMode === 'edit' ? mt('dialog.formEdit') : mt('dialog.formAdd')"
-      width="480px"
-    >
+      width="480px">
       <UniForm v-model="ruleForm" mode="edit" :config="formConfig" />
       <template #footer>
         <el-button @click="formVisible = false">{{ mt('actions.cancel') }}</el-button>
@@ -58,8 +55,7 @@
       v-model="deleteVisible"
       destroy-on-close
       :title="mt('dialog.deleteTitle')"
-      width="480px"
-    >
+      width="480px">
       <p>{{ mt('dialog.deleteConfirm') }}</p>
       <template #footer>
         <el-button @click="deleteVisible = false">{{ mt('actions.cancel') }}</el-button>
@@ -71,8 +67,7 @@
       v-model="attrsVisible"
       destroy-on-close
       :title="mt('dialog.attrsTitle')"
-      width="640px"
-    >
+      width="640px">
       <UniDataTable
         v-if="attrsVisible"
         row-key="_rk"
@@ -80,8 +75,7 @@
         :data="attrRows"
         :pagination="false"
         :toolbar="false"
-        :action-column="{ label: mt('actions.operations'), width: 100, fixed: 'right' }"
-      >
+        :action-column="{ label: mt('actions.operations'), width: 100, fixed: 'right' }">
         <template #column-dictItemValue="{ row }">
           <span v-if="!row.isedit">{{ row.dictItemValue }}</span>
           <el-input v-else v-model="row.dictItemValue" :placeholder="mt('placeholder.attrValue')" />

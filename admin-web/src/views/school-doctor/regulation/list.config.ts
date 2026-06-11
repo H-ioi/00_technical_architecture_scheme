@@ -29,7 +29,11 @@ export const searchForm = (
       label: '',
       component: 'ElSelect',
       options: schoolOptions,
-      componentProps: { clearable: true, filterable: true, placeholder: t('schoolDoctor.regulation.phSchool') },
+      componentProps: {
+        clearable: true,
+        filterable: true,
+        placeholder: t('schoolDoctor.regulation.phSchool')
+      },
       defaultValue: defaultSchoolId,
       colProps: { span: 6 }
     },
@@ -96,7 +100,11 @@ export const dialogFormConfig = (
       label: t('schoolDoctor.regulation.fieldSchool'),
       component: 'ElSelect',
       options: schoolOptions,
-      componentProps: { clearable: true, filterable: true, placeholder: t('schoolDoctor.regulation.phSchoolSelect') },
+      componentProps: {
+        clearable: true,
+        filterable: true,
+        placeholder: t('schoolDoctor.regulation.phSchoolSelect')
+      },
       colProps: { span: 24 }
     },
     {
@@ -117,14 +125,22 @@ export const dialogFormConfig = (
       field: 'cnIntro',
       label: t('schoolDoctor.regulation.fieldCnIntro'),
       component: 'ElInput',
-      componentProps: { type: 'textarea', rows: 3, placeholder: t('schoolDoctor.regulation.phRemark') },
+      componentProps: {
+        type: 'textarea',
+        rows: 3,
+        placeholder: t('schoolDoctor.regulation.phRemark')
+      },
       colProps: { span: 24 }
     },
     {
       field: 'enIntro',
       label: t('schoolDoctor.regulation.fieldEnIntro'),
       component: 'ElInput',
-      componentProps: { type: 'textarea', rows: 3, placeholder: t('schoolDoctor.regulation.phRemark') },
+      componentProps: {
+        type: 'textarea',
+        rows: 3,
+        placeholder: t('schoolDoctor.regulation.phRemark')
+      },
       colProps: { span: 24 }
     },
     {
@@ -147,14 +163,20 @@ export const dialogFormConfig = (
       field: 'remark',
       label: t('schoolDoctor.regulation.fieldRemark'),
       component: 'ElInput',
-      componentProps: { type: 'textarea', rows: 3, placeholder: t('schoolDoctor.regulation.phRemark') },
+      componentProps: {
+        type: 'textarea',
+        rows: 3,
+        placeholder: t('schoolDoctor.regulation.phRemark')
+      },
       colProps: { span: 24 }
     }
   ]
 })
 
 export const dialogFormRules = (t: Translate): FormRules => ({
-  schoolId: [{ required: true, message: t('schoolDoctor.regulation.ruleSchool'), trigger: 'change' }],
+  schoolId: [
+    { required: true, message: t('schoolDoctor.regulation.ruleSchool'), trigger: 'change' }
+  ],
   cnTitle: [{ required: true, message: t('schoolDoctor.regulation.ruleCnTitle'), trigger: 'blur' }],
   enTitle: [{ required: true, message: t('schoolDoctor.regulation.ruleEnTitle'), trigger: 'blur' }],
   type: [{ required: true, message: t('schoolDoctor.regulation.ruleType'), trigger: 'change' }],

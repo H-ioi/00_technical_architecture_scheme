@@ -25,7 +25,11 @@ export const searchForm = (
       label: '',
       component: 'ElSelect',
       options: schoolOptions,
-      componentProps: { clearable: true, filterable: true, placeholder: t('schoolDoctor.studentRecord.phSchool') },
+      componentProps: {
+        clearable: true,
+        filterable: true,
+        placeholder: t('schoolDoctor.studentRecord.phSchool')
+      },
       defaultValue: defaultSchoolId,
       colProps: { span: 6 }
     },
@@ -41,7 +45,10 @@ export const searchForm = (
       label: '',
       component: 'ElSelect',
       options: yesNoOpts(t),
-      componentProps: { clearable: true, placeholder: t('schoolDoctor.studentRecord.phHasAllergen') },
+      componentProps: {
+        clearable: true,
+        placeholder: t('schoolDoctor.studentRecord.phHasAllergen')
+      },
       colProps: { span: 6 }
     },
     {
@@ -49,7 +56,10 @@ export const searchForm = (
       label: '',
       component: 'ElSelect',
       options: yesNoOpts(t),
-      componentProps: { clearable: true, placeholder: t('schoolDoctor.studentRecord.phRegularMedication') },
+      componentProps: {
+        clearable: true,
+        placeholder: t('schoolDoctor.studentRecord.phRegularMedication')
+      },
       colProps: { span: 6 }
     },
     {
@@ -57,7 +67,10 @@ export const searchForm = (
       label: '',
       component: 'ElSelect',
       options: yesNoOpts(t),
-      componentProps: { clearable: true, placeholder: t('schoolDoctor.studentRecord.phHasDisease') },
+      componentProps: {
+        clearable: true,
+        placeholder: t('schoolDoctor.studentRecord.phHasDisease')
+      },
       colProps: { span: 6 }
     },
     {
@@ -65,7 +78,10 @@ export const searchForm = (
       label: '',
       component: 'ElSelect',
       options: archiveStatusOpts(t),
-      componentProps: { clearable: true, placeholder: t('schoolDoctor.studentRecord.phArchiveStatus') },
+      componentProps: {
+        clearable: true,
+        placeholder: t('schoolDoctor.studentRecord.phArchiveStatus')
+      },
       colProps: { span: 6 }
     }
   ]
@@ -73,14 +89,23 @@ export const searchForm = (
 
 export const tableCols = (t: Translate): UniTableColumn[] => [
   { prop: 'id', label: t('schoolDoctor.studentRecord.fieldId'), width: 70, fixed: 'left' },
-  { prop: 'schoolName', label: t('schoolDoctor.studentRecord.fieldSchool'), minWidth: 220, fixed: 'left' },
+  {
+    prop: 'schoolName',
+    label: t('schoolDoctor.studentRecord.fieldSchool'),
+    minWidth: 220,
+    fixed: 'left'
+  },
   { prop: 'admissionNo', label: t('schoolDoctor.studentRecord.fieldAdmissionNo'), minWidth: 120 },
   { prop: 'fullName', label: t('schoolDoctor.studentRecord.fieldName'), minWidth: 180 },
   { prop: 'grade', label: t('schoolDoctor.studentRecord.fieldGrade'), minWidth: 100 },
   { prop: 'formCode', label: t('schoolDoctor.studentRecord.fieldClass'), minWidth: 100 },
   { prop: 'dormitoryStatusText', label: t('schoolDoctor.studentRecord.fieldBoarding'), width: 100 },
   { prop: 'hasAllergenText', label: t('schoolDoctor.studentRecord.fieldHasAllergen'), width: 120 },
-  { prop: 'regularMedicationText', label: t('schoolDoctor.studentRecord.fieldRegularMedication'), width: 160 },
+  {
+    prop: 'regularMedicationText',
+    label: t('schoolDoctor.studentRecord.fieldRegularMedication'),
+    width: 160
+  },
   { prop: 'hasDiseaseText', label: t('schoolDoctor.studentRecord.fieldHasDisease'), width: 120 },
   { prop: 'statusText', label: t('schoolDoctor.studentRecord.fieldStatus'), width: 100 },
   { prop: 'creator', label: t('schoolDoctor.studentRecord.fieldCreator'), minWidth: 100 },

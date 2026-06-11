@@ -75,7 +75,8 @@ export default {
 
   room: {
     pageTitle: 'Room management',
-    pageDesc: 'View rooms by floor with occupancy; add, edit, toggle status, and open bed assignment.',
+    pageDesc:
+      'View rooms by floor with occupancy; add, edit, toggle status, and open bed assignment.',
     add: 'Add room',
     formAdd: 'Add room',
     formEdit: 'Edit room',
@@ -167,7 +168,8 @@ export default {
 
   boardingStudent: {
     pageTitle: 'Boarding students',
-    pageDesc: 'Manage current and historical boarding students with filters, batch assign/checkout, and records.',
+    pageDesc:
+      'Manage current and historical boarding students with filters, batch assign/checkout, and records.',
     tabCurrent: 'Current',
     tabHistory: 'History',
     add: 'Add',

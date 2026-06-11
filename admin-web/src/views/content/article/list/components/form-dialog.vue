@@ -4,27 +4,23 @@
     :title="title"
     width="min(1000px, 96vw)"
     destroy-on-close
-    class="content-article-form-dialog"
-  >
+    class="content-article-form-dialog">
     <div
       v-loading="detailLoading"
       class="content-article-form-dialog__body"
-      :element-loading-text="$t('common.loading')"
-    >
+      :element-loading-text="$t('common.loading')">
       <UniForm ref="uniFormRef" v-model="formModel" mode="edit" :config="dialogFormCfg">
         <template #field-mainImage>
           <el-upload
             class="content-article-form-dialog__upload"
             :show-file-list="false"
             accept="image/jpeg,image/png"
-            :before-upload="onBeforeUpload"
-          >
+            :before-upload="onBeforeUpload">
             <img
               v-if="formModel.mainImage"
               :src="formModel.mainImage"
               class="content-article-form-dialog__preview"
-              alt=""
-            >
+              alt="" />
             <el-icon v-else class="content-article-form-dialog__upload-icon"><Plus /></el-icon>
           </el-upload>
         </template>

@@ -11,16 +11,14 @@
       fit="contain"
       class="bus-order-form__sign-image"
       :preview-src-list="[String(ruleForm.signImageUrl)]"
-      preview-teleported
-    />
+      preview-teleported />
   </div>
   <input
     ref="signFileRef"
     type="file"
     accept="image/*"
     class="bus-order-form__hidden-file"
-    @change="onSignFile"
-  >
+    @change="onSignFile" />
 </template>
 
 <script setup lang="ts">

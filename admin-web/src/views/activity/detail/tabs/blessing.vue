@@ -1,67 +1,62 @@
 <template>
   <section class="activity-blessing-tab">
-    <UniSearchForm
-      v-model="queryModel"
-      :config="searchCfg"
-      :collapsed="true"
-      :collapsed-rows="1"
-      :action-min-span="0"
-      :submit-text="$t('activity.search')"
-      :reset-text="$t('activity.reset')"
-      @search="search"
-      @reset="reset"
-    />
-    <UniDataTable
-      ref="tableRef"
-      row-key="id"
-      :selection="readOnly || !canDelete ? false : 'multiple'"
-      :columns="columns"
-      :request="loadData"
-      :filters="filters"
-      :pagination="{ pageSize: 10, pageSizes: [10, 20, 50, 100] }"
-      :toolbar="{ refresh: true, columnSetting: true }"
-      :actions="actions"
-      :action-column="{ width: 120, fixed: 'right' }"
-      @load-success="handleLoadSuccess"
-      @selection-change="onSelectionChange"
-    >
-      <template #toolbar>
-        <template v-if="!readOnly">
-          <el-button
-            v-if="canDelete"
-            type="danger"
-            plain
-            :disabled="!selectedIds.length"
-            @click="deleteSelected"
-          >
-            {{ $t('activity.delBatch') }}
-          </el-button>
-          <el-button
-            v-uni-permission="'busdriver_edit'"
-            plain
-            :disabled="!selectedIds.length"
-            @click="batchVisible(1)"
-          >
-            {{ $t('activity.visibleYes') }}
-          </el-button>
-          <el-button
-            v-uni-permission="'busdriver_edit'"
-            plain
-            :disabled="!selectedIds.length"
-            @click="batchVisible(0)"
-          >
-            {{ $t('activity.visibleNo') }}
-          </el-button>
+    <div class="uni-list-page__body">
+      <UniSearchForm
+        v-model="queryModel"
+        :config="searchCfg"
+        :collapsed="true"
+        :collapsed-rows="1"
+        :action-min-span="0"
+        :submit-text="$t('activity.search')"
+        :reset-text="$t('activity.reset')"
+        @search="search"
+        @reset="reset" />
+      <UniDataTable
+        ref="tableRef"
+        row-key="id"
+        :selection="readOnly || !canDelete ? false : 'multiple'"
+        :columns="columns"
+        :request="loadData"
+        :filters="filters"
+        :pagination="{ pageSize: 10, pageSizes: [10, 20, 50, 100] }"
+        :toolbar="{ refresh: true, columnSetting: true }"
+        :actions="actions"
+        :action-column="{ width: 120, fixed: 'right' }"
+        @load-success="handleLoadSuccess"
+        @selection-change="onSelectionChange">
+        <template #toolbar>
+          <template v-if="!readOnly">
+            <el-button
+              v-if="canDelete"
+              type="danger"
+              plain
+              :disabled="!selectedIds.length"
+              @click="deleteSelected">
+              {{ $t('activity.delBatch') }}
+            </el-button>
+            <el-button
+              v-uni-permission="'busdriver_edit'"
+              plain
+              :disabled="!selectedIds.length"
+              @click="batchVisible(1)">
+              {{ $t('activity.visibleYes') }}
+            </el-button>
+            <el-button
+              v-uni-permission="'busdriver_edit'"
+              plain
+              :disabled="!selectedIds.length"
+              @click="batchVisible(0)">
+              {{ $t('activity.visibleNo') }}
+            </el-button>
+          </template>
         </template>
-      </template>
-    </UniDataTable>
-
+      </UniDataTable>
+    </div>
     <el-dialog
       v-model="detailVisible"
       :title="$t('activity.blessingDetailTitle')"
       width="560px"
-      append-to-body
-    >
+      append-to-body>
       <el-descriptions :column="1" border>
         <el-descriptions-item :label="$t('activity.blessingTicketIdLabel')">
           {{ detail.ticketIdLabel || '-' }}
@@ -92,8 +87,7 @@
       append-to-body
       destroy-on-close
       :close-on-click-modal="false"
-      @closed="resetEdit"
-    >
+      @closed="resetEdit">
       <UniForm ref="formRef" v-model="formModel" mode="edit" :config="formCfg" />
       <template #footer>
         <el-button @click="editVisible = false">{{ $t('common.cancel') }}</el-button>

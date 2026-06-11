@@ -6,28 +6,24 @@
     size="640px"
     append-to-body
     destroy-on-close
-    @open="handleOpen"
-  >
+    @open="handleOpen">
     <div class="visible-scope-drawer">
       <el-table v-loading="loading" :data="rows" border style="width: 100%">
         <el-table-column
           type="index"
           :label="$t('activity.visibleScopeColIndex')"
           width="60"
-          align="center"
-        />
+          align="center" />
         <el-table-column
           prop="mobile"
           :label="$t('activity.visibleScopeMobile')"
           min-width="160"
-          show-overflow-tooltip
-        />
+          show-overflow-tooltip />
         <el-table-column
           prop="createTime"
           :label="$t('activity.colCreateTime')"
           min-width="170"
-          show-overflow-tooltip
-        />
+          show-overflow-tooltip />
       </el-table>
       <el-pagination
         v-if="total > 0"
@@ -37,8 +33,7 @@
         :current-page="current"
         :page-size="pageSize"
         :total="total"
-        @current-change="handlePageChange"
-      />
+        @current-change="handlePageChange" />
     </div>
   </el-drawer>
 </template>

@@ -39,7 +39,8 @@ export default {
 
   navigateButton: {
     pageTitle: 'Navigation buttons',
-    pageDesc: 'Manage mini-program nav buttons: names, sort order, active state, icon, and linked articles.',
+    pageDesc:
+      'Manage mini-program nav buttons: names, sort order, active state, icon, and linked articles.',
     formAdd: 'Add navigation button',
     formEdit: 'Edit navigation button',
     fieldCnName: 'Chinese name',
@@ -76,7 +77,8 @@ export default {
 
   article: {
     pageTitle: 'Articles',
-    pageDesc: 'Manage campus articles with categories, cover image, rich content, and WeChat options.',
+    pageDesc:
+      'Manage campus articles with categories, cover image, rich content, and WeChat options.',
     formAdd: 'Add article',
     formEdit: 'Edit article',
     formLook: 'Article detail',

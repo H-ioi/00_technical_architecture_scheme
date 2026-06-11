@@ -70,10 +70,7 @@ export const tableCols = (t: Translate, statusOptions: UniOption[]): UniTableCol
   }
 ]
 
-export const dialogFormConfig = (
-  t: Translate,
-  schoolOptions: UniOption[]
-): UniFormConfig => ({
+export const dialogFormConfig = (t: Translate, schoolOptions: UniOption[]): UniFormConfig => ({
   formProps: { labelPosition: 'top' },
   rowProps: { gutter: 0 },
   colProps: { span: 24 },

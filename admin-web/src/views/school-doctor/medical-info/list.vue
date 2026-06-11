@@ -13,68 +13,73 @@
           :show-file-list="false"
           :auto-upload="false"
           accept=".xlsx,.xls"
-          :on-change="onImportFile"
-        >
+          :on-change="onImportFile">
           <el-button :loading="importing">{{ $t('schoolDoctor.common.import') }}</el-button>
         </el-upload>
-        <el-button v-if="canExport" @click="handleExport">{{ $t('schoolDoctor.common.export') }}</el-button>
+        <el-button v-if="canExport" @click="handleExport">{{
+          $t('schoolDoctor.common.export')
+        }}</el-button>
         <el-button v-uni-permission="'medicalinfo_add'" type="primary" @click="openDrawer('add')">
           {{ $t('schoolDoctor.common.add') }}
         </el-button>
       </div>
     </div>
+    <div class="uni-list-page__body">
+      <UniSearchForm
+        v-model="queryModel"
+        :config="searchCfg"
+        :collapsed="true"
+        :collapsed-rows="1"
+        :action-min-span="0"
+        :submit-text="$t('schoolDoctor.common.search')"
+        :reset-text="$t('schoolDoctor.common.reset')"
+        @search="search"
+        @reset="onReset" />
 
-    <UniSearchForm
-      v-model="queryModel"
-      :config="searchCfg"
-      :collapsed="true"
-      :collapsed-rows="1"
-      :action-min-span="0"
-      :submit-text="$t('schoolDoctor.common.search')"
-      :reset-text="$t('schoolDoctor.common.reset')"
-      @search="search"
-      @reset="onReset"
-    />
-
-    <UniDataTable
-      ref="tableRef"
-      row-key="id"
-      selection
-      :columns="columns"
-      :request="loadData"
-      :filters="filters"
-      :pagination="{ pageSize: 10, pageSizes: [10, 20, 50, 100] }"
-      :toolbar="{ refresh: true, density: true, columnSetting: true }"
-      :actions="actions"
-      :action-column="{ width: 120, fixed: 'right' }"
-      @selection-change="onSelectionChange"
-      @load-success="tableEmpty.onLoadSuccess"
-      @request-error="tableEmpty.onRequestError"
-    >
-      <template #toolbar>
-        <el-button type="danger" :disabled="selectedIds.length === 0" @click="batchDelete">
-          {{ $t('schoolDoctor.medicalInfo.batchDelete') }}
-        </el-button>
-      </template>
-      <template #empty>
-        <ListTableEmpty :kind="tableEmpty.kind" @reset="onReset" @retry="tableEmpty.retry" />
-      </template>
-    </UniDataTable>
-
+      <UniDataTable
+        ref="tableRef"
+        row-key="id"
+        selection
+        :columns="columns"
+        :request="loadData"
+        :filters="filters"
+        :pagination="{ pageSize: 10, pageSizes: [10, 20, 50, 100] }"
+        :toolbar="{ refresh: true, density: true, columnSetting: true }"
+        :actions="actions"
+        :action-column="{ width: 120, fixed: 'right' }"
+        @selection-change="onSelectionChange"
+        @load-success="tableEmpty.onLoadSuccess"
+        @request-error="tableEmpty.onRequestError">
+        <template #toolbar>
+          <el-button type="danger" :disabled="selectedIds.length === 0" @click="batchDelete">
+            {{ $t('schoolDoctor.medicalInfo.batchDelete') }}
+          </el-button>
+        </template>
+        <template #empty>
+          <ListTableEmpty :kind="tableEmpty.kind" @reset="onReset" @retry="tableEmpty.retry" />
+        </template>
+      </UniDataTable>
+    </div>
     <DetailDrawer
       v-model:visible="drawerVisible"
       :mode="drawerMode"
       :record-id="activeRecordId"
       :school-records="schoolRecords"
-      @saved="onDrawerSaved"
-    />
+      @saved="onDrawerSaved" />
   </section>
 </template>
 
 <script setup lang="ts">
 import type { UploadFile, UploadInstance } from 'element-plus'
 import type { UniTableAction, UniTableRequest } from 'uni-ui-lib'
-import { UniDataTable, UniSearchForm, toUniOptions, useUniI18n, useUniListState, useUniPermission } from 'uni-ui-lib'
+import {
+  UniDataTable,
+  UniSearchForm,
+  toUniOptions,
+  useUniI18n,
+  useUniListState,
+  useUniPermission
+} from 'uni-ui-lib'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { computed, nextTick, onMounted, ref, watch } from 'vue'
 
@@ -139,7 +144,11 @@ const searchCfg = computed(() =>
 )
 const columns = computed(() => tableCols(t))
 
-function buildPageParams(fv: typeof initialFilters, pageNo: number, pageSize: number): MedicalInfoPageParams {
+function buildPageParams(
+  fv: typeof initialFilters,
+  pageNo: number,
+  pageSize: number
+): MedicalInfoPageParams {
   const params: MedicalInfoPageParams = {
     current: pageNo,
     size: pageSize,
@@ -159,7 +168,12 @@ function formatOperator(row: MedicalInfoListRow) {
   const source = [row.source, row.sourceType, row.applicantType].find(
     (value) => value !== null && value !== undefined
   )
-  if (source === 1 || source === '1' || source === 'mini' || /mini|小程序|家长/i.test(String(row.operator || ''))) {
+  if (
+    source === 1 ||
+    source === '1' ||
+    source === 'mini' ||
+    /mini|小程序|家长/i.test(String(row.operator || ''))
+  ) {
     return t('schoolDoctor.medicalInfo.operatorParent')
   }
   return row.operator || row.creator || '--'

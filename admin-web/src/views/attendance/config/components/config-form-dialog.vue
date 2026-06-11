@@ -4,8 +4,7 @@
     :title="title"
     width="520px"
     destroy-on-close
-    @closed="onClosed"
-  >
+    @closed="onClosed">
     <UniForm ref="uniFormRef" v-model="model" mode="edit" :config="formConfig" />
     <template #footer>
       <el-button @click="innerVisible = false">{{ $t('common.cancel') }}</el-button>

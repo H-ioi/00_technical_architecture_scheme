@@ -3,8 +3,7 @@
     <div
       v-loading="detailLoading"
       class="dorm-building-form__body"
-      :element-loading-text="$t('common.loading')"
-    >
+      :element-loading-text="$t('common.loading')">
       <UniForm ref="uniFormRef" v-model="formModel" mode="edit" :config="dialogFormCfg" />
     </div>
 
@@ -87,7 +86,8 @@ watch(
       const school = (row.school as Loose | undefined) || {}
       formModel.value = {
         id: row.id as string | number,
-        schoolId: (school.extern_id as string | number | undefined) ?? (row.schoolId as string | number),
+        schoolId:
+          (school.extern_id as string | number | undefined) ?? (row.schoolId as string | number),
         name: String(row.name || '')
       }
     })

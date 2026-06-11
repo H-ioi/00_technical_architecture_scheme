@@ -4,28 +4,26 @@
     :title="title"
     width="min(1100px, 96vw)"
     destroy-on-close
-    class="content-navigate-button-form-dialog"
-  >
+    class="content-navigate-button-form-dialog">
     <div
       v-loading="detailLoading"
       class="content-navigate-button-form-dialog__body"
-      :element-loading-text="$t('common.loading')"
-    >
+      :element-loading-text="$t('common.loading')">
       <UniForm ref="uniFormRef" v-model="formModel" mode="edit" :config="dialogFormCfg">
         <template #field-icon>
           <el-upload
             class="content-navigate-button-form-dialog__upload"
             :show-file-list="false"
             accept="image/jpeg,image/png"
-            :before-upload="onBeforeUpload"
-          >
+            :before-upload="onBeforeUpload">
             <img
               v-if="formModel.icon"
               :src="formModel.icon"
               class="content-navigate-button-form-dialog__preview"
-              alt=""
-            >
-            <el-icon v-else class="content-navigate-button-form-dialog__upload-icon"><Plus /></el-icon>
+              alt="" />
+            <el-icon v-else class="content-navigate-button-form-dialog__upload-icon"
+              ><Plus
+            /></el-icon>
           </el-upload>
         </template>
         <template #field-chosenArticleId>
@@ -37,8 +35,7 @@
               $t('content.navigateButton.transferSource'),
               $t('content.navigateButton.transferTarget')
             ]"
-            :data="articleOptions"
-          />
+            :data="articleOptions" />
         </template>
       </UniForm>
     </div>
@@ -67,12 +64,7 @@ import type {
 } from '@/types/modules/content-navigate-button'
 import { normalizeArray, normalizePayload } from '@/utils/api-response-normalize'
 
-import {
-  activeRadioOpts,
-  dialogFormConfig,
-  dialogFormRules,
-  emptyFormModel
-} from '../list.config'
+import { activeRadioOpts, dialogFormConfig, dialogFormRules, emptyFormModel } from '../list.config'
 
 import { useDialogDetailLoading } from '@/composables/use-dialog-detail-loading'
 
@@ -119,9 +111,7 @@ function toTransferOptions(records: ContentArticleVisibleRecord[]): TransferOpti
 
 async function loadArticleOptions() {
   const raw = await contentNavigateButtonApi.articleVisibleList.get()
-  articleOptions.value = toTransferOptions(
-    normalizeArray(raw) as ContentArticleVisibleRecord[]
-  )
+  articleOptions.value = toTransferOptions(normalizeArray(raw) as ContentArticleVisibleRecord[])
 }
 
 function parseChosenArticleIds(value: unknown): Array<string | number> {

@@ -13,8 +13,7 @@
           <el-button
             v-uni-permission="'questionnaire_edit'"
             :disabled="!outerReady"
-            @click="goEditDesign"
-          >
+            @click="goEditDesign">
             {{ $t('activity.questionnaireDesigner') }}
           </el-button>
           <el-button :disabled="!outerReady" @click="openSubmissions">
@@ -30,8 +29,7 @@
             type="primary"
             :loading="saving"
             :disabled="!outerReady"
-            @click="saveQuestions"
-          >
+            @click="saveQuestions">
             {{ $t('activity.questionnaireSaveQuestions') }}
           </el-button>
         </template>
@@ -79,8 +77,7 @@
         v-if="outerReady"
         :key="builderTick"
         v-model="fields"
-        :readonly="isViewMode"
-      />
+        :readonly="isViewMode" />
     </el-card>
   </section>
 </template>

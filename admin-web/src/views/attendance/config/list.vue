@@ -9,37 +9,35 @@
         <el-button type="primary" @click="openAdd">{{ $t('attendance.addConfig') }}</el-button>
       </div>
     </div>
+    <div class="uni-list-page__body">
+      <UniSearchForm
+        v-model="queryModel"
+        :config="searchCfg"
+        :collapsed="true"
+        :collapsed-rows="1"
+        :action-min-span="0"
+        :submit-text="$t('member.search')"
+        :reset-text="$t('member.reset')"
+        @search="search"
+        @reset="reset" />
 
-    <UniSearchForm
-      v-model="queryModel"
-      :config="searchCfg"
-      :collapsed="true"
-      :collapsed-rows="1"
-      :action-min-span="0"
-      :submit-text="$t('member.search')"
-      :reset-text="$t('member.reset')"
-      @search="search"
-      @reset="reset"
-    />
-
-    <UniDataTable
-      ref="tableRef"
-      row-key="id"
-      :columns="columns"
-      :request="loadData"
-      :filters="filters"
-      :pagination="false"
-      :toolbar="{ refresh: true, density: true, columnSetting: true }"
-      :actions="actions"
-      :action-column="{ width: 110, fixed: 'right' }"
-      @load-success="tableEmpty.onLoadSuccess"
-      @request-error="tableEmpty.onRequestError"
-    >
-      <template #empty>
-        <ListTableEmpty :kind="tableEmpty.kind" @reset="reset" @retry="tableEmpty.retry" />
-      </template>
-    </UniDataTable>
-
+      <UniDataTable
+        ref="tableRef"
+        row-key="id"
+        :columns="columns"
+        :request="loadData"
+        :filters="filters"
+        :pagination="false"
+        :toolbar="{ refresh: true, density: true, columnSetting: true }"
+        :actions="actions"
+        :action-column="{ width: 110, fixed: 'right' }"
+        @load-success="tableEmpty.onLoadSuccess"
+        @request-error="tableEmpty.onRequestError">
+        <template #empty>
+          <ListTableEmpty :kind="tableEmpty.kind" @reset="reset" @retry="tableEmpty.retry" />
+        </template>
+      </UniDataTable>
+    </div>
     <ConfigFormDialog
       v-model:visible="formVisible"
       :title="formTitle"
@@ -47,8 +45,7 @@
       :school-options="schoolOptions"
       :department-options="departmentOptions"
       :grade-options="gradeOptions"
-      @success="onFormSuccess"
-    />
+      @success="onFormSuccess" />
   </section>
 </template>
 

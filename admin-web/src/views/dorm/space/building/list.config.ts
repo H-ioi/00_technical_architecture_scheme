@@ -23,7 +23,11 @@ export const searchForm = (
       label: '',
       component: 'ElSelect',
       options: schoolOptions,
-      componentProps: { clearable: true, filterable: true, placeholder: t('dorm.building.phSchool') },
+      componentProps: {
+        clearable: true,
+        filterable: true,
+        placeholder: t('dorm.building.phSchool')
+      },
       defaultValue: defaultSchoolId,
       colProps: { span: 6 }
     },
@@ -32,7 +36,11 @@ export const searchForm = (
       label: '',
       component: 'ElSelect',
       options: buildingOptions,
-      componentProps: { clearable: true, filterable: true, placeholder: t('dorm.building.phBuilding') },
+      componentProps: {
+        clearable: true,
+        filterable: true,
+        placeholder: t('dorm.building.phBuilding')
+      },
       colProps: { span: 6 }
     },
     {

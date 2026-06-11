@@ -5,7 +5,9 @@
         <div v-for="item in basicFields" :key="item.key" class="archive-student-tab__cell">
           <div class="archive-student-tab__label">{{ item.label }}</div>
           <div class="archive-student-tab__value">
-            <el-tag v-if="item.tag" size="small" type="info" effect="plain">{{ item.value }}</el-tag>
+            <el-tag v-if="item.tag" size="small" type="info" effect="plain">{{
+              item.value
+            }}</el-tag>
             <span v-else>{{ item.value }}</span>
           </div>
         </div>
@@ -25,8 +27,7 @@
           v-if="!parentUnlocked && canViewParentInfo"
           size="small"
           plain
-          @click="parentUnlocked = true"
-        >
+          @click="parentUnlocked = true">
           {{ $t('schoolDoctor.studentRecord.parentUnlock') }}
         </el-button>
       </div>
@@ -36,7 +37,10 @@
       </div>
 
       <div v-else-if="visibleParents.length" class="archive-student-tab__parent-list">
-        <div v-for="(parent, index) in visibleParents" :key="index" class="archive-student-tab__parent-item">
+        <div
+          v-for="(parent, index) in visibleParents"
+          :key="index"
+          class="archive-student-tab__parent-item">
           <div v-if="hasText(parent.relationships)" class="archive-student-tab__parent-row">
             <span>{{ $t('schoolDoctor.studentRecord.fieldRelationship') }}</span>
             <span>{{ parent.relationships }}</span>

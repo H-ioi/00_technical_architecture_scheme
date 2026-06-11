@@ -37,7 +37,11 @@ export const editFormConfig = (
       label: t('dorm.boardingStudent.fieldSchool'),
       component: 'ElSelect',
       options: schoolOptions,
-      componentProps: { clearable: true, filterable: true, placeholder: t('dorm.boardingStudent.phSchool') },
+      componentProps: {
+        clearable: true,
+        filterable: true,
+        placeholder: t('dorm.boardingStudent.phSchool')
+      },
       colProps: { span: 24 }
     },
     {
@@ -45,7 +49,11 @@ export const editFormConfig = (
       label: t('dorm.boardingStudent.fieldBuilding'),
       component: 'ElSelect',
       options: buildingOptions,
-      componentProps: { clearable: true, filterable: true, placeholder: t('dorm.boardingStudent.phBuilding') },
+      componentProps: {
+        clearable: true,
+        filterable: true,
+        placeholder: t('dorm.boardingStudent.phBuilding')
+      },
       colProps: { span: 24 }
     },
     {
@@ -53,7 +61,11 @@ export const editFormConfig = (
       label: t('dorm.boardingStudent.fieldFloor'),
       component: 'ElSelect',
       options: floorOptions,
-      componentProps: { clearable: true, filterable: true, placeholder: t('dorm.boardingStudent.phFloor') },
+      componentProps: {
+        clearable: true,
+        filterable: true,
+        placeholder: t('dorm.boardingStudent.phFloor')
+      },
       colProps: { span: 24 }
     },
     {
@@ -61,7 +73,11 @@ export const editFormConfig = (
       label: t('dorm.boardingStudent.fieldRoom'),
       component: 'ElSelect',
       options: roomOptions,
-      componentProps: { clearable: true, filterable: true, placeholder: t('dorm.boardingStudent.phRoom') },
+      componentProps: {
+        clearable: true,
+        filterable: true,
+        placeholder: t('dorm.boardingStudent.phRoom')
+      },
       colProps: { span: 24 }
     },
     {
@@ -69,7 +85,11 @@ export const editFormConfig = (
       label: t('dorm.boardingStudent.fieldBed'),
       component: 'ElSelect',
       options: bedOptions,
-      componentProps: { clearable: true, filterable: true, placeholder: t('dorm.boardingStudent.phBed') },
+      componentProps: {
+        clearable: true,
+        filterable: true,
+        placeholder: t('dorm.boardingStudent.phBed')
+      },
       colProps: { span: 24 }
     },
     {
@@ -77,7 +97,11 @@ export const editFormConfig = (
       label: t('dorm.boardingStudent.fieldProject'),
       component: 'ElSelect',
       options: projectOptions,
-      componentProps: { clearable: true, filterable: true, placeholder: t('dorm.boardingStudent.phProject') },
+      componentProps: {
+        clearable: true,
+        filterable: true,
+        placeholder: t('dorm.boardingStudent.phProject')
+      },
       colProps: { span: 24 }
     },
     {
@@ -113,7 +137,10 @@ export const editFormConfig = (
         { label: t('dorm.boardingStudent.paymentUnpaid'), value: 0 },
         { label: t('dorm.boardingStudent.paymentPaid'), value: 1 }
       ],
-      componentProps: { placeholder: t('dorm.boardingStudent.phPaymentStatus'), style: { width: '100%' } },
+      componentProps: {
+        placeholder: t('dorm.boardingStudent.phPaymentStatus'),
+        style: { width: '100%' }
+      },
       colProps: { span: 24 }
     }
   ]
@@ -121,7 +148,9 @@ export const editFormConfig = (
 
 export const editFormRules = (t: Translate): FormRules => ({
   school: [{ required: true, message: t('dorm.boardingStudent.ruleSchool'), trigger: 'change' }],
-  buildingId: [{ required: true, message: t('dorm.boardingStudent.ruleBuilding'), trigger: 'change' }],
+  buildingId: [
+    { required: true, message: t('dorm.boardingStudent.ruleBuilding'), trigger: 'change' }
+  ],
   floorId: [{ required: true, message: t('dorm.boardingStudent.ruleFloor'), trigger: 'change' }],
   roomId: [{ required: true, message: t('dorm.boardingStudent.ruleRoom'), trigger: 'change' }],
   bedId: [{ required: true, message: t('dorm.boardingStudent.ruleBed'), trigger: 'change' }],

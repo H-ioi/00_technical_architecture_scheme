@@ -18,7 +18,11 @@ export const currentSearchForm = (
       label: '',
       component: 'ElSelect',
       options: schoolOptions,
-      componentProps: { clearable: true, filterable: true, placeholder: t('dorm.boardingStudent.phSchool') },
+      componentProps: {
+        clearable: true,
+        filterable: true,
+        placeholder: t('dorm.boardingStudent.phSchool')
+      },
       defaultValue: defaultSchoolId,
       colProps: { span: 4 }
     },
@@ -27,7 +31,11 @@ export const currentSearchForm = (
       label: '',
       component: 'ElSelect',
       options: buildingOptions,
-      componentProps: { clearable: true, filterable: true, placeholder: t('dorm.boardingStudent.phBuilding') },
+      componentProps: {
+        clearable: true,
+        filterable: true,
+        placeholder: t('dorm.boardingStudent.phBuilding')
+      },
       colProps: { span: 4 }
     },
     {
@@ -35,7 +43,11 @@ export const currentSearchForm = (
       label: '',
       component: 'ElSelect',
       options: floorOptions,
-      componentProps: { clearable: true, filterable: true, placeholder: t('dorm.boardingStudent.phFloor') },
+      componentProps: {
+        clearable: true,
+        filterable: true,
+        placeholder: t('dorm.boardingStudent.phFloor')
+      },
       colProps: { span: 4 }
     },
     {
@@ -43,7 +55,11 @@ export const currentSearchForm = (
       label: '',
       component: 'ElSelect',
       options: roomOptions,
-      componentProps: { clearable: true, filterable: true, placeholder: t('dorm.boardingStudent.phRoom') },
+      componentProps: {
+        clearable: true,
+        filterable: true,
+        placeholder: t('dorm.boardingStudent.phRoom')
+      },
       colProps: { span: 4 }
     },
     {
@@ -51,7 +67,11 @@ export const currentSearchForm = (
       label: '',
       component: 'ElSelect',
       options: projectOptions,
-      componentProps: { clearable: true, filterable: true, placeholder: t('dorm.boardingStudent.phProject') },
+      componentProps: {
+        clearable: true,
+        filterable: true,
+        placeholder: t('dorm.boardingStudent.phProject')
+      },
       colProps: { span: 4 }
     },
     {
@@ -100,8 +120,18 @@ export const currentSearchForm = (
 })
 
 export const currentTableCols = (t: Translate): UniTableColumn[] => [
-  { prop: 'schoolName', label: t('dorm.boardingStudent.fieldSchool'), minWidth: 160, fixed: 'left' },
-  { prop: 'admission_no', label: t('dorm.boardingStudent.fieldAdmissionNo'), minWidth: 120, fixed: 'left' },
+  {
+    prop: 'schoolName',
+    label: t('dorm.boardingStudent.fieldSchool'),
+    minWidth: 160,
+    fixed: 'left'
+  },
+  {
+    prop: 'admission_no',
+    label: t('dorm.boardingStudent.fieldAdmissionNo'),
+    minWidth: 120,
+    fixed: 'left'
+  },
   { prop: 'en_name', label: t('dorm.boardingStudent.fieldName'), minWidth: 120, fixed: 'left' },
   { prop: 'grade_code', label: t('dorm.boardingStudent.fieldGrade'), minWidth: 100 },
   { prop: 'form_code', label: t('dorm.boardingStudent.fieldClass'), minWidth: 100 },
@@ -114,5 +144,9 @@ export const currentTableCols = (t: Translate): UniTableColumn[] => [
   { prop: 'room_room', label: t('dorm.boardingStudent.fieldRoom'), minWidth: 100 },
   { prop: 'bed_label', label: t('dorm.boardingStudent.fieldBed'), minWidth: 80 },
   { prop: 'checkin_date', label: t('dorm.boardingStudent.fieldCheckinDate'), minWidth: 120 },
-  { prop: 'planned_checkout_date', label: t('dorm.boardingStudent.fieldPlannedCheckout'), minWidth: 120 }
+  {
+    prop: 'planned_checkout_date',
+    label: t('dorm.boardingStudent.fieldPlannedCheckout'),
+    minWidth: 120
+  }
 ]

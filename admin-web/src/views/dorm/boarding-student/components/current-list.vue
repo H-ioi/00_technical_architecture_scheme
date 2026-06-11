@@ -5,83 +5,78 @@
         {{ $t('dorm.boardingStudent.add') }}
       </el-button>
     </div>
+    <div class="uni-list-page__body">
+      <UniSearchForm
+        v-model="queryModel"
+        :config="searchCfg"
+        :collapsed="true"
+        :collapsed-rows="1"
+        :action-min-span="0"
+        :submit-text="$t('dorm.common.search')"
+        :reset-text="$t('dorm.common.reset')"
+        @search="search"
+        @reset="onReset" />
 
-    <UniSearchForm
-      v-model="queryModel"
-      :config="searchCfg"
-      :collapsed="true"
-      :collapsed-rows="1"
-      :action-min-span="0"
-      :submit-text="$t('dorm.common.search')"
-      :reset-text="$t('dorm.common.reset')"
-      @search="search"
-      @reset="onReset"
-    />
-
-    <UniDataTable
-      ref="tableRef"
-      row-key="admission_no"
-      selection
-      :columns="columns"
-      :request="loadData"
-      :filters="filters"
-      :pagination="{ pageSize: 10, pageSizes: [10, 20, 50, 100] }"
-      :toolbar="{ refresh: true, density: true, columnSetting: true }"
-      :actions="actions"
-      :action-column="{ width: 150, fixed: 'right' }"
-      @selection-change="onSelectionChange"
-      @load-success="tableEmpty.onLoadSuccess"
-      @request-error="tableEmpty.onRequestError"
-    >
-      <template #toolbar>
-        <el-button
-          v-uni-permission="'boarding-assigne'"
-          type="danger"
-          :disabled="selectedRows.length === 0"
-          @click="batchAssign"
-        >
-          {{ $t('dorm.boardingStudent.batchAssign') }}
-        </el-button>
-        <el-button
-          v-uni-permission="'boarding-checkout'"
-          type="danger"
-          :disabled="selectedRows.length === 0"
-          @click="batchCheckout"
-        >
-          {{ $t('dorm.boardingStudent.batchCheckout') }}
-        </el-button>
-        <el-button
-          v-uni-permission="'boarding-planCheckOut'"
-          type="danger"
-          :disabled="selectedRows.length === 0"
-          @click="openPlannedCheckout"
-        >
-          {{ $t('dorm.boardingStudent.plannedCheckout') }}
-        </el-button>
-      </template>
-      <template #empty>
-        <ListTableEmpty :kind="tableEmpty.kind" @reset="onReset" @retry="tableEmpty.retry" />
-      </template>
-    </UniDataTable>
-
+      <UniDataTable
+        ref="tableRef"
+        row-key="admission_no"
+        selection
+        :columns="columns"
+        :request="loadData"
+        :filters="filters"
+        :pagination="{ pageSize: 10, pageSizes: [10, 20, 50, 100] }"
+        :toolbar="{ refresh: true, density: true, columnSetting: true }"
+        :actions="actions"
+        :action-column="{ width: 150, fixed: 'right' }"
+        @selection-change="onSelectionChange"
+        @load-success="tableEmpty.onLoadSuccess"
+        @request-error="tableEmpty.onRequestError">
+        <template #toolbar>
+          <el-button
+            v-uni-permission="'boarding-assigne'"
+            type="danger"
+            :disabled="selectedRows.length === 0"
+            @click="batchAssign">
+            {{ $t('dorm.boardingStudent.batchAssign') }}
+          </el-button>
+          <el-button
+            v-uni-permission="'boarding-checkout'"
+            type="danger"
+            :disabled="selectedRows.length === 0"
+            @click="batchCheckout">
+            {{ $t('dorm.boardingStudent.batchCheckout') }}
+          </el-button>
+          <el-button
+            v-uni-permission="'boarding-planCheckOut'"
+            type="danger"
+            :disabled="selectedRows.length === 0"
+            @click="openPlannedCheckout">
+            {{ $t('dorm.boardingStudent.plannedCheckout') }}
+          </el-button>
+        </template>
+        <template #empty>
+          <ListTableEmpty :kind="tableEmpty.kind" @reset="onReset" @retry="tableEmpty.retry" />
+        </template>
+      </UniDataTable>
+    </div>
     <StudentAddDialog
       v-model:visible="addVisible"
       :school-options="schoolOptions"
       :default-school-id="defaultSchoolId ?? undefined"
-      @saved="refreshTable"
-    />
-    <StudentDetailDialog v-model:visible="detailVisible" :admission-no="activeAdmissionNo" variant="current" />
+      @saved="refreshTable" />
+    <StudentDetailDialog
+      v-model:visible="detailVisible"
+      :admission-no="activeAdmissionNo"
+      variant="current" />
     <StudentEditDialog
       v-model:visible="editVisible"
       :admission-no="activeAdmissionNo"
       :school-options="schoolOptions"
-      @saved="refreshTable"
-    />
+      @saved="refreshTable" />
     <PlannedCheckoutDialog
       v-model:visible="plannedVisible"
       :admission-nos="selectedAdmissionNos"
-      @saved="onPlannedSaved"
-    />
+      @saved="onPlannedSaved" />
   </div>
 </template>
 
@@ -292,7 +287,8 @@ async function batchCheckout() {
   const raw = await dormBedApi.checkoutBatch.post({
     admissionNos: selectedAdmissionNos.value.join(',')
   })
-  const body = (raw as { data?: { results?: Array<{ admission_no?: string; message?: string }> } })?.data
+  const body = (raw as { data?: { results?: Array<{ admission_no?: string; message?: string }> } })
+    ?.data
   const results = body?.results
   if (Array.isArray(results) && results.length > 0) {
     const lines = results.map(
@@ -326,9 +322,11 @@ async function batchAssign() {
     admissionNos: selectedAdmissionNos.value.join(','),
     dryRun: false
   })
-  const body = (raw as {
-    data?: { details?: Array<{ admission_no?: string; message?: string; label?: string }> }
-  })?.data
+  const body = (
+    raw as {
+      data?: { details?: Array<{ admission_no?: string; message?: string; label?: string }> }
+    }
+  )?.data
   const details = body?.details
   if (Array.isArray(details) && details.length > 0) {
     const lines = details.map((item) => {

@@ -5,7 +5,10 @@
       <el-row :gutter="16">
         <el-col v-for="field in healthFields" :key="field.prop" :span="8">
           <el-form-item :label="field.label">
-            <el-input v-model="formModel[field.prop]" :disabled="readonly" :placeholder="field.placeholder">
+            <el-input
+              v-model="formModel[field.prop]"
+              :disabled="readonly"
+              :placeholder="field.placeholder">
               <template v-if="field.unit" #append>{{ field.unit }}</template>
             </el-input>
           </el-form-item>
@@ -23,8 +26,7 @@
               type="textarea"
               :rows="4"
               :disabled="readonly"
-              :placeholder="field.placeholder"
-            />
+              :placeholder="field.placeholder" />
           </el-form-item>
         </el-col>
       </el-row>
@@ -47,19 +49,65 @@ defineProps<{
 const { t } = useUniI18n()
 
 const healthFields = computed(() => [
-  { prop: 'height' as const, label: t('schoolDoctor.studentRecord.metricHeight'), unit: 'cm', placeholder: t('schoolDoctor.medicalInfo.phHeight') },
-  { prop: 'weight' as const, label: t('schoolDoctor.studentRecord.metricWeight'), unit: 'kg', placeholder: t('schoolDoctor.medicalInfo.phWeight') },
-  { prop: 'leftVision' as const, label: t('schoolDoctor.studentRecord.metricLeftVision'), unit: '', placeholder: t('schoolDoctor.medicalInfo.phLeftVision') },
-  { prop: 'rightVision' as const, label: t('schoolDoctor.studentRecord.metricRightVision'), unit: '', placeholder: t('schoolDoctor.medicalInfo.phRightVision') },
-  { prop: 'leftEar' as const, label: t('schoolDoctor.studentRecord.metricLeftEar'), unit: '', placeholder: t('schoolDoctor.medicalInfo.phLeftEar') },
-  { prop: 'rightEar' as const, label: t('schoolDoctor.studentRecord.metricRightEar'), unit: '', placeholder: t('schoolDoctor.medicalInfo.phRightEar') }
+  {
+    prop: 'height' as const,
+    label: t('schoolDoctor.studentRecord.metricHeight'),
+    unit: 'cm',
+    placeholder: t('schoolDoctor.medicalInfo.phHeight')
+  },
+  {
+    prop: 'weight' as const,
+    label: t('schoolDoctor.studentRecord.metricWeight'),
+    unit: 'kg',
+    placeholder: t('schoolDoctor.medicalInfo.phWeight')
+  },
+  {
+    prop: 'leftVision' as const,
+    label: t('schoolDoctor.studentRecord.metricLeftVision'),
+    unit: '',
+    placeholder: t('schoolDoctor.medicalInfo.phLeftVision')
+  },
+  {
+    prop: 'rightVision' as const,
+    label: t('schoolDoctor.studentRecord.metricRightVision'),
+    unit: '',
+    placeholder: t('schoolDoctor.medicalInfo.phRightVision')
+  },
+  {
+    prop: 'leftEar' as const,
+    label: t('schoolDoctor.studentRecord.metricLeftEar'),
+    unit: '',
+    placeholder: t('schoolDoctor.medicalInfo.phLeftEar')
+  },
+  {
+    prop: 'rightEar' as const,
+    label: t('schoolDoctor.studentRecord.metricRightEar'),
+    unit: '',
+    placeholder: t('schoolDoctor.medicalInfo.phRightEar')
+  }
 ])
 
 const allergyFields = computed(() => [
-  { prop: 'foodAllergy' as const, label: t('schoolDoctor.studentRecord.allergyFood'), placeholder: t('schoolDoctor.medicalInfo.allergyFoodPh') },
-  { prop: 'drugAllergy' as const, label: t('schoolDoctor.studentRecord.allergyDrug'), placeholder: t('schoolDoctor.medicalInfo.allergyDrugPh') },
-  { prop: 'contactAllergy' as const, label: t('schoolDoctor.studentRecord.allergyContact'), placeholder: t('schoolDoctor.medicalInfo.allergyContactPh') },
-  { prop: 'otherAllergy' as const, label: t('schoolDoctor.studentRecord.allergyOther'), placeholder: t('schoolDoctor.medicalInfo.allergyOtherPh') }
+  {
+    prop: 'foodAllergy' as const,
+    label: t('schoolDoctor.studentRecord.allergyFood'),
+    placeholder: t('schoolDoctor.medicalInfo.allergyFoodPh')
+  },
+  {
+    prop: 'drugAllergy' as const,
+    label: t('schoolDoctor.studentRecord.allergyDrug'),
+    placeholder: t('schoolDoctor.medicalInfo.allergyDrugPh')
+  },
+  {
+    prop: 'contactAllergy' as const,
+    label: t('schoolDoctor.studentRecord.allergyContact'),
+    placeholder: t('schoolDoctor.medicalInfo.allergyContactPh')
+  },
+  {
+    prop: 'otherAllergy' as const,
+    label: t('schoolDoctor.studentRecord.allergyOther'),
+    placeholder: t('schoolDoctor.medicalInfo.allergyOtherPh')
+  }
 ])
 </script>
 

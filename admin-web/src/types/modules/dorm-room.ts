@@ -1,4 +1,8 @@
-import type { DormBuildingRecord, DormBuildingSchool, DormFloorRecord } from '@/types/modules/dorm-building'
+import type {
+  DormBuildingRecord,
+  DormBuildingSchool,
+  DormFloorRecord
+} from '@/types/modules/dorm-building'
 
 export interface DormProjectBrief {
   id: string | number

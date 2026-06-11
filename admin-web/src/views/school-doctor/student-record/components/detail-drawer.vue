@@ -4,8 +4,7 @@
     :title="drawerTitle"
     size="1100px"
     destroy-on-close
-    class="student-record-drawer"
-  >
+    class="student-record-drawer">
     <div v-if="visible" v-loading="loading" class="student-record-drawer__body">
       <el-tabs v-model="activeTab" type="card">
         <el-tab-pane :label="$t('schoolDoctor.studentRecord.tabStudent')" name="student">
@@ -15,8 +14,7 @@
           <ArchiveHealthTab
             v-model:edit-form="editForm"
             :health-history="healthHistory"
-            :is-editable="mode === 'edit'"
-          />
+            :is-editable="mode === 'edit'" />
         </el-tab-pane>
         <el-tab-pane :label="$t('schoolDoctor.studentRecord.tabVaccine')" name="vaccine">
           <ArchiveVaccineTab :vaccine-exam="vaccineExam" />

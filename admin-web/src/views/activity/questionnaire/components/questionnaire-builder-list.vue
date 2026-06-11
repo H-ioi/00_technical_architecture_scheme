@@ -9,8 +9,7 @@
     <el-scrollbar
       v-else
       class="qb__scroll qb__scroll--list"
-      max-height="min(720px, calc(100vh - 260px))"
-    >
+      max-height="min(720px, calc(100vh - 260px))">
       <draggable
         :model-value="fields"
         item-key="fontId"
@@ -21,8 +20,7 @@
         drag-class="qb__drag"
         class="qb__draggable"
         tag="div"
-        @update:model-value="emit('update:fields', $event)"
-      >
+        @update:model-value="emit('update:fields', $event)">
         <template #item="{ element: row, index: idx }">
           <div
             :key="row.fontId"
@@ -34,8 +32,7 @@
             :role="readonly ? undefined : 'button'"
             :tabindex="readonly ? undefined : 0"
             @click="emit('row-click', row.fontId)"
-            @keydown.enter.prevent="emit('row-click', row.fontId)"
-          >
+            @keydown.enter.prevent="emit('row-click', row.fontId)">
             <div class="qb__row-toolbar">
               <span v-if="!readonly" class="qb__drag-h" :title="t('activity.qbDrag')" @click.stop>
                 <el-icon>
@@ -49,8 +46,7 @@
                 size="small"
                 effect="plain"
                 type="info"
-                class="qb__row-hide"
-              >
+                class="qb__row-hide">
                 {{ t('activity.qbHide') }}
               </el-tag>
               <el-button
@@ -59,8 +55,7 @@
                 type="danger"
                 :icon="Delete"
                 class="qb__row-del"
-                @click.stop="emit('remove', idx)"
-              />
+                @click.stop="emit('remove', idx)" />
             </div>
 
             <div v-if="row.kind === 'raw'" class="qb__row-preview qb__row-preview--raw qb__muted">
@@ -73,8 +68,7 @@
                 :key="fk.fontId"
                 :field="fk"
                 :preview="fieldPreview(fk)"
-                :t="t"
-              />
+                :t="t" />
             </template>
           </div>
         </template>

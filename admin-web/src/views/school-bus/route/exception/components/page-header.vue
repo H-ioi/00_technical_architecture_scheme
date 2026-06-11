@@ -25,8 +25,7 @@
     type="file"
     accept=".xlsx,.xls"
     class="school-bus-route-exception__file"
-    @change="emit('import-file', $event)"
-  >
+    @change="emit('import-file', $event)" />
 </template>
 
 <script setup lang="ts">

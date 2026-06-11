@@ -18,7 +18,9 @@ const toBrowserUploadUrl = (url: string) => {
   if (typeof window === 'undefined') {
     return url
   }
-  return url.startsWith('/') ? `${window.location.origin}${url}` : `${window.location.origin}/${url}`
+  return url.startsWith('/')
+    ? `${window.location.origin}${url}`
+    : `${window.location.origin}/${url}`
 }
 
 export default {

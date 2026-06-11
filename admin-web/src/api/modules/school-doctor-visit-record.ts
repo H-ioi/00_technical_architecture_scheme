@@ -55,16 +55,20 @@ export default {
   pendingDetail: {
     name: '待用药详情',
     get: async (id: string | number) =>
-      await request.get<PendingMedicationDetail, PendingMedicationDetail>(`${pendingBase}/get/${id}`)
+      await request.get<PendingMedicationDetail, PendingMedicationDetail>(
+        `${pendingBase}/get/${id}`
+      )
   },
 
   pendingOperate: {
     name: '操作待用药',
-    post: async (data: Record<string, unknown>) => await request.post(`${pendingBase}/operate`, data)
+    post: async (data: Record<string, unknown>) =>
+      await request.post(`${pendingBase}/operate`, data)
   },
 
   pendingOperationEdit: {
     name: '编辑待用药操作记录',
-    post: async (data: Record<string, unknown>) => await request.post(`${pendingBase}/operation/edit`, data)
+    post: async (data: Record<string, unknown>) =>
+      await request.post(`${pendingBase}/operation/edit`, data)
   }
 }

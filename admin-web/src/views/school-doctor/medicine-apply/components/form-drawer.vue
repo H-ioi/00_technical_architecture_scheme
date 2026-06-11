@@ -4,8 +4,7 @@
     :title="drawerTitle"
     size="1120px"
     destroy-on-close
-    class="medicine-apply-drawer"
-  >
+    class="medicine-apply-drawer">
     <div v-if="visible" v-loading="loading" class="medicine-apply-drawer__body">
       <FormPanel
         ref="panelRef"
@@ -24,8 +23,7 @@
         @diagnosis-upload="handleDiagnosisUpload"
         @open-signature="signatureDialogRef?.open()"
         @signature-upload="handleSignatureUpload"
-        @open-visit-detail="openVisitDetail"
-      />
+        @open-visit-detail="openVisitDetail" />
     </div>
 
     <template v-if="mode !== 'view'" #footer>
@@ -103,9 +101,7 @@ const formReadonly = computed(() => props.mode !== 'add')
 const studentReadonly = computed(() => props.mode !== 'add')
 const approvalEditable = computed(() => props.mode === 'approve')
 const showApprovalSection = computed(
-  () =>
-    props.mode === 'approve' ||
-    (props.mode === 'view' && formModel.value.nurseApproval != null)
+  () => props.mode === 'approve' || (props.mode === 'view' && formModel.value.nurseApproval != null)
 )
 
 const drawerTitle = computed(() => {
@@ -145,7 +141,9 @@ function mapVisitRow(item: Record<string, unknown>): MedicineApplyVisitDetailRow
     visitDate: timeText.slice(0, 10),
     visitTime: timeText,
     operateStatusText: statusText,
-    specificSituation: String(item.situationDetail || item.specificSituation || item.remark || '--'),
+    specificSituation: String(
+      item.situationDetail || item.specificSituation || item.remark || '--'
+    ),
     operatorName: String(item.operator || item.operatorName || item.creator || '--'),
     leaveTime: item.leaveTime ? String(item.leaveTime).slice(0, 16) : '--',
     leaveDestinationText: destMap[dest] || '--'
@@ -205,15 +203,14 @@ watch(visible, async (open) => {
   }
   await runWithDetailLoading(async () => {
     const data = await schoolDoctorMedicineApplyApi.detail.get(props.recordId!)
-    const contentList =
-      data.contentList?.length
-        ? data.contentList.map((item) => ({
-            ...emptyContentItem(),
-            ...item,
-            startDate: item.startDate ? String(item.startDate).slice(0, 10) : '',
-            endDate: item.endDate ? String(item.endDate).slice(0, 10) : ''
-          }))
-        : [emptyContentItem()]
+    const contentList = data.contentList?.length
+      ? data.contentList.map((item) => ({
+          ...emptyContentItem(),
+          ...item,
+          startDate: item.startDate ? String(item.startDate).slice(0, 10) : '',
+          endDate: item.endDate ? String(item.endDate).slice(0, 10) : ''
+        }))
+      : [emptyContentItem()]
     const legacyLeftover = data.contentList?.[0]?.leftoverDisposal
     formModel.value = {
       ...emptyFormModel(),
@@ -224,7 +221,8 @@ watch(visible, async (open) => {
       contentList,
       diagnosisImageList: data.diagnosisImageList || []
     }
-    const embedded = (data as Record<string, unknown>).medicationDetailList ||
+    const embedded =
+      (data as Record<string, unknown>).medicationDetailList ||
       (data as Record<string, unknown>).visitRecordList ||
       (data as Record<string, unknown>).operationList
     if (Array.isArray(embedded) && embedded.length) {

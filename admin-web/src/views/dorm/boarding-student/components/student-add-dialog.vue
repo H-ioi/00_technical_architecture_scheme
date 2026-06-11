@@ -3,8 +3,7 @@
     v-model="visible"
     :title="$t('dorm.boardingStudent.addStudent')"
     width="640px"
-    destroy-on-close
-  >
+    destroy-on-close>
     <UniForm ref="uniFormRef" v-model="formModel" mode="edit" :config="formCfg" />
     <div v-if="studentPreview" class="student-add-dialog__preview">
       <div class="student-add-dialog__row">
@@ -118,9 +117,15 @@ const formCfg = computed<UniFormConfig>(() => ({
     }
   ],
   rules: {
-    schoolId: [{ required: true, message: t('dorm.boardingStudent.ruleSchool'), trigger: 'change' }],
-    admissionNo: [{ required: true, message: t('dorm.boardingStudent.ruleAdmissionNo'), trigger: 'blur' }],
-    type: [{ required: true, message: t('dorm.boardingStudent.ruleBoardingType'), trigger: 'change' }]
+    schoolId: [
+      { required: true, message: t('dorm.boardingStudent.ruleSchool'), trigger: 'change' }
+    ],
+    admissionNo: [
+      { required: true, message: t('dorm.boardingStudent.ruleAdmissionNo'), trigger: 'blur' }
+    ],
+    type: [
+      { required: true, message: t('dorm.boardingStudent.ruleBoardingType'), trigger: 'change' }
+    ]
   } satisfies FormRules
 }))
 

@@ -4,19 +4,25 @@
       <aside class="medicine-form__side">
         <div class="medicine-form__card">
           <h3>{{ $t('schoolDoctor.medicineApply.sectionStudent') }}</h3>
-          <p class="medicine-form__desc">{{ $t('schoolDoctor.medicineApply.sectionStudentDesc') }}</p>
+          <p class="medicine-form__desc">
+            {{ $t('schoolDoctor.medicineApply.sectionStudentDesc') }}
+          </p>
           <StudentRemoteSelect
             ref="studentSelectRef"
             :readonly="studentReadonly"
             :school-records="schoolRecords"
             @select="onStudentSelect"
-            @clear="onStudentClear"
-          />
+            @clear="onStudentClear" />
         </div>
       </aside>
 
       <main class="medicine-form__main">
-        <el-form ref="formRef" :model="formModel" :rules="formRules" label-position="top" :disabled="isLookMode">
+        <el-form
+          ref="formRef"
+          :model="formModel"
+          :rules="formRules"
+          label-position="top"
+          :disabled="isLookMode">
           <div class="medicine-form__card">
             <h3>{{ $t('schoolDoctor.medicineApply.sectionCondition') }}</h3>
             <el-row :gutter="16">
@@ -28,33 +34,40 @@
                     filterable
                     style="width: 100%"
                     :disabled="formReadonly"
-                    :placeholder="$t('schoolDoctor.common.select')"
-                  >
+                    :placeholder="$t('schoolDoctor.common.select')">
                     <el-option
                       v-for="item in symptomOptions"
                       :key="item.id"
                       :label="`${item.cnName || ''} / ${item.enName || item.name || ''}`"
-                      :value="item.id!"
-                    />
+                      :value="item.id!" />
                   </el-select>
                 </el-form-item>
               </el-col>
               <el-col :span="12">
-                <el-form-item :label="$t('schoolDoctor.medicineApply.fieldNeedMedication')" prop="applyMedication">
+                <el-form-item
+                  :label="$t('schoolDoctor.medicineApply.fieldNeedMedication')"
+                  prop="applyMedication">
                   <el-select
                     v-model="formModel.applyMedication"
                     clearable
                     style="width: 100%"
                     :disabled="formReadonly"
-                    :placeholder="$t('schoolDoctor.medicineApply.ruleNeedMedication')"
-                  >
-                    <el-option v-for="opt in needOpts" :key="opt.value" :label="opt.label" :value="opt.value" />
+                    :placeholder="$t('schoolDoctor.medicineApply.ruleNeedMedication')">
+                    <el-option
+                      v-for="opt in needOpts"
+                      :key="opt.value"
+                      :label="opt.label"
+                      :value="opt.value" />
                   </el-select>
                 </el-form-item>
               </el-col>
               <el-col :span="24">
                 <el-form-item :label="$t('schoolDoctor.medicineApply.fieldSymptomDetail')">
-                  <el-input v-model="formModel.symptomDetails" type="textarea" :rows="3" :disabled="formReadonly" />
+                  <el-input
+                    v-model="formModel.symptomDetails"
+                    type="textarea"
+                    :rows="3"
+                    :disabled="formReadonly" />
                 </el-form-item>
               </el-col>
             </el-row>
@@ -62,12 +75,22 @@
 
           <div v-if="formModel.applyMedication === 1" class="medicine-form__card">
             <h3>{{ $t('schoolDoctor.medicineApply.sectionMedicationDetail') }}</h3>
-            <MedicationContent v-model:content-list="formModel.contentList!" :readonly="formReadonly" />
+            <MedicationContent
+              v-model:content-list="formModel.contentList!"
+              :readonly="formReadonly" />
             <el-row :gutter="16">
               <el-col :span="12">
                 <el-form-item :label="$t('schoolDoctor.medicineApply.fieldLeftover')">
-                  <el-select v-model="formModel.leftoverDisposal" clearable style="width: 100%" :disabled="formReadonly">
-                    <el-option v-for="opt in leftoverOpts" :key="opt.value" :label="opt.label" :value="opt.value" />
+                  <el-select
+                    v-model="formModel.leftoverDisposal"
+                    clearable
+                    style="width: 100%"
+                    :disabled="formReadonly">
+                    <el-option
+                      v-for="opt in leftoverOpts"
+                      :key="opt.value"
+                      :label="opt.label"
+                      :value="opt.value" />
                   </el-select>
                 </el-form-item>
               </el-col>
@@ -81,8 +104,7 @@
                     :before-upload="beforeImage"
                     :on-remove="onRemoveImage"
                     :disabled="formReadonly || uploading"
-                    accept="image/*"
-                  >
+                    accept="image/*">
                     <span v-if="!formReadonly">+</span>
                   </el-upload>
                 </el-form-item>
@@ -96,8 +118,7 @@
             :mode="mode"
             :signature-uploading="signatureUploading"
             @open-signature="emit('open-signature')"
-            @signature-upload="emit('signature-upload', $event)"
-          />
+            @signature-upload="emit('signature-upload', $event)" />
 
           <div v-if="showApprovalSection" class="medicine-form__card">
             <h3>{{ $t('schoolDoctor.medicineApply.sectionApproval') }}</h3>
@@ -114,7 +135,11 @@
               </el-col>
               <el-col :span="24">
                 <el-form-item :label="$t('schoolDoctor.medicineApply.fieldApprovalRemark')">
-                  <el-input v-model="formModel.remark" type="textarea" :rows="3" :disabled="!approvalEditable" />
+                  <el-input
+                    v-model="formModel.remark"
+                    type="textarea"
+                    :rows="3"
+                    :disabled="!approvalEditable" />
                 </el-form-item>
               </el-col>
             </el-row>
@@ -123,11 +148,27 @@
           <div v-if="mode === 'view'" class="medicine-form__card">
             <h3>{{ $t('schoolDoctor.medicineApply.sectionVisitDetail') }}</h3>
             <el-table v-loading="visitLoading" :data="visitRecordList" border size="small">
-              <el-table-column :label="$t('schoolDoctor.visitRecord.fieldVisitDate')" prop="visitDate" width="108" />
-              <el-table-column :label="$t('schoolDoctor.visitRecord.fieldOperateTime')" prop="visitTime" width="168" />
-              <el-table-column :label="$t('schoolDoctor.visitRecord.fieldOperateStatus')" prop="operateStatusText" width="88" />
-              <el-table-column :label="$t('schoolDoctor.visitRecord.fieldSituation')" prop="specificSituation" min-width="140" show-overflow-tooltip />
-              <el-table-column :label="$t('schoolDoctor.visitRecord.fieldOperator')" prop="operatorName" width="96" />
+              <el-table-column
+                :label="$t('schoolDoctor.visitRecord.fieldVisitDate')"
+                prop="visitDate"
+                width="108" />
+              <el-table-column
+                :label="$t('schoolDoctor.visitRecord.fieldOperateTime')"
+                prop="visitTime"
+                width="168" />
+              <el-table-column
+                :label="$t('schoolDoctor.visitRecord.fieldOperateStatus')"
+                prop="operateStatusText"
+                width="88" />
+              <el-table-column
+                :label="$t('schoolDoctor.visitRecord.fieldSituation')"
+                prop="specificSituation"
+                min-width="140"
+                show-overflow-tooltip />
+              <el-table-column
+                :label="$t('schoolDoctor.visitRecord.fieldOperator')"
+                prop="operatorName"
+                width="96" />
               <el-table-column :label="$t('schoolDoctor.common.action')" width="72" fixed="right">
                 <template #default="{ row }">
                   <el-button type="primary" link @click="emit('open-visit-detail', row)">
@@ -147,14 +188,23 @@
 </template>
 
 <script setup lang="ts">
-import type { FormInstance, FormRules, UploadFile, UploadRequestOptions, UploadUserFile } from 'element-plus'
+import type {
+  FormInstance,
+  FormRules,
+  UploadFile,
+  UploadRequestOptions,
+  UploadUserFile
+} from 'element-plus'
 import { ElMessage } from 'element-plus'
 import { useUniI18n } from 'uni-ui-lib'
 import { computed, ref } from 'vue'
 
 import StudentRemoteSelect from '@/views/school-doctor/components/student-remote-select.vue'
 import type { SchoolDoctorDiseaseOption } from '@/api/modules/school-doctor-disease-setting'
-import type { MedicineApplyFormModel, MedicineApplyVisitDetailRow } from '@/types/modules/school-doctor-medicine-apply'
+import type {
+  MedicineApplyFormModel,
+  MedicineApplyVisitDetailRow
+} from '@/types/modules/school-doctor-medicine-apply'
 import type { SchoolOptionRecord } from '@/types/modules/membership'
 
 import { addFormRules, needMedicationOpts, nurseApprovalOpts } from '../list.config'

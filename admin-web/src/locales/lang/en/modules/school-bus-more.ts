@@ -199,7 +199,8 @@ export default {
 
   attendance: {
     pageTitle: 'School bus attendance',
-    pageDesc: 'Manage boarding attendance records with filters by campus, route, station, and date.',
+    pageDesc:
+      'Manage boarding attendance records with filters by campus, route, station, and date.',
     batchDelete: 'Batch delete',
     confirmBatchDelete: 'Delete selected records permanently?',
     notice: 'Notice',

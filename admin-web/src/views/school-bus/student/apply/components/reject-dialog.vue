@@ -4,8 +4,7 @@
     width="520px"
     :title="$t('schoolBus.studentApply.batchReject')"
     destroy-on-close
-    @closed="onClosed"
-  >
+    @closed="onClosed">
     <UniForm ref="uniFormRef" v-model="form" mode="edit" :config="formConfig" />
     <template #footer>
       <el-button @click="visible = false">

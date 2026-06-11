@@ -3,14 +3,12 @@
     <div
       v-loading="detailLoading"
       class="school-bus-car-form__body"
-      :element-loading-text="$t('common.loading')"
-    >
+      :element-loading-text="$t('common.loading')">
       <UniForm
         ref="uniFormRef"
         v-model="formModel"
         :mode="uniFormMode"
-        :config="dialogFormConfig"
-      />
+        :config="dialogFormConfig" />
 
       <div v-if="!isLook" class="car-form__upload">
         <div class="car-form__upload-label">{{ $t('schoolBus.car.fieldCarImage') }}</div>

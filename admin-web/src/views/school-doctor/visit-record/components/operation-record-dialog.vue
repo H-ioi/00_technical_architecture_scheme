@@ -1,13 +1,19 @@
 <template>
   <el-dialog
     v-model="visible"
-    :title="readonly ? $t('schoolDoctor.visitRecord.operationViewTitle') : $t('schoolDoctor.visitRecord.operationEditTitle')"
+    :title="
+      readonly
+        ? $t('schoolDoctor.visitRecord.operationViewTitle')
+        : $t('schoolDoctor.visitRecord.operationEditTitle')
+    "
     width="760px"
     append-to-body
     :close-on-click-modal="false"
-    destroy-on-close
-  >
-    <PendingOperationForm ref="formRef" v-model:operation-form="operationForm" :readonly="readonly" />
+    destroy-on-close>
+    <PendingOperationForm
+      ref="formRef"
+      v-model:operation-form="operationForm"
+      :readonly="readonly" />
     <template #footer>
       <el-button @click="visible = false">
         {{ readonly ? $t('schoolDoctor.common.cancel') : $t('schoolDoctor.common.cancel') }}
@@ -62,7 +68,9 @@ function open(type: 'view' | 'edit', record: Record<string, unknown>, operatorFa
     operationId: (record.id || record.operationId) as string | number | undefined,
     operateTime: operateTime ? String(operateTime) : '',
     operateStatus: Number(record.operationStatus ?? record.operateStatus ?? 1),
-    specificSituation: String(record.situationDetail || record.specificSituation || record.remark || ''),
+    specificSituation: String(
+      record.situationDetail || record.specificSituation || record.remark || ''
+    ),
     operator: String(record.operator || record.operatorName || record.creator || operatorFallback),
     notifyParent: record.notifyParent === 0 ? 0 : 1,
     attachmentList: mapAttachments(record.attachmentList as Array<Record<string, unknown>>),

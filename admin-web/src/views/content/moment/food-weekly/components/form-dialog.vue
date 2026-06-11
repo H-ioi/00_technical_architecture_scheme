@@ -4,13 +4,11 @@
     :title="title"
     width="min(1000px, 96vw)"
     destroy-on-close
-    class="content-food-weekly-form-dialog"
-  >
+    class="content-food-weekly-form-dialog">
     <div
       v-loading="detailLoading"
       class="content-food-weekly-form-dialog__body"
-      :element-loading-text="$t('common.loading')"
-    >
+      :element-loading-text="$t('common.loading')">
       <UniForm ref="uniFormRef" v-model="formModel" mode="edit" :config="dialogFormCfg">
         <template #field-cnContent>
           <UniEditor v-model="editorHtml" height="320px" />
@@ -38,11 +36,7 @@ import UniEditor from '@/components/uni-editor/index.vue'
 import type { FoodWeeklyFormModel } from '@/types/modules/content-food-weekly'
 import { normalizePayload } from '@/utils/api-response-normalize'
 
-import {
-  dialogFormConfig,
-  dialogFormRules,
-  emptyFormModel
-} from '../list.config'
+import { dialogFormConfig, dialogFormRules, emptyFormModel } from '../list.config'
 
 import { useDialogDetailLoading } from '@/composables/use-dialog-detail-loading'
 

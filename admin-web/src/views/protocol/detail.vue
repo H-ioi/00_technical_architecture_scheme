@@ -27,14 +27,12 @@
             :toolbar="{ refresh: true, fullscreen: true, columnSetting: true }"
             :action-column="{ fixed: false }"
             @load-success="signTableEmpty.onLoadSuccess"
-            @request-error="signTableEmpty.onRequestError"
-          >
+            @request-error="signTableEmpty.onRequestError">
             <template #empty>
               <ListTableEmpty
                 :kind="signTableEmpty.kind"
                 @reset="signTableEmpty.retry"
-                @retry="signTableEmpty.retry"
-              />
+                @retry="signTableEmpty.retry" />
             </template>
           </UniDataTable>
         </section>

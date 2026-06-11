@@ -21,7 +21,11 @@ export const searchForm = (
       label: '',
       component: 'ElSelect',
       options: schoolOptions,
-      componentProps: { clearable: true, filterable: true, placeholder: t('dorm.attribute.phSchool') },
+      componentProps: {
+        clearable: true,
+        filterable: true,
+        placeholder: t('dorm.attribute.phSchool')
+      },
       defaultValue: defaultSchoolId,
       colProps: { span: 6 }
     }

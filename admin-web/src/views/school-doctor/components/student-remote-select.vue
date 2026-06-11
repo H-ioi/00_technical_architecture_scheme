@@ -12,9 +12,12 @@
         :remote-method="remoteSearch"
         :loading="loading"
         @change="handleSelectChange"
-        @clear="handleClear"
-      >
-        <el-option v-for="item in options" :key="studentKey(item)" :label="optionLabel(item)" :value="studentKey(item)" />
+        @clear="handleClear">
+        <el-option
+          v-for="item in options"
+          :key="studentKey(item)"
+          :label="optionLabel(item)"
+          :value="studentKey(item)" />
       </el-select>
     </el-form-item>
 
@@ -34,8 +37,14 @@
         <span>{{ $t('schoolDoctor.medicalInfo.gradeDivision') }}</span>
         <span>{{ cardInfo.gradeClassText || '--' }}</span>
       </div>
-      <div v-if="cardInfo.emergencyName || cardInfo.emergencyPhone" class="student-remote-select__footer">
-        <span>{{ $t('schoolDoctor.medicalInfo.emergencyContact') }}：{{ cardInfo.emergencyName || '--' }}</span>
+      <div
+        v-if="cardInfo.emergencyName || cardInfo.emergencyPhone"
+        class="student-remote-select__footer">
+        <span
+          >{{ $t('schoolDoctor.medicalInfo.emergencyContact') }}：{{
+            cardInfo.emergencyName || '--'
+          }}</span
+        >
         <span v-if="cardInfo.emergencyPhone">{{ cardInfo.emergencyPhone }}</span>
       </div>
     </div>

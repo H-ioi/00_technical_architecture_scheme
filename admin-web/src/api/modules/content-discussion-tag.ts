@@ -13,10 +13,10 @@ export default {
     url: `${base}/page`,
     name: '讨论标签分页',
     get: async function (this: { url: string }, params: ContentDiscussionTagListParams) {
-      return await request.get<PageResult<ContentDiscussionTagRecord>, PageResult<ContentDiscussionTagRecord>>(
-        this.url,
-        { params }
-      )
+      return await request.get<
+        PageResult<ContentDiscussionTagRecord>,
+        PageResult<ContentDiscussionTagRecord>
+      >(this.url, { params })
     }
   },
 
@@ -32,7 +32,9 @@ export default {
     url: base,
     name: '讨论标签详情',
     get: async function (this: { url: string }, id: string | number) {
-      return await request.get<ContentDiscussionTagRecord, ContentDiscussionTagRecord>(`${this.url}/${id}`)
+      return await request.get<ContentDiscussionTagRecord, ContentDiscussionTagRecord>(
+        `${this.url}/${id}`
+      )
     }
   },
 

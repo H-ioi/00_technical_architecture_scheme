@@ -10,27 +10,36 @@
             :with-drug-allergy="true"
             :school-records="schoolRecords"
             @select="onStudentSelect"
-            @clear="onStudentClear"
-          />
+            @clear="onStudentClear" />
         </div>
       </aside>
 
       <main class="visit-form__main">
-        <el-form ref="formRef" :model="formModel" :rules="rules" label-position="top" :disabled="isLookMode">
+        <el-form
+          ref="formRef"
+          :model="formModel"
+          :rules="rules"
+          label-position="top"
+          :disabled="isLookMode">
           <div class="visit-form__card">
             <h3>{{ $t('schoolDoctor.visitRecord.sectionOperationInfo') }}</h3>
             <el-row :gutter="16">
               <el-col :span="12">
-                <el-form-item :label="$t('schoolDoctor.visitRecord.fieldVisitTime')" prop="visitTime">
+                <el-form-item
+                  :label="$t('schoolDoctor.visitRecord.fieldVisitTime')"
+                  prop="visitTime">
                   <div class="visit-form__datetime">
                     <el-date-picker
                       v-model="formModel.visitTime"
                       type="datetime"
                       value-format="YYYY-MM-DD HH:mm:ss"
                       :disabled="isOperationDisabled"
-                      style="width: 100%"
-                    />
-                    <el-button v-if="!isOperationDisabled" type="primary" link @click="setNow('visitTime')">
+                      style="width: 100%" />
+                    <el-button
+                      v-if="!isOperationDisabled"
+                      type="primary"
+                      link
+                      @click="setNow('visitTime')">
                       {{ $t('schoolDoctor.visitRecord.now') }}
                     </el-button>
                   </div>
@@ -44,8 +53,7 @@
                       type="datetime"
                       value-format="YYYY-MM-DD HH:mm:ss"
                       :disabled="isLookMode"
-                      style="width: 100%"
-                    />
+                      style="width: 100%" />
                     <el-button v-if="!isLookMode" type="primary" link @click="setNow('leaveTime')">
                       {{ $t('schoolDoctor.visitRecord.now') }}
                     </el-button>
@@ -54,25 +62,52 @@
               </el-col>
             </el-row>
             <el-form-item :label="$t('schoolDoctor.visitRecord.fieldChiefComplaint')">
-              <el-input v-model="formModel.chiefComplaint" type="textarea" :rows="3" :disabled="isOperationDisabled" />
+              <el-input
+                v-model="formModel.chiefComplaint"
+                type="textarea"
+                :rows="3"
+                :disabled="isOperationDisabled" />
             </el-form-item>
             <el-form-item :label="$t('schoolDoctor.visitRecord.fieldPhysicalExam')">
-              <el-input v-model="formModel.physicalExam" type="textarea" :rows="3" :disabled="isOperationDisabled" />
+              <el-input
+                v-model="formModel.physicalExam"
+                type="textarea"
+                :rows="3"
+                :disabled="isOperationDisabled" />
             </el-form-item>
             <el-form-item :label="$t('schoolDoctor.visitRecord.fieldDiagnosis')">
-              <el-input v-model="formModel.diagnosisAdvice" type="textarea" :rows="3" :disabled="isOperationDisabled" />
+              <el-input
+                v-model="formModel.diagnosisAdvice"
+                type="textarea"
+                :rows="3"
+                :disabled="isOperationDisabled" />
             </el-form-item>
             <el-form-item :label="$t('schoolDoctor.visitRecord.fieldRemark')">
-              <el-input v-model="formModel.remark" type="textarea" :rows="2" :disabled="isOperationDisabled" />
+              <el-input
+                v-model="formModel.remark"
+                type="textarea"
+                :rows="2"
+                :disabled="isOperationDisabled" />
             </el-form-item>
             <el-form-item>
               <template #label>
                 <span>{{ $t('schoolDoctor.visitRecord.fieldAttachment') }}</span>
-                <span class="visit-form__tip">{{ $t('schoolDoctor.visitRecord.attachmentTip') }}</span>
+                <span class="visit-form__tip">{{
+                  $t('schoolDoctor.visitRecord.attachmentTip')
+                }}</span>
               </template>
-              <div v-for="(file, index) in formModel.attachmentList" :key="file.url || index" class="visit-form__file">
-                <el-link :href="file.url" target="_blank" type="primary">{{ file.name || 'file' }}</el-link>
-                <el-button v-if="!isOperationDisabled" type="danger" link @click="removeAttachment(index)">
+              <div
+                v-for="(file, index) in formModel.attachmentList"
+                :key="file.url || index"
+                class="visit-form__file">
+                <el-link :href="file.url" target="_blank" type="primary">{{
+                  file.name || 'file'
+                }}</el-link>
+                <el-button
+                  v-if="!isOperationDisabled"
+                  type="danger"
+                  link
+                  @click="removeAttachment(index)">
                   {{ $t('schoolDoctor.common.remove') }}
                 </el-button>
               </div>
@@ -83,9 +118,10 @@
                 :show-file-list="false"
                 accept=".pdf,.png,.jpg,.jpeg,.docx"
                 :http-request="handleUpload"
-                :before-upload="beforeUpload"
-              >
-                <div class="visit-form__upload">{{ $t('schoolDoctor.visitRecord.uploadDrag') }}</div>
+                :before-upload="beforeUpload">
+                <div class="visit-form__upload">
+                  {{ $t('schoolDoctor.visitRecord.uploadDrag') }}
+                </div>
               </el-upload>
             </el-form-item>
             <el-row :gutter="16">
@@ -96,9 +132,12 @@
                     clearable
                     style="width: 100%"
                     :disabled="isOperationDisabled"
-                    :placeholder="$t('schoolDoctor.visitRecord.phLeaveDestinationSelect')"
-                  >
-                    <el-option v-for="item in leaveOptions" :key="item.value" :label="item.label" :value="item.value" />
+                    :placeholder="$t('schoolDoctor.visitRecord.phLeaveDestinationSelect')">
+                    <el-option
+                      v-for="item in leaveOptions"
+                      :key="item.value"
+                      :label="item.label"
+                      :value="item.value" />
                   </el-select>
                 </el-form-item>
               </el-col>
@@ -135,8 +174,7 @@
               type="primary"
               link
               :loading="parentReceiptRefreshing"
-              @click="emit('refresh-parent-receipt')"
-            >
+              @click="emit('refresh-parent-receipt')">
               {{ $t('schoolDoctor.visitRecord.refresh') }}
             </el-button>
           </div>
@@ -163,12 +201,23 @@
               <el-col :span="12">
                 <el-form-item :label="$t('schoolDoctor.visitRecord.fieldParentSignature')">
                   <div v-if="formModel.parentSignaturePath" class="visit-form__signature">
-                    <el-image :src="formModel.parentSignaturePath" fit="contain" style="width: 200px; height: 100px" />
-                    <el-button v-if="!isLookMode" type="danger" link @click="formModel.parentSignaturePath = ''">
+                    <el-image
+                      :src="formModel.parentSignaturePath"
+                      fit="contain"
+                      style="width: 200px; height: 100px" />
+                    <el-button
+                      v-if="!isLookMode"
+                      type="danger"
+                      link
+                      @click="formModel.parentSignaturePath = ''">
                       {{ $t('schoolDoctor.common.remove') }}
                     </el-button>
                   </div>
-                  <el-button v-else-if="!isLookMode" type="primary" link @click="signatureDialogRef?.open()">
+                  <el-button
+                    v-else-if="!isLookMode"
+                    type="primary"
+                    link
+                    @click="signatureDialogRef?.open()">
                     {{ $t('schoolDoctor.medicalInfo.startSign') }}
                   </el-button>
                   <span v-else>--</span>
@@ -222,7 +271,9 @@ const isLimitedEdit = computed(() => props.mode === 'edit' && parentReceiptExist
 const isOperationDisabled = computed(() => isLookMode.value || isLimitedEdit.value)
 
 const rules = computed<FormRules>(() => ({
-  visitTime: [{ required: true, message: t('schoolDoctor.visitRecord.ruleVisitTime'), trigger: 'change' }]
+  visitTime: [
+    { required: true, message: t('schoolDoctor.visitRecord.ruleVisitTime'), trigger: 'change' }
+  ]
 }))
 
 function setNow(field: 'visitTime' | 'leaveTime') {

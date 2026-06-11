@@ -13,52 +13,50 @@
     </div>
 
     <!-- UniSearchForm 统一承载查询条件、重置和空值清理，页面只接收过滤后的查询参数。 -->
-    <UniSearchForm
-      v-model="queryModel"
-      :config="searchCfg"
-      :collapsed="true"
-      :collapsed-rows="1"
-      :action-min-span="0"
-      :submit-text="$t('protocol.search')"
-      :reset-text="$t('protocol.reset')"
-      @search="search"
-      @reset="reset"
-    />
+    <div class="uni-list-page__body">
+      <UniSearchForm
+        v-model="queryModel"
+        :config="searchCfg"
+        :collapsed="true"
+        :collapsed-rows="1"
+        :action-min-span="0"
+        :submit-text="$t('protocol.search')"
+        :reset-text="$t('protocol.reset')"
+        @search="search"
+        @reset="reset" />
 
-    <!-- UniDataTable 负责远程分页、选择列、操作列和表格工具栏；业务只提供列配置、请求和行操作。 -->
-    <UniDataTable
-      ref="tableRef"
-      row-key="id"
-      selection
-      :columns="columns"
-      :request="loadData"
-      :filters="filters"
-      :pagination="{ pageSize: 10, pageSizes: [10, 20, 50, 100] }"
-      :toolbar="{ refresh: true, fullscreen: true, columnSetting: true }"
-      :actions="actions"
-      :action-column="{ width: 110, fixed: 'right' }"
-      @selection-change="selection = $event as ProtocolRecord[]"
-      @load-success="tableEmpty.onLoadSuccess"
-      @request-error="tableEmpty.onRequestError"
-    >
-      <!-- toolbar 插槽放表格勾选后的批量操作，组件内部会和刷新/最大化/列设置工具合并到底部工具栏。 -->
-      <template #toolbar>
-        <div class="protocol-page__toolbar">
-          <el-button
-            v-uni-permission="'protocol_del'"
-            type="danger"
-            :disabled="ids.length === 0"
-            @click="del"
-          >
-            {{ $t('protocol.delete') }}
-          </el-button>
-        </div>
-      </template>
-      <template #empty>
-        <ListTableEmpty :kind="tableEmpty.kind" @reset="reset" @retry="tableEmpty.retry" />
-      </template>
-    </UniDataTable>
-
+      <!-- UniDataTable 负责远程分页、选择列、操作列和表格工具栏；业务只提供列配置、请求和行操作。 -->
+      <UniDataTable
+        ref="tableRef"
+        row-key="id"
+        selection
+        :columns="columns"
+        :request="loadData"
+        :filters="filters"
+        :pagination="{ pageSize: 10, pageSizes: [10, 20, 50, 100] }"
+        :toolbar="{ refresh: true, fullscreen: true, columnSetting: true }"
+        :actions="actions"
+        :action-column="{ width: 110, fixed: 'right' }"
+        @selection-change="selection = $event as ProtocolRecord[]"
+        @load-success="tableEmpty.onLoadSuccess"
+        @request-error="tableEmpty.onRequestError">
+        <!-- toolbar 插槽放表格勾选后的批量操作，组件内部会和刷新/最大化/列设置工具合并到底部工具栏。 -->
+        <template #toolbar>
+          <div class="protocol-page__toolbar">
+            <el-button
+              v-uni-permission="'protocol_del'"
+              type="danger"
+              :disabled="ids.length === 0"
+              @click="del">
+              {{ $t('protocol.delete') }}
+            </el-button>
+          </div>
+        </template>
+        <template #empty>
+          <ListTableEmpty :kind="tableEmpty.kind" @reset="reset" @retry="tableEmpty.retry" />
+        </template>
+      </UniDataTable>
+    </div>
     <PForm
       v-model:visible="formVisible"
       :mode="formMode"
@@ -68,8 +66,7 @@
       :module-options="moduleOptions"
       :yes-no-options="yesNoOptions"
       :status-options="statusOptions"
-      @saved="refreshTable"
-    />
+      @saved="refreshTable" />
   </section>
 </template>
 

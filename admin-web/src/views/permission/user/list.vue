@@ -21,39 +21,38 @@
           default-expand-all
           :props="{ label: 'name', children: 'children' }"
           class="permission-user__tree"
-          @node-click="onDeptNode"
-        />
+          @node-click="onDeptNode" />
       </el-col>
       <el-col :xs="24" :sm="17" :md="18">
-        <UniSearchForm
-          v-model="queryModel"
-          :config="searchCfg"
-          :collapsed="true"
-          :collapsed-rows="1"
-          :action-min-span="0"
-          :submit-text="t('permission.search')"
-          :reset-text="t('permission.reset')"
-          @search="search"
-          @reset="reset"
-        />
-        <UniDataTable
-          ref="tableRef"
-          row-key="userId"
-          :columns="columns"
-          :request="loadData"
-          :filters="filters"
-          :pagination="{ pageSize: 20, pageSizes: [10, 20, 50] }"
-          :toolbar="{ refresh: true, density: true, columnSetting: true }"
-          :actions="actions"
-          :action-column="{ width: 110, fixed: 'right' }"
-          class="permission-user__table"
-          @load-success="tableEmpty.onLoadSuccess"
-          @request-error="tableEmpty.onRequestError"
-        >
-          <template #empty>
-            <ListTableEmpty :kind="tableEmpty.kind" @reset="reset" @retry="tableEmpty.retry" />
-          </template>
-        </UniDataTable>
+        <div class="uni-list-page__body">
+          <UniSearchForm
+            v-model="queryModel"
+            :config="searchCfg"
+            :collapsed="true"
+            :collapsed-rows="1"
+            :action-min-span="0"
+            :submit-text="t('permission.search')"
+            :reset-text="t('permission.reset')"
+            @search="search"
+            @reset="reset" />
+          <UniDataTable
+            ref="tableRef"
+            row-key="userId"
+            :columns="columns"
+            :request="loadData"
+            :filters="filters"
+            :pagination="{ pageSize: 20, pageSizes: [10, 20, 50] }"
+            :toolbar="{ refresh: true, density: true, columnSetting: true }"
+            :actions="actions"
+            :action-column="{ width: 110, fixed: 'right' }"
+            class="permission-user__table"
+            @load-success="tableEmpty.onLoadSuccess"
+            @request-error="tableEmpty.onRequestError">
+            <template #empty>
+              <ListTableEmpty :kind="tableEmpty.kind" @reset="reset" @retry="tableEmpty.retry" />
+            </template>
+          </UniDataTable>
+        </div>
       </el-col>
     </el-row>
 
@@ -63,8 +62,7 @@
       :record="formRecord"
       :dept-options="deptFlat"
       :role-options="roleFlat"
-      @saved="refreshTable"
-    />
+      @saved="refreshTable" />
   </section>
 </template>
 

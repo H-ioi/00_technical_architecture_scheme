@@ -27,10 +27,10 @@ export default {
     url: `${base}/history/page`,
     name: '历史住宿生分页',
     get: async function (this: { url: string }, params: DormStudentPageParams) {
-      return await request.get<PageResult<DormStudentHistoryRow>, PageResult<DormStudentHistoryRow>>(
-        this.url,
-        { params }
-      )
+      return await request.get<
+        PageResult<DormStudentHistoryRow>,
+        PageResult<DormStudentHistoryRow>
+      >(this.url, { params })
     }
   },
 
@@ -38,7 +38,9 @@ export default {
     url: `${base}/detail`,
     name: '住宿生详情',
     get: async function (this: { url: string }, params: { admissionNo?: string }) {
-      return await request.get<Record<string, unknown>, Record<string, unknown>>(this.url, { params })
+      return await request.get<Record<string, unknown>, Record<string, unknown>>(this.url, {
+        params
+      })
     }
   },
 
@@ -46,7 +48,9 @@ export default {
     url: `${base}/history/detail`,
     name: '历史住宿生详情',
     get: async function (this: { url: string }, params: { admissionNo?: string }) {
-      return await request.get<Record<string, unknown>, Record<string, unknown>>(this.url, { params })
+      return await request.get<Record<string, unknown>, Record<string, unknown>>(this.url, {
+        params
+      })
     }
   },
 
@@ -61,7 +65,10 @@ export default {
   historyEditCheckoutDate: {
     url: `${base}/history/editCheckoutDate`,
     name: '编辑历史退宿日期',
-    post: async function (this: { url: string }, data: { admissionNo?: string; checkoutDate?: string }) {
+    post: async function (
+      this: { url: string },
+      data: { admissionNo?: string; checkoutDate?: string }
+    ) {
       return await request.post(this.url, undefined, { params: data })
     }
   },

@@ -3,8 +3,7 @@
     v-model="visible"
     :title="$t('content.discussion.formLook')"
     width="min(900px, 96vw)"
-    destroy-on-close
-  >
+    destroy-on-close>
     <div v-loading="loading" class="content-discussion-detail">
       <dl v-if="detail.id != null" class="content-discussion-detail__grid">
         <template v-for="item in fields" :key="item.key">
@@ -13,15 +12,16 @@
         </template>
       </dl>
       <div v-if="imageItems.length" class="content-discussion-detail__images">
-        <p class="content-discussion-detail__section-title">{{ $t('content.discussion.fieldImages') }}</p>
+        <p class="content-discussion-detail__section-title">
+          {{ $t('content.discussion.fieldImages') }}
+        </p>
         <div class="content-discussion-detail__image-list">
           <el-image
             v-for="item in imageItems"
             :key="item.field"
             :src="item.url"
             fit="contain"
-            class="content-discussion-detail__image"
-          />
+            class="content-discussion-detail__image" />
         </div>
       </div>
       <div v-if="pdfItems.length" class="content-discussion-detail__pdfs">
@@ -85,14 +85,30 @@ const fields = computed(() => {
   return [
     { key: 'id', label: 'ID', value: String(row.id ?? '—') },
     { key: 'school', label: t('content.discussion.fieldSchool'), value: schoolName },
-    { key: 'cnContent', label: t('content.discussion.fieldCnContent'), value: row.cnContent || '—' },
-    { key: 'enContent', label: t('content.discussion.fieldEnContent'), value: row.enContent || '—' },
+    {
+      key: 'cnContent',
+      label: t('content.discussion.fieldCnContent'),
+      value: row.cnContent || '—'
+    },
+    {
+      key: 'enContent',
+      label: t('content.discussion.fieldEnContent'),
+      value: row.enContent || '—'
+    },
     { key: 'tag', label: t('content.discussion.fieldTag'), value: tagName },
     { key: 'scope', label: t('content.discussion.fieldScope'), value: scopeLabel(row.scope) },
-    { key: 'recommended', label: t('content.discussion.fieldRecommended'), value: yesNo(row.recommended) },
+    {
+      key: 'recommended',
+      label: t('content.discussion.fieldRecommended'),
+      value: yesNo(row.recommended)
+    },
     { key: 'active', label: t('content.discussion.fieldVisible'), value: yesNo(row.active) },
     { key: 'top', label: t('content.discussion.fieldTop'), value: yesNo(row.top) },
-    { key: 'createdAt', label: t('content.discussion.fieldCreatedAt'), value: row.createdAt || '—' },
+    {
+      key: 'createdAt',
+      label: t('content.discussion.fieldCreatedAt'),
+      value: row.createdAt || '—'
+    },
     { key: 'updatedAt', label: t('content.discussion.fieldUpdatedAt'), value: row.updatedAt || '—' }
   ]
 })

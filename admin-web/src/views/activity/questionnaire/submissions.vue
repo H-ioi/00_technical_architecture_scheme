@@ -26,20 +26,18 @@
       :filters="filters"
       :pagination="{ pageSize: 10, pageSizes: [10, 20, 50, 100] }"
       :toolbar="{ refresh: true, columnSetting: true }"
-      @load-success="handleLoadSuccess"
-    >
+      @load-success="handleLoadSuccess">
       <template v-if="hasUploadCols" #[attachColumnSlot]="{ row }">
         <el-button
           type="primary"
           link
           :disabled="!(row as SubmissionRowMap).__attachmentIds?.length"
-          @click="openFiles(row as SubmissionRowMap)"
-        >
+          @click="openFiles(row as SubmissionRowMap)">
           {{
             (row as SubmissionRowMap).__attachmentIds?.length
               ? $t('activity.qSubmissionAttachOpen', {
-                n: (row as SubmissionRowMap).__attachmentIds?.length
-              })
+                  n: (row as SubmissionRowMap).__attachmentIds?.length
+                })
               : '—'
           }}
         </el-button>
@@ -49,8 +47,7 @@
     <el-dialog
       v-model="fileDialogVisible"
       :title="$t('activity.qSubmissionAttachTitle')"
-      width="520px"
-    >
+      width="520px">
       <div class="q-sub-files">
         <el-button
           v-for="f in fileRows"
@@ -58,8 +55,7 @@
           type="primary"
           link
           class="q-sub-file"
-          @click="downloadOne(f.id, f.originalName ?? String(f.id))"
-        >
+          @click="downloadOne(f.id, f.originalName ?? String(f.id))">
           {{ f.originalName ?? f.id }}
         </el-button>
       </div>

@@ -11,56 +11,52 @@
         </el-button>
       </div>
     </div>
+    <div class="uni-list-page__body">
+      <UniSearchForm
+        v-model="queryModel"
+        :config="searchCfg"
+        :collapsed="false"
+        :action-min-span="0"
+        :submit-text="$t('dorm.common.search')"
+        :reset-text="$t('dorm.common.reset')"
+        @search="search"
+        @reset="onReset" />
 
-    <UniSearchForm
-      v-model="queryModel"
-      :config="searchCfg"
-      :collapsed="false"
-      :action-min-span="0"
-      :submit-text="$t('dorm.common.search')"
-      :reset-text="$t('dorm.common.reset')"
-      @search="search"
-      @reset="onReset"
-    />
-
-    <UniDataTable
-      ref="tableRef"
-      row-key="id"
-      selection
-      :columns="columns"
-      :request="loadData"
-      :filters="filters"
-      :pagination="{ pageSize: 10, pageSizes: [10, 20, 50, 100] }"
-      :toolbar="{ refresh: true, density: true, columnSetting: true }"
-      :actions="actions"
-      :action-column="{ width: 100, fixed: 'right' }"
-      @selection-change="onSelectionChange"
-      @load-success="tableEmpty.onLoadSuccess"
-      @request-error="tableEmpty.onRequestError"
-    >
-      <template #toolbar>
-        <el-button
-          v-uni-permission="'attribute-delete'"
-          type="danger"
-          :disabled="selectedIds.length === 0"
-          @click="removeBatch"
-        >
-          {{ $t('dorm.common.delete') }}
-        </el-button>
-      </template>
-      <template #empty>
-        <ListTableEmpty :kind="tableEmpty.kind" @reset="onReset" @retry="tableEmpty.retry" />
-      </template>
-    </UniDataTable>
-
+      <UniDataTable
+        ref="tableRef"
+        row-key="id"
+        selection
+        :columns="columns"
+        :request="loadData"
+        :filters="filters"
+        :pagination="{ pageSize: 10, pageSizes: [10, 20, 50, 100] }"
+        :toolbar="{ refresh: true, density: true, columnSetting: true }"
+        :actions="actions"
+        :action-column="{ width: 100, fixed: 'right' }"
+        @selection-change="onSelectionChange"
+        @load-success="tableEmpty.onLoadSuccess"
+        @request-error="tableEmpty.onRequestError">
+        <template #toolbar>
+          <el-button
+            v-uni-permission="'attribute-delete'"
+            type="danger"
+            :disabled="selectedIds.length === 0"
+            @click="removeBatch">
+            {{ $t('dorm.common.delete') }}
+          </el-button>
+        </template>
+        <template #empty>
+          <ListTableEmpty :kind="tableEmpty.kind" @reset="onReset" @retry="tableEmpty.retry" />
+        </template>
+      </UniDataTable>
+    </div>
     <AttributeFormDialog
       v-model:visible="formVisible"
       :mode="formMode"
       :record-id="activeId"
       :school-options="schoolOptions"
       :default-school-id="defaultSchoolId ?? undefined"
-      @saved="refreshTable"
-    />
+      @saved="refreshTable" />
   </section>
 </template>
 
@@ -165,11 +161,15 @@ const removeBatch = async () => {
   }
 
   try {
-    await ElMessageBox.confirm(t('dorm.attribute.confirmBatchDelete'), t('dorm.attribute.confirmTitle'), {
-      confirmButtonText: t('dorm.common.delete'),
-      cancelButtonText: t('dorm.common.cancel'),
-      type: 'warning'
-    })
+    await ElMessageBox.confirm(
+      t('dorm.attribute.confirmBatchDelete'),
+      t('dorm.attribute.confirmTitle'),
+      {
+        confirmButtonText: t('dorm.common.delete'),
+        cancelButtonText: t('dorm.common.cancel'),
+        type: 'warning'
+      }
+    )
   } catch {
     return
   }

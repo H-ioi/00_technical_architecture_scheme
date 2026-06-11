@@ -24,10 +24,10 @@ export default {
     url: `${base}/page`,
     name: '讨论内容分页',
     get: async function (this: { url: string }, params: ContentDiscussionListParams) {
-      return await request.get<PageResult<ContentDiscussionRecord>, PageResult<ContentDiscussionRecord>>(
-        this.url,
-        { params }
-      )
+      return await request.get<
+        PageResult<ContentDiscussionRecord>,
+        PageResult<ContentDiscussionRecord>
+      >(this.url, { params })
     }
   },
 
@@ -43,7 +43,9 @@ export default {
     url: base,
     name: '讨论内容详情',
     get: async function (this: { url: string }, id: string | number) {
-      return await request.get<ContentDiscussionRecord, ContentDiscussionRecord>(`${this.url}/${id}`)
+      return await request.get<ContentDiscussionRecord, ContentDiscussionRecord>(
+        `${this.url}/${id}`
+      )
     }
   },
 

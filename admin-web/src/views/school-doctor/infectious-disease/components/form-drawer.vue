@@ -4,8 +4,7 @@
     :title="drawerTitle"
     size="600px"
     destroy-on-close
-    class="infectious-disease-drawer"
-  >
+    class="infectious-disease-drawer">
     <div v-if="visible" v-loading="loading" class="infectious-disease-drawer__body">
       <FormPanel
         ref="panelRef"
@@ -14,8 +13,7 @@
         :rules="rules"
         :school-records="schoolRecords"
         :uploading="uploading"
-        @upload="handleUpload"
-      />
+        @upload="handleUpload" />
     </div>
 
     <template v-if="mode !== 'view'" #footer>
@@ -70,7 +68,10 @@ const drawerTitle = computed(() => {
   return t('schoolDoctor.infectiousDisease.detailViewTitle')
 })
 
-function mapDetail(data: InfectiousDiseaseFormModel, id: string | number): InfectiousDiseaseFormModel {
+function mapDetail(
+  data: InfectiousDiseaseFormModel,
+  id: string | number
+): InfectiousDiseaseFormModel {
   return {
     ...emptyFormModel(),
     ...data,

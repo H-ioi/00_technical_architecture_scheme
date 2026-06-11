@@ -1,41 +1,39 @@
 <template>
-  <UniSearchForm
-    v-model="queryModel"
-    :config="searchCfg"
-    :collapsed="true"
-    :collapsed-rows="1"
-    :action-min-span="0"
-    :submit-text="$t('schoolDoctor.common.search')"
-    :reset-text="$t('schoolDoctor.common.reset')"
-    @search="search"
-    @reset="onReset"
-  />
+  <div class="uni-list-page__body">
+    <UniSearchForm
+      v-model="queryModel"
+      :config="searchCfg"
+      :collapsed="true"
+      :collapsed-rows="1"
+      :action-min-span="0"
+      :submit-text="$t('schoolDoctor.common.search')"
+      :reset-text="$t('schoolDoctor.common.reset')"
+      @search="search"
+      @reset="onReset" />
 
-  <UniDataTable
-    ref="tableRef"
-    row-key="id"
-    :columns="columns"
-    :request="loadData"
-    :filters="filters"
-    :pagination="{ pageSize: 10, pageSizes: [10, 20, 50, 100] }"
-    :toolbar="{ refresh: true, density: true, columnSetting: true }"
-    :actions="actions"
-    :action-column="{ width: 140, fixed: 'right' }"
-    @load-success="tableEmpty.onLoadSuccess"
-    @request-error="tableEmpty.onRequestError"
-  >
-    <template #empty>
-      <ListTableEmpty :kind="tableEmpty.kind" @reset="onReset" @retry="tableEmpty.retry" />
-    </template>
-  </UniDataTable>
-
+    <UniDataTable
+      ref="tableRef"
+      row-key="id"
+      :columns="columns"
+      :request="loadData"
+      :filters="filters"
+      :pagination="{ pageSize: 10, pageSizes: [10, 20, 50, 100] }"
+      :toolbar="{ refresh: true, density: true, columnSetting: true }"
+      :actions="actions"
+      :action-column="{ width: 140, fixed: 'right' }"
+      @load-success="tableEmpty.onLoadSuccess"
+      @request-error="tableEmpty.onRequestError">
+      <template #empty>
+        <ListTableEmpty :kind="tableEmpty.kind" @reset="onReset" @retry="tableEmpty.retry" />
+      </template>
+    </UniDataTable>
+  </div>
   <PendingDrawer
     v-model:visible="drawerVisible"
     :mode="drawerMode"
     :record-id="activeRecordId"
     :list-row="activeRow"
-    @saved="refreshTable"
-  />
+    @saved="refreshTable" />
 </template>
 
 <script setup lang="ts">
@@ -81,12 +79,19 @@ const drawerMode = ref<'view' | 'operate'>('view')
 const activeRecordId = ref<string | number | undefined>()
 const activeRow = ref<Row | undefined>()
 
-const defaultSchoolId = computed(() => (schoolRecords.value.length === 1 ? schoolRecords.value[0]?.id : null))
+const defaultSchoolId = computed(() =>
+  schoolRecords.value.length === 1 ? schoolRecords.value[0]?.id : null
+)
 const schoolOptions = computed(() =>
   toUniOptions(schoolRecords.value, { labelKeys: ['enName', 'cnName', 'name'], valueKey: 'id' })
 )
 const searchCfg = computed(() =>
-  pendingSearchForm(t, schoolOptions.value, pendingSearchStatusOpts(t), defaultSchoolId.value ?? undefined)
+  pendingSearchForm(
+    t,
+    schoolOptions.value,
+    pendingSearchStatusOpts(t),
+    defaultSchoolId.value ?? undefined
+  )
 )
 const columns = computed(() => pendingTableCols(t))
 

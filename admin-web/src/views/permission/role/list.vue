@@ -11,42 +11,39 @@
         </el-button>
       </div>
     </div>
+    <div class="uni-list-page__body">
+      <UniSearchForm
+        v-model="queryModel"
+        :config="searchCfg"
+        :collapsed="true"
+        :collapsed-rows="1"
+        :action-min-span="0"
+        :submit-text="t('permission.search')"
+        :reset-text="t('permission.reset')"
+        @search="search"
+        @reset="reset" />
 
-    <UniSearchForm
-      v-model="queryModel"
-      :config="searchCfg"
-      :collapsed="true"
-      :collapsed-rows="1"
-      :action-min-span="0"
-      :submit-text="t('permission.search')"
-      :reset-text="t('permission.reset')"
-      @search="search"
-      @reset="reset"
-    />
-
-    <UniDataTable
-      ref="tableRef"
-      row-key="roleId"
-      :columns="columns"
-      :request="loadData"
-      :filters="filters"
-      :pagination="{ pageSize: 20, pageSizes: [10, 20, 50] }"
-      :toolbar="{ refresh: true, density: true, columnSetting: true }"
-      :actions="actions"
-      :action-column="{ width: 180, fixed: 'right' }"
-      @load-success="tableEmpty.onLoadSuccess"
-      @request-error="tableEmpty.onRequestError"
-    >
-      <template #empty>
-        <ListTableEmpty :kind="tableEmpty.kind" @reset="reset" @retry="tableEmpty.retry" />
-      </template>
-    </UniDataTable>
-
+      <UniDataTable
+        ref="tableRef"
+        row-key="roleId"
+        :columns="columns"
+        :request="loadData"
+        :filters="filters"
+        :pagination="{ pageSize: 20, pageSizes: [10, 20, 50] }"
+        :toolbar="{ refresh: true, density: true, columnSetting: true }"
+        :actions="actions"
+        :action-column="{ width: 180, fixed: 'right' }"
+        @load-success="tableEmpty.onLoadSuccess"
+        @request-error="tableEmpty.onRequestError">
+        <template #empty>
+          <ListTableEmpty :kind="tableEmpty.kind" @reset="reset" @retry="tableEmpty.retry" />
+        </template>
+      </UniDataTable>
+    </div>
     <AssignMenuDialog
       v-model:visible="assignVisible"
       :role-id="assignRole?.roleId"
-      @saved="refreshTable"
-    />
+      @saved="refreshTable" />
 
     <el-dialog
       v-model="roleFormVisible"
@@ -54,8 +51,7 @@
       width="640px"
       :title="
         roleFormMode === 'add' ? t('permission.role.formAdd') : t('permission.role.formEdit')
-      "
-    >
+      ">
       <UniForm ref="uniFormRef" v-model="roleForm" mode="edit" :config="roleFormConfig">
         <template #field-deptIds>
           <p class="perm-role-scope-hint">{{ t('permission.messages.deptScopeHint') }}</p>
@@ -67,8 +63,7 @@
             highlight-current
             default-expand-all
             check-strictly
-            :props="{ label: 'name', children: 'children' }"
-          />
+            :props="{ label: 'name', children: 'children' }" />
         </template>
       </UniForm>
       <template #footer>

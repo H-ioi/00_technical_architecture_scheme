@@ -8,8 +8,7 @@
       <div v-if="active === 'def'" class="uni-list-page__header-actions">
         <el-button
           type="primary"
-          @click="router.push({ name: 'AttendanceHolidayFlowDesignCreate' })"
-        >
+          @click="router.push({ name: 'AttendanceHolidayFlowDesignCreate' })">
           {{ $t('attendance.holidayFlow.flowDef.add') }}
         </el-button>
       </div>

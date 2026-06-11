@@ -22,8 +22,7 @@
       :actions="actions"
       :action-column="{ width: 120, fixed: 'right' }"
       @load-success="tableEmpty.onLoadSuccess"
-      @request-error="tableEmpty.onRequestError"
-    >
+      @request-error="tableEmpty.onRequestError">
       <template #empty>
         <ListTableEmpty :kind="tableEmpty.kind" @retry="tableEmpty.retry" />
       </template>
@@ -33,8 +32,7 @@
       v-model:visible="formVisible"
       :mode="formMode"
       :record-id="activeId"
-      @saved="refreshTable"
-    />
+      @saved="refreshTable" />
   </section>
 </template>
 
@@ -93,15 +91,11 @@ const openForm = (mode: 'add' | 'edit', row?: Row) => {
 
 const removeRow = async (row: Row) => {
   try {
-    await ElMessageBox.confirm(
-      t('content.navigateButton.confirmDelete'),
-      t('content.delete'),
-      {
-        confirmButtonText: t('content.submit'),
-        cancelButtonText: t('content.cancel'),
-        type: 'warning'
-      }
-    )
+    await ElMessageBox.confirm(t('content.navigateButton.confirmDelete'), t('content.delete'), {
+      confirmButtonText: t('content.submit'),
+      cancelButtonText: t('content.cancel'),
+      type: 'warning'
+    })
   } catch {
     return
   }

@@ -9,69 +9,63 @@
         <el-button type="primary" @click="openAdd">{{ $t('email.add') }}</el-button>
       </div>
     </div>
+    <div class="uni-list-page__body">
+      <UniSearchForm
+        v-model="queryModel"
+        :config="searchCfg"
+        :collapsed="true"
+        :collapsed-rows="1"
+        :action-min-span="0"
+        :submit-text="$t('member.search')"
+        :reset-text="$t('member.reset')"
+        @search="search"
+        @reset="reset" />
 
-    <UniSearchForm
-      v-model="queryModel"
-      :config="searchCfg"
-      :collapsed="true"
-      :collapsed-rows="1"
-      :action-min-span="0"
-      :submit-text="$t('member.search')"
-      :reset-text="$t('member.reset')"
-      @search="search"
-      @reset="reset"
-    />
-
-    <UniDataTable
-      ref="tableRef"
-      row-key="id"
-      selection="multiple"
-      :columns="columns"
-      :request="loadData"
-      :filters="filters"
-      :pagination="{ pageSize: 10, pageSizes: [10, 20, 50, 100] }"
-      :toolbar="{ refresh: true, density: true, columnSetting: true }"
-      :actions="actions"
-      :action-column="{ width: 115, fixed: 'right' }"
-      @load-success="tableEmpty.onLoadSuccess"
-      @request-error="tableEmpty.onRequestError"
-      @selection-change="onSelectionChange"
-    >
-      <template #toolbar>
-        <el-button
-          v-if="hasPermission('mailgroup-gd')"
-          :disabled="batchDisabled"
-          @click="batchStatus(0)"
-        >
-          {{ $t('email.archive') }}
-        </el-button>
-        <el-button
-          v-if="hasPermission('mailgroup-sy')"
-          :disabled="batchDisabled"
-          @click="batchStatus(1)"
-        >
-          {{ $t('email.markActive') }}
-        </el-button>
-        <el-button
-          v-if="hasPermission('mailgroup-delete')"
-          type="danger"
-          :disabled="batchDisabled"
-          @click="batchStatus(-1)"
-        >
-          {{ $t('email.deleteBatch') }}
-        </el-button>
-      </template>
-      <template #empty>
-        <ListTableEmpty :kind="tableEmpty.kind" @reset="reset" @retry="tableEmpty.retry" />
-      </template>
-    </UniDataTable>
-
+      <UniDataTable
+        ref="tableRef"
+        row-key="id"
+        selection="multiple"
+        :columns="columns"
+        :request="loadData"
+        :filters="filters"
+        :pagination="{ pageSize: 10, pageSizes: [10, 20, 50, 100] }"
+        :toolbar="{ refresh: true, density: true, columnSetting: true }"
+        :actions="actions"
+        :action-column="{ width: 115, fixed: 'right' }"
+        @load-success="tableEmpty.onLoadSuccess"
+        @request-error="tableEmpty.onRequestError"
+        @selection-change="onSelectionChange">
+        <template #toolbar>
+          <el-button
+            v-if="hasPermission('mailgroup-gd')"
+            :disabled="batchDisabled"
+            @click="batchStatus(0)">
+            {{ $t('email.archive') }}
+          </el-button>
+          <el-button
+            v-if="hasPermission('mailgroup-sy')"
+            :disabled="batchDisabled"
+            @click="batchStatus(1)">
+            {{ $t('email.markActive') }}
+          </el-button>
+          <el-button
+            v-if="hasPermission('mailgroup-delete')"
+            type="danger"
+            :disabled="batchDisabled"
+            @click="batchStatus(-1)">
+            {{ $t('email.deleteBatch') }}
+          </el-button>
+        </template>
+        <template #empty>
+          <ListTableEmpty :kind="tableEmpty.kind" @reset="reset" @retry="tableEmpty.retry" />
+        </template>
+      </UniDataTable>
+    </div>
     <GroupDialog
       ref="dialogRef"
       v-model="dialogVisible"
       :mode="dialogMode"
-      @success="tableRef?.refresh()"
-    />
+      @success="tableRef?.refresh()" />
 
     <el-dialog v-model="viewVisible" :title="$t('email.view')" width="560px" destroy-on-close>
       <div class="email-grp-view">

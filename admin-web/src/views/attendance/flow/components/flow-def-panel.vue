@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="uni-list-page__body">
     <UniSearchForm
       v-model="queryModel"
       :config="searchCfg"

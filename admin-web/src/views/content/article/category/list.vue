@@ -22,8 +22,7 @@
       :actions="actions"
       :action-column="{ width: 120, fixed: 'right' }"
       @load-success="tableEmpty.onLoadSuccess"
-      @request-error="tableEmpty.onRequestError"
-    >
+      @request-error="tableEmpty.onRequestError">
       <template #empty>
         <ListTableEmpty :kind="tableEmpty.kind" @retry="tableEmpty.retry" />
       </template>
@@ -33,8 +32,7 @@
       v-model:visible="formVisible"
       :mode="formMode"
       :record-id="activeId"
-      @saved="refreshTable"
-    />
+      @saved="refreshTable" />
   </section>
 </template>
 

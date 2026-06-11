@@ -13,10 +13,10 @@ export default {
     url: `${base}/page`,
     name: '内容分类分页',
     get: async function (this: { url: string }, params: ContentCategoryListParams) {
-      return await request.get<PageResult<ContentCategoryRecord>, PageResult<ContentCategoryRecord>>(
-        this.url,
-        { params }
-      )
+      return await request.get<
+        PageResult<ContentCategoryRecord>,
+        PageResult<ContentCategoryRecord>
+      >(this.url, { params })
     }
   },
 

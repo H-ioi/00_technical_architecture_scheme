@@ -2,7 +2,10 @@ import type { FormRules } from 'element-plus'
 import type { UniFormConfig, UniOption, UniTableColumn } from 'uni-ui-lib'
 
 import type { Translate } from '@/types/i18n'
-import type { MedicineApplyContentItem, MedicineApplyFormModel } from '@/types/modules/school-doctor-medicine-apply'
+import type {
+  MedicineApplyContentItem,
+  MedicineApplyFormModel
+} from '@/types/modules/school-doctor-medicine-apply'
 
 export const applyStatusOpts = (t: Translate): UniOption[] => [
   { label: t('schoolDoctor.medicineApply.statusPending'), value: 0 },
@@ -65,7 +68,11 @@ export const emptyFormModel = (): MedicineApplyFormModel => ({
 
 export const addFormRules = (t: Translate): FormRules => ({
   applyMedication: [
-    { required: true, message: t('schoolDoctor.medicineApply.ruleNeedMedication'), trigger: 'change' }
+    {
+      required: true,
+      message: t('schoolDoctor.medicineApply.ruleNeedMedication'),
+      trigger: 'change'
+    }
   ],
   informedConsent: [
     {
@@ -95,7 +102,11 @@ export const searchForm = (
       label: '',
       component: 'ElSelect',
       options: schoolOptions,
-      componentProps: { clearable: true, filterable: true, placeholder: t('schoolDoctor.medicineApply.phSchool') },
+      componentProps: {
+        clearable: true,
+        filterable: true,
+        placeholder: t('schoolDoctor.medicineApply.phSchool')
+      },
       defaultValue: defaultSchoolId,
       colProps: { span: 6 }
     },
@@ -111,7 +122,10 @@ export const searchForm = (
       label: '',
       component: 'ElSelect',
       options: applyMedicationOptions,
-      componentProps: { clearable: true, placeholder: t('schoolDoctor.medicineApply.phApplyMedication') },
+      componentProps: {
+        clearable: true,
+        placeholder: t('schoolDoctor.medicineApply.phApplyMedication')
+      },
       colProps: { span: 6 }
     },
     {
@@ -132,7 +146,11 @@ export const tableCols = (t: Translate): UniTableColumn[] => [
   { prop: 'fullName', label: t('schoolDoctor.medicineApply.fieldName'), minWidth: 120 },
   { prop: 'grade', label: t('schoolDoctor.medicineApply.fieldGrade'), width: 90 },
   { prop: 'formCode', label: t('schoolDoctor.medicineApply.fieldClass'), width: 90 },
-  { prop: 'applyMedicationText', label: t('schoolDoctor.medicineApply.fieldApplyMedication'), width: 100 },
+  {
+    prop: 'applyMedicationText',
+    label: t('schoolDoctor.medicineApply.fieldApplyMedication'),
+    width: 100
+  },
   { prop: 'statusText', label: t('schoolDoctor.medicineApply.fieldStatus'), width: 110 },
   { prop: 'applicantText', label: t('schoolDoctor.medicineApply.fieldApplicant'), minWidth: 120 },
   { prop: 'createTime', label: t('schoolDoctor.medicineApply.fieldCreateTime'), width: 170 },

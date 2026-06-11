@@ -14,73 +14,71 @@
 
     <el-tabs v-model="activeTab" class="attendance-holiday-tab__tabs">
       <el-tab-pane :label="$t('attendance.holiday.tabLeave')" name="leave">
-        <UniSearchForm
-          v-model="leaveQueryModel"
-          :config="leaveSearchConfig"
-          :collapsed="true"
-          :collapsed-rows="1"
-          :action-min-span="0"
-          :submit-text="$t('member.search')"
-          :reset-text="$t('member.reset')"
-          @search="searchLeave"
-          @reset="resetLeaveSearch"
-        />
-        <UniDataTable
-          ref="leaveTableRef"
-          row-key="id"
-          :columns="leaveColumns"
-          :request="loadLeaveData"
-          :filters="leaveFilters"
-          :pagination="{ pageSize: 10, pageSizes: [10, 20, 50, 100] }"
-          :toolbar="{ refresh: true, density: true, columnSetting: true }"
-          :actions="leaveActions"
-          :action-column="{ width: 150, fixed: 'right' }"
-          @load-success="leaveTableEmpty.onLoadSuccess"
-          @request-error="leaveTableEmpty.onRequestError"
-        >
-          <template #empty>
-            <ListTableEmpty
-              :kind="leaveTableEmpty.kind"
-              @reset="resetLeaveSearch"
-              @retry="leaveTableEmpty.retry"
-            />
-          </template>
-        </UniDataTable>
+        <div class="uni-list-page__body">
+          <UniSearchForm
+            v-model="leaveQueryModel"
+            :config="leaveSearchConfig"
+            :collapsed="true"
+            :collapsed-rows="1"
+            :action-min-span="0"
+            :submit-text="$t('member.search')"
+            :reset-text="$t('member.reset')"
+            @search="searchLeave"
+            @reset="resetLeaveSearch" />
+          <UniDataTable
+            ref="leaveTableRef"
+            row-key="id"
+            :columns="leaveColumns"
+            :request="loadLeaveData"
+            :filters="leaveFilters"
+            :pagination="{ pageSize: 10, pageSizes: [10, 20, 50, 100] }"
+            :toolbar="{ refresh: true, density: true, columnSetting: true }"
+            :actions="leaveActions"
+            :action-column="{ width: 150, fixed: 'right' }"
+            @load-success="leaveTableEmpty.onLoadSuccess"
+            @request-error="leaveTableEmpty.onRequestError">
+            <template #empty>
+              <ListTableEmpty
+                :kind="leaveTableEmpty.kind"
+                @reset="resetLeaveSearch"
+                @retry="leaveTableEmpty.retry" />
+            </template>
+          </UniDataTable>
+        </div>
       </el-tab-pane>
 
       <el-tab-pane :label="$t('attendance.holiday.tabReturn')" name="return">
-        <UniSearchForm
-          v-model="returnQueryModel"
-          :config="returnSearchConfig"
-          :collapsed="true"
-          :collapsed-rows="1"
-          :action-min-span="0"
-          :submit-text="$t('member.search')"
-          :reset-text="$t('member.reset')"
-          @search="searchReturn"
-          @reset="resetReturnSearch"
-        />
-        <UniDataTable
-          ref="returnTableRef"
-          row-key="id"
-          :columns="returnColumns"
-          :request="loadReturnData"
-          :filters="returnFilters"
-          :pagination="{ pageSize: 10, pageSizes: [10, 20, 50, 100] }"
-          :toolbar="{ refresh: true, density: true, columnSetting: true }"
-          :actions="returnActions"
-          :action-column="{ width: 60, fixed: 'right' }"
-          @load-success="returnTableEmpty.onLoadSuccess"
-          @request-error="returnTableEmpty.onRequestError"
-        >
-          <template #empty>
-            <ListTableEmpty
-              :kind="returnTableEmpty.kind"
-              @reset="resetReturnSearch"
-              @retry="returnTableEmpty.retry"
-            />
-          </template>
-        </UniDataTable>
+        <div class="uni-list-page__body">
+          <UniSearchForm
+            v-model="returnQueryModel"
+            :config="returnSearchConfig"
+            :collapsed="true"
+            :collapsed-rows="1"
+            :action-min-span="0"
+            :submit-text="$t('member.search')"
+            :reset-text="$t('member.reset')"
+            @search="searchReturn"
+            @reset="resetReturnSearch" />
+          <UniDataTable
+            ref="returnTableRef"
+            row-key="id"
+            :columns="returnColumns"
+            :request="loadReturnData"
+            :filters="returnFilters"
+            :pagination="{ pageSize: 10, pageSizes: [10, 20, 50, 100] }"
+            :toolbar="{ refresh: true, density: true, columnSetting: true }"
+            :actions="returnActions"
+            :action-column="{ width: 60, fixed: 'right' }"
+            @load-success="returnTableEmpty.onLoadSuccess"
+            @request-error="returnTableEmpty.onRequestError">
+            <template #empty>
+              <ListTableEmpty
+                :kind="returnTableEmpty.kind"
+                @reset="resetReturnSearch"
+                @retry="returnTableEmpty.retry" />
+            </template>
+          </UniDataTable>
+        </div>
       </el-tab-pane>
     </el-tabs>
 
@@ -89,22 +87,19 @@
     <CancelReturnDialog
       v-model:visible="cancelReturnVisible"
       :leave-row="cancelReturnRow"
-      @success="refreshLeaveTable"
-    />
+      @success="refreshLeaveTable" />
 
     <DetailDrawer
       v-model:visible="leaveDetailVisible"
       :source="leaveDetailModel"
       :config="leaveDetailConfig"
-      :loading="leaveDetailLoading"
-    />
+      :loading="leaveDetailLoading" />
 
     <DetailDrawer
       v-model:visible="returnDetailVisible"
       :source="returnDetailModel"
       :config="returnDetailConfig"
-      :loading="returnDetailLoading"
-    />
+      :loading="returnDetailLoading" />
   </section>
 </template>
 

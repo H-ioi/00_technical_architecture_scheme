@@ -3,8 +3,7 @@
     <div
       v-loading="detailLoading"
       class="content-discussion-like-save-form__body"
-      :element-loading-text="$t('common.loading')"
-    >
+      :element-loading-text="$t('common.loading')">
       <UniForm ref="uniFormRef" v-model="formModel" mode="edit" :config="dialogFormCfg" />
     </div>
 
@@ -27,12 +26,7 @@ import { contentDiscussionLikeSaveApi } from '@/api'
 import type { ContentDiscussionLikeSaveFormModel } from '@/types/modules/content-discussion-like-save'
 import { normalizePayload } from '@/utils/api-response-normalize'
 
-import {
-  boolRadioOpts,
-  dialogFormConfig,
-  dialogFormRules,
-  emptyFormModel
-} from '../list.config'
+import { boolRadioOpts, dialogFormConfig, dialogFormRules, emptyFormModel } from '../list.config'
 
 import { useDialogDetailLoading } from '@/composables/use-dialog-detail-loading'
 
@@ -63,7 +57,11 @@ const dialogFormCfg = computed<UniFormConfig>(() => ({
 }))
 
 const title = computed(() =>
-  t(props.mode === 'add' ? 'content.discussionLikeSave.formAdd' : 'content.discussionLikeSave.formEdit')
+  t(
+    props.mode === 'add'
+      ? 'content.discussionLikeSave.formAdd'
+      : 'content.discussionLikeSave.formEdit'
+  )
 )
 
 watch(

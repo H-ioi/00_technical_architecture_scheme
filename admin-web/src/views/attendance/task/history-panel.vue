@@ -11,14 +11,12 @@
       :actions="actions"
       :action-column="{ width: 110, fixed: 'right' }"
       @load-success="tableEmpty.onLoadSuccess"
-      @request-error="tableEmpty.onRequestError"
-    >
+      @request-error="tableEmpty.onRequestError">
       <template #empty>
         <ListTableEmpty
           :kind="tableEmpty.kind"
           @reset="tableEmpty.retry"
-          @retry="tableEmpty.retry"
-        />
+          @retry="tableEmpty.retry" />
       </template>
     </UniDataTable>
 
@@ -26,16 +24,14 @@
       v-model="traceVisible"
       :title="$t('attendance.holidayTask.flowChart')"
       width="80%"
-      destroy-on-close
-    >
-      <img v-if="flowImg" :src="flowImg" alt="" style="max-width: 100%">
+      destroy-on-close>
+      <img v-if="flowImg" :src="flowImg" alt="" style="max-width: 100%" />
       <el-steps direction="vertical" style="margin-top: 16px">
         <el-step
           v-for="item in hiTasks"
           :key="String(item.id)"
           :title="`${item.taskNodeName ?? ''} ${item.assigneeName ?? ''} ${item.startTime ?? ''}`"
-          :description="String(item.remark ?? '')"
-        />
+          :description="String(item.remark ?? '')" />
       </el-steps>
     </el-dialog>
   </div>

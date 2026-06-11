@@ -12,16 +12,18 @@ export default {
   page: {
     name: '规章制度分页',
     get: async (params: SchoolDoctorRegulationPageParams) =>
-      await request.get<PageResult<SchoolDoctorRegulationListRow>, PageResult<SchoolDoctorRegulationListRow>>(
-        `${base}/paginate`,
-        { params }
-      )
+      await request.get<
+        PageResult<SchoolDoctorRegulationListRow>,
+        PageResult<SchoolDoctorRegulationListRow>
+      >(`${base}/paginate`, { params })
   },
 
   detail: {
     name: '规章制度详情',
     get: async (id: string | number) =>
-      await request.get<SchoolDoctorRegulationFormModel, SchoolDoctorRegulationFormModel>(`${base}/get/${id}`)
+      await request.get<SchoolDoctorRegulationFormModel, SchoolDoctorRegulationFormModel>(
+        `${base}/get/${id}`
+      )
   },
 
   add: {

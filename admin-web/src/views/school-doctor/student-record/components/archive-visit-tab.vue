@@ -1,7 +1,9 @@
 <template>
   <div class="archive-visit-tab">
     <div v-if="records.length" class="archive-visit-tab__list">
-      <div class="archive-visit-tab__title">{{ $t('schoolDoctor.studentRecord.visitSection') }}</div>
+      <div class="archive-visit-tab__title">
+        {{ $t('schoolDoctor.studentRecord.visitSection') }}
+      </div>
       <div v-for="item in records" :key="item.id || item.visitTime" class="archive-visit-tab__card">
         <div class="archive-visit-tab__header">
           <span v-if="item.visitCode">{{ item.visitCode }}</span>
@@ -13,26 +15,38 @@
         <div class="archive-visit-tab__body">
           <div class="archive-visit-tab__column">
             <div v-if="hasText(item.chiefComplaint)" class="archive-visit-tab__field">
-              <div class="archive-visit-tab__label">{{ $t('schoolDoctor.studentRecord.visitComplaint') }}</div>
+              <div class="archive-visit-tab__label">
+                {{ $t('schoolDoctor.studentRecord.visitComplaint') }}
+              </div>
               <div>{{ item.chiefComplaint }}</div>
             </div>
-            <div v-if="hasText(item.remark)" class="archive-visit-tab__field archive-visit-tab__field--box">
-              <div class="archive-visit-tab__label">{{ $t('schoolDoctor.studentRecord.visitTreatment') }}</div>
+            <div
+              v-if="hasText(item.remark)"
+              class="archive-visit-tab__field archive-visit-tab__field--box">
+              <div class="archive-visit-tab__label">
+                {{ $t('schoolDoctor.studentRecord.visitTreatment') }}
+              </div>
               <div>{{ item.remark }}</div>
             </div>
           </div>
 
           <div class="archive-visit-tab__column">
             <div v-if="hasText(item.physicalExam)" class="archive-visit-tab__field">
-              <div class="archive-visit-tab__label">{{ $t('schoolDoctor.studentRecord.visitPhysical') }}</div>
+              <div class="archive-visit-tab__label">
+                {{ $t('schoolDoctor.studentRecord.visitPhysical') }}
+              </div>
               <div>{{ item.physicalExam }}</div>
             </div>
             <div v-if="hasText(item.diagnosisAdvice)" class="archive-visit-tab__field">
-              <div class="archive-visit-tab__label">{{ $t('schoolDoctor.studentRecord.visitDiagnosis') }}</div>
+              <div class="archive-visit-tab__label">
+                {{ $t('schoolDoctor.studentRecord.visitDiagnosis') }}
+              </div>
               <div>{{ item.diagnosisAdvice }}</div>
             </div>
             <div v-if="item.metaText" class="archive-visit-tab__field">
-              <div class="archive-visit-tab__label">{{ $t('schoolDoctor.studentRecord.visitParentContact') }}</div>
+              <div class="archive-visit-tab__label">
+                {{ $t('schoolDoctor.studentRecord.visitParentContact') }}
+              </div>
               <div>{{ item.metaText }}</div>
             </div>
           </div>
@@ -87,7 +101,9 @@ const records = computed(() => {
       if (item.contactParent === 0 || item.contactParent === 1) {
         metaParts.push(
           `${t('schoolDoctor.studentRecord.contactParent')}：${
-            item.contactParent === 1 ? t('schoolDoctor.studentRecord.contacted') : t('schoolDoctor.common.no')
+            item.contactParent === 1
+              ? t('schoolDoctor.studentRecord.contacted')
+              : t('schoolDoctor.common.no')
           }`
         )
       }

@@ -5,14 +5,12 @@
     append-to-body
     :title="personDialogTitle"
     destroy-on-close
-    @closed="resetPersonForm"
-  >
+    @closed="resetPersonForm">
     <UniForm
       ref="personUniFormRef"
       v-model="personForm"
       mode="edit"
-      :config="personDialogFormConfig"
-    >
+      :config="personDialogFormConfig">
       <template #field-pickupImageUrl>
         <div class="bus-order-form__upload-row">
           <el-button @click="triggerPersonPick">{{ $t('schoolBus.car.pickImage') }}</el-button>
@@ -25,8 +23,7 @@
           type="file"
           accept="image/*"
           class="bus-order-form__hidden-file"
-          @change="onPersonFile"
-        >
+          @change="onPersonFile" />
       </template>
     </UniForm>
     <template #footer>

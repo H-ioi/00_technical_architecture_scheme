@@ -21,7 +21,11 @@ export const pendingSearchForm = (
       label: '',
       component: 'ElSelect',
       options: schoolOptions,
-      componentProps: { clearable: true, filterable: true, placeholder: t('schoolDoctor.visitRecord.phSchool') },
+      componentProps: {
+        clearable: true,
+        filterable: true,
+        placeholder: t('schoolDoctor.visitRecord.phSchool')
+      },
       defaultValue: defaultSchoolId,
       colProps: { span: 6 }
     },
@@ -63,7 +67,11 @@ export const pendingTableCols = (t: Translate): UniTableColumn[] => [
   { prop: 'fullName', label: t('schoolDoctor.visitRecord.fieldName'), minWidth: 120 },
   { prop: 'grade', label: t('schoolDoctor.visitRecord.fieldGrade'), width: 90 },
   { prop: 'formCode', label: t('schoolDoctor.visitRecord.fieldClass'), width: 90 },
-  { prop: 'applyMedicationDateText', label: t('schoolDoctor.visitRecord.fieldApplyDate'), width: 180 },
+  {
+    prop: 'applyMedicationDateText',
+    label: t('schoolDoctor.visitRecord.fieldApplyDate'),
+    width: 180
+  },
   { prop: 'operationTime', label: t('schoolDoctor.visitRecord.fieldMedicationTime'), width: 170 },
   { prop: 'statusText', label: t('schoolDoctor.visitRecord.fieldStatus'), width: 100 },
   { prop: 'createTime', label: t('schoolDoctor.visitRecord.fieldCreateTime'), width: 170 },
