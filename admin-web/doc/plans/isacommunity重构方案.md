@@ -1072,7 +1072,7 @@ sidebar.vue
 - `useUniPermission`。
 - 权限配置注入协议。
 - `UniThemeSettings`。
-- `setupUniTheme` / `applyUniTheme`，统一覆盖 Element Plus 和项目级 CSS 变量。
+- `variables.scss` + `data-layout`，统一切换 Element Plus 和项目级 CSS 变量。
 
 保留在 `admin-web` 的是：
 
@@ -1310,7 +1310,7 @@ sidebar.vue
 | 权限     | `v-uni-permission`、`useUniPermission`               | UI 和 JS 权限统一                        |
 | 请求     | `createUniRequest`                                   | token、错误码、401、403、重复请求        |
 | 认证     | `createUniAuth`                                      | 登录、退出、刷新、清理 token             |
-| 主题     | `UniThemeSettings`、`setupUniTheme`、`applyUniTheme` | 主题抽屉、持久化、Element Plus 变量覆盖  |
+| 主题     | `UniThemeSettings`、`data-layout`                    | 主题抽屉、根节点主题名切换、CSS 变量覆盖 |
 | 下载     | `downloadBlob` / `useUniDownload`                    | 导出、模板下载                           |
 | 格式化   | `formatEmpty`、`formatDate`、`formatOptionLabel`     | 空值、日期、枚举回显                     |
 

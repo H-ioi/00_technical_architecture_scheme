@@ -11,12 +11,11 @@ import { UniLayout, UniLayoutChangePasswordDialog } from '@/components/uni-layou
 import UniLoginPage from '@/components/uni-login-page/index.vue'
 import { UniSearchForm } from '@/components/uni-search-form'
 import { UniThemeSettings } from '@/components/uni-theme-settings'
-import { setupUniTheme } from '@/components/uni-theme-settings/runtime'
 import { UniUpload } from '@/components/uni-upload'
 import { setupCopyDirective } from '@/directives/copy'
 import { setupDebounceClickDirective } from '@/directives/debounce-click'
 import { setupPermissionDirective } from '@/directives/permission'
-import { getUniConfig, normalizeUniConfig, setUniConfig, tryGetUniConfig } from '@/plugins/config'
+import { getUniConfig, normalizeUniConfig, setUniConfig } from '@/plugins/config'
 import { initUniHttpClient } from '@/plugins/request'
 import { setUniAppName } from '@/plugins/storage'
 import { useUniTagsViewStore } from '@/stores/modules/tags-view'
@@ -47,13 +46,6 @@ export const install = (app: App, options: UniLibInstallOptions = {}) => {
     setUniConfig(config)
     initUniHttpClient()
   }
-
-  const shell = tryGetUniConfig()?.shell
-  setupUniTheme({
-    ...(shell?.themeStorageKey != null ? { storageKey: shell.themeStorageKey } : {}),
-    ...(shell?.defaultTheme != null ? { defaultTheme: shell.defaultTheme } : {}),
-    ...options.theme
-  })
 
   components.forEach(({ name, component }) => {
     app.component(name, component)

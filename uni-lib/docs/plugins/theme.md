@@ -1,42 +1,25 @@
 # Theme
 
-`createUniTheme()` 提供运行时主题变量写入能力，默认主题变量定义在组件库样式中。
+主题变量统一定义在 `src/styles/variables.scss`，通过根节点 `data-layout` 切换。
 
 ## 基础用法
 
 ```ts
-import { createUniTheme } from 'uni-ui-lib'
-
-const theme = createUniTheme({
-  primaryColor: '#1677ff',
-  pageBgColor: '#f5f7fb'
-})
-
-theme.apply({
-  primaryColor: '#13c2c2'
-})
+document.documentElement.dataset.layout = 'custom'
 ```
 
-也可以在安装组件库时传入：
+`UniLayout` 会在初始化时把 `preset` 写入根节点：
 
-```ts
-app.use(UniLib, {
-  theme: {
-    primaryColor: '#1677ff'
-  }
-})
+```vue
+<UniLayout preset="isa-light" />
 ```
 
-## Token
+## Layout
 
-| Token                | CSS 变量                     |
-| -------------------- | ---------------------------- |
-| `primaryColor`       | `--uni-color-primary`        |
-| `pageBgColor`        | `--uni-bg-page`              |
-| `cardBgColor`        | `--uni-bg-card`              |
-| `borderColor`        | `--uni-border-color`         |
-| `textColor`          | `--uni-text-color`           |
-| `textColorSecondary` | `--uni-text-color-secondary` |
-| `radiusBase`         | `--uni-radius-base`          |
+| Layout      | 说明                         |
+| ----------- | ---------------------------- |
+| `default`   | 组件库默认主题               |
+| `isa-light` | ISA 管理后台浅色主题         |
+| `custom`    | 业务通过 `--app-*` 覆盖主题 |
 
 组件库只提供无品牌主题 token，Logo、登录页背景、产品线专属视觉资源仍由业务工程维护。

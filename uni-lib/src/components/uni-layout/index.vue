@@ -139,17 +139,13 @@
 
   <template v-if="shellDialogs">
     <UniLayoutChangePasswordDialog v-model="passwordVisible" />
-    <UniThemeSettings
-      v-model="themeVisible"
-      :default-theme="defaultThemeResolved"
-      :storage-key="themeStorageKeyResolved"
-      :title="tr('common.themeSettings', 'Theme settings')" />
+    <UniThemeSettings v-model="themeVisible" :title="tr('common.themeSettings', 'Theme settings')" />
   </template>
 </template>
 
 <script setup lang="ts">
 import { ArrowDown, Expand, Fold } from '@element-plus/icons-vue'
-import { computed, ref } from 'vue'
+import { computed, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRoute, useRouter } from 'vue-router'
 
@@ -408,14 +404,14 @@ const avatarText = computed(() => {
 const passwordVisible = ref(false)
 const themeVisible = ref(false)
 
-const themeStorageKeyResolved = computed(
-  () => tryGetUniConfig()?.shell?.themeStorageKey ?? 'uni-lib:theme'
-)
-const defaultThemeResolved = computed(
-  () =>
-    tryGetUniConfig()?.shell?.defaultTheme ?? {
-      primaryColor: '#BA8E62'
+watch(
+  () => props.preset,
+  (layout) => {
+    if (typeof document !== 'undefined') {
+      document.documentElement.dataset.layout = layout
     }
+  },
+  { immediate: true }
 )
 
 const onToggleSidebar = () => {

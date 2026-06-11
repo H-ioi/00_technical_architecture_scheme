@@ -32,22 +32,13 @@ export const UNI_DEFAULT_HTTP_MESSAGES_ZH: Required<UniHttpMessages> = {
 
 const shellLogoutDefault = '/login'
 
-const defaultThemeTokens = {
-  primaryColor: '#BA8E62'
-} as const
-
 export const normalizeUniConfig = (
   input: UniLibConfigInput,
   defaultChangePasswordOnSuccess: () => void | Promise<void>
 ): UniLibConfig => {
   const shell: UniConfigShell = {
     logoutRedirect: shellLogoutDefault,
-    ...input.shell,
-    themeStorageKey: input.shell?.themeStorageKey ?? `${input.name}:theme`,
-    defaultTheme: {
-      ...defaultThemeTokens,
-      ...input.shell?.defaultTheme
-    }
+    ...input.shell
   }
 
   const changePassword: UniChangePasswordRuntime = {

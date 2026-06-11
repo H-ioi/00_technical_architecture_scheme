@@ -165,9 +165,8 @@ uni-lib/
 2. 设置存储命名空间 `setUniAppName(config.name)`。
 3. 保存运行时配置 `setUniConfig(config)`。
 4. 初始化默认 HTTP 客户端 `initUniHttpClient()`。
-5. 根据 shell 配置与 `options.theme` 初始化主题。
-6. 全量注册组件。
-7. 注册权限、复制、防抖点击指令。
+5. 全量注册组件。
+6. 注册权限、复制、防抖点击指令。
 
 当前配置类型：
 
@@ -175,7 +174,6 @@ uni-lib/
 interface UniLibInstallOptions {
   config?: UniLibConfigInput
   permission?: UniPermissionOptions
-  theme?: UniThemeSetupOptions
 }
 ```
 
@@ -189,8 +187,6 @@ interface UniLibInstallOptions {
 
 - `defaultLocale`
 - `shell.logoutRedirect`
-- `shell.themeStorageKey`
-- `shell.defaultTheme`
 - `changePassword`
 - `httpMessages`
 

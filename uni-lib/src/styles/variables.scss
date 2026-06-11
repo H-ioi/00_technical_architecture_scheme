@@ -1,13 +1,4 @@
 :root {
-  /** 通用 uni 语义色与圆角（静态默认；运行时由 UniThemeSettings/runtime 同步覆盖） */
-  --uni-color-primary: #ba8e62;
-  --uni-bg-page: #f5f7fb;
-  --uni-bg-card: #fff;
-  --uni-border-color: #e5e7eb;
-  --uni-text-color: #1f2937;
-  --uni-text-color-secondary: #6b7280;
-  --uni-radius-base: 8px;
-
   --uni-font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   --uni-font-size-base: 14px;
   --uni-line-height-base: 1.5;
@@ -15,7 +6,14 @@
   --uni-scrollbar-thumb-color: rgb(144 147 153 / 30%);
   --uni-scrollbar-thumb-hover-color: rgb(144 147 153 / 45%);
 
-  /** UniLayout：可被业务 `--app-*` 覆盖，或由 `.uni-layout--*` 预设改写 */
+  /** 默认兜底：未设置 data-layout 时仍保持可用。 */
+  --uni-color-primary: #ba8e62;
+  --uni-bg-page: #f5f7fb;
+  --uni-bg-card: #fff;
+  --uni-border-color: #e5e7eb;
+  --uni-text-color: #1f2937;
+  --uni-text-color-secondary: #6b7280;
+  --uni-radius-base: 8px;
   --uni-layout-bg: var(--app-bg-color, #f5f7fb);
   --uni-layout-card-bg: var(--app-card-bg-color, #fff);
   --uni-layout-sidebar-bg: var(--app-sidebar-bg-color, #fff);
@@ -29,4 +27,110 @@
   --uni-layout-header-height: 56px;
   --uni-layout-tags-height: 40px;
   --uni-layout-content-padding: 16px;
+}
+
+[data-layout='default'] {
+  --uni-color-primary: #ba8e62;
+  --uni-bg-page: #f5f7fb;
+  --uni-bg-card: #fff;
+  --uni-border-color: #e5e7eb;
+  --uni-text-color: #1f2937;
+  --uni-text-color-secondary: #6b7280;
+  --uni-radius-base: 8px;
+  --uni-layout-bg: #f5f7fb;
+  --uni-layout-card-bg: #fff;
+  --uni-layout-sidebar-bg: #fff;
+  --uni-layout-primary: #ba8e62;
+  --uni-layout-primary-light: rgb(186 142 98 / 12%);
+  --uni-layout-border: #e5e7eb;
+  --uni-layout-text: #1f2937;
+  --uni-layout-text-secondary: #6b7280;
+  --uni-layout-menu-active-bg: #19364a;
+  --uni-layout-menu-active-color: #fff;
+  --uni-layout-header-height: 56px;
+  --uni-layout-tags-height: 40px;
+  --uni-layout-content-padding: 16px;
+}
+
+[data-layout='isa-light'] {
+  --app-primary-color: #6da6c9;
+  --app-primary-color-5: rgb(109 166 201 / 14%);
+  --app-bg-color: #f3f7fd;
+  --app-card-bg-color: #fff;
+  --app-sidebar-bg-color: #fff;
+  --app-border-color: #dce9f3;
+  --app-text-color: #263847;
+  --app-text-color-secondary: #788895;
+  --app-radius-base: 14px;
+  --app-menu-active-bg: #6da6c9;
+  --app-menu-active-color: #fff;
+  --uni-color-primary: #6da6c9;
+  --uni-bg-page: #f3f7fd;
+  --uni-bg-card: #fff;
+  --uni-border-color: #dce9f3;
+  --uni-text-color: #263847;
+  --uni-text-color-secondary: #788895;
+  --uni-radius-base: 14px;
+  --uni-layout-bg: #f3f7fd;
+  --uni-layout-card-bg: #fff;
+  --uni-layout-sidebar-bg: #fff;
+  --uni-layout-primary: #6da6c9;
+  --uni-layout-primary-light: rgb(109 166 201 / 14%);
+  --uni-layout-border: #dce9f3;
+  --uni-layout-text: #263847;
+  --uni-layout-text-secondary: #788895;
+  --uni-layout-menu-active-bg: #6da6c9;
+  --uni-layout-menu-active-color: #fff;
+  --uni-layout-header-height: 56px;
+  --uni-layout-tags-height: 40px;
+  --uni-layout-content-padding: 16px;
+  --el-color-primary: #6da6c9;
+  --el-color-primary-light-3: #8fbcda;
+  --el-color-primary-light-5: #b6d4e8;
+  --el-color-primary-light-7: #d3e6f2;
+  --el-color-primary-light-8: #e2eef6;
+  --el-color-primary-light-9: #eef6fb;
+  --el-color-primary-dark-2: #4f88ad;
+  --el-color-success: #86c98f;
+  --el-color-success-light-9: #eef8f0;
+  --el-color-warning: #d99a3d;
+  --el-color-warning-light-9: #fff6e8;
+  --el-color-danger: #f03f55;
+  --el-color-danger-light-9: #fff0f2;
+  --el-color-error: #f03f55;
+  --el-bg-color: #fff;
+  --el-bg-color-page: #f3f7fd;
+  --el-bg-color-overlay: #fff;
+  --el-text-color-primary: #263847;
+  --el-text-color-regular: #526574;
+  --el-text-color-secondary: #788895;
+  --el-border-color: #dce9f3;
+  --el-border-color-light: #e7eff6;
+  --el-border-color-lighter: #eef4f9;
+  --el-fill-color-light: #f6f9fc;
+  --el-fill-color-lighter: #fafcff;
+  --el-mask-color: rgb(0 0 0 / 38%);
+}
+
+[data-layout='custom'] {
+  --uni-color-primary: var(--app-primary-color, #ba8e62);
+  --uni-bg-page: var(--app-bg-color, #f5f7fb);
+  --uni-bg-card: var(--app-card-bg-color, #fff);
+  --uni-border-color: var(--app-border-color, #e5e7eb);
+  --uni-text-color: var(--app-text-color, #1f2937);
+  --uni-text-color-secondary: var(--app-text-color-secondary, #6b7280);
+  --uni-radius-base: var(--app-radius-base, 8px);
+  --uni-layout-bg: var(--app-bg-color, #f5f7fb);
+  --uni-layout-card-bg: var(--app-card-bg-color, #fff);
+  --uni-layout-sidebar-bg: var(--app-sidebar-bg-color, #fff);
+  --uni-layout-primary: var(--app-primary-color, #ba8e62);
+  --uni-layout-primary-light: var(--app-primary-color-5, rgb(186 142 98 / 12%));
+  --uni-layout-border: var(--app-border-color, #e5e7eb);
+  --uni-layout-text: var(--app-text-color, #1f2937);
+  --uni-layout-text-secondary: var(--app-text-color-secondary, #6b7280);
+  --uni-layout-menu-active-bg: var(--app-menu-active-bg, #19364a);
+  --uni-layout-menu-active-color: var(--app-menu-active-color, #fff);
+  --uni-layout-header-height: var(--app-header-height, 56px);
+  --uni-layout-tags-height: var(--app-tags-height, 40px);
+  --uni-layout-content-padding: var(--app-content-padding, 16px);
 }
