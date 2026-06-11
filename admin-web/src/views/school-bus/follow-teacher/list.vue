@@ -111,7 +111,7 @@ import type {
   FollowTeacherListParams
 } from '@/types/modules/school-bus-follow-teacher'
 import { normalizeArray, normalizePaged } from '@/utils/api-response-normalize'
-import { downloadBlob } from '@/utils/download'
+import { downloadResponseBlob } from '@/utils/download'
 import { membershipSchoolLabel, membershipSchoolToOptions } from '@/utils/membership-school'
 import dayjs from 'dayjs'
 import { ElMessage, ElMessageBox } from 'element-plus'
@@ -248,8 +248,8 @@ const exportData = async () => {
   delete raw.size
   delete raw.current
   try {
-    const blob = await schoolBusFollowTeacherApi.export.get(raw)
-    downloadBlob(blob, 'follow-teacher-export.xlsx')
+    const response = await schoolBusFollowTeacherApi.export.get(raw)
+    downloadResponseBlob(response, 'follow-teacher-export.xlsx')
     ElMessage.success(t('schoolBus.exportSuccess'))
   } catch {
     /* request 层已提示 */

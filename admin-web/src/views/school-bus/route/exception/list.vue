@@ -78,6 +78,7 @@ import { useListTableEmpty } from '@/composables/use-list-table-empty'
 import type { SchoolOptionRecord } from '@/types/modules/membership'
 import type { ExceptionRecord, ExceptionListParams } from '@/types/modules/school-bus-exception'
 import { normalizeArray, normalizePaged } from '@/utils/api-response-normalize'
+import { downloadResponseBlob } from '@/utils/download'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import type { UniTableAction, UniTableRequest } from 'uni-ui-lib'
 import { useUniI18n, toUniOptions, useUniListState } from 'uni-ui-lib'
@@ -324,13 +325,8 @@ const exportData = async () => {
   delete raw.current
 
   try {
-    const blob = await schoolBusExceptionApi.export.get(raw)
-    const url = URL.createObjectURL(blob)
-    const link = document.createElement('a')
-    link.href = url
-    link.download = 'exception-export.xlsx'
-    link.click()
-    URL.revokeObjectURL(url)
+    const response = await schoolBusExceptionApi.export.get(raw)
+    downloadResponseBlob(response, 'exception-export.xlsx')
     ElMessage.success(t('schoolBus.exportSuccess'))
   } catch {
     /* request 层已提示 */

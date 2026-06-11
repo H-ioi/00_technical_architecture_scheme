@@ -61,6 +61,13 @@ export default {
       return await request.delete(`${attendanceBase}/holiday/${id}`)
     }
   },
+  /** 提交销假（旧 `saveHolidayEnd` POST `/holiday-return/save-holiday-return`）。 */
+  holidayReturnSave: {
+    name: '提交销假',
+    post: async (data: unknown) => {
+      return await request.post(`${attendanceBase}/holiday-return/save-holiday-return`, data)
+    }
+  },
 
   // —— 请假模块-通知邮箱配置（旧 `api/isacommunity/config.js`） ——
   sysConfigList: {

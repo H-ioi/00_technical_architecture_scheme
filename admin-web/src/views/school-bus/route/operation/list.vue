@@ -9,7 +9,7 @@
         <el-button v-uni-permission="'busoperation_export'" @click="exportData">
           {{ $t('schoolBus.export') }}
         </el-button>
-        <el-button v-uni-permission="'busoperation_import'" @click="downloadImportTemplate">
+        <el-button v-uni-permission="'busoperation_download'" @click="downloadImportTemplate">
           {{ $t('schoolBus.downloadTemplate') }}
         </el-button>
         <el-button v-uni-permission="'busoperation_import'" @click="fileRef?.click()">
@@ -101,6 +101,7 @@ import { useListTableEmpty } from '@/composables/use-list-table-empty'
 import type { SchoolOptionRecord } from '@/types/modules/membership'
 import type { OperationRecord, OperationListParams } from '@/types/modules/school-bus-operation'
 import { normalizeArray, normalizePaged } from '@/utils/api-response-normalize'
+import { downloadResponseBlob } from '@/utils/download'
 import { normalizeSchoolIdsOnRow } from '@/utils/school-bus'
 import dayjs from 'dayjs'
 import { ElMessage, ElMessageBox } from 'element-plus'
@@ -454,13 +455,8 @@ const exportData = async () => {
   delete raw.current
 
   try {
-    const blob = await schoolBusOperationApi.export.get(raw)
-    const url = URL.createObjectURL(blob)
-    const link = document.createElement('a')
-    link.href = url
-    link.download = 'operation-export.xlsx'
-    link.click()
-    URL.revokeObjectURL(url)
+    const response = await schoolBusOperationApi.export.get(raw)
+    downloadResponseBlob(response, 'operation-export.xlsx')
     ElMessage.success(t('schoolBus.exportSuccess'))
   } catch {
     /* request 层已提示 */

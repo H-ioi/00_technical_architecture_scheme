@@ -7,7 +7,7 @@
 | **旧系统参考代码**   | `test/old-test`（Windows 亦可 `test\old-test`） | 业务行为、接口、权限、页面的**对齐依据**，不作为本期交付产物 |
 | **重构后的管理后台** | `admin-web`                                     | 本期重构的**落地工程**（Vue3 + `uni-lib`/`uni-ui-lib` 等）   |
 
-**当前进度**：重构已推进到 **Phase 12 收尾（部分完成）**。**P12 CI 门禁已完成 ✅**（`type-check` / `lint` / `lint:style` / `build` 均 PASS，见 §15.13）。**Phase 9 内容管理代码已落地 ✅**（9 子模块：公告、一周食谱、校园生活、文章/分类、讨论列表/标签/评论/点赞收藏；路由、`MENU_PATH_ALIASES`、API、i18n 已接入，见 §15.10）；**待人工 QA**（富文本/上传/详情预览、权限按钮冒烟）。§15.13 **人工 QA 待办/进行中**：别名全量审计、跨模块回归、校医八路由冒烟。**活动项目详情子能力仍待补齐**（见 §15.9）。`admin-web` 已阶段性落地基座、登录/首页/成员、基础设置、校车、协议、权限、考勤、群发邮件、宿舍、校医、内容等；活动管理已接入活动列表、活动详情、活动项目列表/编辑、奖品列表、投票节目、问卷管理、问卷设计、答卷页与家长学生关联管理、微信/邮箱配置，活动详情内 Tab 已与旧页对齐（含祝福语，**非独立菜单**）。`test/old-test` 另新增 **校巴考勤** 等扩展域（见 §2.7）。后续：Phase 8 收尾 → Phase 9 人工 QA → P12 人工回归闭合 → 全量稳定交付。
+**当前进度**：重构已推进到 **Phase 12 收尾（部分完成）**。**P12 CI 门禁已完成 ✅**（`type-check` / `lint` / `lint:style` / `build` 均 PASS，见 §15.13）。**业务偏差静态对照已闭合 ✅**（11 条中 10 已修复、1 N/A；含 DEV-009 校车导入导出权限与文件名对齐，见 `QA-deviation-report.md`）。**Phase 9 内容管理代码已落地 ✅**（9 子模块 + 导航按钮；路由、`MENU_PATH_ALIASES`、API、i18n 已接入，见 §15.10）；**待人工 QA**（富文本/上传/详情预览、权限按钮冒烟）。§15.13 **人工 QA 待办/进行中**：别名全量审计、跨模块回归、校医八路由冒烟。**活动项目详情子能力仍待补齐**（见 §15.9）。`admin-web` 已阶段性落地基座、登录/首页/成员、基础设置、校车、协议、权限、考勤、群发邮件、宿舍、校医、内容等；活动管理已接入活动列表、活动详情、活动项目列表/编辑、奖品列表、投票节目、问卷管理、问卷设计、答卷页与家长学生关联管理、微信/邮箱配置，活动详情内 Tab 已与旧页对齐（含祝福语，**非独立菜单**）。`test/old-test` 另新增 **校巴考勤** 等扩展域（见 §2.7）。后续：Phase 8 收尾 → Phase 9 人工 QA → P12 人工回归闭合 → 全量稳定交付。
 
 ---
 
@@ -1241,7 +1241,7 @@ sidebar.vue
 
 **已接入**：`router/modules/content.ts`；§14.2 `MENU_PATH_ALIASES`（`/isacommunity/content/**`）；`api/modules/content-*.ts`（10 文件）；`types/modules/content-*.ts`（9 文件）；`locales/lang/*/modules/content.ts`；各子模块 `list.vue` + `list.config.ts` + 表单/详情抽屉。
 
-**不在 Phase 9 范围**：旧代码 `content/navbutton/`（导航按钮）未列入 §14.2 菜单映射表；若后端菜单仍下发该 path，需产品确认后再单独立项。
+**不在 Phase 9 范围（已补迁）**：旧代码 `content/navbutton/`（导航按钮）原未列入 §14.2 菜单映射表；已于 2026-06-11 迁移至 `/content/navigate-button`，`MENU_PATH_ALIASES` 已登记 `/isacommunity/content/navbutton` 与 `/isacommunity/content/navigate-button`。
 
 该阶段重点处理富文本、图片上传、详情预览、内容状态和多语言标题。须同步补齐 §14.2 内容域 `MENU_PATH_ALIASES` 与 `router/modules/content.ts`（**已完成**）。
 

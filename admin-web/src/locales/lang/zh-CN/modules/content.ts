@@ -37,6 +37,27 @@ export default {
     ruleVisible: '请选择是否可见'
   },
 
+  navigateButton: {
+    pageTitle: '导航按钮',
+    pageDesc: '维护小程序导航按钮的中英文名称、排序、激活状态、图标与关联文章。',
+    formAdd: '新增导航按钮',
+    formEdit: '编辑导航按钮',
+    fieldCnName: '中文名',
+    fieldEnName: '英文名',
+    fieldSort: '排序',
+    fieldActive: '是否激活',
+    fieldIcon: '图标',
+    fieldArticles: '关联文章',
+    transferSource: '文章列表',
+    transferTarget: '已关联文章',
+    confirmDelete: '确定要删除吗？',
+    ruleCnName: '请输入中文名',
+    ruleEnName: '请输入英文名',
+    ruleSort: '请输入排序',
+    ruleActive: '请选择是否激活',
+    ruleIcon: '请上传图标'
+  },
+
   category: {
     pageTitle: '文章分类',
     pageDesc: '维护文章内容分类的中英文名称、排序与可见性。',

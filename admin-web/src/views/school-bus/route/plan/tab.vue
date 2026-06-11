@@ -6,7 +6,7 @@
         <p>{{ $t('schoolBus.routePlan.pageDesc') }}</p>
       </div>
       <div v-if="activeTab === 'routes'" class="uni-list-page__header-actions">
-        <el-button v-uni-permission="'busline_import'" @click="downloadRouteTemplate">
+        <el-button v-uni-permission="'busline_download'" @click="downloadRouteTemplate">
           {{ $t('schoolBus.routePlan.downloadRouteTemplate') }}
         </el-button>
         <el-button v-uni-permission="'busline_import'" @click="routeFileRef?.click()">
@@ -26,7 +26,7 @@
         </el-button>
       </div>
       <div v-else-if="activeTab === 'station'" class="uni-list-page__header-actions">
-        <el-button v-uni-permission="'busstation_import'" @click="downloadStationTemplate">
+        <el-button v-uni-permission="'busstation_download'" @click="downloadStationTemplate">
           {{ $t('schoolBus.routePlan.downloadStationTemplate') }}
         </el-button>
         <el-button v-uni-permission="'busstation_import'" @click="stationFileRef?.click()">

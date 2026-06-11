@@ -6,7 +6,7 @@
     </div>
     <div class="uni-list-page__header-actions">
       <el-button
-        v-uni-permission="'busorder_import_intention_order'"
+        v-uni-permission="'busorder_down_intention_order'"
         @click="emit('download-template')"
       >
         {{ $t('schoolBus.downloadTemplate') }}

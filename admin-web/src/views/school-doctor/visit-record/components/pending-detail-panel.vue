@@ -81,6 +81,7 @@
 </template>
 
 <script setup lang="ts">
+import { usePermissionCodeStore } from '@/stores'
 import { useUniI18n } from 'uni-ui-lib'
 import { computed, ref, watch } from 'vue'
 
@@ -107,10 +108,18 @@ const emit = defineEmits<{
 const operationForm = defineModel<PendingOperationFormModel>('operationForm', { required: true })
 
 const { t } = useUniI18n()
+const permissionCodeStore = usePermissionCodeStore()
 const studentSelectRef = ref<InstanceType<typeof StudentRemoteSelect> | null>(null)
 const operationFormRef = ref<InstanceType<typeof PendingOperationForm> | null>(null)
 
-const canEditOperation = computed(() => true)
+/** 与旧 detail.vue canEditPendingOperation 一致：未下发权限码时不拦截 */
+const canEditOperation = computed(() => {
+  const codes = permissionCodeStore.permissionCodes as string[] | undefined
+  if (!codes?.length) {
+    return true
+  }
+  return permissionCodeStore.hasPermission('pendingmedication_operation_edit')
+})
 
 const application = computed(() => {
   const d = props.detail

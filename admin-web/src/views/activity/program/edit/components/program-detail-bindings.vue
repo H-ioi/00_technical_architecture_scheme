@@ -5,7 +5,7 @@
         <div class="program-detail-bindings__header">
           <span>{{ $t('activity.programPrizeSection') }}</span>
           <el-button
-            v-if="!prizeRows.length"
+            v-if="bindingEditable && !prizeRows.length"
             v-uni-permission="'busdriver_edit'"
             type="primary"
             size="small"
@@ -36,7 +36,7 @@
         <div class="program-detail-bindings__header">
           <span>{{ $t('activity.programPoolSection') }}</span>
           <div
-            v-if="!poolRows.length"
+            v-if="bindingEditable && !poolRows.length"
             v-uni-permission="'busdriver_edit'"
             class="program-detail-bindings__header-actions"
           >
@@ -73,6 +73,7 @@
         <div class="program-detail-bindings__header">
           <span>{{ $t('activity.voteProgramTitle') }}</span>
           <el-button
+            v-if="bindingEditable"
             v-uni-permission="'busdriver_edit'"
             type="primary"
             size="small"
@@ -119,7 +120,11 @@ const props = defineProps<{
   programId: string
   programType: string
   createLotteryPool: string
+  /** 与旧 `canEditProgram` / 详情页 `canEdit` 一致：活动已结束或项目不可编辑时隐藏绑定区写操作 */
+  bindingEditable?: boolean
 }>()
+
+const bindingEditable = computed(() => props.bindingEditable !== false)
 
 const { t } = useUniI18n()
 const tr = t as Translate
@@ -146,54 +151,78 @@ const voteCols = computed(() => voteBindColumns(tr))
 
 const bindOpts = computed(() => ({ bindProgramId: props.programId }))
 
-const prizeActions = computed<UniTableAction<ActivityPrizeRow>[]>(() => [
-  {
-    label: tr('activity.lookDetail'),
-    onClick: (row) => prizeDlgRef.value?.open('view', row, bindOpts.value)
-  },
-  {
-    label: tr('activity.entryEdit'),
-    code: 'busdriver_edit',
-    onClick: (row) => prizeDlgRef.value?.open('edit', row, bindOpts.value)
-  },
-  {
-    label: tr('activity.delBatch'),
-    code: 'busdriver_del',
-    type: 'danger',
-    onClick: (row) => removePrize(row)
+const prizeActions = computed<UniTableAction<ActivityPrizeRow>[]>(() => {
+  const viewOnly: UniTableAction<ActivityPrizeRow>[] = [
+    {
+      label: tr('activity.lookDetail'),
+      onClick: (row) => prizeDlgRef.value?.open('view', row, bindOpts.value)
+    }
+  ]
+  if (!bindingEditable.value) {
+    return viewOnly
   }
-])
+  return [
+    ...viewOnly,
+    {
+      label: tr('activity.entryEdit'),
+      code: 'busdriver_edit',
+      onClick: (row) => prizeDlgRef.value?.open('edit', row, bindOpts.value)
+    },
+    {
+      label: tr('activity.delBatch'),
+      code: 'busdriver_del',
+      type: 'danger',
+      onClick: (row) => removePrize(row)
+    }
+  ]
+})
 
-const voteActions = computed<UniTableAction<Loose>[]>(() => [
-  {
-    label: tr('activity.lookDetail'),
-    onClick: (row) => voteDlgRef.value?.open('view', row, bindOpts.value)
-  },
-  {
-    label: tr('activity.entryEdit'),
-    code: 'busdriver_edit',
-    onClick: (row) => voteDlgRef.value?.open('edit', row, bindOpts.value)
-  },
-  {
-    label: tr('activity.delBatch'),
-    code: 'busdriver_del',
-    type: 'danger',
-    onClick: (row) => removeVote(row)
+const voteActions = computed<UniTableAction<Loose>[]>(() => {
+  const viewOnly: UniTableAction<Loose>[] = [
+    {
+      label: tr('activity.lookDetail'),
+      onClick: (row) => voteDlgRef.value?.open('view', row, bindOpts.value)
+    }
+  ]
+  if (!bindingEditable.value) {
+    return viewOnly
   }
-])
+  return [
+    ...viewOnly,
+    {
+      label: tr('activity.entryEdit'),
+      code: 'busdriver_edit',
+      onClick: (row) => voteDlgRef.value?.open('edit', row, bindOpts.value)
+    },
+    {
+      label: tr('activity.delBatch'),
+      code: 'busdriver_del',
+      type: 'danger',
+      onClick: (row) => removeVote(row)
+    }
+  ]
+})
 
-const poolActions = computed<UniTableAction<Loose>[]>(() => [
-  {
-    label: tr('activity.programPoolViewMembers'),
-    onClick: (row) => openPoolMembers(row)
-  },
-  {
-    label: tr('activity.delBatch'),
-    code: 'busdriver_del',
-    type: 'danger',
-    onClick: (row) => removePoolFile(row)
+const poolActions = computed<UniTableAction<Loose>[]>(() => {
+  const viewOnly: UniTableAction<Loose>[] = [
+    {
+      label: tr('activity.programPoolViewMembers'),
+      onClick: (row) => openPoolMembers(row)
+    }
+  ]
+  if (!bindingEditable.value) {
+    return viewOnly
   }
-])
+  return [
+    ...viewOnly,
+    {
+      label: tr('activity.delBatch'),
+      code: 'busdriver_del',
+      type: 'danger',
+      onClick: (row) => removePoolFile(row)
+    }
+  ]
+})
 
 const loadPrizes = async () => {
   if (!props.programId || props.programType !== '1') {

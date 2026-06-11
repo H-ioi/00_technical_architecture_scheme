@@ -125,18 +125,21 @@ export function useProgramEditPage() {
     if (!detailId.value) {
       return false
     }
+    // Old detail `canEditProgram`: null/empty activity status → not editable
+    if (activityStatus.value === '') {
+      return false
+    }
     if (activityStatus.value === '3') {
       return false
     }
-    const programEditable = canEditProgramRow({
+    if (activityStatus.value !== '2') {
+      return true
+    }
+    return canEditProgramRow({
       programStatus: serverStatus.value,
       programType: serverType.value,
       totalRounds: serverTotalRounds.value
     })
-    if (activityStatus.value === '2') {
-      return programEditable
-    }
-    return programEditable
   })
 
   const canSubmit = computed(() => isEditRoute.value && (isCreate.value || canEdit.value))

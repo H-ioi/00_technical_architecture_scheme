@@ -44,6 +44,7 @@ export default {
   emailOutbox: '发件列表',
   content: '内容管理',
   contentAnnouncement: '公告内容',
+  contentNavigateButton: '导航按钮',
   contentArticle: '文章管理',
   contentArticleList: '文章内容',
   contentArticleCategory: '文章分类',

@@ -44,6 +44,7 @@ export default {
   emailOutbox: 'Outbox',
   content: 'Content',
   contentAnnouncement: 'Announcements',
+  contentNavigateButton: 'Navigation buttons',
   contentArticle: 'Articles',
   contentArticleList: 'Article list',
   contentArticleCategory: 'Categories',

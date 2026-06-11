@@ -37,6 +37,27 @@ export default {
     ruleVisible: 'Select visibility'
   },
 
+  navigateButton: {
+    pageTitle: 'Navigation buttons',
+    pageDesc: 'Manage mini-program nav buttons: names, sort order, active state, icon, and linked articles.',
+    formAdd: 'Add navigation button',
+    formEdit: 'Edit navigation button',
+    fieldCnName: 'Chinese name',
+    fieldEnName: 'English name',
+    fieldSort: 'Sort order',
+    fieldActive: 'Active',
+    fieldIcon: 'Icon',
+    fieldArticles: 'Linked articles',
+    transferSource: 'Article list',
+    transferTarget: 'Linked articles',
+    confirmDelete: 'Delete this navigation button?',
+    ruleCnName: 'Enter Chinese name',
+    ruleEnName: 'Enter English name',
+    ruleSort: 'Enter sort order',
+    ruleActive: 'Select active state',
+    ruleIcon: 'Upload an icon'
+  },
+
   category: {
     pageTitle: 'Article categories',
     pageDesc: 'Manage bilingual category names, sort order, and visibility.',

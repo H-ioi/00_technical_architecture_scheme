@@ -24,6 +24,9 @@ import contentDiscussionApi from './modules/content-discussion'
 import contentDiscussionCommentApi from './modules/content-discussion-comment'
 import contentDiscussionLikeSaveApi from './modules/content-discussion-like-save'
 import contentDiscussionTagApi from './modules/content-discussion-tag'
+import contentFoodWeeklyApi from './modules/content-food-weekly'
+import contentMomentApi from './modules/content-moment'
+import contentNavigateButtonApi from './modules/content-navigate-button'
 import dormAssignRuleApi from './modules/dorm-assign-rule'
 import dormBedApi from './modules/dorm-bed'
 import dormBuildingApi from './modules/dorm-building'
@@ -31,8 +34,6 @@ import dormFloorApi from './modules/dorm-floor'
 import dormProjectApi from './modules/dorm-project'
 import dormRoomApi from './modules/dorm-room'
 import dormStudentApi from './modules/dorm-student'
-import contentFoodWeeklyApi from './modules/content-food-weekly'
-import contentMomentApi from './modules/content-moment'
 import medicalArchiveApi from './modules/medical-archive'
 import medicalInfoApi from './modules/medical-info'
 import membershipApi from './modules/membership'
@@ -102,6 +103,7 @@ export {
   dormStudentApi,
   contentFoodWeeklyApi,
   contentMomentApi,
+  contentNavigateButtonApi,
   medicalArchiveApi,
   medicalInfoApi,
   membershipApi,

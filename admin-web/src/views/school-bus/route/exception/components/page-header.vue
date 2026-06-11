@@ -8,7 +8,7 @@
       <el-button v-uni-permission="'busexception_export'" @click="emit('export')">
         {{ $t('schoolBus.export') }}
       </el-button>
-      <el-button v-uni-permission="'busexception_import'" @click="emit('download-template')">
+      <el-button v-uni-permission="'busexception_download'" @click="emit('download-template')">
         {{ $t('schoolBus.downloadTemplate') }}
       </el-button>
       <el-button v-uni-permission="'busexception_import'" @click="fileRef?.click()">

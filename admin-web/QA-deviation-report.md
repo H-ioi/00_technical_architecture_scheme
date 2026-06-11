@@ -12,16 +12,16 @@
 
 | 模块 | 最高严重度 | 发现数 | 已修复 | 状态 |
 | --- | --- | --- | --- | --- |
-| Activity | P1 | 3 | 2 | 1 项待产品/人工 QA |
-| Attendance | P1 | 3 | 1 | 销假流程未迁移 |
+| Activity | P1 | 3 | 3 | ✅ 静态对齐 |
+| Attendance | P1 | 3 | 3 | ✅ 销假已迁移 |
 | Email | — | 0 | 0 | ✅ 已核对 OK |
-| School bus | P2 | 1 | 0 | API 对齐；导入字段待浏览器 QA |
-| Content | P2 | 1 | 0 | 导航按钮未迁移（已知） |
+| School bus | P2 | 1 | 1 | ✅ 静态对齐 |
+| Content | P2 | 1 | 1 | ✅ 导航按钮已迁移 |
 | Dorm | — | 0 | 0 | ✅ 已核对 OK |
-| School doctor | P2 | 1 | 0 | 就诊记录细粒度权限待补 |
+| School doctor | P2 | 1 | 1 | 就诊记录操作编辑权限已对齐 |
 | Member / Base / Protocol / Permission | — | 0 | 0 | ✅ 已核对 OK |
 
-**合计**：11 条发现（P0: 0 · P1: 5 · P2: 6）· **本轮修复 4 条**
+**合计**：11 条发现（P0: 0 · P1: 5 · P2: 6）· **本轮修复 10 条**（累计 1 条 N/A）
 
 ---
 
@@ -32,6 +32,12 @@
 | DEV-001 | Activity | 活动列表缺少「批量取消发布」API 与工具栏按钮 | `activity.ts` 增加 `batchResetToPending`；`list.vue` 增加按钮与 i18n |
 | DEV-003 | Activity | 问卷列表权限码与旧页不一致 | 改为 `questionnaire_add/delete/edit_status/edit_frozen/edit/copy` |
 | DEV-004 | Attendance | 请假 Tab 删除按钮未校验 `holiday-delete` | `tab.vue` 删除 action 增加 `code: 'holiday-delete'` |
+| DEV-002 | Activity | 活动项目详情绑定区未受 `canEditProgram` 约束 | `program-detail-bindings.vue` 增加 `bindingEditable`；`edit/index.vue` 传入 `canEdit` |
+| DEV-006 | Attendance | 请假 Tab 缺少「销假」入口 | `holidayReturnSave` API + `cancel-return-dialog.vue` + `tab.vue` 行操作（1101 且 dataFrom≠MB） |
+| DEV-005 | Activity | 问卷设计页权限码与旧页不一致 | `edit.vue` 保存/进入设计改为 `questionnaire_edit`（旧 index 行内编辑同码；设计页本身无独立权限） |
+| DEV-011 | School doctor | 待用药操作记录编辑权限 | `pending-detail-panel.vue` `canEditOperation` 对齐旧 `pendingmedication_operation_edit` |
+| DEV-010 | Content | 导航按钮模块未迁移 | `views/content/navigate-button/` + `content-navigate-button.ts` API；路由 `/content/navigate-button`；`MENU_PATH_ALIASES` |
+| DEV-009 | School bus | 导入导出权限码/模板文件名 | 下载模板按钮对齐旧 `*_download` / `busorder_down_*` 权限；模板/导出改用 `content-disposition`（`downloadResponseBlob`） |
 
 ---
 
@@ -48,37 +54,38 @@
 | **实际（修复前）** | 仅有 `batchPublish`，无取消发布入口 |
 | **建议** | ✅ 已按旧接口补齐 |
 
-#### DEV-002 · P1 · 待补
+#### DEV-002 · P1 · 已修复
 | | |
 | --- | --- |
-| **旧** | `activity/program/detail/index.vue`：抽奖项目 `programType==1` 时展示奖品绑定、奖池导入、投票项目 `programType==2` 时展示投票绑定 |
-| **新** | `views/activity/program/edit/components/program-detail-bindings.vue`（查看态 `detailId` 时渲染） |
-| **预期** | 绑定区 API：`prize/listByProgram`、`lotteryPoolFile/*`、`voteProgram/listByprogram`；编辑按钮受活动 `activityStatus` 只读约束 |
-| **实际** | 组件与 API 路径已对齐；**活动只读态**（已结束活动）下编辑/导入按钮是否应隐藏需浏览器 QA（旧 `canEditProgram` 逻辑） |
-| **建议** | 人工 QA D-52～D-56；若只读态仍可操作则补 `readOnly` 与旧 `canEditProgram` 一致 |
+| **旧** | `activity/program/detail/index.vue`：`canEditProgram` 受活动 `activityStatus` 约束 |
+| **新** | `program-detail-bindings.vue` + `use-program-edit.ts` `canEdit` |
+| **预期** | 活动已结束（status=3）或项目不可编辑时，绑定区隐藏新增/编辑/删除/导入；`canEdit` 与旧 `canEditProgram` 等价（非进行中活动可编辑、进行中按 program 规则） |
+| **实际（修复前）** | 绑定区写操作始终可见；`canEdit` 始终走 `canEditProgramRow` |
+| **建议** | ✅ `bindingEditable={canEdit}`；OPT-001 已修复 `canEdit` 分支逻辑 |
 
 #### DEV-003 · P1 · 已修复
 见「已修复」表。
 
-#### DEV-005 · P2
+#### DEV-005 · P2 · 已修复
 | | |
 | --- | --- |
-| **旧** | `activity/questionnaire/index.vue`：`questionnaire_add` 等独立权限 |
-| **新（修复前）** | 问卷页统一使用 `busdriver_edit/del` |
-| **建议** | ✅ 行内/批量权限已改回旧码；`questionnaire/edit.vue` 内按钮仍为 `busdriver_edit`（旧设计页无独立菜单，影响低） |
+| **旧** | `activity/questionnaire/index.vue` 行内「编辑」→ `questionnaire_edit`；`templateform.vue` 设计页无独立权限按钮 |
+| **新** | `questionnaire/edit.vue` |
+| **预期** | 设计/保存按钮与列表编辑同权限码 |
+| **实际（修复前）** | 使用 `busdriver_edit` |
+| **建议** | ✅ 已改为 `questionnaire_edit` |
 
 ---
 
 ### Attendance
 
-#### DEV-006 · P1 · 待补
+#### DEV-006 · P1 · 已修复
 | | |
 | --- | --- |
-| **旧** | `attendance/holiday/leaveManage.vue`：`status==1101 && dataFrom!='MB'` 显示「销假」→ `dialog/cancel.vue` → POST `/attendance/holiday-return/save-holiday-return` |
-| **新** | `views/attendance/holiday/tab.vue` 请假 Tab 仅有「撤销」(1100/1103)、查看、删除；**无销假入口** |
-| **预期** | 休假中记录可发起销假；销假 Tab 仅展示历史 |
-| **实际** | `attendance-holiday.ts` 无 `holidayReturnSave`；无销假弹窗组件 |
-| **建议** | 迁移 `cancel.vue` 交互 + API `save-holiday-return`（勿猜测表单字段，照抄旧 payload） |
+| **旧** | `attendance/holiday/leaveManage.vue`：`status==1101 && dataFrom!='MB'` → `dialog/cancel.vue` → POST `/attendance/holiday-return/save-holiday-return` |
+| **新** | `tab.vue` + `components/cancel-return-dialog.vue` + `attendance-holiday.ts` `holidayReturnSave` |
+| **预期** | 休假中记录可发起销假；payload 与旧 `cancel.vue` 一致 |
+| **建议** | ✅ 已迁移；浏览器 QA 销假 Tab 列表刷新 |
 
 #### DEV-007 · P1 · 已修复（撤销规则）
 | | |
@@ -90,13 +97,13 @@
 #### DEV-004 · P1 · 已修复
 见「已修复」表。
 
-#### DEV-008 · P2
+#### DEV-008 · P2 · 不修复（N/A）
 | | |
 | --- | --- |
 | **旧** | `holiday.js` 含 `cancelHoliday`（POST `/holiday/cancel`）、`startFlowInstance` |
 | **新** | 未封装上述接口 |
 | **实际** | 旧 `add.vue` 新建/编辑仅调 `saveHoliday`/`updateHoliday`，上述 API 在旧 views 中**无引用** |
-| **建议** | 暂不实现；若后端仍要求单独启动流程再立项 |
+| **建议** | ⏭ **Won't fix / N/A** — 旧 views 无调用；若后端流程变更再单独立项 |
 
 ---
 
@@ -110,27 +117,42 @@
 
 ### School bus
 
-#### DEV-009 · P2
+#### DEV-009 · P2 · 已修复（静态对齐）
 | | |
 | --- | --- |
-| **旧** | `busorder.js` 乘车学生/意向导入导出、`busattendance.js` CRUD |
-| **新** | `school-bus-order.ts`、`school-bus-attendance.ts` |
-| **预期** | 路径与方法一致 |
-| **实际** | 静态对比 **API 对齐**；批量导入 VERSION 头、模板文件名需浏览器 QA |
-| **建议** | QA D-19～D-24 |
+| **旧** | 9 处导入导出：`busdriver/car/busorder/busoperation/busexception/busline/busstation/teacheruser`；模板下载权限 `*_download` / `busorder_down_*`；文件名取自 `content-disposition` |
+| **新** | `school-bus-*.ts` API + `views/school-bus/**` 列表页 |
+| **预期** | 路径/HTTP/FormData `file` 字段一致；下载与导入权限分离；导出参数 `{ ...search, 去 size/current }` |
+| **实际（修复前）** | API 路径已对齐；部分页下载模板误用 `*_import` 权限；模板/导出使用硬编码文件名 |
+| **建议** | ✅ 已修复：权限码 + `rawResponse`/`downloadResponseBlob` 对齐旧 `util/download.js` 行为 |
+
+**模块核对摘要**
+
+| 模块 | 导入 API | 模板 API | 导出 API | 下载权限 | 导入权限 |
+| --- | --- | --- | --- | --- | --- |
+| 司机 | POST `/busdriver/import` | GET `/download` | — | `busdriver_download` | `busdriver_import` |
+| 车辆 | POST `/buscarinfo/import` | GET `/download` | — | `buscarinfo_download` | `buscarinfo_import` |
+| 跟车老师 | POST `/teacher/user/import` | GET `/download` | GET `/export` | `teacheruser_download` | `teacheruser_import` |
+| 申请意向 | POST `/busorder/importIntentionOrder` | GET `/downloadIntentionOrder` | — | `busorder_down_intention_order` | `busorder_import_intention_order` |
+| 乘车学生 | POST `/busorder/importOrder` | GET `/downloadOrder` | GET `/exportOrder` | `busorder_down_order` | `busorder_import_order` |
+| 路线运营 | POST `/busoperation/import` | GET `/download` | GET `/export` | `busoperation_download` | `busoperation_import` |
+| 异常上报 | POST `/busexception/import` | GET `/download` | GET `/export` | `busexception_download` | `busexception_import` |
+| 路线规划 | POST `/busline/import` | GET `/download` | — | `busline_download` | `busline_import` |
+| 站点 | POST `/busstation/import` | GET `/download` | — | `busstation_download` | `busstation_import` |
 
 ---
 
 ### Content
 
-#### DEV-010 · P2 · 产品决策
+#### DEV-010 · P2 · 已修复
 | | |
 | --- | --- |
 | **旧** | `content/navbutton/` + `content.js` → `/isacommunity/content/navigate-button/*` |
-| **新** | **未迁移**（方案 §15.10 / QA C-25） |
-| **建议** | 确认生产菜单是否仍下发；若需要则单独立项 |
+| **新** | `views/content/navigate-button/`、`api/modules/content-navigate-button.ts`、`router/modules/content.ts`、`menu.ts` 别名 |
+| **预期** | 列表分页、CRUD、`el-transfer` 关联文章（`/article/visible`）、图标上传（`parent_weapp_upload`）、权限 `busdriver_edit` |
+| **建议** | ✅ 已迁移；浏览器 QA 关联文章与图标上传 |
 
-其余 9 个子模块（公告、食谱、校园生活、文章/分类、讨论列表/标签/评论/点赞收藏）：API 前缀与 HTTP 方法与 `content.js` 一致。
+其余 10 个子模块（公告、食谱、校园生活、文章/分类、讨论列表/标签/评论/点赞收藏、**导航按钮**）：API 前缀与 HTTP 方法与 `content.js` 一致。
 
 ---
 
@@ -143,12 +165,14 @@
 
 ### School doctor
 
-#### DEV-011 · P2
+#### DEV-011 · P2 · 已修复
 | | |
 | --- | --- |
-| **旧** | `visitRecord/detail.vue`：多条 `pendingmedication_*` / 就诊字段级权限 |
-| **新** | `visit-record/components/pending-drawer.vue` 部分使用 `pendingmedication_operation_edit` |
-| **建议** | 对照旧 detail 权限表逐项补 `code`；人工 QA D-73～D-80 |
+| **旧** | `visitRecord/detail.vue`：`pendingmedication_operation_edit`（未下发时不拦截） |
+| **新** | `pending-detail-panel.vue` + `pending-drawer.vue` |
+| **预期** | 操作记录「编辑」按钮受 `pendingmedication_operation_edit` 约束 |
+| **实际（修复前）** | `canEditOperation` 恒为 `true` |
+| **建议** | ✅ 已对齐；旧代码无其他 `pendingmedication_*` 字段级权限 |
 
 其余模块（档案、医疗信息、规章、用药、疾病、传染病、体检）：API 与主列表权限（`medicalinfo_*`、`medicationapplication_add` 等）静态对齐。
 
@@ -175,11 +199,11 @@
 
 ## Top 5 · 需产品/后续决策
 
-1. **请假「销假」入口缺失**（DEV-006）— 影响业务闭环，建议 P1 排期迁移旧 `cancel.vue`。
-2. **内容「导航按钮」未迁移**（DEV-010）— 菜单若仍下发则用户 404。
-3. **活动项目详情只读态**（DEV-002）— 已结束活动是否禁止绑定/导入，需确认旧 `canEditProgram` 行为。
-4. **校医就诊记录字段级权限**（DEV-011）— 是否全量照搬旧 detail 权限表。
-5. **问卷设计页 `?id=` 书签**（QA C-25 可选）— 旧 `templateresult`/`form` query 风格 vs 新 path 参数。
+1. **问卷设计页 `?id=` 书签**（QA C-25 可选）— 旧 `templateresult`/`form` query 风格 vs 新 path 参数。
+2. **活动绑定区行为**（DEV-002 / OPT-001）— 静态已对齐 `canEditProgram`；D-52～D-56 仍建议浏览器回归。
+3. **销假流程**（DEV-006）— 静态已迁移；浏览器 QA 销假 Tab 列表刷新。
+4. **导航按钮**（DEV-010）— 静态已迁移；浏览器 QA 图标上传与文章关联。
+5. **校车导入导出**（DEV-009）— 静态已闭合；可选浏览器冒烟 D-08/D-11 等。
 
 ---
 
@@ -188,3 +212,8 @@
 | 日期 | 说明 |
 | --- | --- |
 | 2026-06-11 | 首版：8 模块静态对照；修复 DEV-001/003/004 |
+| 2026-06-11 | 修复 DEV-002/006：活动绑定只读态、请假销假流程 |
+| 2026-06-11 | 修复 DEV-005/011；DEV-008 N/A、DEV-009 静态 OK |
+| 2026-06-11 | 修复 DEV-010：迁移内容「导航按钮」模块 |
+| 2026-06-11 | 修复 DEV-009：校车导入导出权限码 + content-disposition 文件名对齐 |
+| 2026-06-11 | OPT-001：`canEdit` 对齐旧 `canEditProgram`（DEV-002 绑定区逻辑闭合） |

@@ -21,6 +21,15 @@ export const contentRoute: AppRouteRecord = {
       }
     },
     {
+      path: 'navigate-button',
+      name: 'ContentNavigateButton',
+      component: () => import('@/views/content/navigate-button/list.vue'),
+      meta: {
+        title: '导航按钮',
+        titleKey: 'route.contentNavigateButton'
+      }
+    },
+    {
       path: 'article',
       name: 'ContentArticle',
       redirect: '/content/article/list',

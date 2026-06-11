@@ -1,5 +1,6 @@
 import type { ExceptionFormModel, ExceptionListParams } from '@/types/modules/school-bus-exception'
-import { downloadBlob } from '@/utils/download'
+import { downloadResponseBlob } from '@/utils/download'
+import type { AxiosResponse } from 'axios'
 import { request } from 'uni-ui-lib'
 
 const base = '/isacommunity/busexception'
@@ -53,20 +54,22 @@ export default {
   export: {
     url: `${base}/export`,
     get: async function (this: { url: string }, params: Record<string, unknown>) {
-      return await request.get<Blob, Blob>(this.url, {
+      return await request.get<Blob, AxiosResponse<Blob>>(this.url, {
         params,
-        responseType: 'blob'
+        responseType: 'blob',
+        rawResponse: true
       })
     }
   },
   template: {
     url: `${base}/download`,
     download: async function (this: { url: string }, filename = 'exception-import-template.xlsx') {
-      const blob = await request.get<Blob, Blob>(this.url, {
-        responseType: 'blob'
+      const response = await request.get<Blob, AxiosResponse<Blob>>(this.url, {
+        responseType: 'blob',
+        rawResponse: true
       })
 
-      downloadBlob(blob, filename)
+      downloadResponseBlob(response, filename)
     }
   }
 }

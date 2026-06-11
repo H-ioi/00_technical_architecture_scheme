@@ -34,7 +34,7 @@
           :pagination="{ pageSize: 10, pageSizes: [10, 20, 50, 100] }"
           :toolbar="{ refresh: true, density: true, columnSetting: true }"
           :actions="leaveActions"
-          :action-column="{ width: 110, fixed: 'right' }"
+          :action-column="{ width: 150, fixed: 'right' }"
           @load-success="leaveTableEmpty.onLoadSuccess"
           @request-error="leaveTableEmpty.onRequestError"
         >
@@ -86,6 +86,12 @@
 
     <HolidayFormDrawer v-model:visible="leaveAddVisible" @success="refreshLeaveTable" />
 
+    <CancelReturnDialog
+      v-model:visible="cancelReturnVisible"
+      :leave-row="cancelReturnRow"
+      @success="refreshLeaveTable"
+    />
+
     <DetailDrawer
       v-model:visible="leaveDetailVisible"
       :source="leaveDetailModel"
@@ -124,6 +130,7 @@ import { normalizeEnvelope, normalizePaged } from '@/utils/api-response-normaliz
 import { normalizeHolidayListRow, normalizeHolidayReturnRow } from '@/utils/attendance-holiday'
 import { dateFormat } from '@/utils/tool'
 import DetailDrawer from './components/detail-drawer.vue'
+import CancelReturnDialog from './components/cancel-return-dialog.vue'
 import HolidayFormDrawer from './components/holiday-form-drawer.vue'
 import {
   detailForm,
@@ -142,6 +149,8 @@ const activeTab = ref<(typeof HOLIDAY_TABS)[number]>('leave')
 useTabQuerySync(activeTab, HOLIDAY_TABS)
 const schoolRecords = ref<SchoolOptionRecord[]>([])
 const leaveAddVisible = ref(false)
+const cancelReturnVisible = ref(false)
+const cancelReturnRow = ref<AttendanceHolidayRecord | null>(null)
 const { locale, t } = useUniI18n()
 
 const schoolOptions = computed(() =>
@@ -266,6 +275,11 @@ const removeLeaveRow = (row: AttendanceHolidayRecord) => {
     .catch(() => {})
 }
 
+const openCancelReturn = (row: AttendanceHolidayRecord) => {
+  cancelReturnRow.value = row
+  cancelReturnVisible.value = true
+}
+
 const leaveActions = computed<UniTableAction[]>(() => [
   {
     label: t('attendance.holiday.withdraw'),
@@ -278,6 +292,18 @@ const leaveActions = computed<UniTableAction[]>(() => [
       return st === '1100' || st === 1100 || st === '1103' || st === 1103
     },
     onClick: (row) => withdrawLeave(row as AttendanceHolidayRecord)
+  },
+  {
+    label: t('attendance.holiday.cancelReturn'),
+    visible: (row) => {
+      const r = row as Loose
+      if (r.dataFrom === 'MB' || r.data_from === 'MB') {
+        return false
+      }
+      const st = (row as AttendanceHolidayRecord).status
+      return st === '1101' || st === 1101
+    },
+    onClick: (row) => openCancelReturn(row as AttendanceHolidayRecord)
   },
   {
     label: t('attendance.detail'),

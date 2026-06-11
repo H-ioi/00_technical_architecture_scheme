@@ -4,7 +4,8 @@ import type {
   DriverListParams,
   DriverRecord
 } from '@/types/modules/school-bus-driver'
-import { downloadBlob } from '@/utils/download'
+import { downloadResponseBlob } from '@/utils/download'
+import type { AxiosResponse } from 'axios'
 import { request } from 'uni-ui-lib'
 
 const base = '/isacommunity/busdriver'
@@ -73,11 +74,12 @@ export default {
     url: `${base}/download`,
     name: '下载导入模板',
     download: async function (this: { url: string }, filename = 'driver-import-template.xlsx') {
-      const blob = await request.get<Blob, Blob>(this.url, {
-        responseType: 'blob'
+      const response = await request.get<Blob, AxiosResponse<Blob>>(this.url, {
+        responseType: 'blob',
+        rawResponse: true
       })
 
-      downloadBlob(blob, filename)
+      downloadResponseBlob(response, filename)
     }
   }
 }

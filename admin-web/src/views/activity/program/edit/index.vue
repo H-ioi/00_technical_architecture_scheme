@@ -79,6 +79,7 @@
         :program-id="detailId"
         :program-type="String(form.programType || '')"
         :create-lottery-pool="String(form.createLotteryPool || '')"
+        :binding-editable="canEdit"
       />
     </div>
   </section>

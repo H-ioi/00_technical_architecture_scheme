@@ -11,7 +11,7 @@
             {{ $t('activity.copySignupLink') }}
           </el-button>
           <el-button
-            v-uni-permission="'busdriver_edit'"
+            v-uni-permission="'questionnaire_edit'"
             :disabled="!outerReady"
             @click="goEditDesign"
           >
@@ -26,7 +26,7 @@
         </template>
         <template v-else>
           <el-button
-            v-uni-permission="'busdriver_edit'"
+            v-uni-permission="'questionnaire_edit'"
             type="primary"
             :loading="saving"
             :disabled="!outerReady"

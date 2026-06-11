@@ -9,7 +9,7 @@
         <el-button v-uni-permission="'busorder_export_order'" @click="exportData">
           {{ $t('schoolBus.export') }}
         </el-button>
-        <el-button v-uni-permission="'busorder_import_order'" @click="downloadOrderTemplate">
+        <el-button v-uni-permission="'busorder_down_order'" @click="downloadOrderTemplate">
           {{ $t('schoolBus.downloadTemplate') }}
         </el-button>
         <el-button v-uni-permission="'busorder_import_order'" @click="fileRef?.click()">
@@ -113,7 +113,7 @@ import { useListTableEmpty } from '@/composables/use-list-table-empty'
 import type { SchoolOptionRecord } from '@/types/modules/membership'
 import type { BusOrderRecord, BusOrderListParams } from '@/types/modules/school-bus-order'
 import { normalizePaged } from '@/utils/api-response-normalize'
-import { downloadBlob } from '@/utils/download'
+import { downloadResponseBlob } from '@/utils/download'
 import { membershipSchoolLabel } from '@/utils/membership-school'
 import dayjs from 'dayjs'
 import { ElMessage, ElMessageBox } from 'element-plus'
@@ -356,8 +356,8 @@ const exportData = async () => {
   delete raw.size
   delete raw.current
   try {
-    const blob = await schoolBusOrderApi.exportOrder.get(raw)
-    downloadBlob(blob, 'bus-order-export.xlsx')
+    const response = await schoolBusOrderApi.exportOrder.get(raw)
+    downloadResponseBlob(response, 'bus-order-export.xlsx')
     ElMessage.success(t('schoolBus.exportSuccess'))
   } catch {
     /* request 层已提示 */

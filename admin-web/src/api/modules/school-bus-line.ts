@@ -1,4 +1,5 @@
-import { downloadBlob } from '@/utils/download'
+import { downloadResponseBlob } from '@/utils/download'
+import type { AxiosResponse } from 'axios'
 import { request } from 'uni-ui-lib'
 
 const base = '/isacommunity/busline'
@@ -58,11 +59,12 @@ export default {
   template: {
     url: `${base}/download`,
     download: async function (this: { url: string }, filename = 'route-import-template.xlsx') {
-      const blob = await request.get<Blob, Blob>(this.url, {
-        responseType: 'blob'
+      const response = await request.get<Blob, AxiosResponse<Blob>>(this.url, {
+        responseType: 'blob',
+        rawResponse: true
       })
 
-      downloadBlob(blob, filename)
+      downloadResponseBlob(response, filename)
     }
   }
 }
