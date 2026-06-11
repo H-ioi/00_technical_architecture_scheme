@@ -113,5 +113,6 @@ ${compare.onlyLocal.map((p) => {
 - **未迁移模块**：若菜单/API 有而 admin-web 尚无对应页面，记为 ⚠️，待页面落地时补权限。
 `
 
-fs.writeFileSync(path.join(ROOT, '权限核对清单.md'), md)
-console.log('Wrote', path.join(ROOT, '权限核对清单.md'))
+const outPath = path.join(ROOT, 'doc/qa/权限核对清单.md')
+fs.writeFileSync(outPath, md)
+console.log('Wrote', outPath)

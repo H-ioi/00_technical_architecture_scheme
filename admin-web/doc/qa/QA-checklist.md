@@ -2,7 +2,7 @@
 
 > 对照依据：`test/old-test/src/views/isacommunity/...`  
 > 落地工程：`admin-web`  
-> 方案文档：`isacommunity重构方案.md`  
+> 方案文档：`../plans/isacommunity重构方案.md`  
 > 别名配置：`src/api/modules/menu.ts` → `MENU_PATH_ALIASES`
 
 建议复制到 Excel / 飞书表格，增加列：**执行人 / 日期 / 结果 / 备注**。  

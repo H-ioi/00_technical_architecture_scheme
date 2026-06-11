@@ -2,7 +2,7 @@
 
 > **对照依据**：`test/old-test/src/views/isacommunity/` + 同模块 `api/`、`mixins/`、组件  
 > **落地工程**：`admin-web`  
-> **方案**：`isacommunity重构方案.md`  
+> **方案**：`../plans/isacommunity重构方案.md`  
 > **QA 清单**：`QA-checklist.md`  
 > **审计日期**：2026-06-11
 
