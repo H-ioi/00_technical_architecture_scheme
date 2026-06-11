@@ -250,7 +250,7 @@ const actions = computed<UniTableAction[]>(() => {
       onClick: (row) => onEditRow(row as Loose)
     })
   }
-  if (hasPermission('mailgroup-view')) {
+  if (hasPermission('mailgroup-vieew')) {
     list.push({ label: tr('email.view'), onClick: (row) => openView(row as Loose) })
   }
   if (hasPermission('mailgroup-delete')) {

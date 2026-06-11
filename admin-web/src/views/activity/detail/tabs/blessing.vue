@@ -253,9 +253,7 @@ const { queryModel, filters, handleLoadSuccess, reset, search } = useUniListStat
 const selectedIds = computed(
   () => selectedRows.value.map((row) => row.id).filter((id) => id != null) as Array<string | number>
 )
-const canDelete = computed(
-  () => hasPermission('busdriver_del') || hasPermission('activity_ticket_del')
-)
+const canDelete = computed(() => hasPermission('busdriver_del'))
 
 const decorateRows = (list: Row[], pageNo: number, pageSize: number) => {
   list.forEach((row, index) => {

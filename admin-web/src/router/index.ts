@@ -71,7 +71,14 @@ router.beforeEach(async (to) => {
       routeAccessStore.setAllowedPaths(result?.paths)
 
       if (Array.isArray(result?.permissions) && result.permissions.length) {
-        permissionCodeStore.setPermissionCodes(result.permissions)
+        const cached = permissionCodeStore.permissionCodes
+        const merged = [
+          ...new Set([
+            ...(Array.isArray(cached) ? cached : []),
+            ...result.permissions
+          ])
+        ]
+        permissionCodeStore.setPermissionCodes(merged)
       }
 
       routeAccessStore.markAccessHydrated()

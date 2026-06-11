@@ -207,7 +207,7 @@ const selectedIds = computed(
   () => selectedRows.value.map((row) => row.id).filter((id) => id != null) as Array<string | number>
 )
 const canDeleteRegistration = computed(
-  () => hasPermission('busdriver_del') || hasPermission('activity_ticket_del')
+  () => hasPermission('busdriver_del')
 )
 
 const decorateRows = (list: Row[], pageNo = 1, pageSize = list.length || 1) => {

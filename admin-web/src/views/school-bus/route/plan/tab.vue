@@ -308,13 +308,8 @@ const multiSchool = computed(() => schoolRecords.value.length > 1)
 
 const routeFormRef = ref<InstanceType<typeof RouteFormModal> | null>(null)
 
-/** 复制路线：与后端 `batchCopy` 可对齐的常见码；含 `busline_add`（与新增同源）避免按钮不展示 */
-const ROUTE_LINE_COPY_PERMISSIONS = [
-  'busline_add',
-  'busline_batchCopy',
-  'busline_batchcopy',
-  'busline_copy'
-]
+/** 复制路线：菜单权限码 `busline_batch_copy`；含 `busline_add` 避免仅持新增权限时按钮不展示 */
+const ROUTE_LINE_COPY_PERMISSIONS = ['busline_add', 'busline_batch_copy']
 
 const {
   actions: routeActions,

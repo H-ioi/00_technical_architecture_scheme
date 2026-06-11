@@ -1,0 +1,3594 @@
+{
+  "summary": {
+    "apiButtonCount": 162,
+    "apiUniquePerms": 156,
+    "localUniquePerms": 109,
+    "matched": 109,
+    "onlyApi": 47,
+    "onlyLocal": 0
+  },
+  "apiPerms": [
+    "announcement_add",
+    "announcement_del",
+    "announcement_edit",
+    "archive_wx_openid",
+    "article_add",
+    "article_del",
+    "article_edit",
+    "attribute-add",
+    "attribute-delete",
+    "attribute-edit",
+    "boarding-add",
+    "boarding-assigne",
+    "boarding-checkout",
+    "boarding-delete",
+    "boarding-edit",
+    "boarding-parent-view",
+    "boarding-planCheckOut",
+    "boarding-view",
+    "building-add",
+    "building-delete",
+    "building-edit",
+    "busattendance_add",
+    "busattendance_del",
+    "busattendance_edit",
+    "buscarinfo_add",
+    "buscarinfo_batch_enable",
+    "buscarinfo_del",
+    "buscarinfo_download",
+    "buscarinfo_edit",
+    "buscarinfo_import",
+    "busdriver_add",
+    "busdriver_del",
+    "busdriver_download",
+    "busdriver_edit",
+    "busdriver_import",
+    "busexception_add",
+    "busexception_del",
+    "busexception_download",
+    "busexception_edit",
+    "busexception_export",
+    "busexception_import",
+    "busintentionorder_del",
+    "busline_add",
+    "busline_batch_copy",
+    "busline_del",
+    "busline_download",
+    "busline_edit",
+    "busline_import",
+    "busoperation_add",
+    "busoperation_del",
+    "busoperation_download",
+    "busoperation_edit",
+    "busoperation_export",
+    "busoperation_import",
+    "busorder_add",
+    "busorder_batch_approve",
+    "busorder_batch_deny",
+    "busorder_batch_update_payment_status",
+    "busorder_del",
+    "busorder_down_intention_order",
+    "busorder_down_order",
+    "busorder_edit",
+    "busorder_export_order",
+    "busorder_import_intention_order",
+    "busorder_import_order",
+    "bussection_add",
+    "bussection_del",
+    "bussection_edit",
+    "busstation_add",
+    "busstation_del",
+    "busstation_download",
+    "busstation_edit",
+    "busstation_import",
+    "category_add",
+    "category_del",
+    "category_edit",
+    "comment_add",
+    "comment_del",
+    "comment_edit",
+    "discussion_add",
+    "discussion_del",
+    "discussion_edit",
+    "floor-add",
+    "floor-delete",
+    "floor-edit",
+    "foodweekly_add",
+    "foodweekly_del",
+    "foodweekly_edit",
+    "holiday-delete",
+    "holiday-view",
+    "isedit_bus_intentionorder_pay_info",
+    "isedit_bus_order_pay_info",
+    "isshow_bus_intentionorder_pay_info",
+    "isshow_bus_order_pay_info",
+    "likeandsave_add",
+    "likeandsave_del",
+    "likeandsave_edit",
+    "mailgroup-add",
+    "mailgroup-delete",
+    "mailgroup-edit",
+    "mailgroup-gd",
+    "mailgroup-sy",
+    "mailgroup-vieew",
+    "medicalarchive_edit",
+    "medicalarchive_parent_info",
+    "medicalinfo_add",
+    "medicalinfo_edit",
+    "medicalinfo_export",
+    "medicalinfo_import",
+    "medicationapplication_add",
+    "outgo-delete",
+    "outgo-view",
+    "pass-add",
+    "pass-delete",
+    "pass-generated",
+    "pass-generated-batch",
+    "pass-voided",
+    "pendingmedication_operation_edit",
+    "protocol_add",
+    "protocol_del",
+    "protocol_edit",
+    "protocolsign_export",
+    "questionnaire_add",
+    "questionnaire_copy",
+    "questionnaire_delete",
+    "questionnaire_edit",
+    "questionnaire_edit_frozen",
+    "questionnaire_edit_status",
+    "room-add",
+    "room-assignment",
+    "room-delete",
+    "room-edit",
+    "rule-add",
+    "rule-delete",
+    "rule-edit",
+    "school_attendance_export",
+    "school_attendance_list",
+    "schoollife_add",
+    "schoollife_del",
+    "schoollife_edit",
+    "student_attendance_export",
+    "student_attendance_list",
+    "tag_add",
+    "tag_del",
+    "tag_edit",
+    "teacheruser_add",
+    "teacheruser_del",
+    "teacheruser_disable",
+    "teacheruser_download",
+    "teacheruser_edit",
+    "teacheruser_enble",
+    "teacheruser_export",
+    "teacheruser_import",
+    "union_record_list",
+    "wx_notice_list",
+    "wx_openid_list"
+  ],
+  "localCodes": [
+    "announcement_add",
+    "archive_wx_openid",
+    "article_add",
+    "attribute-add",
+    "attribute-delete",
+    "boarding-add",
+    "boarding-assigne",
+    "boarding-checkout",
+    "boarding-parent-view",
+    "boarding-planCheckOut",
+    "building-add",
+    "building-delete",
+    "building-edit",
+    "busattendance_add",
+    "busattendance_del",
+    "buscarinfo_add",
+    "buscarinfo_del",
+    "buscarinfo_download",
+    "buscarinfo_import",
+    "busdriver_add",
+    "busdriver_del",
+    "busdriver_download",
+    "busdriver_edit",
+    "busdriver_import",
+    "busexception_add",
+    "busexception_del",
+    "busexception_download",
+    "busexception_export",
+    "busexception_import",
+    "busintentionorder_del",
+    "busline_add",
+    "busline_batch_copy",
+    "busline_del",
+    "busline_download",
+    "busline_import",
+    "busoperation_add",
+    "busoperation_del",
+    "busoperation_download",
+    "busoperation_export",
+    "busoperation_import",
+    "busorder_add",
+    "busorder_batch_approve",
+    "busorder_batch_deny",
+    "busorder_batch_update_payment_status",
+    "busorder_del",
+    "busorder_down_intention_order",
+    "busorder_down_order",
+    "busorder_export_order",
+    "busorder_import_intention_order",
+    "busorder_import_order",
+    "bussection_add",
+    "bussection_del",
+    "busstation_add",
+    "busstation_del",
+    "busstation_download",
+    "busstation_import",
+    "category_add",
+    "comment_add",
+    "discussion_add",
+    "floor-add",
+    "floor-delete",
+    "floor-edit",
+    "foodweekly_add",
+    "isedit_bus_intentionorder_pay_info",
+    "isshow_bus_intentionorder_pay_info",
+    "likeandsave_add",
+    "mailgroup-add",
+    "mailgroup-delete",
+    "mailgroup-edit",
+    "mailgroup-gd",
+    "mailgroup-sy",
+    "mailgroup-vieew",
+    "medicalarchive_parent_info",
+    "medicalinfo_add",
+    "medicalinfo_export",
+    "medicalinfo_import",
+    "medicationapplication_add",
+    "outgo-delete",
+    "outgo-view",
+    "pass-add",
+    "pass-delete",
+    "pass-generated",
+    "pass-generated-batch",
+    "pass-voided",
+    "pendingmedication_operation_edit",
+    "protocol_add",
+    "protocol_del",
+    "questionnaire_add",
+    "questionnaire_delete",
+    "questionnaire_edit",
+    "questionnaire_edit_frozen",
+    "questionnaire_edit_status",
+    "room-add",
+    "room-assignment",
+    "room-delete",
+    "room-edit",
+    "rule-add",
+    "rule-delete",
+    "school_attendance_export",
+    "schoollife_add",
+    "student_attendance_export",
+    "tag_add",
+    "teacheruser_add",
+    "teacheruser_del",
+    "teacheruser_disable",
+    "teacheruser_download",
+    "teacheruser_enble",
+    "teacheruser_export",
+    "teacheruser_import"
+  ],
+  "onlyApi": [
+    "announcement_del",
+    "announcement_edit",
+    "article_del",
+    "article_edit",
+    "attribute-edit",
+    "boarding-delete",
+    "boarding-edit",
+    "boarding-view",
+    "busattendance_edit",
+    "buscarinfo_batch_enable",
+    "buscarinfo_edit",
+    "busexception_edit",
+    "busline_edit",
+    "busoperation_edit",
+    "busorder_edit",
+    "bussection_edit",
+    "busstation_edit",
+    "category_del",
+    "category_edit",
+    "comment_del",
+    "comment_edit",
+    "discussion_del",
+    "discussion_edit",
+    "foodweekly_del",
+    "foodweekly_edit",
+    "holiday-delete",
+    "holiday-view",
+    "isedit_bus_order_pay_info",
+    "isshow_bus_order_pay_info",
+    "likeandsave_del",
+    "likeandsave_edit",
+    "medicalarchive_edit",
+    "medicalinfo_edit",
+    "protocol_edit",
+    "protocolsign_export",
+    "questionnaire_copy",
+    "rule-edit",
+    "school_attendance_list",
+    "schoollife_del",
+    "schoollife_edit",
+    "student_attendance_list",
+    "tag_del",
+    "tag_edit",
+    "teacheruser_edit",
+    "union_record_list",
+    "wx_notice_list",
+    "wx_openid_list"
+  ],
+  "onlyLocal": [],
+  "both": [
+    "announcement_add",
+    "archive_wx_openid",
+    "article_add",
+    "attribute-add",
+    "attribute-delete",
+    "boarding-add",
+    "boarding-assigne",
+    "boarding-checkout",
+    "boarding-parent-view",
+    "boarding-planCheckOut",
+    "building-add",
+    "building-delete",
+    "building-edit",
+    "busattendance_add",
+    "busattendance_del",
+    "buscarinfo_add",
+    "buscarinfo_del",
+    "buscarinfo_download",
+    "buscarinfo_import",
+    "busdriver_add",
+    "busdriver_del",
+    "busdriver_download",
+    "busdriver_edit",
+    "busdriver_import",
+    "busexception_add",
+    "busexception_del",
+    "busexception_download",
+    "busexception_export",
+    "busexception_import",
+    "busintentionorder_del",
+    "busline_add",
+    "busline_batch_copy",
+    "busline_del",
+    "busline_download",
+    "busline_import",
+    "busoperation_add",
+    "busoperation_del",
+    "busoperation_download",
+    "busoperation_export",
+    "busoperation_import",
+    "busorder_add",
+    "busorder_batch_approve",
+    "busorder_batch_deny",
+    "busorder_batch_update_payment_status",
+    "busorder_del",
+    "busorder_down_intention_order",
+    "busorder_down_order",
+    "busorder_export_order",
+    "busorder_import_intention_order",
+    "busorder_import_order",
+    "bussection_add",
+    "bussection_del",
+    "busstation_add",
+    "busstation_del",
+    "busstation_download",
+    "busstation_import",
+    "category_add",
+    "comment_add",
+    "discussion_add",
+    "floor-add",
+    "floor-delete",
+    "floor-edit",
+    "foodweekly_add",
+    "isedit_bus_intentionorder_pay_info",
+    "isshow_bus_intentionorder_pay_info",
+    "likeandsave_add",
+    "mailgroup-add",
+    "mailgroup-delete",
+    "mailgroup-edit",
+    "mailgroup-gd",
+    "mailgroup-sy",
+    "mailgroup-vieew",
+    "medicalarchive_parent_info",
+    "medicalinfo_add",
+    "medicalinfo_export",
+    "medicalinfo_import",
+    "medicationapplication_add",
+    "outgo-delete",
+    "outgo-view",
+    "pass-add",
+    "pass-delete",
+    "pass-generated",
+    "pass-generated-batch",
+    "pass-voided",
+    "pendingmedication_operation_edit",
+    "protocol_add",
+    "protocol_del",
+    "questionnaire_add",
+    "questionnaire_delete",
+    "questionnaire_edit",
+    "questionnaire_edit_frozen",
+    "questionnaire_edit_status",
+    "room-add",
+    "room-assignment",
+    "room-delete",
+    "room-edit",
+    "rule-add",
+    "rule-delete",
+    "school_attendance_export",
+    "schoollife_add",
+    "student_attendance_export",
+    "tag_add",
+    "teacheruser_add",
+    "teacheruser_del",
+    "teacheruser_disable",
+    "teacheruser_download",
+    "teacheruser_enble",
+    "teacheruser_export",
+    "teacheruser_import"
+  ],
+  "buttonsByMenu": {
+    "/isacommunity/schoolbus/student/apply": [
+      {
+        "name": "新增订单信息",
+        "permission": "busorder_add",
+        "path": ""
+      },
+      {
+        "name": "更新订单信息",
+        "permission": "busorder_edit",
+        "path": ""
+      },
+      {
+        "name": "删除意向订单信息",
+        "permission": "busintentionorder_del",
+        "path": ""
+      },
+      {
+        "name": "批量更改订单为已缴费状态",
+        "permission": "busorder_batch_update_payment_status",
+        "path": ""
+      },
+      {
+        "name": "批量同意订单",
+        "permission": "busorder_batch_approve",
+        "path": ""
+      },
+      {
+        "name": "批量拒绝订单",
+        "permission": "busorder_batch_deny",
+        "path": ""
+      },
+      {
+        "name": "下载意向订单模版",
+        "permission": "busorder_down_intention_order",
+        "path": ""
+      },
+      {
+        "name": "导入意向订单",
+        "permission": "busorder_import_intention_order",
+        "path": ""
+      },
+      {
+        "name": "是否可展示缴费模块",
+        "permission": "isshow_bus_intentionorder_pay_info",
+        "path": ""
+      },
+      {
+        "name": "是否可编辑缴费模块",
+        "permission": "isedit_bus_intentionorder_pay_info",
+        "path": ""
+      }
+    ],
+    "/isacommunity/schoolbus/student/order": [
+      {
+        "name": "新增订单信息",
+        "permission": "busorder_add",
+        "path": ""
+      },
+      {
+        "name": "更新订单信息",
+        "permission": "busorder_edit",
+        "path": ""
+      },
+      {
+        "name": "删除订单信息",
+        "permission": "busorder_del",
+        "path": ""
+      },
+      {
+        "name": "批量更改订单为已缴费状态",
+        "permission": "busorder_batch_update_payment_status",
+        "path": ""
+      },
+      {
+        "name": "批量同意订单",
+        "permission": "busorder_batch_approve",
+        "path": ""
+      },
+      {
+        "name": "批量拒绝订单",
+        "permission": "busorder_batch_deny",
+        "path": ""
+      },
+      {
+        "name": "下载乘车学生订单模版",
+        "permission": "busorder_down_order",
+        "path": ""
+      },
+      {
+        "name": "导入正式订单",
+        "permission": "busorder_import_order",
+        "path": ""
+      },
+      {
+        "name": "是否可展示缴费模块",
+        "permission": "isshow_bus_order_pay_info",
+        "path": ""
+      },
+      {
+        "name": "是否可编辑缴费模块",
+        "permission": "isedit_bus_order_pay_info",
+        "path": ""
+      },
+      {
+        "name": "导出订单",
+        "permission": "busorder_export_order",
+        "path": ""
+      }
+    ],
+    "/isacommunity/schoolbus/route/plan": [
+      {
+        "name": "新增路线信息",
+        "permission": "busline_add",
+        "path": ""
+      },
+      {
+        "name": "新增站点信息",
+        "permission": "busstation_add",
+        "path": ""
+      },
+      {
+        "name": "新增学期信息",
+        "permission": "bussection_add",
+        "path": ""
+      },
+      {
+        "name": "导入站点",
+        "permission": "busstation_import",
+        "path": null
+      },
+      {
+        "name": "更新路线信息",
+        "permission": "busline_edit",
+        "path": ""
+      },
+      {
+        "name": "更新站点信息",
+        "permission": "busstation_edit",
+        "path": ""
+      },
+      {
+        "name": "更新学期信息",
+        "permission": "bussection_edit",
+        "path": ""
+      },
+      {
+        "name": "删除路线信息",
+        "permission": "busline_del",
+        "path": ""
+      },
+      {
+        "name": "删除站点信息",
+        "permission": "busstation_del",
+        "path": ""
+      },
+      {
+        "name": "删除学期信息",
+        "permission": "bussection_del",
+        "path": ""
+      },
+      {
+        "name": "下载站点模版",
+        "permission": "busstation_download",
+        "path": ""
+      },
+      {
+        "name": "下载路线Excel模板",
+        "permission": "busline_download",
+        "path": ""
+      },
+      {
+        "name": "导入路线",
+        "permission": "busline_import",
+        "path": ""
+      },
+      {
+        "name": "批量复制路线",
+        "permission": "busline_batch_copy",
+        "path": ""
+      }
+    ],
+    "/isacommunity/schoolbus/route/operation": [
+      {
+        "name": "新增车辆运营信息",
+        "permission": "busoperation_add",
+        "path": ""
+      },
+      {
+        "name": "更新车辆运营信息",
+        "permission": "busoperation_edit",
+        "path": ""
+      },
+      {
+        "name": "删除车辆运营信息",
+        "permission": "busoperation_del",
+        "path": ""
+      },
+      {
+        "name": "下载车辆车辆运营Excel模板",
+        "permission": "busoperation_download",
+        "path": ""
+      },
+      {
+        "name": "导入车辆运营信息",
+        "permission": "busoperation_import",
+        "path": ""
+      },
+      {
+        "name": "导出车辆运营数据",
+        "permission": "busoperation_export",
+        "path": ""
+      }
+    ],
+    "/isacommunity/schoolbus/route/exception": [
+      {
+        "name": "新增车辆异常上报信息",
+        "permission": "busexception_add",
+        "path": ""
+      },
+      {
+        "name": "更新车辆异常上报信息",
+        "permission": "busexception_edit",
+        "path": ""
+      },
+      {
+        "name": "删除车辆异常上报信息",
+        "permission": "busexception_del",
+        "path": ""
+      },
+      {
+        "name": "下载车辆异常信息上报Excel模板",
+        "permission": "busexception_download",
+        "path": ""
+      },
+      {
+        "name": "导入车辆异常上报信息",
+        "permission": "busexception_import",
+        "path": ""
+      },
+      {
+        "name": "导出车辆异常上报数据",
+        "permission": "busexception_export",
+        "path": ""
+      }
+    ],
+    "/isacommunity/schoolbus/car": [
+      {
+        "name": "新增校车信息",
+        "permission": "buscarinfo_add",
+        "path": ""
+      },
+      {
+        "name": "更新校车信息",
+        "permission": "buscarinfo_edit",
+        "path": ""
+      },
+      {
+        "name": "删除校车信息",
+        "permission": "buscarinfo_del",
+        "path": ""
+      },
+      {
+        "name": "批量启用禁用校车",
+        "permission": "buscarinfo_batch_enable",
+        "path": ""
+      },
+      {
+        "name": "下载校车Excel模板",
+        "permission": "buscarinfo_download",
+        "path": ""
+      },
+      {
+        "name": "导入校车",
+        "permission": "buscarinfo_import",
+        "path": ""
+      }
+    ],
+    "/isacommunity/schoolbus/driver": [
+      {
+        "name": "新增司机信息",
+        "permission": "busdriver_add",
+        "path": ""
+      },
+      {
+        "name": "更新司机信息",
+        "permission": "busdriver_edit",
+        "path": ""
+      },
+      {
+        "name": "删除司机信息",
+        "permission": "busdriver_del",
+        "path": ""
+      },
+      {
+        "name": "下载司机Excel模板",
+        "permission": "busdriver_download",
+        "path": ""
+      },
+      {
+        "name": "导入司机",
+        "permission": "busdriver_import",
+        "path": ""
+      }
+    ],
+    "/isacommunity/schoolbus/attendance": [
+      {
+        "name": "新增",
+        "permission": "busattendance_add",
+        "path": null
+      },
+      {
+        "name": "删除",
+        "permission": "busattendance_del",
+        "path": null
+      },
+      {
+        "name": "修改",
+        "permission": "busattendance_edit",
+        "path": null
+      }
+    ],
+    "/isacommunity/protocol": [
+      {
+        "name": "导出协议签名数据",
+        "permission": "protocolsign_export",
+        "path": ""
+      },
+      {
+        "name": "新增协议信息",
+        "permission": "protocol_add",
+        "path": ""
+      },
+      {
+        "name": "更新协议信息",
+        "permission": "protocol_edit",
+        "path": ""
+      },
+      {
+        "name": "删除协议信息",
+        "permission": "protocol_del",
+        "path": ""
+      }
+    ],
+    "/isacommunity/activity/questionnaire": [
+      {
+        "name": "复制问卷",
+        "permission": "questionnaire_copy",
+        "path": null
+      },
+      {
+        "name": "更改冻结状态",
+        "permission": "questionnaire_edit_frozen",
+        "path": null
+      },
+      {
+        "name": "更改问卷状态",
+        "permission": "questionnaire_edit_status",
+        "path": null
+      },
+      {
+        "name": "更新问卷",
+        "permission": "questionnaire_edit",
+        "path": null
+      },
+      {
+        "name": "新增问卷",
+        "permission": "questionnaire_add",
+        "path": null
+      },
+      {
+        "name": "删除问卷",
+        "permission": "questionnaire_delete",
+        "path": null
+      }
+    ],
+    "/isacommunity/attendance/student": [
+      {
+        "name": "查看学生考勤",
+        "permission": "student_attendance_list",
+        "path": null
+      },
+      {
+        "name": "导出学生考勤",
+        "permission": "student_attendance_export",
+        "path": ""
+      }
+    ],
+    "/isacommunity/attendance/wechat": [
+      {
+        "name": "查看微信openid",
+        "permission": "wx_openid_list",
+        "path": null
+      },
+      {
+        "name": "归档微信OPenid",
+        "permission": "archive_wx_openid",
+        "path": ""
+      }
+    ],
+    "/isacommunity/attendance/school": [
+      {
+        "name": "查看学校考勤",
+        "permission": "school_attendance_list",
+        "path": null
+      },
+      {
+        "name": "导出校园考勤",
+        "permission": "school_attendance_export",
+        "path": ""
+      }
+    ],
+    "/isacommunity/attendance/access": [
+      {
+        "name": "查看门禁记录",
+        "permission": "union_record_list",
+        "path": null
+      }
+    ],
+    "/isacommunity/attendance/wechatnotice": [
+      {
+        "name": "查看微信通知",
+        "permission": "wx_notice_list",
+        "path": null
+      }
+    ],
+    "/isacommunity/attendance/holiday": [
+      {
+        "name": "查看",
+        "permission": "holiday-view",
+        "path": null
+      },
+      {
+        "name": "删除",
+        "permission": "holiday-delete",
+        "path": null
+      }
+    ],
+    "/isacommunity/attendance/holiday/pass": [
+      {
+        "name": "作废",
+        "permission": "pass-voided",
+        "path": null
+      },
+      {
+        "name": "批量生成",
+        "permission": "pass-generated-batch",
+        "path": null
+      },
+      {
+        "name": "新增",
+        "permission": "pass-add",
+        "path": null
+      },
+      {
+        "name": "删除",
+        "permission": "pass-delete",
+        "path": null
+      },
+      {
+        "name": "生成",
+        "permission": "pass-generated",
+        "path": null
+      }
+    ],
+    "/isacommunity/email/group": [
+      {
+        "name": "归档",
+        "permission": "mailgroup-gd",
+        "path": null
+      },
+      {
+        "name": "新增",
+        "permission": "mailgroup-add",
+        "path": null
+      },
+      {
+        "name": "删除",
+        "permission": "mailgroup-delete",
+        "path": null
+      },
+      {
+        "name": "使用",
+        "permission": "mailgroup-sy",
+        "path": null
+      },
+      {
+        "name": "查看",
+        "permission": "mailgroup-vieew",
+        "path": null
+      },
+      {
+        "name": "编辑",
+        "permission": "mailgroup-edit",
+        "path": null
+      }
+    ],
+    "/isacommunity/email/outgo": [
+      {
+        "name": "删除",
+        "permission": "outgo-delete",
+        "path": null
+      },
+      {
+        "name": "查看",
+        "permission": "outgo-view",
+        "path": null
+      }
+    ],
+    "/isacommunity/content/announcement": [
+      {
+        "name": "公告编辑",
+        "permission": "announcement_edit",
+        "path": null
+      },
+      {
+        "name": "新增公告",
+        "permission": "announcement_add",
+        "path": null
+      },
+      {
+        "name": "公告删除",
+        "permission": "announcement_del",
+        "path": null
+      },
+      {
+        "name": "公告删除",
+        "permission": "announcement_del",
+        "path": null
+      }
+    ],
+    "/isacommunity/content/moent/foodweekly": [
+      {
+        "name": "编辑",
+        "permission": "foodweekly_edit",
+        "path": null
+      },
+      {
+        "name": "新增",
+        "permission": "foodweekly_add",
+        "path": null
+      },
+      {
+        "name": "删除",
+        "permission": "foodweekly_del",
+        "path": null
+      }
+    ],
+    "/isacommunity/content/moent/schoollife": [
+      {
+        "name": "删除",
+        "permission": "schoollife_del",
+        "path": ""
+      },
+      {
+        "name": "编辑",
+        "permission": "schoollife_edit",
+        "path": ""
+      },
+      {
+        "name": "新增",
+        "permission": "schoollife_add",
+        "path": null
+      }
+    ],
+    "/isacommunity/content/article/category": [
+      {
+        "name": "删除",
+        "permission": "category_del",
+        "path": ""
+      },
+      {
+        "name": "编辑",
+        "permission": "category_edit",
+        "path": ""
+      },
+      {
+        "name": "新增",
+        "permission": "category_add",
+        "path": ""
+      }
+    ],
+    "/isacommunity/content/article/list": [
+      {
+        "name": "新增",
+        "permission": "article_add",
+        "path": ""
+      },
+      {
+        "name": "删除",
+        "permission": "article_del",
+        "path": ""
+      },
+      {
+        "name": "编辑",
+        "permission": "article_edit",
+        "path": ""
+      }
+    ],
+    "/isacommunity/content/discussion/likeandsave": [
+      {
+        "name": "编辑",
+        "permission": "likeandsave_edit",
+        "path": ""
+      },
+      {
+        "name": "新增",
+        "permission": "likeandsave_add",
+        "path": ""
+      },
+      {
+        "name": "删除",
+        "permission": "likeandsave_del",
+        "path": ""
+      }
+    ],
+    "/isacommunity/content/discussion/list": [
+      {
+        "name": "新增",
+        "permission": "discussion_add",
+        "path": ""
+      },
+      {
+        "name": "删除",
+        "permission": "discussion_del",
+        "path": ""
+      },
+      {
+        "name": "编辑",
+        "permission": "discussion_edit",
+        "path": ""
+      }
+    ],
+    "/isacommunity/content/discussion/comment": [
+      {
+        "name": "删除",
+        "permission": "comment_del",
+        "path": ""
+      },
+      {
+        "name": "编辑",
+        "permission": "comment_edit",
+        "path": ""
+      },
+      {
+        "name": "新增",
+        "permission": "comment_add",
+        "path": ""
+      }
+    ],
+    "/isacommunity/content/discussion/tag": [
+      {
+        "name": "新增",
+        "permission": "tag_add",
+        "path": ""
+      },
+      {
+        "name": "删除",
+        "permission": "tag_del",
+        "path": ""
+      },
+      {
+        "name": "编辑",
+        "permission": "tag_edit",
+        "path": ""
+      }
+    ],
+    "/isacommunity/dorm/boarding-student": [
+      {
+        "name": "删除",
+        "permission": "boarding-delete",
+        "path": null
+      },
+      {
+        "name": "批量分配",
+        "permission": "boarding-assigne",
+        "path": null
+      },
+      {
+        "name": "批量退宿",
+        "permission": "boarding-checkout",
+        "path": null
+      },
+      {
+        "name": "查看",
+        "permission": "boarding-view",
+        "path": null
+      },
+      {
+        "name": "预计退宿",
+        "permission": "boarding-planCheckOut",
+        "path": null
+      },
+      {
+        "name": "新增",
+        "permission": "boarding-add",
+        "path": null
+      },
+      {
+        "name": "查看家长联系方式",
+        "permission": "boarding-parent-view",
+        "path": null
+      },
+      {
+        "name": "编辑",
+        "permission": "boarding-edit",
+        "path": null
+      }
+    ],
+    "/isacommunity/dorm/space/room": [
+      {
+        "name": "床位分配",
+        "permission": "room-assignment",
+        "path": null
+      },
+      {
+        "name": "新增",
+        "permission": "room-add",
+        "path": null
+      },
+      {
+        "name": "编辑",
+        "permission": "room-edit",
+        "path": null
+      },
+      {
+        "name": "删除",
+        "permission": "room-delete",
+        "path": null
+      }
+    ],
+    "/isacommunity/dorm/space/floor": [
+      {
+        "name": "新增",
+        "permission": "floor-add",
+        "path": "floor-add"
+      },
+      {
+        "name": "删除",
+        "permission": "floor-delete",
+        "path": "floor-add"
+      },
+      {
+        "name": "编辑",
+        "permission": "floor-edit",
+        "path": null
+      }
+    ],
+    "/isacommunity/dorm/space/building": [
+      {
+        "name": "编辑",
+        "permission": "building-edit",
+        "path": null
+      },
+      {
+        "name": "新增",
+        "permission": "building-add",
+        "path": null
+      },
+      {
+        "name": "删除",
+        "permission": "building-delete",
+        "path": null
+      }
+    ],
+    "/isacommunity/dorm/space/attribute": [
+      {
+        "name": "新增",
+        "permission": "attribute-add",
+        "path": "floor-add"
+      },
+      {
+        "name": "删除",
+        "permission": "attribute-delete",
+        "path": "floor-add"
+      },
+      {
+        "name": "编辑",
+        "permission": "attribute-edit",
+        "path": null
+      }
+    ],
+    "/isacommunity/dorm/space/rule": [
+      {
+        "name": "新增",
+        "permission": "rule-add",
+        "path": null
+      },
+      {
+        "name": "删除",
+        "permission": "rule-delete",
+        "path": null
+      },
+      {
+        "name": "编辑",
+        "permission": "rule-edit",
+        "path": null
+      }
+    ],
+    "/isacommunity/schoolDoctor/studentRecord": [
+      {
+        "name": "家长信息",
+        "permission": "medicalarchive_parent_info",
+        "path": null
+      },
+      {
+        "name": "编辑",
+        "permission": "medicalarchive_edit",
+        "path": null
+      }
+    ],
+    "/isacommunity/schoolDoctor/medicalInfo": [
+      {
+        "name": "新增",
+        "permission": "medicalinfo_add",
+        "path": null
+      },
+      {
+        "name": "编辑",
+        "permission": "medicalinfo_edit",
+        "path": null
+      },
+      {
+        "name": "导入",
+        "permission": "medicalinfo_import",
+        "path": null
+      },
+      {
+        "name": "导出",
+        "permission": "medicalinfo_export",
+        "path": null
+      }
+    ],
+    "/isacommunity/schoolDoctor/medicineApply": [
+      {
+        "name": "新增",
+        "permission": "medicationapplication_add",
+        "path": null
+      }
+    ],
+    "/isacommunity/schoolDoctor/visitRecord": [
+      {
+        "name": "待用药操作记录编辑",
+        "permission": "pendingmedication_operation_edit",
+        "path": null
+      }
+    ],
+    "/isacommunity/user/teacher": [
+      {
+        "name": "新增跟车老师信息",
+        "permission": "teacheruser_add",
+        "path": ""
+      },
+      {
+        "name": "更新跟车老师信息",
+        "permission": "teacheruser_edit",
+        "path": ""
+      },
+      {
+        "name": "删除跟车老师信息",
+        "permission": "teacheruser_del",
+        "path": ""
+      },
+      {
+        "name": "启用跟车老师信息",
+        "permission": "teacheruser_enble",
+        "path": ""
+      },
+      {
+        "name": "禁用跟车老师信息",
+        "permission": "teacheruser_disable",
+        "path": ""
+      },
+      {
+        "name": "下载跟车老师Excel模板",
+        "permission": "teacheruser_download",
+        "path": ""
+      },
+      {
+        "name": "导入跟车老师信息",
+        "permission": "teacheruser_import",
+        "path": ""
+      },
+      {
+        "name": "导出跟车老师数据",
+        "permission": "teacheruser_export",
+        "path": ""
+      }
+    ]
+  },
+  "isaButtons": [
+    {
+      "name": "新增订单信息",
+      "permission": "busorder_add",
+      "menuPath": "/isacommunity/schoolbus/student/apply",
+      "path": ""
+    },
+    {
+      "name": "更新订单信息",
+      "permission": "busorder_edit",
+      "menuPath": "/isacommunity/schoolbus/student/apply",
+      "path": ""
+    },
+    {
+      "name": "删除意向订单信息",
+      "permission": "busintentionorder_del",
+      "menuPath": "/isacommunity/schoolbus/student/apply",
+      "path": ""
+    },
+    {
+      "name": "批量更改订单为已缴费状态",
+      "permission": "busorder_batch_update_payment_status",
+      "menuPath": "/isacommunity/schoolbus/student/apply",
+      "path": ""
+    },
+    {
+      "name": "批量同意订单",
+      "permission": "busorder_batch_approve",
+      "menuPath": "/isacommunity/schoolbus/student/apply",
+      "path": ""
+    },
+    {
+      "name": "批量拒绝订单",
+      "permission": "busorder_batch_deny",
+      "menuPath": "/isacommunity/schoolbus/student/apply",
+      "path": ""
+    },
+    {
+      "name": "下载意向订单模版",
+      "permission": "busorder_down_intention_order",
+      "menuPath": "/isacommunity/schoolbus/student/apply",
+      "path": ""
+    },
+    {
+      "name": "导入意向订单",
+      "permission": "busorder_import_intention_order",
+      "menuPath": "/isacommunity/schoolbus/student/apply",
+      "path": ""
+    },
+    {
+      "name": "是否可展示缴费模块",
+      "permission": "isshow_bus_intentionorder_pay_info",
+      "menuPath": "/isacommunity/schoolbus/student/apply",
+      "path": ""
+    },
+    {
+      "name": "是否可编辑缴费模块",
+      "permission": "isedit_bus_intentionorder_pay_info",
+      "menuPath": "/isacommunity/schoolbus/student/apply",
+      "path": ""
+    },
+    {
+      "name": "新增订单信息",
+      "permission": "busorder_add",
+      "menuPath": "/isacommunity/schoolbus/student/order",
+      "path": ""
+    },
+    {
+      "name": "更新订单信息",
+      "permission": "busorder_edit",
+      "menuPath": "/isacommunity/schoolbus/student/order",
+      "path": ""
+    },
+    {
+      "name": "删除订单信息",
+      "permission": "busorder_del",
+      "menuPath": "/isacommunity/schoolbus/student/order",
+      "path": ""
+    },
+    {
+      "name": "批量更改订单为已缴费状态",
+      "permission": "busorder_batch_update_payment_status",
+      "menuPath": "/isacommunity/schoolbus/student/order",
+      "path": ""
+    },
+    {
+      "name": "批量同意订单",
+      "permission": "busorder_batch_approve",
+      "menuPath": "/isacommunity/schoolbus/student/order",
+      "path": ""
+    },
+    {
+      "name": "批量拒绝订单",
+      "permission": "busorder_batch_deny",
+      "menuPath": "/isacommunity/schoolbus/student/order",
+      "path": ""
+    },
+    {
+      "name": "下载乘车学生订单模版",
+      "permission": "busorder_down_order",
+      "menuPath": "/isacommunity/schoolbus/student/order",
+      "path": ""
+    },
+    {
+      "name": "导入正式订单",
+      "permission": "busorder_import_order",
+      "menuPath": "/isacommunity/schoolbus/student/order",
+      "path": ""
+    },
+    {
+      "name": "是否可展示缴费模块",
+      "permission": "isshow_bus_order_pay_info",
+      "menuPath": "/isacommunity/schoolbus/student/order",
+      "path": ""
+    },
+    {
+      "name": "是否可编辑缴费模块",
+      "permission": "isedit_bus_order_pay_info",
+      "menuPath": "/isacommunity/schoolbus/student/order",
+      "path": ""
+    },
+    {
+      "name": "导出订单",
+      "permission": "busorder_export_order",
+      "menuPath": "/isacommunity/schoolbus/student/order",
+      "path": ""
+    },
+    {
+      "name": "新增路线信息",
+      "permission": "busline_add",
+      "menuPath": "/isacommunity/schoolbus/route/plan",
+      "path": ""
+    },
+    {
+      "name": "新增站点信息",
+      "permission": "busstation_add",
+      "menuPath": "/isacommunity/schoolbus/route/plan",
+      "path": ""
+    },
+    {
+      "name": "新增学期信息",
+      "permission": "bussection_add",
+      "menuPath": "/isacommunity/schoolbus/route/plan",
+      "path": ""
+    },
+    {
+      "name": "导入站点",
+      "permission": "busstation_import",
+      "menuPath": "/isacommunity/schoolbus/route/plan",
+      "path": null
+    },
+    {
+      "name": "更新路线信息",
+      "permission": "busline_edit",
+      "menuPath": "/isacommunity/schoolbus/route/plan",
+      "path": ""
+    },
+    {
+      "name": "更新站点信息",
+      "permission": "busstation_edit",
+      "menuPath": "/isacommunity/schoolbus/route/plan",
+      "path": ""
+    },
+    {
+      "name": "更新学期信息",
+      "permission": "bussection_edit",
+      "menuPath": "/isacommunity/schoolbus/route/plan",
+      "path": ""
+    },
+    {
+      "name": "删除路线信息",
+      "permission": "busline_del",
+      "menuPath": "/isacommunity/schoolbus/route/plan",
+      "path": ""
+    },
+    {
+      "name": "删除站点信息",
+      "permission": "busstation_del",
+      "menuPath": "/isacommunity/schoolbus/route/plan",
+      "path": ""
+    },
+    {
+      "name": "删除学期信息",
+      "permission": "bussection_del",
+      "menuPath": "/isacommunity/schoolbus/route/plan",
+      "path": ""
+    },
+    {
+      "name": "下载站点模版",
+      "permission": "busstation_download",
+      "menuPath": "/isacommunity/schoolbus/route/plan",
+      "path": ""
+    },
+    {
+      "name": "下载路线Excel模板",
+      "permission": "busline_download",
+      "menuPath": "/isacommunity/schoolbus/route/plan",
+      "path": ""
+    },
+    {
+      "name": "导入路线",
+      "permission": "busline_import",
+      "menuPath": "/isacommunity/schoolbus/route/plan",
+      "path": ""
+    },
+    {
+      "name": "批量复制路线",
+      "permission": "busline_batch_copy",
+      "menuPath": "/isacommunity/schoolbus/route/plan",
+      "path": ""
+    },
+    {
+      "name": "新增车辆运营信息",
+      "permission": "busoperation_add",
+      "menuPath": "/isacommunity/schoolbus/route/operation",
+      "path": ""
+    },
+    {
+      "name": "更新车辆运营信息",
+      "permission": "busoperation_edit",
+      "menuPath": "/isacommunity/schoolbus/route/operation",
+      "path": ""
+    },
+    {
+      "name": "删除车辆运营信息",
+      "permission": "busoperation_del",
+      "menuPath": "/isacommunity/schoolbus/route/operation",
+      "path": ""
+    },
+    {
+      "name": "下载车辆车辆运营Excel模板",
+      "permission": "busoperation_download",
+      "menuPath": "/isacommunity/schoolbus/route/operation",
+      "path": ""
+    },
+    {
+      "name": "导入车辆运营信息",
+      "permission": "busoperation_import",
+      "menuPath": "/isacommunity/schoolbus/route/operation",
+      "path": ""
+    },
+    {
+      "name": "导出车辆运营数据",
+      "permission": "busoperation_export",
+      "menuPath": "/isacommunity/schoolbus/route/operation",
+      "path": ""
+    },
+    {
+      "name": "新增车辆异常上报信息",
+      "permission": "busexception_add",
+      "menuPath": "/isacommunity/schoolbus/route/exception",
+      "path": ""
+    },
+    {
+      "name": "更新车辆异常上报信息",
+      "permission": "busexception_edit",
+      "menuPath": "/isacommunity/schoolbus/route/exception",
+      "path": ""
+    },
+    {
+      "name": "删除车辆异常上报信息",
+      "permission": "busexception_del",
+      "menuPath": "/isacommunity/schoolbus/route/exception",
+      "path": ""
+    },
+    {
+      "name": "下载车辆异常信息上报Excel模板",
+      "permission": "busexception_download",
+      "menuPath": "/isacommunity/schoolbus/route/exception",
+      "path": ""
+    },
+    {
+      "name": "导入车辆异常上报信息",
+      "permission": "busexception_import",
+      "menuPath": "/isacommunity/schoolbus/route/exception",
+      "path": ""
+    },
+    {
+      "name": "导出车辆异常上报数据",
+      "permission": "busexception_export",
+      "menuPath": "/isacommunity/schoolbus/route/exception",
+      "path": ""
+    },
+    {
+      "name": "新增校车信息",
+      "permission": "buscarinfo_add",
+      "menuPath": "/isacommunity/schoolbus/car",
+      "path": ""
+    },
+    {
+      "name": "更新校车信息",
+      "permission": "buscarinfo_edit",
+      "menuPath": "/isacommunity/schoolbus/car",
+      "path": ""
+    },
+    {
+      "name": "删除校车信息",
+      "permission": "buscarinfo_del",
+      "menuPath": "/isacommunity/schoolbus/car",
+      "path": ""
+    },
+    {
+      "name": "批量启用禁用校车",
+      "permission": "buscarinfo_batch_enable",
+      "menuPath": "/isacommunity/schoolbus/car",
+      "path": ""
+    },
+    {
+      "name": "下载校车Excel模板",
+      "permission": "buscarinfo_download",
+      "menuPath": "/isacommunity/schoolbus/car",
+      "path": ""
+    },
+    {
+      "name": "导入校车",
+      "permission": "buscarinfo_import",
+      "menuPath": "/isacommunity/schoolbus/car",
+      "path": ""
+    },
+    {
+      "name": "新增司机信息",
+      "permission": "busdriver_add",
+      "menuPath": "/isacommunity/schoolbus/driver",
+      "path": ""
+    },
+    {
+      "name": "更新司机信息",
+      "permission": "busdriver_edit",
+      "menuPath": "/isacommunity/schoolbus/driver",
+      "path": ""
+    },
+    {
+      "name": "删除司机信息",
+      "permission": "busdriver_del",
+      "menuPath": "/isacommunity/schoolbus/driver",
+      "path": ""
+    },
+    {
+      "name": "下载司机Excel模板",
+      "permission": "busdriver_download",
+      "menuPath": "/isacommunity/schoolbus/driver",
+      "path": ""
+    },
+    {
+      "name": "导入司机",
+      "permission": "busdriver_import",
+      "menuPath": "/isacommunity/schoolbus/driver",
+      "path": ""
+    },
+    {
+      "name": "新增",
+      "permission": "busattendance_add",
+      "menuPath": "/isacommunity/schoolbus/attendance",
+      "path": null
+    },
+    {
+      "name": "删除",
+      "permission": "busattendance_del",
+      "menuPath": "/isacommunity/schoolbus/attendance",
+      "path": null
+    },
+    {
+      "name": "修改",
+      "permission": "busattendance_edit",
+      "menuPath": "/isacommunity/schoolbus/attendance",
+      "path": null
+    },
+    {
+      "name": "导出协议签名数据",
+      "permission": "protocolsign_export",
+      "menuPath": "/isacommunity/protocol",
+      "path": ""
+    },
+    {
+      "name": "新增协议信息",
+      "permission": "protocol_add",
+      "menuPath": "/isacommunity/protocol",
+      "path": ""
+    },
+    {
+      "name": "更新协议信息",
+      "permission": "protocol_edit",
+      "menuPath": "/isacommunity/protocol",
+      "path": ""
+    },
+    {
+      "name": "删除协议信息",
+      "permission": "protocol_del",
+      "menuPath": "/isacommunity/protocol",
+      "path": ""
+    },
+    {
+      "name": "复制问卷",
+      "permission": "questionnaire_copy",
+      "menuPath": "/isacommunity/activity/questionnaire",
+      "path": null
+    },
+    {
+      "name": "更改冻结状态",
+      "permission": "questionnaire_edit_frozen",
+      "menuPath": "/isacommunity/activity/questionnaire",
+      "path": null
+    },
+    {
+      "name": "更改问卷状态",
+      "permission": "questionnaire_edit_status",
+      "menuPath": "/isacommunity/activity/questionnaire",
+      "path": null
+    },
+    {
+      "name": "更新问卷",
+      "permission": "questionnaire_edit",
+      "menuPath": "/isacommunity/activity/questionnaire",
+      "path": null
+    },
+    {
+      "name": "新增问卷",
+      "permission": "questionnaire_add",
+      "menuPath": "/isacommunity/activity/questionnaire",
+      "path": null
+    },
+    {
+      "name": "删除问卷",
+      "permission": "questionnaire_delete",
+      "menuPath": "/isacommunity/activity/questionnaire",
+      "path": null
+    },
+    {
+      "name": "查看学生考勤",
+      "permission": "student_attendance_list",
+      "menuPath": "/isacommunity/attendance/student",
+      "path": null
+    },
+    {
+      "name": "导出学生考勤",
+      "permission": "student_attendance_export",
+      "menuPath": "/isacommunity/attendance/student",
+      "path": ""
+    },
+    {
+      "name": "查看微信openid",
+      "permission": "wx_openid_list",
+      "menuPath": "/isacommunity/attendance/wechat",
+      "path": null
+    },
+    {
+      "name": "归档微信OPenid",
+      "permission": "archive_wx_openid",
+      "menuPath": "/isacommunity/attendance/wechat",
+      "path": ""
+    },
+    {
+      "name": "查看学校考勤",
+      "permission": "school_attendance_list",
+      "menuPath": "/isacommunity/attendance/school",
+      "path": null
+    },
+    {
+      "name": "导出校园考勤",
+      "permission": "school_attendance_export",
+      "menuPath": "/isacommunity/attendance/school",
+      "path": ""
+    },
+    {
+      "name": "查看门禁记录",
+      "permission": "union_record_list",
+      "menuPath": "/isacommunity/attendance/access",
+      "path": null
+    },
+    {
+      "name": "查看微信通知",
+      "permission": "wx_notice_list",
+      "menuPath": "/isacommunity/attendance/wechatnotice",
+      "path": null
+    },
+    {
+      "name": "查看",
+      "permission": "holiday-view",
+      "menuPath": "/isacommunity/attendance/holiday",
+      "path": null
+    },
+    {
+      "name": "删除",
+      "permission": "holiday-delete",
+      "menuPath": "/isacommunity/attendance/holiday",
+      "path": null
+    },
+    {
+      "name": "作废",
+      "permission": "pass-voided",
+      "menuPath": "/isacommunity/attendance/holiday/pass",
+      "path": null
+    },
+    {
+      "name": "批量生成",
+      "permission": "pass-generated-batch",
+      "menuPath": "/isacommunity/attendance/holiday/pass",
+      "path": null
+    },
+    {
+      "name": "新增",
+      "permission": "pass-add",
+      "menuPath": "/isacommunity/attendance/holiday/pass",
+      "path": null
+    },
+    {
+      "name": "删除",
+      "permission": "pass-delete",
+      "menuPath": "/isacommunity/attendance/holiday/pass",
+      "path": null
+    },
+    {
+      "name": "生成",
+      "permission": "pass-generated",
+      "menuPath": "/isacommunity/attendance/holiday/pass",
+      "path": null
+    },
+    {
+      "name": "归档",
+      "permission": "mailgroup-gd",
+      "menuPath": "/isacommunity/email/group",
+      "path": null
+    },
+    {
+      "name": "新增",
+      "permission": "mailgroup-add",
+      "menuPath": "/isacommunity/email/group",
+      "path": null
+    },
+    {
+      "name": "删除",
+      "permission": "mailgroup-delete",
+      "menuPath": "/isacommunity/email/group",
+      "path": null
+    },
+    {
+      "name": "使用",
+      "permission": "mailgroup-sy",
+      "menuPath": "/isacommunity/email/group",
+      "path": null
+    },
+    {
+      "name": "查看",
+      "permission": "mailgroup-vieew",
+      "menuPath": "/isacommunity/email/group",
+      "path": null
+    },
+    {
+      "name": "编辑",
+      "permission": "mailgroup-edit",
+      "menuPath": "/isacommunity/email/group",
+      "path": null
+    },
+    {
+      "name": "删除",
+      "permission": "outgo-delete",
+      "menuPath": "/isacommunity/email/outgo",
+      "path": null
+    },
+    {
+      "name": "查看",
+      "permission": "outgo-view",
+      "menuPath": "/isacommunity/email/outgo",
+      "path": null
+    },
+    {
+      "name": "公告编辑",
+      "permission": "announcement_edit",
+      "menuPath": "/isacommunity/content/announcement",
+      "path": null
+    },
+    {
+      "name": "新增公告",
+      "permission": "announcement_add",
+      "menuPath": "/isacommunity/content/announcement",
+      "path": null
+    },
+    {
+      "name": "公告删除",
+      "permission": "announcement_del",
+      "menuPath": "/isacommunity/content/announcement",
+      "path": null
+    },
+    {
+      "name": "公告删除",
+      "permission": "announcement_del",
+      "menuPath": "/isacommunity/content/announcement",
+      "path": null
+    },
+    {
+      "name": "编辑",
+      "permission": "foodweekly_edit",
+      "menuPath": "/isacommunity/content/moent/foodweekly",
+      "path": null
+    },
+    {
+      "name": "新增",
+      "permission": "foodweekly_add",
+      "menuPath": "/isacommunity/content/moent/foodweekly",
+      "path": null
+    },
+    {
+      "name": "删除",
+      "permission": "foodweekly_del",
+      "menuPath": "/isacommunity/content/moent/foodweekly",
+      "path": null
+    },
+    {
+      "name": "删除",
+      "permission": "schoollife_del",
+      "menuPath": "/isacommunity/content/moent/schoollife",
+      "path": ""
+    },
+    {
+      "name": "编辑",
+      "permission": "schoollife_edit",
+      "menuPath": "/isacommunity/content/moent/schoollife",
+      "path": ""
+    },
+    {
+      "name": "新增",
+      "permission": "schoollife_add",
+      "menuPath": "/isacommunity/content/moent/schoollife",
+      "path": null
+    },
+    {
+      "name": "删除",
+      "permission": "category_del",
+      "menuPath": "/isacommunity/content/article/category",
+      "path": ""
+    },
+    {
+      "name": "编辑",
+      "permission": "category_edit",
+      "menuPath": "/isacommunity/content/article/category",
+      "path": ""
+    },
+    {
+      "name": "新增",
+      "permission": "category_add",
+      "menuPath": "/isacommunity/content/article/category",
+      "path": ""
+    },
+    {
+      "name": "新增",
+      "permission": "article_add",
+      "menuPath": "/isacommunity/content/article/list",
+      "path": ""
+    },
+    {
+      "name": "删除",
+      "permission": "article_del",
+      "menuPath": "/isacommunity/content/article/list",
+      "path": ""
+    },
+    {
+      "name": "编辑",
+      "permission": "article_edit",
+      "menuPath": "/isacommunity/content/article/list",
+      "path": ""
+    },
+    {
+      "name": "编辑",
+      "permission": "likeandsave_edit",
+      "menuPath": "/isacommunity/content/discussion/likeandsave",
+      "path": ""
+    },
+    {
+      "name": "新增",
+      "permission": "likeandsave_add",
+      "menuPath": "/isacommunity/content/discussion/likeandsave",
+      "path": ""
+    },
+    {
+      "name": "删除",
+      "permission": "likeandsave_del",
+      "menuPath": "/isacommunity/content/discussion/likeandsave",
+      "path": ""
+    },
+    {
+      "name": "新增",
+      "permission": "discussion_add",
+      "menuPath": "/isacommunity/content/discussion/list",
+      "path": ""
+    },
+    {
+      "name": "删除",
+      "permission": "discussion_del",
+      "menuPath": "/isacommunity/content/discussion/list",
+      "path": ""
+    },
+    {
+      "name": "编辑",
+      "permission": "discussion_edit",
+      "menuPath": "/isacommunity/content/discussion/list",
+      "path": ""
+    },
+    {
+      "name": "删除",
+      "permission": "comment_del",
+      "menuPath": "/isacommunity/content/discussion/comment",
+      "path": ""
+    },
+    {
+      "name": "编辑",
+      "permission": "comment_edit",
+      "menuPath": "/isacommunity/content/discussion/comment",
+      "path": ""
+    },
+    {
+      "name": "新增",
+      "permission": "comment_add",
+      "menuPath": "/isacommunity/content/discussion/comment",
+      "path": ""
+    },
+    {
+      "name": "新增",
+      "permission": "tag_add",
+      "menuPath": "/isacommunity/content/discussion/tag",
+      "path": ""
+    },
+    {
+      "name": "删除",
+      "permission": "tag_del",
+      "menuPath": "/isacommunity/content/discussion/tag",
+      "path": ""
+    },
+    {
+      "name": "编辑",
+      "permission": "tag_edit",
+      "menuPath": "/isacommunity/content/discussion/tag",
+      "path": ""
+    },
+    {
+      "name": "删除",
+      "permission": "boarding-delete",
+      "menuPath": "/isacommunity/dorm/boarding-student",
+      "path": null
+    },
+    {
+      "name": "批量分配",
+      "permission": "boarding-assigne",
+      "menuPath": "/isacommunity/dorm/boarding-student",
+      "path": null
+    },
+    {
+      "name": "批量退宿",
+      "permission": "boarding-checkout",
+      "menuPath": "/isacommunity/dorm/boarding-student",
+      "path": null
+    },
+    {
+      "name": "查看",
+      "permission": "boarding-view",
+      "menuPath": "/isacommunity/dorm/boarding-student",
+      "path": null
+    },
+    {
+      "name": "预计退宿",
+      "permission": "boarding-planCheckOut",
+      "menuPath": "/isacommunity/dorm/boarding-student",
+      "path": null
+    },
+    {
+      "name": "新增",
+      "permission": "boarding-add",
+      "menuPath": "/isacommunity/dorm/boarding-student",
+      "path": null
+    },
+    {
+      "name": "查看家长联系方式",
+      "permission": "boarding-parent-view",
+      "menuPath": "/isacommunity/dorm/boarding-student",
+      "path": null
+    },
+    {
+      "name": "编辑",
+      "permission": "boarding-edit",
+      "menuPath": "/isacommunity/dorm/boarding-student",
+      "path": null
+    },
+    {
+      "name": "床位分配",
+      "permission": "room-assignment",
+      "menuPath": "/isacommunity/dorm/space/room",
+      "path": null
+    },
+    {
+      "name": "新增",
+      "permission": "room-add",
+      "menuPath": "/isacommunity/dorm/space/room",
+      "path": null
+    },
+    {
+      "name": "编辑",
+      "permission": "room-edit",
+      "menuPath": "/isacommunity/dorm/space/room",
+      "path": null
+    },
+    {
+      "name": "删除",
+      "permission": "room-delete",
+      "menuPath": "/isacommunity/dorm/space/room",
+      "path": null
+    },
+    {
+      "name": "新增",
+      "permission": "floor-add",
+      "menuPath": "/isacommunity/dorm/space/floor",
+      "path": "floor-add"
+    },
+    {
+      "name": "删除",
+      "permission": "floor-delete",
+      "menuPath": "/isacommunity/dorm/space/floor",
+      "path": "floor-add"
+    },
+    {
+      "name": "编辑",
+      "permission": "floor-edit",
+      "menuPath": "/isacommunity/dorm/space/floor",
+      "path": null
+    },
+    {
+      "name": "编辑",
+      "permission": "building-edit",
+      "menuPath": "/isacommunity/dorm/space/building",
+      "path": null
+    },
+    {
+      "name": "新增",
+      "permission": "building-add",
+      "menuPath": "/isacommunity/dorm/space/building",
+      "path": null
+    },
+    {
+      "name": "删除",
+      "permission": "building-delete",
+      "menuPath": "/isacommunity/dorm/space/building",
+      "path": null
+    },
+    {
+      "name": "新增",
+      "permission": "attribute-add",
+      "menuPath": "/isacommunity/dorm/space/attribute",
+      "path": "floor-add"
+    },
+    {
+      "name": "删除",
+      "permission": "attribute-delete",
+      "menuPath": "/isacommunity/dorm/space/attribute",
+      "path": "floor-add"
+    },
+    {
+      "name": "编辑",
+      "permission": "attribute-edit",
+      "menuPath": "/isacommunity/dorm/space/attribute",
+      "path": null
+    },
+    {
+      "name": "新增",
+      "permission": "rule-add",
+      "menuPath": "/isacommunity/dorm/space/rule",
+      "path": null
+    },
+    {
+      "name": "删除",
+      "permission": "rule-delete",
+      "menuPath": "/isacommunity/dorm/space/rule",
+      "path": null
+    },
+    {
+      "name": "编辑",
+      "permission": "rule-edit",
+      "menuPath": "/isacommunity/dorm/space/rule",
+      "path": null
+    },
+    {
+      "name": "家长信息",
+      "permission": "medicalarchive_parent_info",
+      "menuPath": "/isacommunity/schoolDoctor/studentRecord",
+      "path": null
+    },
+    {
+      "name": "编辑",
+      "permission": "medicalarchive_edit",
+      "menuPath": "/isacommunity/schoolDoctor/studentRecord",
+      "path": null
+    },
+    {
+      "name": "新增",
+      "permission": "medicalinfo_add",
+      "menuPath": "/isacommunity/schoolDoctor/medicalInfo",
+      "path": null
+    },
+    {
+      "name": "编辑",
+      "permission": "medicalinfo_edit",
+      "menuPath": "/isacommunity/schoolDoctor/medicalInfo",
+      "path": null
+    },
+    {
+      "name": "导入",
+      "permission": "medicalinfo_import",
+      "menuPath": "/isacommunity/schoolDoctor/medicalInfo",
+      "path": null
+    },
+    {
+      "name": "导出",
+      "permission": "medicalinfo_export",
+      "menuPath": "/isacommunity/schoolDoctor/medicalInfo",
+      "path": null
+    },
+    {
+      "name": "新增",
+      "permission": "medicationapplication_add",
+      "menuPath": "/isacommunity/schoolDoctor/medicineApply",
+      "path": null
+    },
+    {
+      "name": "待用药操作记录编辑",
+      "permission": "pendingmedication_operation_edit",
+      "menuPath": "/isacommunity/schoolDoctor/visitRecord",
+      "path": null
+    },
+    {
+      "name": "新增跟车老师信息",
+      "permission": "teacheruser_add",
+      "menuPath": "/isacommunity/user/teacher",
+      "path": ""
+    },
+    {
+      "name": "更新跟车老师信息",
+      "permission": "teacheruser_edit",
+      "menuPath": "/isacommunity/user/teacher",
+      "path": ""
+    },
+    {
+      "name": "删除跟车老师信息",
+      "permission": "teacheruser_del",
+      "menuPath": "/isacommunity/user/teacher",
+      "path": ""
+    },
+    {
+      "name": "启用跟车老师信息",
+      "permission": "teacheruser_enble",
+      "menuPath": "/isacommunity/user/teacher",
+      "path": ""
+    },
+    {
+      "name": "禁用跟车老师信息",
+      "permission": "teacheruser_disable",
+      "menuPath": "/isacommunity/user/teacher",
+      "path": ""
+    },
+    {
+      "name": "下载跟车老师Excel模板",
+      "permission": "teacheruser_download",
+      "menuPath": "/isacommunity/user/teacher",
+      "path": ""
+    },
+    {
+      "name": "导入跟车老师信息",
+      "permission": "teacheruser_import",
+      "menuPath": "/isacommunity/user/teacher",
+      "path": ""
+    },
+    {
+      "name": "导出跟车老师数据",
+      "permission": "teacheruser_export",
+      "menuPath": "/isacommunity/user/teacher",
+      "path": ""
+    }
+  ],
+  "isaMenus": [
+    {
+      "name": "首页",
+      "path": "/isacommunity/home/index",
+      "menuPath": "/isacommunity/home"
+    },
+    {
+      "name": "用户管理",
+      "path": "/isacommunity/user",
+      "menuPath": "/isacommunity/user"
+    },
+    {
+      "name": "成员列表管理",
+      "path": "/isacommunity/member",
+      "menuPath": "/isacommunity/member"
+    },
+    {
+      "name": "教师列表",
+      "path": "/isacommunity/member/teacher/index",
+      "menuPath": "/isacommunity/member/teacher"
+    },
+    {
+      "name": "学生列表",
+      "path": "/isacommunity/member/student/index",
+      "menuPath": "/isacommunity/member/student"
+    },
+    {
+      "name": "校巴管理",
+      "path": "/isacommunity/schoolbus",
+      "menuPath": "/isacommunity/schoolbus"
+    },
+    {
+      "name": "学生管理",
+      "path": "/isacommunity/schoolbus/student",
+      "menuPath": "/isacommunity/schoolbus/student"
+    },
+    {
+      "name": "申请意向管理",
+      "path": "/isacommunity/schoolbus/student/apply/index",
+      "menuPath": "/isacommunity/schoolbus/student/apply"
+    },
+    {
+      "name": "乘车学生管理",
+      "path": "/isacommunity/schoolbus/student/order/index",
+      "menuPath": "/isacommunity/schoolbus/student/order"
+    },
+    {
+      "name": "路线管理",
+      "path": "/isacommunity/schoolbus/route",
+      "menuPath": "/isacommunity/schoolbus/route"
+    },
+    {
+      "name": "路线规划",
+      "path": "/isacommunity/schoolbus/route/plan/index",
+      "menuPath": "/isacommunity/schoolbus/route/plan"
+    },
+    {
+      "name": "路线运营",
+      "path": "/isacommunity/schoolbus/route/operation/index",
+      "menuPath": "/isacommunity/schoolbus/route/operation"
+    },
+    {
+      "name": "异常上报",
+      "path": "/isacommunity/schoolbus/route/exception/index",
+      "menuPath": "/isacommunity/schoolbus/route/exception"
+    },
+    {
+      "name": "车辆管理",
+      "path": "/isacommunity/schoolbus/car/index",
+      "menuPath": "/isacommunity/schoolbus/car"
+    },
+    {
+      "name": "司机管理",
+      "path": "/isacommunity/schoolbus/driver/index",
+      "menuPath": "/isacommunity/schoolbus/driver"
+    },
+    {
+      "name": "校巴考勤",
+      "path": "/isacommunity/schoolbus/attendance/index",
+      "menuPath": "/isacommunity/schoolbus/attendance"
+    },
+    {
+      "name": "基础设置",
+      "path": "/isacommunity/base",
+      "menuPath": "/isacommunity/base"
+    },
+    {
+      "name": "年级配置",
+      "path": "/isacommunity/base/grade/index",
+      "menuPath": "/isacommunity/base/grade"
+    },
+    {
+      "name": "校区配置",
+      "path": "/isacommunity/base/school/index",
+      "menuPath": "/isacommunity/base/school"
+    },
+    {
+      "name": "协议管理",
+      "path": "/isacommunity/protocol/index",
+      "menuPath": "/isacommunity/protocol"
+    },
+    {
+      "name": "协议管理",
+      "path": "/isacommunity/protocol/index",
+      "menuPath": "/isacommunity/protocol"
+    },
+    {
+      "name": "活动管理",
+      "path": "/isacommunity/activity",
+      "menuPath": "/isacommunity/activity"
+    },
+    {
+      "name": "活动项目",
+      "path": "/isacommunity/activity/program/index",
+      "menuPath": "/isacommunity/activity/program"
+    },
+    {
+      "name": "投票节目",
+      "path": "/isacommunity/activity/voteprogram/index",
+      "menuPath": "/isacommunity/activity/voteprogram"
+    },
+    {
+      "name": "活动列表",
+      "path": "/isacommunity/activity/list/index",
+      "menuPath": "/isacommunity/activity/list"
+    },
+    {
+      "name": "奖品列表",
+      "path": "/isacommunity/activity/prize/index",
+      "menuPath": "/isacommunity/activity/prize"
+    },
+    {
+      "name": "问卷管理",
+      "path": "/isacommunity/activity/questionnaire/index",
+      "menuPath": "/isacommunity/activity/questionnaire"
+    },
+    {
+      "name": "家长学生关联管理",
+      "path": "/isacommunity/activity/parentstudent/index",
+      "menuPath": "/isacommunity/activity/parentstudent"
+    },
+    {
+      "name": "微信配置",
+      "path": "/isacommunity/activity/wechatSchool/index",
+      "menuPath": "/isacommunity/activity/wechatSchool"
+    },
+    {
+      "name": "邮箱配置",
+      "path": "/isacommunity/activity/emailSchool/index",
+      "menuPath": "/isacommunity/activity/emailSchool"
+    },
+    {
+      "name": "考勤管理",
+      "path": "/isacommunity/attendance",
+      "menuPath": "/isacommunity/attendance"
+    },
+    {
+      "name": "学生考勤",
+      "path": "/isacommunity/attendance/student/index",
+      "menuPath": "/isacommunity/attendance/student"
+    },
+    {
+      "name": "微信OPenid",
+      "path": "/isacommunity/attendance/wechat/index",
+      "menuPath": "/isacommunity/attendance/wechat"
+    },
+    {
+      "name": "学校考勤",
+      "path": "/isacommunity/attendance/school/index",
+      "menuPath": "/isacommunity/attendance/school"
+    },
+    {
+      "name": "门禁记录",
+      "path": "/isacommunity/attendance/access/index",
+      "menuPath": "/isacommunity/attendance/access"
+    },
+    {
+      "name": "微信通知",
+      "path": "/isacommunity/attendance/wechatnotice/index",
+      "menuPath": "/isacommunity/attendance/wechatnotice"
+    },
+    {
+      "name": "配置管理",
+      "path": "/isacommunity/attendance/holiday/config",
+      "menuPath": "/isacommunity/attendance/holiday/config"
+    },
+    {
+      "name": "请假管理",
+      "path": "/isacommunity/attendance/holiday/index",
+      "menuPath": "/isacommunity/attendance/holiday"
+    },
+    {
+      "name": "任务处理",
+      "path": "/isacommunity/attendance/holiday/task",
+      "menuPath": "/isacommunity/attendance/holiday/task"
+    },
+    {
+      "name": "流程设计",
+      "path": "/isacommunity/attendance/holiday/flow",
+      "menuPath": "/isacommunity/attendance/holiday/flow"
+    },
+    {
+      "name": "学生每日考勤",
+      "path": "/isacommunity/attendance/index",
+      "menuPath": "/isacommunity/attendance"
+    },
+    {
+      "name": "放行条管理",
+      "path": "/isacommunity/attendance/holiday/pass",
+      "menuPath": "/isacommunity/attendance/holiday/pass"
+    },
+    {
+      "name": "邮件管理",
+      "path": "/isacommunity/email",
+      "menuPath": "/isacommunity/email"
+    },
+    {
+      "name": "群组配置",
+      "path": "/isacommunity/email/group",
+      "menuPath": "/isacommunity/email/group"
+    },
+    {
+      "name": "发件箱配置",
+      "path": "/isacommunity/email/send/index",
+      "menuPath": "/isacommunity/email/send"
+    },
+    {
+      "name": "发件列表",
+      "path": "/isacommunity/email/outgo/index",
+      "menuPath": "/isacommunity/email/outgo"
+    },
+    {
+      "name": "邮件管理",
+      "path": "/isacommunity/email",
+      "menuPath": "/isacommunity/email"
+    },
+    {
+      "name": "内容管理",
+      "path": "/isacommunity/content",
+      "menuPath": "/isacommunity/content"
+    },
+    {
+      "name": "公告内容",
+      "path": "/isacommunity/content/announcement/index",
+      "menuPath": "/isacommunity/content/announcement"
+    },
+    {
+      "name": "动态内容",
+      "path": "/isacommunity/content/moent",
+      "menuPath": "/isacommunity/content/moent"
+    },
+    {
+      "name": "一周食谱",
+      "path": "/isacommunity/content/moent/foodweekly/index",
+      "menuPath": "/isacommunity/content/moent/foodweekly"
+    },
+    {
+      "name": "校园动态",
+      "path": "/isacommunity/content/moent/circleupdates/index",
+      "menuPath": "/isacommunity/content/moent/circleupdates"
+    },
+    {
+      "name": "校园动态",
+      "path": "/isacommunity/content/moent/schoollife/index",
+      "menuPath": "/isacommunity/content/moent/schoollife"
+    },
+    {
+      "name": "导航按钮",
+      "path": "/isacommunity/content/navbutton/index",
+      "menuPath": "/isacommunity/content/navbutton"
+    },
+    {
+      "name": "文章管理",
+      "path": "/isacommunity/content/article",
+      "menuPath": "/isacommunity/content/article"
+    },
+    {
+      "name": "内容分类",
+      "path": "/isacommunity/content/article/category/index",
+      "menuPath": "/isacommunity/content/article/category"
+    },
+    {
+      "name": "文章内容",
+      "path": "/isacommunity/content/article/list/index",
+      "menuPath": "/isacommunity/content/article/list"
+    },
+    {
+      "name": "讨论管理",
+      "path": "/isacommunity/content/discussion",
+      "menuPath": "/isacommunity/content/discussion"
+    },
+    {
+      "name": "点赞收藏",
+      "path": "/isacommunity/content/discussion/likeandsave/index",
+      "menuPath": "/isacommunity/content/discussion/likeandsave"
+    },
+    {
+      "name": "内容列表",
+      "path": "/isacommunity/content/discussion/list/index",
+      "menuPath": "/isacommunity/content/discussion/list"
+    },
+    {
+      "name": "讨论评论",
+      "path": "/isacommunity/content/discussion/comment/index",
+      "menuPath": "/isacommunity/content/discussion/comment"
+    },
+    {
+      "name": "讨论标签",
+      "path": "/isacommunity/content/discussion/tag/index",
+      "menuPath": "/isacommunity/content/discussion/tag"
+    },
+    {
+      "name": "宿舍管理",
+      "path": "/isacommunity/dorm",
+      "menuPath": "/isacommunity/dorm"
+    },
+    {
+      "name": "住宿生管理",
+      "path": "/isacommunity/dorm/boarding-student",
+      "menuPath": "/isacommunity/dorm/boarding-student"
+    },
+    {
+      "name": "宿舍空间管理",
+      "path": "/isacommunity/dorm/space",
+      "menuPath": "/isacommunity/dorm/space"
+    },
+    {
+      "name": "房间管理",
+      "path": "/isacommunity/dorm/space/room",
+      "menuPath": "/isacommunity/dorm/space/room"
+    },
+    {
+      "name": "楼层管理",
+      "path": "/isacommunity/dorm/space/floor",
+      "menuPath": "/isacommunity/dorm/space/floor"
+    },
+    {
+      "name": "楼栋管理",
+      "path": "/isacommunity/dorm/space/building",
+      "menuPath": "/isacommunity/dorm/space/building"
+    },
+    {
+      "name": "属性管理",
+      "path": "/isacommunity/dorm/space/attribute",
+      "menuPath": "/isacommunity/dorm/space/attribute"
+    },
+    {
+      "name": "自动分配规则",
+      "path": "/isacommunity/dorm/space/rule",
+      "menuPath": "/isacommunity/dorm/space/rule"
+    },
+    {
+      "name": "校医管理",
+      "path": "/isacommunity/schoolDoctor",
+      "menuPath": "/isacommunity/schoolDoctor"
+    },
+    {
+      "name": "学生档案",
+      "path": "/isacommunity/schoolDoctor/studentRecord",
+      "menuPath": "/isacommunity/schoolDoctor/studentRecord"
+    },
+    {
+      "name": "医疗信息",
+      "path": "/isacommunity/schoolDoctor/medicalInfo",
+      "menuPath": "/isacommunity/schoolDoctor/medicalInfo"
+    },
+    {
+      "name": "规章制度",
+      "path": "/isacommunity/schoolDoctor/regulation",
+      "menuPath": "/isacommunity/schoolDoctor/regulation"
+    },
+    {
+      "name": "用药申请",
+      "path": "/isacommunity/schoolDoctor/medicineApply",
+      "menuPath": "/isacommunity/schoolDoctor/medicineApply"
+    },
+    {
+      "name": "就诊记录",
+      "path": "/isacommunity/schoolDoctor/visitRecord",
+      "menuPath": "/isacommunity/schoolDoctor/visitRecord"
+    },
+    {
+      "name": "疾病设置",
+      "path": "/isacommunity/schoolDoctor/diseaseSetting",
+      "menuPath": "/isacommunity/schoolDoctor/diseaseSetting"
+    },
+    {
+      "name": "传染病管理",
+      "path": "/isacommunity/schoolDoctor/infectiousDisease",
+      "menuPath": "/isacommunity/schoolDoctor/infectiousDisease"
+    },
+    {
+      "name": "体检报告",
+      "path": "/isacommunity/schoolDoctor/healthReport",
+      "menuPath": "/isacommunity/schoolDoctor/healthReport"
+    },
+    {
+      "name": "H5管理用户表",
+      "path": "/isacommunity/user/teacher/index",
+      "menuPath": "/isacommunity/user/teacher"
+    }
+  ],
+  "localPerms": {
+    "busdriver_edit": [
+      {
+        "file": "src/views/activity/detail/index.vue",
+        "line": 22
+      },
+      {
+        "file": "src/views/activity/detail/index.vue",
+        "line": 31
+      },
+      {
+        "file": "src/views/activity/detail/index.vue",
+        "line": 40
+      },
+      {
+        "file": "src/views/activity/detail/index.vue",
+        "line": 50
+      },
+      {
+        "file": "src/views/activity/detail/index.vue",
+        "line": 60
+      },
+      {
+        "file": "src/views/activity/detail/index.vue",
+        "line": 68
+      },
+      {
+        "file": "src/views/activity/detail/index.vue",
+        "line": 79
+      },
+      {
+        "file": "src/views/activity/detail/index.vue",
+        "line": 87
+      },
+      {
+        "file": "src/views/activity/detail/index.vue",
+        "line": 98
+      },
+      {
+        "file": "src/views/activity/detail/index.vue",
+        "line": 106
+      },
+      {
+        "file": "src/views/activity/detail/index.vue",
+        "line": 119
+      },
+      {
+        "file": "src/views/activity/detail/tabs/blessing.vue",
+        "line": 40
+      },
+      {
+        "file": "src/views/activity/detail/tabs/blessing.vue",
+        "line": 48
+      },
+      {
+        "file": "src/views/activity/detail/tabs/feedback.vue",
+        "line": 40
+      },
+      {
+        "file": "src/views/activity/detail/tabs/feedback.vue",
+        "line": 48
+      },
+      {
+        "file": "src/views/activity/detail/tabs/program-cards.vue",
+        "line": 163
+      },
+      {
+        "file": "src/views/activity/detail/tabs/program-cards.vue",
+        "line": 176
+      },
+      {
+        "file": "src/views/activity/detail/tabs/questionnaire-content.vue",
+        "line": 22
+      },
+      {
+        "file": "src/views/activity/list/list.vue",
+        "line": 8
+      },
+      {
+        "file": "src/views/activity/list/list.vue",
+        "line": 44
+      },
+      {
+        "file": "src/views/activity/list/list.vue",
+        "line": 52
+      },
+      {
+        "file": "src/views/activity/list/list.vue",
+        "line": 60
+      },
+      {
+        "file": "src/views/activity/list/list.vue",
+        "line": 68
+      },
+      {
+        "file": "src/views/activity/list/list.vue",
+        "line": 76
+      },
+      {
+        "file": "src/views/activity/list/list.vue",
+        "line": 84
+      },
+      {
+        "file": "src/views/activity/prize/list.vue",
+        "line": 8
+      },
+      {
+        "file": "src/views/activity/program/edit/components/program-detail-bindings.vue",
+        "line": 9
+      },
+      {
+        "file": "src/views/activity/program/edit/components/program-detail-bindings.vue",
+        "line": 40
+      },
+      {
+        "file": "src/views/activity/program/edit/components/program-detail-bindings.vue",
+        "line": 77
+      },
+      {
+        "file": "src/views/activity/program/edit/index.vue",
+        "line": 17
+      },
+      {
+        "file": "src/views/activity/program/list.vue",
+        "line": 8
+      },
+      {
+        "file": "src/views/activity/program/list.vue",
+        "line": 39
+      },
+      {
+        "file": "src/views/activity/vote-program/list.vue",
+        "line": 8
+      }
+    ],
+    "busdriver_del": [
+      {
+        "file": "src/views/activity/detail/tabs/blessing.vue",
+        "line": 256
+      },
+      {
+        "file": "src/views/activity/detail/tabs/feedback.vue",
+        "line": 237
+      },
+      {
+        "file": "src/views/activity/detail/tabs/registration.vue",
+        "line": 210
+      },
+      {
+        "file": "src/views/activity/detail/tabs/vote-info.vue",
+        "line": 153
+      },
+      {
+        "file": "src/views/activity/detail/tabs/winner.vue",
+        "line": 132
+      },
+      {
+        "file": "src/views/activity/email-school/list.vue",
+        "line": 39
+      },
+      {
+        "file": "src/views/activity/list/list.vue",
+        "line": 92
+      },
+      {
+        "file": "src/views/activity/prize/list.vue",
+        "line": 39
+      },
+      {
+        "file": "src/views/activity/program/list.vue",
+        "line": 47
+      },
+      {
+        "file": "src/views/activity/vote-program/list.vue",
+        "line": 39
+      },
+      {
+        "file": "src/views/activity/wechat-school/list.vue",
+        "line": 39
+      },
+      {
+        "file": "src/views/school-bus/driver/list.vue",
+        "line": 58
+      }
+    ],
+    "busdriver_add": [
+      {
+        "file": "src/views/activity/email-school/list.vue",
+        "line": 8
+      },
+      {
+        "file": "src/views/activity/wechat-school/list.vue",
+        "line": 8
+      },
+      {
+        "file": "src/views/school-bus/driver/list.vue",
+        "line": 15
+      }
+    ],
+    "questionnaire_edit": [
+      {
+        "file": "src/views/activity/questionnaire/edit.vue",
+        "line": 14
+      },
+      {
+        "file": "src/views/activity/questionnaire/edit.vue",
+        "line": 29
+      }
+    ],
+    "questionnaire_add": [
+      {
+        "file": "src/views/activity/questionnaire/list.vue",
+        "line": 8
+      }
+    ],
+    "questionnaire_edit_status": [
+      {
+        "file": "src/views/activity/questionnaire/list.vue",
+        "line": 39
+      }
+    ],
+    "questionnaire_edit_frozen": [
+      {
+        "file": "src/views/activity/questionnaire/list.vue",
+        "line": 47
+      }
+    ],
+    "questionnaire_delete": [
+      {
+        "file": "src/views/activity/questionnaire/list.vue",
+        "line": 55
+      }
+    ],
+    "pass-add": [
+      {
+        "file": "src/views/attendance/pass/list.vue",
+        "line": 9
+      }
+    ],
+    "pass-generated-batch": [
+      {
+        "file": "src/views/attendance/pass/list.vue",
+        "line": 44
+      }
+    ],
+    "pass-delete": [
+      {
+        "file": "src/views/attendance/pass/list.vue",
+        "line": 51
+      },
+      {
+        "file": "src/views/attendance/pass/list.vue",
+        "line": 213
+      }
+    ],
+    "pass-voided": [
+      {
+        "file": "src/views/attendance/pass/list.vue",
+        "line": 220
+      }
+    ],
+    "pass-generated": [
+      {
+        "file": "src/views/attendance/pass/list.vue",
+        "line": 231
+      }
+    ],
+    "school_attendance_export": [
+      {
+        "file": "src/views/attendance/school/list.vue",
+        "line": 9
+      }
+    ],
+    "student_attendance_export": [
+      {
+        "file": "src/views/attendance/student/list.vue",
+        "line": 9
+      }
+    ],
+    "archive_wx_openid": [
+      {
+        "file": "src/views/attendance/wechat/list.vue",
+        "line": 39
+      },
+      {
+        "file": "src/views/attendance/wechat/list.vue",
+        "line": 46
+      }
+    ],
+    "announcement_add": [
+      {
+        "file": "src/views/content/announcement/list.vue",
+        "line": 9
+      }
+    ],
+    "category_add": [
+      {
+        "file": "src/views/content/article/category/list.vue",
+        "line": 9
+      }
+    ],
+    "article_add": [
+      {
+        "file": "src/views/content/article/list/list.vue",
+        "line": 9
+      }
+    ],
+    "comment_add": [
+      {
+        "file": "src/views/content/discussion/comment/list.vue",
+        "line": 9
+      }
+    ],
+    "likeandsave_add": [
+      {
+        "file": "src/views/content/discussion/like-save/list.vue",
+        "line": 9
+      }
+    ],
+    "discussion_add": [
+      {
+        "file": "src/views/content/discussion/list/list.vue",
+        "line": 9
+      }
+    ],
+    "tag_add": [
+      {
+        "file": "src/views/content/discussion/tag/list.vue",
+        "line": 9
+      }
+    ],
+    "foodweekly_add": [
+      {
+        "file": "src/views/content/moment/food-weekly/list.vue",
+        "line": 9
+      }
+    ],
+    "schoollife_add": [
+      {
+        "file": "src/views/content/moment/school-life/list.vue",
+        "line": 9
+      }
+    ],
+    "boarding-add": [
+      {
+        "file": "src/views/dorm/boarding-student/components/current-list.vue",
+        "line": 4
+      }
+    ],
+    "boarding-assigne": [
+      {
+        "file": "src/views/dorm/boarding-student/components/current-list.vue",
+        "line": 38
+      }
+    ],
+    "boarding-checkout": [
+      {
+        "file": "src/views/dorm/boarding-student/components/current-list.vue",
+        "line": 46
+      }
+    ],
+    "boarding-planCheckOut": [
+      {
+        "file": "src/views/dorm/boarding-student/components/current-list.vue",
+        "line": 54
+      }
+    ],
+    "boarding-parent-view": [
+      {
+        "file": "src/views/dorm/boarding-student/components/history-edit-dialog.vue",
+        "line": 74
+      },
+      {
+        "file": "src/views/dorm/boarding-student/components/student-detail-dialog.vue",
+        "line": 128
+      },
+      {
+        "file": "src/views/dorm/boarding-student/components/student-edit-dialog.vue",
+        "line": 73
+      }
+    ],
+    "attribute-add": [
+      {
+        "file": "src/views/dorm/space/attribute/list.vue",
+        "line": 9
+      }
+    ],
+    "attribute-delete": [
+      {
+        "file": "src/views/dorm/space/attribute/list.vue",
+        "line": 43
+      }
+    ],
+    "building-add": [
+      {
+        "file": "src/views/dorm/space/building/list.vue",
+        "line": 9
+      }
+    ],
+    "building-edit": [
+      {
+        "file": "src/views/dorm/space/building/list.vue",
+        "line": 84
+      }
+    ],
+    "building-delete": [
+      {
+        "file": "src/views/dorm/space/building/list.vue",
+        "line": 92
+      }
+    ],
+    "floor-add": [
+      {
+        "file": "src/views/dorm/space/floor/list.vue",
+        "line": 9
+      }
+    ],
+    "floor-edit": [
+      {
+        "file": "src/views/dorm/space/floor/list.vue",
+        "line": 90
+      }
+    ],
+    "floor-delete": [
+      {
+        "file": "src/views/dorm/space/floor/list.vue",
+        "line": 98
+      }
+    ],
+    "room-assignment": [
+      {
+        "file": "src/views/dorm/space/room/components/room-card.vue",
+        "line": 68
+      }
+    ],
+    "room-edit": [
+      {
+        "file": "src/views/dorm/space/room/components/room-card.vue",
+        "line": 75
+      }
+    ],
+    "room-delete": [
+      {
+        "file": "src/views/dorm/space/room/components/room-card.vue",
+        "line": 78
+      }
+    ],
+    "room-add": [
+      {
+        "file": "src/views/dorm/space/room/list.vue",
+        "line": 9
+      }
+    ],
+    "rule-add": [
+      {
+        "file": "src/views/dorm/space/rule/list.vue",
+        "line": 9
+      }
+    ],
+    "rule-delete": [
+      {
+        "file": "src/views/dorm/space/rule/list.vue",
+        "line": 43
+      }
+    ],
+    "mailgroup-add": [
+      {
+        "file": "src/views/email/group/list.vue",
+        "line": 8
+      }
+    ],
+    "mailgroup-gd": [
+      {
+        "file": "src/views/email/group/list.vue",
+        "line": 42
+      }
+    ],
+    "mailgroup-sy": [
+      {
+        "file": "src/views/email/group/list.vue",
+        "line": 49
+      }
+    ],
+    "mailgroup-delete": [
+      {
+        "file": "src/views/email/group/list.vue",
+        "line": 56
+      },
+      {
+        "file": "src/views/email/group/list.vue",
+        "line": 256
+      }
+    ],
+    "mailgroup-edit": [
+      {
+        "file": "src/views/email/group/list.vue",
+        "line": 247
+      }
+    ],
+    "mailgroup-vieew": [
+      {
+        "file": "src/views/email/group/list.vue",
+        "line": 253
+      }
+    ],
+    "outgo-view": [
+      {
+        "file": "src/views/email/outbox/tab.vue",
+        "line": 98
+      },
+      {
+        "file": "src/views/email/outbox/use-outbox-sent.ts",
+        "line": 81
+      }
+    ],
+    "outgo-delete": [
+      {
+        "file": "src/views/email/outbox/use-outbox-sent.ts",
+        "line": 84
+      }
+    ],
+    "protocol_add": [
+      {
+        "file": "src/views/protocol/list.vue",
+        "line": 9
+      }
+    ],
+    "protocol_del": [
+      {
+        "file": "src/views/protocol/list.vue",
+        "line": 48
+      }
+    ],
+    "busattendance_add": [
+      {
+        "file": "src/views/school-bus/attendance/list.vue",
+        "line": 9
+      }
+    ],
+    "busattendance_del": [
+      {
+        "file": "src/views/school-bus/attendance/list.vue",
+        "line": 44
+      }
+    ],
+    "buscarinfo_download": [
+      {
+        "file": "src/views/school-bus/car/list.vue",
+        "line": 9
+      }
+    ],
+    "buscarinfo_import": [
+      {
+        "file": "src/views/school-bus/car/list.vue",
+        "line": 12
+      }
+    ],
+    "buscarinfo_add": [
+      {
+        "file": "src/views/school-bus/car/list.vue",
+        "line": 15
+      }
+    ],
+    "buscarinfo_del": [
+      {
+        "file": "src/views/school-bus/car/list.vue",
+        "line": 58
+      }
+    ],
+    "busdriver_download": [
+      {
+        "file": "src/views/school-bus/driver/list.vue",
+        "line": 9
+      }
+    ],
+    "busdriver_import": [
+      {
+        "file": "src/views/school-bus/driver/list.vue",
+        "line": 12
+      }
+    ],
+    "teacheruser_export": [
+      {
+        "file": "src/views/school-bus/follow-teacher/list.vue",
+        "line": 9
+      }
+    ],
+    "teacheruser_download": [
+      {
+        "file": "src/views/school-bus/follow-teacher/list.vue",
+        "line": 12
+      }
+    ],
+    "teacheruser_import": [
+      {
+        "file": "src/views/school-bus/follow-teacher/list.vue",
+        "line": 15
+      }
+    ],
+    "teacheruser_add": [
+      {
+        "file": "src/views/school-bus/follow-teacher/list.vue",
+        "line": 18
+      }
+    ],
+    "teacheruser_enble": [
+      {
+        "file": "src/views/school-bus/follow-teacher/list.vue",
+        "line": 62
+      }
+    ],
+    "teacheruser_disable": [
+      {
+        "file": "src/views/school-bus/follow-teacher/list.vue",
+        "line": 69
+      }
+    ],
+    "teacheruser_del": [
+      {
+        "file": "src/views/school-bus/follow-teacher/list.vue",
+        "line": 76
+      }
+    ],
+    "busexception_export": [
+      {
+        "file": "src/views/school-bus/route/exception/components/page-header.vue",
+        "line": 8
+      }
+    ],
+    "busexception_download": [
+      {
+        "file": "src/views/school-bus/route/exception/components/page-header.vue",
+        "line": 11
+      }
+    ],
+    "busexception_import": [
+      {
+        "file": "src/views/school-bus/route/exception/components/page-header.vue",
+        "line": 14
+      }
+    ],
+    "busexception_add": [
+      {
+        "file": "src/views/school-bus/route/exception/components/page-header.vue",
+        "line": 17
+      }
+    ],
+    "busexception_del": [
+      {
+        "file": "src/views/school-bus/route/exception/list.vue",
+        "line": 39
+      }
+    ],
+    "busoperation_export": [
+      {
+        "file": "src/views/school-bus/route/operation/list.vue",
+        "line": 9
+      }
+    ],
+    "busoperation_download": [
+      {
+        "file": "src/views/school-bus/route/operation/list.vue",
+        "line": 12
+      }
+    ],
+    "busoperation_import": [
+      {
+        "file": "src/views/school-bus/route/operation/list.vue",
+        "line": 15
+      }
+    ],
+    "busoperation_add": [
+      {
+        "file": "src/views/school-bus/route/operation/list.vue",
+        "line": 18
+      }
+    ],
+    "busoperation_del": [
+      {
+        "file": "src/views/school-bus/route/operation/list.vue",
+        "line": 61
+      }
+    ],
+    "busline_download": [
+      {
+        "file": "src/views/school-bus/route/plan/tab.vue",
+        "line": 9
+      }
+    ],
+    "busline_import": [
+      {
+        "file": "src/views/school-bus/route/plan/tab.vue",
+        "line": 12
+      }
+    ],
+    "busline_add": [
+      {
+        "file": "src/views/school-bus/route/plan/tab.vue",
+        "line": 15
+      },
+      {
+        "file": "src/views/school-bus/route/plan/tab.vue",
+        "line": 90
+      },
+      {
+        "file": "src/views/school-bus/route/plan/tab.vue",
+        "line": 90
+      }
+    ],
+    "bussection_add": [
+      {
+        "file": "src/views/school-bus/route/plan/tab.vue",
+        "line": 21
+      }
+    ],
+    "busstation_download": [
+      {
+        "file": "src/views/school-bus/route/plan/tab.vue",
+        "line": 29
+      }
+    ],
+    "busstation_import": [
+      {
+        "file": "src/views/school-bus/route/plan/tab.vue",
+        "line": 32
+      }
+    ],
+    "busstation_add": [
+      {
+        "file": "src/views/school-bus/route/plan/tab.vue",
+        "line": 36
+      }
+    ],
+    "busline_batch_copy": [
+      {
+        "file": "src/views/school-bus/route/plan/tab.vue",
+        "line": 90
+      },
+      {
+        "file": "src/views/school-bus/route/plan/tab.vue",
+        "line": 90
+      }
+    ],
+    "busline_del": [
+      {
+        "file": "src/views/school-bus/route/plan/tab.vue",
+        "line": 97
+      }
+    ],
+    "bussection_del": [
+      {
+        "file": "src/views/school-bus/route/plan/tab.vue",
+        "line": 143
+      }
+    ],
+    "busstation_del": [
+      {
+        "file": "src/views/school-bus/route/plan/tab.vue",
+        "line": 189
+      }
+    ],
+    "busorder_batch_approve": [
+      {
+        "file": "src/views/school-bus/student/apply/components/batch-toolbar.vue",
+        "line": 3
+      }
+    ],
+    "busorder_batch_deny": [
+      {
+        "file": "src/views/school-bus/student/apply/components/batch-toolbar.vue",
+        "line": 9
+      }
+    ],
+    "busorder_batch_update_payment_status": [
+      {
+        "file": "src/views/school-bus/student/apply/components/batch-toolbar.vue",
+        "line": 13
+      }
+    ],
+    "busintentionorder_del": [
+      {
+        "file": "src/views/school-bus/student/apply/components/batch-toolbar.vue",
+        "line": 20
+      }
+    ],
+    "busorder_down_intention_order": [
+      {
+        "file": "src/views/school-bus/student/apply/components/page-header.vue",
+        "line": 9
+      }
+    ],
+    "busorder_import_intention_order": [
+      {
+        "file": "src/views/school-bus/student/apply/components/page-header.vue",
+        "line": 14
+      }
+    ],
+    "busorder_add": [
+      {
+        "file": "src/views/school-bus/student/apply/components/page-header.vue",
+        "line": 17
+      },
+      {
+        "file": "src/views/school-bus/student/order/list.vue",
+        "line": 18
+      }
+    ],
+    "isshow_bus_intentionorder_pay_info": [
+      {
+        "file": "src/views/school-bus/student/components/bus-order-form-dialog-setup-main.ts",
+        "line": 95
+      },
+      {
+        "file": "src/views/school-bus/student/components/order-detail-dialog.vue",
+        "line": 213
+      }
+    ],
+    "isedit_bus_intentionorder_pay_info": [
+      {
+        "file": "src/views/school-bus/student/components/bus-order-form-dialog-setup-main.ts",
+        "line": 96
+      }
+    ],
+    "busorder_export_order": [
+      {
+        "file": "src/views/school-bus/student/order/list.vue",
+        "line": 9
+      }
+    ],
+    "busorder_down_order": [
+      {
+        "file": "src/views/school-bus/student/order/list.vue",
+        "line": 12
+      }
+    ],
+    "busorder_import_order": [
+      {
+        "file": "src/views/school-bus/student/order/list.vue",
+        "line": 15
+      }
+    ],
+    "busorder_del": [
+      {
+        "file": "src/views/school-bus/student/order/list.vue",
+        "line": 76
+      }
+    ],
+    "medicalinfo_add": [
+      {
+        "file": "src/views/school-doctor/medical-info/list.vue",
+        "line": 21
+      }
+    ],
+    "medicalinfo_import": [
+      {
+        "file": "src/views/school-doctor/medical-info/list.vue",
+        "line": 101
+      }
+    ],
+    "medicalinfo_export": [
+      {
+        "file": "src/views/school-doctor/medical-info/list.vue",
+        "line": 102
+      }
+    ],
+    "medicationapplication_add": [
+      {
+        "file": "src/views/school-doctor/medicine-apply/list.vue",
+        "line": 9
+      }
+    ],
+    "medicalarchive_parent_info": [
+      {
+        "file": "src/views/school-doctor/student-record/components/archive-student-tab.vue",
+        "line": 79
+      }
+    ],
+    "pendingmedication_operation_edit": [
+      {
+        "file": "src/views/school-doctor/visit-record/components/pending-detail-panel.vue",
+        "line": 121
+      },
+      {
+        "file": "src/views/school-doctor/visit-record/components/pending-drawer.vue",
+        "line": 173
+      }
+    ]
+  }
+}

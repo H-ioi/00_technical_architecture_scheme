@@ -13,7 +13,7 @@ export interface OAuthTokenUserInfo {
   username?: string
   nickname?: string
   avatar?: string
-  authorities?: Array<{ authority?: string } | string>
+  authorities?: Array<{ authority?: string; permission?: string } | string>
 }
 
 /** OAuth password 模式接口返回（网关原始字段）。 */
