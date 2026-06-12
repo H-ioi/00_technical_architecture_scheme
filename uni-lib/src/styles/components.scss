@@ -288,10 +288,11 @@
 
 [data-layout='isa-light'] {
   .uni-layout {
-    background: var(--uni-layout-bg);
+    background: #fff;
 
     .uni-layout-tags {
       border: 0;
+      padding-left: 0;
     }
 
     &__sidebar {
@@ -320,8 +321,6 @@
       .el-menu-item,
       .el-sub-menu__title {
         height: 44px;
-        margin: 0 0 4px;
-        padding: 0 16px !important;
         color: var(--uni-layout-text);
         font-size: 16px;
         border-radius: var(--uni-radius-base);
@@ -349,6 +348,14 @@
         color: var(--uni-layout-primary);
         background: transparent;
       }
+      > .el-sub-menu {
+        &.is-active {
+          > .el-sub-menu__title {
+            background: var(--uni-layout-primary);
+            color: #fff;
+          }
+        }
+      }
     }
 
     &__header {
@@ -373,7 +380,6 @@
     &__user,
     &__action {
       color: var(--uni-layout-text);
-      font-size: 16px;
     }
 
     &__locale:hover,
@@ -391,17 +397,22 @@
     &__content {
       padding: 20px;
       background: var(--uni-layout-bg);
-      border-radius: var(--uni-radius-base);
+      border-top-left-radius: var(--uni-radius-lg);
+      // overflow: hidden;
+    }
+
+    &__user-info {
+      max-width: 72px;
     }
   }
 
   .uni-list-page {
     gap: 16px;
-    border-radius: var(--uni-radius-base);
+    border-radius: var(--uni-radius-lg);
     &__body {
       padding: 20px;
       background: var(--uni-layout-card-bg);
-      border-radius: var(--uni-radius-base);
+      border-radius: var(--uni-radius-lg);
     }
     &__header {
       margin-bottom: 0;
@@ -414,6 +425,17 @@
 
       p {
         color: var(--uni-layout-text-secondary);
+      }
+    }
+  }
+
+  .uni-layout-tags {
+    padding: 0;
+    &__actions {
+      background: var(--uni-layout-bg);
+      border-top-left-radius: 12px;
+      &::before {
+        background: transparent;
       }
     }
   }
@@ -455,21 +477,8 @@
   }
 
   .el-button {
-    min-height: 34px;
     border-radius: var(--uni-radius-base);
     font-size: 14px;
-  }
-
-  .el-button--primary {
-    color: var(--uni-layout-card-bg);
-    border-color: var(--el-color-primary);
-    background: var(--el-color-primary);
-  }
-
-  .el-button--primary:hover,
-  .el-button--primary:focus {
-    border-color: var(--el-color-primary-dark-2);
-    background: var(--el-color-primary-dark-2);
   }
 
   .el-switch.is-checked .el-switch__core {
