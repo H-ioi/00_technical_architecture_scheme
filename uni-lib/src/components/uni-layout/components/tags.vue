@@ -349,10 +349,7 @@ const onToolbarRefresh = () => {
       margin-left: 0;
       overflow: hidden;
       opacity: 0;
-      transition:
-        width 0.2s ease,
-        margin-left 0.2s ease,
-        opacity 0.2s ease;
+      transition: var(--uni-transition-tag-close);
     }
 
     &:hover .el-tag__close,

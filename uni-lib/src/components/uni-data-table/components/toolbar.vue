@@ -61,6 +61,10 @@ const emit = defineEmits<{
 
 <style lang="scss">
 .uni-table-toolbar {
+  &__trigger {
+    transition: var(--uni-transition-colors);
+  }
+
   &__panel {
     display: flex;
     flex-direction: column;

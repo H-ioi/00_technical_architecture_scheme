@@ -49,7 +49,7 @@ const injectPwaStyles = () => {
         0 0 32px rgba(64, 158, 255, 0.18);
       color: rgba(255, 255, 255, 0.92);
       font-family: system-ui, -apple-system, 'Segoe UI', sans-serif;
-      animation: uni-pwa-enter 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+      animation: uni-pwa-enter var(--uni-duration-enter) var(--uni-ease-emphasized);
       overflow: hidden;
     }
     .uni-pwa-card::before {
@@ -99,7 +99,7 @@ const injectPwaStyles = () => {
       border-radius: inherit;
       background: linear-gradient(90deg, #409eff, #79bbff, #a0cfff);
       box-shadow: 0 0 12px rgba(64, 158, 255, 0.6);
-      transition: width 0.3s ease;
+      transition: width var(--uni-duration-slow) var(--uni-ease-standard);
     }
     .uni-pwa-update-btn {
       flex-shrink: 0;
@@ -113,7 +113,7 @@ const injectPwaStyles = () => {
       font-weight: 600;
       cursor: pointer;
       box-shadow: 0 4px 16px rgba(64, 158, 255, 0.4);
-      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      transition: var(--uni-transition-transform), box-shadow var(--uni-duration-base) var(--uni-ease-standard);
     }
     .uni-pwa-update-btn:hover {
       transform: translateY(-1px);

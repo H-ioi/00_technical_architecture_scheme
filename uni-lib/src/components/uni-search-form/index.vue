@@ -35,17 +35,19 @@
       </div>
     </div>
 
-    <div v-if="showSelectedTags && selectedTags.length" class="uni-search-form__selected-tags">
-      <slot name="selected-tags" :tags="selectedTags" :remove="removeSelectedTag">
-        <el-tag
-          v-for="tag in selectedTags"
-          :key="tag.field"
-          closable
-          @close="removeSelectedTag(tag.field)"
-          >{{ tag.label }}：{{ tag.value }}</el-tag
-        >
-      </slot>
-    </div>
+    <Transition name="uni-fade">
+      <div v-if="showSelectedTags && selectedTags.length" class="uni-search-form__selected-tags">
+        <slot name="selected-tags" :tags="selectedTags" :remove="removeSelectedTag">
+          <el-tag
+            v-for="tag in selectedTags"
+            :key="tag.field"
+            closable
+            @close="removeSelectedTag(tag.field)"
+            >{{ tag.label }}：{{ tag.value }}</el-tag
+          >
+        </slot>
+      </div>
+    </Transition>
   </div>
 </template>
 
@@ -259,6 +261,7 @@ watch(
     line-height: 1;
     height: auto;
     min-height: 0;
+    transition: var(--uni-transition-colors);
   }
 
   &__selected-tags {

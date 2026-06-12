@@ -274,7 +274,7 @@ watch(visible, async (isOpen) => {
     left: 0;
     background-repeat: no-repeat;
     background-size: 100% 100%;
-    transition: transform 0.12s ease;
+    transition: var(--uni-transition-transform);
 
     &.is-dragging {
       transition: none;
@@ -330,7 +330,7 @@ watch(visible, async (isOpen) => {
     border-radius: 999px;
     box-shadow: 0 6px 16px rgb(15 23 42 / 18%);
     place-items: center;
-    transition: transform 0.12s ease;
+    transition: var(--uni-transition-transform);
 
     &.is-dragging {
       cursor: grabbing;

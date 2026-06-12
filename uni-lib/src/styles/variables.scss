@@ -7,6 +7,25 @@
   --uni-scrollbar-thumb-color: rgb(144 147 153 / 30%);
   --uni-scrollbar-thumb-hover-color: rgb(144 147 153 / 45%);
 
+  /** 动效 token：时长 / 曲线 / 常用 transition 组合。 */
+  --uni-duration-fast: 120ms;
+  --uni-duration-base: 200ms;
+  --uni-duration-slow: 300ms;
+  --uni-duration-enter: 450ms;
+  --uni-ease-standard: cubic-bezier(0.4, 0, 0.2, 1);
+  --uni-ease-out: cubic-bezier(0, 0, 0.2, 1);
+  --uni-ease-emphasized: cubic-bezier(0.22, 1, 0.36, 1);
+  --uni-transition-colors:
+    color var(--uni-duration-base) var(--uni-ease-standard),
+    background-color var(--uni-duration-base) var(--uni-ease-standard);
+  --uni-transition-opacity: opacity var(--uni-duration-base) var(--uni-ease-out);
+  --uni-transition-transform: transform var(--uni-duration-fast) var(--uni-ease-standard);
+  --uni-transition-layout: width var(--uni-duration-base) var(--uni-ease-standard);
+  --uni-transition-tag-close:
+    width var(--uni-duration-base) var(--uni-ease-standard),
+    margin-left var(--uni-duration-base) var(--uni-ease-standard),
+    opacity var(--uni-duration-base) var(--uni-ease-standard);
+
   /** 默认兜底：未设置 data-layout 时仍保持可用。 */
   --uni-color-primary: #ba8e62;
   --uni-bg-page: #f5f7fb;
@@ -155,7 +174,7 @@
   --el-border-color-lighter: #eef4f9;
   --el-fill-color-light: #f6f9fc;
   --el-fill-color-lighter: #fafcff;
-  --el-mask-color: rgb(0 0 0 / 38%);
+  --el-mask-color: rgb(255 255 255 / 90%);
 }
 
 [data-layout='ems-dark'] {
