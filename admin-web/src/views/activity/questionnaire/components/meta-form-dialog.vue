@@ -12,7 +12,7 @@
     </el-alert>
     <UniForm
       ref="uniFormRef"
-      v-model="form"
+      v-model="formModel"
       mode="edit"
       class="activity-q-meta__form"
       :config="formConfig" />
@@ -77,6 +77,10 @@ const form = reactive({
   status: 1 as number,
   needStudentInfo: '0',
   instructions: ''
+})
+const formModel = computed({
+  get: () => form,
+  set: (value: typeof form) => Object.assign(form, value)
 })
 
 const dlgTitle = computed(() =>

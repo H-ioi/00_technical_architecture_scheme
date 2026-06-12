@@ -7,7 +7,7 @@
     append-to-body
     :close-on-click-modal="false"
     @closed="onClosed">
-    <UniForm ref="uniFormRef" v-model="form" mode="edit" :config="formConfig" />
+    <UniForm ref="uniFormRef" v-model="formModel" mode="edit" :config="formConfig" />
     <template #footer>
       <el-button @click="visible = false">{{ $t('common.cancel') }}</el-button>
       <el-button type="primary" :loading="saving" @click="submit">
@@ -40,6 +40,10 @@ const actOpts = ref<UniOption[]>([])
 const form = reactive({
   newName: '',
   newActivityId: undefined as string | number | undefined
+})
+const formModel = computed({
+  get: () => form,
+  set: (value: typeof form) => Object.assign(form, value)
 })
 
 const formConfig = computed<UniFormConfig>(() => ({

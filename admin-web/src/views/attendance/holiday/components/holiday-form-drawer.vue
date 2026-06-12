@@ -9,7 +9,7 @@
     @closed="onClosed">
     <UniForm
       ref="uniFormRef"
-      v-model="form"
+      v-model="formModel"
       mode="edit"
       class="holiday-form-drawer__form"
       :config="holidayDrawerFormConfig">
@@ -170,6 +170,10 @@ const form = reactive({
   parentResponsible: false,
   /** UniForm 占位字段，不参与请假提交 */
   attachments: ''
+})
+const formModel = computed({
+  get: () => form,
+  set: (value: typeof form) => Object.assign(form, value)
 })
 const rules = computed<UniFormConfig['rules']>(() => ({
   admissonNo: [{ required: true, message: t('attendance.holiday.ruleStudent'), trigger: 'change' }],

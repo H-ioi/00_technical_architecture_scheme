@@ -12,7 +12,7 @@
     </el-alert>
     <UniForm
       ref="uniFormRef"
-      v-model="form"
+      v-model="formModel"
       mode="edit"
       class="activity-q-batch-flag__form"
       :config="formConfig" />
@@ -50,6 +50,10 @@ const uniFormRef = ref<InstanceType<typeof UniForm> | null>(null)
 
 const form = reactive({
   value: '1'
+})
+const formModel = computed({
+  get: () => form,
+  set: (value: typeof form) => Object.assign(form, value)
 })
 
 const title = computed(() =>

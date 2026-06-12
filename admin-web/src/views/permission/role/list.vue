@@ -52,7 +52,7 @@
       :title="
         roleFormMode === 'add' ? t('permission.role.formAdd') : t('permission.role.formEdit')
       ">
-      <UniForm ref="uniFormRef" v-model="roleForm" mode="edit" :config="roleFormConfig">
+      <UniForm ref="uniFormRef" v-model="roleFormModel" mode="edit" :config="roleFormConfig">
         <template #field-deptIds>
           <p class="perm-role-scope-hint">{{ t('permission.messages.deptScopeHint') }}</p>
           <el-tree
@@ -111,6 +111,10 @@ const roleForm = reactive<Row>({
   dictItemMap: {},
   templateIds: [],
   deptIds: []
+})
+const roleFormModel = computed({
+  get: () => roleForm,
+  set: (value: Row) => Object.assign(roleForm, value)
 })
 
 const roleFormConfig = computed<UniFormConfig>(() => ({

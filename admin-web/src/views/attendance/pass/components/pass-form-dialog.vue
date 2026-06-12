@@ -27,7 +27,7 @@
 
     <UniForm
       ref="uniFormRef"
-      v-model="form"
+      v-model="formModel"
       :mode="viewOnly ? 'view' : 'edit'"
       class="holiday-pass-dialog__form"
       :config="passFormConfig">
@@ -134,6 +134,10 @@ const form = reactive<{
   memo: '',
   way: '',
   dateLimit: ['08:00', '09:00']
+})
+const formModel = computed({
+  get: () => form,
+  set: (value: typeof form) => Object.assign(form, value)
 })
 
 const studentLine = computed(() => {
