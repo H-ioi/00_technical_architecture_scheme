@@ -1,3 +1,4 @@
+import fs from 'node:fs'
 import { createRequire } from 'node:module'
 import path from 'node:path'
 import { fileURLToPath, URL } from 'node:url'
@@ -7,9 +8,19 @@ import { defineConfig, loadEnv } from 'vite'
 import { VitePWA } from 'vite-plugin-pwa'
 
 const require = createRequire(import.meta.url)
-// exports 未导出 package.json，不能用 resolve('uni-ui-lib/package.json')
-const uniLibEntry = require.resolve('uni-ui-lib')
-const uniLibCss = path.join(path.dirname(uniLibEntry), 'index.css')
+const adminWebDir = fileURLToPath(new URL('.', import.meta.url))
+/**  monorepo 本地联调：优先读 sibling uni-lib/dist，避免 file: 在 Windows 复制到 node_modules 后 rebuild 仍命中旧 dist */
+const uniLibDistDir = path.resolve(adminWebDir, '../uni-lib/dist')
+const uniLibDistEntry = path.join(uniLibDistDir, 'index.mjs')
+const uniLibDistCss = path.join(uniLibDistDir, 'index.css')
+const hasLocalUniLibDist = fs.existsSync(uniLibDistEntry)
+const resolvedPkgEntry = require.resolve('uni-ui-lib')
+const uniLibEntry = hasLocalUniLibDist
+  ? uniLibDistEntry
+  : path.join(path.dirname(resolvedPkgEntry), 'index.mjs')
+const uniLibCss = hasLocalUniLibDist
+  ? uniLibDistCss
+  : path.join(path.dirname(resolvedPkgEntry), 'index.css')
 
 const isEnvEnabled = (value?: string) => {
   const normalized = value?.trim().split(/\s+/)[0]?.toLowerCase()
@@ -73,15 +84,23 @@ export default defineConfig(({ mode }) => {
     },
     resolve: {
       dedupe: ['vue', 'vue-router', '@vue/shared'],
-      alias: {
-        '@': fileURLToPath(new URL('./src', import.meta.url)),
-        'uni-ui-lib/style.css': uniLibCss,
-        'uni-ui-lib/dist/index.css': uniLibCss,
+      /** 数组顺序：先匹配 style 子路径，再用 /^uni-ui-lib$/ 精确匹配入口，避免 uni-ui-lib 前缀误伤 style.css */
+      alias: [
+        { find: 'uni-ui-lib/style.css', replacement: uniLibCss },
+        { find: 'uni-ui-lib/dist/index.css', replacement: uniLibCss },
+        { find: /^uni-ui-lib$/, replacement: uniLibEntry },
+        {
+          find: '@',
+          replacement: fileURLToPath(new URL('./src', import.meta.url))
+        },
         /** vuedraggable 误把 UMD 标成 module；走源码入口，否则预构建会令 defineComponent 内 isFunction 异常 */
-        vuedraggable: fileURLToPath(
-          new URL('./node_modules/vuedraggable/src/vuedraggable.js', import.meta.url)
-        )
-      }
+        {
+          find: 'vuedraggable',
+          replacement: fileURLToPath(
+            new URL('./node_modules/vuedraggable/src/vuedraggable.js', import.meta.url)
+          )
+        }
+      ]
     },
     server: {
       host: '0.0.0.0',

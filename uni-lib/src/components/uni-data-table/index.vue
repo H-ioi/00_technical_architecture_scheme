@@ -4,7 +4,7 @@
     'is-tree-table': isTreeEnabled
   }">
     <el-table v-loading="actualLoading" :data="actualData" :row-key="rowKey" :empty-text="actualEmptyText"
-      :border="tableBorder" :max-height="actualMaxHeight" :size="tableSize" :stripe="tableStripe"
+      :border="tableBorder" :height="actualMaxHeight" :size="tableSize" :stripe="tableStripe"
       v-bind="elTableTreeBindings" :highlight-current-row="selection === 'single'"
       @selection-change="(selection: Recordable[]) => emit('selection-change', selection)"
       @current-change="handleSingleSelectionChange" @sort-change="handleSortChange"
@@ -401,7 +401,7 @@ const updateAutoMaxHeight = () => {
   const paginationHeight = paginationRef.value?.getBoundingClientRect().height ?? 0
   const paginationGap = paginationHeight > 0 ? 10 : 0
   const availableHeight =
-    window.innerHeight - tableTop - paginationHeight - paginationGap - props.maxHeightOffset - 22
+    window.innerHeight - tableTop - paginationHeight - paginationGap - props.maxHeightOffset - 25
 
   autoMaxHeight.value = Math.max(160, Math.floor(availableHeight))
 }
