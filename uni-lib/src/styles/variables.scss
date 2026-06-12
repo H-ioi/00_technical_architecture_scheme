@@ -196,7 +196,8 @@
   --uni-border-color: #e5edf3;
   --uni-text-color: #24323d;
   --uni-text-color-secondary: #7c8792;
-  --uni-radius-base: 14px;
+  --uni-radius-base: 8px;
+  --uni-radius-lg: 20px;
   --uni-layout-bg: #f2f5f8;
   --uni-layout-card-bg: #fff;
   --uni-layout-sidebar-bg: #29475d;
@@ -221,9 +222,6 @@
   --el-color-success-light-9: #eef8f0;
   --el-color-warning: #d4a06f;
   --el-color-warning-light-9: #fbf3ec;
-  --el-color-danger: #f03f55;
-  --el-color-danger-light-9: #fff0f2;
-  --el-color-error: #f03f55;
   --el-bg-color: #fff;
   --el-bg-color-page: #f2f5f8;
   --el-bg-color-overlay: #fff;
@@ -235,7 +233,6 @@
   --el-border-color-lighter: #f2f6f9;
   --el-fill-color-light: #f7f9fb;
   --el-fill-color-lighter: #fbfcfd;
-  --el-mask-color: rgb(0 0 0 / 42%);
 }
 
 [data-layout='mas-dark'] {
@@ -256,7 +253,8 @@
   --uni-border-color: #ddd;
   --uni-text-color: #333;
   --uni-text-color-secondary: #666;
-  --uni-radius-base: 20px;
+  --uni-radius-base: 8px;
+  --uni-radius-lg: 20px;
   --uni-layout-bg: #f1f5fb;
   --uni-layout-card-bg: #fff;
   --uni-layout-sidebar-bg: #2a3f54;
@@ -295,7 +293,6 @@
   --el-border-color-lighter: #f0f0f0;
   --el-fill-color-light: #f8f9fa;
   --el-fill-color-lighter: #fbfcfe;
-  --el-mask-color: rgb(0 0 0 / 42%);
 }
 
 [data-theme-mode='dark'] {

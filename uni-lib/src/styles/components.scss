@@ -299,6 +299,7 @@
     gap: 2px;
     min-width: 0;
     text-align: left;
+    max-width: 72px;
 
     strong,
     small {
@@ -468,10 +469,6 @@
       border-top-left-radius: var(--uni-radius-lg);
       // overflow: hidden;
     }
-
-    &__user-info {
-      max-width: 72px;
-    }
   }
 
   .uni-list-page {
@@ -577,20 +574,32 @@
 
 [data-layout='ems-dark'] {
   .uni-layout {
-    background: var(--uni-layout-bg);
-
     &__sidebar {
-      margin: 0 28px 0 0;
       background: var(--uni-layout-sidebar-bg);
       border-right: 0;
       border-radius: 0 36px 36px 0;
       box-shadow: none;
+      z-index: 9;
     }
 
     &__brand {
       height: 92px;
-      padding: 0 30px;
+      padding: 0 10px;
       justify-content: flex-start;
+    }
+    &__main {
+      position: relative;
+      overflow: visible;
+      &::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -300px;
+        width: 300px;
+        height: 100px;
+        background: #fff;
+        z-index: 1;
+      }
     }
 
     &__logo {
@@ -598,19 +607,25 @@
     }
 
     &__menu-wrap {
-      padding: 0 20px 24px;
+      padding: 0 8px;
     }
-
+    .el-menu--collapse {
+      width: 48px;
+    }
     &__menu {
       background: transparent;
 
+      .el-menu {
+        background-color: transparent;
+      }
+
       .el-menu-item,
+      .el-menu-tooltip__trigger,
       .el-sub-menu__title {
         height: 42px;
         margin: 0 0 2px;
-        padding: 0 16px !important;
+        padding: 0 12px;
         color: rgb(255 255 255 / 90%);
-        font-size: 16px;
         border-radius: 10px;
       }
 
@@ -630,18 +645,26 @@
         height: 34px;
         padding-left: 38px !important;
         color: rgb(255 255 255 / 90%);
-        font-size: 14px;
       }
 
       .el-sub-menu .el-menu-item.is-active {
         color: var(--uni-layout-primary);
         background: transparent;
       }
+
+      > .el-sub-menu {
+        &.is-active {
+          > .el-sub-menu__title {
+            background-color: transparent;
+            color: var(--uni-layout-primary);
+          }
+        }
+      }
     }
 
     &__header {
       height: 72px;
-      padding: 0 28px 0 0;
+      padding: 0 28px 0 10px;
       background: var(--uni-layout-card-bg);
       border-bottom: 0;
       box-shadow: none;
@@ -661,7 +684,6 @@
     &__user,
     &__action {
       color: var(--uni-layout-text);
-      font-size: 16px;
     }
 
     &__locale:hover,
@@ -677,16 +699,22 @@
     }
 
     &__content {
-      padding: 30px 28px 30px 0;
+      padding: 20px;
       background: var(--uni-layout-bg);
     }
   }
 
   .uni-list-page {
-    gap: 18px;
-    padding: 28px;
+    gap: 10px;
+    padding: 20px;
     background: var(--uni-layout-card-bg);
-    border-radius: var(--uni-radius-base);
+    border-radius: var(--uni-radius-lg);
+
+    .el-table {
+      border-top-right-radius: var(--uni-radius-base);
+      border-top-left-radius: var(--uni-radius-base);
+      overflow: hidden;
+    }
 
     &__header {
       margin-bottom: 0;
@@ -732,23 +760,6 @@
     background: var(--uni-color-primary);
   }
 
-  .el-input__wrapper,
-  .el-select__wrapper {
-    min-height: 44px;
-    border-radius: 22px;
-    border: 1px solid var(--uni-color-primary);
-    box-shadow: 0 0 6px color-mix(in srgb, var(--uni-color-primary) 20%, transparent);
-    background: var(--uni-layout-primary-light);
-  }
-
-  .el-input__wrapper:hover,
-  .el-select__wrapper:hover,
-  .el-input__wrapper.is-focus,
-  .el-select__wrapper.is-focused {
-    border-color: var(--uni-color-primary);
-    box-shadow: 0 0 6px color-mix(in srgb, var(--uni-color-primary) 28%, transparent);
-  }
-
   .el-input__inner,
   .el-select__placeholder,
   .el-select__selected-item {
@@ -760,27 +771,6 @@
     min-height: 34px;
     border-radius: 10px;
     font-size: 14px;
-  }
-
-  .el-button--primary {
-    color: var(--uni-layout-card-bg);
-    border-color: var(--el-color-primary);
-    background: var(--el-color-primary);
-  }
-
-  .el-button--primary:hover,
-  .el-button--primary:focus {
-    border-color: var(--el-color-primary-dark-2);
-    background: var(--el-color-primary-dark-2);
-  }
-
-  .el-table {
-    color: var(--uni-layout-text);
-    font-size: 14px;
-  }
-
-  .el-table th.el-table__cell {
-    background: var(--el-fill-color-light);
   }
 
   .el-switch.is-checked .el-switch__core {
@@ -823,17 +813,24 @@
     }
 
     &__menu-wrap {
-      padding: 0 20px 24px;
+      padding: 0 8px;
+    }
+
+    .el-menu--collapse {
+      width: 48px;
     }
 
     &__menu {
       background: transparent;
 
+      .el-menu {
+        background-color: transparent;
+      }
+
       .el-menu-item,
       .el-sub-menu__title {
         height: 42px;
         margin: 0 0 2px;
-        padding: 0 16px !important;
         color: rgb(255 255 255 / 80%);
         font-size: 16px;
         border-radius: 10px;
@@ -868,8 +865,8 @@
 
     &__header {
       height: 72px;
-      padding: 0 28px 0 0;
-      background: var(--uni-layout-card-bg);
+      padding: 0 20px 0 10px;
+      background: transparent;
       border-bottom: 0;
       box-shadow: none;
     }
@@ -888,7 +885,6 @@
     &__user,
     &__action {
       color: var(--uni-layout-text);
-      font-size: 16px;
     }
 
     &__locale:hover,
@@ -904,16 +900,34 @@
     }
 
     &__content {
-      padding: 20px 28px 20px 0;
+      padding: 20px;
       background: var(--uni-layout-bg);
+    }
+  }
+
+  .uni-layout-tags {
+    border: 0;
+    background-color: transparent;
+    padding: 0 20px;
+    &__actions {
+      background: var(--uni-layout-card-bg);
+      border-radius: var(--uni-radius-base);
+      box-shadow: 0 0 6px rgb(0 0 0 / 10%);
+      padding-right: 8px;
+      &::before {
+        background: transparent;
+      }
+      .el-button + .el-button {
+        margin-left: 0;
+      }
     }
   }
 
   .uni-list-page {
     gap: 18px;
-    padding: 28px;
+    padding: 20px;
     background: var(--uni-layout-card-bg);
-    border-radius: var(--uni-radius-base);
+    border-radius: var(--uni-radius-lg);
     box-shadow: 0 0 6px rgb(0 0 0 / 10%);
 
     &__header {
@@ -931,14 +945,14 @@
     }
   }
 
-  .el-card,
-  .uni-data-table,
-  .uni-form,
-  .uni-search-form {
+  .uni-data-table {
     border: 0;
     border-radius: var(--uni-radius-base);
-    background: var(--uni-layout-card-bg);
-    box-shadow: 0 0 6px rgb(0 0 0 / 10%);
+    .el-table {
+      border-top-right-radius: var(--uni-radius-base);
+      border-top-left-radius: var(--uni-radius-base);
+      overflow: hidden;
+    }
   }
 
   .el-card.is-always-shadow {
@@ -983,52 +997,6 @@
   .el-select__selected-item {
     color: var(--el-text-color-regular);
     font-size: 14px;
-  }
-
-  .el-button {
-    min-height: 34px;
-    border-radius: var(--uni-radius-base);
-    font-size: 14px;
-  }
-
-  .el-button--primary {
-    color: var(--uni-layout-card-bg);
-    border-color: var(--el-color-primary);
-    background: var(--el-color-primary);
-  }
-
-  .el-button--primary:hover,
-  .el-button--primary:focus {
-    border-color: var(--el-color-primary-dark-2);
-    background: var(--el-color-primary-dark-2);
-  }
-
-  .el-button--default {
-    color: var(--uni-color-primary);
-    border-color: var(--uni-color-primary);
-    background: transparent;
-  }
-
-  .el-button--default:hover,
-  .el-button--default:focus {
-    color: var(--uni-layout-card-bg);
-    border-color: var(--uni-color-primary);
-    background: var(--uni-color-primary);
-  }
-
-  .el-table {
-    color: var(--uni-layout-text);
-    font-size: 14px;
-  }
-
-  .el-table th.el-table__cell {
-    background: var(--el-fill-color-light);
-    border-radius: var(--uni-radius-base);
-  }
-
-  .el-table .el-button.is-link,
-  .el-table .el-link {
-    color: var(--uni-color-primary);
   }
 
   .el-checkbox__input.is-checked .el-checkbox__inner {
