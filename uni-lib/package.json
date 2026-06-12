@@ -72,6 +72,7 @@
     "dev": "vite --host 0.0.0.0",
     "icons:generate": "node scripts/generate-icons.mjs",
     "build": "vite build",
+    "build:watch": "vite build --watch",
     "type-check": "vue-tsc --noEmit -p tsconfig.json",
     "docs:dev": "vitepress dev docs --host 0.0.0.0",
     "docs:build": "vitepress build docs",

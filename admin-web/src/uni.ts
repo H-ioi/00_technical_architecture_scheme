@@ -1,5 +1,9 @@
+// 正式机使用
 import UniLib, { registerServiceWorker } from 'uni-ui-lib'
-import 'uni-ui-lib/style.css'
+// import 'uni-ui-lib/style.css'
+
+// 本地组件库开发
+import '../../uni-lib/dist/index.css'
 
 import type { App } from 'vue'
 
