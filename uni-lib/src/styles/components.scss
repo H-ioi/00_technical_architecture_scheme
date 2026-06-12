@@ -453,11 +453,20 @@
   }
 
   .el-card,
-  .uni-data-table,
   .uni-form,
   .uni-search-form {
     border: 0;
     border-radius: var(--uni-radius-base);
+  }
+
+  .uni-data-table {
+    border: 0;
+    border-radius: var(--uni-radius-base);
+    .el-table {
+      border-top-right-radius: var(--uni-radius-base);
+      border-top-left-radius: var(--uni-radius-base);
+      overflow: hidden;
+    }
   }
 
   .el-card.is-always-shadow {

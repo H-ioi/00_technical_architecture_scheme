@@ -184,7 +184,7 @@ const paginationRef = ref<HTMLElement>()
 const tableSize = ref<UniTableSize>('default')
 const fullscreen = ref(false)
 const tableBorder = ref(false)
-const tableStripe = ref(false)
+const tableStripe = ref(true)
 const autoMaxHeight = ref<number>()
 let resizeObserver: ResizeObserver | undefined
 const actualEmptyText = computed(() => props.emptyText ?? t('common.empty'))
@@ -491,19 +491,21 @@ watch(
   .el-table {
     width: 100%;
     --el-table-border-color: #edf0f5;
-    --el-table-header-bg-color: #fafbfc;
     --el-table-row-hover-bg-color: #f7f9ff;
-
-    border-top: 1px solid var(--el-table-border-color);
+    --el-table-border: 1px solid #ffffff;
     color: var(--app-text-color);
     font-size: 13px;
+
+    thead {
+      background-color: rgba(241, 245, 251, 1);
+    }
   }
 
   .el-table th.el-table__cell {
     height: 44px;
     color: var(--app-text-color-secondary);
     font-weight: 600;
-    background: #fafbfc;
+    background: rgba(241, 245, 251, 1);
   }
 
   .el-table .el-table__cell {

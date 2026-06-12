@@ -67,7 +67,7 @@ import { formatEmpty, isEmptyValue, omitBlankValues, toArray } from '@/utils/for
 const GRID_COLUMNS = 24
 const DEFAULT_ACTION_MIN_SPAN = 6
 
-const model = defineModel<Recordable>({ required: true })
+let model = defineModel<Recordable>({ required: true })
 
 const props = withDefaults(
   defineProps<{
