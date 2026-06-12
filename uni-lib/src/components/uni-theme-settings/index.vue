@@ -117,9 +117,7 @@ watch(visible, (nextVisible) => {
 
   const layout = document.documentElement.dataset.layout
   selectedLayout.value =
-    layout === 'isa-light' || layout === 'ems-dark' || layout === 'mas-dark'
-      ? layout
-      : 'default'
+    layout === 'isa-light' || layout === 'ems-dark' || layout === 'mas-dark' ? layout : 'default'
 })
 </script>
 

@@ -16,7 +16,9 @@
     <template #default="{ item }">
       <div class="uni-layout__global-search-item">
         <span class="uni-layout__global-search-title">{{ item.title }}</span>
-        <small v-if="item.parentPath" class="uni-layout__global-search-path">{{ item.parentPath }}</small>
+        <small v-if="item.parentPath" class="uni-layout__global-search-path">{{
+          item.parentPath
+        }}</small>
       </div>
     </template>
   </el-autocomplete>

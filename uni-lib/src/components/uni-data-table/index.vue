@@ -1,30 +1,62 @@
 <template>
-  <div ref="rootRef" class="uni-data-table" :class="{
-    'is-fullscreen': fullscreen,
-    'is-tree-table': isTreeEnabled
-  }">
-    <el-table v-loading="actualLoading" :data="actualData" :row-key="rowKey" :empty-text="actualEmptyText"
-      :border="tableBorder" :height="actualMaxHeight" :size="tableSize" :stripe="tableStripe"
-      v-bind="elTableTreeBindings" :highlight-current-row="selection === 'single'"
+  <div
+    ref="rootRef"
+    class="uni-data-table"
+    :class="{
+      'is-fullscreen': fullscreen,
+      'is-tree-table': isTreeEnabled
+    }">
+    <el-table
+      v-loading="actualLoading"
+      :data="actualData"
+      :row-key="rowKey"
+      :empty-text="actualEmptyText"
+      :border="tableBorder"
+      :height="actualMaxHeight"
+      :size="tableSize"
+      :stripe="tableStripe"
+      v-bind="elTableTreeBindings"
+      :highlight-current-row="selection === 'single'"
       @selection-change="(selection: Recordable[]) => emit('selection-change', selection)"
-      @current-change="handleSingleSelectionChange" @sort-change="handleSortChange"
+      @current-change="handleSingleSelectionChange"
+      @sort-change="handleSortChange"
       @row-click="(row: Recordable) => emit('row-click', row)">
-      <el-table-column v-if="selection === true || selection === 'multiple'" type="selection" width="48"
+      <el-table-column
+        v-if="selection === true || selection === 'multiple'"
+        type="selection"
+        width="48"
         :selectable="selectable" />
 
-      <el-table-column v-for="column in visibleColumns" :key="column.prop" :column-key="column.prop" :prop="column.prop"
-        :label="column.label" :width="column.width" :min-width="column.minWidth" :fixed="column.fixed"
-        :align="column.align" :sortable="column.sortable" :show-overflow-tooltip="column.showOverflowTooltip">
+      <el-table-column
+        v-for="column in visibleColumns"
+        :key="column.prop"
+        :column-key="column.prop"
+        :prop="column.prop"
+        :label="column.label"
+        :width="column.width"
+        :min-width="column.minWidth"
+        :fixed="column.fixed"
+        :align="column.align"
+        :sortable="column.sortable"
+        :show-overflow-tooltip="column.showOverflowTooltip">
         <template #header>
           <slot :name="`header-${column.prop}`" :column="column">{{ column.label }}</slot>
         </template>
         <template #default="{ row, $index }">
           <!-- EP：插槽顶层若全是 Comment 会退回 defaultRenderCell，直接展示 row[prop] -->
           <span class="uni-data-table__cell-slot-root">
-            <slot v-if="$slots[`column-${column.prop}`]" :name="`column-${column.prop}`" :row="row"
-              :value="resolveRowCellValue(row as Record<string, unknown>, column.prop)" :index="$index" />
-            <UniTableCell v-else :row="row" :column="column"
-              :value="resolveRowCellValue(row as Record<string, unknown>, column.prop)" :row-index="$index"
+            <slot
+              v-if="$slots[`column-${column.prop}`]"
+              :name="`column-${column.prop}`"
+              :row="row"
+              :value="resolveRowCellValue(row as Record<string, unknown>, column.prop)"
+              :index="$index" />
+            <UniTableCell
+              v-else
+              :row="row"
+              :column="column"
+              :value="resolveRowCellValue(row as Record<string, unknown>, column.prop)"
+              :row-index="$index"
               @switch-change="
                 (nextRow, nextColumn, value) => emit('switch-change', nextRow, nextColumn, value)
               " />
@@ -32,20 +64,33 @@
         </template>
       </el-table-column>
 
-      <el-table-column v-if="hasActionColumn" :label="actionColumn?.label ?? $t('dataTable.actions')"
+      <el-table-column
+        v-if="hasActionColumn"
+        :label="actionColumn?.label ?? $t('dataTable.actions')"
         :fixed="actionColumn?.fixed === false ? false : (actionColumn?.fixed ?? 'right')"
-        :width="actionColumn?.width ?? 180" :min-width="actionColumn?.minWidth">
+        :width="actionColumn?.width ?? 180"
+        :min-width="actionColumn?.minWidth">
         <template #default="{ row, $index }">
           <slot name="actions" :row="row" :index="$index">
-            <template v-for="(action, actionIndex) in getInlineActions(row)" :key="getActionKey(action, actionIndex)">
-              <el-button link :type="action.type ?? 'primary'" :disabled="isActionDisabled(action, row)"
+            <template
+              v-for="(action, actionIndex) in getInlineActions(row)"
+              :key="getActionKey(action, actionIndex)">
+              <el-button
+                link
+                :type="action.type ?? 'primary'"
+                :disabled="isActionDisabled(action, row)"
                 @click="action.onClick(row, $index)">
                 {{ action.label }}
               </el-button>
             </template>
-            <el-dropdown v-if="getMoreActions(row).length" trigger="click"
+            <el-dropdown
+              v-if="getMoreActions(row).length"
+              trigger="click"
               @command="(action: UniTableAction) => handleMoreActionCommand(action, row, $index)">
-              <el-button link type="primary" class="uni-data-table__more-action"
+              <el-button
+                link
+                type="primary"
+                class="uni-data-table__more-action"
                 :aria-label="$t('dataTable.moreActions')">
                 <el-icon>
                   <MoreFilled />
@@ -53,8 +98,10 @@
               </el-button>
               <template #dropdown>
                 <el-dropdown-menu>
-                  <el-dropdown-item v-for="(action, actionIndex) in getMoreActions(row)"
-                    :key="getActionKey(action, actionIndex)" :command="action"
+                  <el-dropdown-item
+                    v-for="(action, actionIndex) in getMoreActions(row)"
+                    :key="getActionKey(action, actionIndex)"
+                    :command="action"
                     :disabled="isActionDisabled(action, row)">
                     {{ action.label }}
                   </el-dropdown-item>
@@ -70,30 +117,47 @@
       </template>
     </el-table>
 
-    <div v-if="
-      $slots.toolbar ||
-      hasToolbarTools ||
-      (paginationConfig && paginationConfig.enabled !== false)
-    " ref="paginationRef" class="uni-data-table__footer">
+    <div
+      v-if="
+        $slots.toolbar ||
+        hasToolbarTools ||
+        (paginationConfig && paginationConfig.enabled !== false)
+      "
+      ref="paginationRef"
+      class="uni-data-table__footer">
       <div class="uni-data-table__toolbar">
         <el-button-group v-if="$slots.toolbar" class="uni-data-table__toolbar-left">
           <slot name="toolbar" />
         </el-button-group>
         <el-divider v-if="$slots.toolbar" direction="vertical" />
         <div v-if="hasToolbarTools" class="uni-data-table__toolbar-right">
-          <UniTableToolbar v-model:border="tableBorder" v-model:fullscreen="fullscreen" v-model:stripe="tableStripe"
-            :column-states="columnStates" :config="toolbarConfig" :loading="actualLoading"
-            @refresh="handleToolbarRefresh" @column-drag-start="handleColumnDragStart"
+          <UniTableToolbar
+            v-model:border="tableBorder"
+            v-model:fullscreen="fullscreen"
+            v-model:stripe="tableStripe"
+            :column-states="columnStates"
+            :config="toolbarConfig"
+            :loading="actualLoading"
+            @refresh="handleToolbarRefresh"
+            @column-drag-start="handleColumnDragStart"
             @column-drop="handleColumnDrop" />
         </div>
       </div>
 
-      <div v-if="paginationConfig && paginationConfig.enabled !== false" class="uni-data-table__pagination"
+      <div
+        v-if="paginationConfig && paginationConfig.enabled !== false"
+        class="uni-data-table__pagination"
         :class="`is-${paginationConfig.position}`">
-        <el-pagination :background="paginationConfig.background" :layout="paginationConfig.layout"
-          :page-sizes="paginationConfig.pageSizes" :hide-on-single-page="paginationConfig.hideOnSinglePage"
-          :current-page="paginationState.pageNo" :page-size="paginationState.pageSize" :total="actualTotal"
-          @current-change="handleCurrentChange" @size-change="handleSizeChange" />
+        <el-pagination
+          :background="paginationConfig.background"
+          :layout="paginationConfig.layout"
+          :page-sizes="paginationConfig.pageSizes"
+          :hide-on-single-page="paginationConfig.hideOnSinglePage"
+          :current-page="paginationState.pageNo"
+          :page-size="paginationState.pageSize"
+          :total="actualTotal"
+          @current-change="handleCurrentChange"
+          @size-change="handleSizeChange" />
       </div>
     </div>
   </div>
@@ -513,13 +577,12 @@ watch(
   }
 
   &.is-tree-table {
-
     /*
      EP 树表在每格 .cell 内放置缩进/展开占位，与正文同一 flex 行；
      插槽根节点若用 display:contents 则 UniTableCell 无法成为独立 flex 子项，
      width:100%/ellipsis 百分比参照错误 → 正文区宽度塌缩为 「…」（tooltip 仍能读到全文）。
     */
-    .el-table__body-wrapper .el-table__body tr td.el-table__cell>.cell {
+    .el-table__body-wrapper .el-table__body tr td.el-table__cell > .cell {
       display: inline-flex;
       align-items: center;
       gap: 0;

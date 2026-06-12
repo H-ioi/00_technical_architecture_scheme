@@ -1,20 +1,38 @@
 <template>
   <el-button-group plain class="uni-table-toolbar">
-    <el-button v-if="config.refresh" class="uni-table-toolbar__trigger" :icon="Refresh" :loading="loading"
-      :aria-label="$t('dataTable.refresh')" :title="$t('dataTable.refresh')" @click="emit('refresh')" />
-    <el-button v-if="config.fullscreen" class="uni-table-toolbar__trigger" :icon="FullScreen"
+    <el-button
+      v-if="config.refresh"
+      class="uni-table-toolbar__trigger"
+      :icon="Refresh"
+      :loading="loading"
+      :aria-label="$t('dataTable.refresh')"
+      :title="$t('dataTable.refresh')"
+      @click="emit('refresh')" />
+    <el-button
+      v-if="config.fullscreen"
+      class="uni-table-toolbar__trigger"
+      :icon="FullScreen"
       :aria-label="fullscreen ? $t('dataTable.exitFullscreen') : $t('dataTable.fullscreen')"
       :title="fullscreen ? $t('dataTable.exitFullscreen') : $t('dataTable.fullscreen')"
       @click="fullscreen = !fullscreen" />
-    <el-popover v-if="config.columnSetting" placement="bottom-end" trigger="click" width="300"
+    <el-popover
+      v-if="config.columnSetting"
+      placement="bottom-end"
+      trigger="click"
+      width="300"
       popper-class="uni-table-toolbar-popper">
       <template #reference>
-        <el-button class="uni-table-toolbar__trigger" :icon="Setting" :aria-label="$t('dataTable.tools')"
+        <el-button
+          class="uni-table-toolbar__trigger"
+          :icon="Setting"
+          :aria-label="$t('dataTable.tools')"
           :title="$t('dataTable.tools')" />
       </template>
 
       <div class="uni-table-toolbar__panel">
-        <UniTableColumnSettings :columns="columnStates" @drag-start="(prop) => emit('column-drag-start', prop)"
+        <UniTableColumnSettings
+          :columns="columnStates"
+          @drag-start="(prop) => emit('column-drag-start', prop)"
           @drop="(prop) => emit('column-drop', prop)" />
 
         <div class="uni-table-toolbar__section">

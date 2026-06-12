@@ -13,16 +13,34 @@
 
 ```bash
 npm install
-npm run dev
+npm run dev              # 本地开发（vite.config.local.ts）
+npm run dev:force        # 清 Vite 缓存后启动，uni-lib dist 更新后样式仍旧时用
+npm run build            # 生产构建（vite.config.ts）
+npm run preview          # 预览构建产物
 npm run lint
 npm run lint:style
 npm run type-check
-npm run build
 npm run test:run
 npm run test:e2e
 ```
 
 Playwright E2E：复制 `.env.e2e.example` 为 `.env.e2e.local` 并填写 `E2E_USERNAME` / `E2E_PASSWORD` 后执行 `npm run test:e2e`；无账号时仅跑 smoke 用例。
+
+## Vite 配置
+
+配置拆成三份，按场景选用：
+
+| 文件 | 用途 | 对应命令 |
+| --- | --- | --- |
+| `vite.config.shared.ts` | 公共配置（PWA、代理、分包、SCSS、公共 alias） | — |
+| `vite.config.local.ts` | 本地联调 `uni-lib` | `dev` / `dev:force` |
+| `vite.config.ts` | 上线构建，走 `node_modules` 标准解析 | `build` / `preview` |
+
+**本地联调**（`vite.config.local.ts`）会优先将 `uni-ui-lib` 解析到 monorepo 同级目录 `../uni-lib/dist`，并排除 `optimizeDeps` 预构建缓存，避免 Windows 下 `file:../uni-lib` 复制到 `node_modules` 后仍读到旧 dist。
+
+**构建 / 预览**（`vite.config.ts`）不含上述 alias，直接使用依赖中的 `uni-ui-lib`。
+
+联调组件库时，在 `uni-lib` 目录执行 `yarn dev:watch`（或手动 `yarn build`），admin-web 保存 dist 后刷新即可；样式仍旧时执行 `npm run dev:force`。
 
 ## 目录约定
 
