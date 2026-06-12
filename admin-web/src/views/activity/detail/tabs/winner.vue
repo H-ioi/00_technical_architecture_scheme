@@ -12,37 +12,35 @@
       <el-radio-button label="lottery">{{ $t('activity.winnerLottery') }}</el-radio-button>
       <el-radio-button label="competition">{{ $t('activity.winnerCompetition') }}</el-radio-button>
     </el-radio-group>
-    <div class="uni-list-page__body">
-      <UniSearchForm
-        v-model="queryModel"
-        :config="searchCfg"
-        :collapsed="true"
-        :collapsed-rows="1"
-        :action-min-span="0"
-        :submit-text="$t('activity.search')"
-        :reset-text="$t('activity.reset')"
-        @search="search"
-        @reset="reset" />
-      <UniDataTable
-        ref="tableRef"
-        row-key="id"
-        :selection="readOnly || !canDelete ? false : 'multiple'"
-        :columns="columns"
-        :request="loadData"
-        :filters="filters"
-        :pagination="{ pageSize: 10, pageSizes: [10, 20, 50, 100] }"
-        :toolbar="{ refresh: true, columnSetting: true }"
-        :actions="actions"
-        :action-column="{ width: 100, fixed: 'right' }"
-        @load-success="handleLoadSuccess"
-        @selection-change="onSelectionChange">
-        <template v-if="!readOnly && canDelete" #toolbar>
-          <el-button type="danger" plain :disabled="!selectedIds.length" @click="deleteSelected">
-            {{ $t('activity.delBatch') }}
-          </el-button>
-        </template>
-      </UniDataTable>
-    </div>
+    <UniSearchForm
+      v-model="queryModel"
+      :config="searchCfg"
+      :collapsed="true"
+      :collapsed-rows="1"
+      :action-min-span="0"
+      :submit-text="$t('activity.search')"
+      :reset-text="$t('activity.reset')"
+      @search="search"
+      @reset="reset" />
+    <UniDataTable
+      ref="tableRef"
+      row-key="id"
+      :selection="readOnly || !canDelete ? false : 'multiple'"
+      :columns="columns"
+      :request="loadData"
+      :filters="filters"
+      :pagination="{ pageSize: 10, pageSizes: [10, 20, 50, 100] }"
+      :toolbar="{ refresh: true, columnSetting: true }"
+      :actions="actions"
+      :action-column="{ width: 100, fixed: 'right' }"
+      @load-success="handleLoadSuccess"
+      @selection-change="onSelectionChange">
+      <template v-if="!readOnly && canDelete" #toolbar>
+        <el-button type="danger" plain :disabled="!selectedIds.length" @click="deleteSelected">
+          {{ $t('activity.delBatch') }}
+        </el-button>
+      </template>
+    </UniDataTable>
     <el-dialog
       v-model="dialogVisible"
       :title="dialogMode === 'add' ? $t('activity.winnerAddTitle') : $t('activity.winnerEditTitle')"
@@ -64,6 +62,8 @@
 </template>
 
 <script setup lang="ts">
+import dayjs from 'dayjs'
+import { ElMessage, ElMessageBox } from 'element-plus'
 import type {
   UniFormConfig,
   UniOption,
@@ -79,8 +79,6 @@ import {
   useUniListState,
   useUniPermission
 } from 'uni-ui-lib'
-import dayjs from 'dayjs'
-import { ElMessage, ElMessageBox } from 'element-plus'
 import { computed, nextTick, reactive, ref } from 'vue'
 
 import { activityApi, activityProgramApi } from '@/api'

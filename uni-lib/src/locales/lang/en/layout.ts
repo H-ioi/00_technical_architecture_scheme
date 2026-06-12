@@ -11,5 +11,6 @@ export default {
   reset: 'Reset',
   cancel: 'Cancel',
   submit: 'Submit',
-  passwordChangeSuccess: 'Password has been updated'
+  passwordChangeSuccess: 'Password has been updated',
+  globalSearchPlaceholder: 'Search menus / pages'
 } as const

@@ -17,6 +17,14 @@
     </div>
 
     <div class="uni-layout__header-right">
+      <slot name="header-search">
+        <LayoutSearch
+          v-if="showGlobalSearch"
+          :menus="menus"
+          :translate="translate"
+          @select="(path) => emit('searchSelect', path)" />
+      </slot>
+
       <slot name="header-right">
         <el-dropdown
           v-if="showLocale"
@@ -85,10 +93,12 @@ import { UniZhEnIcon } from '@/icons'
 import type {
   UniLayoutBreadcrumbItem,
   UniLayoutLocaleOption,
+  UniLayoutMenuRecord,
   UniLayoutTranslate,
   UniLayoutUser,
   UniLayoutUserCommand
 } from '@/types/uni-layout'
+import LayoutSearch from './search.vue'
 
 defineOptions({
   name: 'HeaderBar'
@@ -98,7 +108,9 @@ withDefaults(
   defineProps<{
     collapsed?: boolean
     breadcrumbs?: UniLayoutBreadcrumbItem[]
+    menus?: UniLayoutMenuRecord[]
     translate: UniLayoutTranslate
+    showGlobalSearch?: boolean
     showLocale?: boolean
     showUser?: boolean
     localeOptions?: UniLayoutLocaleOption[]
@@ -111,6 +123,8 @@ withDefaults(
   {
     collapsed: false,
     breadcrumbs: () => [],
+    menus: () => [],
+    showGlobalSearch: true,
     showLocale: true,
     showUser: true,
     localeOptions: () => [],
@@ -126,5 +140,6 @@ const emit = defineEmits<{
   toggleSidebar: []
   changeLocale: [locale: string]
   userCommand: [command: string]
+  searchSelect: [path: string]
 }>()
 </script>

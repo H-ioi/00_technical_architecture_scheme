@@ -1,57 +1,55 @@
 <template>
   <section class="activity-blessing-tab">
-    <div class="uni-list-page__body">
-      <UniSearchForm
-        v-model="queryModel"
-        :config="searchCfg"
-        :collapsed="true"
-        :collapsed-rows="1"
-        :action-min-span="0"
-        :submit-text="$t('activity.search')"
-        :reset-text="$t('activity.reset')"
-        @search="search"
-        @reset="reset" />
-      <UniDataTable
-        ref="tableRef"
-        row-key="id"
-        :selection="readOnly || !canDelete ? false : 'multiple'"
-        :columns="columns"
-        :request="loadData"
-        :filters="filters"
-        :pagination="{ pageSize: 10, pageSizes: [10, 20, 50, 100] }"
-        :toolbar="{ refresh: true, columnSetting: true }"
-        :actions="actions"
-        :action-column="{ width: 120, fixed: 'right' }"
-        @load-success="handleLoadSuccess"
-        @selection-change="onSelectionChange">
-        <template #toolbar>
-          <template v-if="!readOnly">
-            <el-button
-              v-if="canDelete"
-              type="danger"
-              plain
-              :disabled="!selectedIds.length"
-              @click="deleteSelected">
-              {{ $t('activity.delBatch') }}
-            </el-button>
-            <el-button
-              v-uni-permission="'busdriver_edit'"
-              plain
-              :disabled="!selectedIds.length"
-              @click="batchVisible(1)">
-              {{ $t('activity.visibleYes') }}
-            </el-button>
-            <el-button
-              v-uni-permission="'busdriver_edit'"
-              plain
-              :disabled="!selectedIds.length"
-              @click="batchVisible(0)">
-              {{ $t('activity.visibleNo') }}
-            </el-button>
-          </template>
+    <UniSearchForm
+      v-model="queryModel"
+      :config="searchCfg"
+      :collapsed="true"
+      :collapsed-rows="1"
+      :action-min-span="0"
+      :submit-text="$t('activity.search')"
+      :reset-text="$t('activity.reset')"
+      @search="search"
+      @reset="reset" />
+    <UniDataTable
+      ref="tableRef"
+      row-key="id"
+      :selection="readOnly || !canDelete ? false : 'multiple'"
+      :columns="columns"
+      :request="loadData"
+      :filters="filters"
+      :pagination="{ pageSize: 10, pageSizes: [10, 20, 50, 100] }"
+      :toolbar="{ refresh: true, columnSetting: true }"
+      :actions="actions"
+      :action-column="{ width: 120, fixed: 'right' }"
+      @load-success="handleLoadSuccess"
+      @selection-change="onSelectionChange">
+      <template #toolbar>
+        <template v-if="!readOnly">
+          <el-button
+            v-if="canDelete"
+            type="danger"
+            plain
+            :disabled="!selectedIds.length"
+            @click="deleteSelected">
+            {{ $t('activity.delBatch') }}
+          </el-button>
+          <el-button
+            v-uni-permission="'busdriver_edit'"
+            plain
+            :disabled="!selectedIds.length"
+            @click="batchVisible(1)">
+            {{ $t('activity.visibleYes') }}
+          </el-button>
+          <el-button
+            v-uni-permission="'busdriver_edit'"
+            plain
+            :disabled="!selectedIds.length"
+            @click="batchVisible(0)">
+            {{ $t('activity.visibleNo') }}
+          </el-button>
         </template>
-      </UniDataTable>
-    </div>
+      </template>
+    </UniDataTable>
     <el-dialog
       v-model="detailVisible"
       :title="$t('activity.blessingDetailTitle')"
@@ -100,6 +98,8 @@
 </template>
 
 <script setup lang="ts">
+import dayjs from 'dayjs'
+import { ElMessage, ElMessageBox } from 'element-plus'
 import type {
   UniFormConfig,
   UniOption,
@@ -115,8 +115,6 @@ import {
   useUniListState,
   useUniPermission
 } from 'uni-ui-lib'
-import dayjs from 'dayjs'
-import { ElMessage, ElMessageBox } from 'element-plus'
 import { computed, reactive, ref } from 'vue'
 
 import { activityApi, activityProgramApi } from '@/api'

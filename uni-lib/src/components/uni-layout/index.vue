@@ -28,7 +28,9 @@
         <HeaderBar
           :collapsed="resolvedCollapsed"
           :breadcrumbs="resolvedBreadcrumbs"
+          :menus="resolvedMenus"
           :translate="tr"
+          :show-global-search="showGlobalSearch"
           :show-locale="showLocale"
           :show-user="showUser"
           :locale-options="localeOptions"
@@ -39,9 +41,13 @@
           :avatar-text="avatarText"
           @toggle-sidebar="onToggleSidebar"
           @change-locale="onChangeLocale"
-          @user-command="onUserCommand">
+          @user-command="onUserCommand"
+          @search-select="onSearchSelect">
           <template v-if="$slots.breadcrumb" #breadcrumb>
             <slot name="breadcrumb" />
+          </template>
+          <template v-if="$slots['header-search']" #header-search>
+            <slot name="header-search" />
           </template>
           <template v-if="$slots['header-right']" #header-right>
             <slot name="header-right" />
@@ -129,6 +135,7 @@ const props = withDefaults(
     userCommands?: UniLayoutUserCommand[]
     breadcrumbs?: UniLayoutBreadcrumbItem[]
     showTags?: boolean
+    showGlobalSearch?: boolean
     showLocale?: boolean
     showUser?: boolean
     preset?: 'default' | 'isa-light' | 'ems-dark' | 'mas-dark'
@@ -154,6 +161,7 @@ const props = withDefaults(
     userCommands: () => [],
     breadcrumbs: () => [],
     showTags: true,
+    showGlobalSearch: true,
     showLocale: true,
     showUser: true,
     preset: 'default',
@@ -172,6 +180,7 @@ const emit = defineEmits<{
   tagRefresh: [tag?: UniLayoutTag]
   tagCloseOthers: [path?: string]
   tagCloseAll: []
+  searchSelect: [path: string]
 }>()
 
 const { t, locale: globalLocale } = useI18n({
@@ -357,6 +366,14 @@ const onMenuSelect = (path: string) => {
     void router.push(path)
   } else {
     emit('menuSelect', path)
+  }
+}
+
+const onSearchSelect = (path: string) => {
+  if (props.autoWire) {
+    void router.push(path)
+  } else {
+    emit('searchSelect', path)
   }
 }
 
