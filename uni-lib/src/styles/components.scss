@@ -832,8 +832,8 @@
         height: 42px;
         margin: 0 0 2px;
         color: rgb(255 255 255 / 80%);
-        font-size: 16px;
         border-radius: 10px;
+        padding: 0 12px;
       }
 
       .el-menu-item:hover,
@@ -845,8 +845,9 @@
       .el-menu-item.is-active,
       .el-sub-menu.is-active > .el-sub-menu__title {
         color: var(--uni-layout-menu-active-color);
-        background: var(--uni-layout-menu-active-bg);
-        box-shadow: inset 0 0 0 1px var(--uni-layout-menu-active-color);
+      }
+      .el-menu-tooltip__trigger {
+        padding: 0 12px;
       }
 
       .el-sub-menu .el-menu-item {
@@ -860,6 +861,18 @@
         color: var(--uni-layout-menu-active-color);
         background: transparent;
         box-shadow: none;
+      }
+      > .el-menu-item.is-active {
+        background: var(--uni-layout-menu-active-bg);
+        box-shadow: inset 0 0 0 1px var(--uni-layout-menu-active-color);
+      }
+      > .el-sub-menu {
+        &.is-active {
+          > .el-sub-menu__title {
+            background: var(--uni-layout-menu-active-bg);
+            box-shadow: inset 0 0 0 1px var(--uni-layout-menu-active-color);
+          }
+        }
       }
     }
 
