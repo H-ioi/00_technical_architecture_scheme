@@ -5,13 +5,13 @@
 import * as ElementPlusIconsVue from '@element-plus/icons-vue'
 import type { Component } from 'vue'
 
-import { UniZhEnIcon } from '@/icons'
+import { UniZhEn } from '@/icons'
 import type { UniLayoutIconMap } from '@/types/uni-layout'
 
 const elementPlusIcons = ElementPlusIconsVue as unknown as Record<string, Component>
 
 const uniLibIcons: Record<string, Component> = {
-  UniZhEn: UniZhEnIcon
+  UniZhEn
 }
 
 /** 内置图标名 → 组件（布局侧栏等 `icon` 配置解析用） */

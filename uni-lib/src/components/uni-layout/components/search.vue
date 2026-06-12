@@ -10,7 +10,7 @@
     @select="handleSelect">
     <template #prefix>
       <el-icon>
-        <Search />
+        <UniSparkles />
       </el-icon>
     </template>
     <template #default="{ item }">
@@ -25,9 +25,9 @@
 </template>
 
 <script setup lang="ts">
-import { Search } from '@element-plus/icons-vue'
 import { computed, ref } from 'vue'
 
+import { UniSparkles } from '@/icons'
 import type { UniLayoutMenuRecord, UniLayoutTranslate } from '@/types/uni-layout'
 
 defineOptions({
@@ -60,7 +60,7 @@ const emit = defineEmits<{
 const keyword = ref('')
 
 const placeholder = computed(
-  () => props.placeholder || props.translate('layout.globalSearchPlaceholder', 'Search menus')
+  () => props.placeholder || props.translate('layout.globalSearchPlaceholder', 'Smart search')
 )
 
 const resolveTitle = (menu: UniLayoutMenuRecord) =>

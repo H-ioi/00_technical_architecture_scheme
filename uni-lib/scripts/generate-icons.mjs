@@ -99,7 +99,7 @@ async function main() {
   for (const file of svgFiles) {
     const relativePath = relative(svgRoot, file)
     const baseName = toPascalCase(relativePath)
-    const componentName = `Uni${baseName}Icon`
+    const componentName = `Uni${baseName}`
 
     if (!baseName) {
       continue

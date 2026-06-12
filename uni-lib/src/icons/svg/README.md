@@ -8,8 +8,8 @@ npm run icons:generate
 
 File names are converted to component exports. For example:
 
-- `copy.svg` -> `UniCopyIcon`
-- `user-add.svg` -> `UniUserAddIcon`
-- `nav/home.svg` -> `UniNavHomeIcon`
+- `copy.svg` -> `UniCopy`
+- `user-add.svg` -> `UniUserAdd`
+- `nav/home.svg` -> `UniNavHome`
 
 By default, generated icons use `currentColor`. Use `npm run icons:generate -- --keep-colors` to preserve original SVG colors.

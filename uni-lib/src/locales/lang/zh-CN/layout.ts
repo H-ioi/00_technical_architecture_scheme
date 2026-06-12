@@ -12,5 +12,5 @@ export default {
   cancel: '取消',
   submit: '提交',
   passwordChangeSuccess: '密码已修改',
-  globalSearchPlaceholder: '搜索菜单 / 页面'
+  globalSearchPlaceholder: '智能搜索'
 } as const

@@ -31,7 +31,7 @@
           trigger="click"
           @command="(value: string) => emit('changeLocale', value)">
           <button class="uni-layout__locale uni-layout__action" type="button">
-            <UniIcon class="uni-layout__locale-icon" :icon="UniZhEnIcon" :size="24" />
+            <UniIcon class="uni-layout__locale-icon" :icon="UniZhEn" :size="24" />
             {{ activeLocaleLabel }}
             <el-icon class="uni-layout__locale-arrow">
               <ArrowDown />
@@ -89,7 +89,7 @@
 import { ArrowDown, Expand, Fold } from '@element-plus/icons-vue'
 
 import { UniIcon } from '@/components/uni-icon'
-import { UniZhEnIcon } from '@/icons'
+import { UniZhEn } from '@/icons'
 import type {
   UniLayoutBreadcrumbItem,
   UniLayoutLocaleOption,
