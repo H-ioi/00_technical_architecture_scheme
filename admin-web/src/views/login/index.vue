@@ -1,14 +1,16 @@
 <template>
   <UniLoginPage
+    :background-image="loginBgUrl"
     :captcha-client="captchaClient"
     :login-request="handleLogin"
     random-str="blockPuzzle" />
 </template>
 
 <script setup lang="ts">
-import { useRoute, useRouter } from 'vue-router'
 import { UniLoginPage, type UniCaptchaClient } from 'uni-ui-lib'
+import { useRoute, useRouter } from 'vue-router'
 
+import loginBgUrl from '@/assets/images/isa.png'
 import { captchaApi } from '@/api'
 import { useUserStore } from '@/stores'
 

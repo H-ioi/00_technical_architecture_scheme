@@ -23,6 +23,7 @@ export default defineConfig({
     port: 8200
   },
   build: {
+    assetsInlineLimit: 0,
     cssCodeSplit: true,
     lib: {
       entry: fileURLToPath(new URL('./src/index.ts', import.meta.url)),

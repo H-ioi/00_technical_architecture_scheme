@@ -1,5 +1,5 @@
 <template>
-  <main class="uni-login-page">
+  <main class="uni-login-page" :style="pageBackgroundStyle">
     <div class="uni-login-page__decor uni-login-page__decor--left" />
     <div class="uni-login-page__decor uni-login-page__decor--right" />
     <section class="uni-login-page__panel">
@@ -23,27 +23,17 @@
             <el-input v-model="formModel.username" :placeholder="$t('login.usernamePlaceholder')" />
           </el-form-item>
           <el-form-item :label="$t('common.password')" prop="password">
-            <el-input
-              v-model="formModel.password"
-              :placeholder="$t('login.passwordPlaceholder')"
-              show-password
-              type="password"
-              @keyup.enter="submitLogin" />
+            <el-input v-model="formModel.password" :placeholder="$t('login.passwordPlaceholder')" show-password
+              type="password" @keyup.enter="submitLogin" />
           </el-form-item>
-          <el-button
-            type="primary"
-            class="uni-login-page__submit"
-            :loading="loading"
-            @click="submitLogin">
+          <el-button type="primary" class="uni-login-page__submit" :loading="loading" @click="submitLogin">
             {{ $t('common.login') }}
           </el-button>
         </el-form>
       </el-card>
     </section>
 
-    <UniLoginSecurityVerifyDialog
-      v-model:visible="verifyVisible"
-      :captcha-client="captchaClient"
+    <UniLoginSecurityVerifyDialog v-model:visible="verifyVisible" :captcha-client="captchaClient"
       @success="loginWithCaptcha" />
   </main>
 </template>
@@ -59,6 +49,8 @@ import UniLoginSecurityVerifyDialog from './security-verify-dialog.vue'
 
 const props = withDefaults(
   defineProps<{
+    /** 页面背景图 URL，空字符串时仅显示渐变底 */
+    backgroundImage?: string
     /** 左侧品牌区 Logo 文案 */
     logoText?: string
     /** 滑块验证码能力（拉图 / 加密 / 校验由宿主注入） */
@@ -74,9 +66,14 @@ const props = withDefaults(
     }) => Promise<void>
   }>(),
   {
+    backgroundImage: '',
     logoText: 'ISA',
     randomStr: 'blockPuzzle'
   }
+)
+
+const pageBackgroundStyle = computed(() =>
+  props.backgroundImage ? { backgroundImage: `url(${props.backgroundImage})` } : undefined
 )
 
 const { t } = useUniI18n()
@@ -123,6 +120,9 @@ const loginWithCaptcha = async (captchaVerification: string) => {
   overflow: hidden;
   background: linear-gradient(135deg, #f4f8fb 0%, #eef5f8 48%, #e8f8fb 100%);
   place-items: center;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
 
   &__decor {
     position: absolute;
@@ -159,6 +159,10 @@ const loginWithCaptcha = async (captchaVerification: string) => {
   &__intro {
     padding: 32px;
     color: #1f2937;
+    text-shadow:
+      0 0 2px rgb(255 255 255 / 95%),
+      0 0 4px rgb(255 255 255 / 80%),
+      0 0 8px rgb(255 255 255 / 60%);
 
     h1 {
       margin: 12px 0 16px;
@@ -182,6 +186,7 @@ const loginWithCaptcha = async (captchaVerification: string) => {
     color: #fff;
     font-size: 20px;
     font-weight: 800;
+    text-shadow: none;
     background: #2a3f54;
     border-radius: 18px;
     box-shadow: 0 16px 36px rgb(42 63 84 / 24%);
