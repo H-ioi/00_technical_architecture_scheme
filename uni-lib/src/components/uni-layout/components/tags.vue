@@ -1,11 +1,18 @@
 <template>
   <div class="uni-layout-tags">
     <div ref="scrollRef" class="uni-layout-tags__scroll">
-      <el-dropdown v-for="tag in tags" :key="tag.path" trigger="contextmenu"
+      <el-dropdown
+        v-for="tag in tags"
+        :key="tag.path"
+        trigger="contextmenu"
         popper-class="uni-layout-tags-context-dropdown"
         @command="(command: string | number | object) => handleTagsMenuCommand(command, tag)">
-        <el-tag class="uni-layout-tags__tag" :class="{ 'is-active': tag.path === activePath }" :closable="!tag.affix"
-          :effect="tag.path === activePath ? 'dark' : 'plain'" @click="navigateTag(tag.path)"
+        <el-tag
+          class="uni-layout-tags__tag"
+          :class="{ 'is-active': tag.path === activePath }"
+          :closable="!tag.affix"
+          :effect="tag.path === activePath ? 'dark' : 'plain'"
+          @click="navigateTag(tag.path)"
           @close="onTagCloseIcon(tag.path, $event)">
           {{ translate(tag.titleKey, tag.title) }}
         </el-tag>
@@ -28,11 +35,19 @@
       </el-dropdown>
     </div>
     <div class="uni-layout-tags__actions">
-      <el-button :icon="ArrowLeft" text :aria-label="translate('common.scrollLeft', '向左滚动')"
+      <el-button
+        :icon="ArrowLeft"
+        text
+        :aria-label="translate('common.scrollLeft', '向左滚动')"
         @click="scrollTags('left')" />
-      <el-button :icon="ArrowRight" text :aria-label="translate('common.scrollRight', '向右滚动')"
+      <el-button
+        :icon="ArrowRight"
+        text
+        :aria-label="translate('common.scrollRight', '向右滚动')"
         @click="scrollTags('right')" />
-      <el-dropdown trigger="click" popper-class="uni-layout-tags-more-dropdown"
+      <el-dropdown
+        trigger="click"
+        popper-class="uni-layout-tags-more-dropdown"
         @command="(command: string | number | object) => handleTagsMenuCommand(command)">
         <el-button :icon="MoreFilled" text :aria-label="translate('common.more', '更多')" />
         <template #dropdown>
@@ -46,7 +61,11 @@
           </el-dropdown-menu>
         </template>
       </el-dropdown>
-      <el-button :icon="Refresh" text :aria-label="translate('common.refresh', '刷新')" @click="onToolbarRefresh" />
+      <el-button
+        :icon="Refresh"
+        text
+        :aria-label="translate('common.refresh', '刷新')"
+        @click="onToolbarRefresh" />
     </div>
   </div>
 </template>

@@ -23,17 +23,27 @@
             <el-input v-model="formModel.username" :placeholder="$t('login.usernamePlaceholder')" />
           </el-form-item>
           <el-form-item :label="$t('common.password')" prop="password">
-            <el-input v-model="formModel.password" :placeholder="$t('login.passwordPlaceholder')" show-password
-              type="password" @keyup.enter="submitLogin" />
+            <el-input
+              v-model="formModel.password"
+              :placeholder="$t('login.passwordPlaceholder')"
+              show-password
+              type="password"
+              @keyup.enter="submitLogin" />
           </el-form-item>
-          <el-button type="primary" class="uni-login-page__submit" :loading="loading" @click="submitLogin">
+          <el-button
+            type="primary"
+            class="uni-login-page__submit"
+            :loading="loading"
+            @click="submitLogin">
             {{ $t('common.login') }}
           </el-button>
         </el-form>
       </el-card>
     </section>
 
-    <UniLoginSecurityVerifyDialog v-model:visible="verifyVisible" :captcha-client="captchaClient"
+    <UniLoginSecurityVerifyDialog
+      v-model:visible="verifyVisible"
+      :captcha-client="captchaClient"
       @success="loginWithCaptcha" />
   </main>
 </template>
