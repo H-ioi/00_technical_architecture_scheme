@@ -1,19 +1,20 @@
 import { describe, it, expect, vi } from 'vitest'
 
+import type { Translate } from '@/types/i18n'
+
 import {
   dictSearchForm,
   dictItemColumns,
   dictItemActions,
   dictItemFormConfig,
-  dictAttrColumns,
-  type DictMsg
+  dictAttrColumns
 } from '../../../views/base/components/dict.config'
 
-const mt: DictMsg = (key: string) => key
+const t: Translate = (key: string) => key
 
 describe('dict.config.ts', () => {
   describe('dictSearchForm', () => {
-    const form = dictSearchForm(mt)
+    const form = dictSearchForm(t)
 
     it('应返回 UniFormConfig 结构', () => {
       expect(form).toHaveProperty('schema')
@@ -32,7 +33,7 @@ describe('dict.config.ts', () => {
     it('keyword 输入框应有 placeholder 且可清空', () => {
       const field = form.schema[0]
       expect(field.componentProps).toMatchObject({
-        placeholder: 'search.keywordPlaceholder',
+        placeholder: 'base.phKeyword',
         clearable: true
       })
     })
@@ -47,7 +48,7 @@ describe('dict.config.ts', () => {
   })
 
   describe('dictItemColumns', () => {
-    const columns = dictItemColumns(mt)
+    const columns = dictItemColumns(t)
 
     it('应返回 3 列', () => {
       expect(columns).toHaveLength(3)
@@ -55,7 +56,7 @@ describe('dict.config.ts', () => {
 
     it('第一列为 label', () => {
       expect(columns[0].prop).toBe('label')
-      expect(columns[0].label).toBe('fields.label')
+      expect(columns[0].label).toBe('base.label')
       expect(columns[0].type).toBe('text')
       expect(columns[0].minWidth).toBe(200)
     })
@@ -80,24 +81,24 @@ describe('dict.config.ts', () => {
     const onEdit = vi.fn()
     const onAttrs = vi.fn()
     const onDelete = vi.fn()
-    const actions = dictItemActions(mt, { onEdit, onAttrs, onDelete })
+    const actions = dictItemActions(t, { onEdit, onAttrs, onDelete })
 
     it('应返回 3 个操作', () => {
       expect(actions).toHaveLength(3)
     })
 
     it('第一个操作为编辑（primary）', () => {
-      expect(actions[0].label).toBe('actions.edit')
+      expect(actions[0].label).toBe('base.edit')
       expect(actions[0].type).toBe('primary')
     })
 
     it('第二个操作为额外属性（primary）', () => {
-      expect(actions[1].label).toBe('actions.extraAttrs')
+      expect(actions[1].label).toBe('base.extraAttrs')
       expect(actions[1].type).toBe('primary')
     })
 
     it('第三个操作为删除（danger）', () => {
-      expect(actions[2].label).toBe('actions.delete')
+      expect(actions[2].label).toBe('base.delete')
       expect(actions[2].type).toBe('danger')
     })
 
@@ -121,7 +122,7 @@ describe('dict.config.ts', () => {
   })
 
   describe('dictItemFormConfig', () => {
-    const formConfig = dictItemFormConfig(mt)
+    const formConfig = dictItemFormConfig(t)
 
     it('formProps 应有 labelPosition=top', () => {
       expect(formConfig.formProps).toEqual({ labelPosition: 'top' })
@@ -157,7 +158,7 @@ describe('dict.config.ts', () => {
   })
 
   describe('dictAttrColumns', () => {
-    const columns = dictAttrColumns(mt)
+    const columns = dictAttrColumns(t)
 
     it('应返回 3 列', () => {
       expect(columns).toHaveLength(3)

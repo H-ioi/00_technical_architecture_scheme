@@ -2,87 +2,53 @@
   <section class="uni-list-page base-dict-page">
     <div class="uni-list-page__header">
       <div>
-        <h1>{{ mt('page.title') }}</h1>
-        <p>{{ mt('page.description') }}</p>
+        <h1>{{ $t(`base.${localeScope}.pageTitle`) }}</h1>
+        <p>{{ $t(`base.${localeScope}.pageDesc`) }}</p>
       </div>
       <div class="uni-list-page__header-actions">
-        <el-button type="primary" @click="openAdd">{{ mt('actions.add') }}</el-button>
+        <el-button type="primary" @click="openAdd">{{ $t('base.add') }}</el-button>
       </div>
     </div>
     <div class="uni-list-page__body">
-      <UniSearchForm
-        v-model="queryModel"
-        :config="searchCfg"
-        :collapsed="true"
-        :collapsed-rows="1"
-        :action-min-span="0"
-        :submit-text="mt('actions.search')"
-        :reset-text="mt('actions.reset')"
-        @search="search"
-        @reset="reset" />
+      <UniSearchForm v-model="queryModel" :config="searchCfg" :collapsed="true" :collapsed-rows="1" :action-min-span="0"
+        :submit-text="$t('base.search')" :reset-text="$t('base.reset')" @search="search" @reset="reset" />
 
-      <UniDataTable
-        ref="tableRef"
-        row-key="id"
-        :columns="columns"
-        :request="tableRequest"
-        :filters="filters"
-        :pagination="false"
-        :toolbar="{ refresh: true, density: true, columnSetting: true }"
-        :actions="actions"
-        :action-column="{ width: 180, fixed: 'right' }"
-        @load-success="tableEmpty.onLoadSuccess"
-        @request-error="onDictRequestError"
-        @switch-change="onStatusSwitch">
+      <UniDataTable ref="tableRef" row-key="id" :columns="columns" :request="tableRequest" :filters="filters"
+        :pagination="false" :toolbar="{ refresh: true, density: true, columnSetting: true }" :actions="actions"
+        :action-column="{ width: 180, fixed: 'right' }" @load-success="tableEmpty.onLoadSuccess"
+        @request-error="onDictRequestError" @switch-change="onStatusSwitch">
         <template #empty>
           <ListTableEmpty :kind="tableEmpty.kind" @reset="reset" @retry="tableEmpty.retry" />
         </template>
       </UniDataTable>
     </div>
-    <el-dialog
-      v-model="formVisible"
-      destroy-on-close
-      :title="formMode === 'edit' ? mt('dialog.formEdit') : mt('dialog.formAdd')"
-      width="480px">
+    <el-dialog v-model="formVisible" destroy-on-close
+      :title="formMode === 'edit' ? $t('base.dlgFormEdit') : $t('base.dlgFormAdd')" width="480px">
       <UniForm v-model="ruleForm" mode="edit" :config="formConfig" />
       <template #footer>
-        <el-button @click="formVisible = false">{{ mt('actions.cancel') }}</el-button>
-        <el-button type="primary" @click="submitForm">{{ mt('actions.save') }}</el-button>
+        <el-button @click="formVisible = false">{{ $t('base.cancel') }}</el-button>
+        <el-button type="primary" @click="submitForm">{{ $t('base.save') }}</el-button>
       </template>
     </el-dialog>
 
-    <el-dialog
-      v-model="deleteVisible"
-      destroy-on-close
-      :title="mt('dialog.deleteTitle')"
-      width="480px">
-      <p>{{ mt('dialog.deleteConfirm') }}</p>
+    <el-dialog v-model="deleteVisible" destroy-on-close :title="$t('base.dlgDeleteTitle')" width="480px">
+      <p>{{ $t('base.dlgDeleteConfirm') }}</p>
       <template #footer>
-        <el-button @click="deleteVisible = false">{{ mt('actions.cancel') }}</el-button>
-        <el-button type="primary" @click="confirmDelete">{{ mt('actions.confirm') }}</el-button>
+        <el-button @click="deleteVisible = false">{{ $t('base.cancel') }}</el-button>
+        <el-button type="primary" @click="confirmDelete">{{ $t('base.confirm') }}</el-button>
       </template>
     </el-dialog>
 
-    <el-dialog
-      v-model="attrsVisible"
-      destroy-on-close
-      :title="mt('dialog.attrsTitle')"
-      width="640px">
-      <UniDataTable
-        v-if="attrsVisible"
-        row-key="_rk"
-        :columns="attrColumns"
-        :data="attrRows"
-        :pagination="false"
-        :toolbar="false"
-        :action-column="{ label: mt('actions.operations'), width: 100, fixed: 'right' }">
+    <el-dialog v-model="attrsVisible" destroy-on-close :title="$t('base.dlgAttrsTitle')" width="640px">
+      <UniDataTable v-if="attrsVisible" row-key="_rk" :columns="attrColumns" :data="attrRows" :pagination="false"
+        :toolbar="false" :height="400" :action-column="{ label: $t('base.operations'), width: 100, fixed: 'right' }">
         <template #column-dictItemValue="{ row }">
           <span v-if="!row.isedit">{{ row.dictItemValue }}</span>
-          <el-input v-else v-model="row.dictItemValue" :placeholder="mt('placeholder.attrValue')" />
+          <el-input v-else v-model="row.dictItemValue" :placeholder="$t('base.phAttrValue')" />
         </template>
         <template #actions="{ row, index }">
           <el-button link type="primary" @click="toggleAttrEdit(row, index)">
-            {{ row.isedit ? mt('actions.attrSave') : mt('actions.attrEdit') }}
+            {{ row.isedit ? $t('base.attrSave') : $t('base.attrEdit') }}
           </el-button>
         </template>
       </UniDataTable>
@@ -96,9 +62,9 @@ import type { Recordable, UniTableColumn, UniTableRequest } from 'uni-ui-lib'
 import { UniDataTable, UniForm, UniSearchForm, useUniI18n, useUniListState } from 'uni-ui-lib'
 import { computed, ref } from 'vue'
 
+import { baseDictApi } from '@/api'
 import ListTableEmpty from '@/components/list-table-empty/index.vue'
 import { useListTableEmpty } from '@/composables/use-list-table-empty'
-import { baseDictApi } from '@/api'
 import type { BaseDictFieldRecord, BaseDictItemRecord } from '@/types/modules/base-dict'
 
 import {
@@ -140,58 +106,6 @@ const props = defineProps<{
 
 const { t } = useUniI18n()
 
-/** 与 `locales/.../modules/base.ts` 结构对齐：共用文案在 `base.<camelKey>`，仅 `pageTitle`/`pageDesc` 在 `base.school|grade`。 */
-const BASE_DICT_I18N: Record<string, string | { scope: 'pageTitle' | 'pageDesc' }> = {
-  'page.title': { scope: 'pageTitle' },
-  'page.description': { scope: 'pageDesc' },
-  'search.keywordPlaceholder': 'phKeyword',
-  'fields.label': 'label',
-  'fields.sort': 'sort',
-  'fields.status': 'status',
-  'fields.attrName': 'attrName',
-  'fields.attrKey': 'attrKey',
-  'fields.attrValue': 'attrValue',
-  'actions.operations': 'operations',
-  'actions.search': 'search',
-  'actions.reset': 'reset',
-  'actions.add': 'add',
-  'actions.edit': 'edit',
-  'actions.extraAttrs': 'extraAttrs',
-  'actions.delete': 'delete',
-  'actions.save': 'save',
-  'actions.cancel': 'cancel',
-  'actions.confirm': 'confirm',
-  'actions.attrEdit': 'attrEdit',
-  'actions.attrSave': 'attrSave',
-  'dialog.formAdd': 'dlgFormAdd',
-  'dialog.formEdit': 'dlgFormEdit',
-  'dialog.deleteTitle': 'dlgDeleteTitle',
-  'dialog.deleteConfirm': 'dlgDeleteConfirm',
-  'dialog.attrsTitle': 'dlgAttrsTitle',
-  'form.name': 'formName',
-  'form.sort': 'formSort',
-  'placeholder.attrValue': 'phAttrValue',
-  'messages.addOk': 'msgAddOk',
-  'messages.updateOk': 'msgUpdateOk',
-  'messages.deleteOk': 'msgDeleteOk',
-  'messages.enabledOk': 'msgEnabledOk',
-  'messages.disabledOk': 'msgDisabledOk',
-  'messages.fieldOk': 'msgFieldOk',
-  'messages.loadFail': 'msgLoadFail',
-  'messages.saveFail': 'msgSaveFail'
-}
-
-const mt = (key: string) => {
-  const mapped = BASE_DICT_I18N[key]
-  if (mapped && typeof mapped === 'object') {
-    return t(`base.${props.localeScope}.${mapped.scope}`)
-  }
-  if (typeof mapped === 'string') {
-    return t(`base.${mapped}`)
-  }
-  return key
-}
-
 const { queryModel, filters, tableRef, search, reset, handleLoadSuccess } = useUniListState({
   initialFilters: { keyword: '' }
 })
@@ -200,7 +114,7 @@ const tableEmpty = useListTableEmpty(filters, { tableRef, afterLoadSuccess: hand
 
 const onDictRequestError = (err: unknown) => {
   tableEmpty.onRequestError(err)
-  ElMessage.error(mt('messages.loadFail'))
+  ElMessage.error(t('base.msgLoadFail'))
 }
 
 const formVisible = ref(false)
@@ -218,10 +132,10 @@ const ruleForm = ref<{ label: string; sort: number | undefined }>({
   sort: undefined
 })
 
-const columns = computed(() => dictItemColumns(mt))
-const attrColumns = computed(() => dictAttrColumns(mt))
-const formConfig = computed(() => dictItemFormConfig(mt))
-const searchCfg = computed(() => dictSearchForm(mt))
+const columns = computed(() => dictItemColumns(t))
+const attrColumns = computed(() => dictAttrColumns(t))
+const formConfig = computed(() => dictItemFormConfig(t))
+const searchCfg = computed(() => dictSearchForm(t))
 
 const tableRequest: UniTableRequest<BaseDictItemRecord> = async ({ filters: reqFilters }) => {
   const list = await baseDictApi.list.get(props.dictType)
@@ -274,19 +188,19 @@ const submitForm = async () => {
         label: payload.label,
         sort: payload.sort === undefined ? '' : payload.sort
       })
-      ElMessage.success(mt('messages.updateOk'))
+      ElMessage.success(t('base.msgUpdateOk'))
     } else {
       await baseDictApi.add.post({
         label: payload.label,
         sort: payload.sort === undefined ? '' : payload.sort,
         type: props.dictType
       })
-      ElMessage.success(mt('messages.addOk'))
+      ElMessage.success(t('base.msgAddOk'))
     }
     formVisible.value = false
     tableRef.value?.refresh()
   } catch {
-    ElMessage.error(mt('messages.saveFail'))
+    ElMessage.error(t('base.msgSaveFail'))
   }
 }
 
@@ -302,15 +216,15 @@ const onStatusSwitch = async (row: Recordable, column: UniTableColumn, value: un
   try {
     if (next) {
       await baseDictApi.enable.put(item.id)
-      ElMessage.success(mt('messages.enabledOk'))
+      ElMessage.success(t('base.msgEnabledOk'))
     } else {
       await baseDictApi.disable.put(item.id)
-      ElMessage.success(mt('messages.disabledOk'))
+      ElMessage.success(t('base.msgDisabledOk'))
     }
     item.status = next
   } catch {
     item.status = prev
-    ElMessage.error(mt('messages.saveFail'))
+    ElMessage.error(t('base.msgSaveFail'))
   }
 }
 
@@ -326,12 +240,12 @@ const confirmDelete = async () => {
 
   try {
     await baseDictApi.remove.delete(pendingDeleteId.value)
-    ElMessage.success(mt('messages.deleteOk'))
+    ElMessage.success(t('base.msgDeleteOk'))
     deleteVisible.value = false
     pendingDeleteId.value = ''
     tableRef.value?.refresh()
   } catch {
-    ElMessage.error(mt('messages.saveFail'))
+    ElMessage.error(t('base.msgSaveFail'))
   }
 }
 
@@ -362,7 +276,7 @@ const refreshAttrs = async () => {
       ]
     }
   } catch {
-    ElMessage.error(mt('messages.loadFail'))
+    ElMessage.error(t('base.msgLoadFail'))
   }
 }
 
@@ -385,15 +299,15 @@ const toggleAttrEdit = async (row: AttrRow, index: number) => {
       type: row.dictItemType,
       value: row.dictItemValue
     })
-    ElMessage.success(mt('messages.fieldOk'))
+    ElMessage.success(t('base.msgFieldOk'))
     await refreshAttrs()
   } catch {
-    ElMessage.error(mt('messages.saveFail'))
+    ElMessage.error(t('base.msgSaveFail'))
   }
 }
 
 const actions = computed(() =>
-  dictItemActions(mt, {
+  dictItemActions(t, {
     onEdit: openEdit,
     onAttrs: openAttrs,
     onDelete: openDelete
