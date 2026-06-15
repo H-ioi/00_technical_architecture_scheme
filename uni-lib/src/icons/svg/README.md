@@ -13,3 +13,5 @@ File names are converted to component exports. For example:
 - `nav/home.svg` -> `UniNavHome`
 
 By default, generated icons use `currentColor`. Use `npm run icons:generate -- --keep-colors` to preserve original SVG colors.
+
+`fill="url(...)"` / `stroke="url(...)"` pattern references are always preserved.

@@ -4,8 +4,9 @@
       <SidebarPanel
         :collapsed="resolvedCollapsed"
         :sidebar-width="resolvedSidebarWidth"
-        :logo="resolvedLogo"
-        :logo-alt="logoAlt"
+        :layout="resolvedLayout"
+        :brand-name="brandName"
+        :brand-description="brandDescription"
         :menus="resolvedMenus"
         :active-menu="resolvedActiveMenu"
         :icon-map="iconMap"
@@ -94,7 +95,6 @@ import { computed, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRoute, useRouter } from 'vue-router'
 
-import defaultLayoutLogo from '@/assets/images/logo-top.png'
 import { UniThemeSettings } from '@/components/uni-theme-settings'
 import { tryGetUniConfig } from '@/plugins/config'
 import { useAppStore, useMenuStore, useUniTagsViewStore, useUserStore } from '@/stores'
@@ -127,8 +127,8 @@ const props = withDefaults(
     activeMenu?: string
     collapsed?: boolean
     sidebarWidth?: string
-    logo?: string
-    logoAlt?: string
+    brandName?: string
+    brandDescription?: string
     locale?: string
     localeOptions?: UniLayoutLocaleOption[]
     user?: UniLayoutUser
@@ -151,7 +151,8 @@ const props = withDefaults(
     activeMenu: undefined,
     collapsed: false,
     sidebarWidth: '220px',
-    logoAlt: 'logo',
+    brandName: '',
+    brandDescription: '',
     locale: 'zh-CN',
     localeOptions: () => [
       { label: '简体中文', value: 'zh-CN' },
@@ -200,24 +201,20 @@ const tr: UniLayoutTranslate = (key?: string, fallback = '') => {
   return out !== key ? out : fallback
 }
 
-const resolvedLogo = computed(() => {
-  if (props.logo === '') {
-    return ''
-  }
-
-  if (props.logo) {
-    return props.logo
-  }
-
-  return defaultLayoutLogo
-})
-
 const menuStore = useMenuStore()
 const appStore = useAppStore()
 const userStore = useUserStore()
 const tagsViewStore = useUniTagsViewStore()
 const route = useRoute()
 const router = useRouter()
+
+const resolvedLayout = computed(() => {
+  if (props.autoWire && appStore.frameworkLayout) {
+    return appStore.frameworkLayout as 'default' | 'isa-light' | 'ems-dark' | 'mas-dark'
+  }
+
+  return props.preset
+})
 
 const viewKey = computed(() => `${route?.fullPath ?? ''}-${tagsViewStore.refreshKey}`)
 

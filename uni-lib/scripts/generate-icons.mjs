@@ -54,8 +54,14 @@ function normalizeSvg(source) {
 
   if (!keepColors) {
     svg = svg
-      .replace(/\sfill=(["'])(?!none\b|currentColor\b)[^"']*\1/gi, ' fill="currentColor"')
-      .replace(/\sstroke=(["'])(?!none\b|currentColor\b)[^"']*\1/gi, ' stroke="currentColor"')
+      .replace(
+        /\sfill=(["'])(?!none\b|currentColor\b|url\()[^"']*\1/gi,
+        ' fill="currentColor"'
+      )
+      .replace(
+        /\sstroke=(["'])(?!none\b|currentColor\b|url\()[^"']*\1/gi,
+        ' stroke="currentColor"'
+      )
   }
 
   svg = svg.replace(/<svg\b([^>]*)>/i, (_, attrs) => {
