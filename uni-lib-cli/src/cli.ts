@@ -1,14 +1,22 @@
+import { readFileSync } from 'node:fs'
+import { dirname, join } from 'node:path'
+import { fileURLToPath } from 'node:url'
+
 import { Command } from 'commander'
 
 import { collectCreateContext, runCreate, runCreateWithOptions } from './create.js'
 import type { CreateOptions, TemplateId } from './types.js'
+import { runUpdate } from './update.js'
 import { printError } from './utils/logger.js'
+
+const pkgPath = join(dirname(fileURLToPath(import.meta.url)), '..', 'package.json')
+const { version: cliVersion } = JSON.parse(readFileSync(pkgPath, 'utf8')) as { version: string }
 
 /** 注册并启动 CLI 命令 */
 export function startCli(): void {
   const program = new Command()
 
-  program.name('uni-lib-cli').description('uni-lib 多端项目脚手架').version('0.1.1')
+  program.name('uni-lib-cli').description('uni-lib 多端项目脚手架').version(cliVersion)
 
   program
     .command('create')
@@ -43,6 +51,13 @@ export function startCli(): void {
         printError(message)
         process.exitCode = 1
       }
+    })
+
+  program
+    .command('update')
+    .description('从 npm 拉取最新版并更新全局脚手架')
+    .action(() => {
+      runUpdate()
     })
 
   /** 无子命令时默认进入 create 交互 */
