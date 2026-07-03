@@ -14,9 +14,9 @@ description: >-
 
 **触发：** 用户要求 review / 校验 / 自查；或编码任务完成后的 Finish Check。
 
-**平台专项：** 移动端 `uni-review-mobile`；后台 `uni-review-web`（冲突时专项优先）。
+**平台专项：** 若存在对应 Platform Skill（如 `AI-PC架构校验Skill` / `AI-Mobile架构校验Skill`），**架构与项目约定**优先引用 Platform；**违规判定与等级**仍由本 Checker 负责。Checker 不预设「后台必须…」「移动必须…」等项目细节。
 
-**阈值：** 33 行、800 行等为**预警信号**；判定须结合是否机械拆分、是否单一业务流程。
+**阈值：** 行数阈值引用 **`AI-全局编码规则.md`** — 33 行（函数）、450 行（Warning）、800 行（Critical）；判定须结合是否机械拆分、是否单一业务流程。
 
 ---
 
@@ -113,10 +113,12 @@ description: >-
 
 ### CHK-FILE-01 单文件组件行数
 
+> 阈值见 `AI-全局编码规则.md` §3.1：**800 行 Critical；450 行 Warning**。
+
 ```
 .vue/.tsx 超过 800 行？
   YES → Critical：必须拆分
-  NO → 超过约 500 行？
+  NO → 超过 450 行？
     YES → Warning：评估 UI/业务子组件
     NO → Pass
 ```
@@ -481,11 +483,24 @@ description: >-
 - XSS；密钥入库；`eval`
 - 仅为遵守规则降低可读性
 
-> 平台专项见 `uni-review-mobile` / `uni-review-web`。
+> **平台专项：** 若存在 Platform Skill，将其「项目约定」作为 CHK-PLATFORM 的对照依据；本清单仅汇总**通用** Critical。
 
 ---
 
-## 20. 质量门禁
+## 20. 平台专项检查
+
+### CHK-PLATFORM-01 项目架构约定
+
+| 检查 | 当前改动是否涉及有 Platform Skill 的项目（如 admin-web / customer-mobile）？ |
+| --- | --- |
+| NO | Pass |
+| YES | 对照对应 Platform Skill 的目录、分层、API、request 来源、页面形态等**项目约定**；不符 → **Critical**（架构错误）或 **Warning**（偏离约定） |
+
+**说明：** Checker 不内置「后台必须…」「移动必须…」等项目细节；项目特有规则只在 Platform Skill 中维护，校验时动态引用。
+
+---
+
+## 21. 质量门禁
 
 目标项目根执行：
 
@@ -503,7 +518,7 @@ npm run test:run      # 若已配置
 
 ---
 
-## 21. 评审输出格式
+## 22. 评审输出格式
 
 ```markdown
 ## Summary
@@ -520,13 +535,13 @@ npm run test:run      # 若已配置
 
 ---
 
-## 22. Finish Checklist
+## 23. Finish Checklist
 
 编码任务完成或提交前逐项勾选：
 
 - [ ] CHK-LAYER：api 层无 UI；页面无裸 URL
 - [ ] CHK-DATA：无重复状态；无可 derived 的 watch/effect 同步
-- [ ] CHK-FN/FILE：无碎函数；单文件 ≤800 行；无机械凑行数
+- [ ] CHK-FN/FILE：无碎函数；单文件 ≤800 行（>450 行须评估）；无机械凑行数
 - [ ] CHK-TS：无 any；DTO 完整
 - [ ] CHK-ASYNC：只读并发；写操作已评估
 - [ ] CHK-VUE/REACT：computed/useMemo 优先；hook 合规
@@ -535,4 +550,4 @@ npm run test:run      # 若已配置
 - [ ] CHK-LOG：无 console.log/debugger
 - [ ] CHK-AI：无 Base*/提前抽象
 - [ ] `lint` + `type-check`（+ `test:run`）通过
-- [ ] 平台专项 Skill 已对照（若适用）
+- [ ] CHK-PLATFORM：Platform Skill 项目约定已对照（若适用）
